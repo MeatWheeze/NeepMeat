@@ -638,6 +638,7 @@
   "item.neepmeat.lore_0": "Reveals the unseen",
 
   "item.neepmeat.farming_scutter": "Farming Scutter",
+  "item.neepmeat.farming_scutter.lore_0": "Harvests and replants crops. Must be placed on farmland. Harvested items will be inserted into block that is highlighted when placing.\nSneak-click to pick up.",
   "entity.neepmeat.farming_scutter": "Farming Scutter",
 
   "entity.neepmeat.glome": "Glome",
