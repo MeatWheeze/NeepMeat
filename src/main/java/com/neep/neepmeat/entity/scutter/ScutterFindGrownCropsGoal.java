@@ -2,8 +2,6 @@ package com.neep.neepmeat.entity.scutter;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.particle.ParticleTypes;
-import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
@@ -24,19 +22,15 @@ public class ScutterFindGrownCropsGoal extends Goal
         this.entity = entity;
         this.world = entity.getWorld();
         this.interval = interval;
-    }
-
-    @Override
-    public void setControls(EnumSet<Control> controls)
-    {
-        EnumSet.of(Control.MOVE);
+        setControls(EnumSet.of(Control.MOVE));
     }
 
     @Override
     public boolean canStart()
     {
-        return world.getTime() - interval > lastTime &&
-                entity.getTargets().isEmpty();
+        return world.getTime() - interval > lastTime
+                && !entity.needsEmptying()
+                && entity.getTargets().isEmpty();
     }
 
     @Override
@@ -98,7 +92,6 @@ public class ScutterFindGrownCropsGoal extends Goal
                         if (FarmingScutter.isGrownCrop(world.getBlockState(up)))
                         {
                             result.add(up);
-                            return result;
                         }
                     }
                 }

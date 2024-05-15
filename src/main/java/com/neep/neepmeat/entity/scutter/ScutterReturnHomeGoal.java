@@ -7,11 +7,11 @@ import net.minecraft.world.WorldView;
 
 import java.util.EnumSet;
 
-public class ScutterMoveToCropGoal extends MoveToTargetPosGoal
+public class ScutterReturnHomeGoal extends MoveToTargetPosGoal
 {
     private final FarmingScutter scutter;
 
-    public ScutterMoveToCropGoal(FarmingScutter scutter, double speed, int range)
+    public ScutterReturnHomeGoal(FarmingScutter scutter, float speed, int range)
     {
         super(scutter, speed, range);
         this.scutter = scutter;
@@ -21,43 +21,29 @@ public class ScutterMoveToCropGoal extends MoveToTargetPosGoal
     @Override
     public boolean canStart()
     {
-        if (cooldown > 0 && scutter.getTargets().isEmpty())
+        if (cooldown > 0)
         {
             cooldown--;
         }
-        else if (!scutter.getTargets().isEmpty())
+        else if (scutter.getHomePos() != null && (scutter.needsEmptying() || scutter.getTargets().isEmpty()))
         {
             cooldown = getInterval(mob);
-            targetPos = scutter.getTargets().iterator().next();
+            targetPos = scutter.getHomePos();
             return true;
         }
         return false;
     }
 
     @Override
+    public void start()
+    {
+        super.start();
+    }
+
+    @Override
     protected int getInterval(PathAwareEntity mob)
     {
-        return 10;
-    }
-
-    @Override
-    public boolean shouldContinue()
-    {
-        return super.shouldContinue() && !hasReached() && !scutter.getTargets().isEmpty();
-    }
-
-    @Override
-    public void tick()
-    {
-        if (scutter.getTargets().isEmpty())
-            return;
-
-        if (hasReached())
-        {
-            scutter.getTargets().remove(targetPos);
-        }
-
-        super.tick();
+        return 20;
     }
 
     @Override
@@ -69,6 +55,6 @@ public class ScutterMoveToCropGoal extends MoveToTargetPosGoal
     @Override
     protected boolean isTargetPos(WorldView world, BlockPos pos)
     {
-        return pos.equals(targetPos);
+        return pos.equals(scutter.getHomePos());
     }
 }

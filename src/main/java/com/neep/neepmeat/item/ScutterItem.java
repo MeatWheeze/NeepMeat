@@ -61,16 +61,22 @@ public abstract class ScutterItem<T extends ScutterEntity> extends BaseItem
                 return ActionResult.SUCCESS;
             }
 
-            ScutterEntity scutter = entityType.get().create(world);
+            T scutter = entityType.get().create(world);
             if (scutter != null)
             {
                 world.spawnEntity(scutter);
                 scutter.setPos(valid.x, valid.y, valid.z);
+                processEntity(scutter, context);
             }
 
             return ActionResult.SUCCESS;
 
         }
         return super.useOnBlock(context);
+    }
+
+    protected void processEntity(T entity, ItemUsageContext context)
+    {
+
     }
 }

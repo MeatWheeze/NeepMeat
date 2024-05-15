@@ -3,6 +3,8 @@ package com.neep.neepmeat.entity.scutter;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.util.math.BlockPos;
 
+import java.util.EnumSet;
+
 public class ScutterFindFarmlandGoal extends Goal
 {
     private final FarmingScutter entity;
@@ -16,6 +18,7 @@ public class ScutterFindFarmlandGoal extends Goal
 
         this.range = range;
         this.maxYDiff = maxYDiff;
+        setControls(EnumSet.of(Control.MOVE));
     }
 
     @Override

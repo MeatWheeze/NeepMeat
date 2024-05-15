@@ -89,6 +89,20 @@ public interface ImplementedInventory extends Inventory, NbtSerialisable
         return true;
     }
 
+    default float emptyStacks()
+    {
+        int filled = 0;
+        for (int i = 0; i < size(); i++)
+        {
+            ItemStack stack = getStack(i);
+            if (!stack.isEmpty())
+            {
+                filled++;
+            }
+        }
+        return size() - filled;
+    }
+
     @Override
     default ItemStack getStack(int slot)
     {

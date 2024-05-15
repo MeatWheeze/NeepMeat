@@ -2,8 +2,11 @@ package com.neep.neepmeat.item;
 
 import com.neep.meatlib.item.TooltipSupplier;
 import com.neep.neepmeat.entity.scutter.FarmingScutter;
+import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.EntityType;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemUsageContext;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
@@ -27,5 +30,16 @@ public class FarmingScutterItem extends ScutterItem<FarmingScutter>
             return epos;
 
         return null;
+    }
+
+    @Override
+    protected void processEntity(FarmingScutter entity, ItemUsageContext context)
+    {
+
+        if (ItemStorage.SIDED.find(context.getWorld(), context.getBlockPos(), context.getSide()) != null)
+        {
+            entity.setStoragePos(context.getBlockPos());
+            entity.setHomePos(BlockPos.ofFloored(entity.getPos()));
+        }
     }
 }
