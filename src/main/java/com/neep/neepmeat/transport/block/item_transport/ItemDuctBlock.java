@@ -25,6 +25,8 @@ import net.minecraft.util.ItemScatterer;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import net.minecraft.util.shape.VoxelShape;
+import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
 import org.jetbrains.annotations.Nullable;
@@ -53,6 +55,27 @@ public class ItemDuctBlock extends AbstractPipeBlock implements BlockEntityProvi
         BlockState pipeState = super.getPlacementState(context);
 
         return pipeState.with(FACING, context.getSide().getOpposite());
+    }
+
+    @Override
+    public VoxelShape getShapeForState(BlockState state)
+    {
+        VoxelShape shape = getCentreShape();
+        for (Direction direction : Direction.values())
+        {
+            for (Direction direction1 : Direction.values())
+            {
+                if (state.get(DIR_TO_CONNECTION.get(direction)) == PipeConnectionType.SIDE)
+                {
+                    shape = VoxelShapes.union(shape, DIR_SHAPES.get(direction));
+                }
+                if (state.get(FACING) == direction1)
+                {
+                    shape = VoxelShapes.union(shape, DIR_SHAPES.get(direction1));
+                }
+            }
+        }
+        return shape;
     }
 
     @Nullable

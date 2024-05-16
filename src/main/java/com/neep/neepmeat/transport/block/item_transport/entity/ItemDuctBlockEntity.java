@@ -79,10 +79,10 @@ public class ItemDuctBlockEntity extends BlockEntity implements Storage<ItemVari
         }
     }
 
-    private static boolean insertTick(World world, BlockPos pos, BlockState state, ItemDuctBlockEntity be)
+    private static void insertTick(World world, BlockPos pos, BlockState state, ItemDuctBlockEntity be)
     {
         if (be.getResource().isBlank())
-            return false;
+            return;
 
         Direction targetDirection = state.get(ItemDuctBlock.FACING).getOpposite();
         if (be.cache == null)
@@ -95,35 +95,36 @@ public class ItemDuctBlockEntity extends BlockEntity implements Storage<ItemVari
         // Spawn item entities at open ends
         if (storage == null)
         {
-            if (world.getBlockState(pos.offset(targetDirection)).isAir())
+            BlockPos offsetPos = pos.offset(targetDirection.getOpposite());
+            BlockState offsetState = world.getBlockState(offsetPos);
+            if (!offsetState.blocksMovement())
             {
-                Transaction transaction = Transaction.openOuter();
+                try (Transaction transaction = Transaction.openOuter())
+                {
+                    ItemEntity item = new ItemEntity(world,
+                            offsetPos.getX() + 0.5,
+                            offsetPos.getY() + (targetDirection.getAxis().isHorizontal() ? 0.1 : 0.5),
+                            offsetPos.getZ() + 0.5,
+                            be.getResource().toStack((int) be.getAmount()),
+                            0, 0, 0);
+                    be.extract(be.getResource(), be.getAmount(), transaction);
+                    world.spawnEntity(item);
 
-                BlockPos pos2 = pos.offset(targetDirection);
-                Vec3d pos3 = new Vec3d(pos2.getX() + 0.5,
-                        pos2.getY() + (targetDirection.getAxis().isHorizontal() ? 0.1 : 0.5),
-                        pos2.getZ() + 0.5);
-                ItemEntity item = new ItemEntity(world, pos3.getX(), pos3.getY(), pos3.getZ(), be.getResource().toStack((int) be.getAmount()),
-                        0, 0, 0);
-                be.extract(be.getResource(), be.getAmount(), transaction);
-                world.spawnEntity(item);
-
-                transaction.commit();
-                return true;
+                    transaction.commit();
+                    return;
+                }
             }
-            return false;
+            return;
         }
 
         Transaction transaction = Transaction.openOuter();
 
-        long transferAmount = 0;
         if (storage.supportsInsertion() && be.supportsExtraction() && !be.getResource().isBlank())
         {
-            transferAmount = StorageUtil.move(be, storage, type -> true, 1, transaction);
+            StorageUtil.move(be, storage, type -> true, 1, transaction);
         }
 
         transaction.commit();
-        return transferAmount > 0;
     }
 
     private void setCooldown(int cooldown)
