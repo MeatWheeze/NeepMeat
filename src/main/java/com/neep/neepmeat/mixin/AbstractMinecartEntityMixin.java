@@ -1,5 +1,8 @@
 package com.neep.neepmeat.mixin;
 
+import com.neep.neepmeat.block.DumpingTrackBlock;
+import com.neep.neepmeat.block.SpecialRail;
+import com.neep.neepmeat.init.NMBlocks;
 import com.neep.neepmeat.interfaces.AbstractMinecartEntityAccess;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
@@ -23,9 +26,16 @@ public class AbstractMinecartEntityMixin implements AbstractMinecartEntityAccess
     @Inject(method = "moveOnRail", at = @At("HEAD"))
     void onMoveOnRail(BlockPos pos, BlockState state, CallbackInfo ci)
     {
-        if (((Entity) (Object) (this)).getFirstPassenger() instanceof PlayerEntity player)
+        AbstractMinecartEntity thisEntity = ((AbstractMinecartEntity) (Object) (this));
+        Entity passenger = thisEntity.getFirstPassenger();
+        if (passenger instanceof PlayerEntity player)
         {
             controllerVelocity = player.getVelocity();
+        }
+
+        if (state.getBlock() instanceof SpecialRail specialRail)
+        {
+            specialRail.apply(thisEntity.getWorld(), pos, state, thisEntity);
         }
     }
 

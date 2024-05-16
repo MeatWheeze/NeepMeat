@@ -494,6 +494,8 @@
   "block.neepmeat.holding_track.lore_0": "Holds carts in place when unpowered.",
   "block.neepmeat.control_track": "Rider Control Rail",
   "block.neepmeat.control_track.lore_0": "Boosts a cart in the direction a riding player wishes to move.\nWhen unpowered, it will hold the cart in place until the player uses the motion keys.",
+  "block.neepmeat.dumping_track": "Dumping Rail",
+  "block.neepmeat.dumping_track.lore_0": "Drops the riding entity directly below the track.",
 
   "item.neepmeat.projector": "Guide Projector",
   "item.neepmeat.projector.lore_0": "A guide to all NEEPMeat content.",

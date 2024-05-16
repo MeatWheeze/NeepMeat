@@ -2,6 +2,7 @@
   "replace": false,
   "values": [
     "neepmeat:holding_track",
-    "neepmeat:control_track"
+    "neepmeat:control_track",
+    "neepmeat:dumping_track"
   ]
 }
