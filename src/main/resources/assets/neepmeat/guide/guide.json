@@ -434,12 +434,12 @@
 
     {"id": "plc", "contents": [
       {"type": "text", "text": "Programmable Logic Controller\n", "bold": true},
-      {"type": "text", "text": "The PLC is a computer specialised for industrial automation. It can run user-defined programs and can operate in interactive mode. Its clock speed is a lightning fast 20Hz."},
+      {"type": "text", "text": "The PLC is a computer specialised for industrial automation. It can run user-defined programs or run instructions one by one in an interactive mode. Its clock speed is a lightning fast 20Hz."},
       {"type": "text", "text": "\nRight-clicking on the PLC gives control over its robot."},
       {"type": "text", "text": "\nUser Interface\n", "bold": true},
       {"type": "text", "text": "When inside the robot, movement is accomplished using the normal keys. Middle click-dragging rotates the camera."},
-      {"type": "text", "text": "\nThe PLC has two modes: interactive mode and edit mode. This can be changed using the button on the top right of the screen."},
-      {"type": "text", "text": "\nTo execute an instruction in Interactive Mode, select the desired operation from the bottom right panel. Then, click blocks in the world to add them as arguments. When sufficient arguments are provided, the instruction will be executed."},
+      {"type": "text", "text": "\nThe PLC has two modes: interactive mode and edit mode. The current mode can be switched using the button on the top right of the screen."},
+      {"type": "text", "text": "\nTo execute an instruction in Interactive Mode, select the desired operation from the bottom right panel. Then, click blocks in the world to add them as arguments. When sufficient arguments are provided, an instruction emitted and executed."},
       {"type": "text", "text": "\nIn Edit Mode, the program is written in the left panel in NEEPASM. More instructions are available in this mode and are outlined in the bottom right panel."},
       {"type": "text", "text": "The buttons at the top right of the screen allow programs to be compiled, started and stopped."}
     ]},
