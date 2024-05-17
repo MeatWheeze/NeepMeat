@@ -52,7 +52,7 @@ public abstract class LivingMachineBlockEntity extends SyncableBlockEntity imple
     private final Random random = Random.create();
 
     protected final List<LivingMachineStructure> structures = new ArrayList<>();
-    private final Collection<LivingMachineComponent>[] componentMap = (Collection<LivingMachineComponent>[]) Array.newInstance(Collection.class, ComponentType.Simple.NEXT_ID);
+    private final Set<LivingMachineComponent>[] componentMap = (Set<LivingMachineComponent>[]) Array.newInstance(Set.class, ComponentType.Simple.NEXT_ID);
     private final BitSet currentComponents = new BitSet(); // Active components marked in one-hot codes
     private EnumMap<StructureProperty, AtomicDouble> properties = new EnumMap<>(StructureProperty.class);
 
@@ -183,10 +183,15 @@ public abstract class LivingMachineBlockEntity extends SyncableBlockEntity imple
         {
             i = currentComponents.nextSetBit(i);
 
-            for (var component : componentMap[i])
+//            for (LivingMachineComponent component : componentMap[i])
+//            for (int j = 0; j < componentMap[i].size(); ++j)
+//            LivingMachineComponent component;
+            for (Iterator<LivingMachineComponent> it = componentMap[i].iterator(); it.hasNext();)
             {
+                LivingMachineComponent component = it.next();
                 if (component.componentRemoved())
                 {
+                    it.remove();
                     removeComponent(component);
                     updateProcess = true;
                 }
@@ -277,14 +282,15 @@ public abstract class LivingMachineBlockEntity extends SyncableBlockEntity imple
         componentMap[idx].add(component);
     }
 
-    protected void removeComponent(LivingMachineComponent component)
+    // Does not remove the component from the set
+    private void removeComponent(LivingMachineComponent component)
     {
         int idx = component.getComponentType().getBitIdx();
         if (!currentComponents.get(idx))
             return;
 
         currentComponents.clear(idx);
-        componentMap[idx].remove(component);
+//        componentMap[idx].remove(component); // TODO Reintroduce this without concurrent modification
     }
 
     protected void clearComponents()
