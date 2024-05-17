@@ -117,7 +117,6 @@
   "block.neepmeat.yellow_metal_scaffold_stairs": "Yellow Metal Scaffold Stairs",
   "block.neepmeat.yellow_metal_scaffold_slab": "Yellow Metal Scaffold Slab",
 
-
   "block.neepmeat.rusty_vent": "Rusty Vent",
   "block.neepmeat.rusty_column": "Rusty Column",
 
@@ -133,6 +132,7 @@
   "block.neepmeat.machine_block": "Machine Block",
   "block.neepmeat.base_machine_block": "Base Machine Block",
   "block.neepmeat.blood_bubble_machine_block": "Blood Bubble Machine Block",
+  "block.neepmeat.skin_machine_block": "Skin Machine Block",
   "block.neepmeat.motor_port": "Motor Port",
   "block.neepmeat.integration_port": "Integration Port",
   "block.neepmeat.item_output_port": "Item Output Port",
@@ -808,7 +808,7 @@
   "advancements.neepmeat.main.obtain_integrator.title": "Angel's Egg",
   "advancements.neepmeat.main.obtain_integrator.desc": "Obtain an Integrator Egg from a dungeon chest.",
 
-  "advancements.neepmeat.main.obtain_asbestos.title": "Your Fibrous Friend",
+  "advancements.neepmeat.main.obtain_asbestos.title": "Your Fibrous, Fireproof Friend",
   "advancements.neepmeat.main.obtain_asbestos.desc": "Find some asbestos.",
 
   "advancements.neepmeat.main.place_grinder.title": "Scrunch Scrunch",
