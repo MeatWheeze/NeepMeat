@@ -16,7 +16,11 @@ import com.neep.neepmeat.api.processing.PowerUtils;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
+import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
+import net.fabricmc.fabric.api.networking.v1.PacketSender;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.fabricmc.fabric.api.transfer.v1.context.ContainerItemContext;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
@@ -44,6 +48,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ToolMaterials;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.network.PacketByteBuf;
 import net.minecraft.particle.BlockStateParticleEffect;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -51,10 +56,7 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.tag.BlockTags;
 import net.minecraft.tag.TagKey;
 import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
-import net.minecraft.util.Hand;
-import net.minecraft.util.TypedActionResult;
-import net.minecraft.util.UseAction;
+import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.MathHelper;
@@ -81,13 +83,14 @@ import java.util.Optional;
 
 public class AssaultDrillItem extends Item implements MeatlibItem, IAnimatable, ISyncable, PoweredItem, CustomEnchantable, OverrideSwingItem
 {
-    public AnimationFactory factory = new SingletonAnimationFactory(this);
-    protected String registryName;
-
-    protected float attackDamage;
+    public static final Identifier CHANNEL_ID = new Identifier("assault_drill");
 
     public final String controllerName = "controller";
     private final TagKey<Block> effectiveBlocks;
+
+    private final EntityAttributeModifier eam = new EntityAttributeModifier("aa", 8, EntityAttributeModifier.Operation.ADDITION);
+    protected String registryName;
+    protected float attackDamage;
     private final float miningSpeed;
 
     public AssaultDrillItem(String registryName, int maxDamage, FabricItemSettings settings)
@@ -101,6 +104,21 @@ public class AssaultDrillItem extends Item implements MeatlibItem, IAnimatable, 
 
         GeckoLibNetwork.registerSyncable(this);
         ItemRegistry.queue(this);
+    }
+
+    public static boolean using(ItemStack stack)
+    {
+        if (stack.getItem() instanceof AssaultDrillItem && stack.hasNbt())
+        {
+            NbtCompound nbt = stack.getNbt();
+            return nbt.getBoolean("using") || nbt.getBoolean("attacking");
+        }
+        return false;
+    }
+
+    public static Storage<FluidVariant> getStorage(ItemStack stack, ContainerItemContext containerItemContext)
+    {
+        return new InternalStorage(stack, containerItemContext);
     }
 
     @Override
@@ -145,7 +163,7 @@ public class AssaultDrillItem extends Item implements MeatlibItem, IAnimatable, 
         ItemStack itemStack = user.getStackInHand(hand);
         user.setCurrentHand(hand);
 
-        if (!world.isClient())
+        if (world instanceof ServerWorld serverWorld)
         {
             final int id = GeckoLibUtil.guaranteeIDForStack(user.getStackInHand(hand), (ServerWorld) world);
             world.getPlayers().forEach(p -> GeckoLibNetwork.syncAnimation(user, this, id, 0));
@@ -161,8 +179,6 @@ public class AssaultDrillItem extends Item implements MeatlibItem, IAnimatable, 
 
         return TypedActionResult.fail(itemStack);
     }
-
-    private final EntityAttributeModifier eam = new EntityAttributeModifier("aa", 8, EntityAttributeModifier.Operation.ADDITION);
 
     @Override
     public Multimap<EntityAttribute, EntityAttributeModifier> getAttributeModifiers(ItemStack stack, EquipmentSlot slot)
@@ -215,7 +231,7 @@ public class AssaultDrillItem extends Item implements MeatlibItem, IAnimatable, 
 
             // Reduce durability
             if (!(user instanceof PlayerEntity player && player.isCreative())
-                && stack.getDamage() < getMaxDamage(stack))
+                    && stack.getDamage() < getMaxDamage(stack))
             {
                 stack.setDamage(stack.getDamage() + 1);
             }
@@ -228,6 +244,10 @@ public class AssaultDrillItem extends Item implements MeatlibItem, IAnimatable, 
     @Override
     public boolean postMine(ItemStack stack, World world, BlockState state, BlockPos pos, LivingEntity miner)
     {
+        if (!world.isClient && state.getHardness(world, pos) != 0.0F && stack.getDamage() < getMaxDamage())
+        {
+            stack.damage(1, miner, e -> {});
+        }
         return true;
     }
 
@@ -236,21 +256,10 @@ public class AssaultDrillItem extends Item implements MeatlibItem, IAnimatable, 
         return stack.getMaxDamage();
     }
 
-
     @Override
     public Optional<TooltipData> getTooltipData(ItemStack stack)
     {
         return super.getTooltipData(stack);
-    }
-
-    public static boolean using(ItemStack stack)
-    {
-        if (stack.getItem() instanceof AssaultDrillItem && stack.hasNbt())
-        {
-            NbtCompound nbt = stack.getNbt();
-            return nbt.getBoolean("using") || nbt.getBoolean("attacking");
-        }
-        return false;
     }
 
     @Override
@@ -270,7 +279,12 @@ public class AssaultDrillItem extends Item implements MeatlibItem, IAnimatable, 
     @Override
     public float getMiningSpeedMultiplier(ItemStack stack, BlockState state)
     {
-        return state.isIn(this.effectiveBlocks) ? this.miningSpeed * 4 : 1.0f;
+        if (stack.getDamage() >= getMaxDamage())
+        {
+            return 1;
+        }
+
+        return state.isIn(this.effectiveBlocks) ? this.miningSpeed * 4 : 1;
     }
 
     @Override
@@ -310,12 +324,6 @@ public class AssaultDrillItem extends Item implements MeatlibItem, IAnimatable, 
     }
 
     @Override
-    public int getEnchantability()
-    {
-        return 1;
-    }
-
-    @Override
     public void onAnimationSync(int id, int state)
     {
         if (state == 0)
@@ -329,14 +337,20 @@ public class AssaultDrillItem extends Item implements MeatlibItem, IAnimatable, 
         }
     }
 
+    @Override
+    public int getEnchantability()
+    {
+        return 1;
+    }
+
     public void onAttackBlock(ItemStack stack, PlayerEntity player)
     {
-        stack.getOrCreateNbt().putBoolean("attacking", true);
+        sendAttack(true);
     }
 
     public void onFinishAttackBlock(ItemStack stack, PlayerEntity player)
     {
-        stack.getOrCreateNbt().putBoolean("attacking", false);
+        sendAttack(false);
     }
 
     protected <P extends Item & IAnimatable> PlayState predicate(AnimationEvent<P> event)
@@ -349,11 +363,6 @@ public class AssaultDrillItem extends Item implements MeatlibItem, IAnimatable, 
     {
         player.handSwingProgress = 0;
         return false;
-    }
-
-    public static Storage<FluidVariant> getStorage(ItemStack stack, ContainerItemContext containerItemContext)
-    {
-        return new InternalStorage(stack, containerItemContext);
     }
 
     @SuppressWarnings("UnstableApiUsage")
@@ -423,7 +432,7 @@ public class AssaultDrillItem extends Item implements MeatlibItem, IAnimatable, 
         @Override
         protected Integer createSnapshot()
         {
-            return (stack.getMaxDamage() - stack.getDamage()) * ENERGY_PER_DURABILITY ;
+            return (stack.getMaxDamage() - stack.getDamage()) * ENERGY_PER_DURABILITY;
         }
 
         @Override
@@ -437,6 +446,7 @@ public class AssaultDrillItem extends Item implements MeatlibItem, IAnimatable, 
         {
             return 0;
         }
+
     }
 
     @Environment(EnvType.CLIENT)
