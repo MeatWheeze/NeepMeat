@@ -7,7 +7,7 @@ import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.api.storage.WritableStackStorage;
 import com.neep.neepmeat.init.NMrecipeTypes;
 import com.neep.neepmeat.machine.grinder.IGrinderStorage;
-import com.neep.neepmeat.recipe.GrindingRecipe;
+import com.neep.neepmeat.recipe.CrushingRecipe;
 import net.fabricmc.fabric.api.transfer.v1.item.InventoryStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
@@ -73,7 +73,7 @@ public class LargeCrusherStorage implements NbtSerialisable
     protected class InputSlot extends WritableStackStorage implements IGrinderStorage
     {
         @Nullable
-        private GrindingRecipe recipe;
+        private CrushingRecipe recipe;
         private float progress;
 
         public InputSlot(@Nullable Runnable parent)
@@ -99,7 +99,7 @@ public class LargeCrusherStorage implements NbtSerialisable
             }
             else if (!isEmpty())
             {
-                GrindingRecipe foundRecipe = MeatlibRecipes.getInstance().getFirstMatch(NMrecipeTypes.ADVANCED_CRUSHING, this).orElse(null);
+                CrushingRecipe foundRecipe = MeatlibRecipes.getInstance().getFirstMatch(NMrecipeTypes.ADVANCED_CRUSHING, this).orElse(null);
 
                 if (foundRecipe == null)
                     foundRecipe = MeatlibRecipes.getInstance().getFirstMatch(NMrecipeTypes.GRINDING, this).orElse(null);
@@ -159,7 +159,7 @@ public class LargeCrusherStorage implements NbtSerialisable
         }
 
         @Nullable
-        public GrindingRecipe getRecipe()
+        public CrushingRecipe getRecipe()
         {
             return recipe;
         }

@@ -8,7 +8,7 @@ import com.neep.neepmeat.block.entity.MotorisedMachineBlockEntity;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.init.NMrecipeTypes;
 import com.neep.neepmeat.machine.motor.MotorEntity;
-import com.neep.neepmeat.recipe.GrindingRecipe;
+import com.neep.neepmeat.recipe.CrushingRecipe;
 import com.neep.neepmeat.transport.util.ItemPipeUtil;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.base.CombinedStorage;
@@ -43,8 +43,8 @@ public class GrinderBlockEntity extends MotorisedMachineBlockEntity
     protected float progress;
 
     protected Identifier currentRecipeId;
-    protected GrindingRecipe lastRecipe;
-    protected GrindingRecipe currentRecipe;
+    protected CrushingRecipe lastRecipe;
+    protected CrushingRecipe currentRecipe;
 
     public GrinderBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
     {
@@ -56,12 +56,12 @@ public class GrinderBlockEntity extends MotorisedMachineBlockEntity
         this(NMBlockEntities.CRUSHER, pos, state);
     }
 
-    public GrindingRecipe getCurrentRecipe()
+    public CrushingRecipe getCurrentRecipe()
     {
         return currentRecipe;
     }
 
-    public void setCurrentRecipe(@Nullable GrindingRecipe recipe)
+    public void setCurrentRecipe(@Nullable CrushingRecipe recipe)
     {
         this.currentRecipe = recipe;
         this.currentRecipeId = recipe != null ? recipe.getId() : null;
@@ -72,7 +72,7 @@ public class GrinderBlockEntity extends MotorisedMachineBlockEntity
         if (world != null)
         {
             Optional<? extends MeatlibRecipe<?>> optional = MeatlibRecipes.getInstance().get(currentRecipeId);
-            optional.ifPresentOrElse(recipe -> this.currentRecipe = (GrindingRecipe) recipe,
+            optional.ifPresentOrElse(recipe -> this.currentRecipe = (CrushingRecipe) recipe,
                     () -> this.currentRecipe = null);
         }
     }
@@ -166,7 +166,7 @@ public class GrinderBlockEntity extends MotorisedMachineBlockEntity
     {
         if (currentRecipe == null && storage.outputStorage.isEmpty() && !storage.inputStorage.isEmpty())
         {
-            GrindingRecipe recipe = MeatlibRecipes.getInstance().getFirstMatch(NMrecipeTypes.GRINDING, storage).orElse(null);
+            CrushingRecipe recipe = MeatlibRecipes.getInstance().getFirstMatch(NMrecipeTypes.GRINDING, storage).orElse(null);
 
             if (recipe != null && MeatlibStorageUtil.simulateInsert(storage.outputStorage, ItemVariant.of(recipe.getItemOutput().resource()),
                                                                  recipe.getItemOutput().amount(), null) == recipe.getItemOutput().amount())

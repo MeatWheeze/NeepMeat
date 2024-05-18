@@ -17,9 +17,10 @@ public class LivingMachineComponents
 
     public static final ComponentType<HopperComponent> HOPPER = new ComponentType.Simple<>();
     public static final ComponentType<ItemOutputComponent> ITEM_OUTPUT = new ComponentType.Simple<>();
-
     public static final ComponentType<FluidInputComponent> FLUID_INPUT = new ComponentType.Simple<>();
     public static final ComponentType<FluidOutputComponent> FLUID_OUTPUT = new ComponentType.Simple<>();
+
+    public static final ComponentType<LuckyOneBlockEntity> LUCKY_ONE = new ComponentType.Simple<>();
 
     public static void init()
     {

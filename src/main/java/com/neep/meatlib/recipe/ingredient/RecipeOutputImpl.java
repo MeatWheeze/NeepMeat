@@ -36,7 +36,6 @@ public class RecipeOutputImpl<T> implements RecipeOutput<T>
         this.lootFunction = UniformIntProvider.create(min, max);
         this.random = Random.create();
         this.chance = probability;
-        update();
     }
 
     public RecipeOutputImpl(@NotNull T resource, int min, int max)
@@ -44,38 +43,42 @@ public class RecipeOutputImpl<T> implements RecipeOutput<T>
         this(resource, min, max, 1);
     }
 
-
+    @Override
     public T resource()
     {
         return resource;
     }
 
+    @Override
     public long amount()
     {
         return amount;
     }
 
+    @Override
     public long maxAmount()
     {
         return lootFunction.getMax();
     }
 
+    @Override
     public long minAmount()
     {
         return lootFunction.getMin();
     }
 
+    @Override
     public float chance()
     {
         return chance;
     }
 
-    public void update()
-    {
-        amount = lootFunction.get(random);
-        float next = random.nextFloat();
-        willOutput = next < chance;
-    }
+//    public void update()
+//    {
+//        amount = lootFunction.get(random);
+//        float next = random.nextFloat();
+//        willOutput = next < chance;
+//    }
 
 //    public <V extends TransferVariant<T>> boolean insertInto(Storage<V> storage, Function<T, V> of, TransactionContext transaction)
 //    {
@@ -93,9 +96,13 @@ public class RecipeOutputImpl<T> implements RecipeOutput<T>
         this.nbt = nbt;
     }
 
-    public <V extends TransferVariant<T>> boolean insertInto(Storage<V> storage, BiFunction<T, NbtCompound, V> of, TransactionContext transaction)
+    @Override
+    public <V extends TransferVariant<T>> boolean insertInto(Storage<V> storage, BiFunction<T, NbtCompound, V> of, float chanceModifier, TransactionContext transaction)
     {
-        update();
+        long amount = lootFunction.get(random);
+        float next = random.nextFloat();
+        willOutput = next < chance;
+
         if (!willOutput)
             return true;
 

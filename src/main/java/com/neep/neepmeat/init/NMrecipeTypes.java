@@ -22,8 +22,8 @@ public class NMrecipeTypes
     public static final RecipeSerializer<MixingRecipe> MIXING_SERIALIZER = RecipeRegistry.registerMeatlibSerializer(NeepMeat.NAMESPACE, "mixing", new MixingRecipe.MixerSerializer(MixingRecipe::new, 60));
     public static final RecipeType<MixingRecipe> MIXING = RecipeRegistry.registerType(NeepMeat.NAMESPACE, "mixing");
 
-    public static final MeatRecipeSerialiser<GrindingRecipe> GRINDING_SERIALIZER = RecipeRegistry.registerMeatlibSerializer(NeepMeat.NAMESPACE, "grinding", new GrindingRecipe.Serializer<>(GrindingRecipe::new, GrindingRecipe.DestroyRecipe::new, 60));
-    public static final MeatRecipeType<GrindingRecipe> GRINDING = RecipeRegistry.registerMeatlibType(NeepMeat.NAMESPACE, "grinding");
+    public static final MeatRecipeSerialiser<CrushingRecipe> GRINDING_SERIALIZER = RecipeRegistry.registerMeatlibSerializer(NeepMeat.NAMESPACE, "grinding", new CrushingRecipe.Serializer<>(CrushingRecipe::new, CrushingRecipe.DestroyRecipe::new, 60));
+    public static final MeatRecipeType<CrushingRecipe> GRINDING = RecipeRegistry.registerMeatlibType(NeepMeat.NAMESPACE, "grinding");
 
     public static final MeatRecipeSerialiser<AdvancedCrushingRecipe> ADVANCED_CRUSHING_SERIALIZER = RecipeRegistry.registerMeatlibSerializer(NeepMeat.NAMESPACE, "advanced_crushing", new AdvancedCrushingRecipe.Serializer<>(AdvancedCrushingRecipe::new, AdvancedCrushingRecipe.DestroyRecipe::new, 60));
     public static final MeatRecipeType<AdvancedCrushingRecipe> ADVANCED_CRUSHING = RecipeRegistry.registerMeatlibType(NeepMeat.NAMESPACE, "advanced_crushing");

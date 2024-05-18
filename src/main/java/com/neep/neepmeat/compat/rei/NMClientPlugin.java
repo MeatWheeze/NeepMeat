@@ -49,7 +49,7 @@ public class NMClientPlugin implements REIClientPlugin, NMREIPlugin
     {
         registerRecipeFiller(registry, ItemManufactureRecipe.class, PLCRecipes.MANUFACTURE, ManufactureDisplay::new);
         registry.add(new TransformingToolDisplay(TransformingToolRecipe.getInstance()));
-        registerRecipeFiller(registry, GrindingRecipe.class, NMrecipeTypes.GRINDING, r -> !r.destroy(), GrindingDisplay.filler(GRINDING));
+        registerRecipeFiller(registry, CrushingRecipe.class, NMrecipeTypes.GRINDING, r -> !r.destroy(), GrindingDisplay.filler(GRINDING));
         registerRecipeFiller(registry, AdvancedCrushingRecipe.class, NMrecipeTypes.ADVANCED_CRUSHING, r -> !r.destroy(), GrindingDisplay.filler(ADVANCED_CRUSHING));
         registerRecipeFiller(registry, NormalTrommelRecipe.class, NMrecipeTypes.TROMMEL, TrommelDisplay::new);
         registerRecipeFiller(registry, FluidHeatingRecipe.class, NMrecipeTypes.HEATING, HeatingDisplay::new);

@@ -106,6 +106,7 @@ public class LivingMachines
         TEST_LIVING_MACHINE_BE = register("test_living_machine", (p, s) -> new TestLivingMachineBE(LivingMachines.TEST_LIVING_MACHINE_BE, p, s), NMBlocks.TEST_LIVING_MACHINE);
 
         LUCKY_ONE_BE = register("lucky_one", (p, s) -> new LuckyOneBlockEntity(LivingMachines.LUCKY_ONE_BE, p, s), LUCKY_ONE);
+        LivingMachineComponent.LOOKUP.registerSelf(LUCKY_ONE_BE);
         BloodAcceptor.SIDED.registerForBlockEntity(LuckyOneBlockEntity::getAcceptor, LUCKY_ONE_BE);
 
         Processes.init();

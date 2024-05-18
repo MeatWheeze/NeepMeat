@@ -1,7 +1,6 @@
 package com.neep.neepmeat.compat.rei.display;
 
-import com.neep.neepmeat.compat.rei.NMREIPlugin;
-import com.neep.neepmeat.recipe.GrindingRecipe;
+import com.neep.neepmeat.recipe.CrushingRecipe;
 import me.shedaniel.rei.api.common.category.CategoryIdentifier;
 import me.shedaniel.rei.api.common.display.basic.BasicDisplay;
 import me.shedaniel.rei.api.common.entry.EntryIngredient;
@@ -19,9 +18,9 @@ import java.util.function.Function;
 public class GrindingDisplay extends BasicDisplay
 {
     private final CategoryIdentifier<?> categoryIdentifier;
-    private GrindingRecipe recipe;
+    private CrushingRecipe recipe;
 
-    public GrindingDisplay(CategoryIdentifier<?> categoryIdentifier, GrindingRecipe recipe)
+    public GrindingDisplay(CategoryIdentifier<?> categoryIdentifier, CrushingRecipe recipe)
     {
         this(categoryIdentifier,
                 List.of(EntryIngredients.ofItems((Collection<ItemConvertible>) (Object) recipe.getItemInput().getAll(), (int) recipe.getItemInput().amount())),
@@ -56,7 +55,7 @@ public class GrindingDisplay extends BasicDisplay
         return BasicDisplay.Serializer.ofSimple((input, output, location1) -> new GrindingDisplay(categoryIdentifier, input, output, location1));
     }
 
-    public static <T extends GrindingRecipe> Function<T, GrindingDisplay> filler(CategoryIdentifier<? extends GrindingDisplay> categoryIdentifier)
+    public static <T extends CrushingRecipe> Function<T, GrindingDisplay> filler(CategoryIdentifier<? extends GrindingDisplay> categoryIdentifier)
     {
         return r -> new GrindingDisplay(categoryIdentifier, r);
     }

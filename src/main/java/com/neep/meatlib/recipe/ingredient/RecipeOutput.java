@@ -1,9 +1,7 @@
 package com.neep.meatlib.recipe.ingredient;
 
-import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.fabricmc.fabric.api.transfer.v1.storage.TransferVariant;
-import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.PacketByteBuf;
@@ -18,9 +16,15 @@ public interface RecipeOutput<T>
     long maxAmount();
     long minAmount();
     float chance();
-    void update();
+//    void update();
     void setNbt(NbtCompound nbt);
-    <V extends TransferVariant<T>> boolean insertInto(Storage<V> storage, BiFunction<T, NbtCompound, V> of, TransactionContext transaction);
+
+    default <V extends TransferVariant<T>> boolean insertInto(Storage<V> storage, BiFunction<T, NbtCompound, V> of, TransactionContext transaction)
+    {
+        return insertInto(storage, of, 1, transaction);
+    }
+
+    <V extends TransferVariant<T>> boolean insertInto(Storage<V> storage, BiFunction<T, NbtCompound, V> of, float chanceModifier, TransactionContext transaction);
 
     void write(Registry<T> registry, PacketByteBuf buf);
 
@@ -57,19 +61,13 @@ public interface RecipeOutput<T>
         }
 
         @Override
-        public void update()
-        {
-
-        }
-
-        @Override
         public void setNbt(NbtCompound nbt)
         {
 
         }
 
         @Override
-        public <V extends TransferVariant<Object>> boolean insertInto(Storage<V> storage, BiFunction<Object, NbtCompound, V> of, TransactionContext transaction)
+        public <V extends TransferVariant<Object>> boolean insertInto(Storage<V> storage, BiFunction<Object, NbtCompound, V> of, float chanceMod, TransactionContext transaction)
         {
             return true;
         }

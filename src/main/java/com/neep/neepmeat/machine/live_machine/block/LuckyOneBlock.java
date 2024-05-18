@@ -8,6 +8,7 @@ import com.neep.neepmeat.machine.live_machine.LivingMachines;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.ShapeContext;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.state.StateManager;
@@ -15,6 +16,9 @@ import net.minecraft.state.property.DirectionProperty;
 import net.minecraft.state.property.IntProperty;
 import net.minecraft.state.property.Properties;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.shape.VoxelShape;
+import net.minecraft.util.shape.VoxelShapes;
+import net.minecraft.world.BlockView;
 import org.jetbrains.annotations.Nullable;
 
 public class LuckyOneBlock extends TallerBlock implements BlockEntityProvider
@@ -35,6 +39,12 @@ public class LuckyOneBlock extends TallerBlock implements BlockEntityProvider
     }
 
     @Override
+    public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context)
+    {
+        return VoxelShapes.fullCube();
+    }
+
+    @Override
     protected Structure createStructure()
     {
         return BlockRegistry.queue(new Structure(getRegistryName() + "_structure", MeatlibBlockSettings.copyOf(settings))
@@ -50,6 +60,12 @@ public class LuckyOneBlock extends TallerBlock implements BlockEntityProvider
             protected BlockState getState(BlockState baseState)
             {
                 return super.getState(baseState).with(FACING, baseState.get(FACING));
+            }
+
+            @Override
+            public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context)
+            {
+                return VoxelShapes.fullCube();
             }
         });
     }

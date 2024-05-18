@@ -2,11 +2,11 @@ package com.neep.neepmeat.machine.live_machine;
 
 import com.neep.neepmeat.api.live_machine.ComponentType;
 import com.neep.neepmeat.api.live_machine.Process;
+import it.unimi.dsi.fastutil.Pair;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.BitSet;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class Processes
 {
@@ -17,7 +17,9 @@ public class Processes
         return INSTANCE;
     }
 
-    private final Map<BitSet, Process> entries = new HashMap<>();
+//    private final Map<BitSet, Process> entries = new HashMap<>();
+
+    private final List<Pair<BitSet, Process>> entries = new ObjectArrayList<>();
 
     public void register(Process process)
     {
@@ -26,7 +28,8 @@ public class Processes
 
     public void register(BitSet bitSet, Process process)
     {
-        entries.put(bitSet, process);
+        entries.add(Pair.of(bitSet, process));
+//        entries.put(bitSet, process);
     }
 
     public void register(Process process, ComponentType<?>... types)
@@ -42,7 +45,16 @@ public class Processes
     @Nullable
     public Process getFirstMatch(BitSet bits)
     {
-        return entries.get(bits);
+        for (var pair : entries)
+        {
+            BitSet copy = (BitSet) pair.key().clone();
+            copy.and(bits);
+            if (copy.cardinality() == pair.key().cardinality())
+            {
+                return pair.value();
+            }
+        }
+        return null;
     }
 
     public static void init()

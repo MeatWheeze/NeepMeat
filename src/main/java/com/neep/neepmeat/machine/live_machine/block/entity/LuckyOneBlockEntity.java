@@ -1,6 +1,9 @@
 package com.neep.neepmeat.machine.live_machine.block.entity;
 
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
+import com.neep.neepmeat.api.live_machine.ComponentType;
+import com.neep.neepmeat.api.live_machine.LivingMachineComponent;
+import com.neep.neepmeat.machine.live_machine.LivingMachineComponents;
 import com.neep.neepmeat.transport.api.pipe.AbstractBloodAcceptor;
 import com.neep.neepmeat.transport.api.pipe.BloodAcceptor;
 import net.minecraft.block.BlockState;
@@ -10,7 +13,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 
-public class LuckyOneBlockEntity extends SyncableBlockEntity
+public class LuckyOneBlockEntity extends SyncableBlockEntity implements LivingMachineComponent
 {
     private final AbstractBloodAcceptor acceptor = new AbstractBloodAcceptor()
     {
@@ -72,5 +75,23 @@ public class LuckyOneBlockEntity extends SyncableBlockEntity
     public BloodAcceptor getAcceptor(Direction unused)
     {
         return acceptor;
+    }
+
+    @Override
+    public void setController(BlockPos pos)
+    {
+
+    }
+
+    @Override
+    public boolean componentRemoved()
+    {
+        return isRemoved();
+    }
+
+    @Override
+    public ComponentType<? extends LivingMachineComponent> getComponentType()
+    {
+        return LivingMachineComponents.LUCKY_ONE;
     }
 }

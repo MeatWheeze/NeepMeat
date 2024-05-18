@@ -1,6 +1,6 @@
 package com.neep.neepmeat.compat.emi.recipe;
 
-import com.neep.neepmeat.recipe.GrindingRecipe;
+import com.neep.neepmeat.recipe.CrushingRecipe;
 import dev.emi.emi.api.recipe.EmiRecipe;
 import dev.emi.emi.api.recipe.EmiRecipeCategory;
 import dev.emi.emi.api.render.EmiTexture;
@@ -21,9 +21,9 @@ public class GrindingEmiRecipe implements EmiRecipe {
     private final List<EmiStack> output;
 
     private final EmiRecipeCategory category;
-    private final GrindingRecipe recipe;
+    private final CrushingRecipe recipe;
 
-    public GrindingEmiRecipe(EmiRecipeCategory category, GrindingRecipe recipe) {
+    public GrindingEmiRecipe(EmiRecipeCategory category, CrushingRecipe recipe) {
         this.category = category;
         this.recipe = recipe;
 

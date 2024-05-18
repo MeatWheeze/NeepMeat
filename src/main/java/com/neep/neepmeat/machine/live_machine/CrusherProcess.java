@@ -1,5 +1,6 @@
 package com.neep.neepmeat.machine.live_machine;
 
+import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.api.live_machine.ComponentType;
 import com.neep.neepmeat.api.live_machine.LivingMachineBlockEntity;
 import com.neep.neepmeat.api.live_machine.Process;
@@ -21,6 +22,11 @@ public class CrusherProcess implements Process
             var hoppers = result.t1();
             var crushers = result.t2();
             var itemOutputs = result.t3();
+
+            if (!be.getComponent(LivingMachineComponents.LUCKY_ONE).isEmpty())
+            {
+//                NeepMeat.LOGGER.info("Yay!");
+            }
 
             if (be.getPower() < 0.1)
             {

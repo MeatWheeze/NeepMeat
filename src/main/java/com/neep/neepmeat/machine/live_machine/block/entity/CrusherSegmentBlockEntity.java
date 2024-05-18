@@ -9,7 +9,7 @@ import com.neep.neepmeat.api.storage.WritableStackStorage;
 import com.neep.neepmeat.init.NMrecipeTypes;
 import com.neep.neepmeat.machine.live_machine.LivingMachineComponents;
 import com.neep.neepmeat.machine.live_machine.component.PoweredComponent;
-import com.neep.neepmeat.recipe.GrindingRecipe;
+import com.neep.neepmeat.recipe.CrushingRecipe;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
@@ -100,7 +100,7 @@ public class CrusherSegmentBlockEntity extends SyncableBlockEntity implements Li
     public static class InputSlot extends WritableStackStorage
     {
         @Nullable
-        private GrindingRecipe recipe;
+        private CrushingRecipe recipe;
         private float progress;
 
         public InputSlot(@Nullable Runnable parent)
@@ -127,7 +127,7 @@ public class CrusherSegmentBlockEntity extends SyncableBlockEntity implements Li
             }
             else if (!isEmpty())
             {
-                GrindingRecipe foundRecipe = MeatlibRecipes.getInstance().getFirstMatch(NMrecipeTypes.ADVANCED_CRUSHING, storage).orElse(null);
+                CrushingRecipe foundRecipe = MeatlibRecipes.getInstance().getFirstMatch(NMrecipeTypes.ADVANCED_CRUSHING, storage).orElse(null);
 
                 if (foundRecipe == null)
                     foundRecipe = MeatlibRecipes.getInstance().getFirstMatch(NMrecipeTypes.GRINDING, storage).orElse(null);
@@ -169,14 +169,14 @@ public class CrusherSegmentBlockEntity extends SyncableBlockEntity implements Li
         {
             super.readNbt(nbt);
             if (nbt.contains("recipe"))
-                this.recipe = (GrindingRecipe) MeatlibRecipes.getInstance().get(Identifier.tryParse(nbt.getString("recipe"))).orElse(null);
+                this.recipe = (CrushingRecipe) MeatlibRecipes.getInstance().get(Identifier.tryParse(nbt.getString("recipe"))).orElse(null);
 //                this.recipe = MeatlibRecipes.getInstance().get(NMrecipeTypes.GRINDING, Identifier.tryParse(nbt.getString("recipe"))).orElse(null);
             else
                 this.recipe = null;
         }
 
         @Nullable
-        public GrindingRecipe getRecipe()
+        public CrushingRecipe getRecipe()
         {
             return recipe;
         }

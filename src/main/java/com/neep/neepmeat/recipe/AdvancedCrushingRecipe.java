@@ -13,7 +13,7 @@ import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.minecraft.item.Item;
 import net.minecraft.util.Identifier;
 
-public class AdvancedCrushingRecipe extends GrindingRecipe
+public class AdvancedCrushingRecipe extends CrushingRecipe
 {
     public AdvancedCrushingRecipe(Identifier id, RecipeInput<Item> itemInput, RecipeOutput<Item> itemOutput, RecipeOutput<Item> extraOutput, float experience, int processTime)
     {
