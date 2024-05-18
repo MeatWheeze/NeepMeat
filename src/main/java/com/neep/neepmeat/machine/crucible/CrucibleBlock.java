@@ -46,9 +46,9 @@ public class CrucibleBlock extends BaseBlock implements BlockEntityProvider
     @Override
     public void onSteppedOn(World world, BlockPos pos, BlockState state, Entity entity)
     {
-        if (entity instanceof ItemEntity && world.getBlockEntity(pos) instanceof CrucibleBlockEntity be && !world.isClient())
+        if (entity instanceof ItemEntity itemEntity && !entity.isRemoved() && world.getBlockEntity(pos) instanceof CrucibleBlockEntity be && !world.isClient())
         {
-            be.receiveItemEntity((ItemEntity) entity);
+            be.receiveItemEntity(itemEntity);
         }
     }
 }

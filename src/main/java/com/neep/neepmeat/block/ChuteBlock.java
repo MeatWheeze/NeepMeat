@@ -81,7 +81,7 @@ public class ChuteBlock extends BaseHorFacingBlock implements BlockEntityProvide
     @Override
     public void onEntityCollision(BlockState state, World world, BlockPos pos, Entity entity)
     {
-        if (!world.isClient() && state.get(OPEN) && world.getTime() % 5 == 0)
+        if (!world.isClient() && state.get(OPEN) && world.getTime() % 5 == 0 && !entity.isRemoved())
         {
             if (world.getBlockEntity(pos) instanceof ChuteBlockEntity be && entity instanceof ItemEntity itemEntity)
             {

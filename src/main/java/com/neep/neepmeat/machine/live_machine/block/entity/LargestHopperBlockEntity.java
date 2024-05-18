@@ -68,6 +68,9 @@ public class LargestHopperBlockEntity extends SyncableBlockEntity implements Ite
 
     public void insertEntity(ItemEntity itemEntity)
     {
+        if (itemEntity.isRemoved())
+            return;
+
         ItemStack stack = itemEntity.getStack();
         if (inventory.isEmpty())
         {
