@@ -1,0 +1,28 @@
+{
+  "variants": {
+    "height=2": {
+      "model": "neepmeat:block/living_machine/lucky_one/air"
+    },
+
+    "height=1,facing=east": {
+      "model": "neepmeat:block/living_machine/lucky_one/frame",
+      "y": 90,
+      "x": 0
+    },
+    "height=1,facing=north": {
+      "model": "neepmeat:block/living_machine/lucky_one/frame",
+      "y": 0,
+      "x": 0
+    },
+    "height=1,facing=south": {
+      "model": "neepmeat:block/living_machine/lucky_one/frame",
+      "y": 180,
+      "x": 0
+    },
+    "height=1,facing=west": {
+      "model": "neepmeat:block/living_machine/lucky_one/frame",
+      "y": -90,
+      "x": 0
+    }
+  }
+}

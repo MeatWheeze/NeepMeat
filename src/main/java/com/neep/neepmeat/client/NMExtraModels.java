@@ -45,6 +45,11 @@ public class NMExtraModels implements ExtraModelProvider
     public static final PartialModel UNKNOWN_BODY_1 = new PartialModel(new Identifier(NeepMeat.NAMESPACE, "entity/parts/unknown_body_1"));
     public static final PartialModel FARMING_SCUTTER = new PartialModel(new Identifier(NeepMeat.NAMESPACE, "entity/scutter"));
 
+    public static final PartialModel LUCKY_ONE_HEAD = new PartialModel(new Identifier(NeepMeat.NAMESPACE, "block/living_machine/lucky_one/head"));
+    public static final PartialModel LUCKY_ONE_ARM_L = new PartialModel(new Identifier(NeepMeat.NAMESPACE, "block/living_machine/lucky_one/arm_l"));
+    public static final PartialModel LUCKY_ONE_ARM_R = new PartialModel(new Identifier(NeepMeat.NAMESPACE, "block/living_machine/lucky_one/arm_r"));
+    public static final PartialModel LUCKY_ONE_BODY = new PartialModel(new Identifier(NeepMeat.NAMESPACE, "block/living_machine/lucky_one/body"));
+
     public static NMExtraModels EXTRA_MODELS = new NMExtraModels();
 
     public static Identifier BIG_LEVER_HANDLE = new Identifier(NeepMeat.NAMESPACE, "block/big_lever_handle");

@@ -1,5 +1,6 @@
 package com.neep.neepmeat.machine.live_machine;
 
+import com.neep.meatlib.block.multi.TallerBlock;
 import com.neep.meatlib.item.ItemSettings;
 import com.neep.meatlib.registry.BlockRegistry;
 import com.neep.neepmeat.api.FluidPump;
@@ -11,6 +12,7 @@ import com.neep.neepmeat.block.MachineBlock;
 import com.neep.neepmeat.init.NMBlocks;
 import com.neep.neepmeat.machine.live_machine.block.*;
 import com.neep.neepmeat.machine.live_machine.block.entity.*;
+import com.neep.neepmeat.transport.api.pipe.BloodAcceptor;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
@@ -59,6 +61,8 @@ public class LivingMachines
     public static final BigBlock<?> LARGE_TROMMEL = BlockRegistry.queue(new LargeTrommelBlock("large_trommel",FabricBlockSettings.copyOf(MACHINE_SETTINGS), ItemSettings.block()));
     public static final BigBlock<LargestHopperBlock.StructureBlock> LARGEST_HOPPER = BlockRegistry.queue(new LargestHopperBlock("largest_hopper", FabricBlockSettings.copyOf(MACHINE_SETTINGS), ItemSettings.block()));
 
+    public static final TallerBlock LUCKY_ONE = BlockRegistry.queue(new LuckyOneBlock("lucky_one", ItemSettings.block(), FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
+
     public static BlockEntityType<MotorPortBlockEntity> MOTOR_PORT_BE;
     public static BlockEntityType<IntegrationPortBlockEntity> INTEGRATION_PORT_BE;
     public static BlockEntityType<CrusherSegmentBlockEntity> CRUSHER_SEGMENT_BE;
@@ -69,6 +73,8 @@ public class LivingMachines
     public static BlockEntityType<ItemOutputPortBlockEntity> ITEM_OUTPUT_PORT_BE;
     public static BlockEntityType<FluidInputPortBlockEntity> FLUID_INPUT_PORT_BE;
     public static BlockEntityType<FluidOutputPortBlockEntity> FLUID_OUTPUT_PORT_BE;
+
+    public static BlockEntityType<LuckyOneBlockEntity> LUCKY_ONE_BE;
 
     public static void init()
     {
@@ -98,6 +104,9 @@ public class LivingMachines
         FluidPump.SIDED.registerForBlockEntity(FluidOutputPortBlockEntity::getPump, FLUID_OUTPUT_PORT_BE);
 
         TEST_LIVING_MACHINE_BE = register("test_living_machine", (p, s) -> new TestLivingMachineBE(LivingMachines.TEST_LIVING_MACHINE_BE, p, s), NMBlocks.TEST_LIVING_MACHINE);
+
+        LUCKY_ONE_BE = register("lucky_one", (p, s) -> new LuckyOneBlockEntity(LivingMachines.LUCKY_ONE_BE, p, s), LUCKY_ONE);
+        BloodAcceptor.SIDED.registerForBlockEntity(LuckyOneBlockEntity::getAcceptor, LUCKY_ONE_BE);
 
         Processes.init();
     }

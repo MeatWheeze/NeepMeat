@@ -13,6 +13,8 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
+import net.minecraft.state.StateManager;
+import net.minecraft.state.property.IntProperty;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.shape.VoxelShape;
@@ -23,20 +25,21 @@ import net.minecraft.world.WorldView;
 import org.jetbrains.annotations.Nullable;
 
 @SuppressWarnings("deprecation")
-public abstract class TallBlock extends BaseBlock
+public abstract class TallerBlock extends BaseBlock
 {
     public static final VoxelShape OUTLINE = Block.createCuboidShape(0, 0, 0, 16, 32, 16);
 
-    private final Block structureBlock;
+    private final TallerBlock.Structure structureBlock;
+    private final IntProperty heightProperty;
+    private final int maxHeight;
 
-    public TallBlock(String registryName, Settings settings)
+    public TallerBlock(String registryName, IntProperty heightProperty, ItemSettings itemSettings, Settings settings)
     {
-        this(registryName, ItemSettings.block(), settings);
-    }
+        super(registryName, itemSettings, settings.pistonBehavior(PistonBehavior.IGNORE));
 
-    public TallBlock(String registryName, ItemSettings itemSettings, Settings settings)
-    {
-        super(registryName, itemSettings, settings);
+        this.heightProperty = heightProperty;
+        this.maxHeight = heightProperty.getValues().stream().max(Integer::compare).get() + 1;
+
         this.structureBlock = createStructure();
     }
 
@@ -51,32 +54,60 @@ public abstract class TallBlock extends BaseBlock
         return structureBlock;
     }
 
+    public IntProperty getHeightProperty()
+    {
+        return heightProperty;
+    }
+
     protected abstract Structure createStructure();
 
     @Override
     public boolean canPlaceAt(BlockState state, WorldView world, BlockPos pos)
     {
-        Box box = new Box(pos.getX(), pos.getY(), pos.getZ(), pos.getX(), pos.getY() + 1, pos.getZ());
-        return world.getBlockState(pos.up()).isAir() && world.isSpaceEmpty(box) && super.canPlaceAt(state, world, pos);
+        Box box = new Box(pos.getX(), pos.getY(), pos.getZ(), pos.getX(), pos.getY() + maxHeight, pos.getZ());
+
+        if (!super.canPlaceAt(state, world, pos) || !world.isSpaceEmpty(box))
+            return false;
+
+        boolean valid = true;
+        for (int i = 0; i < maxHeight; i++)
+        {
+            valid = valid && world.getBlockState(pos.up(i)).isAir();
+        }
+
+        return valid;
     }
 
     @Override
     public void onPlaced(World world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack itemStack)
     {
-        if (world.getBlockState(pos.up()).isAir())
+        for (int i = 1; i < maxHeight; ++i)
         {
-            world.setBlockState(pos.up(), structureBlock.getDefaultState());
+            BlockPos upPos = pos.up(i);
+            if (world.getBlockState(upPos).isAir())
+            {
+                world.setBlockState(pos.up(i), structureBlock.getState(state).with(heightProperty, i));
+            }
         }
+
         super.onPlaced(world, pos, state, placer, itemStack);
     }
 
     @Override
     public void onStateReplaced(BlockState state, World world, BlockPos pos, BlockState newState, boolean moved)
     {
-        if (!newState.isOf(this) && world.getBlockState(pos.up()).isOf(structureBlock))
+        if (!newState.isOf(this))
         {
-            world.setBlockState(pos.up(), Blocks.AIR.getDefaultState());
+            for (int i = 1; i < maxHeight; ++i)
+            {
+                BlockPos upPos = pos.up(i);
+                if (world.getBlockState(upPos).isOf(structureBlock))
+                {
+                    world.setBlockState(upPos, Blocks.AIR.getDefaultState());
+                }
+            }
         }
+
         super.onStateReplaced(state, world, pos, newState, moved);
     }
 
@@ -88,23 +119,35 @@ public abstract class TallBlock extends BaseBlock
     
     public class Structure extends BaseDummyBlock implements MeatlibBlockExtension
     {
+
         public Structure(String registryName, Settings settings)
         {
-            super(registryName, settings);
+            super(registryName, settings.pistonBehavior(PistonBehavior.IGNORE));
+        }
+
+        protected int getHeight(BlockState state)
+        {
+            return state.get(getHeightProperty());
+        }
+
+        protected BlockState getState(BlockState baseState)
+        {
+            return getDefaultState();
         }
 
         @Override
         public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context)
         {
-            return TallBlock.this.getOutlineShape(state, world, pos, context).offset(0, -1, 0);
+            return TallerBlock.this.getOutlineShape(state, world, pos, context).offset(0, -1, 0);
         }
 
         @Override
         public void onStateReplaced(BlockState state, World world, BlockPos pos, BlockState newState, boolean moved)
         {
-            if (!newState.isOf(this) && world.getBlockState(pos.down()).isOf(TallBlock.this))
+            BlockPos basePos = pos.down(getHeight(state));
+            if (!newState.isOf(this) && world.getBlockState(basePos).isOf(TallerBlock.this))
             {
-                world.setBlockState(pos.down(), Blocks.AIR.getDefaultState());
+                world.setBlockState(basePos, Blocks.AIR.getDefaultState());
             }
             super.onStateReplaced(state, world, pos, newState, moved);
         }
@@ -112,7 +155,7 @@ public abstract class TallBlock extends BaseBlock
         @Override
         public ItemConvertible dropsLike()
         {
-            return TallBlock.this;
+            return TallerBlock.this;
         }
 
         @Override
@@ -124,19 +167,20 @@ public abstract class TallBlock extends BaseBlock
         @Override
         public ItemStack getPickStack(BlockView world, BlockPos pos, BlockState state)
         {
-            return TallBlock.this.getPickStack(world, pos, state);
+            return TallerBlock.this.getPickStack(world, pos, state);
         }
 
         @Override
         protected void spawnBreakParticles(World world, PlayerEntity player, BlockPos pos, BlockState state)
         {
-            world.syncWorldEvent(player, WorldEvents.BLOCK_BROKEN, pos, Block.getRawIdFromState(TallBlock.this.getDefaultState()));
+            world.syncWorldEvent(player, WorldEvents.BLOCK_BROKEN, pos, Block.getRawIdFromState(TallerBlock.this.getDefaultState()));
         }
 
         @Override
-        public PistonBehavior getPistonBehavior(BlockState state)
+        protected void appendProperties(StateManager.Builder<Block, BlockState> builder)
         {
-            return PistonBehavior.IGNORE;
+            super.appendProperties(builder);
+            builder.add(heightProperty);
         }
     }
 }

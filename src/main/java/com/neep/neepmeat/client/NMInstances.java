@@ -5,6 +5,7 @@ import com.neep.neepmeat.client.instance.LargeFanInstance;
 import com.neep.neepmeat.client.instance.LargeTrommelInstance;
 import com.neep.neepmeat.client.instance.RoboticArmInstance;
 import com.neep.neepmeat.client.instance.FarmingScutterInstance;
+import com.neep.neepmeat.client.instance.*;
 import com.neep.neepmeat.client.renderer.LinearOscillatorInstance;
 import com.neep.neepmeat.client.renderer.RoboticArmRenderer;
 import com.neep.neepmeat.client.renderer.block.LargeTrommelRenderer;
@@ -48,6 +49,8 @@ public class NMInstances
         BlockEntityRendererFactories.register(LivingMachines.LARGE_TROMMEL_BE, LargeTrommelRenderer::new);
 
         BlockEntityRendererFactories.register(LivingMachines.LARGEST_HOPPER_BE, LargestHopperRenderer::new);
+
+        InstancedRenderRegistry.configure(LivingMachines.LUCKY_ONE_BE).alwaysSkipRender().factory(LuckyOneInstance::new).apply();
 
         InstancedRenderRegistry.configure(NMBlockEntities.MOTOR).alwaysSkipRender().factory(MotorInstance::new).apply();
         InstancedRenderRegistry.configure(NMBlockEntities.ADVANCED_MOTOR).alwaysSkipRender().factory(AdvancedMotorInstance::new).apply();
