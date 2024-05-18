@@ -55,7 +55,7 @@ public class DrillSoundInstance extends MovingSoundInstance
 
         if (AssaultDrillItem.using(player.getMainHandStack()))
         {
-            targetVolume = 1;
+            targetVolume = 0.4f;
             targetPitch = 1;
         }
         else
