@@ -37,7 +37,7 @@ public class MixerRenderer implements BlockEntityRenderer<MixerBlockEntity>
         if (be.getCurrentRecipe() != null && be.progressIncrement() > be.minIncrement())
         {
             progress = (be.progress) / be.processLength;
-            nextOutput = progress * be.getCurrentRecipe().fluidOutput.amount();
+            nextOutput = progress * be.getCurrentRecipe().fluidOutput.maxAmount();
         }
 
 

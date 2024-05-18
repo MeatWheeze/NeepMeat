@@ -109,13 +109,10 @@ public class NormalTrommelRecipe implements TrommelRecipe
     {
         try (Transaction inner = transaction.openNested())
         {
-            fluidOutput.update();
-
             boolean bl1 = fluidOutput.insertInto(context.output(), FluidVariant::of, inner);
 
             if (itemOutput != null)
             {
-                itemOutput.update();
                 itemOutput.insertInto(context.itemOutput(), ItemVariant::of, inner);
             }
 

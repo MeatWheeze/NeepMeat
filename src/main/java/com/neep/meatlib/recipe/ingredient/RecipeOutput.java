@@ -12,7 +12,12 @@ import java.util.function.BiFunction;
 public interface RecipeOutput<T>
 {
     T resource();
-    long amount();
+
+    /**
+     * Generates a random output amount. The result is random, so call this once and store the value for further use.
+     * Do expect the returned amount to be the same amount used in RecipeOutput::insertInto.
+     */
+    long randomAmount(float chanceMod);
     long maxAmount();
     long minAmount();
     float chance();
@@ -37,7 +42,7 @@ public interface RecipeOutput<T>
         }
 
         @Override
-        public long amount()
+        public long randomAmount(float chanceMod)
         {
             return 0;
         }

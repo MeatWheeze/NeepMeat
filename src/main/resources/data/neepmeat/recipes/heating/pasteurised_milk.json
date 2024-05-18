@@ -2,12 +2,11 @@
   "type": "neepmeat:heating",
   "input": {
     "tag": "c:milk",
-    "amount": 8100
+    "amount": 9000
   },
   "output": {
     "resource": "neepmeat:pasteurised_milk",
-    "min": 8100,
-    "max": 8100
+    "amount": 9000
   },
   "processtime": 5
 }

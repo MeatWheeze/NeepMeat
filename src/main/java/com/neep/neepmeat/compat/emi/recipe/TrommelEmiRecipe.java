@@ -33,7 +33,7 @@ public class TrommelEmiRecipe implements EmiRecipe {
 
         output.add(EmiStack.of(recipe.getFluidOutput().resource(), recipe.getFluidOutput().minAmount()));
         if (recipe.getAuxOutput() != null) {
-            output.add(EmiStack.of(recipe.getAuxOutput().resource(), recipe.getAuxOutput().amount()));
+            output.add(EmiStack.of(recipe.getAuxOutput().resource(), recipe.getAuxOutput().minAmount()).setChance(recipe.getAuxOutput().chance()));
         }
 
         this.output = output;

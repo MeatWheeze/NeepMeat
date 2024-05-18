@@ -122,9 +122,6 @@ public class CrushingRecipe implements MeatlibRecipe<IGrinderStorage>
     {
         try (Transaction inner = transaction.openNested())
         {
-            itemOutput.update();
-//            long inserted = storage.getOutputStorage().insert(ItemVariant.of(itemOutput.resource()), itemOutput.amount(), transaction);
-
             boolean bl1 = itemOutput.insertInto(context.getOutputStorage(), ItemVariant::of, inner);
             boolean bl2 = extraOutput == null || extraOutput.insertInto(context.getExtraStorage(), ItemVariant::of, inner);
             boolean bl3 = context.getXpStorage().insert(experience, transaction) == experience;

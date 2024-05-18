@@ -88,7 +88,7 @@ public class ItemManufactureRecipe implements ManufactureRecipe<MutateInPlace<It
     @Override
     public boolean ejectOutputs(MutateInPlace<ItemStack> context, TransactionContext transaction)
     {
-        ItemStack outputStack = new ItemStack(output.resource(), Math.toIntExact(output.amount()));
+        ItemStack outputStack = new ItemStack(output.resource(), Math.toIntExact(output.randomAmount(1)));
         context.set(outputStack);
         return true;
     }

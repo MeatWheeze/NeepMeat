@@ -118,8 +118,6 @@ public class RenderingRecipe extends ImplementedRecipe<CrucibleStorage>
     {
         try (Transaction inner = transaction.openNested())
         {
-            fluidOutput.update();
-
             boolean bl1 = true;
             for (int i = 0; i < amount; ++i)
             {

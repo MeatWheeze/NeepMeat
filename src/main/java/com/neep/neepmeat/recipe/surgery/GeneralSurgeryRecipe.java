@@ -122,7 +122,6 @@ public class GeneralSurgeryRecipe extends SurgeryRecipe
     @Override
     public boolean ejectOutputs(SurgeryTableContext context, TransactionContext transaction)
     {
-        output.update();
         output.insertInto(context.getStorage(), ItemVariant::of, transaction);
         return false;
     }

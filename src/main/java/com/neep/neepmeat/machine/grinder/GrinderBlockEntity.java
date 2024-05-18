@@ -168,8 +168,9 @@ public class GrinderBlockEntity extends MotorisedMachineBlockEntity
         {
             CrushingRecipe recipe = MeatlibRecipes.getInstance().getFirstMatch(NMrecipeTypes.GRINDING, storage).orElse(null);
 
-            if (recipe != null && MeatlibStorageUtil.simulateInsert(storage.outputStorage, ItemVariant.of(recipe.getItemOutput().resource()),
-                                                                 recipe.getItemOutput().amount(), null) == recipe.getItemOutput().amount())
+            if (recipe != null && MeatlibStorageUtil.simulateInsert(
+                    storage.outputStorage, ItemVariant.of(recipe.getItemOutput().resource()), recipe.getItemOutput().maxAmount(), null)
+                    == recipe.getItemOutput().maxAmount())
             {
                 setCurrentRecipe(recipe);
                 this.processLength = recipe.getTime();

@@ -110,8 +110,6 @@ public class FluidHeatingRecipe implements MeatlibRecipe<MultiTankBlockEntity>
     {
         try (Transaction inner = transaction.openNested())
         {
-            fluidOutput.update();
-
             boolean bl1 = fluidOutput.insertInto(context.getStorage(), FluidVariant::of, inner);
 
             if (bl1)

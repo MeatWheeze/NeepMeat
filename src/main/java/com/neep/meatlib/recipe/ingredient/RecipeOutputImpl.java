@@ -5,7 +5,6 @@ import com.google.gson.JsonSyntaxException;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.fabricmc.fabric.api.transfer.v1.storage.TransferVariant;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
-import net.minecraft.item.Item;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.util.Identifier;
@@ -26,8 +25,6 @@ public class RecipeOutputImpl<T> implements RecipeOutput<T>
     protected final UniformIntProvider lootFunction;
     protected final Random random;
     protected final float chance;
-    protected int amount;
-    protected boolean willOutput;
     protected @Nullable NbtCompound nbt;
 
     public RecipeOutputImpl(@NotNull T resource, int min, int max, float probability)
@@ -50,9 +47,9 @@ public class RecipeOutputImpl<T> implements RecipeOutput<T>
     }
 
     @Override
-    public long amount()
+    public long randomAmount(float chanceMod)
     {
-        return amount;
+        return lootFunction.get(random);
     }
 
     @Override
@@ -73,24 +70,6 @@ public class RecipeOutputImpl<T> implements RecipeOutput<T>
         return chance;
     }
 
-//    public void update()
-//    {
-//        amount = lootFunction.get(random);
-//        float next = random.nextFloat();
-//        willOutput = next < chance;
-//    }
-
-//    public <V extends TransferVariant<T>> boolean insertInto(Storage<V> storage, Function<T, V> of, TransactionContext transaction)
-//    {
-//        update();
-//        if (!willOutput)
-//            return true;
-//
-//        V variant = of.apply(resource).
-//        long inserted = storage.insert(of.apply(resource()), amount, transaction);
-//        return inserted == amount;
-//    }
-
     public void setNbt(NbtCompound nbt)
     {
         this.nbt = nbt;
@@ -99,9 +78,9 @@ public class RecipeOutputImpl<T> implements RecipeOutput<T>
     @Override
     public <V extends TransferVariant<T>> boolean insertInto(Storage<V> storage, BiFunction<T, NbtCompound, V> of, float chanceModifier, TransactionContext transaction)
     {
-        long amount = lootFunction.get(random);
+        long amount = randomAmount(chanceModifier);
         float next = random.nextFloat();
-        willOutput = next < chance;
+        boolean willOutput = next < chance;
 
         if (!willOutput)
             return true;

@@ -149,8 +149,6 @@ public class AlloyKilnRecipe implements MeatlibRecipe<AlloyKilnStorage>
     {
         try (Transaction inner = transaction.openNested())
         {
-            itemOutput.update();
-
             boolean bl1 = itemOutput.insertInto(storage.getOutputStorage(), ItemVariant::of, inner);
 
             if (bl1)

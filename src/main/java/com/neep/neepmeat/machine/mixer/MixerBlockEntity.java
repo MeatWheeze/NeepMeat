@@ -137,7 +137,7 @@ public class MixerBlockEntity extends MotorisedMachineBlockEntity
             MixingRecipe recipe = world.getRecipeManager().getFirstMatch(NMrecipeTypes.MIXING, storage, world).orElse(null);
 
             if (recipe != null && MeatlibStorageUtil.simulateInsert(getOutputStorage(), FluidVariant.of(recipe.fluidOutput.resource()),
-                                                                 recipe.fluidOutput.amount(), null) == recipe.fluidOutput.amount())
+                                                                 recipe.fluidOutput.maxAmount(), null) == recipe.fluidOutput.maxAmount())
             {
                 try (Transaction transaction = Transaction.openOuter())
                 {

@@ -10,8 +10,8 @@
   },
   "extra": {
     "resource": "minecraft:flint",
-    "min": 1,
-    "max": 1
+    "amount": 1,
+    "chance": 0.25
   },
   "experience": 0,
   "processtime": 40
