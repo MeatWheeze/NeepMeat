@@ -6,7 +6,7 @@ import com.neep.meatlib.util.NbtSerialisable;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.api.storage.WritableStackStorage;
 import com.neep.neepmeat.init.NMrecipeTypes;
-import com.neep.neepmeat.machine.grinder.IGrinderStorage;
+import com.neep.neepmeat.machine.grinder.CrusherRecipeContext;
 import com.neep.neepmeat.recipe.CrushingRecipe;
 import net.fabricmc.fabric.api.transfer.v1.item.InventoryStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
@@ -30,7 +30,7 @@ public class LargeCrusherStorage implements NbtSerialisable
     final ImplementedInventory outputInventory = ImplementedInventory.ofSize(8);
     final InventoryStorage outputStorage = InventoryStorage.of(outputInventory, null);
 
-    private final IGrinderStorage.XpStorage xpStorage = new IGrinderStorage.XpStorage();
+    private final CrusherRecipeContext.XpStorage xpStorage = new CrusherRecipeContext.XpStorage();
 
     public LargeCrusherStorage(LargeCrusherBlockEntity parent)
     {
@@ -70,7 +70,7 @@ public class LargeCrusherStorage implements NbtSerialisable
         xpStorage.readNbt(nbt.getCompound("xp"));
     }
 
-    protected class InputSlot extends WritableStackStorage implements IGrinderStorage
+    protected class InputSlot extends WritableStackStorage implements CrusherRecipeContext
     {
         @Nullable
         private CrushingRecipe recipe;
@@ -156,6 +156,12 @@ public class LargeCrusherStorage implements NbtSerialisable
         public XpStorage getXpStorage()
         {
             return xpStorage;
+        }
+
+        @Override
+        public float getChanceMod()
+        {
+            return 0;
         }
 
         @Nullable

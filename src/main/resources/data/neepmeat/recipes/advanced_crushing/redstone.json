@@ -6,8 +6,12 @@
   },
   "output": {
     "resource": "minecraft:redstone",
-    "min": 5,
-    "max": 7
+    "amount": 5
+  },
+  "extra": {
+    "resource": "minecraft:redstone",
+    "amount": 2,
+    "chance": 0.5
   },
   "experience": 2,
   "processtime": 40

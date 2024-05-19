@@ -96,7 +96,7 @@ public class EnlighteningRecipe extends ImplementedRecipe<PedestalBlockEntity.Re
                 return null;
             }
 
-            long outputAmount = amount * itemOutput.randomAmount(1);
+            long outputAmount = amount * itemOutput.randomAmount(0);
             long ins = stackStorage.insert(ItemVariant.of(itemOutput.resource()), outputAmount, inner);
 
             if (ins == outputAmount)

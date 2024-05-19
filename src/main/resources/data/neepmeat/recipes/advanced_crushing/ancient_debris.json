@@ -6,7 +6,11 @@
   },
   "output": {
     "resource": "minecraft:netherite_scrap",
-    "amount": 2
+    "amount": 1
+  },
+  "extra": {
+    "resource": "minecraft:netherite_scrap",
+    "amount": 1
   },
   "experience": 5,
   "processtime": 40

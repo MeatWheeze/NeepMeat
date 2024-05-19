@@ -6,8 +6,12 @@
   },
   "output": {
     "resource": "minecraft:emerald",
-    "min": 2,
-    "max": 4
+    "amount": 2
+  },
+  "extra": {
+    "resource": "minecraft:emerald",
+    "amount": 1,
+    "chance": 0.5
   },
   "experience": 5,
   "processtime": 40

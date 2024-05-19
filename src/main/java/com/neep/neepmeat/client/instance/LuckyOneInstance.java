@@ -53,14 +53,14 @@ public class LuckyOneInstance extends BlockEntityInstance<LuckyOneBlockEntity> i
         float headPitch = 4;
         float bodyPitch = 0;
 
-        if (blockEntity.getInflux() > 0)
+        if (blockEntity.isActive())
         {
-            headYaw = 2 * MathHelper.sin((MathHelper.sin(time + offset) + 1) * time / 10);
+            headYaw = 2 * MathHelper.sin((MathHelper.sin(time + offset) + 1) * time / (10));
             headPitch = 8 * MathHelper.cos(time / 4) * MathHelper.sin((time - offset) / 10 + 2);
 
             bodyPitch = MathHelper.clamp(
                     5 * (MathHelper.cos((time + offset / 2f) / 4 + 2)
-                            + MathHelper.sin(time / 10 + 1) * MathHelper.sin(time))
+                            + MathHelper.sin(time / 10 + 1) * MathHelper.sin(time * (offset / 100f - 0.5f)))
                             + MathHelper.cos(time),
                     0, 20);
         }

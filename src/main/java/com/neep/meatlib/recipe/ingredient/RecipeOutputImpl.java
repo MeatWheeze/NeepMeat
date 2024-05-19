@@ -9,6 +9,7 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.JsonHelper;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.intprovider.UniformIntProvider;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.util.registry.Registry;
@@ -49,7 +50,25 @@ public class RecipeOutputImpl<T> implements RecipeOutput<T>
     @Override
     public long randomAmount(float chanceMod)
     {
-        return lootFunction.get(random);
+        float newChance = chance + chanceMod;
+
+        // The expected amount should be (chance + chanceMod) * Ex(lootFunction)
+
+        int rolls = MathHelper.floor(newChance);
+        float bonus = newChance % 1;
+
+        long amount = 0;
+        for (int roll = 0; roll < rolls; ++roll)
+        {
+            amount += lootFunction.get(random);
+        }
+
+        if (bonus > 0 && random.nextFloat() < bonus)
+        {
+            amount += lootFunction.get(random);
+        }
+
+        return amount;
     }
 
     @Override
@@ -79,10 +98,8 @@ public class RecipeOutputImpl<T> implements RecipeOutput<T>
     public <V extends TransferVariant<T>> boolean insertInto(Storage<V> storage, BiFunction<T, NbtCompound, V> of, float chanceModifier, TransactionContext transaction)
     {
         long amount = randomAmount(chanceModifier);
-        float next = random.nextFloat();
-        boolean willOutput = next < chance;
 
-        if (!willOutput)
+        if (amount == 0)
             return true;
 
         V variant = of.apply(resource, nbt);

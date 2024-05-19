@@ -108,9 +108,9 @@ public class CrusherSegmentBlockEntity extends SyncableBlockEntity implements Li
             super(parent);
         }
 
-        public void tick(float progressIncrement, Storage<ItemVariant> output, TransactionContext transaction)
+        public void tick(float progressIncrement, Storage<ItemVariant> output, float chanceMod, TransactionContext transaction)
         {
-            var storage = new TestLivingMachineBE.SimpleCrushingStorage(this, output);
+            var storage = new TestLivingMachineBE.SimpleCrushingStorage(this, output, chanceMod);
             if (recipe != null)
             {
                 progress += progressIncrement;

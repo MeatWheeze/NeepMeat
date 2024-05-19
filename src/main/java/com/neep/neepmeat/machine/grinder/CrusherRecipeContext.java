@@ -7,7 +7,7 @@ import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.fabricmc.fabric.api.transfer.v1.transaction.base.SnapshotParticipant;
 import net.minecraft.nbt.NbtCompound;
 
-public interface IGrinderStorage
+public interface CrusherRecipeContext
 {
     Storage<ItemVariant> getInputStorage();
 
@@ -16,6 +16,8 @@ public interface IGrinderStorage
     Storage<ItemVariant> getExtraStorage();
 
     XpStorage getXpStorage();
+
+    float getChanceMod();
 
     class XpStorage extends SnapshotParticipant<Float> implements NbtSerialisable
     {

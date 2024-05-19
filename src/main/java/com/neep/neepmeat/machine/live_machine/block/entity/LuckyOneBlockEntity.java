@@ -26,9 +26,18 @@ public class LuckyOneBlockEntity extends SyncableBlockEntity implements LivingMa
         @Override
         public float updateInflux(float influx)
         {
-            LuckyOneBlockEntity.this.influx = influx;
-            sync();
-            return influx;
+            if (influx >= 0.05)
+            {
+                LuckyOneBlockEntity.this.influx = 0.05f;
+                sync();
+                return 0.05f;
+            }
+            else
+            {
+                LuckyOneBlockEntity.this.influx = 0;
+                sync();
+                return 0;
+            }
         }
     };
 
@@ -46,7 +55,7 @@ public class LuckyOneBlockEntity extends SyncableBlockEntity implements LivingMa
         super.setWorld(world);
         if (animationOffset == -1)
         {
-            animationOffset = (int) (world.getTime() % 400);
+            animationOffset = world.getRandom().nextInt(200);
             markDirty();
         }
     }
@@ -93,5 +102,10 @@ public class LuckyOneBlockEntity extends SyncableBlockEntity implements LivingMa
     public ComponentType<? extends LivingMachineComponent> getComponentType()
     {
         return LivingMachineComponents.LUCKY_ONE;
+    }
+
+    public boolean isActive()
+    {
+        return influx >= 0.05;
     }
 }

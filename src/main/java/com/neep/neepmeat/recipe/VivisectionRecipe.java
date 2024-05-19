@@ -52,7 +52,7 @@ public class VivisectionRecipe implements MeatlibRecipe<VivisectionRecipe.Vivise
     public boolean ejectOutputs(VivisectionContext context, TransactionContext transaction)
     {
         Item resource = output.resource();
-        int amount = (int) output.randomAmount(1);
+        int amount = (int) output.randomAmount(0);
         ItemEntity item = new ItemEntity(context.world, context.pos.x, context.pos.y, context.pos.z, new ItemStack(resource, amount));
         context.world.spawnEntity(item);
         context.entity.kill();

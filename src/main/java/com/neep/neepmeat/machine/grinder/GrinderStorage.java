@@ -11,7 +11,7 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 
 @SuppressWarnings("UnstableApiUsage")
-public class GrinderStorage extends SimpleInventory implements IGrinderStorage
+public class GrinderStorage extends SimpleInventory implements CrusherRecipeContext
 {
     protected GrinderBlockEntity parent;
     protected WritableStackStorage inputStorage;
@@ -73,6 +73,12 @@ public class GrinderStorage extends SimpleInventory implements IGrinderStorage
     public XpStorage getXpStorage()
     {
         return xpStorage;
+    }
+
+    @Override
+    public float getChanceMod()
+    {
+        return 0;
     }
 
     public void writeNbt(NbtCompound nbt)

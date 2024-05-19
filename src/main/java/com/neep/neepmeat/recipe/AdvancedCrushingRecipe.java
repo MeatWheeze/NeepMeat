@@ -6,7 +6,7 @@ import com.neep.meatlib.recipe.ingredient.RecipeInput;
 import com.neep.meatlib.recipe.ingredient.RecipeInputs;
 import com.neep.meatlib.recipe.ingredient.RecipeOutput;
 import com.neep.neepmeat.init.NMrecipeTypes;
-import com.neep.neepmeat.machine.grinder.IGrinderStorage;
+import com.neep.neepmeat.machine.grinder.CrusherRecipeContext;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.StorageView;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
@@ -46,13 +46,13 @@ public class AdvancedCrushingRecipe extends CrushingRecipe
         }
 
         @Override
-        public boolean matches(IGrinderStorage inventory)
+        public boolean matches(CrusherRecipeContext inventory)
         {
             return false;
         }
 
         @Override
-        public boolean takeInputs(IGrinderStorage storage, TransactionContext transaction)
+        public boolean takeInputs(CrusherRecipeContext storage, TransactionContext transaction)
         {
             for (StorageView<ItemVariant> view : storage.getInputStorage())
             {
@@ -66,7 +66,7 @@ public class AdvancedCrushingRecipe extends CrushingRecipe
         }
 
         @Override
-        public boolean ejectOutputs(IGrinderStorage context, TransactionContext transaction)
+        public boolean ejectOutputs(CrusherRecipeContext context, TransactionContext transaction)
         {
             return true;
         }

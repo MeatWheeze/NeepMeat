@@ -26,7 +26,7 @@ public interface RecipeOutput<T>
 
     default <V extends TransferVariant<T>> boolean insertInto(Storage<V> storage, BiFunction<T, NbtCompound, V> of, TransactionContext transaction)
     {
-        return insertInto(storage, of, 1, transaction);
+        return insertInto(storage, of, 0, transaction);
     }
 
     <V extends TransferVariant<T>> boolean insertInto(Storage<V> storage, BiFunction<T, NbtCompound, V> of, float chanceModifier, TransactionContext transaction);

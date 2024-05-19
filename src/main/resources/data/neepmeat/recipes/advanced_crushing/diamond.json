@@ -6,8 +6,12 @@
   },
   "output": {
     "resource": "minecraft:diamond",
-    "min": 2,
-    "max": 4
+    "amount": 2
+  },
+  "extra": {
+    "resource": "minecraft:diamond",
+    "amount": 1,
+    "chance": 0.5
   },
   "experience": 5,
   "processtime": 50

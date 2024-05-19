@@ -1,15 +1,16 @@
 package com.neep.neepmeat.machine.live_machine;
 
-import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.api.live_machine.ComponentType;
 import com.neep.neepmeat.api.live_machine.LivingMachineBlockEntity;
 import com.neep.neepmeat.api.live_machine.Process;
 import com.neep.neepmeat.machine.live_machine.block.entity.CrusherSegmentBlockEntity;
+import com.neep.neepmeat.machine.live_machine.block.entity.LuckyOneBlockEntity;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.fabricmc.fabric.api.transfer.v1.storage.StorageUtil;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 
+import java.util.Collection;
 import java.util.List;
 
 public class CrusherProcess implements Process
@@ -23,9 +24,14 @@ public class CrusherProcess implements Process
             var crushers = result.t2();
             var itemOutputs = result.t3();
 
-            if (!be.getComponent(LivingMachineComponents.LUCKY_ONE).isEmpty())
+            float chanceMod = 0;
+
+            // LSMFT! Reach for a Lucky! IT'S TOASTED.
+            Collection<LuckyOneBlockEntity> luckies = be.getComponent(LivingMachineComponents.LUCKY_ONE);
+            for (var lucky : luckies)
             {
-//                NeepMeat.LOGGER.info("Yay!");
+                if (lucky.isActive())
+                    chanceMod += 1;
             }
 
             if (be.getPower() < 0.1)
@@ -52,7 +58,7 @@ public class CrusherProcess implements Process
 
                         if (!slot.isEmpty())
                         {
-                            slot.tick(progressIncrement, output, inner);
+                            slot.tick(progressIncrement, output, chanceMod, inner);
                         }
                         inner.commit();
                     }
