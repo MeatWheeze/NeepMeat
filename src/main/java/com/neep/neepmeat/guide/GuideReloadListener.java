@@ -1,9 +1,6 @@
 package com.neep.neepmeat.guide;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
+import com.google.gson.*;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.guide.article.Article;
 import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener;
@@ -72,13 +69,25 @@ public class GuideReloadListener implements SimpleSynchronousResourceReloadListe
                     JsonElement rootElement = JsonParser.parseReader(reader);
 
                     processArticles((JsonObject) rootElement);
-                    root = processNode(JsonHelper.getObject((JsonObject) rootElement, "tree"));
+                    if (JsonHelper.hasJsonObject((JsonObject) rootElement, "index"))
+                    {
+                        if (root != null)
+                        {
+                            throw new JsonParseException("Multiple index elements found");
+                        }
+                        root = processNode(JsonHelper.getObject((JsonObject) rootElement, "index"));
+                    }
                 }
                 catch (Exception e)
                 {
-                    NeepMeat.LOGGER.error("Error occurred while loading resource json " + id.toString(), e);
+                    NeepMeat.LOGGER.error("Error occurred while loading guide file " + id.toString(), e);
                 }
             }
+        }
+
+        if (root == null)
+        {
+            NeepMeat.LOGGER.error("Failed to load guide due to invalid JSON or missing index element");
         }
     }
 
