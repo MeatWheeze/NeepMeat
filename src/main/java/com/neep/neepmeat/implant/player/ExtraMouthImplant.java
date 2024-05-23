@@ -3,6 +3,7 @@ package com.neep.neepmeat.implant.player;
 import com.google.common.collect.Lists;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.item.MeatCartonItem;
+import it.unimi.dsi.fastutil.ints.IntObjectPair;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.HungerManager;
 import net.minecraft.entity.player.PlayerEntity;
@@ -30,31 +31,31 @@ public class ExtraMouthImplant implements EntityImplant
     @Override
     public void tick()
     {
-        if (player.world.getTime() % 20 != 0) return;
+        if (player.getWorld().getTime() % 20 != 0) return;
 
         HungerManager hungerManager = player.getHungerManager();
         if (hungerManager.isNotFull())
         {
             int foodLevel = hungerManager.getFoodLevel();
-            ItemStack stack = getFood(MAX_FOOD - foodLevel, hungerManager.getSaturationLevel(), player.getMaxHealth() - player.getHealth());
+            IntObjectPair<ItemStack> stack = getFood(MAX_FOOD - foodLevel, hungerManager.getSaturationLevel(), player.getMaxHealth() - player.getHealth());
             if (stack != null)
             {
-                eatFood(player, stack);
+                eatFood(player, stack.value(), stack.keyInt());
             }
         }
     }
 
     @Nullable
-    protected ItemStack getFood(int emptyHunger, float saturation, float emptyHearts)
+    protected IntObjectPair<ItemStack> getFood(int emptyHunger, float saturation, float emptyHearts)
     {
         Inventory inventory = player.getInventory();
-        List<ItemStack> foodStacks = Lists.newArrayList();
+        List<IntObjectPair<ItemStack>> foodStacks = Lists.newArrayList();
         for (int i = 0; i < inventory.size(); ++i)
         {
             ItemStack stack = inventory.getStack(i);
             if (stack.getItem().isFood() && stack.getItem().getFoodComponent() != null)
             {
-                foodStacks.add(stack);
+                foodStacks.add(IntObjectPair.of(i, stack));
             }
         }
 
@@ -65,44 +66,47 @@ public class ExtraMouthImplant implements EntityImplant
         if (emptyHearts > 3)
         {
             // Prioritise high saturation if damaged
-            foodStacks.sort(Comparator.comparingDouble(s -> ((ItemStack) s).getItem().getFoodComponent().getSaturationModifier()).reversed());
+            foodStacks.sort(Comparator.<IntObjectPair<ItemStack>>comparingDouble(s -> s.value().getItem().getFoodComponent().getSaturationModifier()).reversed());
 
             return foodStacks.get(0);
         }
         else
         {
-            foodStacks.sort(Comparator.comparingInt(s -> ((ItemStack) s).getItem().getFoodComponent().getHunger()).reversed());
+            foodStacks.sort(Comparator.<IntObjectPair<ItemStack>>comparingInt(s -> s.value().getItem().getFoodComponent().getHunger()).reversed());
 
-            for (var stack : foodStacks)
+            for (var pair : foodStacks)
             {
-                if (emptyHunger >= stack.getItem().getFoodComponent().getHunger())
+                if (emptyHunger >= pair.value().getItem().getFoodComponent().getHunger())
                 {
-                    return stack;
+                    return pair;
                 }
             }
         }
 
         // If no small items are available, wait for empty hunger to drop below half of the smallest item's hunger.
-        ItemStack smallest = foodStacks.get(foodStacks.size() - 1);
-        if (emptyHunger > smallest.getItem().getFoodComponent().getHunger() / 2)
+        IntObjectPair<ItemStack> smallest = foodStacks.get(foodStacks.size() - 1);
+        if (emptyHunger > smallest.value().getItem().getFoodComponent().getHunger() / 2)
             return smallest;
 
         return null;
     }
 
-    protected static void eatFood(PlayerEntity player, ItemStack stack)
+    protected static void eatFood(PlayerEntity player, ItemStack stack, int slot)
     {
         Item item = stack.getItem();
 
         // Hopefully nobody notices this.
         if (item instanceof MeatCartonItem meatCarton)
         {
-            meatCarton.eatFood(player, player.world, stack);
+            meatCarton.eatFood(player, player.getWorld(), stack);
         }
         else
         {
-            player.eatFood(player.world, stack);
-//            player.getHungerManager().eat(item, stack);
+            ItemStack remainder = stack.finishUsing(player.getWorld(), player);
+            if (remainder != stack)
+            {
+                player.getInventory().setStack(slot, remainder);
+            }
         }
     }
 
