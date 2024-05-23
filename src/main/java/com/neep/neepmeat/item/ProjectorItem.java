@@ -2,7 +2,10 @@ package com.neep.neepmeat.item;
 
 import com.neep.meatlib.item.BaseItem;
 import com.neep.meatlib.item.TooltipSupplier;
+import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.client.screen.tablet.GuideMainScreen;
+import com.neep.neepmeat.guide.GuideNode;
+import com.neep.neepmeat.guide.GuideReloadListener;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
@@ -77,6 +80,13 @@ public class ProjectorItem extends BaseItem
         public static GuideMainScreen openScreen()
         {
             MinecraftClient client = MinecraftClient.getInstance();
+
+            if (!GuideReloadListener.getInstance().isValid())
+            {
+                NeepMeat.LOGGER.error("Error opening NEEPMeat guide.");
+                return null;
+            }
+
             GuideMainScreen screen = new GuideMainScreen();
 
             if (client.player != null)

@@ -46,7 +46,7 @@ public class GuideLookupThings
             }
 
             List<GuideNode> path = GuideReloadListener.getInstance().getPath(NEXT_LOOKUP);
-            if (path != null)
+            if (path != null && GuideReloadListener.getInstance().isValid())
             {
                 GuideMainScreen screen = ProjectorItem.Client.openScreen();
                 for (var node : path)

@@ -7,6 +7,7 @@ import com.google.gson.JsonParser;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.guide.article.Article;
 import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.item.ItemStack;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.text.Text;
@@ -23,10 +24,9 @@ import java.util.*;
 public class GuideReloadListener implements SimpleSynchronousResourceReloadListener
 {
     private static final GuideReloadListener INSTANCE = new GuideReloadListener();
-
-    private GuideNode root;
     private final Map<String, Article> articles = new HashMap<>();
     private final Collection<GuideNode.ArticleNode> articleNodes = new ArrayList<>();
+    private @Nullable GuideNode root;
 
     public static GuideReloadListener getInstance()
     {
@@ -39,6 +39,11 @@ public class GuideReloadListener implements SimpleSynchronousResourceReloadListe
         return new Identifier(NeepMeat.NAMESPACE, "guide");
     }
 
+    public boolean isValid()
+    {
+        return getRootNode() != null;
+    }
+
     @Override
     public void reload(ResourceManager manager)
     {
@@ -46,13 +51,22 @@ public class GuideReloadListener implements SimpleSynchronousResourceReloadListe
         articleNodes.clear();
         articles.clear();
 
-        var map = manager.findResources("guide", path -> path.getPath().endsWith(".json")).keySet();
-        for(Identifier id : manager.findResources("guide", path -> path.getPath().endsWith(".json")).keySet())
+        String language = MinecraftClient.getInstance().getLanguageManager().getLanguage();
+        String suffix = language + ".json";
+
+        var foundIds = manager.findResources("guide", path -> path.getPath().endsWith(suffix)).keySet();
+        if (foundIds.isEmpty())
+        {
+            // Fall back to en_us for 'Murica!
+            foundIds = manager.findResources("guide", path -> path.getPath().endsWith("en_us.json")).keySet();
+        }
+
+        for (Identifier id : foundIds)
         {
             var opt = manager.getResource(id);
             if (opt.isPresent())
             {
-                try(InputStream stream = opt.get().getInputStream())
+                try (InputStream stream = opt.get().getInputStream())
                 {
                     Reader reader = new InputStreamReader(stream);
                     JsonElement rootElement = JsonParser.parseReader(reader);
@@ -60,7 +74,7 @@ public class GuideReloadListener implements SimpleSynchronousResourceReloadListe
                     processArticles((JsonObject) rootElement);
                     root = processNode(JsonHelper.getObject((JsonObject) rootElement, "tree"));
                 }
-                catch(Exception e)
+                catch (Exception e)
                 {
                     NeepMeat.LOGGER.error("Error occurred while loading resource json " + id.toString(), e);
                 }
