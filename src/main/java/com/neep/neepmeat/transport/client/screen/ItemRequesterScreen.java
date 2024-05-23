@@ -4,8 +4,9 @@ import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.api.plc.PLCCols;
 import com.neep.neepmeat.client.screen.tablet.GUIUtil;
 import com.neep.neepmeat.client.screen.util.Border;
-import com.neep.neepmeat.client.screen.util.BorderLeft;
+import com.neep.neepmeat.client.screen.util.BorderScrollRight;
 import com.neep.neepmeat.client.screen.util.Rectangle;
+import com.neep.neepmeat.screen_handler.BasicScreenHandler;
 import com.neep.neepmeat.transport.network.SyncRequesterScreenS2CPacket;
 import com.neep.neepmeat.transport.screen_handler.ItemRequesterScreenHandler;
 import net.fabricmc.api.EnvType;
@@ -32,6 +33,7 @@ import net.minecraft.screen.slot.Slot;
 import net.minecraft.screen.slot.SlotActionType;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.MathHelper;
 
 import java.util.List;
 
@@ -59,7 +61,8 @@ public class ItemRequesterScreen extends HandledScreen<ItemRequesterScreenHandle
         Border border = addDrawable(new Border(x, (height - backgroundHeight) / 2, backgroundWidth, backgroundHeight, 3, () -> PLCCols.BORDER.col));
         Rectangle bounds = border.withoutPadding();
 
-//        Border gridBorder = addDrawable(new Border(new Rectangle.Mutable(bounds).setH(itemPane.height), 0, () -> PLCCols.BORDER.col));
+        Rectangle inv = new Rectangle.Immutable(bounds.x() + 3, bounds.y() + bounds.h() - BasicScreenHandler.playerSlotsH() - 3, BasicScreenHandler.playerSlotsW(), BasicScreenHandler.playerSlotsH());
+        Border invBorder = addDrawable(new Border(inv, 0, () -> PLCCols.BORDER.col));
 
 //        addDrawable(new Border())
 
@@ -112,8 +115,7 @@ public class ItemRequesterScreen extends HandledScreen<ItemRequesterScreenHandle
         protected final TextRenderer textRenderer;
         protected final List<ResourceAmount<ItemVariant>> items;
         protected final MinecraftClient client;
-        private final BorderLeft border;
-        private final int scrollbarWidth;
+        private final BorderScrollRight border;
         protected int wSlot = 18;
         protected int hSlot = 18;
         protected int startX;
@@ -121,7 +123,8 @@ public class ItemRequesterScreen extends HandledScreen<ItemRequesterScreenHandle
         protected int width;
         protected int height;
         protected int scroll;
-        protected int offset;
+        protected int scrollRow;
+        private int scrollableRows;
 
         public ItemPane(int width, int height, int startX, int startY, ItemRenderer itemRenderer, TextRenderer textRenderer, List<ResourceAmount<ItemVariant>> items, MinecraftClient client)
         {
@@ -138,15 +141,15 @@ public class ItemRequesterScreen extends HandledScreen<ItemRequesterScreenHandle
             this.items = items;
             this.client = client;
 
-            this.scrollbarWidth = 5;
+            scrollableRows = (int) (Math.ceil((float) items.size() / wGrid) - hGrid);
 
-            this.border = new BorderLeft(startX - 2, startY - 3, this.width + 3, this.height + 4, 0, () -> PLCCols.BORDER.col);
+            this.border = new BorderScrollRight(startX - 2, startY - 3, this.width + 3, this.height + 4, 0, () -> PLCCols.BORDER.col);
         }
 
         @Override
         public void render(MatrixStack matrices, int mouseX, int mouseY, float delta)
         {
-            border.render(matrices, mouseX, mouseY, delta);
+            border.render(matrices, mouseX, mouseY, delta, (float) scrollRow / scrollableRows);
 
             int x, y, i, j;
             for (int m = 0; m < items.size(); ++m)
@@ -175,9 +178,10 @@ public class ItemRequesterScreen extends HandledScreen<ItemRequesterScreenHandle
         @Override
         public boolean mouseScrolled(double mouseX, double mouseY, double amount)
         {
-            scroll = (int) Math.max(scroll - amount, 0);
-            int hiddenRows = (int) (Math.ceil((items.size() - (wGrid * hGrid)) / (float) wGrid));
-            offset = (int) Math.min(hiddenRows, Math.max(offset - amount, 0));
+
+            scroll = (int) MathHelper.clamp(scroll - amount, 0, scrollableRows);
+
+            scrollRow = (int) Math.min(scrollableRows, Math.max(scrollRow - amount, 0));
             return Element.super.mouseScrolled(mouseX, mouseY, amount);
         }
 
@@ -241,7 +245,7 @@ public class ItemRequesterScreen extends HandledScreen<ItemRequesterScreenHandle
         {
             if (!isInGrid(i, j)) return null;
 
-            int m = offset * wGrid + i + wGrid * j;
+            int m = scrollRow * wGrid + i + wGrid * j;
 
             if (!(m >= 0 && m < items.size())) return null;
 
