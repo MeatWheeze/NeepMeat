@@ -12,6 +12,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.Rarity;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Comparator;
@@ -53,7 +54,10 @@ public class ExtraMouthImplant implements EntityImplant
         for (int i = 0; i < inventory.size(); ++i)
         {
             ItemStack stack = inventory.getStack(i);
-            if (stack.getItem().isFood() && stack.getItem().getFoodComponent() != null)
+            if (
+                    stack.getRarity() == Rarity.COMMON  // Avoid eating golden apples and expenisve things
+                    && stack.getItem().isFood()
+                    && stack.getItem().getFoodComponent() != null)
             {
                 foodStacks.add(IntObjectPair.of(i, stack));
             }
@@ -61,7 +65,6 @@ public class ExtraMouthImplant implements EntityImplant
 
         if (foodStacks.isEmpty())
             return null;
-
 
         if (emptyHearts > 3)
         {
