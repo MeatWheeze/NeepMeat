@@ -5,7 +5,7 @@ import com.neep.neepmeat.api.live_machine.LivingMachineBlock;
 import com.neep.neepmeat.api.live_machine.LivingMachineBlockEntity;
 import com.neep.neepmeat.api.processing.PowerUtils;
 import com.neep.neepmeat.machine.live_machine.LivingMachines;
-import com.neep.neepmeat.machine.live_machine.block.entity.TestLivingMachineBE;
+import com.neep.neepmeat.machine.live_machine.block.entity.LivingMachineControllerBlockEntity;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -32,7 +32,7 @@ public class TestLivingMachineBlock extends LivingMachineBlock implements Meatli
     @Override
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit)
     {
-        if (world.getBlockEntity(pos) instanceof TestLivingMachineBE be)
+        if (world.getBlockEntity(pos) instanceof LivingMachineControllerBlockEntity be)
         {
             if (!world.isClient())
             {
@@ -73,6 +73,6 @@ public class TestLivingMachineBlock extends LivingMachineBlock implements Meatli
     @Override
     public BlockEntity createBlockEntity(BlockPos pos, BlockState state)
     {
-        return LivingMachines.TEST_LIVING_MACHINE_BE.instantiate(pos, state);
+        return LivingMachines.LIVING_MACHINE_CONTROLLER_BE.instantiate(pos, state);
     }
 }

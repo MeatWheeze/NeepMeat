@@ -129,6 +129,7 @@
   "block.neepmeat.caution_block_stairs": "Caution Stripes Stairs",
   "block.neepmeat.caution_block_door": "Caution Stripes Door",
 
+  "block.neepmeat.living_machine_controller": "Machine Controller",
   "block.neepmeat.machine_block": "Machine Block",
   "block.neepmeat.base_machine_block": "Base Machine Block",
   "block.neepmeat.blood_bubble_machine_block": "Blood Bubble Machine Block",

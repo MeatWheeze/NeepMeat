@@ -1,5 +1,6 @@
 package com.neep.neepmeat.machine.live_machine;
 
+import com.neep.meatlib.block.MeatlibBlockSettings;
 import com.neep.meatlib.block.multi.TallerBlock;
 import com.neep.meatlib.item.ItemSettings;
 import com.neep.meatlib.registry.BlockRegistry;
@@ -7,9 +8,7 @@ import com.neep.neepmeat.api.FluidPump;
 import com.neep.neepmeat.api.big_block.BigBlock;
 import com.neep.neepmeat.api.live_machine.LivingMachineComponent;
 import com.neep.neepmeat.api.live_machine.StructureProperty;
-import com.neep.neepmeat.machine.live_machine.block.entity.TestLivingMachineBE;
 import com.neep.neepmeat.block.MachineBlock;
-import com.neep.neepmeat.init.NMBlocks;
 import com.neep.neepmeat.machine.live_machine.block.*;
 import com.neep.neepmeat.machine.live_machine.block.entity.*;
 import com.neep.neepmeat.transport.api.pipe.BloodAcceptor;
@@ -27,6 +26,8 @@ import static com.neep.neepmeat.init.NMBlocks.OPAQUE_MACHINE_SETTINGS;
 
 public class LivingMachines
 {
+    public static Block LIVING_MACHINE_CONTROLLER = BlockRegistry.queueWithItem(new TestLivingMachineBlock("living_machine_controller", MeatlibBlockSettings.copyOf(MACHINE_SETTINGS)), ItemSettings.block());
+
     public static Block MACHINE_BLOCK = BlockRegistry.queue(new MachineBlock("machine_block", Map.of(
             StructureProperty.MAX_POWER, new StructureProperty.Entry(300f),
                     StructureProperty.MASS, new StructureProperty.Entry(1000f)), FabricBlockSettings.copyOf(OPAQUE_MACHINE_SETTINGS)));
@@ -69,12 +70,13 @@ public class LivingMachines
     public static BlockEntityType<LargeTrommelBlockEntity> LARGE_TROMMEL_BE;
     public static BlockEntityType<LargestHopperBlockEntity> LARGEST_HOPPER_BE;
 
-    public static BlockEntityType<TestLivingMachineBE> TEST_LIVING_MACHINE_BE;
+    public static BlockEntityType<LivingMachineControllerBlockEntity> LIVING_MACHINE_CONTROLLER_BE;
     public static BlockEntityType<ItemOutputPortBlockEntity> ITEM_OUTPUT_PORT_BE;
     public static BlockEntityType<FluidInputPortBlockEntity> FLUID_INPUT_PORT_BE;
     public static BlockEntityType<FluidOutputPortBlockEntity> FLUID_OUTPUT_PORT_BE;
 
     public static BlockEntityType<LuckyOneBlockEntity> LUCKY_ONE_BE;
+
 
     public static void init()
     {
@@ -103,7 +105,7 @@ public class LivingMachines
         FluidStorage.SIDED.registerForBlockEntity(FluidOutputPortBlockEntity::getStorage, FLUID_OUTPUT_PORT_BE);
         FluidPump.SIDED.registerForBlockEntity(FluidOutputPortBlockEntity::getPump, FLUID_OUTPUT_PORT_BE);
 
-        TEST_LIVING_MACHINE_BE = register("test_living_machine", (p, s) -> new TestLivingMachineBE(LivingMachines.TEST_LIVING_MACHINE_BE, p, s), NMBlocks.TEST_LIVING_MACHINE);
+        LIVING_MACHINE_CONTROLLER_BE = register("living_machine_controller", (p, s) -> new LivingMachineControllerBlockEntity(LivingMachines.LIVING_MACHINE_CONTROLLER_BE, p, s), LIVING_MACHINE_CONTROLLER);
 
         LUCKY_ONE_BE = register("lucky_one", (p, s) -> new LuckyOneBlockEntity(LivingMachines.LUCKY_ONE_BE, p, s), LUCKY_ONE);
         LivingMachineComponent.LOOKUP.registerSelf(LUCKY_ONE_BE);

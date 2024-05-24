@@ -17,9 +17,9 @@ import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
 import org.jetbrains.annotations.Nullable;
 
-public class TestLivingMachineBE extends LivingMachineBlockEntity implements ExtendedScreenHandlerFactory
+public class LivingMachineControllerBlockEntity extends LivingMachineBlockEntity implements ExtendedScreenHandlerFactory
 {
-    public TestLivingMachineBE(BlockEntityType<?> type, BlockPos pos, BlockState state)
+    public LivingMachineControllerBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
     {
         super(type, pos, state);
     }
