@@ -786,6 +786,8 @@
   "screen.neepmeat.living_machine.rul": "Remaining useful life",
   "screen.neepmeat.living_machine.size": "Structures",
   "screen.neepmeat.living_machine.components": "Functional components",
+  "screen.neepmeat.living_machine.process": "Current process",
+  "screen.neepmeat.living_machine.no_process": "None",
 
   "category.neepmeat.pressing": "Pressing",
   "category.neepmeat.grinding": "Crushing",

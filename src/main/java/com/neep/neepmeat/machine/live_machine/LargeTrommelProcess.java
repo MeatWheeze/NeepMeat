@@ -10,6 +10,7 @@ import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.fabricmc.fabric.api.transfer.v1.storage.StorageView;
 import net.fabricmc.fabric.api.transfer.v1.storage.base.CombinedStorage;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
+import net.minecraft.text.Text;
 
 import java.util.List;
 import java.util.stream.StreamSupport;
@@ -94,5 +95,11 @@ public class LargeTrommelProcess implements Process
                 LivingMachineComponents.ITEM_OUTPUT,
                 LivingMachineComponents.MOTOR_PORT
         );
+    }
+
+    @Override
+    public Text getName()
+    {
+        return Text.of("Trommel");
     }
 }

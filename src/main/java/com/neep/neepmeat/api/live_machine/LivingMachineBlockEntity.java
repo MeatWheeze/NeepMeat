@@ -20,6 +20,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtOps;
+import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.MathHelper;
@@ -74,6 +75,7 @@ public abstract class LivingMachineBlockEntity extends SyncableBlockEntity imple
     // Use only on client. Use structures.size() elsewhere.
     private int numStructures;
     private int numComponents;
+    private Text processName = Process.NO_PROCESS;
 
     public LivingMachineBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
     {
@@ -92,6 +94,7 @@ public abstract class LivingMachineBlockEntity extends SyncableBlockEntity imple
 
         this.numStructures = nbt.getInt("num_structures");
         this.numComponents = nbt.getInt("num_components");
+        this.processName = Text.of(nbt.getString("process_name"));
     }
 
     @Override
@@ -105,6 +108,7 @@ public abstract class LivingMachineBlockEntity extends SyncableBlockEntity imple
 
         nbt.putInt("num_structures", structures.size());
         nbt.putInt("num_components", getNumComponents());
+        nbt.putString("process_name", getProcess().getString());
     }
 
     protected void tickDegradation()
@@ -502,5 +506,15 @@ public abstract class LivingMachineBlockEntity extends SyncableBlockEntity imple
         }
 
         return numComponents;
+    }
+
+    public Text getProcess()
+    {
+        if (!world.isClient())
+        {
+            return process != null ? process.getName() : Process.NO_PROCESS;
+        }
+
+        return processName != null ? processName : Process.NO_PROCESS;
     }
 }

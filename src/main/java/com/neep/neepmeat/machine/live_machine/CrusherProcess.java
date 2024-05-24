@@ -9,6 +9,7 @@ import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.fabricmc.fabric.api.transfer.v1.storage.StorageUtil;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
+import net.minecraft.text.Text;
 
 import java.util.Collection;
 import java.util.List;
@@ -79,5 +80,11 @@ public class CrusherProcess implements Process
                 LivingMachineComponents.ITEM_OUTPUT,
                 LivingMachineComponents.MOTOR_PORT
         );
+    }
+
+    @Override
+    public Text getName()
+    {
+        return Text.of("Crusher");
     }
 }

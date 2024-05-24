@@ -49,6 +49,8 @@ public class MetricsPane extends LivingMachineScreen.PaneWidget
                 () -> intFormat.format(handler.getBlockEntity().getNumStructures())));
         entries.add(Pair.of(NeepMeat.translationKey("screen", "living_machine.components"),
                 () -> intFormat.format(handler.getBlockEntity().getNumComponents())));
+        entries.add(Pair.of(NeepMeat.translationKey("screen", "living_machine.process"),
+                () -> handler.getBlockEntity().getProcess().getString()));
     }
 
     public void tick()
