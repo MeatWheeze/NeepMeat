@@ -24,7 +24,7 @@ public class OreFatFluidVariantRenderHandler implements FluidVariantRenderHandle
     @Override
     public void appendTooltip(FluidVariant fluidVariant, List<Text> tooltip, TooltipContext tooltipContext)
     {
-        NbtCompound nbt = fluidVariant.copyNbt();
+        NbtCompound nbt = fluidVariant.getNbt();
         if (nbt != null)
         {
 //            tooltip.add(Text.translatable("UwU").formatted(Formatting.AQUA));
@@ -34,7 +34,7 @@ public class OreFatFluidVariantRenderHandler implements FluidVariantRenderHandle
     @Override
     public int getColor(FluidVariant fluidVariant, @Nullable BlockRenderView view, @Nullable BlockPos pos)
     {
-        NbtCompound nbt = fluidVariant.copyNbt();
+        NbtCompound nbt = fluidVariant.getNbt();
         if (nbt != null)
         {
             OreFatRegistry.Entry entry;
