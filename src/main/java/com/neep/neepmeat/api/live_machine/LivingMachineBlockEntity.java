@@ -71,6 +71,9 @@ public abstract class LivingMachineBlockEntity extends SyncableBlockEntity imple
     protected boolean updateProcess = true;
     @Nullable private Process process;
 
+    // Use only on client. Use structures.size() elsewhere.
+    private int numStructures;
+    private int numComponents;
 
     public LivingMachineBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
     {
@@ -86,6 +89,9 @@ public abstract class LivingMachineBlockEntity extends SyncableBlockEntity imple
         this.properties = PROPERTIES_CODEC.parse(NbtOps.INSTANCE, nbt.getCompound("properties")).result().orElseGet(() -> new EnumMap<>(StructureProperty.class));
         this.power = nbt.getFloat("power");
         degradationManager.readNbt(nbt);
+
+        this.numStructures = nbt.getInt("num_structures");
+        this.numComponents = nbt.getInt("num_components");
     }
 
     @Override
@@ -96,6 +102,9 @@ public abstract class LivingMachineBlockEntity extends SyncableBlockEntity imple
         PROPERTIES_CODEC.encodeStart(NbtOps.INSTANCE, properties).get().ifLeft(r -> nbt.put("properties", r));
         nbt.putFloat("power", power);
         degradationManager.writeNbt(nbt);
+
+        nbt.putInt("num_structures", structures.size());
+        nbt.putInt("num_components", getNumComponents());
     }
 
     protected void tickDegradation()
@@ -135,7 +144,7 @@ public abstract class LivingMachineBlockEntity extends SyncableBlockEntity imple
             repairAmount += rateMultiplier * selfRepair;
         }
 
-        var motors1 = getComponent(LivingMachineComponents.MOTOR_PORT);
+//        var motors1 = getComponent(LivingMachineComponents.MOTOR_PORT);
 
 //        if (world.getTime() % 20 == 0 && !motors1.isEmpty())
 //        {
@@ -158,7 +167,6 @@ public abstract class LivingMachineBlockEntity extends SyncableBlockEntity imple
             this.process = Processes.getInstance().getFirstMatch(currentComponents);
             updateProcess = false;
         }
-
 
         age++;
         tickDegradation();
@@ -183,9 +191,6 @@ public abstract class LivingMachineBlockEntity extends SyncableBlockEntity imple
         {
             i = currentComponents.nextSetBit(i);
 
-//            for (LivingMachineComponent component : componentMap[i])
-//            for (int j = 0; j < componentMap[i].size(); ++j)
-//            LivingMachineComponent component;
             for (Iterator<LivingMachineComponent> it = componentMap[i].iterator(); it.hasNext();)
             {
                 LivingMachineComponent component = it.next();
@@ -215,16 +220,6 @@ public abstract class LivingMachineBlockEntity extends SyncableBlockEntity imple
         dataLog.log(getWorld().getTime(), this);
     }
 
-//    public Multimap<ComponentType<?>, LivingMachineComponent> getComponents()
-//    {
-//        return componentMap;
-//    }
-
-
-//    public boolean hasComponents(ComponentType<?>... types)
-//    {
-//        return getComponents().keys().containsAll(Arrays.asList(types));
-//    }
     protected void updateStructure()
     {
         search(getPos());
@@ -282,14 +277,15 @@ public abstract class LivingMachineBlockEntity extends SyncableBlockEntity imple
         componentMap[idx].add(component);
     }
 
-    // Does not remove the component from the set
+    // Assumes that the component has been removed.
     private void removeComponent(LivingMachineComponent component)
     {
         int idx = component.getComponentType().getBitIdx();
         if (!currentComponents.get(idx))
             return;
 
-        currentComponents.clear(idx);
+        if (componentMap[idx] == null || componentMap[idx].isEmpty())
+            currentComponents.clear(idx);
 //        componentMap[idx].remove(component); // TODO Reintroduce this without concurrent modification
     }
 
@@ -395,7 +391,7 @@ public abstract class LivingMachineBlockEntity extends SyncableBlockEntity imple
     public double degradationRate(double degradation)
     {
         double rate = -repairAmount;
-        if (power <= getRatedPower() / 2)
+        if (power <= getRatedPower() * 0.75)
         {
             return rate;
         }
@@ -405,7 +401,7 @@ public abstract class LivingMachineBlockEntity extends SyncableBlockEntity imple
         else if (power > getRatedPower())
             rate += (rateMultiplier * (0.000007f * power / getRatedPower()));
         else
-            rate += (rateMultiplier * (0.000005f));
+            rate += (rateMultiplier * (0.000003f));
 
         return rate;
     }
@@ -427,6 +423,11 @@ public abstract class LivingMachineBlockEntity extends SyncableBlockEntity imple
             return -1;
 
         return ticks / 20;
+    }
+
+    public float getCurrentDegradationRate()
+    {
+        return (float) degradationRate(degradationManager.getDegradation());
     }
 
     public void onBlockRemoved()
@@ -475,5 +476,31 @@ public abstract class LivingMachineBlockEntity extends SyncableBlockEntity imple
     public float getHealth()
     {
         return 1 - degradationManager.getDegradation();
+    }
+
+    public int getNumStructures()
+    {
+        if (!world.isClient())
+            return structures.size();
+
+        return numStructures;
+    }
+
+    public int getNumComponents()
+    {
+        if (!world.isClient())
+        {
+            int count = 0;
+            for (var set : componentMap)
+            {
+                if (set == null)
+                    continue;
+
+                count += set.size();
+            }
+            return count;
+        }
+
+        return numComponents;
     }
 }

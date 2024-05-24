@@ -25,6 +25,7 @@ public class MetricsPane extends LivingMachineScreen.PaneWidget
     private final List<Pair<Text, Supplier<String>>> entries = new ArrayList<>();
 
     private final DecimalFormat floatFormat = new DecimalFormat("####.#");
+    private final DecimalFormat smallFloatFormat = new DecimalFormat("####.####");
     private final DecimalFormat intFormat = new DecimalFormat("####");
 
     public MetricsPane(LivingMachineScreenHandler handler)
@@ -37,8 +38,17 @@ public class MetricsPane extends LivingMachineScreen.PaneWidget
                 () -> PowerUtils.perUnitToText(handler.getBlockEntity().getPower()).getString()));
         entries.add(Pair.of(NeepMeat.translationKey("screen", "living_machine.efficiency"),
                 () -> intFormat.format(100 * handler.getBlockEntity().getEfficiency()) + "%"));
+        entries.add(Pair.of(NeepMeat.translationKey("screen", "living_machine.degradation_rate"),
+                () -> formatRepair(handler.getBlockEntity().getCurrentDegradationRate())));
+        entries.add(Pair.of(NeepMeat.translationKey("screen", "living_machine.self_repair"),
+                () -> formatRepair(handler.getBlockEntity().getSelfRepair())));
         entries.add(Pair.of(NeepMeat.translationKey("screen", "living_machine.rul"),
                 () -> formatRUL(handler.getBlockEntity().getRulSecs())));
+        entries.add(Pair.of(Text.empty(), () -> ""));
+        entries.add(Pair.of(NeepMeat.translationKey("screen", "living_machine.size"),
+                () -> intFormat.format(handler.getBlockEntity().getNumStructures())));
+        entries.add(Pair.of(NeepMeat.translationKey("screen", "living_machine.components"),
+                () -> intFormat.format(handler.getBlockEntity().getNumComponents())));
     }
 
     public void tick()
@@ -89,5 +99,10 @@ public class MetricsPane extends LivingMachineScreen.PaneWidget
         {
             return duration.toSecondsPart() + "s";
         }
+    }
+
+    private String formatRepair(float repair)
+    {
+        return smallFloatFormat.format(repair * 20 * 100) + "%/s";
     }
 }

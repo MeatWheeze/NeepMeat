@@ -26,10 +26,12 @@ public class CrusherProcess implements Process
 
             float chanceMod = 0;
 
-            // LSMFT! Reach for a Lucky! IT'S TOASTED.
             Collection<LuckyOneBlockEntity> luckies = be.getComponent(LivingMachineComponents.LUCKY_ONE);
             for (var lucky : luckies)
             {
+                if (chanceMod >= 2)
+                    break;
+
                 if (lucky.isActive())
                     chanceMod += 1;
             }

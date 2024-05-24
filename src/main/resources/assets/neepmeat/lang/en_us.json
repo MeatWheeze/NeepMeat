@@ -766,11 +766,26 @@
   "screen.neepmeat.content_detector.regulate.desc": "Stays powered until all filter items have left",
   "screen.neepmeat.content_detector.absolute.desc": "Stays powered only while conditions are met",
 
+  "screen.neepmeat.living_machine.block_hold_shift": "Machine Structure §7(hold §fSHIFT§7)",
+  "screen.neepmeat.living_machine.block": "Machine Structure",
+  "screen.neepmeat.living_machine.component_hold_shift": "Machine Functional Component",
+  "screen.neepmeat.living_machine.component": "Machine Functional Component",
+
+  "screen.neepmeat.living_machine.fault_tolerance": "Fault tolerance",
+  "screen.neepmeat.living_machine.speed": "Speed",
+  "screen.neepmeat.living_machine.max_power": "Rated power",
+  "screen.neepmeat.living_machine.mass": "Mass",
+
   "screen.neepmeat.living_machine.rated_power": "Rated power",
   "screen.neepmeat.living_machine.power": "Supplied power",
   "screen.neepmeat.living_machine.efficiency": "Efficiency",
+  "screen.neepmeat.living_machine.degradation_rate": "Ageing (post-repair)",
+  "screen.neepmeat.living_machine.self_repair": "Self-repair",
+  "screen.neepmeat.living_machine.self_repair_unit": "",
   "screen.neepmeat.living_machine.health": "Health",
   "screen.neepmeat.living_machine.rul": "Remaining useful life",
+  "screen.neepmeat.living_machine.size": "Structures",
+  "screen.neepmeat.living_machine.components": "Functional components",
 
   "category.neepmeat.pressing": "Pressing",
   "category.neepmeat.grinding": "Crushing",
