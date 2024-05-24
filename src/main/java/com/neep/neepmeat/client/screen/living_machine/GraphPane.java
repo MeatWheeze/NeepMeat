@@ -46,6 +46,12 @@ public class GraphPane extends LivingMachineScreen.PaneWidget
     }
 
     @Override
+    protected void init()
+    {
+
+    }
+
+    @Override
     public void init(Rectangle parentSize)
     {
         super.init(parentSize);

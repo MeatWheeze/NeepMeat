@@ -3,6 +3,7 @@ package com.neep.neepmeat.client.screen.living_machine;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.api.plc.PLCCols;
 import com.neep.neepmeat.api.processing.PowerUtils;
+import com.neep.neepmeat.client.screen.plc.PLCScreenButton;
 import com.neep.neepmeat.client.screen.tablet.GUIUtil;
 import com.neep.neepmeat.screen_handler.LivingMachineScreenHandler;
 import it.unimi.dsi.fastutil.Pair;
@@ -22,40 +23,52 @@ public class MetricsPane extends LivingMachineScreen.PaneWidget
     private final TextRenderer textRenderer = MinecraftClient.getInstance().textRenderer;
 
     private final LivingMachineScreenHandler handler;
+    private final LivingMachineScreen parent;
     private final List<Pair<Text, Supplier<String>>> entries = new ArrayList<>();
 
     private final DecimalFormat floatFormat = new DecimalFormat("####.#");
     private final DecimalFormat smallFloatFormat = new DecimalFormat("####.####");
     private final DecimalFormat intFormat = new DecimalFormat("####");
 
-    public MetricsPane(LivingMachineScreenHandler handler)
+    public MetricsPane(LivingMachineScreenHandler handler, LivingMachineScreen parent)
     {
         this.handler = handler;
+        this.parent = parent;
 
-        entries.add(Pair.of(NeepMeat.translationKey("screen", "living_machine.rated_power"),
+        entries.add(Pair.of(
+                NeepMeat.translationKey("screen", "living_machine.rated_power"),
                 () -> PowerUtils.perUnitToText(handler.getBlockEntity().getRatedPower()).getString()));
-        entries.add(Pair.of(NeepMeat.translationKey("screen", "living_machine.power"),
+        entries.add(Pair.of(
+                NeepMeat.translationKey("screen", "living_machine.power"),
                 () -> PowerUtils.perUnitToText(handler.getBlockEntity().getPower()).getString()));
-        entries.add(Pair.of(NeepMeat.translationKey("screen", "living_machine.efficiency"),
+        entries.add(Pair.of(
+                NeepMeat.translationKey("screen", "living_machine.efficiency"),
                 () -> intFormat.format(100 * handler.getBlockEntity().getEfficiency()) + "%"));
-        entries.add(Pair.of(NeepMeat.translationKey("screen", "living_machine.degradation_rate"),
+        entries.add(Pair.of(
+                NeepMeat.translationKey("screen", "living_machine.degradation_rate"),
                 () -> formatRepair(handler.getBlockEntity().getCurrentDegradationRate())));
-        entries.add(Pair.of(NeepMeat.translationKey("screen", "living_machine.self_repair"),
+        entries.add(Pair.of(
+                NeepMeat.translationKey("screen", "living_machine.self_repair"),
                 () -> formatRepair(handler.getBlockEntity().getSelfRepair())));
-        entries.add(Pair.of(NeepMeat.translationKey("screen", "living_machine.rul"),
+        entries.add(Pair.of(
+                NeepMeat.translationKey("screen", "living_machine.rul"),
                 () -> formatRUL(handler.getBlockEntity().getRulSecs())));
         entries.add(Pair.of(Text.empty(), () -> ""));
-        entries.add(Pair.of(NeepMeat.translationKey("screen", "living_machine.size"),
+        entries.add(Pair.of(
+                NeepMeat.translationKey("screen", "living_machine.size"),
                 () -> intFormat.format(handler.getBlockEntity().getNumStructures())));
-        entries.add(Pair.of(NeepMeat.translationKey("screen", "living_machine.components"),
+        entries.add(Pair.of(
+                NeepMeat.translationKey("screen", "living_machine.components"),
                 () -> intFormat.format(handler.getBlockEntity().getNumComponents())));
-        entries.add(Pair.of(NeepMeat.translationKey("screen", "living_machine.process"),
+        entries.add(Pair.of(
+                NeepMeat.translationKey("screen", "living_machine.process"),
                 () -> handler.getBlockEntity().getProcess().getString()));
     }
 
-    public void tick()
+    @Override
+    protected void init()
     {
-
+        addDrawableChild(new ThingyButton(bounds.x() + 2, bounds.y() + bounds.h() - 16 - 2, 112, parent::switchMode));
     }
 
     @Override
@@ -106,5 +119,35 @@ public class MetricsPane extends LivingMachineScreen.PaneWidget
     private String formatRepair(float repair)
     {
         return smallFloatFormat.format(repair * 20 * 100) + "%/s";
+    }
+
+    public static class ThingyButton extends PLCScreenButton
+    {
+        private final int u;
+        private final Runnable onClick;
+
+        public ThingyButton(int x, int y, int u, Runnable onClick)
+        {
+            super(x, y, Text.empty());
+            this.u = u;
+            this.onClick = onClick;
+        }
+
+        @Override
+        protected int getU()
+        {
+            return u;
+        }
+
+        @Override
+        public void renderTooltip(DrawContext matrices, int mouseX, int mouseY)
+        {
+        }
+
+        @Override
+        public void onClick(double mouseX, double mouseY)
+        {
+            onClick.run();
+        }
     }
 }

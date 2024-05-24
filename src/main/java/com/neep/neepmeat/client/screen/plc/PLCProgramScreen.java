@@ -4,29 +4,25 @@ import com.google.common.collect.Lists;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.api.plc.PLCCols;
-import com.neep.neepmeat.network.plc.PLCSyncThings;
-import com.neep.neepmeat.plc.instruction.Argument;
-import com.neep.neepmeat.plc.instruction.InstructionProvider;
 import com.neep.neepmeat.api.plc.recipe.Workpiece;
 import com.neep.neepmeat.client.plc.PLCHudRenderer;
 import com.neep.neepmeat.client.plc.PLCMotionController;
 import com.neep.neepmeat.init.NMComponents;
 import com.neep.neepmeat.init.NMSounds;
+import com.neep.neepmeat.network.plc.PLCSyncThings;
 import com.neep.neepmeat.plc.block.entity.PLCBlockEntity;
 import com.neep.neepmeat.plc.component.MutateInPlace;
+import com.neep.neepmeat.plc.instruction.Argument;
+import com.neep.neepmeat.plc.instruction.InstructionProvider;
 import com.neep.neepmeat.plc.screen.PLCScreenHandler;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.ingame.ScreenHandlerProvider;
-import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder;
 import net.minecraft.client.gui.tooltip.TooltipComponent;
-import net.minecraft.client.gui.widget.ClickableWidget;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.client.render.*;
 import net.minecraft.client.sound.PositionedSoundInstance;
-import net.minecraft.client.sound.SoundManager;
 import net.minecraft.client.texture.Sprite;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.Entity;
@@ -47,18 +43,15 @@ import java.util.stream.Collectors;
 
 public class PLCProgramScreen extends Screen implements ScreenHandlerProvider<PLCScreenHandler>
 {
-    protected static final Identifier VIGNETTE = new Identifier(NeepMeat.NAMESPACE, "textures/gui/plc_robot_vignette.png");
     public static final Identifier WIDGETS = new Identifier(NeepMeat.NAMESPACE, "textures/gui/widget/plc_widgets.png");
-
+    protected static final Identifier VIGNETTE = new Identifier(NeepMeat.NAMESPACE, "textures/gui/plc_robot_vignette.png");
     protected final PLCScreenEditorState editor;
     protected final PLCScreenShellState shell;
-    protected PLCScreenState state;
-
     private final PLCScreenHandler handler;
     private final PLCBlockEntity plc;
-
     // Text relating to the block that the mouse is currently over
     private final List<Text> tooltipText = Lists.newArrayList();
+    protected PLCScreenState state;
     private double mouseX;
     private double mouseY;
     private RecordMode mode;
@@ -74,6 +67,43 @@ public class PLCProgramScreen extends Screen implements ScreenHandlerProvider<PL
         this.shell = new PLCScreenShellState(this);
         this.state = shell;
         this.mode = handler.getMode();
+    }
+
+    @Nullable
+    private static BlockState getWallState(World world, Camera camera)
+    {
+        BlockPos.Mutable mutable = new BlockPos.Mutable();
+        float width = 0.8f;
+        for (int i = 0; i < 8; ++i)
+        {
+            Vec3d camPos = camera.getPos();
+            double d = camPos.x + (((i >> 0) % 2) - 0.5f) * width * 0.8f;
+            double e = camPos.y + (((i >> 1) % 2) - 0.5f) * 0.1f;
+            double f = camPos.z + (((i >> 2) % 2) - 0.5f) * width * 0.8f;
+            mutable.set(d, e, f);
+
+            BlockState blockState = world.getBlockState(mutable);
+            if (blockState.getRenderType() == BlockRenderType.INVISIBLE || !blockState.shouldBlockVision(world, mutable))
+                continue;
+            return blockState;
+        }
+        return null;
+    }
+
+    private static void makeEntityTooltip(@Nullable Entity entity, List<Text> tooltip)
+    {
+        if (entity == null)
+            return;
+
+        tooltip.add(entity.getDisplayName());
+        Workpiece workpiece = NMComponents.WORKPIECE.getNullable(entity);
+        if (workpiece != null)
+        {
+            for (var step : workpiece.getSteps())
+            {
+                step.appendText(tooltip);
+            }
+        }
     }
 
     @Override
@@ -94,17 +124,17 @@ public class PLCProgramScreen extends Screen implements ScreenHandlerProvider<PL
             addDrawableChild(editor);
             editor.setDimensions(width, height);
 
-            addDrawableChild(new ModeSwitchButton(width - 17, 1, 16, 16));
-            addDrawableChild(new StopButton(width - 2 * 17, 1, 16, 16, Text.of("Stop")));
-            addDrawableChild(new RunButton(width - 3 * 17, 1, 16, 16, Text.of("Run")));
-            addDrawableChild(new CompileButton(width - 4 * 17, 1, 16, 16, Text.of("Compile")));
+            addDrawableChild(new ModeSwitchButton(width - 17, 1));
+            addDrawableChild(new StopButton(width - 2 * 17, 1, Text.of("Stop")));
+            addDrawableChild(new RunButton(width - 3 * 17, 1, Text.of("Run")));
+            addDrawableChild(new CompileButton(width - 4 * 17, 1, Text.of("Compile")));
             state = editor;
         }
         else
         {
             addDrawableChild(shell);
-            addDrawableChild(new ModeSwitchButton(width - 17, 1, 16, 16));
-            addDrawableChild(new StopButton(width - 2 * 17, 1, 16, 16, Text.of("Stop")));
+            addDrawableChild(new ModeSwitchButton(width - 17, 1));
+            addDrawableChild(new StopButton(width - 2 * 17, 1, Text.of("Stop")));
             state = shell;
         }
 
@@ -156,29 +186,13 @@ public class PLCProgramScreen extends Screen implements ScreenHandlerProvider<PL
         super.render(matrices, mouseX, mouseY, delta);
     }
 
-    @Nullable
-    private static BlockState getWallState(World world, Camera camera)
-    {
-        BlockPos.Mutable mutable = new BlockPos.Mutable();
-        float width = 0.8f;
-        for (int i = 0; i < 8; ++i)
-        {
-            Vec3d camPos = camera.getPos();
-            double d = camPos.x + (((i >> 0) % 2) - 0.5f) * width * 0.8f;
-            double e = camPos.y + (((i >> 1) % 2) - 0.5f) * 0.1f;
-            double f = camPos.z + (((i >> 2) % 2) - 0.5f) * width * 0.8f;
-            mutable.set(d, e, f);
-
-            BlockState blockState = world.getBlockState(mutable);
-            if (blockState.getRenderType() == BlockRenderType.INVISIBLE || !blockState.shouldBlockVision(world, mutable)) continue;
-            return blockState;
-        }
-        return null;
-    }
-
     private void drawScreenTexture(MatrixStack matrices, Identifier texture, float u0, float v0, float u1, float v1, float light)
     {
-        float x0 = 0; float y0 = 0; float x1 = width; float y1 = height; float z = 0;
+        float x0 = 0;
+        float y0 = 0;
+        float x1 = width;
+        float y1 = height;
+        float z = 0;
         var matrix = matrices.peek().getPositionMatrix();
         RenderSystem.setShaderTexture(0, texture);
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
@@ -194,7 +208,11 @@ public class PLCProgramScreen extends Screen implements ScreenHandlerProvider<PL
 
     private void renderInWallOverlay(Sprite sprite, MatrixStack matrices)
     {
-        float x0 = 0; float y0 = 0; float x1 = width; float y1 = height; float z = 0;
+        float x0 = 0;
+        float y0 = 0;
+        float x1 = width;
+        float y1 = height;
+        float z = 0;
         RenderSystem.setShaderTexture(0, sprite.getAtlas().getId());
         RenderSystem.setShader(GameRenderer::getPositionColorTexShader);
         BufferBuilder bufferBuilder = Tessellator.getInstance().getBuffer();
@@ -240,22 +258,6 @@ public class PLCProgramScreen extends Screen implements ScreenHandlerProvider<PL
         }
     }
 
-    private static void makeEntityTooltip(@Nullable Entity entity, List<Text> tooltip)
-    {
-        if (entity == null)
-            return;
-
-        tooltip.add(entity.getDisplayName());
-        Workpiece workpiece = NMComponents.WORKPIECE.getNullable(entity);
-        if (workpiece != null)
-        {
-            for (var step : workpiece.getSteps())
-            {
-                step.appendText(tooltip);
-            }
-        }
-    }
-
     @Override
     public boolean mouseDragged(double mouseX, double mouseY, int button, double deltaX, double deltaY)
     {
@@ -282,6 +284,7 @@ public class PLCProgramScreen extends Screen implements ScreenHandlerProvider<PL
             return true;
         }
 
+        setFocused(null);
         return handleWorldClick(mouseX, mouseY, button);
     }
 
@@ -360,6 +363,13 @@ public class PLCProgramScreen extends Screen implements ScreenHandlerProvider<PL
     public boolean mouseReleased(double mouseX, double mouseY, int button)
     {
         return super.mouseReleased(mouseX, mouseY, button);
+    }
+
+    @Override
+    public boolean mouseScrolled(double mouseX, double mouseY, double amount)
+    {
+        var hovered = hoveredElement(mouseX, mouseY);
+        return super.mouseScrolled(mouseX, mouseY, amount);
     }
 
     @Override
@@ -479,48 +489,16 @@ public class PLCProgramScreen extends Screen implements ScreenHandlerProvider<PL
         return shell;
     }
 
-    class SaveButton extends ClickableWidget
+    public boolean passEvents()
     {
-        public SaveButton(int x, int y, int width, int height, Text message)
-        {
-            super(x, y, width, height, message);
-        }
+        return !editor.isEditFieldFocused();
+    }
 
-        public void renderButton(MatrixStack matrices, int mouseX, int mouseY, float delta)
+    public abstract class BaseButton extends PLCScreenButton
+    {
+        public BaseButton(int x, int y, Text message)
         {
-            MinecraftClient minecraftClient = MinecraftClient.getInstance();
-            RenderSystem.setShader(GameRenderer::getPositionTexShader);
-            RenderSystem.setShaderTexture(0, WIDGETS);
-            RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, this.alpha);
-            int i = this.getYImage(this.isHovered());
-            RenderSystem.enableBlend();
-            RenderSystem.defaultBlendFunc();
-            RenderSystem.enableDepthTest();
-            int thingHeight = 16;
-            drawTexture(matrices, this.x, this.y, 0, getU(), getV() + i * thingHeight, this.width, this.height, 256, 256);
-            this.renderBackground(matrices, minecraftClient, mouseX, mouseY);
-
-            if (isMouseOver(mouseX, mouseY))
-            {
-                renderTooltip(matrices, mouseX, mouseY);
-            }
-        }
-
-        @Override
-        public void playDownSound(SoundManager soundManager)
-        {
-            soundManager.play(PositionedSoundInstance.master(NMSounds.PLC_SELECT, 1.0F));
-            soundManager.play(PositionedSoundInstance.master(NMSounds.UI_BEEP, 1.0F));
-        }
-
-        protected int getU()
-        {
-            return 0;
-        }
-
-        protected int getV()
-        {
-            return 0;
+            super(x, y, message);
         }
 
         @Override
@@ -528,19 +506,13 @@ public class PLCProgramScreen extends Screen implements ScreenHandlerProvider<PL
         {
             renderTooltipText(matrices, List.of(getMessage()), true, mouseX, mouseY, PLCCols.BORDER.col);
         }
-
-        @Override
-        public void appendNarrations(NarrationMessageBuilder builder)
-        {
-
-        }
     }
 
-    class RunButton extends SaveButton
+    class RunButton extends BaseButton
     {
-        public RunButton(int x, int y, int width, int height, Text message)
+        public RunButton(int x, int y, Text message)
         {
-            super(x, y, width, height, message);
+            super(x, y, message);
         }
 
         @Override
@@ -559,11 +531,11 @@ public class PLCProgramScreen extends Screen implements ScreenHandlerProvider<PL
         }
     }
 
-    class CompileButton extends SaveButton
+    class CompileButton extends BaseButton
     {
-        public CompileButton(int x, int y, int width, int height, Text message)
+        public CompileButton(int x, int y, Text message)
         {
-            super(x, y, width, height, message);
+            super(x, y, message);
         }
 
         @Override
@@ -579,11 +551,11 @@ public class PLCProgramScreen extends Screen implements ScreenHandlerProvider<PL
         }
     }
 
-    class StopButton extends SaveButton
+    class StopButton extends BaseButton
     {
-        public StopButton(int x, int y, int width, int height, Text message)
+        public StopButton(int x, int y, Text message)
         {
-            super(x, y, width, height, message);
+            super(x, y, message);
         }
 
         @Override
@@ -612,11 +584,11 @@ public class PLCProgramScreen extends Screen implements ScreenHandlerProvider<PL
         }
     }
 
-    class ModeSwitchButton extends SaveButton
+    class ModeSwitchButton extends BaseButton
     {
-        public ModeSwitchButton(int x, int y, int width, int height)
+        public ModeSwitchButton(int x, int y)
         {
-            super(x, y, width, height, Text.empty());
+            super(x, y, Text.empty());
         }
 
         @Override
@@ -645,7 +617,7 @@ public class PLCProgramScreen extends Screen implements ScreenHandlerProvider<PL
         @Override
         protected int getU()
         {
-            return switch(handler.getMode())
+            return switch (handler.getMode())
             {
                 case EDIT -> 64;
                 case IMMEDIATE -> 48;

@@ -6,7 +6,8 @@ import it.unimi.dsi.fastutil.Pair;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
+import java.util.BitSet;
+import java.util.List;
 
 public class Processes
 {
@@ -17,9 +18,12 @@ public class Processes
         return INSTANCE;
     }
 
-//    private final Map<BitSet, Process> entries = new HashMap<>();
-
     private final List<Pair<BitSet, Process>> entries = new ObjectArrayList<>();
+
+    public List<Pair<BitSet, Process>> getEntries()
+    {
+        return entries;
+    }
 
     public void register(Process process)
     {

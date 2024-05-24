@@ -1,22 +1,21 @@
 package com.neep.neepmeat.client.screen.living_machine;
 
 import com.neep.neepmeat.api.plc.PLCCols;
+import com.neep.neepmeat.client.screen.ScreenSubElement;
 import com.neep.neepmeat.client.screen.util.Border;
 import com.neep.neepmeat.client.screen.util.Rectangle;
-import com.neep.neepmeat.network.plc.PLCSyncThings;
 import com.neep.neepmeat.screen_handler.LivingMachineScreenHandler;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
-import net.fabricmc.fabric.api.networking.v1.FabricPacket;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.*;
+import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.gui.Selectable;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
-import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.text.Text;
@@ -24,14 +23,20 @@ import net.minecraft.text.Text;
 @Environment(EnvType.CLIENT)
 public class LivingMachineScreen extends HandledScreen<LivingMachineScreenHandler>
 {
-    private final MetricsPane metricsPane;
     private final GraphPane graphPane;
+
+    private final MetricsPane metricsPane;
+    private final ProcessesPane processesPane;
+    private PaneWidget leftPane;
 
     public LivingMachineScreen(LivingMachineScreenHandler handler, PlayerInventory inventory, Text title)
     {
         super(handler, inventory, title);
-        this.metricsPane = new MetricsPane(handler);
+        this.metricsPane = new MetricsPane(handler, this);
+        this.processesPane = new ProcessesPane(this);
         this.graphPane = new GraphPane(handler);
+
+        leftPane = metricsPane;
 
         ClientPlayNetworking.registerReceiver(LivingMachineScreenHandler.GRAPH_SYNC_ID, this::receive);
     }
@@ -59,10 +64,17 @@ public class LivingMachineScreen extends HandledScreen<LivingMachineScreenHandle
         int graphsWidth = (int) ((1 - fraction) * withoutPadding.w());
 
         metricsPane.init(new Rectangle.Mutable(withoutPadding).setW(metricsWidth));
-        addDrawableChild(metricsPane);
+        processesPane.init(new Rectangle.Mutable(withoutPadding).setW(metricsWidth));
+        addDrawableChild(leftPane);
 
         graphPane.init(new Rectangle.Immutable(metricsPane.border.x() + metricsPane.border.w() + 1, withoutPadding.y(), graphsWidth, withoutPadding.h()));
         addDrawableChild(graphPane);
+    }
+
+    @Override
+    public boolean mouseClicked(double mouseX, double mouseY, int button)
+    {
+        return leftPane.mouseClicked(mouseX, mouseY, button) || super.mouseClicked(mouseX, mouseY, button);
     }
 
     @Override
@@ -92,7 +104,17 @@ public class LivingMachineScreen extends HandledScreen<LivingMachineScreenHandle
         ClientPlayNetworking.unregisterReceiver(LivingMachineScreenHandler.GRAPH_SYNC_ID);
     }
 
-    static abstract class PaneWidget implements Drawable, Element, Selectable
+    public void switchMode()
+    {
+        if (leftPane == processesPane)
+            leftPane = metricsPane;
+        else
+            leftPane = processesPane;
+
+        clearAndInit();
+    }
+
+    static abstract class PaneWidget extends ScreenSubElement implements Selectable
     {
         protected boolean focused;
         protected Rectangle bounds;
@@ -102,11 +124,19 @@ public class LivingMachineScreen extends HandledScreen<LivingMachineScreenHandle
         {
             this.bounds = new Rectangle.Immutable(parentSize);
             this.border = new Border(bounds, 0, () -> PLCCols.BORDER.col);
+            clearChildren();
+            init();
+        }
+
+        @Override
+        protected void init()
+        {
         }
 
         @Override
         public void render(DrawContext context, int mouseX, int mouseY, float delta)
         {
+            super.render(context, mouseX, mouseY, delta);
             border.render(context, mouseX, mouseY, delta);
         }
 
@@ -140,4 +170,5 @@ public class LivingMachineScreen extends HandledScreen<LivingMachineScreenHandle
 
         }
     }
+
 }
