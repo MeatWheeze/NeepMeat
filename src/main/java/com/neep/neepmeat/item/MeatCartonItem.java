@@ -81,7 +81,7 @@ public class MeatCartonItem extends BaseItem
 
             if (user instanceof PlayerEntity player)
             {
-                NbtCompound nbt = stack.getOrCreateNbt();
+                NbtCompound nbt = stack.getNbt();
                 int food = (int) MeatFluidUtil.getHunger(nbt);
                 float sat = MeatFluidUtil.getSaturation(nbt);
                 player.getHungerManager().add(food, sat);

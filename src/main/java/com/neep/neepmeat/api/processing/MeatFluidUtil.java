@@ -10,6 +10,7 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+// All of this code is very insane. Hopefully I'll make it not insane one day.
 @SuppressWarnings("UnstableApiUsage")
 public class MeatFluidUtil
 {
@@ -79,17 +80,16 @@ public class MeatFluidUtil
     {
         if (variant.hasNbt())
             return variant.getNbt().getCompound(KEY_ROOT);
-        return null;
+        return new NbtCompound();
     }
 
-    @Nullable
     public static NbtCompound getRoot(@NotNull NbtCompound nbt)
     {
         if (nbt.contains(KEY_ROOT, NbtCompound.COMPOUND_TYPE))
         {
             return nbt.getCompound(KEY_ROOT);
         }
-        return null;
+        return new NbtCompound();
     }
 
     @NotNull
