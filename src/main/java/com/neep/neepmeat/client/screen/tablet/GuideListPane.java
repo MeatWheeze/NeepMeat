@@ -2,6 +2,7 @@ package com.neep.neepmeat.client.screen.tablet;
 
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.guide.GuideNode;
 import com.neep.neepmeat.guide.GuideReloadListener;
 import com.neep.neepmeat.init.NMSounds;
@@ -255,7 +256,7 @@ public class GuideListPane extends ContentPane implements Drawable, Element, Sel
 
     public class SearchWidget extends ClickableWidget
     {
-        private Text searchMessage = Text.of("Type '/' to search");
+        private final Text searchMessage = NeepMeat.translationKey("screen", "guide.search");
 
         public SearchWidget(int x, int y, int width, int height, Text message)
         {

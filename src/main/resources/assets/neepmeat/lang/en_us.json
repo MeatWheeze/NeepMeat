@@ -501,6 +501,7 @@
   "item.neepmeat.projector": "Guide Projector",
   "item.neepmeat.projector.lore_0": "A guide to all NEEPMeat content.",
   "item.neepmeat.projector.lore_1": "Press CTRL + L to look up a hovered item while this guide is in your inventory.",
+  "screen.neepmeat.guide.search": "Type '/' to search",
 
   "item.neepmeat.pipette": "Pipette",
   "item.neepmeat.pipette.full": "Pipette: %s (%s mb)",

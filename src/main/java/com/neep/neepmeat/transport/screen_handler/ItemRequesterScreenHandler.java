@@ -111,7 +111,9 @@ public class ItemRequesterScreenHandler extends BasicScreenHandler
         try (Transaction transaction = Transaction.openOuter())
         {
             items.clear();
-            items.addAll(network.getAllAvailable(transaction));
+            var available = network.getAllAvailable(transaction);
+//            items.addAll(network.getAllAvailable(transaction));
+            items.addAll(available);
             transaction.commit();
         }
         sortItems(items, 0);

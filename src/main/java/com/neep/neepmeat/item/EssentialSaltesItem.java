@@ -41,6 +41,9 @@ public class EssentialSaltesItem extends BaseItem
     @Override
     public Text getName(ItemStack stack)
     {
+        if (!stack.hasNbt())
+            return super.getName(stack);
+
         String id = stack.getOrCreateNbt().getString("id");
         if (id != null)
         {
@@ -143,6 +146,9 @@ public class EssentialSaltesItem extends BaseItem
 
     public static EntityType<?> getEntityType(ItemStack stack)
     {
+        if (!stack.hasNbt())
+            return null;
+
         NbtCompound nbt = stack.getOrCreateNbt();
         String id = nbt.getString("id");
         if (id != null)

@@ -1,6 +1,7 @@
 package com.neep.neepmeat.transport.network;
 
 import com.neep.neepmeat.NeepMeat;
+import com.neep.neepmeat.transport.client.screen.ItemRequesterScreen;
 import com.neep.neepmeat.transport.screen_handler.ItemRequesterScreenHandler;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -69,7 +70,7 @@ public class SyncRequesterScreenS2CPacket
                 PacketByteBuf buf2 = PacketByteBufs.copy(buf);
                 server.execute(() ->
                 {
-                        screenHandler.receiveRequestPacket(buf2);
+                    screenHandler.receiveRequestPacket(buf2);
                 });
             }
         });
@@ -82,10 +83,18 @@ public class SyncRequesterScreenS2CPacket
         {
             ClientPlayNetworking.registerGlobalReceiver(SYNC_ID, (client, handler, buf, responseSender) ->
             {
-                if (client.player.currentScreenHandler instanceof ItemRequesterScreenHandler screenHandler)
+                PacketByteBuf copy = PacketByteBufs.copy(buf);
+                client.execute(() ->
                 {
-                    screenHandler.receivePacket(buf);
-                }
+                    if (client.player.currentScreenHandler instanceof ItemRequesterScreenHandler screenHandler)
+                    {
+                        screenHandler.receivePacket(copy);
+                        if (client.currentScreen instanceof ItemRequesterScreen screen)
+                        {
+                            screen.updateItems();
+                        }
+                    }
+                });
             });
         }
     }

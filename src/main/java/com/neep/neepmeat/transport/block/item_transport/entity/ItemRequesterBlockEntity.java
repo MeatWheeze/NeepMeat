@@ -84,11 +84,13 @@ public class ItemRequesterBlockEntity extends ItemPipeBlockEntity implements Ite
     {
         BlockApiCache<RoutingNetwork, Void> cache1 = getController();
 
-        if (cache1 == null) return null;
+        if (cache1 == null)
+            return null;
 
         RoutingNetwork network = cache1.find(null);
 
-        if (network == null) return null;
+        if (network == null)
+            return null;
 
         return new ItemRequesterScreenHandler(syncId, inv, inventory, network, pos, player, propertyDelegate);
     }

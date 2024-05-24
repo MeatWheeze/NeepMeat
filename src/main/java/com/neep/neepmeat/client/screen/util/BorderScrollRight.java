@@ -40,7 +40,7 @@ public class BorderScrollRight extends Border
         drawVerticalLine1(context, x + w - 1, yOff, (int) (yOff + barHeight), col.get());
     }
 
-    static void renderBorder(DrawContext context, int x, int y, int dx, int dy, int col, int offset)
+    protected void renderBorder(DrawContext context, int x, int y, int dx, int dy, int col, int offset)
     {
         drawHorizontalLine1(context, x - offset, x + dx + offset, y - offset, col);
         drawVerticalLine1(context, x - offset, y - offset, y + dy + offset, col);
