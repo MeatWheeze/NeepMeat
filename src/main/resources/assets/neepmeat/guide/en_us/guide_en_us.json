@@ -157,7 +157,7 @@
       {"type": "text", "text": "Motor\n", "bold": true},
       {"type": "text", "text": "Arcane artifice, a blessing of the Integrator, allows a motor to convert the subtle efficacies of Ethereal Fuel into mechanical work."},
       {"type": "text", "text": "\nUsage\n", "bold": true},
-      {"type": "text", "text": "Many rotary machines require an external motor in order to function. This motor accepts Ethereal Fuel, produced with a Fuel Trasnducer, through fluid pipes. \nThe motor's speed is determined by the rate at which fluid is inserted. This often affects the speed of the connected machine."}
+      {"type": "text", "text": "Many rotary machines require an external motor in order to function. This motor accepts Ethereal Fuel, produced with a Fuel Transducer, through fluid pipes. \nThe motor's speed is determined by the rate at which fluid is inserted. This often affects the speed of the connected machine."}
     ]},
     {"id": "advanced_motor", "contents": [
       {"type": "text", "text": "Advanced Motor\n", "bold": true},

@@ -1,6 +1,7 @@
 package com.neep.neepmeat.client.screen.living_machine;
 
 import com.neep.neepmeat.api.plc.PLCCols;
+import com.neep.neepmeat.client.screen.BaseHandledScreen;
 import com.neep.neepmeat.client.screen.ScreenSubElement;
 import com.neep.neepmeat.client.screen.util.Border;
 import com.neep.neepmeat.client.screen.util.Rectangle;
@@ -13,7 +14,6 @@ import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.Selectable;
-import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
 import net.minecraft.entity.player.PlayerInventory;
@@ -21,7 +21,7 @@ import net.minecraft.network.PacketByteBuf;
 import net.minecraft.text.Text;
 
 @Environment(EnvType.CLIENT)
-public class LivingMachineScreen extends HandledScreen<LivingMachineScreenHandler>
+public class LivingMachineScreen extends BaseHandledScreen<LivingMachineScreenHandler>
 {
     private final GraphPane graphPane;
 

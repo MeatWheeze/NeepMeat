@@ -1,13 +1,17 @@
 package com.neep.neepmeat.client.screen.living_machine;
 
 import com.neep.neepmeat.NeepMeat;
+import com.neep.neepmeat.api.live_machine.ComponentType;
 import com.neep.neepmeat.api.live_machine.Process;
 import com.neep.neepmeat.api.plc.PLCCols;
 import com.neep.neepmeat.client.screen.tablet.GUIUtil;
 import com.neep.neepmeat.machine.live_machine.Processes;
 import it.unimi.dsi.fastutil.Pair;
 import net.minecraft.client.gui.DrawContext;
+import net.minecraft.text.OrderedText;
 import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
+import net.minecraft.util.Identifier;
 
 import java.util.ArrayList;
 import java.util.BitSet;
@@ -58,11 +62,15 @@ public class ProcessesPane extends LivingMachineScreen.PaneWidget
         private int prevX;
         private int prevY;
 
+//        private List<OrderedText> texts;
+
         public EntryWidget(Pair<BitSet, Process> pair, int w, int h)
         {
             this.w = w;
             this.process = pair.value();
             this.h = h;
+
+//            this.texts = new ArrayList<>();
         }
 
         private boolean isMouseOver(double mouseX, double mouseY)
@@ -80,7 +88,26 @@ public class ProcessesPane extends LivingMachineScreen.PaneWidget
 
             if (isMouseOver(mouseX, mouseY))
             {
-                context.drawTooltip(textRenderer, NeepMeat.translationKey("process", process.getName().getString().toLowerCase() + ".requirements"), mouseX, mouseY);
+                int width = 180;
+                List<OrderedText> texts = new ArrayList<>();
+                Text head = NeepMeat.translationKey("screen", "living_machine.requirements");
+                texts.add(head.asOrderedText());
+                List<ComponentType<?>> requiredTypes = process.getRequired();
+                for (var type : requiredTypes)
+                {
+                    Identifier id = ComponentType.REGISTRY.getId(type);
+                    if (id == null)
+                        continue;
+
+                    Formatting formatting = parent.getScreenHandler().getBlockEntity().getDisplayComponents().contains(id) ?
+                            Formatting.GOLD
+                            : Formatting.GRAY;
+                    texts.addAll(textRenderer.wrapLines(
+                            Text.literal(" ")
+                                    .append(Text.translatable(id.toTranslationKey("component")).formatted(formatting)), width));
+                }
+
+                parent.renderTooltipOrderedText(context, texts, false, x + w - 3, y, width, PLCCols.TEXT.col);
             }
 
             return h;

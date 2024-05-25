@@ -7,19 +7,19 @@ import com.neep.neepmeat.api.plc.PLCCols;
 import com.neep.neepmeat.api.plc.recipe.Workpiece;
 import com.neep.neepmeat.client.plc.PLCHudRenderer;
 import com.neep.neepmeat.client.plc.PLCMotionController;
+import com.neep.neepmeat.client.screen.StyledTooltipUser;
 import com.neep.neepmeat.init.NMComponents;
 import com.neep.neepmeat.init.NMSounds;
 import com.neep.neepmeat.network.plc.PLCSyncThings;
 import com.neep.neepmeat.plc.block.entity.PLCBlockEntity;
 import com.neep.neepmeat.plc.component.MutateInPlace;
 import com.neep.neepmeat.plc.instruction.Argument;
-import com.neep.neepmeat.plc.instruction.InstructionProvider;
 import com.neep.neepmeat.plc.screen.PLCScreenHandler;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
+import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.ingame.ScreenHandlerProvider;
-import net.minecraft.client.gui.tooltip.TooltipComponent;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.client.render.*;
 import net.minecraft.client.sound.PositionedSoundInstance;
@@ -27,7 +27,6 @@ import net.minecraft.client.texture.Sprite;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.text.OrderedText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.hit.BlockHitResult;
@@ -39,9 +38,8 @@ import org.jetbrains.annotations.Nullable;
 import org.lwjgl.glfw.GLFW;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
-public class PLCProgramScreen extends Screen implements ScreenHandlerProvider<PLCScreenHandler>
+public class PLCProgramScreen extends Screen implements ScreenHandlerProvider<PLCScreenHandler>, StyledTooltipUser
 {
     public static final Identifier WIDGETS = new Identifier(NeepMeat.NAMESPACE, "textures/gui/widget/plc_widgets.png");
     protected static final Identifier VIGNETTE = new Identifier(NeepMeat.NAMESPACE, "textures/gui/plc_robot_vignette.png");
@@ -157,6 +155,12 @@ public class PLCProgramScreen extends Screen implements ScreenHandlerProvider<PL
 
         state.onKeyPressed(keyCode, scanCode, modifiers);
         return true;
+    }
+
+    @Override
+    public boolean charTyped(char chr, int modifiers)
+    {
+        return super.charTyped(chr, modifiers);
     }
 
     @Override
@@ -310,11 +314,6 @@ public class PLCProgramScreen extends Screen implements ScreenHandlerProvider<PL
         return true;
     }
 
-    public void updateInstruction(InstructionProvider provider)
-    {
-        PLCSyncThings.Client.switchOperation(provider, plc);
-    }
-
     protected void addArgument(BlockHitResult result)
     {
         state.argument(new Argument(result.getBlockPos(), result.getSide()));
@@ -390,88 +389,85 @@ public class PLCProgramScreen extends Screen implements ScreenHandlerProvider<PL
         PLCHudRenderer.leave();
     }
 
-    public void renderTooltipText(MatrixStack matrices, List<Text> texts, boolean offset, int x, int y, int col)
-    {
-        renderTooltipComponents(matrices, texts.stream().map(t -> TooltipComponent.of(t.asOrderedText())).collect(Collectors.toList()), offset, x, y, 0, col);
-    }
-
-    public void renderTooltipOrderedText(MatrixStack matrices, List<OrderedText> texts, boolean offset, int x, int y, int width, int col)
-    {
-        renderTooltipComponents(matrices, texts.stream().map(TooltipComponent::of).collect(Collectors.toList()), offset, x, y, width, col);
-    }
-
-    private void renderTooltipComponents(MatrixStack matrices, List<TooltipComponent> components, boolean offset, int x, int y, int maxWidth, int col)
-    {
-        if (offset)
-        {
-            x += 12;
-            y -= 12;
-        }
-        if (components.isEmpty())
-        {
-            return;
-        }
-
-        int maxHeight = components.size() == 1 ? -2 : 0;
-        for (TooltipComponent tooltipComponent : components)
-        {
-            int componentWidth = tooltipComponent.getWidth(this.textRenderer);
-            if (componentWidth > maxWidth)
-            {
-                maxWidth = componentWidth;
-            }
-            maxHeight += tooltipComponent.getHeight();
-        }
-
-        if (x + maxWidth > this.width)
-        {
-            x -= 28 + maxWidth;
-        }
-
-        if (y + maxHeight + 6 > this.height)
-        {
-            y = this.height - maxHeight - 6;
-        }
-
-        matrices.push();
-        float itemRendererPrevZ = this.itemRenderer.zOffset;
-        float prevZ = this.getZOffset();
-        this.itemRenderer.zOffset = 400.0f;
-        this.setZOffset(400);
-        RenderSystem.setShader(GameRenderer::getPositionColorShader);
-
-        Screen.fill(matrices, x, y, x + maxWidth + 2, y + maxHeight + 2, 0x90000000);
-        drawHorizontalLine(matrices, x, x + maxWidth + 2, y, col);
-        drawHorizontalLine(matrices, x, x + maxWidth + 2, y + maxHeight + 2, col);
-        drawVerticalLine(matrices, x + maxWidth + 2, y, y + maxHeight + 2, col);
-        drawVerticalLine(matrices, x, y, y + maxHeight + 2, col);
-
-        RenderSystem.disableBlend();
-        RenderSystem.enableTexture();
-        VertexConsumerProvider.Immediate immediate = VertexConsumerProvider.immediate(Tessellator.getInstance().getBuffer());
-        matrices.translate(0.0, 0.0, 400.0);
-
-        Matrix4f matrix4f = matrices.peek().getPositionMatrix();
-        int yAdvance = y + 2;
-
-        for (TooltipComponent tooltipComponent2 : components)
-        {
-            tooltipComponent2.drawText(this.textRenderer, x + 2, yAdvance, matrix4f, immediate);
-            yAdvance += tooltipComponent2.getHeight();
-        }
-
-        immediate.draw();
-        matrices.pop();
-        yAdvance = y;
-        for (int index = 0; index < components.size(); ++index)
-        {
-            TooltipComponent tooltipComponent2 = components.get(index);
-            tooltipComponent2.drawItems(this.textRenderer, x, yAdvance, matrices, this.itemRenderer, 400);
-            yAdvance += tooltipComponent2.getHeight() + (index == 0 ? 2 : 0);
-        }
-        this.itemRenderer.zOffset = itemRendererPrevZ;
-        this.setZOffset((int) prevZ);
-    }
+//    public void renderTooltipText(DrawContext matrices, List<Text> texts, boolean offset, int x, int y, int col)
+//    {
+//        renderTooltipComponents(matrices, texts.stream().map(t -> TooltipComponent.of(t.asOrderedText())).collect(Collectors.toList()), offset, x, y, 0, col);
+//    }
+//
+//    public void renderTooltipOrderedText(DrawContext matrices, List<OrderedText> texts, boolean offset, int x, int y, int width, int col)
+//    {
+//        renderTooltipComponents(matrices, texts.stream().map(TooltipComponent::of).collect(Collectors.toList()), offset, x, y, width, col);
+//    }
+//
+//    private void renderTooltipComponents(DrawContext context, List<TooltipComponent> components, boolean offset, int x, int y, int maxWidth, int col)
+//    {
+//        MatrixStack matrices = context.getMatrices();
+//        if (offset)
+//        {
+//            x += 12;
+//            y -= 12;
+//        }
+//        if (components.isEmpty())
+//        {
+//            return;
+//        }
+//
+//        int maxHeight = components.size() == 1 ? -2 : 0;
+//        for (TooltipComponent tooltipComponent : components)
+//        {
+//            int componentWidth = tooltipComponent.getWidth(this.textRenderer);
+//            if (componentWidth > maxWidth)
+//            {
+//                maxWidth = componentWidth;
+//            }
+//            maxHeight += tooltipComponent.getHeight();
+//        }
+//
+//        if (x + maxWidth > this.width)
+//        {
+//            x -= 28 + maxWidth;
+//        }
+//
+//        if (y + maxHeight + 6 > this.height)
+//        {
+//            y = this.height - maxHeight - 6;
+//        }
+//
+//        matrices.push();
+////        this.itemRenderer.zOffset = 400.0f;
+////        this.setZOffset(400);
+//        matrices.translate(0, 0, 400);
+//        RenderSystem.setShader(GameRenderer::getPositionColorProgram);
+//
+//        context.fill(x, y, x + maxWidth + 2, y + maxHeight + 2, 0x90000000);
+//        drawHorizontalLine1(context, x, x + maxWidth + 2, y, col);
+//        drawHorizontalLine1(context, x, x + maxWidth + 2, y + maxHeight + 2, col);
+//        drawVerticalLine1(context, x + maxWidth + 2, y, y + maxHeight + 2, col);
+//        drawVerticalLine1(context, x, y, y + maxHeight + 2, col);
+//
+//        RenderSystem.disableBlend();
+//        VertexConsumerProvider.Immediate immediate = VertexConsumerProvider.immediate(Tessellator.getInstance().getBuffer());
+//        matrices.translate(0.0, 0.0, 400.0);
+//
+//        Matrix4f matrix4f = matrices.peek().getPositionMatrix();
+//        int yAdvance = y + 2;
+//
+//        for (TooltipComponent tooltipComponent2 : components)
+//        {
+//            tooltipComponent2.drawText(this.textRenderer, x + 2, yAdvance, matrix4f, immediate);
+//            yAdvance += tooltipComponent2.getHeight();
+//        }
+//
+//        immediate.draw();
+//        matrices.pop();
+//        yAdvance = y;
+//        for (int index = 0; index < components.size(); ++index)
+//        {
+//            TooltipComponent tooltipComponent2 = components.get(index);
+//            tooltipComponent2.drawItems(this.textRenderer, x, yAdvance, context);
+//            yAdvance += tooltipComponent2.getHeight() + (index == 0 ? 2 : 0);
+//        }
+//    }
 
     @Override
     public PLCScreenHandler getScreenHandler()
@@ -492,6 +488,24 @@ public class PLCProgramScreen extends Screen implements ScreenHandlerProvider<PL
     public boolean passEvents()
     {
         return !editor.isEditFieldFocused();
+    }
+
+    @Override
+    public TextRenderer textRenderer()
+    {
+        return textRenderer;
+    }
+
+    @Override
+    public int width()
+    {
+        return width;
+    }
+
+    @Override
+    public int height()
+    {
+        return height;
     }
 
     public abstract class BaseButton extends PLCScreenButton

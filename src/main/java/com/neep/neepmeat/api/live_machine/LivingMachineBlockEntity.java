@@ -18,9 +18,9 @@ import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntityType;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.nbt.NbtOps;
+import net.minecraft.nbt.*;
 import net.minecraft.text.Text;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.MathHelper;
@@ -75,6 +75,7 @@ public abstract class LivingMachineBlockEntity extends SyncableBlockEntity imple
     // Use only on client. Use structures.size() elsewhere.
     private int numStructures;
     private int numComponents;
+    private final List<Identifier> components = new ArrayList<>();
     private Text processName = Process.NO_PROCESS;
 
     public LivingMachineBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
@@ -95,6 +96,13 @@ public abstract class LivingMachineBlockEntity extends SyncableBlockEntity imple
         this.numStructures = nbt.getInt("num_structures");
         this.numComponents = nbt.getInt("num_components");
         this.processName = Text.of(nbt.getString("process_name"));
+
+        components.clear();
+        NbtList list = nbt.getList("components", NbtElement.STRING_TYPE);
+        for (int i = 0; i < list.size(); ++i)
+        {
+             components.add(Identifier.tryParse(list.getString(i)));
+        }
     }
 
     @Override
@@ -109,6 +117,23 @@ public abstract class LivingMachineBlockEntity extends SyncableBlockEntity imple
         nbt.putInt("num_structures", structures.size());
         nbt.putInt("num_components", getNumComponents());
         nbt.putString("process_name", getProcess().getString());
+
+        NbtList componentList = new NbtList();
+
+        int i = currentComponents.nextSetBit(0);
+        while (i != -1 && i < currentComponents.length())
+        {
+            i = currentComponents.nextSetBit(i);
+
+            ComponentType<?> type = ComponentType.ID_TO_TYPE.get(i);
+            Identifier id = ComponentType.REGISTRY.getId(type);
+            if (id != null)
+                componentList.add(NbtString.of(id.toString()));
+
+            i++;
+        }
+
+        nbt.put("components", componentList);
     }
 
     protected void tickDegradation()
@@ -516,5 +541,10 @@ public abstract class LivingMachineBlockEntity extends SyncableBlockEntity imple
         }
 
         return processName != null ? processName : Process.NO_PROCESS;
+    }
+
+    public List<Identifier> getDisplayComponents()
+    {
+        return components;
     }
 }

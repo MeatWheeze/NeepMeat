@@ -790,6 +790,19 @@
   "screen.neepmeat.living_machine.process": "Current process",
   "screen.neepmeat.living_machine.no_process": "None",
 
+  "screen.neepmeat.living_machine.requirements": "Requirements:",
+  "process.neepmeat.crushing.requirements": "   ",
+
+  "component.neepmeat.crusher_segment": "Crusher Segment",
+  "component.neepmeat.large_trommel": "Large Trommel",
+  "component.neepmeat.motor_port": "Motor Port",
+  "component.neepmeat.integration_port": "Integration Port",
+  "component.neepmeat.hopper": "Hopper",
+  "component.neepmeat.item_input": "Item Input",
+  "component.neepmeat.item_output": "Item Output",
+  "component.neepmeat.fluid_input": "Fluid Input",
+  "component.neepmeat.fluid_output": "Fluid Output",
+
   "category.neepmeat.pressing": "Pressing",
   "category.neepmeat.grinding": "Crushing",
   "category.neepmeat.advanced_crushing": "Advanced Crushing",
