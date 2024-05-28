@@ -26,9 +26,9 @@ public class MachineBlock extends BaseBlock implements LivingMachineStructure
 {
     private final EnumMap<StructureProperty, StructureProperty.Entry> properties;
 
-    public MachineBlock(String registryName, Map<StructureProperty, StructureProperty.Entry> properties, Settings settings)
+    public MachineBlock(String registryName, ItemSettings itemSettings, Map<StructureProperty, StructureProperty.Entry> properties, Settings settings)
     {
-        super(registryName, ItemSettings.block().factory(MachineBlockItem::new), settings);
+        super(registryName, itemSettings.factory(MachineBlockItem::new), settings);
         this.properties = new EnumMap<>(properties);
 //        properties.put(Property.MAX_POWER, 10f);
     }
@@ -43,6 +43,7 @@ public class MachineBlock extends BaseBlock implements LivingMachineStructure
     public void appendTooltip(ItemStack stack, @Nullable BlockView world, List<Text> tooltip, TooltipContext options)
     {
         super.appendTooltip(stack, world, tooltip, options);
+
         if (!Screen.hasShiftDown())
         {
             tooltip.add(NeepMeat.translationKey("screen", "living_machine.block_hold_shift").formatted(Formatting.RED));

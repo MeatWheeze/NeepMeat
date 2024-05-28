@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "neepmeat:meat_steel_machine_block_2"
+    }
+  ],
+  "result": {
+    "item": "neepmeat:meat_steel_machine_block",
+    "count": 1
+  }
+}

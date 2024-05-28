@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "idi",
+    " b ",
+    "i i"
+  ],
+  "key": {
+    "i": {
+      "item": "minecraft:iron_ingot"
+    },
+    "b": {
+      "item": "minecraft:iron_block"
+    },
+    "d": {
+      "item": "minecraft:yellow_dye"
+    }
+  },
+  "result": {
+    "item": "neepmeat:machine_block",
+    "count": 6
+  }
+}

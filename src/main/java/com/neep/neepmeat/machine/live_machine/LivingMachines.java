@@ -22,36 +22,35 @@ import net.minecraft.block.entity.BlockEntityType;
 import java.util.Map;
 
 import static com.neep.neepmeat.init.NMBlockEntities.register;
-import static com.neep.neepmeat.init.NMBlocks.MACHINE_SETTINGS;
-import static com.neep.neepmeat.init.NMBlocks.OPAQUE_MACHINE_SETTINGS;
+import static com.neep.neepmeat.init.NMBlocks.*;
 import static com.neep.neepmeat.machine.live_machine.LivingMachineComponents.tooltip;
 
 public class LivingMachines
 {
     public static Block LIVING_MACHINE_CONTROLLER = BlockRegistry.queueWithItem(new TestLivingMachineBlock("living_machine_controller", MeatlibBlockSettings.copyOf(MACHINE_SETTINGS)), ItemSettings.block());
 
-    public static Block MACHINE_BLOCK = BlockRegistry.queue(new MachineBlock("machine_block", Map.of(
+    public static Block MACHINE_BLOCK = BlockRegistry.queue(new MachineBlock("machine_block", block(), Map.of(
             StructureProperty.MAX_POWER, new StructureProperty.Entry(300f),
                     StructureProperty.MASS, new StructureProperty.Entry(1000f)), FabricBlockSettings.copyOf(OPAQUE_MACHINE_SETTINGS)));
-    public static Block BASE_MACHINE_BLOCK = BlockRegistry.queue(new MachineBlock("base_machine_block", Map.of(
+    public static Block BASE_MACHINE_BLOCK = BlockRegistry.queue(new MachineBlock("base_machine_block", block(), Map.of(
             StructureProperty.MAX_POWER, new StructureProperty.Entry(300f),
             StructureProperty.MASS, new StructureProperty.Entry(2000f)), FabricBlockSettings.copyOf(OPAQUE_MACHINE_SETTINGS)));
-    public static Block BLOOD_BUBBLE_MACHINE_BLOCK = BlockRegistry.queue(new MachineBlock("blood_bubble_machine_block", Map.of(
+    public static Block BLOOD_BUBBLE_MACHINE_BLOCK = BlockRegistry.queue(new MachineBlock("blood_bubble_machine_block", block(), Map.of(
             StructureProperty.MAX_POWER, new StructureProperty.Entry(StructureProperty.Function.ADD, -5),
             StructureProperty.MASS, new StructureProperty.Entry(500f),
             StructureProperty.SELF_REPAIR, new StructureProperty.Entry(StructureProperty.Function.ADD, 1e-6f)), FabricBlockSettings.copyOf(OPAQUE_MACHINE_SETTINGS)));
-    public static Block MEAT_STEEL_MACHINE_BLOCK = BlockRegistry.queue(new MachineBlock("meat_steel_machine_block", Map.of(
+    public static Block MEAT_STEEL_MACHINE_BLOCK = BlockRegistry.queue(new MachineBlock("meat_steel_machine_block", block(), Map.of(
             StructureProperty.MAX_POWER, new StructureProperty.Entry(500f),
             StructureProperty.SELF_REPAIR, new StructureProperty.Entry(StructureProperty.Function.ADD, 0.5e-6f),
             StructureProperty.MASS, new StructureProperty.Entry(1000f)), FabricBlockSettings.copyOf(OPAQUE_MACHINE_SETTINGS)));
-    public static Block MEAT_STEEL_MACHINE_BLOCK_2 = BlockRegistry.queue(new MachineBlock("meat_steel_machine_block_2", Map.of(
+    public static Block MEAT_STEEL_MACHINE_BLOCK_2 = BlockRegistry.queue(new MachineBlock("meat_steel_machine_block_2", block().tooltip(TooltipSupplier.simple(1)), Map.of(
             StructureProperty.MAX_POWER, new StructureProperty.Entry(500f),
             StructureProperty.SELF_REPAIR, new StructureProperty.Entry(StructureProperty.Function.ADD, 0.5e-6f),
             StructureProperty.MASS, new StructureProperty.Entry(1000f)
     ), FabricBlockSettings.copyOf(OPAQUE_MACHINE_SETTINGS)));
-    public static Block SKIN_MACHINE_BLOCK = BlockRegistry.queue(new MachineBlock("skin_machine_block", Map.of(
+    public static Block SKIN_MACHINE_BLOCK = BlockRegistry.queue(new MachineBlock("skin_machine_block", block(), Map.of(
             StructureProperty.MAX_POWER, new StructureProperty.Entry(500f),
-            StructureProperty.SELF_REPAIR, new StructureProperty.Entry(StructureProperty.Function.ADD, 0.5e-6f),
+            StructureProperty.SELF_REPAIR, new StructureProperty.Entry(StructureProperty.Function.ADD, 1.5e-6f),
             StructureProperty.MASS, new StructureProperty.Entry(1000f)
     ), FabricBlockSettings.copyOf(OPAQUE_MACHINE_SETTINGS)));
 

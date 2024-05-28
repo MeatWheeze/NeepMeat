@@ -1,9 +1,9 @@
 {
   "type": "minecraft:crafting_shaped",
   "pattern": [
-    "mmm",
-    "dbd",
-    "mmm"
+    "mcm",
+    "cbc",
+    "mcm"
   ],
   "key": {
     "m": {
@@ -12,12 +12,12 @@
     "b": {
       "item": "minecraft:iron_block"
     },
-    "d": {
-      "item": "minecraft:yellow_dye"
+    "c": {
+      "item": "neepmeat:internal_components"
     }
   },
   "result": {
-    "item": "neepmeat:machine_block",
+    "item": "neepmeat:meat_steel_machine_block",
     "count": 4
   }
 }
