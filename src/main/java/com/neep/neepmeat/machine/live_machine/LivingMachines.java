@@ -3,6 +3,7 @@ package com.neep.neepmeat.machine.live_machine;
 import com.neep.meatlib.block.MeatlibBlockSettings;
 import com.neep.meatlib.block.multi.TallerBlock;
 import com.neep.meatlib.item.ItemSettings;
+import com.neep.meatlib.item.TooltipSupplier;
 import com.neep.meatlib.registry.BlockRegistry;
 import com.neep.neepmeat.api.FluidPump;
 import com.neep.neepmeat.api.big_block.BigBlock;
@@ -23,6 +24,7 @@ import java.util.Map;
 import static com.neep.neepmeat.init.NMBlockEntities.register;
 import static com.neep.neepmeat.init.NMBlocks.MACHINE_SETTINGS;
 import static com.neep.neepmeat.init.NMBlocks.OPAQUE_MACHINE_SETTINGS;
+import static com.neep.neepmeat.machine.live_machine.LivingMachineComponents.tooltip;
 
 public class LivingMachines
 {
@@ -53,16 +55,22 @@ public class LivingMachines
             StructureProperty.MASS, new StructureProperty.Entry(1000f)
     ), FabricBlockSettings.copyOf(OPAQUE_MACHINE_SETTINGS)));
 
-    public static final Block MOTOR_PORT = BlockRegistry.queue(new PortBlock<>("motor_port", ItemSettings.block(), () ->  LivingMachines.MOTOR_PORT_BE, FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
-    public static final Block INTEGRATION_PORT = BlockRegistry.queue(new PortBlock<>("integration_port", ItemSettings.block(), () -> LivingMachines.INTEGRATION_PORT_BE, FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
-    public static final Block ITEM_OUTPUT_PORT = BlockRegistry.queue(new PortBlock<>("item_output_port", ItemSettings.block(), () -> LivingMachines.ITEM_OUTPUT_PORT_BE, FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
-    public static final Block FLUID_INPUT_PORT = BlockRegistry.queue(new PortBlock<>("fluid_input_port", ItemSettings.block(), () -> LivingMachines.FLUID_INPUT_PORT_BE, FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
-    public static final Block FLUID_OUTPUT_PORT = BlockRegistry.queue(new PortBlock<>("fluid_output_port", ItemSettings.block(), () -> LivingMachines.FLUID_OUTPUT_PORT_BE, FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
-    public static final BigBlock<CrusherSegmentBlock.CrusherSegmentStructureBlock> CRUSHER_SEGMENT = BlockRegistry.queue(new CrusherSegmentBlock("crusher_segment", FabricBlockSettings.copyOf(MACHINE_SETTINGS), ItemSettings.block()));
-    public static final BigBlock<?> LARGE_TROMMEL = BlockRegistry.queue(new LargeTrommelBlock("large_trommel",FabricBlockSettings.copyOf(MACHINE_SETTINGS), ItemSettings.block()));
-    public static final BigBlock<LargestHopperBlock.StructureBlock> LARGEST_HOPPER = BlockRegistry.queue(new LargestHopperBlock("largest_hopper", FabricBlockSettings.copyOf(MACHINE_SETTINGS), ItemSettings.block()));
+    public static final Block MOTOR_PORT = BlockRegistry.queue(new PortBlock<>("motor_port", ItemSettings.block().tooltip(tooltip(LivingMachineComponents.MOTOR_PORT)),
+            () ->  LivingMachines.MOTOR_PORT_BE, FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
+    public static final Block INTEGRATION_PORT = BlockRegistry.queue(new PortBlock<>("integration_port", ItemSettings.block().tooltip(tooltip(LivingMachineComponents.INTEGRATION_PORT)),
+            () -> LivingMachines.INTEGRATION_PORT_BE, FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
+    public static final Block ITEM_OUTPUT_PORT = BlockRegistry.queue(new PortBlock<>("item_output_port", ItemSettings.block().tooltip(tooltip(LivingMachineComponents.ITEM_OUTPUT)),
+            () -> LivingMachines.ITEM_OUTPUT_PORT_BE, FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
+    public static final Block FLUID_INPUT_PORT = BlockRegistry.queue(new PortBlock<>("fluid_input_port", ItemSettings.block().tooltip(tooltip(LivingMachineComponents.FLUID_INPUT)),
+            () -> LivingMachines.FLUID_INPUT_PORT_BE, FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
+    public static final Block FLUID_OUTPUT_PORT = BlockRegistry.queue(new PortBlock<>("fluid_output_port", ItemSettings.block().tooltip(tooltip(LivingMachineComponents.FLUID_OUTPUT)),
+            () -> LivingMachines.FLUID_OUTPUT_PORT_BE, FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
+    public static final BigBlock<CrusherSegmentBlock.CrusherSegmentStructureBlock> CRUSHER_SEGMENT = BlockRegistry.queue(new CrusherSegmentBlock("crusher_segment", FabricBlockSettings.copyOf(MACHINE_SETTINGS), ItemSettings.block().tooltip(tooltip(LivingMachineComponents.CRUSHER_SEGMENT))));
+    public static final BigBlock<?> LARGE_TROMMEL = BlockRegistry.queue(new LargeTrommelBlock("large_trommel",FabricBlockSettings.copyOf(MACHINE_SETTINGS), ItemSettings.block().tooltip(tooltip(LivingMachineComponents.LARGE_TROMMEL))));
+    public static final BigBlock<LargestHopperBlock.StructureBlock> LARGEST_HOPPER = BlockRegistry.queue(new LargestHopperBlock("largest_hopper", FabricBlockSettings.copyOf(MACHINE_SETTINGS), ItemSettings.block().tooltip(tooltip(LivingMachineComponents.ITEM_INPUT))));
 
-    public static final TallerBlock LUCKY_ONE = BlockRegistry.queue(new LuckyOneBlock("lucky_one", ItemSettings.block(), FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
+    public static final TallerBlock LUCKY_ONE = BlockRegistry.queue(new LuckyOneBlock("lucky_one", ItemSettings.block().tooltip(tooltip(LivingMachineComponents.LUCKY_ONE).append(TooltipSupplier.simple(1))
+    ), FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
 
     public static BlockEntityType<MotorPortBlockEntity> MOTOR_PORT_BE;
     public static BlockEntityType<IntegrationPortBlockEntity> INTEGRATION_PORT_BE;

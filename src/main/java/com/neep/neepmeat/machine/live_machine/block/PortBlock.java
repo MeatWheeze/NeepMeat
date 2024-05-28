@@ -2,7 +2,7 @@ package com.neep.neepmeat.machine.live_machine.block;
 
 import com.neep.meatlib.block.BaseFacingBlock;
 import com.neep.meatlib.item.ItemSettings;
-import com.neep.neepmeat.machine.live_machine.LivingMachines;
+import com.neep.neepmeat.machine.live_machine.LivingMachineComponents;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;

@@ -14,9 +14,14 @@ import java.util.List;
 @FunctionalInterface
 public interface TooltipSupplier
 {
-    static TooltipSupplier BLANK = (i, t) -> {};
+    TooltipSupplier BLANK = (i, t) -> {};
 
     void apply(Item item, List<Text> tooltip);
+
+    default TooltipSupplier append(TooltipSupplier other)
+    {
+        return TooltipSupplier.combine(this, other);
+    }
 
     static TooltipSupplier blank()
     {

@@ -71,16 +71,17 @@ public class NeepMeat implements ModInitializer
 		return Text.translatable(prefix + "." + NAMESPACE + "." + things);
 	}
 
-	public static MutableText translationKey(String prefix, String... things)
+	public static MutableText translationKey(String prefix, String things, String args)
 	{
-		StringBuilder builder = new StringBuilder();
-		for (int i = 0; i < things.length; ++i)
-		{
-			builder.append(things[i]);
-			if (i <= things.length - 1)
-				builder.append('.');
-		}
-		return Text.translatable(prefix + "." + NAMESPACE + "." + builder);
+//		StringBuilder builder = new StringBuilder();
+//		for (int i = 0; i < things.length; ++i)
+//		{
+//			builder.append(things[i]);
+//			if (i <= things.length - 1)
+//				builder.append('.');
+//		}
+//		return Text.translatable(prefix + "." + NAMESPACE + "." + builder);
+		return Text.translatable(prefix + "." + NAMESPACE + "." + things, args);
 	}
 
 	@Override
