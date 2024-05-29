@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/orientable",
+  "textures": {
+    "front": "neepmeat:block/living_machine/service_port",
+    "side": "neepmeat:block/living_machine/base_machine_block_top",
+    "top": "neepmeat:block/living_machine/base_machine_block_top"
+  }
+}

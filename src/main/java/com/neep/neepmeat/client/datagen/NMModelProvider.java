@@ -47,7 +47,6 @@ public class NMModelProvider extends FabricModelProvider
         blockStateModelGenerator.registerSingleton(LivingMachines.SKIN_MACHINE_BLOCK,
                 TextureMap.all(new Identifier(NeepMeat.NAMESPACE, "block/living_machine/skin_machine_block")),
                 TexturedModel.CUBE_ALL.get(LivingMachines.SKIN_MACHINE_BLOCK).getModel());
-//                TexturedModel.CUBE_ALL.upload(LivingMachines.SKIN_MACHINE_BLOCK, blockStateModelGenerator.modelCollector));
     }
 
     @Override

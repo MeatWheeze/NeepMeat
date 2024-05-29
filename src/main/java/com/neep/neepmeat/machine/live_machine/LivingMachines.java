@@ -58,6 +58,8 @@ public class LivingMachines
             () ->  LivingMachines.MOTOR_PORT_BE, FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
     public static final Block INTEGRATION_PORT = BlockRegistry.queue(new PortBlock<>("integration_port", ItemSettings.block().tooltip(tooltip(LivingMachineComponents.INTEGRATION_PORT)),
             () -> LivingMachines.INTEGRATION_PORT_BE, FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
+    public static final Block SERVICE_PORT = BlockRegistry.queue(new PortBlock<>("service_port", ItemSettings.block(),
+            () -> LivingMachines.SERVICE_PORT_BE, FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
     public static final Block ITEM_OUTPUT_PORT = BlockRegistry.queue(new PortBlock<>("item_output_port", ItemSettings.block().tooltip(tooltip(LivingMachineComponents.ITEM_OUTPUT)),
             () -> LivingMachines.ITEM_OUTPUT_PORT_BE, FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
     public static final Block FLUID_INPUT_PORT = BlockRegistry.queue(new PortBlock<>("fluid_input_port", ItemSettings.block().tooltip(tooltip(LivingMachineComponents.FLUID_INPUT)),
@@ -74,6 +76,7 @@ public class LivingMachines
 
     public static BlockEntityType<MotorPortBlockEntity> MOTOR_PORT_BE;
     public static BlockEntityType<IntegrationPortBlockEntity> INTEGRATION_PORT_BE;
+    public static BlockEntityType<ServicePortBlockEntity> SERVICE_PORT_BE;
     public static BlockEntityType<CrusherSegmentBlockEntity> CRUSHER_SEGMENT_BE;
     public static BlockEntityType<LargeTrommelBlockEntity> LARGE_TROMMEL_BE;
     public static BlockEntityType<LargestHopperBlockEntity> LARGEST_HOPPER_BE;
@@ -93,6 +96,8 @@ public class LivingMachines
         INTEGRATION_PORT_BE = register("integration_port", (p, s) -> new IntegrationPortBlockEntity(INTEGRATION_PORT_BE, p, s), INTEGRATION_PORT);
         LivingMachineComponent.LOOKUP.registerSelf(LivingMachines.INTEGRATION_PORT_BE);
         FluidStorage.SIDED.registerForBlockEntity(IntegrationPortBlockEntity::getFluidStorage, LivingMachines.INTEGRATION_PORT_BE);
+        SERVICE_PORT_BE = register("service_port", (p, s) -> new ServicePortBlockEntity(SERVICE_PORT_BE, p, s), SERVICE_PORT);
+        LivingMachineComponent.LOOKUP.registerSelf(LivingMachines.SERVICE_PORT_BE);
         CRUSHER_SEGMENT_BE = register("crusher_segment", (p, s) -> new CrusherSegmentBlockEntity(CRUSHER_SEGMENT_BE, p, s), CRUSHER_SEGMENT);
         LivingMachineComponent.LOOKUP.registerSelf(LivingMachines.CRUSHER_SEGMENT_BE);
         LARGE_TROMMEL_BE = register("large_trommel", (p, s) -> new LargeTrommelBlockEntity(LARGE_TROMMEL_BE, p, s), LARGE_TROMMEL);

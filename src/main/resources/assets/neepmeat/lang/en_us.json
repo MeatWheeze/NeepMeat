@@ -140,6 +140,7 @@
   "block.neepmeat.skin_machine_block": "Skin Machine Block",
   "block.neepmeat.motor_port": "Motor Port",
   "block.neepmeat.integration_port": "Integration Port",
+  "block.neepmeat.service_port": "Service Port",
   "block.neepmeat.item_output_port": "Item Output Port",
   "block.neepmeat.fluid_input_port": "Fluid Input Port",
   "block.neepmeat.fluid_output_port": "Fluid Output Port",

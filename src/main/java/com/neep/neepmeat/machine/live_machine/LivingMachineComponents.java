@@ -20,6 +20,7 @@ public class LivingMachineComponents
     public static final ComponentType<LargeTrommelBlockEntity> LARGE_TROMMEL = register("large_trommel", new ComponentType.Simple<>());
     public static final ComponentType<MotorPortBlockEntity> MOTOR_PORT = register("motor_port", new ComponentType.Simple<>());
     public static final ComponentType<IntegrationPortBlockEntity> INTEGRATION_PORT = register("integration_port", new ComponentType.Simple<>());
+    public static final ComponentType<IntegrationPortBlockEntity> SERVICE_PORT = register("service_port", new ComponentType.Simple<>());
 
     public static final ComponentType<HopperComponent> HOPPER = register("hopper", new ComponentType.Simple<>());
     public static final ComponentType<ItemInputComponent> ITEM_INPUT = register("item_input", new ComponentType.Simple<>());

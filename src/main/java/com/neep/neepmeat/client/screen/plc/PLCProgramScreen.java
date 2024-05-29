@@ -47,6 +47,7 @@ public class PLCProgramScreen extends Screen implements ScreenHandlerProvider<PL
     protected final PLCScreenShellState shell;
     private final PLCScreenHandler handler;
     private final PLCBlockEntity plc;
+
     // Text relating to the block that the mouse is currently over
     private final List<Text> tooltipText = Lists.newArrayList();
     protected PLCScreenState state;
