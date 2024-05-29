@@ -5,6 +5,8 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.neep.neepmeat.api.processing.PowerUtils;
 
+import java.util.EnumMap;
+
 public enum StructureProperty
 {
 
@@ -18,6 +20,8 @@ public enum StructureProperty
     public static final Codec<StructureProperty> CODEC = RecordCodecBuilder.create(instance ->
             instance.group(Codec.INT.fieldOf("ordinal").forGetter(StructureProperty::ordinal))
                     .apply(instance, id -> StructureProperty.values()[id]));
+
+    public static final EnumMap<StructureProperty, Entry> EMPTY = new EnumMap<>(StructureProperty.class);
 
     private final float def;
     private final StructurePropertyFormatter formatter;

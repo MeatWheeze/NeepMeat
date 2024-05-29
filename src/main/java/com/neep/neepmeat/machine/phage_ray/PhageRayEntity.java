@@ -1,6 +1,5 @@
 package com.neep.neepmeat.machine.phage_ray;
 
-import com.google.common.collect.MapMaker;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.neep.meatlib.client.api.event.InputEvents;
@@ -11,13 +10,16 @@ import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.init.NMBlocks;
 import com.neep.neepmeat.init.NMGraphicsEffects;
 import com.neep.neepmeat.init.NMSounds;
-import com.neep.neepmeat.machine.pylon.PylonBlockEntity;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
+import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
+import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.sound.EntityTrackingSoundInstance;
@@ -36,6 +38,7 @@ import net.minecraft.network.Packet;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.network.packet.s2c.play.EntitySpawnS2CPacket;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.ActionResult;
@@ -95,6 +98,12 @@ public class PhageRayEntity extends Entity
     }
 
     @Override
+    public boolean handleAttack(Entity attacker)
+    {
+        return super.handleAttack(attacker);
+    }
+
+    @Override
     protected void readCustomDataFromNbt(NbtCompound nbt)
     {
 
@@ -117,7 +126,7 @@ public class PhageRayEntity extends Entity
     public void tick()
     {
         super.tick();
-        if (!world.isClient() && (age > 5 && (parent == null || parent.isRemoved())))
+        if (!getWorld().isClient() && (age > 5 && (parent == null || parent.isRemoved())))
         {
             remove(RemovalReason.DISCARDED);
         }
@@ -131,31 +140,13 @@ public class PhageRayEntity extends Entity
             this.setRotation(this.getYaw(), this.getPitch());
         }
 
-        if (world.isClient())
+        if (getWorld().isClient())
         {
             clientTick();
-        }
-        else
-        {
-            // Update running state
-            boolean canRun = parent != null && parent.canRun();
-
-            if (dataTracker.get(RUNNING) != canRun)
-            {
-                dataTracker.set(RUNNING, canRun);
-            }
         }
 
         if (isRunning() && trigger)
         {
-            if (triggerTicks >= 20)
-            {
-                if (!world.isClient())
-                {
-                    spawnBeams();
-                    breakBlocks();
-                }
-            }
             ++triggerTicks;
 
             if (!hasPlayerRider())
@@ -165,7 +156,30 @@ public class PhageRayEntity extends Entity
         {
             triggerTicks = 0;
         }
+    }
 
+    // Called by PhageRayProcess
+    public void tickProcess(boolean canHarvest, Storage<ItemVariant> combinedItemOutput, TransactionContext transaction)
+    {
+        // Update running state
+        boolean canRun = parent != null && parent.canRun();
+
+        if (dataTracker.get(RUNNING) != canRun)
+        {
+            dataTracker.set(RUNNING, canRun);
+        }
+
+        if (isRunning() && trigger)
+        {
+            if (triggerTicks >= 20)
+            {
+                if (!getWorld().isClient())
+                {
+                    spawnBeams();
+                    breakBlocks(canHarvest, combinedItemOutput, transaction);
+                }
+            }
+        }
     }
 
     private void spawnBeams()
@@ -175,7 +189,7 @@ public class PhageRayEntity extends Entity
         {
             for (ServerPlayerEntity player : PlayerLookup.tracking(this))
             {
-                syncBeamEffect(player, world,
+                syncBeamEffect(player, getWorld(),
                         getBeamOrigin(), getBeamEnd(), Vec3d.ZERO, 1.2f, beamInterval);
             }
         }
@@ -217,7 +231,7 @@ public class PhageRayEntity extends Entity
                     RaycastContext.FluidHandling.NONE,
                     this);
 
-            BlockHitResult result = world.raycast(context);
+            BlockHitResult result = getWorld().raycast(context);
 
             if (result.getType() == HitResult.Type.BLOCK)
             {
@@ -229,11 +243,12 @@ public class PhageRayEntity extends Entity
         return newTargets;
     }
 
-    private void breakBlocks()
+    private void breakBlocks(boolean canHarvest, Storage<ItemVariant> output, TransactionContext transaction)
     {
+        World world = getWorld();
         if (hasPassengers() && getFirstPassenger() != null)
         {
-            if (world.getTime() % 2 == 0)
+            if (getWorld().getTime() % 2 == 0)
             {
                 Set<BlockPos> newTargets = getTargets(getBeamOrigin(), getBeamEnd());
 
@@ -244,15 +259,25 @@ public class PhageRayEntity extends Entity
             while (it.hasNext())
             {
                 var target = it.next();
+                BlockPos pos = target.getKey();
                 if (target.getValue() >= 1 && !getWorld().getBlockState(target.getKey()).isOf(NMBlocks.PHAGE_RAY.getStructure()))
                 {
+                    if (canHarvest)
+                    {
+                        BlockState state = world.getBlockState(target.getKey());
+                        List<ItemStack> dropped = Block.getDroppedStacks(state, (ServerWorld) world, pos, world.getBlockEntity(pos));
+                        for (var stack : dropped)
+                        {
+                            output.insert(ItemVariant.of(stack), stack.getCount(), transaction);
+                        }
+                    }
                     world.breakBlock(target.getKey(), false);
                     it.remove();
                 }
                 else
                 {
-                    BlockState state = world.getBlockState(target.getKey());
-                    target.setValue(target.getValue() + calcBlockBreakingDelta(state, world, target.getKey()));
+                    BlockState state = getWorld().getBlockState(target.getKey());
+                    target.setValue(target.getValue() + calcBlockBreakingDelta(state, getWorld(), target.getKey()));
                 }
             }
         }
@@ -313,15 +338,15 @@ public class PhageRayEntity extends Entity
 //        double posX = this.getX() + vec3d.x;
 //        double posZ = this.getZ() + vec3d.z;
 //        BlockPos blockPos = new BlockPos(posX, this.getBoundingBox().maxY, posZ).down();
-//        if (!this.world.isWater(blockPos))
+//        if (!this.getWorld().isWater(blockPos))
 //        {
 //            ArrayList<Vec3d> list = Lists.newArrayList();
-//            double f = this.world.getDismountHeight(blockPos);
+//            double f = this.getWorld().getDismountHeight(blockPos);
 //            if (Dismounting.canDismountInBlock(f))
 //            {
 //                list.add(new Vec3d(posX, blockPos.getY() + f, posZ));
 //            }
-//            double g = this.world.getDismountHeight(blockPos);
+//            double g = this.getWorld().getDismountHeight(blockPos);
 //            if (Dismounting.canDismountInBlock(g))
 //            {
 //                list.add(new Vec3d(posX, blockPos.getY() + g, posZ));
@@ -372,7 +397,7 @@ public class PhageRayEntity extends Entity
     @Override
     public ActionResult interact(PlayerEntity player, Hand hand)
     {
-        if (!world.isClient())
+        if (!getWorld().isClient())
         {
             if (hasPassengers())
                 return ActionResult.PASS;

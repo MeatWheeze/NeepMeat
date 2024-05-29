@@ -150,6 +150,8 @@
   "block.neepmeat.largest_hopper.lore_0": "It's a very large hopper. Perhaps the largest.",
   "block.neepmeat.lucky_one": "Lucky One",
   "block.neepmeat.lucky_one.lore_0": "+100% chance of extra outputs (max +200%). Must be receiving ≥100eJ/t of vascular power.",
+  "block.neepmeat.extractor": "Harvest Extractor",
+  "block.neepmeat.extractor.lore_0": "Allows a Phage Ray to harvest blocks. Drops are deposited in a connected item output.",
 
   "block.neepmeat.meat_steel_block": "Meat Steel Block",
   "block.neepmeat.meat_steel_block_slab": "Meat Steel Slab",
@@ -804,6 +806,9 @@
   "component.neepmeat.large_trommel": "Large Trommel",
   "component.neepmeat.motor_port": "Motor Port",
   "component.neepmeat.integration_port": "Integration Port",
+  "component.neepmeat.service_port": "Service Port",
+  "component.neepmeat.phage_ray": "Phage Ray",
+  "component.neepmeat.extractor": "Harvest Extractor",
   "component.neepmeat.hopper": "Hopper",
   "component.neepmeat.item_input": "Item Input",
   "component.neepmeat.item_output": "Item Output",

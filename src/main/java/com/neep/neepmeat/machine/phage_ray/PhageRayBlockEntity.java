@@ -2,7 +2,10 @@ package com.neep.neepmeat.machine.phage_ray;
 
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
 import com.neep.neepmeat.NeepMeat;
+import com.neep.neepmeat.api.live_machine.ComponentType;
+import com.neep.neepmeat.api.live_machine.LivingMachineComponent;
 import com.neep.neepmeat.init.NMEntities;
+import com.neep.neepmeat.machine.live_machine.LivingMachineComponents;
 import com.neep.neepmeat.transport.api.pipe.AbstractBloodAcceptor;
 import com.neep.neepmeat.transport.api.pipe.BloodAcceptor;
 import net.minecraft.block.BlockState;
@@ -14,7 +17,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public class PhageRayBlockEntity extends SyncableBlockEntity
+public class PhageRayBlockEntity extends SyncableBlockEntity implements LivingMachineComponent
 {
     @Nullable private PhageRayEntity tetheredEntity;
 
@@ -23,7 +26,6 @@ public class PhageRayBlockEntity extends SyncableBlockEntity
 
     private final BloodAcceptor acceptor = new AbstractBloodAcceptor()
     {
-
         @Override
         public Mode getMode()
         {
@@ -73,15 +75,18 @@ public class PhageRayBlockEntity extends SyncableBlockEntity
             }
         }
 
-        Box box = new Box(pos.up());
-        List<PhageRayEntity> entities = world.getEntitiesByClass(PhageRayEntity.class, box, e -> true);
-
-        if (entities.size() > 1)
+        if (world.getTime() % 5 == 0)
         {
-            NeepMeat.LOGGER.warn("Phage Ray at {} {} {} seems to have too many tethered entities!", pos.getX(), pos.getY(), pos.getZ());
-            for (int i = 1; i < entities.size(); ++i)
+            Box box = new Box(pos.up());
+            List<PhageRayEntity> entities = world.getEntitiesByClass(PhageRayEntity.class, box, e -> true);
+
+            if (entities.size() > 1)
             {
-                entities.get(i).remove(Entity.RemovalReason.DISCARDED);
+                NeepMeat.LOGGER.warn("Phage Ray at {} {} {} seems to have too many tethered entities!", pos.getX(), pos.getY(), pos.getZ());
+                for (int i = 1; i < entities.size(); ++i)
+                {
+                    entities.get(i).remove(Entity.RemovalReason.DISCARDED);
+                }
             }
         }
 
@@ -101,5 +106,29 @@ public class PhageRayBlockEntity extends SyncableBlockEntity
     public boolean canRun()
     {
         return power >= minPower;
+    }
+
+    @Override
+    public void setController(BlockPos pos)
+    {
+
+    }
+
+    @Override
+    public boolean componentRemoved()
+    {
+        return isRemoved();
+    }
+
+    @Override
+    public ComponentType<? extends LivingMachineComponent> getComponentType()
+    {
+        return LivingMachineComponents.PHAGE_RAY;
+    }
+
+    @Nullable
+    public PhageRayEntity getTetheredEntity()
+    {
+        return tetheredEntity;
     }
 }

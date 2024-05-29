@@ -15,6 +15,9 @@ import com.neep.neepmeat.machine.live_machine.Processes;
 import com.neep.neepmeat.machine.live_machine.block.entity.MotorPortBlockEntity;
 import com.neep.neepmeat.machine.live_machine.component.PoweredComponent;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
+import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
+import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
+import net.fabricmc.fabric.api.transfer.v1.storage.base.CombinedStorage;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntityType;
@@ -71,6 +74,9 @@ public abstract class LivingMachineBlockEntity extends SyncableBlockEntity imple
 
     protected boolean updateProcess = true;
     @Nullable private Process process;
+
+    // Convenient combined item output
+    private Storage<ItemVariant> combinedItemOutput = Storage.empty();
 
     // Use only on client. Use structures.size() elsewhere.
     private int numStructures;
@@ -253,6 +259,7 @@ public abstract class LivingMachineBlockEntity extends SyncableBlockEntity imple
     {
         search(getPos());
         processStructure();
+        updateSpecialStorage();
         updateProcess = true;
     }
 
@@ -279,6 +286,12 @@ public abstract class LivingMachineBlockEntity extends SyncableBlockEntity imple
                 entry.apply(properties.computeIfAbsent(property, p -> new AtomicDouble(p.defaultValue())), numberPresent != null ? numberPresent.get() : 1);
             });
         }
+    }
+
+    private void updateSpecialStorage()
+    {
+        List<Storage<ItemVariant>> storages = getComponent(LivingMachineComponents.ITEM_OUTPUT).stream().map(l -> l.getStorage(null)).toList();
+        combinedItemOutput = new CombinedStorage<>(storages);
     }
 
     protected float getProperty(StructureProperty property)
@@ -546,5 +559,10 @@ public abstract class LivingMachineBlockEntity extends SyncableBlockEntity imple
     public List<Identifier> getDisplayComponents()
     {
         return components;
+    }
+
+    public Storage<ItemVariant> getCombinedItemOutput()
+    {
+        return combinedItemOutput;
     }
 }

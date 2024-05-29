@@ -86,7 +86,7 @@ public class LargeTrommelBlock extends BigBlock<LargeTrommelBlock.StructureBlock
                 FabricBlockEntityTypeBuilder.create(
                         (p, s) -> new LargeTrommelStructureBlockEntity(b.getBlockEntityType(), p, s), this).build());
 
-            return BlockRegistry.queue(new StructureBlock(this, FabricBlockSettings.copyOf(this), registerererer), "large_trommel_structure");
+        return BlockRegistry.queue(new StructureBlock(this, FabricBlockSettings.copyOf(this), registerererer), "large_trommel_structure");
     }
 
     @Override
@@ -148,7 +148,7 @@ public class LargeTrommelBlock extends BigBlock<LargeTrommelBlock.StructureBlock
         @Override
         public EnumMap<StructureProperty, StructureProperty.Entry> getProperties()
         {
-            return new EnumMap<>(StructureProperty.class);
+            return StructureProperty.EMPTY;
         }
     }
 
