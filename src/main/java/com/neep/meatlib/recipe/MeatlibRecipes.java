@@ -149,6 +149,12 @@ public interface MeatlibRecipes
                     .flatMap(recipe -> type.match(recipe, context).stream()).findFirst();
         }
 
+//        @Override
+//        public <C, T extends MeatlibRecipe<C>> Optional<T> getFirstMatch(C context, MeatRecipeType<T>... types)
+//        {
+//            return Optional.empty();
+//        }
+
         @Override
         public <C, T extends MeatlibRecipe<C>> Map<Identifier, T> getAllOfTypeSafe(MeatRecipeType<T> type)
         {

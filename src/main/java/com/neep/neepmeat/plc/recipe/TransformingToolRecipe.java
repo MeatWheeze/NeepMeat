@@ -20,7 +20,7 @@ import org.apache.commons.lang3.NotImplementedException;
 
 import java.util.List;
 
-public class TransformingToolRecipe implements ManufactureRecipe<MutateInPlace<ItemStack>>
+public class TransformingToolRecipe implements ManufactureRecipe<MutateInPlace<ItemStack>, Item>
 {
     private static final TransformingToolRecipe INSTANCE = new TransformingToolRecipe();
 
@@ -100,7 +100,7 @@ public class TransformingToolRecipe implements ManufactureRecipe<MutateInPlace<I
     }
 
     @Override
-    public Object getBase()
+    public Item getBase()
     {
         return base;
     }

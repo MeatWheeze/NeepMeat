@@ -1,24 +1,24 @@
 {
-  "type": "neepmeat:manufacture",
+  "type": "neepmeat:entity_to_item",
   "base": {
-    "id": "neepmeat:meat_steel_machine_block"
+    "id": "minecraft:zombie"
   },
   "steps":[
     {
-      "id": "neepmeat:combine",
+      "id": "neepmeat:implant",
       "resource": "neepmeat:internal_components"
     },
     {
-      "id": "neepmeat:combine",
-      "resource": "neepmeat:internal_components"
+      "id": "neepmeat:implant",
+      "resource": "minecraft:rabbit_foot"
     },
     {
-      "id": "neepmeat:inject",
-      "resource": "neepmeat:blood"
+      "id": "neepmeat:implant",
+      "resource": "minecraft:lapis_block"
     },
     {
-      "id": "neepmeat:inject",
-      "resource": "neepmeat:work_fluid"
+      "id": "neepmeat:implant",
+      "resource": "neepmeat:meat_steel_machine_block"
     }
   ],
   "result": {

@@ -5,9 +5,9 @@ import com.neep.neepmeat.api.plc.recipe.ManufactureStep;
 
 import java.util.List;
 
-public interface ManufactureRecipe<C> extends MeatlibRecipe<C>
+public interface ManufactureRecipe<C, B> extends MeatlibRecipe<C>
 {
     // TODO: Use generics
-    Object getBase();
+    B getBase();
     List<ManufactureStep<?>> getSteps();
 }

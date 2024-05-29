@@ -22,7 +22,7 @@ import net.minecraft.util.registry.Registry;
 
 import java.util.List;
 
-public class ItemManufactureRecipe implements ManufactureRecipe<MutateInPlace<ItemStack>>
+public class ItemManufactureRecipe implements ManufactureRecipe<MutateInPlace<ItemStack>, Item>
 {
     protected final Identifier id;
     protected final Item base;
@@ -38,7 +38,7 @@ public class ItemManufactureRecipe implements ManufactureRecipe<MutateInPlace<It
     }
 
     @Override
-    public Object getBase()
+    public Item getBase()
     {
         return base;
     }

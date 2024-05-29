@@ -1,31 +1,36 @@
 package com.neep.neepmeat.plc.recipe;
 
 import com.google.gson.JsonObject;
-import com.google.gson.JsonSyntaxException;
 import com.neep.meatlib.recipe.MeatRecipeSerialiser;
 import com.neep.meatlib.recipe.MeatRecipeType;
+import com.neep.meatlib.recipe.ingredient.RecipeOutput;
+import com.neep.meatlib.recipe.ingredient.RecipeOutputImpl;
 import com.neep.neepmeat.api.plc.recipe.ManufactureStep;
-import com.neep.neepmeat.implant.player.EntityImplantInstaller;
 import com.neep.neepmeat.init.NMComponents;
 import com.neep.neepmeat.plc.component.MutateInPlace;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.ItemEntity;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketByteBuf;
+import net.minecraft.registry.Registries;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.JsonHelper;
-import net.minecraft.util.registry.Registry;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.World;
 
 import java.util.List;
 
-public class EntityImplantRecipe extends EntityMutateRecipe
+public class EntityToItemRecipe extends EntityMutateRecipe
 {
-    private final EntityImplantInstaller implant;
+    private final RecipeOutput<Item> output;
 
-    public EntityImplantRecipe(Identifier id, EntityType<?> base, List<ManufactureStep<?>> steps, EntityImplantInstaller implant)
+    public EntityToItemRecipe(Identifier id, EntityType<?> base, List<ManufactureStep<?>> steps, RecipeOutput<Item> output)
     {
         super(id, base, steps);
-        this.implant = implant;
+        this.output = output;
     }
 
     @Override
@@ -84,69 +89,67 @@ public class EntityImplantRecipe extends EntityMutateRecipe
     @Override
     public boolean ejectOutputs(MutateInPlace<Entity> context, TransactionContext transaction)
     {
-        implant.install(context.get());
+        Entity entity = context.get();
+        Vec3d pos = entity.getPos();
+
+        World world = entity.getWorld();
+        int amount = (int) output.randomAmount(0);
+        ItemStack stack = new ItemStack(output.resource(), amount);
+        world.spawnEntity(new ItemEntity(world, pos.x, pos.y + 0.1, pos.z, stack, 0, 0.1, 0));
+        entity.discard();
+
         return false;
     }
 
     @Override
     public MeatRecipeType<?> getType()
     {
-        return PLCRecipes.ENTITY_MANUFACTURE;
+        return PLCRecipes.ENTITY_TO_ITEM;
     }
 
     @Override
     public MeatRecipeSerialiser<?> getSerializer()
     {
-        return PLCRecipes.ENTITY_MANUFACTURE_SERIALISER;
+        return PLCRecipes.ENTITY_TO_ITEM_SERIALISER;
     }
 
-    public static class Serialiser implements MeatRecipeSerialiser<EntityImplantRecipe>
+
+    public static class Serialiser implements MeatRecipeSerialiser<EntityToItemRecipe>
     {
         @Override
-        public EntityImplantRecipe read(Identifier id, JsonObject json)
+        public EntityToItemRecipe read(Identifier id, JsonObject json)
         {
-//            Identifier baseId = Identifier.tryParse(JsonHelper.getString(json , "base"));
-//            EntityType<?> base = Registry.ENTITY_TYPE.get(baseId);
-
             JsonObject baseElement = JsonHelper.getObject(json, "base");
             String idString = JsonHelper.getString(baseElement, "id");
-            EntityType<?> base = Registry.ENTITY_TYPE.get(Identifier.tryParse(idString));
+            EntityType<?> base = Registries.ENTITY_TYPE.get(Identifier.tryParse(idString));
 
             List<ManufactureStep<?>> steps = ItemManufactureRecipe.Serialiser.readSteps(json);
 
-            EntityImplantInstaller installer;
-            if (JsonHelper.hasJsonObject(json, "implant_installer"))
-            {
-                Identifier installerId = Identifier.tryParse(JsonHelper.getString(JsonHelper.getObject(json, "implant_installer"), "id"));
+            RecipeOutput<Item> output = RecipeOutputImpl.fromJsonRegistry(Registries.ITEM, json.getAsJsonObject("result"));
 
-                installer = EntityImplantInstaller.REGISTRY.get(installerId);
-                if (installer == null) throw new JsonSyntaxException("Implant installer " + installerId + " does not exist.");
-            }
-            else throw new JsonSyntaxException("Implant installer not found.");
-
-            return new EntityImplantRecipe(id, base, steps, installer);
+            return new EntityToItemRecipe(id, base, steps, output);
         }
 
         @Override
-        public EntityImplantRecipe read(Identifier id, PacketByteBuf buf)
+        public EntityToItemRecipe read(Identifier id, PacketByteBuf buf)
         {
-            EntityType<?> base = buf.readRegistryValue(Registry.ENTITY_TYPE);
+            EntityType<?> base = buf.readRegistryValue(Registries.ENTITY_TYPE);
 
             List<ManufactureStep<?>> steps = ItemManufactureRecipe.Serialiser.readSteps(buf);
 
-            EntityImplantInstaller implant = buf.readRegistryValue(EntityImplantInstaller.REGISTRY);
+            RecipeOutput<Item> output = RecipeOutputImpl.fromBuffer(Registries.ITEM, buf);
 
-            return new EntityImplantRecipe(id, base, steps, implant);
+            return new EntityToItemRecipe(id, base, steps, output);
         }
 
         @Override
-        public void write(PacketByteBuf buf, EntityImplantRecipe recipe)
+        public void write(PacketByteBuf buf, EntityToItemRecipe recipe)
         {
-            buf.writeRegistryValue(Registry.ENTITY_TYPE, recipe.base);
+            buf.writeRegistryValue(Registries.ENTITY_TYPE, recipe.base);
 
             ItemManufactureRecipe.Serialiser.writeSteps(recipe.getSteps(), buf);
 
-            buf.writeRegistryValue(EntityImplantInstaller.REGISTRY, recipe.implant);
+            recipe.output.write(Registries.ITEM, buf);
         }
     }
 }

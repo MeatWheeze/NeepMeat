@@ -12,8 +12,6 @@ import me.shedaniel.rei.api.common.entry.EntryIngredient;
 import me.shedaniel.rei.api.common.util.EntryIngredients;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
 
 import java.util.List;
@@ -55,7 +53,7 @@ public class TransformingToolDisplay implements Display
 
     public Item getBase()
     {
-        return (Item) recipe.getBase();
+        return recipe.getBase();
     }
 
     public ManufactureStep<?> getStep()

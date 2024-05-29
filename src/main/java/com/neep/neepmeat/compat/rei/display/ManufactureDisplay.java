@@ -34,7 +34,7 @@ public class ManufactureDisplay implements Display
     {
         this.steps = recipe.getSteps();
         this.outputs = Collections.singletonList(EntryIngredients.ofItems(List.of(recipe.getRecipeOutput().resource()), (int) recipe.getRecipeOutput().minAmount()));
-        this.base = (Item) recipe.getBase();
+        this.base = recipe.getBase();
 
         this.inputs = Lists.newArrayList();
         inputs.add(EntryIngredients.of(base));

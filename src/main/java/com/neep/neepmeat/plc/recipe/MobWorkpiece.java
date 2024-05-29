@@ -3,6 +3,8 @@ package com.neep.neepmeat.plc.recipe;
 import com.google.common.collect.Lists;
 import com.neep.neepmeat.api.plc.recipe.ManufactureStep;
 import com.neep.neepmeat.api.plc.recipe.Workpiece;
+import com.neep.neepmeat.init.NMComponents;
+import dev.onyxstudios.cca.api.v3.component.sync.AutoSyncedComponent;
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
@@ -12,7 +14,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-public class MobWorkpiece implements Workpiece
+public class MobWorkpiece implements Workpiece, AutoSyncedComponent
 {
     protected final List<ManufactureStep<?>> steps = Lists.newArrayList();
     protected final Entity entity;
@@ -26,6 +28,7 @@ public class MobWorkpiece implements Workpiece
     public void addStep(ManufactureStep<?> step)
     {
         steps.add(step);
+        NMComponents.WORKPIECE.sync(this.entity);
     }
 
     @Override

@@ -3,12 +3,12 @@ package com.neep.neepmeat.init;
 import com.neep.meatweapons.MWItems;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.api.enlightenment.EnlightenmentManager;
+import com.neep.neepmeat.api.plc.recipe.Workpiece;
 import com.neep.neepmeat.enlightenment.PlayerEnlightenmentManager;
 import com.neep.neepmeat.implant.item.ItemImplantManager;
 import com.neep.neepmeat.implant.player.ImplantManager;
 import com.neep.neepmeat.implant.player.PlayerImplantManager;
 import com.neep.neepmeat.plc.recipe.ItemWorkpiece;
-import com.neep.neepmeat.api.plc.recipe.Workpiece;
 import com.neep.neepmeat.plc.recipe.MobWorkpiece;
 import com.neep.neepmeat.plc.recipe.PlayerWorkpiece;
 import dev.onyxstudios.cca.api.v3.component.ComponentKey;
@@ -18,9 +18,9 @@ import dev.onyxstudios.cca.api.v3.entity.EntityComponentInitializer;
 import dev.onyxstudios.cca.api.v3.entity.RespawnCopyStrategy;
 import dev.onyxstudios.cca.api.v3.item.ItemComponentFactoryRegistry;
 import dev.onyxstudios.cca.api.v3.item.ItemComponentInitializer;
+import net.minecraft.entity.mob.ZombieEntity;
 import net.minecraft.entity.passive.CowEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Items;
 import net.minecraft.util.Identifier;
 
 public class NMComponents implements EntityComponentInitializer, ItemComponentInitializer
@@ -46,6 +46,7 @@ public class NMComponents implements EntityComponentInitializer, ItemComponentIn
         registry.beginRegistration(PlayerEntity.class, IMPLANT_MANAGER).impl(PlayerImplantManager.class).respawnStrategy(RespawnCopyStrategy.LOSSLESS_ONLY).end(PlayerImplantManager::new);
         registry.beginRegistration(PlayerEntity.class, ENLIGHTENMENT_MANAGER).impl(PlayerEnlightenmentManager.class).respawnStrategy(RespawnCopyStrategy.ALWAYS_COPY).end(PlayerEnlightenmentManager::new);
         registry.registerFor(CowEntity.class, WORKPIECE, MobWorkpiece::new);
+        registry.registerFor(ZombieEntity.class, WORKPIECE, MobWorkpiece::new);
         registry.registerFor(PlayerEntity.class, WORKPIECE, PlayerWorkpiece::new);
     }
 

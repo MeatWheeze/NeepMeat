@@ -40,7 +40,7 @@ public class ToolManufactureEmiRecipe implements EmiRecipe
 
     public ToolManufactureEmiRecipe(TransformingToolRecipe recipe)
     {
-        this.base = (Item) recipe.getBase();
+        this.base = recipe.getBase();
         this.finalStep = recipe.getSteps().get(0);
 
         this.id = recipe.getId();
