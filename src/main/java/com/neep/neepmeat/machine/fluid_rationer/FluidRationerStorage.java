@@ -6,7 +6,6 @@ import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.fabricmc.fabric.api.transfer.v1.storage.StorageView;
-import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.fabricmc.fabric.api.util.NbtType;
 import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemStack;
@@ -37,13 +36,9 @@ public class FluidRationerStorage extends WritableSingleFluidStorage
         Storage<FluidVariant> storage = FluidStorage.ITEM.find(stack, ContainerItemContext.withConstant(stack));
         if (storage != null)
         {
-            try (Transaction transaction = Transaction.openOuter())
+            for (StorageView<FluidVariant> view : storage)
             {
-                for (StorageView<FluidVariant> view : storage)
-                {
-                    filters.add(view.getResource());
-                }
-                transaction.abort();
+                filters.add(view.getResource());
             }
         }
     }
