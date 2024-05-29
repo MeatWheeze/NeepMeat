@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "p  ",
+    "i  ",
+    "b  "
+  ],
+  "key": {
+    "i": {
+      "item": "neepmeat:enlightened_brain"
+    },
+    "b": {
+      "item": "neepmeat:machine_block"
+    },
+    "p": {
+      "item": "neepmeat:control_unit"
+    }
+  },
+  "result": {
+    "item": "neepmeat:living_machine_controller",
+    "count": 1
+  }
+}

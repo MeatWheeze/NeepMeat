@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "hhh",
+    "imi"
+  ],
+  "key": {
+    "i": {
+      "item": "minecraft:iron_ingot"
+    },
+    "m": {
+      "item": "neepmeat:meat_steel_ingot"
+    },
+    "h": {
+      "item": "minecraft:hopper"
+    }
+  },
+  "result": {
+    "item": "neepmeat:largest_hopper",
+    "count": 1
+  }
+}

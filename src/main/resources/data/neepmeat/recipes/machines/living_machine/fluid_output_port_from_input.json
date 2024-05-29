@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "neepmeat:fluid_input_port"
+    }
+  ],
+  "result": {
+    "item": "neepmeat:fluid_output_port",
+    "count": 1
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "type": "neepmeat:manufacture",
+  "base": {
+    "id": "neepmeat:meat_steel_machine_block"
+  },
+  "steps":[
+    {
+      "id": "neepmeat:combine",
+      "resource": "neepmeat:internal_components"
+    },
+    {
+      "id": "neepmeat:combine",
+      "resource": "neepmeat:internal_components"
+    },
+    {
+      "id": "neepmeat:inject",
+      "resource": "neepmeat:blood"
+    },
+    {
+      "id": "neepmeat:inject",
+      "resource": "neepmeat:work_fluid"
+    }
+  ],
+  "result": {
+    "resource": "neepmeat:lucky_one",
+    "amount": 1
+  }
+}

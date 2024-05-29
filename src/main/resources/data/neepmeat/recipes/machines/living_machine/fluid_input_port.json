@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "pu ",
+    " b "
+  ],
+  "key": {
+    "p": {
+      "item": "neepmeat:fluid_pipe"
+    },
+    "u": {
+      "item": "neepmeat:fluid_buffer"
+    },
+    "b": {
+      "item": "neepmeat:machine_block"
+    }
+  },
+  "result": {
+    "item": "neepmeat:fluid_input_port",
+    "count": 1
+  }
+}

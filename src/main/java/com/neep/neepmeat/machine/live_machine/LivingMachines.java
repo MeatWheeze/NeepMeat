@@ -32,9 +32,9 @@ public class LivingMachines
     public static Block MACHINE_BLOCK = BlockRegistry.queue(new MachineBlock("machine_block", block(), Map.of(
             StructureProperty.MAX_POWER, new StructureProperty.Entry(300f),
                     StructureProperty.MASS, new StructureProperty.Entry(1000f)), FabricBlockSettings.copyOf(OPAQUE_MACHINE_SETTINGS)));
-    public static Block BASE_MACHINE_BLOCK = BlockRegistry.queue(new MachineBlock("base_machine_block", block(), Map.of(
+    public static Block BASE_MACHINE_BLOCK = BlockRegistry.queue(new MachineBlock("base_machine_block", block().tooltip(TooltipSupplier.simple(1)), Map.of(
             StructureProperty.MAX_POWER, new StructureProperty.Entry(300f),
-            StructureProperty.MASS, new StructureProperty.Entry(2000f)), FabricBlockSettings.copyOf(OPAQUE_MACHINE_SETTINGS)));
+            StructureProperty.MASS, new StructureProperty.Entry(500f)), FabricBlockSettings.copyOf(OPAQUE_MACHINE_SETTINGS)));
     public static Block BLOOD_BUBBLE_MACHINE_BLOCK = BlockRegistry.queue(new MachineBlock("blood_bubble_machine_block", block(), Map.of(
             StructureProperty.MAX_POWER, new StructureProperty.Entry(StructureProperty.Function.ADD, -5),
             StructureProperty.MASS, new StructureProperty.Entry(500f),
@@ -68,8 +68,9 @@ public class LivingMachines
     public static final BigBlock<?> LARGE_TROMMEL = BlockRegistry.queue(new LargeTrommelBlock("large_trommel",FabricBlockSettings.copyOf(MACHINE_SETTINGS), ItemSettings.block().tooltip(tooltip(LivingMachineComponents.LARGE_TROMMEL))));
     public static final BigBlock<LargestHopperBlock.StructureBlock> LARGEST_HOPPER = BlockRegistry.queue(new LargestHopperBlock("largest_hopper", FabricBlockSettings.copyOf(MACHINE_SETTINGS), ItemSettings.block().tooltip(tooltip(LivingMachineComponents.ITEM_INPUT))));
 
-    public static final TallerBlock LUCKY_ONE = BlockRegistry.queue(new LuckyOneBlock("lucky_one", ItemSettings.block().tooltip(tooltip(LivingMachineComponents.LUCKY_ONE).append(TooltipSupplier.simple(1))
-    ), FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
+    public static final TallerBlock LUCKY_ONE = BlockRegistry.queue(new LuckyOneBlock("lucky_one",
+            ItemSettings.block().tooltip(tooltip(LivingMachineComponents.LUCKY_ONE).append(TooltipSupplier.simple(1))),
+            MeatlibBlockSettings.copyOf(MACHINE_SETTINGS)));
 
     public static BlockEntityType<MotorPortBlockEntity> MOTOR_PORT_BE;
     public static BlockEntityType<IntegrationPortBlockEntity> INTEGRATION_PORT_BE;

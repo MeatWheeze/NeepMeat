@@ -1,0 +1,26 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "mmm",
+    "tct",
+    "bmb"
+  ],
+  "key": {
+    "c": {
+      "item": "neepmeat:meat_steel_component"
+    },
+    "b": {
+      "item": "minecraft:iron_block"
+    },
+    "t": {
+      "item": "neepmeat:small_trommel"
+    },
+    "m": {
+      "item": "neepmeat:meat_steel_ingot"
+    }
+  },
+  "result": {
+    "item": "neepmeat:large_trommel",
+    "count": 1
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "ibi",
+    "bwb",
+    "ibi"
+  ],
+  "key": {
+    "i": {
+      "item": "minecraft:iron_ingot"
+    },
+    "b": {
+      "item": "neepmeat:blood_bubble_planks"
+    },
+    "w": {
+      "item": "neepmeat:blood_bubble_log"
+    }
+  },
+  "result": {
+    "item": "neepmeat:blood_bubble_machine_block",
+    "count": 1
+  }
+}

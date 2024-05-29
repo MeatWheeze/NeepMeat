@@ -1,5 +1,6 @@
 package com.neep.neepmeat.datagen;
 
+import com.neep.meatlib.block.MeatlibBlockSettings;
 import com.neep.meatlib.datagen.MeatRecipeProvider;
 import com.neep.neepmeat.datagen.tag.NMTags;
 import com.neep.neepmeat.init.NMBlocks;
@@ -43,6 +44,9 @@ public class NMRecipeGenerator
         {
             MeatRecipeProvider.offerEightDyeingRecipe(exporter, pipe, DyeItem.byColor(pipe.col.dyeCol), NMTags.FLUID_PIPES);
         }
+
+
+
     }
 
     static

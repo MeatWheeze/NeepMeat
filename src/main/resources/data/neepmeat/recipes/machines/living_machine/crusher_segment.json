@@ -1,0 +1,26 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "bmf",
+    "mcm",
+    "fmb"
+  ],
+  "key": {
+    "c": {
+      "item": "neepmeat:grinder"
+    },
+    "b": {
+      "item": "minecraft:iron_block"
+    },
+    "f": {
+      "item": "minecraft:flint"
+    },
+    "m": {
+      "item": "neepmeat:meat_steel_ingot"
+    }
+  },
+  "result": {
+    "item": "neepmeat:crusher_segment",
+    "count": 1
+  }
+}

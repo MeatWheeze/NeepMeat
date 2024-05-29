@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " c ",
+    " b "
+  ],
+  "key": {
+    "c": {
+      "item": "minecraft:chest"
+    },
+    "b": {
+      "item": "neepmeat:machine_block"
+    }
+  },
+  "result": {
+    "item": "neepmeat:item_output_port",
+    "count": 1
+  }
+}
