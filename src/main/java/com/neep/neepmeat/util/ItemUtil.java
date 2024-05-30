@@ -59,13 +59,9 @@ public class ItemUtil
 
     public static void scatterItems(World world, BlockPos pos, Storage<ItemVariant> storage)
     {
-        try (Transaction transaction = Transaction.openOuter())
+        for (StorageView<ItemVariant> view : storage)
         {
-            for (StorageView<ItemVariant> view : storage)
-            {
-                ItemScatterer.spawn(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, view.getResource().toStack((int) view.getAmount()));
-            }
-            transaction.commit();
+            ItemScatterer.spawn(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, view.getResource().toStack((int) view.getAmount()));
         }
     }
 
