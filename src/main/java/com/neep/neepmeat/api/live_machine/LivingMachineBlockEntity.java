@@ -148,7 +148,7 @@ public abstract class LivingMachineBlockEntity extends SyncableBlockEntity imple
 
     protected void tickDegradation()
     {
-        float repairPerDroplet = 4 / 81000f; // Decrease in degradation from one droplet
+        double repairPerDroplet = 1 / (2 * 81000f); // Decrease in degradation from one droplet
         long maxConsume = 8;
         long consumePerTick = Math.min(MathHelper.ceil(degradationManager.getDegradation() / repairPerDroplet), maxConsume);
 

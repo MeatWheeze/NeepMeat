@@ -1,6 +1,7 @@
 package com.neep.neepmeat.client.screen.living_machine;
 
 import com.neep.neepmeat.NeepMeat;
+import com.neep.neepmeat.api.live_machine.StructurePropertyFormatter;
 import com.neep.neepmeat.api.plc.PLCCols;
 import com.neep.neepmeat.api.processing.PowerUtils;
 import com.neep.neepmeat.client.screen.plc.PLCScreenButton;
@@ -12,6 +13,8 @@ import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.text.Text;
 
+import java.math.BigDecimal;
+import java.math.MathContext;
 import java.text.DecimalFormat;
 import java.time.Duration;
 import java.util.ArrayList;
@@ -118,7 +121,12 @@ public class MetricsPane extends LivingMachineScreen.PaneWidget
 
     private String formatRepair(float repair)
     {
-        return smallFloatFormat.format(repair * 20 * 100) + "%/s";
+        var big = new BigDecimal(repair * 20 * 100);
+        big = big.round(new MathContext(2));
+//        return big.toString() + "%/s";
+//        return smallFloatFormat.format(repair * 20 * 100) + "%/s";
+
+        return StructurePropertyFormatter.formatRepair(repair);
     }
 
     public static class ThingyButton extends PLCScreenButton
