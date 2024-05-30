@@ -4,6 +4,7 @@ import com.neep.meatlib.blockentity.SyncableBlockEntity;
 import com.neep.meatlib.inventory.ImplementedInventory;
 import com.neep.neepmeat.api.live_machine.ComponentType;
 import com.neep.neepmeat.machine.live_machine.LivingMachineComponents;
+import com.neep.neepmeat.machine.live_machine.block.ItemOutputPortBlock;
 import com.neep.neepmeat.machine.live_machine.block.PortBlock;
 import com.neep.neepmeat.machine.live_machine.component.ItemOutputComponent;
 import com.neep.neepmeat.screen_handler.ItemOutputScreenHandler;
@@ -19,6 +20,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.screen.NamedScreenHandlerFactory;
+import net.minecraft.screen.PropertyDelegate;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
@@ -35,6 +37,7 @@ public class ItemOutputPortBlockEntity extends SyncableBlockEntity implements It
     private final ImplementedInventory inventory = ImplementedInventory.ofSize(9, this::markDirty);
     private final InventoryStorage inventoryStorage = InventoryStorage.of(inventory, null);
     private final StorageDelegate delegate = new StorageDelegate();
+    private final EjectPropertyDelegate propertyDelegate = new EjectPropertyDelegate();
 
     public ItemOutputPortBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
     {
@@ -89,7 +92,7 @@ public class ItemOutputPortBlockEntity extends SyncableBlockEntity implements It
     @Override
     public ScreenHandler createMenu(int syncId, PlayerInventory playerInventory, PlayerEntity player)
     {
-        return new ItemOutputScreenHandler(playerInventory, inventory, syncId);
+        return new ItemOutputScreenHandler(playerInventory, inventory, syncId, propertyDelegate);
     }
 
     @Override
@@ -103,12 +106,20 @@ public class ItemOutputPortBlockEntity extends SyncableBlockEntity implements It
         @Override
         public long insert(ItemVariant resource, long maxAmount, TransactionContext transaction)
         {
-            long inserted = inventoryStorage.insert(resource, maxAmount, transaction);
-            if (inserted < maxAmount)
+            if (getCachedState().get(ItemOutputPortBlock.AUTO_EJECT))
             {
-                ItemPipeUtil.stackToAny((ServerWorld) world, pos, getCachedState().get(PortBlock.FACING), resource, maxAmount - inserted, transaction);
+                return ItemPipeUtil.stackToAny((ServerWorld) world, pos, getCachedState().get(PortBlock.FACING), resource, maxAmount, transaction);
             }
-            return maxAmount;
+            else
+            {
+                long inserted = inventoryStorage.insert(resource, maxAmount, transaction);
+                if (inserted < maxAmount)
+                {
+                    ItemPipeUtil.stackToAny((ServerWorld) world, pos, getCachedState().get(PortBlock.FACING), resource, maxAmount - inserted, transaction);
+                }
+
+                return maxAmount;
+            }
         }
 
         @Override
@@ -121,6 +132,30 @@ public class ItemOutputPortBlockEntity extends SyncableBlockEntity implements It
         public @NotNull Iterator<StorageView<ItemVariant>> iterator()
         {
             return inventoryStorage.iterator();
+        }
+    }
+
+    private class EjectPropertyDelegate implements PropertyDelegate
+    {
+        @Override
+        public int get(int index)
+        {
+            if (index == 0)
+                return getCachedState().get(ItemOutputPortBlock.AUTO_EJECT) ? 1 : 0;
+            return 0;
+        }
+
+        @Override
+        public void set(int index, int value)
+        {
+            if (index == 0)
+                world.setBlockState(pos, getCachedState().with(ItemOutputPortBlock.AUTO_EJECT, value > 0));
+        }
+
+        @Override
+        public int size()
+        {
+            return 1;
         }
     }
 }

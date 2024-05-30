@@ -27,6 +27,16 @@ public class NMButtonWidget extends ButtonWidget
         return this;
     }
 
+    protected boolean borderActive()
+    {
+        return isHovered();
+    }
+
+    protected boolean textActive()
+    {
+        return borderActive();
+    }
+
     @Override
     protected void renderButton(DrawContext matrices, int mouseX, int mouseY, float delta)
     {
@@ -40,10 +50,10 @@ public class NMButtonWidget extends ButtonWidget
             matrices.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
         }
 
-        int borderCol = isHovered() ? PLCCols.SELECTED.col : PLCCols.BORDER.col;
+        int borderCol = borderActive() ? PLCCols.SELECTED.col : PLCCols.BORDER.col;
         GUIUtil.renderBorder(matrices, getX() + 3, getY() + 3, width - 4 * 2 + 1, height - 4 * 2 + 1, borderCol, 0);
 
-        int textCol = isHovered() ? PLCCols.SELECTED.col : PLCCols.BORDER.col;
+        int textCol = textActive() ? PLCCols.SELECTED.col : PLCCols.TEXT.col;
         this.drawMessage(matrices, minecraftClient.textRenderer, textCol);
     }
 

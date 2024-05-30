@@ -60,7 +60,7 @@ public class LivingMachines
             () -> LivingMachines.INTEGRATION_PORT_BE, FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
     public static final Block SERVICE_PORT = BlockRegistry.queue(new PortBlock<>("service_port", ItemSettings.block(),
             () -> LivingMachines.SERVICE_PORT_BE, FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
-    public static final Block ITEM_OUTPUT_PORT = BlockRegistry.queue(new PortBlock<>("item_output_port", ItemSettings.block().tooltip(tooltip(LivingMachineComponents.ITEM_OUTPUT)),
+    public static final Block ITEM_OUTPUT_PORT = BlockRegistry.queue(new ItemOutputPortBlock("item_output_port", ItemSettings.block().tooltip(tooltip(LivingMachineComponents.ITEM_OUTPUT)),
             () -> LivingMachines.ITEM_OUTPUT_PORT_BE, FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
     public static final Block FLUID_INPUT_PORT = BlockRegistry.queue(new PortBlock<>("fluid_input_port", ItemSettings.block().tooltip(tooltip(LivingMachineComponents.FLUID_INPUT)),
             () -> LivingMachines.FLUID_INPUT_PORT_BE, FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
