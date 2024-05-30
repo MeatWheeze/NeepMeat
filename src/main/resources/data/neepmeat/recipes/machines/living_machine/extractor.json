@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "iei",
+    "ele",
+    "iii"
+  ],
+  "key": {
+    "i": {
+      "item": "neepmeat:meat_steel_ingot"
+    },
+    "e": {
+      "item": "minecraft:emerald"
+    },
+    "l": {
+      "item": "minecraft:lapis_block"
+    }
+  },
+  "result": {
+    "item": "neepmeat:extractor",
+    "count": 1
+  }
+}
