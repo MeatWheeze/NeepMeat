@@ -121,7 +121,7 @@ public class ItemPipeBlockEntity extends SyncableBlockEntity
         {
             amountInserted = ItemPipeUtil.itemToPipe(item, pipe, world, toPos, toState, out, false, transaction);
         }
-        else if (toState.isAir())
+        else if (ItemPipeUtil.canDumpInto(toState))
         {
             amountInserted = ItemPipeUtil.itemToWorld(item.getItemStack(), 0.2, item.speed, world, toPos, out, transaction);
         }

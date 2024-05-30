@@ -49,7 +49,7 @@ public class ItemPipeUtil
         {
             amountInserted = itemToPipe(item, pipe, world, toPos, toState, out, simpleCheck, transaction);
         }
-        else if (toState.isAir())
+        else if (canDumpInto(toState))
         {
             amountInserted = itemToWorld(item.getItemStack(), 0.2, item.speed, world, toPos, out, transaction);
         }
@@ -191,7 +191,7 @@ public class ItemPipeUtil
         long transferred = 0;
         try (Transaction nested = transaction.openNested())
         {
-            if (facingState.isAir())
+            if (canDumpInto(facingState))
             {
                 transferred = itemToWorld(variant.toStack((int) amount), 0.2, 0.05f, world, offset, facing, nested);
                 nested.commit();
@@ -263,7 +263,7 @@ public class ItemPipeUtil
 
             if (currentPipe.canItemLeave(item, world, current, currentState, direction))
             {
-                if (offsetState.isAir())
+                if (canDumpInto(offsetState))
                     return item.amount();
 
                 Storage<ItemVariant> storage;
@@ -334,5 +334,10 @@ public class ItemPipeUtil
             pipeQueue.addAll(nextSet);
         }
         return output;
+    }
+
+    public static boolean canDumpInto(BlockState state)
+    {
+        return !state.blocksMovement();
     }
 }
