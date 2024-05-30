@@ -829,6 +829,7 @@
   "category.neepmeat.enlightening": "Enlightening",
   "category.neepmeat.enlightening.data": "Data: %d",
   "category.neepmeat.manufacture": "Manufacture",
+  "category.neepmeat.entity_to_item_manufacture": "Entity-to-Item Manufacture",
   "category.neepmeat.surgery": "Machine Surgery",
   "category.neepmeat.transforming_tool": "Transforming Tool Manufacture",
   "category.neepmeat.trommel": "Trommel",

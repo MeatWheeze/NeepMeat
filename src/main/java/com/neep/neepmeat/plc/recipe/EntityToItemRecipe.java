@@ -113,6 +113,10 @@ public class EntityToItemRecipe extends EntityMutateRecipe
         return PLCRecipes.ENTITY_TO_ITEM_SERIALISER;
     }
 
+    public RecipeOutput<Item> getRecipeOutput()
+    {
+        return output;
+    }
 
     public static class Serialiser implements MeatRecipeSerialiser<EntityToItemRecipe>
     {

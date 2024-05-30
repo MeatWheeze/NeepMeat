@@ -16,7 +16,8 @@ public interface NMREIPlugin
     CategoryIdentifier<PressingDisplay> PRESSING = CategoryIdentifier.of(NeepMeat.NAMESPACE, "plugins/pressing");
     CategoryIdentifier<SurgeryDisplay> SURGERY = CategoryIdentifier.of(NeepMeat.NAMESPACE, "plugins/surgery");
 
-    CategoryIdentifier<ManufactureDisplay> MANUFACTURE = CategoryIdentifier.of(NeepMeat.NAMESPACE, "plugins/manufacture");
+    CategoryIdentifier<ItemManufactureDisplay> MANUFACTURE = CategoryIdentifier.of(NeepMeat.NAMESPACE, "plugins/item_manufacture");
+    CategoryIdentifier<EntityToItemDisplay> ENTITY_TO_ITEM = CategoryIdentifier.of(NeepMeat.NAMESPACE, "plugins/entity_to_item_manufacture");
 
     CategoryIdentifier<TrommelDisplay> TROMMEL = CategoryIdentifier.of(NeepMeat.NAMESPACE, "plugins/trommel");
     CategoryIdentifier<HeatingDisplay> HEATING = CategoryIdentifier.of(NeepMeat.NAMESPACE, "plugins/heating");
