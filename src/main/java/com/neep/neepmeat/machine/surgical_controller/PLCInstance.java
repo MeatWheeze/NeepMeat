@@ -21,6 +21,7 @@ public class PLCInstance extends BlockEntityInstance<PLCBlockEntity> implements 
 {
     private final ModelData robotModel;
     private final MatrixStack matrixStack = new MatrixStack();
+    private final int animOffset;
 
     public PLCInstance(MaterialManager materialManager, PLCBlockEntity blockEntity)
     {
@@ -29,6 +30,8 @@ public class PLCInstance extends BlockEntityInstance<PLCBlockEntity> implements 
 
         robotModel = materialManager.defaultCutout().material(Materials.TRANSFORMED)
                 .getModel(NMExtraModels.P_PLC_ROBOT).createInstance();
+
+        this.animOffset = (int) (Math.random() * 360);
     }
 
     @Override
@@ -78,10 +81,10 @@ public class PLCInstance extends BlockEntityInstance<PLCBlockEntity> implements 
                     robot.clientZ - blockEntity.getPos().getZ() - 0.5);
 
             float tickDelta = AnimationTickHolder.getPartialTicks();
-            double sinTime = Math.sin(Math.toRadians(blockEntity.getWorld().getTime() % 360) * 7) * Math.cos(Math.toRadians(tickDelta) * 7)
-                    + Math.cos(Math.toRadians(blockEntity.getWorld().getTime() % 360) * 7) * Math.sin(Math.toRadians(tickDelta) * 7);
-            matrixStack.translate(0, 0.5 + (robot.isActive() ?
-                    0.1 * sinTime : 0), 0);
+            int time = (int) ((blockEntity.getWorld().getTime() % 360) + animOffset);
+            double sinTime = Math.sin(Math.toRadians(time * 7)) * Math.cos(Math.toRadians(tickDelta) * 7)
+                    + Math.cos(Math.toRadians(time * 7)) * Math.sin(Math.toRadians(tickDelta) * 7);
+            matrixStack.translate(0, 0.5 + 0.1 * sinTime, 0);
 
             matrixStack.translate(0.5, 0.5, 0.5);
             matrixStack.multiply(Vec3f.NEGATIVE_Y.getDegreesQuaternion(robot.clientYaw + 180));
