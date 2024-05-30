@@ -25,6 +25,9 @@ public class CrusherProcess implements Process
             var crushers = result.t2();
             var itemOutputs = result.t3();
 
+            if (crushers.size() > 4)
+                return;
+
             float chanceMod = 0;
 
             Collection<LuckyOneBlockEntity> luckies = be.getComponent(LivingMachineComponents.LUCKY_ONE);
@@ -42,7 +45,8 @@ public class CrusherProcess implements Process
                 return;
             }
 
-            float progressIncrement = be.getProgressIncrement() / crushers.size() * 4;
+//            float progressIncrement = be.getProgressIncrement() / crushers.size() * 2;
+            float progressIncrement = be.getProgressIncrement();
 
             Storage<ItemVariant> input = hoppers.iterator().next().getStorage(null);
             Storage<ItemVariant> output = itemOutputs.iterator().next().getStorage(null);
