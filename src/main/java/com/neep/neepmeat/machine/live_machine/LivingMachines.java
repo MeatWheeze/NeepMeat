@@ -31,27 +31,27 @@ public class LivingMachines
 
     public static Block MACHINE_BLOCK = BlockRegistry.queue(new MachineBlock("machine_block", block(), Map.of(
             StructureProperty.MAX_POWER, new StructureProperty.Entry(300f),
-                    StructureProperty.MASS, new StructureProperty.Entry(1000f)), FabricBlockSettings.copyOf(OPAQUE_MACHINE_SETTINGS)));
+                    StructureProperty.MASS, new StructureProperty.Entry(StructureProperty.Function.ADD, 100)), FabricBlockSettings.copyOf(OPAQUE_MACHINE_SETTINGS)));
     public static Block BASE_MACHINE_BLOCK = BlockRegistry.queue(new MachineBlock("base_machine_block", block().tooltip(TooltipSupplier.simple(1)), Map.of(
             StructureProperty.MAX_POWER, new StructureProperty.Entry(300f),
-            StructureProperty.MASS, new StructureProperty.Entry(500f)), FabricBlockSettings.copyOf(OPAQUE_MACHINE_SETTINGS)));
+            StructureProperty.MASS, new StructureProperty.Entry(StructureProperty.Function.ADD, 100)), FabricBlockSettings.copyOf(OPAQUE_MACHINE_SETTINGS)));
     public static Block BLOOD_BUBBLE_MACHINE_BLOCK = BlockRegistry.queue(new MachineBlock("blood_bubble_machine_block", block(), Map.of(
             StructureProperty.MAX_POWER, new StructureProperty.Entry(StructureProperty.Function.ADD, -5),
-            StructureProperty.MASS, new StructureProperty.Entry(500f),
+            StructureProperty.MASS, new StructureProperty.Entry(StructureProperty.Function.ADD, 100f),
             StructureProperty.SELF_REPAIR, new StructureProperty.Entry(StructureProperty.Function.ADD, 1e-6f)), FabricBlockSettings.copyOf(OPAQUE_MACHINE_SETTINGS)));
     public static Block MEAT_STEEL_MACHINE_BLOCK = BlockRegistry.queue(new MachineBlock("meat_steel_machine_block", block(), Map.of(
             StructureProperty.MAX_POWER, new StructureProperty.Entry(500f),
             StructureProperty.SELF_REPAIR, new StructureProperty.Entry(StructureProperty.Function.ADD, 0.5e-6f),
-            StructureProperty.MASS, new StructureProperty.Entry(1000f)), FabricBlockSettings.copyOf(OPAQUE_MACHINE_SETTINGS)));
+            StructureProperty.MASS, new StructureProperty.Entry(StructureProperty.Function.ADD, 100f)), FabricBlockSettings.copyOf(OPAQUE_MACHINE_SETTINGS)));
     public static Block MEAT_STEEL_MACHINE_BLOCK_2 = BlockRegistry.queue(new MachineBlock("meat_steel_machine_block_2", block().tooltip(TooltipSupplier.simple(1)), Map.of(
             StructureProperty.MAX_POWER, new StructureProperty.Entry(500f),
             StructureProperty.SELF_REPAIR, new StructureProperty.Entry(StructureProperty.Function.ADD, 0.5e-6f),
-            StructureProperty.MASS, new StructureProperty.Entry(1000f)
+            StructureProperty.MASS, new StructureProperty.Entry(StructureProperty.Function.ADD, 100f)
     ), FabricBlockSettings.copyOf(OPAQUE_MACHINE_SETTINGS)));
     public static Block SKIN_MACHINE_BLOCK = BlockRegistry.queue(new MachineBlock("skin_machine_block", block(), Map.of(
             StructureProperty.MAX_POWER, new StructureProperty.Entry(500f),
             StructureProperty.SELF_REPAIR, new StructureProperty.Entry(StructureProperty.Function.ADD, 1.5e-6f),
-            StructureProperty.MASS, new StructureProperty.Entry(1000f)
+            StructureProperty.MASS, new StructureProperty.Entry(StructureProperty.Function.ADD, 100f)
     ), FabricBlockSettings.copyOf(OPAQUE_MACHINE_SETTINGS)));
 
     public static final Block MOTOR_PORT = BlockRegistry.queue(new PortBlock<>("motor_port", ItemSettings.block().tooltip(tooltip(LivingMachineComponents.MOTOR_PORT)),
