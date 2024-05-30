@@ -6,8 +6,6 @@ import com.neep.neepmeat.api.plc.recipe.ManufactureStep;
 import com.neep.neepmeat.client.screen.tablet.GUIUtil;
 import com.neep.neepmeat.compat.emi.NMEmiPlugin;
 import com.neep.neepmeat.plc.recipe.CombineStep;
-import com.neep.neepmeat.plc.recipe.ImplantStep;
-import com.neep.neepmeat.plc.recipe.InjectStep;
 import com.neep.neepmeat.plc.recipe.TransformingToolRecipe;
 import dev.emi.emi.api.recipe.EmiRecipe;
 import dev.emi.emi.api.recipe.EmiRecipeCategory;
@@ -47,43 +45,50 @@ public class ToolManufactureEmiRecipe implements EmiRecipe
     }
 
     @Override
-    public EmiRecipeCategory getCategory() {
+    public EmiRecipeCategory getCategory()
+    {
         return NMEmiPlugin.SURGERY;
     }
 
     @Override
-    public @Nullable Identifier getId() {
+    public @Nullable Identifier getId()
+    {
         return id;
     }
 
     @Override
-    public List<EmiIngredient> getInputs() {
+    public List<EmiIngredient> getInputs()
+    {
         return List.of(EmiStack.of(base));
     }
 
     @Override
-    public List<EmiStack> getOutputs() {
+    public List<EmiStack> getOutputs()
+    {
         return List.of();
     }
 
     @Override
-    public int getDisplayWidth() {
+    public int getDisplayWidth()
+    {
         return 160;
     }
 
     @Override
-    public int getDisplayHeight() {
+    public int getDisplayHeight()
+    {
         return 150;
     }
 
     @Override
-    public void addWidgets(WidgetHolder widgets) {
+    public void addWidgets(WidgetHolder widgets)
+    {
         int startX = 5;
         int startY = 5;
 
         widgets.add(new OutlineWidget(new Bounds(0, 0, getDisplayWidth(), getDisplayHeight())));
 
-        var widgetBase = new ManufactureEmiRecipe.LabelledSlot(startX, startY, Text.of("Base: "), EmiStack.of(base), widgets);
+        var widgetBase = new ItemManufactureEmiRecipe.LabelledSlot(startX, startY, Text.of("Base: "), EmiStack.of(base), widgets);
         widgets.add(widgetBase);
 
         int entryX = startX + 1;
@@ -99,14 +104,9 @@ public class ToolManufactureEmiRecipe implements EmiRecipe
         widgets.add(toolWidget);
         entryY += toolWidget.height() + 2;
 
-        ManufactureEmiRecipe.EntryWidget widget;
-        widget = new ManufactureEmiRecipe.EntryWidget(entryX, entryY, finalStep, getDisplayWidth() - 20, widgets);
+        ItemManufactureEmiRecipe.EntryWidget widget;
+        widget = new ItemManufactureEmiRecipe.EntryWidget(entryX, entryY, finalStep, getDisplayWidth() - 20, widgets);
         widgets.add(widget);
-    }
-
-    public static int borderCol()
-    {
-        return PLCCols.BORDER.col;
     }
 
     public static class ToolWidget extends Widget
@@ -132,21 +132,25 @@ public class ToolManufactureEmiRecipe implements EmiRecipe
                     originX + width() - 14, originY);
         }
 
-        public int height() {
+        public int height()
+        {
             return Math.max(textRenderer.fontHeight + 3, 19);
         }
 
-        public int width() {
+        public int width()
+        {
             return width;
         }
 
         @Override
-        public Bounds getBounds() {
+        public Bounds getBounds()
+        {
             return new Bounds(originX, originY, width(), height());
         }
 
         @Override
-        public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
+        public void render(MatrixStack matrices, int mouseX, int mouseY, float delta)
+        {
             int x = originX + 2;
             int y = originY + 2;
 
@@ -155,51 +159,18 @@ public class ToolManufactureEmiRecipe implements EmiRecipe
         }
     }
 
-    static void appendStepIngredients(List<ManufactureStep<?>> steps, List<EmiIngredient> ingredients)
+    static class OutlineWidget extends Widget
     {
-        for (var step : steps)
-        {
-            if (step instanceof CombineStep combineStep)
-            {
-                ingredients.add(EmiStack.of(combineStep.getItem()));
-            }
-            else if (step instanceof InjectStep injectStep)
-            {
-                ingredients.add(EmiStack.of(injectStep.getFluid()));
-            }
-            else if (step instanceof ImplantStep implantStep)
-            {
-                ingredients.add(EmiStack.of(implantStep.getItem()));
-            }
-        }
-    }
-
-    static void drawThing(int x, int y, ManufactureStep<?> step, WidgetHolder widgets) {
-        if (step instanceof CombineStep combineStep)
-        {
-            widgets.addSlot(EmiStack.of(combineStep.getItem()), x - 1, y + 1).drawBack(false);
-        }
-        else if (step instanceof InjectStep injectStep)
-        {
-            widgets.addSlot(EmiStack.of(injectStep.getFluid()), x - 1, y + 1).drawBack(false);
-        }
-        else if (step instanceof ImplantStep implantStep)
-        {
-            widgets.addSlot(EmiStack.of(implantStep.getItem()), x - 1, y + 1).drawBack(false);
-        }
-        else
-            widgets.addSlot(EmiStack.EMPTY, x, y + 2).drawBack(false);
-    }
-
-    static class OutlineWidget extends Widget {
         private final Bounds bounds;
 
-        public OutlineWidget(Bounds bounds) {
+        public OutlineWidget(Bounds bounds)
+        {
             this.bounds = bounds;
         }
 
         @Override
-        public Bounds getBounds() {
+        public Bounds getBounds()
+        {
             return this.bounds;
         }
 

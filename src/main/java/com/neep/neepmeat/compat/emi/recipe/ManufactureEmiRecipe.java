@@ -1,16 +1,12 @@
 package com.neep.neepmeat.compat.emi.recipe;
 
-import com.google.common.collect.Lists;
 import com.neep.neepmeat.api.plc.PLCCols;
 import com.neep.neepmeat.api.plc.recipe.ManufactureStep;
 import com.neep.neepmeat.client.screen.tablet.GUIUtil;
-import com.neep.neepmeat.compat.emi.NMEmiPlugin;
 import com.neep.neepmeat.plc.recipe.CombineStep;
 import com.neep.neepmeat.plc.recipe.ImplantStep;
 import com.neep.neepmeat.plc.recipe.InjectStep;
-import com.neep.neepmeat.plc.recipe.ItemManufactureRecipe;
 import dev.emi.emi.api.recipe.EmiRecipe;
-import dev.emi.emi.api.recipe.EmiRecipeCategory;
 import dev.emi.emi.api.stack.EmiIngredient;
 import dev.emi.emi.api.stack.EmiStack;
 import dev.emi.emi.api.widget.Bounds;
@@ -20,40 +16,39 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.item.Item;
-import net.minecraft.recipe.Ingredient;
 import net.minecraft.text.Text;
-import net.minecraft.util.Identifier;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public class ManufactureEmiRecipe implements EmiRecipe
+public abstract class ManufactureEmiRecipe<T> implements EmiRecipe
 {
-    private final Identifier id;
-    private final List<EmiIngredient> input;
-    private final List<EmiStack> output;
+    protected final T base;
+    protected final List<ManufactureStep<?>> steps;
 
-    private final Item base;
-    private final List<ManufactureStep<?>> steps;
-
-    public ManufactureEmiRecipe(ItemManufactureRecipe recipe)
+    protected ManufactureEmiRecipe(T base, List<ManufactureStep<?>> steps)
     {
-        this.base = recipe.getBase();
-        this.steps = recipe.getSteps();
-
-        List<EmiIngredient> inputs = Lists.newArrayList();
-        inputs.add(EmiIngredient.of(Ingredient.ofItems(base)));
-        appendStepIngredients(steps, inputs);
-
-        this.id = recipe.getId();
-        this.input = inputs;
-        this.output = List.of(EmiStack.of(recipe.getRecipeOutput().resource(), recipe.getRecipeOutput().minAmount()));
+        this.base = base;
+        this.steps = steps;
     }
 
-    public static int borderCol()
+    static void drawThing(int x, int y, ManufactureStep<?> step, WidgetHolder widgets)
     {
-        return PLCCols.BORDER.col;
+        if (step instanceof CombineStep combineStep)
+        {
+            widgets.addSlot(EmiStack.of(combineStep.getItem()), x - 1, y + 1).drawBack(false);
+        }
+        else if (step instanceof InjectStep injectStep)
+        {
+            widgets.addSlot(EmiStack.of(injectStep.getFluid()), x - 1, y + 1).drawBack(false);
+        }
+        else if (step instanceof ImplantStep implantStep)
+        {
+            widgets.addSlot(EmiStack.of(implantStep.getItem()), x - 1, y + 1).drawBack(false);
+        }
+        else
+        {
+            widgets.addSlot(EmiStack.EMPTY, x, y + 2).drawBack(false);
+        }
     }
 
     static void appendStepIngredients(List<ManufactureStep<?>> steps, List<EmiIngredient> ingredients)
@@ -75,46 +70,9 @@ public class ManufactureEmiRecipe implements EmiRecipe
         }
     }
 
-    static void drawThing(int x, int y, ManufactureStep<?> step, WidgetHolder widgets)
+    public T getBase()
     {
-        if (step instanceof CombineStep combineStep)
-        {
-            widgets.addSlot(EmiStack.of(combineStep.getItem()), x - 1, y + 1).drawBack(false);
-        }
-        else if (step instanceof InjectStep injectStep)
-        {
-            widgets.addSlot(EmiStack.of(injectStep.getFluid()), x - 1, y + 1).drawBack(false);
-        }
-        else if (step instanceof ImplantStep implantStep)
-        {
-            widgets.addSlot(EmiStack.of(implantStep.getItem()), x - 1, y + 1).drawBack(false);
-        }
-        else
-            widgets.addSlot(EmiStack.EMPTY, x, y + 2).drawBack(false);
-    }
-
-    @Override
-    public EmiRecipeCategory getCategory()
-    {
-        return NMEmiPlugin.SURGERY;
-    }
-
-    @Override
-    public @Nullable Identifier getId()
-    {
-        return id;
-    }
-
-    @Override
-    public List<EmiIngredient> getInputs()
-    {
-        return input;
-    }
-
-    @Override
-    public List<EmiStack> getOutputs()
-    {
-        return output;
+        return base;
     }
 
     @Override
@@ -127,30 +85,6 @@ public class ManufactureEmiRecipe implements EmiRecipe
     public int getDisplayHeight()
     {
         return 150;
-    }
-
-    @Override
-    public void addWidgets(WidgetHolder widgets)
-    {
-        int startX = 5;
-        int startY = 5;
-
-        widgets.add(new OutlineWidget(new Bounds(0, 0, getDisplayWidth(), getDisplayHeight())));
-
-        var widgetBase = new LabelledSlot(startX, startY, Text.of("Base: "), EmiStack.of(base), widgets);
-        widgets.add(widgetBase);
-
-        var widgetOutput = new LabelledSlot(startX + 20 + widgetBase.width(), startY, Text.of("Output: "), output.get(0), widgets, this);
-        widgets.add(widgetOutput);
-
-        int entryX = startX + 1;
-        int entryY = startY + 22;
-        for (var step : steps)
-        {
-            var widget = new EntryWidget(entryX, entryY, step, getDisplayWidth() - 20, widgets);
-            widgets.add(widget);
-            entryY += widget.height() + 2;
-        }
     }
 
     static class LabelledSlot extends Widget
@@ -197,8 +131,8 @@ public class ManufactureEmiRecipe implements EmiRecipe
         @Override
         public void render(MatrixStack matrices, int mouseX, int mouseY, float delta)
         {
-            textRenderer.drawWithShadow(matrices, name, originX, originY, borderCol());
-            GUIUtil.renderBorder(matrices, slotOriginX, slotOriginY, 17, 17, borderCol(), 0);
+            textRenderer.drawWithShadow(matrices, name, originX, originY, ItemManufactureEmiRecipe.borderCol());
+            GUIUtil.renderBorder(matrices, slotOriginX, slotOriginY, 17, 17, ItemManufactureEmiRecipe.borderCol(), 0);
             GUIUtil.renderBorder(matrices, slotOriginX + 1, slotOriginY + 1, 15, 15, PLCCols.TRANSPARENT.col, 0);
         }
     }
@@ -245,8 +179,8 @@ public class ManufactureEmiRecipe implements EmiRecipe
             int x = originX + 2;
             int y = originY + 2;
 
-            textRenderer.drawWithShadow(matrices, name, x, y, borderCol());
-            GUIUtil.renderBorder(matrices, originX, originY, width() + 3, height(), borderCol(), 0);
+            textRenderer.drawWithShadow(matrices, name, x, y, ItemManufactureEmiRecipe.borderCol());
+            GUIUtil.renderBorder(matrices, originX, originY, width() + 3, height(), ItemManufactureEmiRecipe.borderCol(), 0);
         }
     }
 
@@ -269,7 +203,7 @@ public class ManufactureEmiRecipe implements EmiRecipe
         public void render(MatrixStack matrices, int mouseX, int mouseY, float delta)
         {
             DrawableHelper.fill(matrices, bounds.x(), bounds.y(), bounds.x() + bounds.width(), bounds.y() + bounds.height(), 0xFF000000);
-            GUIUtil.renderBorder(matrices, bounds.x(), bounds.y(), bounds.width(), bounds.height(), borderCol(), 0);
+            GUIUtil.renderBorder(matrices, bounds.x(), bounds.y(), bounds.width(), bounds.height(), ItemManufactureEmiRecipe.borderCol(), 0);
             GUIUtil.renderBorder(matrices, bounds.x() + 1, bounds.y() + 1, bounds.width() - 2, bounds.height() - 2, PLCCols.TRANSPARENT.col, 0);
         }
     }

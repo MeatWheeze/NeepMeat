@@ -18,7 +18,6 @@ import dev.emi.emi.api.EmiPlugin;
 import dev.emi.emi.api.EmiRegistry;
 import dev.emi.emi.api.recipe.EmiRecipeCategory;
 import dev.emi.emi.api.stack.EmiStack;
-import net.minecraft.entity.EntityType;
 import net.minecraft.item.Item;
 import net.minecraft.recipe.RecipeManager;
 import net.minecraft.util.Identifier;
@@ -41,7 +40,6 @@ public class NMEmiPlugin implements EmiPlugin {
     public static final EmiStack MIXING_WORKSTATION = EmiStack.of(NMBlocks.MIXER);
     public static final EmiStack PRESSING_WORKSTATION = EmiStack.of(NMBlocks.HYDRAULIC_PRESS);
     public static final EmiStack SURGERY_WORKSTATION = EmiStack.of(PLCBlocks.PLC);
-    public static final EmiStack TRANSFORMING_TOOL_WORKSTATION = EmiStack.of(PLCBlocks.PLC);
     public static final EmiStack TROMMEL_WORKSTATION = EmiStack.of(NMBlocks.SMALL_TROMMEL);
 
     public static final EmiRecipeCategory ALLOY_SMELTING = new LazyEmiRecipeCategory(new Identifier(NeepMeat.NAMESPACE, "plugins/alloy_smelting"), ALLOY_SMELTING_WORKSTATION);
@@ -51,11 +49,12 @@ public class NMEmiPlugin implements EmiPlugin {
     public static final EmiRecipeCategory ADVANCED_CRUSHING = new LazyEmiRecipeCategory(new Identifier(NeepMeat.NAMESPACE, "plugins/advanced_crushing"), LARGE_CRUSHER_WORKSTATION);
     public static final EmiRecipeCategory VIVISECTION = new LazyEmiRecipeCategory(new Identifier(NeepMeat.NAMESPACE, "plugins/vivisection"), VIVISECTION_WORKSTATION);
     public static final EmiRecipeCategory HEATING = new LazyEmiRecipeCategory(new Identifier(NeepMeat.NAMESPACE, "plugins/heating"), HEATING_WORKSTATION);
-    public static final EmiRecipeCategory MANUFACTURE = new LazyEmiRecipeCategory(new Identifier(NeepMeat.NAMESPACE, "plugins/manufacture"), MANUFACTURE_WORKSTATION);
+    public static final EmiRecipeCategory ITEM_MANUFACTURE = new LazyEmiRecipeCategory(new Identifier(NeepMeat.NAMESPACE, "plugins/manufacture"), MANUFACTURE_WORKSTATION);
+    public static final EmiRecipeCategory ENTITY_TO_ITEM_MANUFACTURE = new LazyEmiRecipeCategory(new Identifier(NeepMeat.NAMESPACE, "plugins/entity_to_item_manufacture"), MANUFACTURE_WORKSTATION);
+    public static final EmiRecipeCategory TRANSFORMING_TOOL = new LazyEmiRecipeCategory(new Identifier(NeepMeat.NAMESPACE, "plugins/transforming_tool"), MANUFACTURE_WORKSTATION);
     public static final EmiRecipeCategory MIXING = new LazyEmiRecipeCategory(new Identifier(NeepMeat.NAMESPACE, "plugins/mixing"), MIXING_WORKSTATION);
     public static final EmiRecipeCategory PRESSING = new LazyEmiRecipeCategory(new Identifier(NeepMeat.NAMESPACE, "plugins/pressing"), PRESSING_WORKSTATION);
     public static final EmiRecipeCategory SURGERY = new LazyEmiRecipeCategory(new Identifier(NeepMeat.NAMESPACE, "plugins/surgery"), SURGERY_WORKSTATION);
-    public static final EmiRecipeCategory TRANSFORMING_TOOL = new LazyEmiRecipeCategory(new Identifier(NeepMeat.NAMESPACE, "plugins/transforming_tool"), TRANSFORMING_TOOL_WORKSTATION);
     public static final EmiRecipeCategory TROMMEL = new LazyEmiRecipeCategory(new Identifier(NeepMeat.NAMESPACE, "plugins/trommel"), TROMMEL_WORKSTATION);
 
     @Override
@@ -67,7 +66,8 @@ public class NMEmiPlugin implements EmiPlugin {
         registry.addCategory(ADVANCED_CRUSHING);
         registry.addCategory(VIVISECTION);
         registry.addCategory(HEATING);
-        registry.addCategory(MANUFACTURE);
+        registry.addCategory(ITEM_MANUFACTURE);
+        registry.addCategory(ENTITY_TO_ITEM_MANUFACTURE);
         registry.addCategory(MIXING);
         registry.addCategory(PRESSING);
         registry.addCategory(SURGERY);
@@ -84,8 +84,9 @@ public class NMEmiPlugin implements EmiPlugin {
         registry.addWorkstation(ADVANCED_CRUSHING, LARGE_CRUSHER_WORKSTATION);
         registry.addWorkstation(VIVISECTION, VIVISECTION_WORKSTATION);
         registry.addWorkstation(HEATING, HEATING_WORKSTATION);
-        registry.addWorkstation(MANUFACTURE, MANUFACTURE_WORKSTATION);
-        registry.addWorkstation(TRANSFORMING_TOOL, TRANSFORMING_TOOL_WORKSTATION);
+        registry.addWorkstation(ITEM_MANUFACTURE, MANUFACTURE_WORKSTATION);
+        registry.addWorkstation(ENTITY_TO_ITEM_MANUFACTURE, MANUFACTURE_WORKSTATION);
+        registry.addWorkstation(TRANSFORMING_TOOL, MANUFACTURE_WORKSTATION);
         registry.addWorkstation(MIXING, MIXING_WORKSTATION);
         registry.addWorkstation(PRESSING, PRESSING_WORKSTATION);
         registry.addWorkstation(SURGERY, SURGERY_WORKSTATION);
@@ -120,7 +121,10 @@ public class NMEmiPlugin implements EmiPlugin {
                 .map(HeatingEmiRecipe::new)
                 .forEach(registry::addRecipe);
         MeatlibRecipes.getInstance().getAllValuesOfType(PLCRecipes.MANUFACTURE)
-                .map(ManufactureEmiRecipe::new)
+                .map(ItemManufactureEmiRecipe::new)
+                .forEach(registry::addRecipe);
+        MeatlibRecipes.getInstance().getAllValuesOfType(PLCRecipes.ENTITY_TO_ITEM)
+                .map(EntityToItemManufactureEmiRecipe::new)
                 .forEach(registry::addRecipe);
         MeatlibRecipes.getInstance().getAllValuesOfType(NMrecipeTypes.TROMMEL)
                 .map(TrommelEmiRecipe::new)
