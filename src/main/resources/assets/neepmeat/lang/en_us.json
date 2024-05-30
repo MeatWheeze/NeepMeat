@@ -145,6 +145,7 @@
   "block.neepmeat.fluid_input_port": "Fluid Input Port",
   "block.neepmeat.fluid_output_port": "Fluid Output Port",
   "block.neepmeat.crusher_segment": "Crusher Segment",
+  "block.neepmeat.crusher_segment.lore_0": "Enables advanced crushing recipes. Up to four are allowed per machine.",
   "block.neepmeat.large_trommel": "Large Trommel",
   "block.neepmeat.largest_hopper": "Largest Hopper",
   "block.neepmeat.largest_hopper.lore_0": "It's a very large hopper. Perhaps the largest.",

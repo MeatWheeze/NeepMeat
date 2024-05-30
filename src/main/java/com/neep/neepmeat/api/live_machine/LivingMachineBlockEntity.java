@@ -13,12 +13,15 @@ import com.neep.neepmeat.init.NMFluids;
 import com.neep.neepmeat.machine.live_machine.LivingMachineComponents;
 import com.neep.neepmeat.machine.live_machine.Processes;
 import com.neep.neepmeat.machine.live_machine.block.entity.MotorPortBlockEntity;
+import com.neep.neepmeat.machine.live_machine.component.ItemOutputComponent;
 import com.neep.neepmeat.machine.live_machine.component.PoweredComponent;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
+import net.fabricmc.fabric.api.transfer.v1.storage.StorageView;
 import net.fabricmc.fabric.api.transfer.v1.storage.base.CombinedStorage;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
+import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.nbt.*;
@@ -28,6 +31,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.random.Random;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.Array;
@@ -199,6 +203,8 @@ public abstract class LivingMachineBlockEntity extends SyncableBlockEntity imple
 
         if (updateProcess)
         {
+            updateSpecialStorage();
+
             this.process = Processes.getInstance().getFirstMatch(currentComponents);
             updateProcess = false;
         }
@@ -233,6 +239,7 @@ public abstract class LivingMachineBlockEntity extends SyncableBlockEntity imple
                 {
                     it.remove();
                     removeComponent(component);
+                    sync();
                     updateProcess = true;
                 }
                 else
@@ -290,8 +297,9 @@ public abstract class LivingMachineBlockEntity extends SyncableBlockEntity imple
 
     private void updateSpecialStorage()
     {
-        List<Storage<ItemVariant>> storages = getComponent(LivingMachineComponents.ITEM_OUTPUT).stream().map(l -> l.getStorage(null)).toList();
-        combinedItemOutput = new CombinedStorage<>(storages);
+        Collection<ItemOutputComponent> itemOutputs = getComponent(LivingMachineComponents.ITEM_OUTPUT);
+        List<Storage<ItemVariant>> storages = itemOutputs.stream().map(l -> l.getStorage(null)).toList();
+        combinedItemOutput = new StorageDelegate(storages);
     }
 
     protected float getProperty(StructureProperty property)
@@ -564,5 +572,47 @@ public abstract class LivingMachineBlockEntity extends SyncableBlockEntity imple
     public Storage<ItemVariant> getCombinedItemOutput()
     {
         return combinedItemOutput;
+    }
+
+    private class StorageDelegate implements Storage<ItemVariant>
+    {
+        private final Storage<ItemVariant> storage;
+//        private final BlockPos outPos;
+//        private final Direction outDir;
+//        private final boolean empty;
+
+//        private StorageDelegate(List<Storage<ItemVariant>> storages, BlockPos outPos, Direction outDir, boolean empty)
+        private StorageDelegate(List<Storage<ItemVariant>> storages)
+        {
+            this.storage = new CombinedStorage<>(storages);
+//            this.outPos = outPos;
+//            this.outDir = outDir;
+//            this.empty = empty;
+        }
+
+        @Override
+        public long insert(ItemVariant resource, long maxAmount, TransactionContext transaction)
+        {
+            return storage.insert(resource, maxAmount, transaction);
+//            if (!empty && inserted < maxAmount)
+//            {
+//                long difference = maxAmount - inserted;
+//
+//                ItemPipeUtil.stackToAny((ServerWorld) world, outPos, outDir, resource, difference, transaction);
+//            }
+//            return maxAmount;
+        }
+
+        @Override
+        public long extract(ItemVariant resource, long maxAmount, TransactionContext transaction)
+        {
+            return storage.extract(resource, maxAmount, transaction);
+        }
+
+        @Override
+        public @NotNull Iterator<StorageView<ItemVariant>> iterator()
+        {
+            return storage.iterator();
+        }
     }
 }
