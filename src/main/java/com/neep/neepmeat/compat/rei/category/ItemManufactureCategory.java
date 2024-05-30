@@ -18,7 +18,7 @@ public class ItemManufactureCategory extends ManufactureCategory<ItemManufacture
     @Override
     public CategoryIdentifier<? extends ItemManufactureDisplay> getCategoryIdentifier()
     {
-        return NMREIPlugin.MANUFACTURE;
+        return NMREIPlugin.ITEM_MANUFACTURE;
     }
 
     @Override

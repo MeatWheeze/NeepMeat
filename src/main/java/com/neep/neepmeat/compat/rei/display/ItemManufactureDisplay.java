@@ -60,7 +60,7 @@ public class ItemManufactureDisplay extends ManufactureDisplay<Item>
     @Override
     public CategoryIdentifier<?> getCategoryIdentifier()
     {
-        return NMREIPlugin.MANUFACTURE;
+        return NMREIPlugin.ITEM_MANUFACTURE;
     }
 
     public static DisplaySerializer<ItemManufactureDisplay> getSerializer()

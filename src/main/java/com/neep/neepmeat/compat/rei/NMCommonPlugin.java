@@ -18,7 +18,8 @@ public class NMCommonPlugin implements REIServerPlugin, NMREIPlugin
         registry.register(ENLIGHTENING, EnlighteningDisplay.serializer());
         registry.register(PRESSING, PressingDisplay.serializer());
         registry.register(SURGERY, SurgeryDisplay.getSerializer());
-        registry.register(MANUFACTURE, ItemManufactureDisplay.getSerializer());
+        registry.registerNotSerializable(ITEM_MANUFACTURE);
+        registry.registerNotSerializable(ENTITY_TO_ITEM);
         registry.register(TRANSFORMING_TOOL, TransformingToolDisplay.serializer());
         registry.register(TROMMEL, TrommelDisplay.serializer());
     }
