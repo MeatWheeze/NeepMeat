@@ -86,6 +86,8 @@ public class GraphPane extends LivingMachineScreen.PaneWidget
     {
         long period = timeEnd - timeStart;
 
+        BufferBuilder builder = Tessellator.getInstance().getBuffer();
+        builder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_COLOR);
         long highestTime = 0;
         for (int i = 0; i < time.length; ++i)
         {
@@ -94,8 +96,6 @@ public class GraphPane extends LivingMachineScreen.PaneWidget
 
             long t1 = time[i];
 
-            BufferBuilder builder = Tessellator.getInstance().getBuffer();
-            builder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_COLOR);
             if (t1 >= timeStart && t1 < timeEnd && i + 1 < time.length)
             {
                 long t2 = time[i + 1];
@@ -119,8 +119,8 @@ public class GraphPane extends LivingMachineScreen.PaneWidget
 
                 drawLine(context, t1Scaled, y1Scaled, t2Scaled, y2Scaled, 0.5f, col, builder);
             }
-            BufferRenderer.drawWithShader(builder.end());
         }
+        BufferRenderer.drawWithShader(builder.end());
         return highestTime;
     }
 

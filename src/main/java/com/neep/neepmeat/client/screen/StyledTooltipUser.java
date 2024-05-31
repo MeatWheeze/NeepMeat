@@ -73,6 +73,7 @@ public interface StyledTooltipUser
 //        this.setZOffset(400);
         matrices.translate(0, 0, 400);
         RenderSystem.setShader(GameRenderer::getPositionColorShader);
+        RenderSystem.enableDepthTest();
 
         DrawableHelper.fill(matrices, x, y, x + maxWidth + 2, y + maxHeight + 2, 0x90000000);
         GUIUtil.drawHorizontalLine1(matrices, x, x + maxWidth + 2, y, col);
@@ -82,7 +83,7 @@ public interface StyledTooltipUser
 
         RenderSystem.disableBlend();
         VertexConsumerProvider.Immediate immediate = VertexConsumerProvider.immediate(Tessellator.getInstance().getBuffer());
-        matrices.translate(0.0, 0.0, 400.0);
+        matrices.translate(0.0, 0.0, 500.0);
 
         Matrix4f matrix4f = matrices.peek().getPositionMatrix();
         int yAdvance = y + 2;

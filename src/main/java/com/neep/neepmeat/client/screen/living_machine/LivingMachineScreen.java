@@ -65,10 +65,13 @@ public class LivingMachineScreen extends BaseHandledScreen<LivingMachineScreenHa
 
         metricsPane.init(new Rectangle.Mutable(withoutPadding).setW(metricsWidth));
         processesPane.init(new Rectangle.Mutable(withoutPadding).setW(metricsWidth));
+        graphPane.init(new Rectangle.Immutable(metricsPane.border.x() + metricsPane.border.w() + 1, withoutPadding.y(), graphsWidth, withoutPadding.h()));
+
+        // This has to be before the left pane otherwise it renders over the tooltips. I could probably enable depth, but I can't be bothered.
+        addDrawableChild(graphPane);
+
         addDrawableChild(leftPane);
 
-        graphPane.init(new Rectangle.Immutable(metricsPane.border.x() + metricsPane.border.w() + 1, withoutPadding.y(), graphsWidth, withoutPadding.h()));
-        addDrawableChild(graphPane);
     }
 
     @Override

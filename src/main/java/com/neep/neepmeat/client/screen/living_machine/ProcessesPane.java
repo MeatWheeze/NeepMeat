@@ -108,6 +108,7 @@ public class ProcessesPane extends LivingMachineScreen.PaneWidget
                 }
 
                 parent.renderTooltipOrderedText(context, texts, false, x + w - 3, y, width, PLCCols.TEXT.col);
+//                parent.renderOrderedTooltip(context, texts, x + w - 3, y);
             }
 
             return h;

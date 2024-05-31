@@ -1,24 +1,36 @@
 package com.neep.neepmeat.client.screen;
 
+import com.google.common.collect.Lists;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.font.TextRenderer;
+import net.minecraft.client.gui.AbstractParentElement;
 import net.minecraft.client.gui.Drawable;
 import net.minecraft.client.gui.Element;
+import net.minecraft.client.gui.Selectable;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ClickableWidget;
+import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
 import org.jetbrains.annotations.Nullable;
 
-public class ScreenSubElement extends Screen implements Drawable, Element
+import java.util.List;
+
+public abstract class ScreenSubElement extends AbstractParentElement implements Drawable, Element
 {
+    protected final List<Element> children = Lists.newArrayList();
+    protected final List<Drawable> drawables = Lists.newArrayList();
+    protected final List<Selectable> selectables = Lists.newArrayList();
+
     protected int x;
     protected int y;
     protected int screenWidth;
     protected int screenHeight;
-    protected int elementWidth;
-    protected int elementHeight;
+
+    protected final MinecraftClient client = MinecraftClient.getInstance();
+    protected final TextRenderer textRenderer = client.textRenderer;
 
     protected ScreenSubElement()
     {
-        super(Text.empty());
     }
 
     public void setDimensions(int screenWidth, int screenHeight)
@@ -27,43 +39,60 @@ public class ScreenSubElement extends Screen implements Drawable, Element
         this.screenHeight = screenHeight;
     }
 
-    @Override
-    public boolean shouldCloseOnEsc()
+    public void init(int screenWidth, int screenHeight)
     {
-        return false;
+        clearChildren();
+
+        this.screenWidth = screenWidth;
+        this.screenHeight = screenHeight;
+
+        init();
+    }
+
+    public void tick()
+    {
+
+    }
+
+    protected abstract void init();
+
+    @Override
+    public void render(MatrixStack context, int mouseX, int mouseY, float delta)
+    {
+        for(Drawable drawable : this.drawables)
+        {
+            drawable.render(context, mouseX, mouseY, delta);
+        }
     }
 
     @Override
-    protected void init()
+    public List<? extends Element> children()
     {
-        super.init();
-        this.screenWidth = width;
-        this.screenHeight = height;
+        return children;
+    }
+
+    protected void clearChildren()
+    {
+        this.drawables.clear();
+        this.children.clear();
+        this.selectables.clear();
+    }
+
+    public <T extends Drawable & Element & Selectable> void addDrawableChild(T t)
+    {
+        this.drawables.add(t);
+        this.children.add(t);
+        this.selectables.add(t);
     }
 
     @Override
-    public void setFocused(@Nullable Element focused)
+    public boolean isMouseOver(double mouseX, double mouseY)
     {
-//        if (getFocused() instanceof ClickableWidget widget)
-//        {
-//            widget.setFocused(false);
-//        }
-//
-//        if (focused != null)
-//        {
-//            focused.setf(true);
-//        }
-
-        super.setFocused(focused);
+        return hoveredElement(mouseX, mouseY).isPresent();
     }
 
-    //    protected final List<Element> children = Lists.newArrayList();
-
-//    @Override
-//    public List<? extends Element> children()
-//    {
-//        return children;
-//    }
-
-
+    public void addDrawable(Drawable t)
+    {
+        this.drawables.add(t);
+    }
 }

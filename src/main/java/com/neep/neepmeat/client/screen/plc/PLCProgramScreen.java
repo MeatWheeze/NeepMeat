@@ -116,8 +116,8 @@ public class PLCProgramScreen extends Screen implements ScreenHandlerProvider<PL
     {
         super.init();
 
-        editor.init(client, width, height);
-        shell.init(client, width, height);
+        editor.init(width, height);
+        shell.init(width, height);
         if (mode == RecordMode.EDIT)
         {
             addDrawableChild(editor);
