@@ -116,7 +116,7 @@ public class HoldingTrackBlock extends BaseRailBlock implements BlockEntityProvi
             AxialDirection direction = getCachedState().get(FACING);
             RailShape railShape = getCachedState().get(SHAPE);
 
-            Box box = new Box(getPos());
+            Box box = new Box(getPos()).shrink(0.24, 0.24, 0.24);
 
             double x = pos.getX() + 0.5;
             double y = pos.getY();

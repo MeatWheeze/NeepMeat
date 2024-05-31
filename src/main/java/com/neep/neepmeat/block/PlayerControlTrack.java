@@ -189,7 +189,7 @@ public class PlayerControlTrack extends BaseRailBlock implements BlockEntityProv
 
         public void serverTick()
         {
-            Box box = new Box(getPos());
+            Box box = new Box(getPos()).shrink(0.24, 0.24, 0.24);
 
             double x = pos.getX() + 0.5;
             double z = pos.getZ() + 0.5;
