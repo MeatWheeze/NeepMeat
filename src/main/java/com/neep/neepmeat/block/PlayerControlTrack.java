@@ -3,18 +3,17 @@ package com.neep.neepmeat.block;
 import com.neep.meatlib.item.BaseBlockItem;
 import com.neep.meatlib.item.ItemSettings;
 import com.neep.meatlib.registry.ItemRegistry;
-import com.neep.neepmeat.interfaces.AbstractMinecartEntityAccess;
 import com.neep.neepmeat.init.NMBlockEntities;
+import com.neep.neepmeat.interfaces.AbstractMinecartEntityAccess;
 import com.neep.neepmeat.util.MiscUtil;
-import net.minecraft.block.AbstractRailBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.RailPlacementHelper;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.block.enums.RailShape;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.vehicle.AbstractMinecartEntity;
 import net.minecraft.fluid.FluidState;
@@ -37,7 +36,7 @@ public class PlayerControlTrack extends BaseRailBlock implements BlockEntityProv
             shape -> !shape.isAscending() && (shape != RailShape.NORTH_EAST && shape != RailShape.NORTH_WEST && shape != RailShape.SOUTH_EAST && shape != RailShape.SOUTH_WEST)
     );
 
-//    public static final EnumProperty<AxialDirection> FACING = EnumProperty.of("direction", AxialDirection.class);
+    //    public static final EnumProperty<AxialDirection> FACING = EnumProperty.of("direction", AxialDirection.class);
     public static final EnumProperty<RailShape> SHAPE = RAIL_SHAPE_NO_SLOPE;
     public static final BooleanProperty POWERED = Properties.POWERED;
 
@@ -79,6 +78,19 @@ public class PlayerControlTrack extends BaseRailBlock implements BlockEntityProv
     }
 
     @Override
+    protected BlockState updateBlockState(World world, BlockPos pos, BlockState state, boolean forceUpdate)
+    {
+        // The initial direction of the rail is just cosmetic.
+        return state;
+    }
+
+    @Override
+    public void onBlockAdded(BlockState state, World world, BlockPos pos, BlockState oldState, boolean notify)
+    {
+        super.onBlockAdded(state, world, pos, oldState, notify);
+    }
+
+    @Override
     public BlockState getPlacementState(ItemPlacementContext ctx)
     {
         FluidState fluidState = ctx.getWorld().getFluidState(ctx.getBlockPos());
@@ -111,6 +123,16 @@ public class PlayerControlTrack extends BaseRailBlock implements BlockEntityProv
         public TrackBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
         {
             super(type, pos, state);
+        }
+
+        protected static Direction.Axis axis(RailShape railShape)
+        {
+            return switch (railShape)
+            {
+                case NORTH_SOUTH, ASCENDING_NORTH, ASCENDING_SOUTH -> Direction.Axis.Z;
+                case EAST_WEST, ASCENDING_EAST, ASCENDING_WEST -> Direction.Axis.X;
+                default -> throw new IllegalStateException();
+            };
         }
 
         @Nullable
@@ -202,16 +224,6 @@ public class PlayerControlTrack extends BaseRailBlock implements BlockEntityProv
                     minecart.setPosition(x, minecart.getY(), z);
                 }
             });
-        }
-
-        protected static Direction.Axis axis(RailShape railShape)
-        {
-            return switch (railShape)
-            {
-                case NORTH_SOUTH, ASCENDING_NORTH, ASCENDING_SOUTH -> Direction.Axis.Z;
-                case EAST_WEST, ASCENDING_EAST, ASCENDING_WEST -> Direction.Axis.X;
-                default -> throw new IllegalStateException();
-            };
         }
     }
 }
