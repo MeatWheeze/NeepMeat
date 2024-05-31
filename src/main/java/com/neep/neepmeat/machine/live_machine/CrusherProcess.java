@@ -1,5 +1,6 @@
 package com.neep.neepmeat.machine.live_machine;
 
+import com.google.common.collect.Iterators;
 import com.neep.neepmeat.api.live_machine.ComponentType;
 import com.neep.neepmeat.api.live_machine.LivingMachineBlockEntity;
 import com.neep.neepmeat.api.live_machine.Process;
@@ -12,6 +13,7 @@ import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.minecraft.text.Text;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 public class CrusherProcess implements Process
@@ -51,7 +53,7 @@ public class CrusherProcess implements Process
             Storage<ItemVariant> input = hoppers.iterator().next().getStorage(null);
             Storage<ItemVariant> output = itemOutputs.iterator().next().getStorage(null);
 
-            boolean hasInput = input.nonEmptyIterator().hasNext();
+            boolean hasInput = Iterators.tryFind(input.iterator(), view -> view.getAmount() > 0 && !view.isResourceBlank()).isPresent();
             try (Transaction transaction = Transaction.openOuter())
             {
                 for (var crusher : crushers)

@@ -9,15 +9,15 @@ import com.neep.neepmeat.screen_handler.LivingMachineScreenHandler;
 import it.unimi.dsi.fastutil.objects.ObjectIntPair;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
-import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.render.RenderLayer;
-import net.minecraft.client.render.VertexConsumer;
+import net.minecraft.client.gui.DrawableHelper;
+import net.minecraft.client.render.*;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.ColorHelper;
 import net.minecraft.util.math.MathHelper;
-import org.joml.Matrix4f;
+import net.minecraft.util.math.Matrix4f;
+import net.minecraft.util.math.Vec3f;
 
 import java.text.DecimalFormat;
 import java.time.Duration;
@@ -64,7 +64,7 @@ public class GraphPane extends LivingMachineScreen.PaneWidget
     }
 
     @Override
-    public void render(DrawContext context, int mouseX, int mouseY, float delta)
+    public void render(MatrixStack context, int mouseX, int mouseY, float delta)
     {
         super.render(context, mouseX, mouseY, delta);
 
@@ -82,7 +82,7 @@ public class GraphPane extends LivingMachineScreen.PaneWidget
         drawLegend(context, dataView.getLegend());
     }
 
-    private long drawCurve(DrawContext context, long[] time, double[] yVals, long timeStart, long timeEnd, int col)
+    private long drawCurve(MatrixStack context, long[] time, double[] yVals, long timeStart, long timeEnd, int col)
     {
         long period = timeEnd - timeStart;
 
@@ -94,6 +94,8 @@ public class GraphPane extends LivingMachineScreen.PaneWidget
 
             long t1 = time[i];
 
+            BufferBuilder builder = Tessellator.getInstance().getBuffer();
+            builder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_COLOR);
             if (t1 >= timeStart && t1 < timeEnd && i + 1 < time.length)
             {
                 long t2 = time[i + 1];
@@ -115,13 +117,14 @@ public class GraphPane extends LivingMachineScreen.PaneWidget
                 float y1Scaled = plotBounds.y() + plotBounds.h() - y1 * yStride;
                 float y2Scaled = plotBounds.y() + plotBounds.h() - y2 * yStride;
 
-                drawLine(context, t1Scaled, y1Scaled, t2Scaled, y2Scaled, 0.5f, col);
+                drawLine(context, t1Scaled, y1Scaled, t2Scaled, y2Scaled, 0.5f, col, builder);
             }
+            BufferRenderer.drawWithShader(builder.end());
         }
         return highestTime;
     }
 
-    private void drawLegend(DrawContext context, List<ObjectIntPair<Text>> entries)
+    private void drawLegend(MatrixStack context, List<ObjectIntPair<Text>> entries)
     {
 //        float entryPadding = 5;
 //        float totalWidth = 0;
@@ -130,7 +133,6 @@ public class GraphPane extends LivingMachineScreen.PaneWidget
 //            totalWidth += textRenderer.getWidth(entry.key()) + entryPadding;
 //        }
 
-        MatrixStack matrices = context.getMatrices();
         float scale = 0.7f;
         for (int i = 0; i < entries.size(); ++i)
         {
@@ -144,18 +146,17 @@ public class GraphPane extends LivingMachineScreen.PaneWidget
             float y = (windowBounds.y() - textRenderer.fontHeight * scale);
             float x = plotBounds.x() + (i + 0.5f) * ((float) plotBounds.w() / (entries.size())) - legendWidth / 2;
 
-            context.fill((int) x, (int) y, (int) x + squareWidth, (int) y + squareWidth, col);
-            matrices.push();
-            matrices.translate(x + squareWidth + 1, y, 0);
-            matrices.scale(scale, scale, 1);
+            DrawableHelper.fill(context, (int) x, (int) y, (int) x + squareWidth, (int) y + squareWidth, col);
+            context.push();
+            context.translate(x + squareWidth + 1, y, 0);
+            context.scale(scale, scale, 1);
             GUIUtil.drawText(context, textRenderer, name, 0, 0, PLCCols.SELECTED.col, false);
-            matrices.pop();
+            context.pop();
         }
     }
 
-    private void drawTimeScale(DrawContext context, long lower, long upper, long zero, DecimalFormat format)
+    private void drawTimeScale(MatrixStack context, long lower, long upper, long zero, DecimalFormat format)
     {
-        MatrixStack matrices = context.getMatrices();
         long divisions = 5;
 
         long period = upper - lower;
@@ -170,12 +171,12 @@ public class GraphPane extends LivingMachineScreen.PaneWidget
             float y = plotBounds.y() + plotBounds.h();
             float x = plotBounds.x() + (float) (i * stride) / period * plotBounds.w();
 
-            matrices.push();
-            matrices.translate(x, (y + ((float) textRenderer.fontHeight / 2f)) + 2, 0);
-            matrices.scale(0.7f, 0.7f, 1);
+            context.push();
+            context.translate(x, (y + ((float) textRenderer.fontHeight / 2f)) + 2, 0);
+            context.scale(0.7f, 0.7f, 1);
             GUIUtil.drawText(context, textRenderer, formatted, - textRenderer.getWidth(formatted) / 2f, 0,
                     PLCCols.SELECTED.col, false);
-            matrices.pop();
+            context.pop();
             int tickLength = 6; // For some reason, this length has to be 1 higher than its horizontal counterpart.
             GUIUtil.drawVerticalLine1(context, (int) x, (int) y, (int) (y + tickLength), PLCCols.SELECTED.col);
         }
@@ -200,9 +201,8 @@ public class GraphPane extends LivingMachineScreen.PaneWidget
         }
     }
 
-    private void drawYScale(DrawContext context, float lower, float upper, DecimalFormat format)
+    private void drawYScale(MatrixStack context, float lower, float upper, DecimalFormat format)
     {
-        MatrixStack matrices = context.getMatrices();
         int divisions = 10;
 
         float stride = (upper - lower) / divisions;
@@ -213,12 +213,12 @@ public class GraphPane extends LivingMachineScreen.PaneWidget
 
             String formatted = format.format(value);
             float y = (plotBounds.y() + plotBounds.h() - (i * stride) / (upper - lower) * plotBounds.h());
-            matrices.push();
-            matrices.translate(bounds.x(), (y - ((float) textRenderer.fontHeight / 2f)) + 2, 0);
-            matrices.scale(0.7f, 0.7f, 1);
+            context.push();
+            context.translate(bounds.x(), (y - ((float) textRenderer.fontHeight / 2f)) + 2, 0);
+            context.scale(0.7f, 0.7f, 1);
             GUIUtil.drawText(context, textRenderer, formatted, 0, 0,
                     PLCCols.SELECTED.col, false);
-            matrices.pop();
+            context.pop();
             int tickLength = 5;
             GUIUtil.drawHorizontalLine1(context, plotBounds.x() - tickLength, plotBounds.x(), (int) y, PLCCols.SELECTED.col);
         }
@@ -229,7 +229,7 @@ public class GraphPane extends LivingMachineScreen.PaneWidget
         dataView = DataLog.fromBuf(buf);
     }
 
-    private void drawLine(DrawContext context, float x1, float y1, float x2, float y2, float radius, int col)
+    private void drawLine(MatrixStack context, float x1, float y1, float x2, float y2, float radius, int col, VertexConsumer vertexConsumer)
     {
         float z = 10;
         double angle = MathHelper.atan2((y2 - y1), (x2 - x1));
@@ -240,12 +240,15 @@ public class GraphPane extends LivingMachineScreen.PaneWidget
         float h = (float) ColorHelper.Argb.getGreen(col) / 255.0F;
         float j = (float) ColorHelper.Argb.getBlue(col) / 255.0F;
 
-        Matrix4f matrix4f = new Matrix4f()
-                .identity()
-                .translate(x1, y1, 0)
-                .rotateZ((float) angle);
+        Matrix4f matrix4f = new Matrix4f();
+//                .identity()
+//                .translate(x1, y1, 0)
+//                .rotateZ((float) angle);
+        matrix4f.loadIdentity();
+        matrix4f.multiplyByTranslation(x1, y1, 0);
+        matrix4f.multiply(Vec3f.POSITIVE_Z.getRadialQuaternion((float) angle));
 
-        VertexConsumer vertexConsumer = context.getVertexConsumers().getBuffer(RenderLayer.getGui());
+//        VertexConsumer vertexConsumer = context.getVertexConsumers().getBuffer(RenderLayer.getGui());
         vertexConsumer.vertex(matrix4f, 0, - radius, z).color(g, h, j, f).next();
         vertexConsumer.vertex(matrix4f, 0, + radius, z).color(g, h, j, f).next();
         vertexConsumer.vertex(matrix4f, l, + radius, z).color(g, h, j, f).next();

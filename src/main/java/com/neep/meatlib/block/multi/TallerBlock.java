@@ -35,7 +35,7 @@ public abstract class TallerBlock extends BaseBlock
 
     public TallerBlock(String registryName, IntProperty heightProperty, ItemSettings itemSettings, Settings settings)
     {
-        super(registryName, itemSettings, settings.pistonBehavior(PistonBehavior.IGNORE));
+        super(registryName, itemSettings, settings);
 
         this.heightProperty = heightProperty;
         this.maxHeight = heightProperty.getValues().stream().max(Integer::compare).get() + 1;
@@ -116,13 +116,19 @@ public abstract class TallerBlock extends BaseBlock
     {
         return 1;
     }
-    
+
+    @Override
+    public PistonBehavior getPistonBehavior(BlockState state)
+    {
+        return PistonBehavior.IGNORE;
+    }
+
     public class Structure extends BaseDummyBlock implements MeatlibBlockExtension
     {
 
         public Structure(String registryName, Settings settings)
         {
-            super(registryName, settings.pistonBehavior(PistonBehavior.IGNORE));
+            super(registryName, settings);
         }
 
         protected int getHeight(BlockState state)
@@ -181,6 +187,12 @@ public abstract class TallerBlock extends BaseBlock
         {
             super.appendProperties(builder);
             builder.add(heightProperty);
+        }
+
+        @Override
+        public PistonBehavior getPistonBehavior(BlockState state)
+        {
+            return PistonBehavior.IGNORE;
         }
     }
 }

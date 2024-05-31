@@ -13,8 +13,8 @@ import net.minecraft.item.Item;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
-import net.minecraft.registry.Registries;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.registry.Registry;
 
 import java.util.Collections;
 import java.util.List;
@@ -75,7 +75,7 @@ public class ItemManufactureDisplay extends ManufactureDisplay<Item>
         public NbtCompound save(NbtCompound tag, ItemManufactureDisplay display)
         {
             tag.put("output", EntryIngredients.save(getOutputIngredients(display)));
-            tag.putString("base", Registries.ITEM.getId(ItemManufactureDisplay.this.getBase()).toString());
+            tag.putString("base", Registry.ITEM.getId(ItemManufactureDisplay.this.getBase()).toString());
             NbtList steps = new NbtList();
 
             for (var step : display.getSteps())
@@ -100,7 +100,7 @@ public class ItemManufactureDisplay extends ManufactureDisplay<Item>
         {
             List<EntryIngredient> output = EntryIngredients.read(tag.getList("output", NbtElement.COMPOUND_TYPE));
 
-            Item base = Registries.ITEM.get(Identifier.tryParse(tag.getString("base")));
+            Item base = Registry.ITEM.get(Identifier.tryParse(tag.getString("base")));
 
             List<ManufactureStep<?>> steps = Lists.newArrayList();
             NbtList nbtSteps = tag.getList("steps", NbtElement.COMPOUND_TYPE);

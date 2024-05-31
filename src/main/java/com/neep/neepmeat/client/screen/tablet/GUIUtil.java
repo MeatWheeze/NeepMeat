@@ -1,12 +1,15 @@
 package com.neep.neepmeat.client.screen.tablet;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.neep.neepmeat.NeepMeat;
 import net.minecraft.client.font.TextRenderer;
+import net.minecraft.client.gui.DrawableHelper;
+import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.OrderedText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
-import net.minecraft.client.gui.DrawableHelper;
-import net.minecraft.client.util.math.MatrixStack;
+
+import static net.minecraft.client.gui.DrawableHelper.drawTexture;
 
 public interface GUIUtil
 {
@@ -29,23 +32,26 @@ public interface GUIUtil
 
     static int drawText(MatrixStack context, TextRenderer textRenderer, Text text, float x, float y, int color, boolean shadow)
     {
-        int i = textRenderer.draw( text, x, y, color, shadow, context.getMatrices().peek().getPositionMatrix(), context.getVertexConsumers(),
-                TextRenderer.TextLayerType.NORMAL, 0, 15728880 );
-        return i;
+        if (shadow)
+            return textRenderer.drawWithShadow(context, text, x, y, color);
+        else
+            return textRenderer.draw(context, text, x, y, color);
     }
 
     static int drawText(MatrixStack context, TextRenderer textRenderer, OrderedText text, float x, float y, int color, boolean shadow)
     {
-        int i = textRenderer.draw( text, x, y, color, shadow, context.peek().getPositionMatrix(), context.getVertexConsumers(),
-                TextRenderer.TextLayerType.NORMAL, 0, 15728880);
-        return i;
+        if (shadow)
+            return textRenderer.drawWithShadow(context, text, x, y, color);
+        else
+            return textRenderer.draw(context, text, x, y, color);
     }
 
     static int drawText(MatrixStack context, TextRenderer textRenderer, String text, float x, float y, int color, boolean shadow)
     {
-        int i = textRenderer.draw( text, x, y, color, shadow, context.peek().getPositionMatrix(), context.getVertexConsumers(),
-                TextRenderer.TextLayerType.NORMAL, 0, 15728880);
-        return i;
+        if (shadow)
+            return textRenderer.drawWithShadow(context, text, x, y, color);
+        else
+            return textRenderer.draw(context, text, x, y, color);
     }
 
     static void drawHorizontalLine1(MatrixStack matrices, int x1, int x2, int y, int color)
@@ -59,7 +65,7 @@ public interface GUIUtil
         DrawableHelper.fill(matrices, x1, y, x2 + 1, y + 1, color);
     }
 
-    public static void drawVerticalLine1(MatrixStack matrices, int x, int y1, int y2, int color)
+    static void drawVerticalLine1(MatrixStack matrices, int x, int y1, int y2, int color)
     {
         if (y2 < y1)
         {
@@ -72,6 +78,22 @@ public interface GUIUtil
 
     static void drawInventoryBackground(MatrixStack context, int x, int y)
     {
-        DrawableHelper.drawTexture(context, x, y, 0, 0, 176, 90, INVENTORY_BACKGROUND);
+        RenderSystem.setShaderTexture(0, INVENTORY_BACKGROUND);
+        drawTexture(context, x, y, 0, 0, 176, 90, 256, 256);
+    }
+
+    static void drawNineSlicedTexture(MatrixStack matrices, Identifier texture, int x, int y, int width, int height, int leftSliceWidth, int topSliceHeight, int rightSliceWidth, int bottomSliceHeight, int centerSliceWidth, int centerSliceHeight, int u, int v)
+    {
+
+    }
+
+    static void drawNineSlicedTexture(MatrixStack matrices, Identifier texture, int x, int y, int width, int height, int outerSliceSize, int centerSliceWidth, int centerSliceHeight, int u, int v)
+    {
+        drawNineSlicedTexture(matrices, texture, x, y, width, height, outerSliceSize, outerSliceSize, outerSliceSize, outerSliceSize, centerSliceWidth, centerSliceHeight, u, v);
+    }
+
+    static void drawNineSlicedTexture(MatrixStack matrices, Identifier texture, int x, int y, int width, int height, int outerSliceWidth, int outerSliceHeight, int centerSliceWidth, int centerSliceHeight, int u, int v)
+    {
+        drawNineSlicedTexture(matrices, texture, x, y, width, height, outerSliceWidth, outerSliceHeight, outerSliceWidth, outerSliceHeight, centerSliceWidth, centerSliceHeight, u, v);
     }
 }

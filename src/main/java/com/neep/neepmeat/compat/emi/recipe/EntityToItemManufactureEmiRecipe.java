@@ -2,6 +2,7 @@ package com.neep.neepmeat.compat.emi.recipe;
 
 import com.google.common.collect.Lists;
 import com.neep.neepmeat.api.plc.PLCCols;
+import com.neep.neepmeat.client.screen.tablet.GUIUtil;
 import com.neep.neepmeat.compat.emi.NMEmiPlugin;
 import com.neep.neepmeat.plc.recipe.EntityToItemRecipe;
 import dev.emi.emi.api.recipe.EmiRecipeCategory;
@@ -12,7 +13,7 @@ import dev.emi.emi.api.widget.Widget;
 import dev.emi.emi.api.widget.WidgetHolder;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
-import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.EntityType;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
@@ -128,10 +129,10 @@ public class EntityToItemManufactureEmiRecipe extends ManufactureEmiRecipe<Entit
         }
 
         @Override
-        public void render(DrawContext matrices, int mouseX, int mouseY, float delta)
+        public void render(MatrixStack matrices, int mouseX, int mouseY, float delta)
         {
-            matrices.drawText(textRenderer, name, originX, originY, ItemManufactureEmiRecipe.borderCol(), true);
-            matrices.drawText(textRenderer, entityType.getName(), slotOriginX, slotOriginY, ItemManufactureEmiRecipe.borderCol(), true);
+            GUIUtil.drawText(matrices, textRenderer, name, originX, originY, ManufactureEmiRecipe.borderCol(), true);
+            GUIUtil.drawText(matrices, textRenderer, entityType.getName(), slotOriginX, slotOriginY, ManufactureEmiRecipe.borderCol(), true);
 //            GUIUtil.renderBorder(matrices, slotOriginX, slotOriginY, 17, 17, ItemManufactureEmiRecipe.borderCol(), 0);
 //            GUIUtil.renderBorder(matrices, slotOriginX + 1, slotOriginY + 1, 15, 15, PLCCols.TRANSPARENT.col, 0);
         }

@@ -4,8 +4,8 @@ import com.neep.neepmeat.NeepMeat;
 import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import net.fabricmc.fabric.api.event.registry.FabricRegistryBuilder;
-import net.minecraft.registry.SimpleRegistry;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.registry.SimpleRegistry;
 
 public interface ComponentType<T extends LivingMachineComponent>
 {

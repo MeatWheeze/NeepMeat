@@ -57,7 +57,8 @@ public class LargeTrommelProcess implements Process
                         {
                             List<StorageView<FluidVariant>> inputViews = fluidInputs.stream()
                                     .map(c -> c.getStorage(null))
-                                    .flatMap(s -> StreamSupport.stream(s.nonEmptyViews().spliterator(), false))
+                                    .flatMap(s -> StreamSupport.stream(s.spliterator(), false))
+                                    .filter(view -> view.isResourceBlank() && view.getAmount() > 0)
                                     .toList();
 
                             if (!inputViews.isEmpty())

@@ -12,7 +12,7 @@ import com.neep.neepmeat.machine.live_machine.block.entity.LuckyOneBlockEntity;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.RotationAxis;
+import net.minecraft.util.math.Vec3f;
 
 public class LuckyOneInstance extends BlockEntityInstance<LuckyOneBlockEntity> implements DynamicInstance
 {
@@ -69,10 +69,10 @@ public class LuckyOneInstance extends BlockEntityInstance<LuckyOneBlockEntity> i
 
         matrixStack.push();
         matrixStack.translate(0.5, 1.5, 0.5);
-        matrixStack.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(180 - state.get(LuckyOneBlock.FACING).asRotation()));
+        matrixStack.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(180 - state.get(LuckyOneBlock.FACING).asRotation()));
         matrixStack.translate(0, 0, 2 / 16f);
         matrixStack.translate(0, 0, -0.5);
-        matrixStack.multiply(RotationAxis.POSITIVE_X.rotationDegrees(-8 - bodyPitch));
+        matrixStack.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(-8 - bodyPitch));
 
         matrixStack.translate(-0.5, 0, 0);
 
@@ -81,24 +81,24 @@ public class LuckyOneInstance extends BlockEntityInstance<LuckyOneBlockEntity> i
 
         matrixStack.push();
         matrixStack.translate(0.5, 1.5 + (12 / 16f), 0);
-        matrixStack.multiply(RotationAxis.NEGATIVE_X.rotationDegrees(headPitch));
-        matrixStack.multiply(RotationAxis.NEGATIVE_Y.rotationDegrees(headYaw));
+        matrixStack.multiply(Vec3f.NEGATIVE_X.getDegreesQuaternion(headPitch));
+        matrixStack.multiply(Vec3f.NEGATIVE_Y.getDegreesQuaternion(headYaw));
         matrixStack.translate(-0.5, -(1.5 + (12 / 16f)), 0);
         head.setTransform(matrixStack);
         matrixStack.pop();
 
         matrixStack.push();
         matrixStack.translate(0.5 - (4 / 16f), 1.5 + (12 / 16f), 0);
-        matrixStack.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(3));
-        matrixStack.multiply(RotationAxis.POSITIVE_X.rotationDegrees(-6 - bodyPitch));
+        matrixStack.multiply(Vec3f.POSITIVE_Z.getDegreesQuaternion(3));
+        matrixStack.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(-6 - bodyPitch));
         matrixStack.translate(-(0.5 - 4 / 16f), -(1.5 + (12 / 16f)), 0);
         arm_l.setTransform(matrixStack);
         matrixStack.pop();
 
         matrixStack.push();
         matrixStack.translate(0.5 + (4 / 16f), 1.5 + (12 / 16f), 0);
-        matrixStack.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(-3));
-        matrixStack.multiply(RotationAxis.POSITIVE_X.rotationDegrees(-6 - bodyPitch));
+        matrixStack.multiply(Vec3f.POSITIVE_Z.getDegreesQuaternion(-3));
+        matrixStack.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(-6 - bodyPitch));
         matrixStack.translate(-(0.5 + 4 / 16f), -(1.5 + (12 / 16f)), 0);
         arm_r.setTransform(matrixStack);
         matrixStack.pop();

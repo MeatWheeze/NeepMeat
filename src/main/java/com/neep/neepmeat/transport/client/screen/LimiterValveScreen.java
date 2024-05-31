@@ -88,7 +88,7 @@ public class LimiterValveScreen extends HandledScreen<LimiterValveScreenHandler>
         });
         this.addDrawableChild(textField);
 
-        this.addDrawableChild(new NMButtonWidget(buttonX, buttonY, buttonWidth, buttonHeight, getButtonText(), button -> {}, textSupplier -> getButtonText().copy())
+        this.addDrawableChild(new NMButtonWidget(buttonX, buttonY, buttonWidth, buttonHeight, getButtonText(), button -> {})
         {
             @Override
             public void onPress()

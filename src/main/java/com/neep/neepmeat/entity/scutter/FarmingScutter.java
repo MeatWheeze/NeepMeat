@@ -53,7 +53,7 @@ public class FarmingScutter extends ScutterEntity
     public FarmingScutter(EntityType<? extends ScutterEntity> type, World world)
     {
         super(type, world);
-        homePos = BlockPos.ofFloored(getPos()); // Just so that it's not null
+        homePos = new BlockPos(getPos()); // Just so that it's not null
     }
 
     public void setStoragePos(@Nullable BlockPos pos)
@@ -165,7 +165,7 @@ public class FarmingScutter extends ScutterEntity
         }
         world.setBlockState(pos, block.withAge(0));
 
-        world.playSound(this, getBlockPos(), block.getSoundGroup(state).getBreakSound(), SoundCategory.BLOCKS, 1, 1);
+        world.playSound(null, getBlockPos(), block.getSoundGroup(state).getBreakSound(), SoundCategory.BLOCKS, 1, 1);
     }
 
     public void depositItems()
@@ -181,7 +181,7 @@ public class FarmingScutter extends ScutterEntity
                     long transferred = StorageUtil.move(storage, homeStorage, v -> true, Long.MAX_VALUE, transaction);
                     if (transferred > 0)
                     {
-                        getWorld().playSound(this, getBlockPos(), NMSounds.DEPOSIT_ITEMS, SoundCategory.NEUTRAL, 1, 1);
+                        getWorld().playSound(null, getBlockPos(), NMSounds.DEPOSIT_ITEMS, SoundCategory.NEUTRAL, 1, 1);
                         transaction.commit();
                     }
                 }
@@ -224,6 +224,6 @@ public class FarmingScutter extends ScutterEntity
 
     public boolean isAtHome()
     {
-        return getPos().isInRange(getHomePos().toCenterPos(), 1.1);
+        return getPos().isInRange(Vec3d.ofCenter(getHomePos()), 1.1);
     }
 }

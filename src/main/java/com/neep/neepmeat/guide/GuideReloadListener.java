@@ -48,7 +48,7 @@ public class GuideReloadListener implements SimpleSynchronousResourceReloadListe
         articleNodes.clear();
         articles.clear();
 
-        String language = MinecraftClient.getInstance().getLanguageManager().getLanguage();
+        String language = MinecraftClient.getInstance().getLanguageManager().getLanguage().getCode();
         String suffix = language + ".json";
 
         var foundIds = manager.findResources("guide", path -> path.getPath().endsWith(suffix)).keySet();

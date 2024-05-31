@@ -9,10 +9,10 @@ import com.neep.neepmeat.machine.live_machine.component.*;
 import com.neep.neepmeat.machine.phage_ray.PhageRayBlockEntity;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.entity.HopperBlockEntity;
-import net.minecraft.registry.Registry;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.registry.Registry;
 
 public class LivingMachineComponents
 {

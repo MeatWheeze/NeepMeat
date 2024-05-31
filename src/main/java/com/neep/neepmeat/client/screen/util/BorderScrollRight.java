@@ -1,7 +1,7 @@
 package com.neep.neepmeat.client.screen.util;
 
 import com.neep.neepmeat.api.plc.PLCCols;
-import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.util.math.MatrixStack;
 
 import java.util.function.Supplier;
 
@@ -21,7 +21,7 @@ public class BorderScrollRight extends Border
     }
 
     @Override
-    public void render(DrawContext context, int mouseX, int mouseY, float delta)
+    public void render(MatrixStack context, int mouseX, int mouseY, float delta)
     {
         renderBorder(context, x, y, w - 1, h - 1, col.get(), 0);
         renderBorder(context, x, y, w - 1, h - 1, PLCCols.TRANSPARENT.col, -1);
@@ -29,7 +29,7 @@ public class BorderScrollRight extends Border
         drawVerticalLine1(context, x + w - 1, y + 1, y + h, PLCCols.TRANSPARENT.col);
     }
 
-    public void render(DrawContext context, int mouseX, int mouseY, float delta, float scrollAmount)
+    public void render(MatrixStack context, int mouseX, int mouseY, float delta, float scrollAmount)
     {
         render(context, mouseX, mouseY, delta);
 
@@ -40,7 +40,7 @@ public class BorderScrollRight extends Border
         drawVerticalLine1(context, x + w - 1, yOff, (int) (yOff + barHeight), col.get());
     }
 
-    protected void renderBorder(DrawContext context, int x, int y, int dx, int dy, int col, int offset)
+    protected void renderBorder(MatrixStack context, int x, int y, int dx, int dy, int col, int offset)
     {
         drawHorizontalLine1(context, x - offset, x + dx + offset, y - offset, col);
         drawVerticalLine1(context, x - offset, y - offset, y + dy + offset, col);

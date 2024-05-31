@@ -3,8 +3,8 @@ package com.neep.neepmeat.client.screen.util;
 import com.neep.neepmeat.api.plc.PLCCols;
 import com.neep.neepmeat.client.screen.tablet.GUIUtil;
 import com.neep.neepmeat.screen_handler.BasicScreenHandler;
-import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.Drawable;
+import net.minecraft.client.util.math.MatrixStack;
 
 import java.util.function.Supplier;
 
@@ -25,7 +25,7 @@ public class PlayerSlotsBorder implements Drawable
     }
 
     @Override
-    public void render(DrawContext context, int mouseX, int mouseY, float delta)
+    public void render(MatrixStack context, int mouseX, int mouseY, float delta)
     {
         GUIUtil.renderBorder(context, x, y, w - 1, h - 1 - 18 - 4, col.get(), 0);
         GUIUtil.renderBorder(context, x, y, w - 1, h - 1 - 18 - 4, PLCCols.TRANSPARENT.col, -1);

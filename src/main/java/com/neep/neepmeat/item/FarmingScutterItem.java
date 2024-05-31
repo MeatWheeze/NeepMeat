@@ -26,7 +26,7 @@ public class FarmingScutterItem extends ScutterItem<FarmingScutter>
     protected @Nullable Vec3d canPlaceAt(World world, BlockPos pos, Vec3d hit, Direction side)
     {
         Vec3d epos = super.canPlaceAt(world, pos, hit, side);
-        if (epos != null && world.getBlockState(BlockPos.ofFloored(epos).down()).isOf(Blocks.FARMLAND))
+        if (epos != null && world.getBlockState(new BlockPos(epos).down()).isOf(Blocks.FARMLAND))
             return epos;
 
         return null;
@@ -39,7 +39,7 @@ public class FarmingScutterItem extends ScutterItem<FarmingScutter>
         if (ItemStorage.SIDED.find(context.getWorld(), context.getBlockPos(), context.getSide()) != null)
         {
             entity.setStoragePos(context.getBlockPos());
-            entity.setHomePos(BlockPos.ofFloored(entity.getPos()));
+            entity.setHomePos(new BlockPos(entity.getPos()));
         }
     }
 }

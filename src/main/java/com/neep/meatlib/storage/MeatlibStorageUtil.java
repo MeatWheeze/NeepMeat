@@ -1,14 +1,15 @@
 package com.neep.meatlib.storage;
 
-import net.fabricmc.fabric.api.transfer.v1.item.InventoryStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
-import net.fabricmc.fabric.api.transfer.v1.storage.StorageUtil;
 import net.fabricmc.fabric.api.transfer.v1.storage.StorageView;
 import net.fabricmc.fabric.api.transfer.v1.storage.base.ResourceAmount;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.util.ItemScatterer;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import org.apache.commons.lang3.function.TriFunction;
 import org.jetbrains.annotations.Nullable;
 
@@ -112,9 +113,12 @@ public class MeatlibStorageUtil
     {
         try (Transaction transaction = Transaction.openOuter())
         {
-            for (var view : storage.nonEmptyViews())
+            for (var view : storage)
             {
                 ItemVariant variant = view.getResource();
+                if (variant.isBlank() || view.getAmount() <= 0)
+                    continue;
+
                 long extracted = view.extract(view.getResource(), Long.MAX_VALUE, transaction);
                 ItemScatterer.spawn(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ()+ 0.5, variant.toStack((int) extracted));
             }

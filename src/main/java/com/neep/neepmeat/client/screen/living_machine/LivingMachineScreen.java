@@ -12,10 +12,10 @@ import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.Selectable;
 import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
+import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.text.Text;
@@ -78,13 +78,13 @@ public class LivingMachineScreen extends BaseHandledScreen<LivingMachineScreenHa
     }
 
     @Override
-    protected void drawBackground(DrawContext context, float delta, int mouseX, int mouseY)
+    protected void drawBackground(MatrixStack context, float delta, int mouseX, int mouseY)
     {
         super.renderBackground(context);
     }
 
     @Override
-    protected void drawForeground(DrawContext context, int mouseX, int mouseY)
+    protected void drawForeground(MatrixStack context, int mouseX, int mouseY)
     {
 
     }
@@ -134,7 +134,7 @@ public class LivingMachineScreen extends BaseHandledScreen<LivingMachineScreenHa
         }
 
         @Override
-        public void render(DrawContext context, int mouseX, int mouseY, float delta)
+        public void render(MatrixStack context, int mouseX, int mouseY, float delta)
         {
             super.render(context, mouseX, mouseY, delta);
             border.render(context, mouseX, mouseY, delta);
@@ -145,18 +145,18 @@ public class LivingMachineScreen extends BaseHandledScreen<LivingMachineScreenHa
         {
             return bounds.isWithin(mouseX, mouseY);
         }
-
-        @Override
-        public void setFocused(boolean focused)
-        {
-            this.focused = focused;
-        }
-
-        @Override
-        public boolean isFocused()
-        {
-            return focused;
-        }
+//
+//        @Override
+//        public void setFocused(boolean focused)
+//        {
+//            this.focused = focused;
+//        }
+//
+//        @Override
+//        public boolean isFocused()
+//        {
+//            return focused;
+//        }
 
         @Override
         public SelectionType getType()

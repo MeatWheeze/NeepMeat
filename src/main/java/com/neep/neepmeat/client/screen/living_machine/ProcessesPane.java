@@ -7,7 +7,7 @@ import com.neep.neepmeat.api.plc.PLCCols;
 import com.neep.neepmeat.client.screen.tablet.GUIUtil;
 import com.neep.neepmeat.machine.live_machine.Processes;
 import it.unimi.dsi.fastutil.Pair;
-import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.OrderedText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
@@ -41,7 +41,7 @@ public class ProcessesPane extends LivingMachineScreen.PaneWidget
     }
 
     @Override
-    public void render(DrawContext context, int mouseX, int mouseY, float delta)
+    public void render(MatrixStack context, int mouseX, int mouseY, float delta)
     {
         super.render(context, mouseX, mouseY, delta);
 
@@ -78,7 +78,7 @@ public class ProcessesPane extends LivingMachineScreen.PaneWidget
             return prevX <= mouseX && prevY <= mouseY && prevX + w >= mouseX && prevY + h >= mouseY;
         }
 
-        public float render(DrawContext context, int x, int y, int mouseX, int mouseY, float delta)
+        public float render(MatrixStack context, int x, int y, int mouseX, int mouseY, float delta)
         {
             this.prevX = x;
             this.prevY = y;

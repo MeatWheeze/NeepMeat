@@ -18,10 +18,8 @@ import net.minecraft.client.render.block.entity.BlockEntityRendererFactory;
 import net.minecraft.client.render.model.BakedQuad;
 import net.minecraft.client.texture.Sprite;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.fluid.Fluids;
 import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.RotationAxis;
-import org.joml.Vector3f;
+import net.minecraft.util.math.Vec3f;
 
 public class LargeTrommelRenderer implements BlockEntityRenderer<LargeTrommelBlockEntity>
 {
@@ -40,7 +38,7 @@ public class LargeTrommelRenderer implements BlockEntityRenderer<LargeTrommelBlo
             float progress = (be.getWorld().getTime() - be.getStorage().recipeStartTime) / (be.getStorage().totalProgress / be.progressIncrement());
 
             matrices.translate(0.5, 0.5, 0.5);
-            matrices.multiply(RotationAxis.NEGATIVE_Y.rotationDegrees(facing.asRotation()));
+            matrices.multiply(Vec3f.NEGATIVE_Y.getDegreesQuaternion(facing.asRotation()));
             matrices.translate(-0.5, -0.5, -0.5);
             matrices.translate(-0.5, -0.2, 1);
             renderFluidColumn(vcp, matrices, fluidVariant, 1 - progress, light);
@@ -90,29 +88,29 @@ public class LargeTrommelRenderer implements BlockEntityRenderer<LargeTrommelBlo
             float z = i;
 
             // Top face
-            emitter.pos(0, new Vector3f(x1, y1, z + 0)).uv(0, u1, v0);
-            emitter.pos(1, new Vector3f(x0, y1, z + 0)).uv(1, u0, v0);
-            emitter.pos(2, new Vector3f(x0, y1, z + 1)).uv(2, u0, v1);
-            emitter.pos(3, new Vector3f(x1, y1, z + 1)).uv(3, u1, v1);
-            BakedQuad quad = emitter.toBakedQuad(sprite);
+            emitter.pos(0, new Vec3f(x1, y1, z + 0)).sprite(0, 0, u1, v0);
+            emitter.pos(1, new Vec3f(x0, y1, z + 0)).sprite(1, 0, u0, v0);
+            emitter.pos(2, new Vec3f(x0, y1, z + 1)).sprite(2, 0, u0, v1);
+            emitter.pos(3, new Vec3f(x1, y1, z + 1)).sprite(3,0,  u1, v1);
+            BakedQuad quad = emitter.toBakedQuad(0, sprite, false);
             consumer.quad(matrices.peek(), quad, cr, cg, cb, light, OverlayTexture.DEFAULT_UV);
             emitter.emit();
 
             // Right face (looking from the trommel's controller block)
-            emitter.pos(0, new Vector3f(x0, y1, z + 0)).uv(0, u1, v0);
-            emitter.pos(1, new Vector3f(x2, y0, z + 0)).uv(1, u0, v0);
-            emitter.pos(2, new Vector3f(x2, y0, z + 1)).uv(2, u0, v1);
-            emitter.pos(3, new Vector3f(x0, y1, z + 1)).uv(3, u1, v1);
-            quad = emitter.toBakedQuad(sprite);
+            emitter.pos(0, new Vec3f(x0, y1, z + 0)).sprite(0, 0, u1, v0);
+            emitter.pos(1, new Vec3f(x2, y0, z + 0)).sprite(1, 0, u0, v0);
+            emitter.pos(2, new Vec3f(x2, y0, z + 1)).sprite(2, 0, u0, v1);
+            emitter.pos(3, new Vec3f(x0, y1, z + 1)).sprite(3, 0, u1, v1);
+            quad = emitter.toBakedQuad(0, sprite, false);
             consumer.quad(matrices.peek(), quad, cr, cg, cb, light, OverlayTexture.DEFAULT_UV);
             emitter.emit();
 
             // Left face
-            emitter.pos(1, new Vector3f(x1, y1, z + 0)).uv(1, u1, v0);
-            emitter.pos(0, new Vector3f(x3, y0, z + 0)).uv(0, u0, v0);
-            emitter.pos(3, new Vector3f(x3, y0, z + 1)).uv(3, u0, v1);
-            emitter.pos(2, new Vector3f(x1, y1, z + 1)).uv(2, u1, v1);
-            quad = emitter.toBakedQuad(sprite);
+            emitter.pos(1, new Vec3f(x1, y1, z + 0)).sprite(1, 0, u1, v0);
+            emitter.pos(0, new Vec3f(x3, y0, z + 0)).sprite(0, 0, u0, v0);
+            emitter.pos(3, new Vec3f(x3, y0, z + 1)).sprite(3, 0, u0, v1);
+            emitter.pos(2, new Vec3f(x1, y1, z + 1)).sprite(2, 0, u1, v1);
+            quad = emitter.toBakedQuad(0, sprite, false);
             consumer.quad(matrices.peek(), quad, cr, cg, cb, light, OverlayTexture.DEFAULT_UV);
             emitter.emit();
         }

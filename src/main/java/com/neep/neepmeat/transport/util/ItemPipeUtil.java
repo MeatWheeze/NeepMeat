@@ -49,7 +49,7 @@ public class ItemPipeUtil
         {
             amountInserted = itemToPipe(item, pipe, world, toPos, toState, out, simpleCheck, transaction);
         }
-        else if (canDumpInto(toState))
+        else if (canDumpInto(world, toPos, toState))
         {
             amountInserted = itemToWorld(item.getItemStack(), 0.2, item.speed, world, toPos, out, transaction);
         }
@@ -191,7 +191,7 @@ public class ItemPipeUtil
         long transferred = 0;
         try (Transaction nested = transaction.openNested())
         {
-            if (canDumpInto(facingState))
+            if (canDumpInto(world, offset, facingState))
             {
                 transferred = itemToWorld(variant.toStack((int) amount), 0.2, 0.05f, world, offset, facing, nested);
                 nested.commit();
@@ -263,7 +263,7 @@ public class ItemPipeUtil
 
             if (currentPipe.canItemLeave(item, world, current, currentState, direction))
             {
-                if (canDumpInto(offsetState))
+                if (canDumpInto(world, offset, offsetState))
                     return item.amount();
 
                 Storage<ItemVariant> storage;
@@ -325,7 +325,7 @@ public class ItemPipeUtil
                         if (predicate.test(new Pair<>(next, direction.getOpposite())))
                         {
                             BlockApiCache<Storage<ItemVariant>, Direction> cache = BlockApiCache.create(ItemStorage.SIDED, (ServerWorld) world, next);
-                            output.add(new RetrievalTarget(cache, direction.getOpposite()));
+                            output.add(new RetrievalTarget<>(cache, direction.getOpposite()));
                         }
                     }
                 }
@@ -336,8 +336,8 @@ public class ItemPipeUtil
         return output;
     }
 
-    public static boolean canDumpInto(BlockState state)
+    public static boolean canDumpInto(World world, BlockPos pos, BlockState state)
     {
-        return !state.blocksMovement();
+        return state.isSolidBlock(world, pos);
     }
 }

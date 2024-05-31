@@ -2,8 +2,9 @@ package com.neep.neepmeat.client.screen;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.neep.neepmeat.client.screen.tablet.GUIUtil;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
-import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.gui.tooltip.TooltipComponent;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.render.Tessellator;
@@ -11,7 +12,7 @@ import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.OrderedText;
 import net.minecraft.text.Text;
-import org.joml.Matrix4f;
+import net.minecraft.util.math.Matrix4f;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -24,19 +25,18 @@ public interface StyledTooltipUser
 
     int height();
 
-    default void renderTooltipText(DrawContext matrices, List<Text> texts, boolean offset, int x, int y, int col)
+    default void renderTooltipText(MatrixStack matrices, List<Text> texts, boolean offset, int x, int y, int col)
     {
         renderTooltipComponents(matrices, texts.stream().map(t -> TooltipComponent.of(t.asOrderedText())).collect(Collectors.toList()), offset, x, y, 0, col);
     }
 
-    default void renderTooltipOrderedText(DrawContext matrices, List<OrderedText> texts, boolean offset, int x, int y, int width, int col)
+    default void renderTooltipOrderedText(MatrixStack matrices, List<OrderedText> texts, boolean offset, int x, int y, int width, int col)
     {
         renderTooltipComponents(matrices, texts.stream().map(TooltipComponent::of).collect(Collectors.toList()), offset, x, y, width, col);
     }
 
-    default void renderTooltipComponents(DrawContext context, List<TooltipComponent> components, boolean offset, int x, int y, int maxWidth, int col)
+    default void renderTooltipComponents(MatrixStack matrices, List<TooltipComponent> components, boolean offset, int x, int y, int maxWidth, int col)
     {
-        MatrixStack matrices = context.getMatrices();
         if (offset)
         {
             x += 12;
@@ -72,13 +72,13 @@ public interface StyledTooltipUser
 //        this.itemRenderer.zOffset = 400.0f;
 //        this.setZOffset(400);
         matrices.translate(0, 0, 400);
-        RenderSystem.setShader(GameRenderer::getPositionColorProgram);
+        RenderSystem.setShader(GameRenderer::getPositionColorShader);
 
-        context.fill(x, y, x + maxWidth + 2, y + maxHeight + 2, 0x90000000);
-        GUIUtil.drawHorizontalLine1(context, x, x + maxWidth + 2, y, col);
-        GUIUtil.drawHorizontalLine1(context, x, x + maxWidth + 2, y + maxHeight + 2, col);
-        GUIUtil.drawVerticalLine1(context, x + maxWidth + 2, y, y + maxHeight + 2, col);
-        GUIUtil.drawVerticalLine1(context, x, y, y + maxHeight + 2, col);
+        DrawableHelper.fill(matrices, x, y, x + maxWidth + 2, y + maxHeight + 2, 0x90000000);
+        GUIUtil.drawHorizontalLine1(matrices, x, x + maxWidth + 2, y, col);
+        GUIUtil.drawHorizontalLine1(matrices, x, x + maxWidth + 2, y + maxHeight + 2, col);
+        GUIUtil.drawVerticalLine1(matrices, x + maxWidth + 2, y, y + maxHeight + 2, col);
+        GUIUtil.drawVerticalLine1(matrices, x, y, y + maxHeight + 2, col);
 
         RenderSystem.disableBlend();
         VertexConsumerProvider.Immediate immediate = VertexConsumerProvider.immediate(Tessellator.getInstance().getBuffer());
@@ -99,7 +99,7 @@ public interface StyledTooltipUser
         for (int index = 0; index < components.size(); ++index)
         {
             TooltipComponent tooltipComponent2 = components.get(index);
-            tooltipComponent2.drawItems(textRenderer(), x, yAdvance, context);
+            tooltipComponent2.drawItems(textRenderer(), x, yAdvance, matrices, MinecraftClient.getInstance().getItemRenderer(), 400);
             yAdvance += tooltipComponent2.getHeight() + (index == 0 ? 2 : 0);
         }
     }

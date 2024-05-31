@@ -1,5 +1,6 @@
 package com.neep.neepmeat.transport.client.screen;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.api.plc.PLCCols;
 import com.neep.neepmeat.client.screen.button.PersistentWidget;
@@ -13,13 +14,13 @@ import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.base.ResourceAmount;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
-import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.Drawable;
 import net.minecraft.client.gui.Element;
 import net.minecraft.client.gui.Selectable;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder;
 import net.minecraft.client.render.item.ItemRenderer;
+import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.MathHelper;
@@ -35,6 +36,7 @@ public class ItemPane implements Drawable, Element, Selectable, GUIUtil
 
     protected final List<ResourceAmount<ItemVariant>> items;
     protected final MinecraftClient client;
+    private final ItemRequesterScreen parent;
     protected final int wSlot = 18;
     protected final int hSlot = 18;
     private final SearchWidget searchWidget;
@@ -48,7 +50,7 @@ public class ItemPane implements Drawable, Element, Selectable, GUIUtil
     private int scrollableRows;
     private boolean searchMode;
 
-    public ItemPane(int wGrid, int hGrid, ItemRenderer itemRenderer, TextRenderer textRenderer, List<ResourceAmount<ItemVariant>> items, MinecraftClient client)
+    public ItemPane(int wGrid, int hGrid, ItemRenderer itemRenderer, TextRenderer textRenderer, List<ResourceAmount<ItemVariant>> items, MinecraftClient client, ItemRequesterScreen parent)
     {
         this.wGrid = wGrid;
         this.hGrid = hGrid;
@@ -57,6 +59,7 @@ public class ItemPane implements Drawable, Element, Selectable, GUIUtil
         this.textRenderer = textRenderer;
         this.items = items;
         this.client = client;
+        this.parent = parent;
 
         this.searchWidget = new SearchWidget();
 
@@ -85,7 +88,7 @@ public class ItemPane implements Drawable, Element, Selectable, GUIUtil
         this.border = new BorderScrollRight(startX - 2, startY - 3, this.w + 3, this.h + 4, 0, () -> PLCCols.BORDER.col)
         {
             @Override
-            public void render(DrawContext context, int mouseX, int mouseY, float delta)
+            public void render(MatrixStack context, int mouseX, int mouseY, float delta)
             {
                 renderBorder(context, x, y, w - 1, h - 1, col.get(), 0, false);
                 renderBorder(context, x, y, w - 1, h - 1, PLCCols.TRANSPARENT.col, -1, true);
@@ -93,7 +96,7 @@ public class ItemPane implements Drawable, Element, Selectable, GUIUtil
                 GUIUtil.drawVerticalLine1(context, x + w - 1, y + 1, y + h, PLCCols.TRANSPARENT.col);
             }
 
-            void renderBorder(DrawContext context, int x, int y, int dx, int dy, int col, int offset, boolean bottom)
+            void renderBorder(MatrixStack context, int x, int y, int dx, int dy, int col, int offset, boolean bottom)
             {
                 GUIUtil.drawHorizontalLine1(context, x - offset, x + dx + offset, y - offset, col);
                 GUIUtil.drawVerticalLine1(context, x - offset, y - offset, y + dy + offset, col);
@@ -109,7 +112,7 @@ public class ItemPane implements Drawable, Element, Selectable, GUIUtil
     }
 
     @Override
-    public void render(DrawContext matrices, int mouseX, int mouseY, float delta)
+    public void render(MatrixStack matrices, int mouseX, int mouseY, float delta)
     {
         border.render(matrices, mouseX, mouseY, delta, (float) scrollRow / scrollableRows);
         searchWidget.render(matrices, mouseX, mouseY, delta);
@@ -117,7 +120,7 @@ public class ItemPane implements Drawable, Element, Selectable, GUIUtil
         int x, y, i, j;
         for (int m = 0; m < itemsToShow.size(); ++m)
         {
-            matrices.getMatrices().push();
+            matrices.push();
             i = m % wGrid;
             j = m / wGrid;
 
@@ -128,13 +131,14 @@ public class ItemPane implements Drawable, Element, Selectable, GUIUtil
 
             drawSlot(x, y, matrices, getGridItem(i, j));
 
-            matrices.getMatrices().pop();
+            matrices.pop();
         }
 
         ItemStack hoveredItem = getHoveredItem(mouseX, mouseY);
         if (hoveredItem != null)
         {
-            matrices.drawItemTooltip(textRenderer, hoveredItem, mouseX, mouseY);
+            List<Text> texts = parent.getTooltipFromItem(hoveredItem);
+            parent.renderTooltipText(matrices, texts, false, mouseX, mouseY, PLCCols.BORDER.col);
         }
     }
 
@@ -233,17 +237,17 @@ public class ItemPane implements Drawable, Element, Selectable, GUIUtil
         return mouseInGrid(mouseX, mouseY);
     }
 
-    @Override
-    public boolean isFocused()
-    {
-        return true;
-    }
-
-    @Override
-    public void setFocused(boolean focused)
-    {
-
-    }
+//    @Override
+//    public boolean isFocused()
+//    {
+//        return true;
+//    }
+//
+//    @Override
+//    public void setFocused(boolean focused)
+//    {
+//
+//    }
 
     protected ItemStack getGridItem(int i, int j)
     {
@@ -269,25 +273,26 @@ public class ItemPane implements Drawable, Element, Selectable, GUIUtil
         return i < wGrid && j < hGrid;
     }
 
-    public void drawSlot(int x, int y, DrawContext matrices, ItemStack itemStack)
+    public void drawSlot(int x, int y, MatrixStack matrices, ItemStack itemStack)
     {
         if (itemStack == null)
             return;
 
 //        ItemStack itemStack = ra.resource().toStack((int) ra.amount());
-        matrices.getMatrices().push();
-        matrices.getMatrices().translate(x, y, 0);
+        matrices.push();
+        matrices.translate(x, y, 0);
 
-//            this.setZOffset(100);
-//            itemRenderer.zOffset = 100.0f;
+//        this.setZOffset(100);
+        itemRenderer.zOffset = 100.0f;
 
-//            RenderSystem.enableDepthTest();
-//            this.itemRenderer.renderInGuiWithOverrides(this.client.player, itemStack, x, y, slot.x + slot.y * this.backgroundWidth);
-//            itemRenderer.renderItem(itemStack, ModelTransformationMode.GUI, 0xF000F0, OverlayTexture.DEFAULT_UV, matrices.getMatrices(), matrices.getVertexConsumers(), null, 0);
-//            itemRenderer.renderGuiItemOverlay(textRenderer, itemStack, x, y, string);
-        matrices.drawItem(itemStack, 0, 0, 100);
-        matrices.drawItemInSlot(textRenderer, itemStack, 0, 0);
-        matrices.getMatrices().pop();
+        RenderSystem.enableDepthTest();
+        this.itemRenderer.renderInGuiWithOverrides(this.client.player, itemStack, 0, 0, 0);
+//        itemRenderer.renderItem(itemStack, ModelTransformation.Mode.GUI, 0xF000F0, OverlayTexture.DEFAULT_UV, matrices, null, 0);
+        itemRenderer.renderInGui(itemStack, 0, 0);
+        itemRenderer.renderGuiItemOverlay(textRenderer, itemStack, x, y);
+//        matrices.drawItem(itemStack, 0, 0, 100);
+//        matrices.drawItemInSlot(textRenderer, itemStack, 0, 0);
+        matrices.pop();
     }
 
     public class SearchWidget extends PersistentWidget implements Drawable
@@ -331,7 +336,7 @@ public class ItemPane implements Drawable, Element, Selectable, GUIUtil
         }
 
         @Override
-        public void render(DrawContext matrices, int mouseX, int mouseY, float delta)
+        public void render(MatrixStack matrices, int mouseX, int mouseY, float delta)
         {
             GUIUtil.drawVerticalLine1(matrices, x() - 2, y() - 1, y() + h() + 3, PLCCols.BORDER.col);
             GUIUtil.drawVerticalLine1(matrices, x() - 1, y() - 1, y() + h() + 2, PLCCols.TRANSPARENT.col);

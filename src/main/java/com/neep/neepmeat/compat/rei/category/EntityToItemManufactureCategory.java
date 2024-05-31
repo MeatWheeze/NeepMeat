@@ -11,8 +11,8 @@ import me.shedaniel.rei.api.client.gui.widgets.Widget;
 import me.shedaniel.rei.api.common.category.CategoryIdentifier;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
-import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.Element;
+import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.EntityType;
 import net.minecraft.text.Text;
 
@@ -87,7 +87,7 @@ public class EntityToItemManufactureCategory extends ManufactureCategory<EntityT
         }
 
         @Override
-        public void render(DrawContext context, int mouseX, int mouseY, float delta)
+        public void render(MatrixStack context, int mouseX, int mouseY, float delta)
         {
             GUIUtil.drawText(context, textRenderer, name, origin.x, origin.y, borderCol(), true);
 

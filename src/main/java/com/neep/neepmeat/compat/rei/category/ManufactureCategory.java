@@ -19,8 +19,9 @@ import me.shedaniel.rei.api.common.entry.EntryStack;
 import me.shedaniel.rei.api.common.util.EntryStacks;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
-import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.gui.Element;
+import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
 
 import java.util.Collections;
@@ -105,7 +106,7 @@ public abstract class ManufactureCategory<T extends ManufactureDisplay<?>> imple
         }
 
         @Override
-        public void render(DrawContext context, int mouseX, int mouseY, float delta)
+        public void render(MatrixStack context, int mouseX, int mouseY, float delta)
         {
             int x = origin.x + 2;
             int y = origin.y + 2;
@@ -128,9 +129,9 @@ public abstract class ManufactureCategory<T extends ManufactureDisplay<?>> imple
         }
 
         @Override
-        public void render(DrawContext matrices, int mouseX, int mouseY, float delta)
+        public void render(MatrixStack matrices, int mouseX, int mouseY, float delta)
         {
-            matrices.fill(bounds.x, bounds.y, bounds.x + bounds.width, bounds.y + bounds.height, 0xFF000000);
+            DrawableHelper.fill(matrices, bounds.x, bounds.y, bounds.x + bounds.width, bounds.y + bounds.height, 0xFF000000);
             GUIUtil.renderBorder(matrices, bounds.x, bounds.y, bounds.width, bounds.height, ItemManufactureCategory.borderCol(), 0);
             GUIUtil.renderBorder(matrices, bounds.x + 1, bounds.y + 1, bounds.width - 2, bounds.height - 2, PLCCols.TRANSPARENT.col, 0);
         }
@@ -166,7 +167,7 @@ public abstract class ManufactureCategory<T extends ManufactureDisplay<?>> imple
         }
 
         @Override
-        public void render(DrawContext context, int mouseX, int mouseY, float delta)
+        public void render(MatrixStack context, int mouseX, int mouseY, float delta)
         {
             GUIUtil.drawText(context, textRenderer, name, origin.x, origin.y, EntityToItemManufactureCategory.borderCol(), true);
             slot.render(context, mouseX, mouseY, delta);

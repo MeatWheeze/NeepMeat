@@ -14,6 +14,7 @@ import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.block.enums.RailShape;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.vehicle.AbstractMinecartEntity;
 import net.minecraft.fluid.FluidState;
@@ -24,16 +25,9 @@ import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.state.property.EnumProperty;
 import net.minecraft.state.property.Properties;
 import net.minecraft.state.property.Property;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Box;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.*;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
-import org.joml.Vector3f;
-
-import java.util.Vector;
-
 
 public class PlayerControlTrack extends BaseRailBlock implements BlockEntityProvider
 {
@@ -90,7 +84,7 @@ public class PlayerControlTrack extends BaseRailBlock implements BlockEntityProv
         FluidState fluidState = ctx.getWorld().getFluidState(ctx.getBlockPos());
         boolean waterlogged = fluidState.getFluid() == Fluids.WATER;
         BlockState blockState = super.getDefaultState();
-        Direction direction = ctx.getHorizontalPlayerFacing();
+        Direction direction = ctx.getPlayerFacing();
         boolean eastWest = direction == Direction.EAST || direction == Direction.WEST;
         return blockState
                 .with(this.getShapeProperty(), eastWest ? RailShape.EAST_WEST : RailShape.NORTH_SOUTH)
@@ -197,8 +191,10 @@ public class PlayerControlTrack extends BaseRailBlock implements BlockEntityProv
                             world.setBlockState(pos, getCachedState().with(RAIL_SHAPE_NO_SLOPE, RailShape.EAST_WEST));
                     }
 
-                    Vector3f unit = direction.getUnitVector().mul(0.3f);
-                    minecart.addVelocity(unit.x, unit.y, unit.z);
+                    Vec3f unit = direction.getUnitVector();
+//                    unit.multiplyComponentwise(0.3f, 0.3f, 0.3f);
+//                    minecart.addVelocity(unit.getX(), unit.getY(), unit.getZ());
+                    minecart.addVelocity(unit.getX() * 0.3, unit.getY() * 0.3, unit.getZ() * 0.3);
                 }
                 else
                 {

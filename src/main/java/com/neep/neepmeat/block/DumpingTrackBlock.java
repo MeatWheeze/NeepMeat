@@ -114,7 +114,7 @@ public class DumpingTrackBlock extends BaseRailBlock implements SpecialRail
         FluidState fluidState = ctx.getWorld().getFluidState(ctx.getBlockPos());
         boolean waterlogged = fluidState.getFluid() == Fluids.WATER;
         BlockState blockState = super.getDefaultState();
-        Direction direction = ctx.getHorizontalPlayerFacing();
+        Direction direction = ctx.getPlayerFacing();
         boolean eastWest = direction == Direction.EAST || direction == Direction.WEST;
         return blockState
                 .with(this.getShapeProperty(), eastWest ? RailShape.EAST_WEST : RailShape.NORTH_SOUTH)

@@ -1,12 +1,12 @@
 package com.neep.neepmeat.client.screen.living_machine;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.client.screen.button.NMToggleButtonWidget;
-import com.neep.neepmeat.client.screen.plc.PLCScreenButton;
 import com.neep.neepmeat.client.screen.tablet.GUIUtil;
 import com.neep.neepmeat.screen_handler.ItemOutputScreenHandler;
-import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
+import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
@@ -33,27 +33,28 @@ public class ItemOutputPortScreen extends HandledScreen<ItemOutputScreenHandler>
         addDrawableChild(new NMToggleButtonWidget(buttonX, buttonY, 70, 20, () -> handler.getProperty(0) > 0, Text.of("Auto eject"), (b, t) ->
         {
             handler.setEject(t);
-        }, b -> Text.empty()));
+        }));
     }
 
     @Override
-    protected void drawBackground(DrawContext context, float delta, int mouseX, int mouseY)
+    protected void drawBackground(MatrixStack context, float delta, int mouseX, int mouseY)
     {
         super.renderBackground(context);
-        context.drawTexture(TEXTURE, x, y, 0, 0, backgroundWidth, 87);
+        RenderSystem.setShaderTexture(0, TEXTURE);
+        drawTexture(context, x, y, 0, 0, backgroundWidth, 87, 256, 256);
 
         GUIUtil.drawInventoryBackground(context, x, y + 88);
     }
 
     @Override
-    public void render(DrawContext context, int mouseX, int mouseY, float delta)
+    public void render(MatrixStack context, int mouseX, int mouseY, float delta)
     {
         super.render(context, mouseX, mouseY, delta);
         drawMouseoverTooltip(context, mouseX, mouseY);
     }
 
     @Override
-    protected void drawForeground(DrawContext context, int mouseX, int mouseY)
+    protected void drawForeground(MatrixStack context, int mouseX, int mouseY)
     {
     }
 }

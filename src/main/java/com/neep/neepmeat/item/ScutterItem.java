@@ -2,7 +2,6 @@ package com.neep.neepmeat.item;
 
 import com.neep.meatlib.item.BaseItem;
 import com.neep.meatlib.item.TooltipSupplier;
-import com.neep.neepmeat.entity.scutter.FarmingScutter;
 import com.neep.neepmeat.entity.scutter.ScutterEntity;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.EntityType;
@@ -32,7 +31,7 @@ public abstract class ScutterItem<T extends ScutterEntity> extends BaseItem
     {
         BlockState state = world.getBlockState(pos);
         BlockPos offset = pos;
-        if (state.blocksMovement())
+        if (state.isFullCube(world, pos))
         {
             offset = pos.offset(side);
         }

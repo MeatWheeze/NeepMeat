@@ -220,7 +220,7 @@ public class NMBlockEntities
     public static <T extends net.minecraft.block.entity.BlockEntity> BlockEntityType<T> register(String id, BlockEntityType<T> type)
     {
         return Registry.register(
-                Registries.BLOCK_ENTITY_TYPE, new Identifier(NeepMeat.NAMESPACE, id),
+                Registry.BLOCK_ENTITY_TYPE, new Identifier(NeepMeat.NAMESPACE, id),
                 type);
     }
 

@@ -27,18 +27,17 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public class ToolManufactureEmiRecipe implements EmiRecipe
+public class ToolManufactureEmiRecipe extends ManufactureEmiRecipe<Item>
 {
     private static final Identifier GHOST_AXE = new Identifier(NeepMeat.NAMESPACE, "textures/gui/ghost_axe.png");
     private static final Identifier GHOST_SWORD = new Identifier(NeepMeat.NAMESPACE, "textures/gui/ghost_sword.png");
 
     private final Identifier id;
-    private final Item base;
     private final ManufactureStep<?> finalStep;
 
     public ToolManufactureEmiRecipe(TransformingToolRecipe recipe)
     {
-        this.base = recipe.getBase();
+        super(recipe.getBase(), recipe.getSteps());
         this.finalStep = recipe.getSteps().get(0);
 
         this.id = recipe.getId();

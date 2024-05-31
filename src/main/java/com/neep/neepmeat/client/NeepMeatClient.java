@@ -10,6 +10,7 @@ import com.neep.neepmeat.client.fluid.NMFluidsClient;
 import com.neep.neepmeat.client.hud.GuideLookupThings;
 import com.neep.neepmeat.client.hud.HUDOverlays;
 import com.neep.neepmeat.client.item.FarmingScutterHudRenderer;
+import com.neep.neepmeat.client.model.GenericModel;
 import com.neep.neepmeat.client.model.GlassTankModel;
 import com.neep.neepmeat.client.model.GlomeEntityModel;
 import com.neep.neepmeat.client.model.entity.HoundEntityModel;

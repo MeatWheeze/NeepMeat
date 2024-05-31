@@ -10,7 +10,7 @@ import com.neep.neepmeat.screen_handler.LivingMachineScreenHandler;
 import it.unimi.dsi.fastutil.Pair;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
-import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
 
 import java.math.BigDecimal;
@@ -75,7 +75,7 @@ public class MetricsPane extends LivingMachineScreen.PaneWidget
     }
 
     @Override
-    public void render(DrawContext context, int mouseX, int mouseY, float delta)
+    public void render(MatrixStack context, int mouseX, int mouseY, float delta)
     {
         super.render(context, mouseX, mouseY, delta);
 
@@ -148,7 +148,7 @@ public class MetricsPane extends LivingMachineScreen.PaneWidget
         }
 
         @Override
-        public void renderTooltip(DrawContext matrices, int mouseX, int mouseY)
+        public void renderTooltip(MatrixStack matrices, int mouseX, int mouseY)
         {
         }
 

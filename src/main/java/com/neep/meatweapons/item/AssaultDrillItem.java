@@ -19,8 +19,6 @@ import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
-import net.fabricmc.fabric.api.networking.v1.PacketSender;
-import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.fabricmc.fabric.api.transfer.v1.context.ContainerItemContext;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
@@ -86,6 +84,7 @@ public class AssaultDrillItem extends Item implements MeatlibItem, IAnimatable, 
     public static final Identifier CHANNEL_ID = new Identifier("assault_drill");
 
     public final String controllerName = "controller";
+    private final AnimationFactory factory = new SingletonAnimationFactory(this);
     private final TagKey<Block> effectiveBlocks;
 
     private final EntityAttributeModifier eam = new EntityAttributeModifier("aa", 8, EntityAttributeModifier.Operation.ADDITION);
@@ -364,6 +363,13 @@ public class AssaultDrillItem extends Item implements MeatlibItem, IAnimatable, 
     {
         player.handSwingProgress = 0;
         return false;
+    }
+
+    private void sendAttack(boolean attacking)
+    {
+        PacketByteBuf buf = PacketByteBufs.create();
+        buf.writeBoolean(attacking);
+        ClientPlayNetworking.send(CHANNEL_ID, buf);
     }
 
     @SuppressWarnings("UnstableApiUsage")

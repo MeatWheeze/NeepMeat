@@ -2,12 +2,9 @@ package com.neep.neepmeat.machine.separator;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.neep.neepmeat.NeepMeat;
-import com.neep.neepmeat.client.screen.NumberFieldWidget;
-import com.neep.neepmeat.client.screen.button.NMButtonWidget;
 import com.neep.neepmeat.client.screen.NumberField;
-import net.minecraft.client.gui.DrawContext;
+import com.neep.neepmeat.client.screen.button.NMButtonWidget;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
-import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.player.PlayerInventory;
@@ -53,8 +50,7 @@ public class SeparatorScreen extends HandledScreen<SeparatorScreenHandler>
         textField.setDrawsBackground(false);
 
         this.addDrawableChild(new NMButtonWidget(x + 5, y + 30, 73, 20, Text.empty(), button ->
-                handler.setTakeBabies(!handler.takeBabies()),
-                t -> Text.empty())
+                handler.setTakeBabies(!handler.takeBabies()))
         {
             @Override
             public Text getMessage()

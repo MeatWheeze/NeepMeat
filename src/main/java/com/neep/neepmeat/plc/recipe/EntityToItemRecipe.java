@@ -15,10 +15,10 @@ import net.minecraft.entity.ItemEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketByteBuf;
-import net.minecraft.registry.Registries;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.JsonHelper;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 
 import java.util.List;
@@ -125,11 +125,11 @@ public class EntityToItemRecipe extends EntityMutateRecipe
         {
             JsonObject baseElement = JsonHelper.getObject(json, "base");
             String idString = JsonHelper.getString(baseElement, "id");
-            EntityType<?> base = Registries.ENTITY_TYPE.get(Identifier.tryParse(idString));
+            EntityType<?> base = Registry.ENTITY_TYPE.get(Identifier.tryParse(idString));
 
             List<ManufactureStep<?>> steps = ItemManufactureRecipe.Serialiser.readSteps(json);
 
-            RecipeOutput<Item> output = RecipeOutputImpl.fromJsonRegistry(Registries.ITEM, json.getAsJsonObject("result"));
+            RecipeOutput<Item> output = RecipeOutputImpl.fromJsonRegistry(Registry.ITEM, json.getAsJsonObject("result"));
 
             return new EntityToItemRecipe(id, base, steps, output);
         }
@@ -137,11 +137,11 @@ public class EntityToItemRecipe extends EntityMutateRecipe
         @Override
         public EntityToItemRecipe read(Identifier id, PacketByteBuf buf)
         {
-            EntityType<?> base = buf.readRegistryValue(Registries.ENTITY_TYPE);
+            EntityType<?> base = buf.readRegistryValue(Registry.ENTITY_TYPE);
 
             List<ManufactureStep<?>> steps = ItemManufactureRecipe.Serialiser.readSteps(buf);
 
-            RecipeOutput<Item> output = RecipeOutputImpl.fromBuffer(Registries.ITEM, buf);
+            RecipeOutput<Item> output = RecipeOutputImpl.fromBuffer(Registry.ITEM, buf);
 
             return new EntityToItemRecipe(id, base, steps, output);
         }
@@ -149,11 +149,11 @@ public class EntityToItemRecipe extends EntityMutateRecipe
         @Override
         public void write(PacketByteBuf buf, EntityToItemRecipe recipe)
         {
-            buf.writeRegistryValue(Registries.ENTITY_TYPE, recipe.base);
+            buf.writeRegistryValue(Registry.ENTITY_TYPE, recipe.base);
 
             ItemManufactureRecipe.Serialiser.writeSteps(recipe.getSteps(), buf);
 
-            recipe.output.write(Registries.ITEM, buf);
+            recipe.output.write(Registry.ITEM, buf);
         }
     }
 }

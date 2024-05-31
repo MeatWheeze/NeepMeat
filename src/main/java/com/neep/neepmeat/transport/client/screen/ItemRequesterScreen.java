@@ -1,7 +1,9 @@
 package com.neep.neepmeat.transport.client.screen;
 
 import com.neep.neepmeat.api.plc.PLCCols;
+import com.neep.neepmeat.client.screen.StyledTooltipUser;
 import com.neep.neepmeat.client.screen.util.Border;
+import com.neep.neepmeat.client.screen.util.PlayerSlotsBorder;
 import com.neep.neepmeat.client.screen.util.Rectangle;
 import com.neep.neepmeat.screen_handler.BasicScreenHandler;
 import com.neep.neepmeat.transport.screen_handler.ItemRequesterScreenHandler;
@@ -9,15 +11,7 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
-import net.minecraft.client.gui.Drawable;
-import net.minecraft.client.gui.DrawableHelper;
-import net.minecraft.client.gui.Element;
-import net.minecraft.client.gui.Selectable;
-import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
-import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder;
-import net.minecraft.client.render.GameRenderer;
-import net.minecraft.client.render.item.ItemRenderer;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.screen.slot.Slot;
@@ -25,7 +19,7 @@ import net.minecraft.screen.slot.SlotActionType;
 import net.minecraft.text.Text;
 
 @Environment(value = EnvType.CLIENT)
-public class ItemRequesterScreen extends HandledScreen<ItemRequesterScreenHandler>
+public class ItemRequesterScreen extends HandledScreen<ItemRequesterScreenHandler> implements StyledTooltipUser
 {
     private final ItemPane itemPane;
 
@@ -36,7 +30,7 @@ public class ItemRequesterScreen extends HandledScreen<ItemRequesterScreenHandle
         this.backgroundHeight = 231;
 
         MinecraftClient client1 = MinecraftClient.getInstance();
-        this.itemPane = new ItemPane(11, 7, client1.getItemRenderer(), client1.textRenderer, handler.getItems(), MinecraftClient.getInstance());
+        this.itemPane = new ItemPane(11, 7, client1.getItemRenderer(), client1.textRenderer, handler.getItems(), MinecraftClient.getInstance(), this);
     }
 
     @Override
@@ -69,12 +63,12 @@ public class ItemRequesterScreen extends HandledScreen<ItemRequesterScreenHandle
     @Override
     protected void drawBackground(MatrixStack matrices, float delta, int mouseX, int mouseY)
     {
-        RenderSystem.setShader(GameRenderer::getPositionTexShader);
-        RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
-        RenderSystem.setShaderTexture(0, TEXTURE);
-        int i = this.x;
-        int j = (this.height - this.backgroundHeight) / 2;
-        this.drawTexture(matrices, i, j, 0, 0, this.backgroundWidth, this.backgroundHeight);
+//        RenderSystem.setShader(GameRenderer::getPositionTexShader);
+//        RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
+//        RenderSystem.setShaderTexture(0, TEXTURE);
+//        int i = this.x;
+//        int j = (this.height - this.backgroundHeight) / 2;
+//        this.drawTexture(matrices, i, j, 0, 0, this.backgroundWidth, this.backgroundHeight);
     }
 
     @Override
@@ -107,5 +101,23 @@ public class ItemRequesterScreen extends HandledScreen<ItemRequesterScreenHandle
     public void updateItems()
     {
         itemPane.updateSearch();
+    }
+
+    @Override
+    public TextRenderer textRenderer()
+    {
+        return textRenderer;
+    }
+
+    @Override
+    public int width()
+    {
+        return width;
+    }
+
+    @Override
+    public int height()
+    {
+        return height;
     }
 }

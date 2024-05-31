@@ -2,12 +2,13 @@ package com.neep.neepmeat.client.screen.plc;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.neep.neepmeat.init.NMSounds;
-import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder;
 import net.minecraft.client.gui.widget.ClickableWidget;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.sound.PositionedSoundInstance;
 import net.minecraft.client.sound.SoundManager;
+import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
 
 public abstract class PLCScreenButton extends ClickableWidget
@@ -18,9 +19,9 @@ public abstract class PLCScreenButton extends ClickableWidget
     }
 
     @Override
-    public void renderButton(DrawContext matrices, int mouseX, int mouseY, float delta)
+    public void renderButton(MatrixStack matrices, int mouseX, int mouseY, float delta)
     {
-        RenderSystem.setShader(GameRenderer::getPositionTexProgram);
+        RenderSystem.setShader(GameRenderer::getPositionTexShader);
         RenderSystem.setShaderTexture(0, PLCProgramScreen.WIDGETS);
         RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, this.alpha);
         int i = this.getYImage(this.isHovered());
@@ -28,7 +29,7 @@ public abstract class PLCScreenButton extends ClickableWidget
         RenderSystem.defaultBlendFunc();
         RenderSystem.enableDepthTest();
         int thingHeight = 16;
-        matrices.drawTexture(PLCProgramScreen.WIDGETS, getX(), getY(), 0, getU(), getV() + i * thingHeight, this.width, this.height, 256, 256);
+        DrawableHelper.drawTexture(matrices, getX(), getY(), 0, getU(), getV() + i * thingHeight, this.width, this.height, 256, 256);
 
         if (isMouseOver(mouseX, mouseY))
         {
@@ -48,6 +49,16 @@ public abstract class PLCScreenButton extends ClickableWidget
         soundManager.play(PositionedSoundInstance.master(NMSounds.UI_BEEP, 1.0F));
     }
 
+    public int getX()
+    {
+        return x;
+    }
+
+    public int getY()
+    {
+        return y;
+    }
+
     protected int getU()
     {
         return 0;
@@ -58,10 +69,10 @@ public abstract class PLCScreenButton extends ClickableWidget
         return 0;
     }
 
-    abstract public void renderTooltip(DrawContext matrices, int mouseX, int mouseY);
+    abstract public void renderTooltip(MatrixStack matrices, int mouseX, int mouseY);
 
     @Override
-    protected void appendClickableNarrations(NarrationMessageBuilder builder)
+    public void appendNarrations(NarrationMessageBuilder builder)
     {
 
     }

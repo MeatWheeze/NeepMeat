@@ -19,7 +19,6 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 import java.util.Iterator;
@@ -97,7 +96,7 @@ public class ItemDuctBlockEntity extends BlockEntity implements Storage<ItemVari
         {
             BlockPos offsetPos = pos.offset(targetDirection.getOpposite());
             BlockState offsetState = world.getBlockState(offsetPos);
-            if (!offsetState.blocksMovement())
+            if (!offsetState.isSolidBlock(world, offsetPos))
             {
                 try (Transaction transaction = Transaction.openOuter())
                 {

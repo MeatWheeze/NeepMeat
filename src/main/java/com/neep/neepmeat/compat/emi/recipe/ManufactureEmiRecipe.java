@@ -70,6 +70,11 @@ public abstract class ManufactureEmiRecipe<T> implements EmiRecipe
         }
     }
 
+    public static int borderCol()
+    {
+        return PLCCols.BORDER.col;
+    }
+
     public T getBase()
     {
         return base;
@@ -131,8 +136,8 @@ public abstract class ManufactureEmiRecipe<T> implements EmiRecipe
         @Override
         public void render(MatrixStack matrices, int mouseX, int mouseY, float delta)
         {
-            textRenderer.drawWithShadow(matrices, name, originX, originY, ItemManufactureEmiRecipe.borderCol());
-            GUIUtil.renderBorder(matrices, slotOriginX, slotOriginY, 17, 17, ItemManufactureEmiRecipe.borderCol(), 0);
+            textRenderer.drawWithShadow(matrices, name, originX, originY, borderCol());
+            GUIUtil.renderBorder(matrices, slotOriginX, slotOriginY, 17, 17, borderCol(), 0);
             GUIUtil.renderBorder(matrices, slotOriginX + 1, slotOriginY + 1, 15, 15, PLCCols.TRANSPARENT.col, 0);
         }
     }
@@ -179,8 +184,8 @@ public abstract class ManufactureEmiRecipe<T> implements EmiRecipe
             int x = originX + 2;
             int y = originY + 2;
 
-            textRenderer.drawWithShadow(matrices, name, x, y, ItemManufactureEmiRecipe.borderCol());
-            GUIUtil.renderBorder(matrices, originX, originY, width() + 3, height(), ItemManufactureEmiRecipe.borderCol(), 0);
+            textRenderer.drawWithShadow(matrices, name, x, y, borderCol());
+            GUIUtil.renderBorder(matrices, originX, originY, width() + 3, height(), borderCol(), 0);
         }
     }
 
@@ -203,7 +208,7 @@ public abstract class ManufactureEmiRecipe<T> implements EmiRecipe
         public void render(MatrixStack matrices, int mouseX, int mouseY, float delta)
         {
             DrawableHelper.fill(matrices, bounds.x(), bounds.y(), bounds.x() + bounds.width(), bounds.y() + bounds.height(), 0xFF000000);
-            GUIUtil.renderBorder(matrices, bounds.x(), bounds.y(), bounds.width(), bounds.height(), ItemManufactureEmiRecipe.borderCol(), 0);
+            GUIUtil.renderBorder(matrices, bounds.x(), bounds.y(), bounds.width(), bounds.height(), borderCol(), 0);
             GUIUtil.renderBorder(matrices, bounds.x() + 1, bounds.y() + 1, bounds.width() - 2, bounds.height() - 2, PLCCols.TRANSPARENT.col, 0);
         }
     }

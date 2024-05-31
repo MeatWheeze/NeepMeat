@@ -1,7 +1,6 @@
 package com.neep.neepmeat.compat.emi.recipe;
 
 import com.google.common.collect.Lists;
-import com.neep.neepmeat.api.plc.PLCCols;
 import com.neep.neepmeat.compat.emi.NMEmiPlugin;
 import com.neep.neepmeat.plc.recipe.ItemManufactureRecipe;
 import dev.emi.emi.api.recipe.EmiRecipeCategory;
@@ -32,11 +31,6 @@ public class ItemManufactureEmiRecipe extends ManufactureEmiRecipe<Item>
         this.id = recipe.getId();
         this.input = inputs;
         this.output = List.of(EmiStack.of(recipe.getRecipeOutput().resource(), recipe.getRecipeOutput().minAmount()));
-    }
-
-    public static int borderCol()
-    {
-        return PLCCols.BORDER.col;
     }
 
     @Override

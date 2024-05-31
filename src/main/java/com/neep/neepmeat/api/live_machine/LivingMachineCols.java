@@ -1,6 +1,7 @@
 package com.neep.neepmeat.api.live_machine;
 
-import software.bernie.geckolib.core.object.Color;
+
+import software.bernie.geckolib3.core.util.Color;
 
 public class LivingMachineCols
 {
