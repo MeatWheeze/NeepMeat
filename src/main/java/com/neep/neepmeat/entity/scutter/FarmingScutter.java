@@ -3,34 +3,28 @@ package com.neep.neepmeat.entity.scutter;
 import com.neep.meatlib.inventory.ImplementedInventory;
 import com.neep.neepmeat.init.NMItems;
 import com.neep.neepmeat.init.NMSounds;
-import com.neep.neepmeat.util.ItemUtil;
 import net.fabricmc.fabric.api.transfer.v1.item.InventoryStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.fabricmc.fabric.api.transfer.v1.storage.StorageUtil;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
-import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.CropBlock;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.EntityType;
-import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtHelper;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
@@ -64,11 +58,6 @@ public class FarmingScutter extends ScutterEntity
     public void setHomePos(BlockPos homePos)
     {
         this.homePos = homePos;
-    }
-
-    public @Nullable BlockPos getStoragePos()
-    {
-        return storagePos;
     }
 
     public BlockPos getHomePos()
@@ -123,10 +112,12 @@ public class FarmingScutter extends ScutterEntity
     {
         if (player.isSneaking())
         {
-            if (!player.isCreative())
-            {
-                dropItem(NMItems.FARMING_SCUTTER);
-            }
+            ItemStack stack = new ItemStack(NMItems.FARMING_SCUTTER);
+
+            if (getCustomName() != null)
+                stack.setCustomName(getCustomName());
+
+            dropStack(stack);
 
             remove(RemovalReason.DISCARDED);
 
@@ -224,6 +215,12 @@ public class FarmingScutter extends ScutterEntity
 
     public boolean isAtHome()
     {
-        return getPos().isInRange(Vec3d.ofCenter(getHomePos()), 1.1);
+        return getPos().isInRange(Vec3d.ofCenter(getHomePos()), 1);
+    }
+
+    @Override
+    public boolean shouldRenderName()
+    {
+        return true;
     }
 }

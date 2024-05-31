@@ -5,7 +5,6 @@ import com.neep.neepmeat.entity.scutter.FarmingScutter;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.EntityType;
-import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUsageContext;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
@@ -35,11 +34,15 @@ public class FarmingScutterItem extends ScutterItem<FarmingScutter>
     @Override
     protected void processEntity(FarmingScutter entity, ItemUsageContext context)
     {
+        entity.setHomePos(new BlockPos(entity.getPos()));
+        if (context.getStack().hasCustomName())
+        {
+            entity.setCustomName(context.getStack().getName());
+        }
 
         if (ItemStorage.SIDED.find(context.getWorld(), context.getBlockPos(), context.getSide()) != null)
         {
             entity.setStoragePos(context.getBlockPos());
-            entity.setHomePos(new BlockPos(entity.getPos()));
         }
     }
 }
