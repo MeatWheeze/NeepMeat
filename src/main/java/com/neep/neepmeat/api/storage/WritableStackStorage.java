@@ -13,7 +13,7 @@ import org.jetbrains.annotations.Nullable;
 @SuppressWarnings("UnstableApiUsage")
 public class WritableStackStorage extends SingleVariantStorage<ItemVariant> implements StorageView<ItemVariant>
 {
-    protected int capacity;
+    protected final int capacity;
     protected Runnable callback;
 
     public WritableStackStorage(@Nullable Runnable parent)

@@ -336,6 +336,8 @@
   "block.neepmeat.fluid_exciter.lore_0": "Injects power into a vascular network connected to the upper dome when Ethereal Fuel is inserted into the bottom. Provides a 150% efficiency gain over standard motors.",
 
   "block.neepmeat.item_buffer": "Display Plate",
+  "block.neepmeat.item_buffer.lore_0": "Sneak-click to configure capacity.",
+  "screen.neepmeat.display_plate.capacity": "Enter new capacity",
 
   "block.neepmeat.item_duct": "Hopper Extender",
 

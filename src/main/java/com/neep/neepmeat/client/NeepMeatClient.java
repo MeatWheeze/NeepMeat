@@ -251,6 +251,7 @@ public class NeepMeatClient implements ClientModInitializer
         HandledScreens.register(ScreenHandlerInit.FLUID_RATIONER, FluidRationerScreen::new);
         HandledScreens.register(ScreenHandlerInit.SEPARATOR, SeparatorScreen::new);
         HandledScreens.register(ScreenHandlerInit.UPGRADE_MANAGER, UpgradeManagerScreen::new);
+        HandledScreens.register(ScreenHandlerInit.DISPLAY_PLATE, DisplayPlateScreen::new);
 
         HandledScreens.register(ScreenHandlerInit.LIVING_MACHINE, LivingMachineScreen::new);
         HandledScreens.register(ScreenHandlerInit.ITEM_OUTPUT, ItemOutputPortScreen::new);

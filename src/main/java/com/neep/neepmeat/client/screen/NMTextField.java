@@ -13,11 +13,14 @@ import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 
 import java.util.function.BiFunction;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
 public class NMTextField extends TextFieldWidget
 {
     private final TextRenderer textRenderer;
     protected boolean drawFancyBackground = true;
+    private Function<NMTextField, Text> tooltipSupplier;
 
     private final BiFunction<String, Integer, OrderedText> renderTextProvider = (string, firstCharacterIndex) -> OrderedText.styledForwardsVisitedString(
             string, Style.EMPTY
@@ -35,6 +38,12 @@ public class NMTextField extends TextFieldWidget
         this.drawFancyBackground = draw;
         return this;
     }
+
+//    public NMTextField setTooltip(Function<NMTextField, Text> function)
+//    {
+//        this.tooltipSupplier = function;
+//        return this;
+//    }
 
     @Override
     public void renderButton(MatrixStack context, int mouseX, int mouseY, float delta)
@@ -100,5 +109,17 @@ public class NMTextField extends TextFieldWidget
             int p = l + this.textRenderer.getWidth(string.substring(0, k));
             accessor.callDrawSelectionHighlight(o, m - 1, p - 1, m + 1 + 9);
         }
+    }
+
+//    @Override
+//    public void renderTooltip(MatrixStack matrices, int mouseX, int mouseY)
+//    {
+//        Text text = tooltipSupplier.apply(this);
+//    }
+
+    @Override
+    public void setChangedListener(Consumer<String> changedListener)
+    {
+        super.setChangedListener(changedListener);
     }
 }

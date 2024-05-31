@@ -122,7 +122,7 @@ public class NMBlockEntities
     public static BlockEntityType<MetalBarrelBlockEntity> METAL_BARREL;
     public static BlockEntityType<LargeFanBlockEntity> LARGE_FAN;
 
-    public static BlockEntityType<DisplayPlatformBlockEntity> ITEM_BUFFER_BLOCK_ENTITY;
+    public static BlockEntityType<DisplayPlateBlockEntity> ITEM_BUFFER_BLOCK_ENTITY;
     public static BlockEntityType<InventoryDetectorBlockEntity> INVENTORY_DETECTOR;
     public static BlockEntityType<GlassTankBlockEntity> GLASS_TANK;
     public static BlockEntityType<MultiTankBlockEntity> MULTI_TANK;
@@ -299,9 +299,9 @@ public class NMBlockEntities
 
         // --- Surgery Machine ---
 //        MOB_PLATFORM = registerBlockEntity("mob_platform", MobPlatformBlockEntity::new, NMBlocks.MOB_PLATFORM);
-        ITEM_BUFFER_BLOCK_ENTITY = register("item_buffer", DisplayPlatformBlockEntity::new, NMBlocks.ITEM_BUFFER);
-        TableComponent.LOOKUP.registerForBlockEntity(DisplayPlatformBlockEntity::getTableComponent, ITEM_BUFFER_BLOCK_ENTITY);
-        MutateInPlace.ITEM.registerForBlockEntity(DisplayPlatformBlockEntity::getMip, ITEM_BUFFER_BLOCK_ENTITY);
+        ITEM_BUFFER_BLOCK_ENTITY = register("item_buffer", DisplayPlateBlockEntity::new, NMBlocks.ITEM_BUFFER);
+//        TableComponent.LOOKUP.registerForBlockEntity(DisplayPlatformBlockEntity::getTableComponent, ITEM_BUFFER_BLOCK_ENTITY);
+        MutateInPlace.ITEM.registerForBlockEntity(DisplayPlateBlockEntity::getMip, ITEM_BUFFER_BLOCK_ENTITY);
         SURGERY_PLATFORM = register("surgery_platform", (p, s) -> new SurgeryPlatformBlockEntity(SURGERY_PLATFORM, p, s), NMBlocks.SURGERY_PLATFORM);
         TableComponent.LOOKUP.registerForBlockEntity(SurgeryPlatformBlockEntity::getTableComponent, SURGERY_PLATFORM);
         MutateInPlace.ENTITY.registerForBlockEntity(SurgeryPlatformBlockEntity::getMutate, SURGERY_PLATFORM);
@@ -492,7 +492,7 @@ public class NMBlockEntities
         ItemStorage.SIDED.registerForBlockEntity((be, direction) -> be.getStorage().getItemStorage(direction), CRUSHER);
 
         ItemStorage.SIDED.registerForBlockEntity((be, direction) -> be.getStorage().getStorage(direction), ALLOY_KILN);
-        ItemStorage.SIDED.registerForBlockEntity(DisplayPlatformBlockEntity::getStorage, ITEM_BUFFER_BLOCK_ENTITY);
+        ItemStorage.SIDED.registerForBlockEntity(DisplayPlateBlockEntity::getStorage, ITEM_BUFFER_BLOCK_ENTITY);
 
         ItemStorage.SIDED.registerForBlockEntity((be, direction) -> be.getStorage().getFuelStorage(direction), STIRLING_ENGINE);
 

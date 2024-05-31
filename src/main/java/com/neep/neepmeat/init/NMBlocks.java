@@ -282,7 +282,7 @@ public class NMBlocks
 
     public static Block FLAME_JET = BlockRegistry.queue(new FlameJetBlock("flame_jet", block().factory(FluidComponentItem::new), MACHINE_SETTINGS));
 
-    public static Block ITEM_BUFFER = BlockRegistry.queue(new DisplayPlatformBlock("item_buffer", block().plc(), MACHINE_SETTINGS.sounds(BlockSoundGroup.METAL)));
+    public static Block ITEM_BUFFER = BlockRegistry.queue(new DisplayPlateBlock("item_buffer", block().tooltip(TooltipSupplier.simple(1)).plc(), MACHINE_SETTINGS.sounds(BlockSoundGroup.METAL)));
     //    public static Block SPIGOT = BlockRegistry.queue(new SpigotBlock("spigot", 64, false, FLUID_MACHINE_SETTINGS));
 
     public static Block BOTTLER = BlockRegistry.queue(new BottlerBlock("bottler", block().tooltip(TooltipSupplier.simple(1)).requiresMotor(), FLUID_MACHINE_SETTINGS));

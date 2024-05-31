@@ -4,7 +4,7 @@ import com.neep.meatlib.block.BaseBlock;
 import com.neep.meatlib.item.ItemSettings;
 import com.neep.meatlib.storage.MeatlibStorageUtil;
 import com.neep.neepmeat.api.storage.WritableStackStorage;
-import com.neep.neepmeat.block.entity.DisplayPlatformBlockEntity;
+import com.neep.neepmeat.block.entity.DisplayPlateBlockEntity;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.minecraft.block.Block;
@@ -16,6 +16,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.screen.NamedScreenHandlerFactory;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
@@ -26,12 +27,12 @@ import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
 @SuppressWarnings("UnstableApiUsage")
-public class DisplayPlatformBlock extends BaseBlock implements BlockEntityProvider
+public class DisplayPlateBlock extends BaseBlock implements BlockEntityProvider
 {
     protected static final VoxelShape DEFAULT_SHAPE = Block.createCuboidShape(0.0, 0.0, 0.0, 16.0, 1.0, 16.0);
 
 
-    public DisplayPlatformBlock(String itemName, ItemSettings itemSettings, Settings settings)
+    public DisplayPlateBlock(String itemName, ItemSettings itemSettings, Settings settings)
     {
         super(itemName, itemSettings, settings);
     }
@@ -46,13 +47,21 @@ public class DisplayPlatformBlock extends BaseBlock implements BlockEntityProvid
     @Override
     public BlockEntity createBlockEntity(BlockPos pos, BlockState state)
     {
-        return new DisplayPlatformBlockEntity(pos, state);
+        return new DisplayPlateBlockEntity(pos, state);
     }
 
     @Override
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit)
     {
-        if (world.getBlockEntity(pos) instanceof DisplayPlatformBlockEntity be && !world.isClient)
+        if (player.isSneaking()
+                && player.getMainHandStack().isEmpty()
+                && world.getBlockEntity(pos) instanceof NamedScreenHandlerFactory factory)
+        {
+            player.openHandledScreen(factory);
+            return ActionResult.SUCCESS;
+        }
+
+        if (world.getBlockEntity(pos) instanceof DisplayPlateBlockEntity be && !world.isClient)
         {
             ItemStack stack = player.getStackInHand(hand);
             WritableStackStorage storage = be.getStorage(null);
@@ -83,7 +92,7 @@ public class DisplayPlatformBlock extends BaseBlock implements BlockEntityProvid
     public void onEntityCollision(BlockState state, World world, BlockPos pos, Entity entity)
     {
         BlockEntity blockEntity = world.getBlockEntity(pos);
-        if (blockEntity instanceof DisplayPlatformBlockEntity be && !world.isClient())
+        if (blockEntity instanceof DisplayPlateBlockEntity be && !world.isClient())
         {
             onEntityCollided(world, pos, state, entity, be);
         }
@@ -96,7 +105,7 @@ public class DisplayPlatformBlock extends BaseBlock implements BlockEntityProvid
         {
             BlockEntity blockEntity = world.getBlockEntity(pos);
 
-            if (blockEntity instanceof DisplayPlatformBlockEntity be)
+            if (blockEntity instanceof DisplayPlateBlockEntity be)
             {
                 MeatlibStorageUtil.scatterNoTransaction(world, pos, be.getStorage(null));
                 world.updateComparators(pos,this);
@@ -114,13 +123,13 @@ public class DisplayPlatformBlock extends BaseBlock implements BlockEntityProvid
     @Override
     public int getComparatorOutput(BlockState state, World world, BlockPos pos)
     {
-        DisplayPlatformBlockEntity be = (DisplayPlatformBlockEntity) world.getBlockEntity(pos);
+        DisplayPlateBlockEntity be = (DisplayPlateBlockEntity) world.getBlockEntity(pos);
         int maxCount = be.getStorage(null).getResource().toStack().getMaxCount();
         return maxCount > 0 ? (int) Math.ceil((float) be.getStorage(null).getAmount() / (float) maxCount * 16) : 0;
     }
 
     // Add dropped items to inventory
-    public static void onEntityCollided(World world, BlockPos pos, BlockState state, Entity entity, DisplayPlatformBlockEntity be)
+    public static void onEntityCollided(World world, BlockPos pos, BlockState state, Entity entity, DisplayPlateBlockEntity be)
     {
         if (!world.isClient && entity instanceof ItemEntity item)
         {

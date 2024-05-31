@@ -10,8 +10,7 @@ import net.minecraft.text.OrderedText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Matrix4f;
-
-import static net.minecraft.client.gui.DrawableHelper.drawTexture;
+import software.bernie.geckolib3.core.util.Color;
 
 public interface GUIUtil
 {
@@ -31,6 +30,57 @@ public interface GUIUtil
         drawText(context, textRenderer, text, centerX - textRenderer.getWidth(text) / 2f, y, color, shadow);
     }
 
+    static void drawTexture(Identifier texture, MatrixStack context, int x, int y, int u, int v, int width, int height)
+    {
+        drawTexture(texture, context, x, y, 0, (float) u, (float) v, width, height, 256, 256, 1, 1, 1, 1);
+    }
+
+    static void drawTexture(Identifier texture, MatrixStack context, int x, int y, int u, int v, int width, int height, int col)
+    {
+        Color color = Color.ofTransparent(col);
+        drawTexture(texture, context, x, y, 0, (float) u, (float) v, width, height, 256, 256, color.getRed() / 255f, color.getGreen() / 255f, color.getBlue() / 255f, color.getAlpha() / 255f);
+    }
+
+    static void drawTexture(Identifier texture, MatrixStack context, int x, int y, int u, int v, int width, int height, float r, float g, float b, float a)
+    {
+        drawTexture(texture, context, x, y, 0, (float) u, (float) v, width, height, 256, 256, r, g, b, a);
+    }
+
+    static void drawTexture(Identifier texture, MatrixStack context, int x, int y, float u, float v, int width, int height, int textureWidth, int textureHeight)
+    {
+        drawTexture(texture, context, x, x + width, y, y + height, 0, width, height, u, v, textureWidth, textureHeight, 1, 1, 1, 1);
+    }
+
+    static void drawTexture(Identifier texture, MatrixStack context, int x, int y, int z, float u, float v, int width, int height, int textureWidth, int textureHeight, float r, float g, float b, float a)
+    {
+        drawTexture(texture, context, x, x + width, y, y + height, z, width, height, u, v, textureWidth, textureHeight, r, g, b, a);
+    }
+
+    static void drawTextureStretch(Identifier texture, MatrixStack context, int x1, int y1, int w, int h, float u, float v, int du, int dv, int textureWidth, int textureHeight)
+    {
+        drawTexturedQuad(texture, context, x1, x1 + w, y1, y1 + h, 0, u / textureWidth, (u + du) / textureWidth, v / textureHeight, (v + dv) / textureHeight, 1, 1, 1, 1);
+    }
+
+    static void drawTexture(Identifier texture, MatrixStack context, int x1, int x2, int y1, int y2, int z, int du, int dv, float u, float v, int textureWidth, int textureHeight, float r, float g, float b, float a)
+    {
+        drawTexturedQuad(texture, context, x1, x2, y1, y2, z, u / textureWidth, (u + du) / textureWidth, v / textureHeight, (v + dv) / textureHeight, r, g, b, a);
+    }
+
+    private static void drawTexturedQuad(Identifier texture, MatrixStack context, int x1, int x2, int y1, int y2, int z, float u1, float u2, float v1, float v2, float r, float g, float b, float a)
+    {
+        RenderSystem.setShaderTexture(0, texture);
+        RenderSystem.setShader(GameRenderer::getPositionColorTexShader);
+        RenderSystem.enableBlend();
+        Matrix4f matrix4f = context.peek().getPositionMatrix();
+        BufferBuilder bufferBuilder = Tessellator.getInstance().getBuffer();
+        bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_COLOR_TEXTURE);
+        bufferBuilder.vertex(matrix4f, x1, y1, z).color(r, g, b, a).texture(u1, v1).next();
+        bufferBuilder.vertex(matrix4f, x1, y2, z).color(r, g, b, a).texture(u1, v2).next();
+        bufferBuilder.vertex(matrix4f, x2, y2, z).color(r, g, b, a).texture(u2, v2).next();
+        bufferBuilder.vertex(matrix4f, x2, y1, z).color(r, g, b, a).texture(u2, v1).next();
+        BufferRenderer.drawWithShader(bufferBuilder.end());
+        RenderSystem.disableBlend();
+    }
 
     static int drawText(MatrixStack context, TextRenderer textRenderer, Text text, float x, float y, int color, boolean shadow)
     {
@@ -80,8 +130,7 @@ public interface GUIUtil
 
     static void drawInventoryBackground(MatrixStack context, int x, int y)
     {
-        RenderSystem.setShaderTexture(0, INVENTORY_BACKGROUND);
-        drawTexture(context, x, y, 0, 0, 176, 90, 256, 256);
+        drawTexture(INVENTORY_BACKGROUND, context, x, y, 0, 0, 176, 90, 256, 256);
     }
 
     /**
