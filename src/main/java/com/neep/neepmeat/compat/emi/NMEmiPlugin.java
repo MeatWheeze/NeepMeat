@@ -10,6 +10,7 @@ import com.neep.neepmeat.datagen.tag.NMTags;
 import com.neep.neepmeat.init.NMBlocks;
 import com.neep.neepmeat.init.NMItems;
 import com.neep.neepmeat.init.NMrecipeTypes;
+import com.neep.neepmeat.machine.live_machine.LivingMachines;
 import com.neep.neepmeat.plc.PLCBlocks;
 import com.neep.neepmeat.plc.recipe.PLCRecipes;
 import com.neep.neepmeat.plc.recipe.TransformingToolRecipe;
@@ -34,6 +35,7 @@ public class NMEmiPlugin implements EmiPlugin {
     public static final EmiStack ADV_INTEGRATOR_WORKSTATION = EmiStack.of(NMBlocks.ADVANCED_INTEGRATOR);
     public static final EmiStack GRINDING_WORKSTATION = EmiStack.of(NMBlocks.CRUSHER);
     public static final EmiStack LARGE_CRUSHER_WORKSTATION = EmiStack.of(NMBlocks.LARGE_CRUSHER);
+    public static final EmiStack CRUSHER_SEGMENT_WORKSTATION = EmiStack.of(LivingMachines.CRUSHER_SEGMENT);
     public static final EmiStack VIVISECTION_WORKSTATION = EmiStack.of(NMItems.SACRIFICIAL_SCALPEL);
     public static final EmiStack HEATING_WORKSTATION = EmiStack.of(FluidTransport.MULTI_TANK);
     public static final EmiStack MANUFACTURE_WORKSTATION = EmiStack.of(PLCBlocks.PLC);
@@ -41,6 +43,7 @@ public class NMEmiPlugin implements EmiPlugin {
     public static final EmiStack PRESSING_WORKSTATION = EmiStack.of(NMBlocks.HYDRAULIC_PRESS);
     public static final EmiStack SURGERY_WORKSTATION = EmiStack.of(PLCBlocks.PLC);
     public static final EmiStack TROMMEL_WORKSTATION = EmiStack.of(NMBlocks.SMALL_TROMMEL);
+    public static final EmiStack LARGE_TROMMEL_WORKSTATION = EmiStack.of(LivingMachines.LARGE_TROMMEL);
 
     public static final EmiRecipeCategory ALLOY_SMELTING = new LazyEmiRecipeCategory(new Identifier(NeepMeat.NAMESPACE, "plugins/alloy_smelting"), ALLOY_SMELTING_WORKSTATION);
     public static final EmiRecipeCategory COMPACTING = new LazyEmiRecipeCategory(new Identifier(NeepMeat.NAMESPACE, "plugins/compacting"), COMPACTING_WORKSTATION);
@@ -81,7 +84,9 @@ public class NMEmiPlugin implements EmiPlugin {
         registry.addWorkstation(ENLIGHTENING, ADV_INTEGRATOR_WORKSTATION);
         registry.addWorkstation(GRINDING, GRINDING_WORKSTATION);
         registry.addWorkstation(GRINDING, LARGE_CRUSHER_WORKSTATION);
+        registry.addWorkstation(GRINDING, CRUSHER_SEGMENT_WORKSTATION);
         registry.addWorkstation(ADVANCED_CRUSHING, LARGE_CRUSHER_WORKSTATION);
+        registry.addWorkstation(ADVANCED_CRUSHING, CRUSHER_SEGMENT_WORKSTATION);
         registry.addWorkstation(VIVISECTION, VIVISECTION_WORKSTATION);
         registry.addWorkstation(HEATING, HEATING_WORKSTATION);
         registry.addWorkstation(ITEM_MANUFACTURE, MANUFACTURE_WORKSTATION);
@@ -91,6 +96,7 @@ public class NMEmiPlugin implements EmiPlugin {
         registry.addWorkstation(PRESSING, PRESSING_WORKSTATION);
         registry.addWorkstation(SURGERY, SURGERY_WORKSTATION);
         registry.addWorkstation(TROMMEL, TROMMEL_WORKSTATION);
+        registry.addWorkstation(TROMMEL, LARGE_TROMMEL_WORKSTATION);
 
         RecipeManager manager = registry.getRecipeManager();
         manager.listAllOfType(NMrecipeTypes.ENLIGHTENING)
