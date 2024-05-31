@@ -9,6 +9,7 @@ import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.MathHelper;
 
 public class NMButtonWidget extends ButtonWidget
 {
@@ -55,6 +56,7 @@ public class NMButtonWidget extends ButtonWidget
         int textCol = textActive() ? PLCCols.SELECTED.col : PLCCols.TEXT.col;
 
 //        this.drawMessage(matrices, minecraftClient.textRenderer, textCol);
+        GUIUtil.drawCenteredText(matrices, minecraftClient.textRenderer, getMessage(), x + getWidth() / 2f, y + Math.round((height - minecraftClient.textRenderer.fontHeight) / 2f), textCol, false);
     }
 
     private int getTextureY()
