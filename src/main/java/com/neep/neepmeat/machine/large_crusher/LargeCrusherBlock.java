@@ -4,13 +4,13 @@ import com.google.common.collect.ImmutableMap;
 import com.neep.meatlib.block.MeatlibBlock;
 import com.neep.meatlib.item.ItemSettings;
 import com.neep.meatlib.registry.BlockRegistry;
+import com.neep.meatlib.storage.MeatlibStorageUtil;
 import com.neep.neepmeat.api.big_block.BigBlockPattern;
 import com.neep.neepmeat.api.machine.MotorisedBlock;
 import com.neep.neepmeat.api.multiblock2.Multiblock2ControllerBlock;
 import com.neep.neepmeat.api.multiblock2.MultiblockUnassembledPattern;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.machine.live_machine.LivingMachines;
-import com.neep.neepmeat.util.ItemUtil;
 import com.neep.neepmeat.util.MiscUtil;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
 import net.minecraft.block.Block;
@@ -159,7 +159,7 @@ public class LargeCrusherBlock extends Multiblock2ControllerBlock<LargeCrusherSt
         {
             world.getBlockEntity(pos, NMBlockEntities.LARGE_CRUSHER).ifPresent(be ->
             {
-                ItemUtil.scatterItems(world, pos, be.getInputStorage(null));
+                MeatlibStorageUtil.scatterNoTransaction(world, pos, be.getInputStorage(null));
             });
         }
 //        else if (state.get(ASSEMBLED) && !newState.get(ASSEMBLED))

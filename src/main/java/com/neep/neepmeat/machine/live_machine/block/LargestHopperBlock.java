@@ -9,7 +9,6 @@ import com.neep.neepmeat.api.big_block.BigBlockPattern;
 import com.neep.neepmeat.api.big_block.BigBlockStructure;
 import com.neep.neepmeat.api.big_block.BigBlockStructureEntity;
 import com.neep.neepmeat.init.NMBlockEntities;
-import com.neep.neepmeat.machine.large_crusher.LargeCrusherBlockEntity;
 import com.neep.neepmeat.machine.live_machine.LivingMachines;
 import com.neep.neepmeat.machine.live_machine.block.entity.LargestHopperBlockEntity;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
@@ -99,7 +98,7 @@ public class LargestHopperBlock extends BigBlock<LargestHopperBlock.StructureBlo
     {
         if (!newState.isOf(this) && world.getBlockEntity(pos) instanceof LargestHopperBlockEntity be)
         {
-            MeatlibStorageUtil.scatter(world, pos, be.getStorage(null));
+            MeatlibStorageUtil.scatterNoTransaction(world, pos, be.getStorage(null));
         }
         super.onStateReplaced(state, world, pos, newState, moved);
     }

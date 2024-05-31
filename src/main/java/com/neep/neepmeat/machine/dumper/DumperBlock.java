@@ -2,6 +2,7 @@ package com.neep.neepmeat.machine.dumper;
 
 import com.neep.meatlib.block.BaseBlock;
 import com.neep.meatlib.item.ItemSettings;
+import com.neep.meatlib.storage.MeatlibStorageUtil;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.util.ItemUtil;
 import com.neep.neepmeat.util.MiscUtil;
@@ -15,8 +16,6 @@ import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.tag.BlockTags;
-import net.minecraft.tag.TagKey;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.function.BooleanBiFunction;
@@ -63,7 +62,7 @@ public class DumperBlock extends BaseBlock implements BlockEntityProvider
         {
             if (world.getBlockEntity(pos) instanceof DumperBlockEntity be)
             {
-                ItemUtil.scatterItems(world, pos, be.getStorage(null));
+                MeatlibStorageUtil.scatterNoTransaction(world, pos, be.getStorage(null));
                 world.updateComparators(pos,this);
             }
         }

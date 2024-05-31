@@ -124,4 +124,12 @@ public class MeatlibStorageUtil
             }
         }
     }
+
+    public static void scatterNoTransaction(World world, BlockPos pos, Storage<ItemVariant> storage)
+    {
+        for (StorageView<ItemVariant> view : storage)
+        {
+            ItemScatterer.spawn(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, view.getResource().toStack((int) view.getAmount()));
+        }
+    }
 }

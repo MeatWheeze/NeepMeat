@@ -16,9 +16,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.util.Hand;
-import net.minecraft.util.ItemScatterer;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 
 import java.util.List;
 import java.util.Optional;
@@ -55,14 +52,6 @@ public class ItemUtil
     public static boolean notBlank(StorageView<ItemVariant> view)
     {
         return !view.isResourceBlank();
-    }
-
-    public static void scatterItems(World world, BlockPos pos, Storage<ItemVariant> storage)
-    {
-        for (StorageView<ItemVariant> view : storage)
-        {
-            ItemScatterer.spawn(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, view.getResource().toStack((int) view.getAmount()));
-        }
     }
 
     public static boolean singleVariantInteract(PlayerEntity player, Hand hand, SingleVariantStorage<ItemVariant> storage)
