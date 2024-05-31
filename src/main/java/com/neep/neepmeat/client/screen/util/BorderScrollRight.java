@@ -31,6 +31,9 @@ public class BorderScrollRight extends Border
 
     public void render(MatrixStack context, int mouseX, int mouseY, float delta, float scrollAmount)
     {
+        if (Float.isNaN(scrollAmount))
+            scrollAmount = 0;
+
         render(context, mouseX, mouseY, delta);
 
         float barHeight = 10;

@@ -39,7 +39,6 @@ public class ItemRequesterScreen extends HandledScreen<ItemRequesterScreenHandle
         super.init();
 
         itemPane.init(x + 8, y + 8);
-        this.addDrawableChild(itemPane);
 
         Border border = addDrawable(new Border(x, (height - backgroundHeight) / 2, backgroundWidth, backgroundHeight, 3, () -> PLCCols.BORDER.col));
         Rectangle bounds = border.withoutPadding();
@@ -47,7 +46,7 @@ public class ItemRequesterScreen extends HandledScreen<ItemRequesterScreenHandle
 //        Rectangle inv = new Rectangle.Immutable(bounds.x() + 3, bounds.y() + bounds.h() - BasicScreenHandler.playerSlotsH() - 3, BasicScreenHandler.playerSlotsW(), BasicScreenHandler.playerSlotsH());
         var invBorder = addDrawable(new PlayerSlotsBorder(bounds.x() + 3, bounds.y() + bounds.h() - BasicScreenHandler.playerInvH() - 3, () -> PLCCols.BORDER.col));
 
-//        addDrawable(new Border())
+        this.addDrawableChild(itemPane);
 
         this.titleX = 29;
     }
