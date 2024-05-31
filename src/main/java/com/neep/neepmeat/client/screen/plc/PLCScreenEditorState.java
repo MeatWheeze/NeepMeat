@@ -68,12 +68,12 @@ public class PLCScreenEditorState extends ScreenSubElement implements Drawable, 
 
     }
 
-//    @Override
-//    public void setFocused(boolean focused)
-//    {
-//        super.setFocused(focused);
-//        updateEditorWidth();
-//    }
+    @Override
+    public void setFocused(Element focused)
+    {
+        super.setFocused(focused);
+        updateEditorWidth();
+    }
 
     private void updateEditorWidth()
     {
@@ -127,13 +127,15 @@ public class PLCScreenEditorState extends ScreenSubElement implements Drawable, 
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button)
     {
-        if (!editorField.isHovered() && getFocused() == editorField)
+        boolean b = editorField.isMouseOver(mouseX, mouseY);
+        if (!editorField.isMouseOver(mouseX, mouseY) && getFocused() == editorField)
         {
             setFocused(null);
+            editorField.setFocused(false);
 //            updateEditorWidth();
 //            setFocused(null);
 //            parent.focusOn(null);
-//            return false;
+            return false;
         }
 
         return super.mouseClicked(mouseX, mouseY, button);

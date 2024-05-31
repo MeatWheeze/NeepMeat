@@ -115,6 +115,12 @@ public class EditBoxWidget extends ScrollableWidget
     }
 
     @Override
+    public void setFocused(boolean focused)
+    {
+        super.setFocused(focused);
+    }
+
+    @Override
     public boolean mouseReleased(double mouseX, double mouseY, int button)
     {
         return super.mouseReleased(mouseX, mouseY, button);
