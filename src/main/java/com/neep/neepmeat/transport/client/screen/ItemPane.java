@@ -279,8 +279,8 @@ public class ItemPane implements Drawable, Element, Selectable, GUIUtil
             return;
 
 //        ItemStack itemStack = ra.resource().toStack((int) ra.amount());
-        matrices.push();
-        matrices.translate(x, y, 0);
+//        matrices.push();
+//        matrices.translate(x, y, 0);
 
 //        this.setZOffset(100);
         itemRenderer.zOffset = 100.0f;
@@ -288,11 +288,11 @@ public class ItemPane implements Drawable, Element, Selectable, GUIUtil
         RenderSystem.enableDepthTest();
         this.itemRenderer.renderInGuiWithOverrides(this.client.player, itemStack, 0, 0, 0);
 //        itemRenderer.renderItem(itemStack, ModelTransformation.Mode.GUI, 0xF000F0, OverlayTexture.DEFAULT_UV, matrices, null, 0);
-        itemRenderer.renderInGui(itemStack, 0, 0);
+        itemRenderer.renderInGui(itemStack, x, y);
         itemRenderer.renderGuiItemOverlay(textRenderer, itemStack, x, y);
 //        matrices.drawItem(itemStack, 0, 0, 100);
 //        matrices.drawItemInSlot(textRenderer, itemStack, 0, 0);
-        matrices.pop();
+//        matrices.pop();
     }
 
     public class SearchWidget extends PersistentWidget implements Drawable
