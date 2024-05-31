@@ -2,7 +2,7 @@
     "ambientocclusion": false,
     "textures": {
         "particle": "neepmeat:block/mesh_panel",
-        "bars": "neepmeat:block/mesh_panel_top"
+        "bars": "neepmeat:block/mesh_panel"
     },
     "elements": [
         {   "from": [ 8, 0, 7 ],
