@@ -87,7 +87,7 @@ public interface GUIUtil
     /**
      * Segments and stretches the defined region to draw it as a window border. Only works with plain colours, since the texture is stretched or squashed.
      */
-    static void drawFiveSlicedTexture(MatrixStack matrices, Identifier texture, int x, int y, int width, int height, int sliceBorder, int regionWidth, int regionHeight, int u, int v)
+    static void drawNineSlicedTexture(MatrixStack matrices, Identifier texture, int x, int y, int width, int height, int sliceBorder, int regionWidth, int regionHeight, int u, int v)
     {
         RenderSystem.setShaderTexture(0, texture);
         Matrix4f pos = matrices.peek().getPositionMatrix();

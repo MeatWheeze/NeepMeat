@@ -9,7 +9,6 @@ import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.math.MathHelper;
 
 public class NMButtonWidget extends ButtonWidget
 {
@@ -46,7 +45,7 @@ public class NMButtonWidget extends ButtonWidget
             RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, this.alpha);
             RenderSystem.enableBlend();
             RenderSystem.enableDepthTest();
-            GUIUtil.drawFiveSlicedTexture(matrices, NM_WIDGETS_TEXTURE, x, y, this.getWidth(), this.getHeight(), 4, 200, 20, 0, this.getTextureY());
+            GUIUtil.drawNineSlicedTexture(matrices, NM_WIDGETS_TEXTURE, x, y, this.getWidth(), this.getHeight(), 4, 200, 20, 0, this.getTextureY());
 //            matrices.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
         }
 
