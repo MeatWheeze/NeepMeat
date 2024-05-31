@@ -65,7 +65,7 @@ dependencies {
 	modApi include("com.jozufozu.flywheel:flywheel-fabric-${project.flywheel_mc_version}:${project.flywheel_version}")
 
 	// Myron
-	modImplementation include("dev.monarkhes:myron-neepmeat:${project.myron_version}")
+	modImplementation include("com.github.MeatWheeze:myron-neepmeat:${project.myron_version}")
 
 	// Milk lib
 	modImplementation include("io.github.tropheusj:milk-lib:${project.milk_version}")
