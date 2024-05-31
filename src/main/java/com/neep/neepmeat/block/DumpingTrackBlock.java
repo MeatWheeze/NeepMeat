@@ -7,6 +7,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.enums.RailShape;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.vehicle.AbstractMinecartEntity;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.fluid.Fluids;
@@ -75,7 +76,15 @@ public class DumpingTrackBlock extends BaseRailBlock implements SpecialRail
         {
             passenger.stopRiding();
             Vec3d prevPassengerPos = passenger.getPos();
-            passenger.setPosition(thisX, prevPassengerPos.y, thisZ);
+            if (passenger instanceof PlayerEntity player)
+            {
+                player.setPos(thisX, prevPassengerPos.y, thisZ);
+                player.teleport(thisX, prevPassengerPos.y, thisZ);
+            }
+            else
+            {
+                passenger.setPosition(thisX, prevPassengerPos.y, thisZ);
+            }
         }
     }
 
