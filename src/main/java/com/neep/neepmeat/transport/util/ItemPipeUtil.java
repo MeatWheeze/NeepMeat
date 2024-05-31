@@ -20,6 +20,7 @@ import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.ItemEntity;
+import net.minecraft.fluid.FluidState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Pair;
@@ -338,6 +339,7 @@ public class ItemPipeUtil
 
     public static boolean canDumpInto(World world, BlockPos pos, BlockState state)
     {
-        return !state.isSolidBlock(world, pos);
+        return state.isAir() || !state.getFluidState().isEmpty();
+//        return !state.isSolidBlock(world, pos);
     }
 }
