@@ -2,7 +2,7 @@ package com.neep.neepmeat.client.screen;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.neep.neepmeat.NeepMeat;
-import com.neep.neepmeat.client.screen.button.TextToggleWidget;
+import com.neep.neepmeat.client.screen.button.NMToggleButtonWidget;
 import com.neep.neepmeat.screen_handler.AssemblerScreenHandler;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -100,11 +100,8 @@ public class AssemblerScreen extends HandledScreen<AssemblerScreenHandler>
     {
         super.init();
         titleX = (backgroundWidth - textRenderer.getWidth(title)) / 2;
-        this.addDrawableChild(new TextToggleWidget(this.x + 7, this.y + 93, 110, 20, Text.translatable("button." + NeepMeat.NAMESPACE + ".assembler.select"),
-                handler.getProperty(2) > 0, (b, t) ->
-        {
-            buttonPress(AssemblerScreenHandler.ID_TOGGLE_SELECT);
-        }));
+        this.addDrawableChild(new NMToggleButtonWidget(this.x + 7, this.y + 93, 110, 20, () -> handler.getProperty(2) > 0, Text.translatable("button." + NeepMeat.NAMESPACE + ".assembler.select"),
+            (b, t) -> buttonPress(AssemblerScreenHandler.ID_TOGGLE_SELECT)));
 
 //        this.addDrawableChild(ButtonWidget.builder(Text.translatable("container.neepmeat.assembler.display"), button ->
 //        {
