@@ -2,11 +2,11 @@
   "replace": false,
   "values": [
     {
-      "id": "#c:raw_meat",
+      "id": "#c:raw_fish",
       "required": false
     },
     {
-      "id": "#c:raw_fish",
+      "id": "#c:raw_meat",
       "required": false
     },
     {
