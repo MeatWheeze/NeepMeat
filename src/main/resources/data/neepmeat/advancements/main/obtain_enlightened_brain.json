@@ -8,7 +8,7 @@
       "translate": "advancements.neepmeat.main.obtain_enlightened_brain.title"
     },
     "description": {
-      "translate": "advancements.neepmeat.main.obtain_enlightened_brain.description"
+      "translate": "advancements.neepmeat.main.obtain_enlightened_brain.desc"
     },
     "frame": "goal",
     "show_toast": true,

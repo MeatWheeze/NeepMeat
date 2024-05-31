@@ -8,7 +8,7 @@
       "translate": "advancements.neepmeat.main.obtain_item_pipe.title"
     },
     "description": {
-      "translate": "advancements.neepmeat.main.obtain_item_pipe.description"
+      "translate": "advancements.neepmeat.main.obtain_item_pipe.desc"
     },
     "frame": "task",
     "show_toast": true,

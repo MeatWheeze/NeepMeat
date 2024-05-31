@@ -8,7 +8,7 @@
       "translate": "advancements.neepmeat.main.obtain_whisper_brass.title"
     },
     "description": {
-      "translate": "advancements.neepmeat.main.obtain_whisper_brass.description"
+      "translate": "advancements.neepmeat.main.obtain_whisper_brass.desc"
     },
     "frame": "task",
     "show_toast": false,

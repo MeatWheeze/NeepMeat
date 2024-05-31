@@ -8,7 +8,7 @@
       "translate": "advancements.neepmeat.main.obtain_whisper_flour.title"
     },
     "description": {
-      "translate": "advancements.neepmeat.main.obtain_whisper_flour.description"
+      "translate": "advancements.neepmeat.main.obtain_whisper_flour.desc"
     },
     "frame": "goal",
     "show_toast": true,
