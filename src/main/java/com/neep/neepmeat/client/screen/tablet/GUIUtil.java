@@ -4,10 +4,12 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.neep.neepmeat.NeepMeat;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawableHelper;
+import net.minecraft.client.render.*;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.OrderedText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.Matrix4f;
 
 import static net.minecraft.client.gui.DrawableHelper.drawTexture;
 
@@ -82,18 +84,57 @@ public interface GUIUtil
         drawTexture(context, x, y, 0, 0, 176, 90, 256, 256);
     }
 
-    static void drawNineSlicedTexture(MatrixStack matrices, Identifier texture, int x, int y, int width, int height, int leftSliceWidth, int topSliceHeight, int rightSliceWidth, int bottomSliceHeight, int centerSliceWidth, int centerSliceHeight, int u, int v)
+    /**
+     * Segments and stretches the defined region to draw it as a window border. Only works with plain colours, since the texture is stretched or squashed.
+     */
+    static void drawFiveSlicedTexture(MatrixStack matrices, Identifier texture, int x, int y, int width, int height, int sliceBorder, int regionWidth, int regionHeight, int u, int v)
     {
+        RenderSystem.setShaderTexture(0, texture);
+        Matrix4f pos = matrices.peek().getPositionMatrix();
+        int z = 0;
+        int centerSliceWidth = regionWidth - 2 * sliceBorder;
 
+        // Top
+        drawTexturedQuad(pos, x + sliceBorder, x + width - sliceBorder, y, y + sliceBorder, z, u + sliceBorder, u + sliceBorder + centerSliceWidth, v, v + sliceBorder);
+
+        // Bottom
+        drawTexturedQuad(pos, x + sliceBorder, x + width - sliceBorder, y + height - sliceBorder, y + height, z, u + sliceBorder, u + sliceBorder + centerSliceWidth, v + regionHeight - sliceBorder, v + regionHeight);
+
+        // Left
+        drawTexturedQuad(pos, x, x + sliceBorder, y + sliceBorder, y + height - sliceBorder, z, u, u + sliceBorder, v + sliceBorder, v + regionHeight - sliceBorder);
+
+        // Right
+        drawTexturedQuad(pos, x + width - sliceBorder, x + width, y + sliceBorder, y + height - sliceBorder, z, u + regionWidth - sliceBorder, u + regionWidth, v + sliceBorder, v + regionHeight - sliceBorder);
+
+        // Middle
+        drawTexturedQuad(pos, x + sliceBorder, x + width - sliceBorder, y + sliceBorder, y + height - sliceBorder, z, u + sliceBorder, u + regionWidth - sliceBorder, v + sliceBorder, v + regionHeight - sliceBorder);
+
+        // Top left corner
+        drawTexturedQuad(pos, x, x + sliceBorder, y, y + sliceBorder, z, u, u + sliceBorder, v, v + sliceBorder);
+
+        // Bottom left corner
+        drawTexturedQuad(pos, x, x + sliceBorder, y + height - sliceBorder, y + height, z, u, u + sliceBorder, v + regionHeight - sliceBorder, v + regionHeight);
+
+        // Bottom right corner
+        drawTexturedQuad(pos, x + width - sliceBorder, x + width, y + height - sliceBorder, y + height, z, u + regionWidth - sliceBorder, u + regionWidth, v + regionHeight - sliceBorder, v + regionHeight);
+
+        // Top right corner
+        drawTexturedQuad(pos, x + width - sliceBorder, x + width, y, y + sliceBorder, z, u + regionWidth - sliceBorder, u + regionWidth, v, v + sliceBorder);
     }
 
-    static void drawNineSlicedTexture(MatrixStack matrices, Identifier texture, int x, int y, int width, int height, int outerSliceSize, int centerSliceWidth, int centerSliceHeight, int u, int v)
+    private static void drawTexturedQuad(Matrix4f matrix, int x0, int x1, int y0, int y1, int z, float u0, float u1, float v0, float v1)
     {
-        drawNineSlicedTexture(matrices, texture, x, y, width, height, outerSliceSize, outerSliceSize, outerSliceSize, outerSliceSize, centerSliceWidth, centerSliceHeight, u, v);
-    }
-
-    static void drawNineSlicedTexture(MatrixStack matrices, Identifier texture, int x, int y, int width, int height, int outerSliceWidth, int outerSliceHeight, int centerSliceWidth, int centerSliceHeight, int u, int v)
-    {
-        drawNineSlicedTexture(matrices, texture, x, y, width, height, outerSliceWidth, outerSliceHeight, outerSliceWidth, outerSliceHeight, centerSliceWidth, centerSliceHeight, u, v);
+        u0 /= 256;
+        u1 /= 256;
+        v0 /= 256;
+        v1 /= 256;
+        RenderSystem.setShader(GameRenderer::getPositionTexShader);
+        BufferBuilder bufferBuilder = Tessellator.getInstance().getBuffer();
+        bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE);
+        bufferBuilder.vertex(matrix, (float) x0, (float) y1, (float) z).texture(u0, v1).next();
+        bufferBuilder.vertex(matrix, (float) x1, (float) y1, (float) z).texture(u1, v1).next();
+        bufferBuilder.vertex(matrix, (float) x1, (float) y0, (float) z).texture(u1, v0).next();
+        bufferBuilder.vertex(matrix, (float) x0, (float) y0, (float) z).texture(u0, v0).next();
+        BufferRenderer.drawWithShader(bufferBuilder.end());
     }
 }

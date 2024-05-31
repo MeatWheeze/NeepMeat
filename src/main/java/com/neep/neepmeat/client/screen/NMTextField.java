@@ -41,7 +41,7 @@ public class NMTextField extends TextFieldWidget
     {
         if (drawFancyBackground)
         {
-            GUIUtil.drawNineSlicedTexture(context, NMButtonWidget.NM_WIDGETS_TEXTURE, x, y, this.getWidth(), this.getHeight(), 20, 4, 200, 20, 0, 90);
+            GUIUtil.drawFiveSlicedTexture(context, NMButtonWidget.NM_WIDGETS_TEXTURE, x, y, this.getWidth(), this.getHeight(), 4, 200, 20, 0, 90);
         }
 
         TextFieldWidgetAccessor accessor = (TextFieldWidgetAccessor) this;

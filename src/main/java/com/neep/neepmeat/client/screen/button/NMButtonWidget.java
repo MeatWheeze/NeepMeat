@@ -5,7 +5,6 @@ import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.api.plc.PLCCols;
 import com.neep.neepmeat.client.screen.tablet.GUIUtil;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
@@ -46,7 +45,7 @@ public class NMButtonWidget extends ButtonWidget
             RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, this.alpha);
             RenderSystem.enableBlend();
             RenderSystem.enableDepthTest();
-            GUIUtil.drawNineSlicedTexture(matrices, NM_WIDGETS_TEXTURE, x, y, this.getWidth(), this.getHeight(), 20, 4, 200, 20, 0, this.getTextureY());
+            GUIUtil.drawFiveSlicedTexture(matrices, NM_WIDGETS_TEXTURE, x, y, this.getWidth(), this.getHeight(), 4, 200, 20, 0, this.getTextureY());
 //            matrices.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
         }
 
