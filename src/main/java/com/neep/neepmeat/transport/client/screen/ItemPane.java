@@ -286,9 +286,9 @@ public class ItemPane implements Drawable, Element, Selectable, GUIUtil
         itemRenderer.zOffset = 100.0f;
 
         RenderSystem.enableDepthTest();
-        this.itemRenderer.renderInGuiWithOverrides(this.client.player, itemStack, 0, 0, 0);
+        this.itemRenderer.renderInGuiWithOverrides(this.client.player, itemStack, x, y, 0);
 //        itemRenderer.renderItem(itemStack, ModelTransformation.Mode.GUI, 0xF000F0, OverlayTexture.DEFAULT_UV, matrices, null, 0);
-        itemRenderer.renderInGui(itemStack, x, y);
+//        itemRenderer.renderInGui(itemStack, x, y);
         itemRenderer.renderGuiItemOverlay(textRenderer, itemStack, x, y);
 //        matrices.drawItem(itemStack, 0, 0, 100);
 //        matrices.drawItemInSlot(textRenderer, itemStack, 0, 0);
