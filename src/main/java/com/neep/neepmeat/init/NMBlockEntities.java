@@ -30,6 +30,7 @@ import com.neep.neepmeat.machine.crucible.CrucibleBlockEntity;
 import com.neep.neepmeat.machine.death_blades.DeathBladesBlockEntity;
 import com.neep.neepmeat.machine.deployer.DeployerBlockEntity;
 import com.neep.neepmeat.machine.dumper.DumperBlockEntity;
+import com.neep.neepmeat.machine.fabricator.FabricatorBlockEntity;
 import com.neep.neepmeat.machine.fluid_exciter.FluidExciterBlock;
 import com.neep.neepmeat.machine.fluid_exciter.FluidExciterBlockEntity;
 import com.neep.neepmeat.machine.fluid_rationer.FluidRationerBlockEntity;
@@ -185,6 +186,7 @@ public class NMBlockEntities
     public static BlockEntityType<HydraulicPressBlockEntity> HYDRAULIC_PRESS;
     public static BlockEntityType<PedestalBlockEntity> PEDESTAL;
     public static BlockEntityType<AssemblerBlockEntity> ASSEMBLER;
+    public static BlockEntityType<FabricatorBlockEntity> FABRICATOR;
     public static BlockEntityType<WorkstationBlockEntity> WORKSTATION;
     public static BlockEntityType<DeathBladesBlockEntity> DEATH_BLADES;
     public static BlockEntityType<BottlerBlockEntity> BOTTLER;
@@ -443,6 +445,8 @@ public class NMBlockEntities
         ASSEMBLER = register("assembler", AssemblerBlockEntity::new, NMBlocks.ASSEMBLER);
         ItemStorage.SIDED.registerForBlockEntity((be, dir) -> be.getStorage().getStorage(dir, false), ASSEMBLER);
         BloodAcceptor.SIDED.registerForBlocks(AssemblerBlockEntity::getBloodAcceptorFromTop, NMBlocks.ASSEMBLER.getStructureBlock());
+
+        FABRICATOR = register("fabricator", (p, s) -> new FabricatorBlockEntity(FABRICATOR, p, s), NMBlocks.FABRICATOR);
 
         WORKSTATION = register("workstation", WorkstationBlockEntity::new, NMBlocks.WORKSTATION);
 

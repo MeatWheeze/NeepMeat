@@ -28,6 +28,8 @@ public class NMExtraModels implements ExtraModelProvider
     public static final PartialModel PHAGE_RAY_BASE = new PartialModel(new Identifier(NeepMeat.NAMESPACE, "block/phage_ray/phage_ray.obj"));
     public static final PartialModel PHAGE_RAY_BARREL = new PartialModel(new Identifier(NeepMeat.NAMESPACE, "block/phage_ray/phage_ray_barrel.obj"));
 
+    public static final PartialModel FABRICATOR_ROTOR = new PartialModel(new Identifier(NeepMeat.NAMESPACE, "block/fabricator/rotor"));
+    public static final PartialModel FABRICATOR_SEGMENT = new PartialModel(new Identifier(NeepMeat.NAMESPACE, "block/fabricator/segment"));
 
     // I hindsight I should have called this a turntable, but words elude me when I am forced to quickly name a file.
     public static PartialModel ROBOTIC_ARM_SPINNY_BIT = new PartialModel(new Identifier(NeepMeat.NAMESPACE, "block/robotic_arm/spinny_bit"));

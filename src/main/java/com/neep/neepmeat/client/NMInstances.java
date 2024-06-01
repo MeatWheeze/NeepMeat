@@ -1,13 +1,8 @@
 package com.neep.neepmeat.client;
 
 import com.jozufozu.flywheel.backend.instancing.InstancedRenderRegistry;
-import com.neep.neepmeat.client.instance.LargeFanInstance;
-import com.neep.neepmeat.client.instance.LargeTrommelInstance;
-import com.neep.neepmeat.client.instance.RoboticArmInstance;
-import com.neep.neepmeat.client.instance.FarmingScutterInstance;
 import com.neep.neepmeat.client.instance.*;
 import com.neep.neepmeat.client.renderer.LinearOscillatorInstance;
-import com.neep.neepmeat.client.renderer.RoboticArmRenderer;
 import com.neep.neepmeat.client.renderer.block.LargeTrommelRenderer;
 import com.neep.neepmeat.client.renderer.block.LargestHopperRenderer;
 import com.neep.neepmeat.client.renderer.entity.LimbEntityInstance;
@@ -15,6 +10,7 @@ import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.init.NMEntities;
 import com.neep.neepmeat.machine.advanced_motor.AdvancedMotorInstance;
 import com.neep.neepmeat.machine.charnel_pump.CharnelPumpInstance;
+import com.neep.neepmeat.machine.fabricator.FabricatorInstance;
 import com.neep.neepmeat.machine.flywheel.FlywheelInstance;
 import com.neep.neepmeat.machine.grinder.GrinderInstance;
 import com.neep.neepmeat.machine.grinder.GrinderRenderer;
@@ -59,6 +55,8 @@ public class NMInstances
         InstancedRenderRegistry.configure(NMBlockEntities.FLYWHEEL).alwaysSkipRender().factory(FlywheelInstance::new).apply();
         InstancedRenderRegistry.configure(NMBlockEntities.HYDRAULIC_PRESS).alwaysSkipRender().factory(HydraulicPressInstance::new).apply();
         InstancedRenderRegistry.configure(NMBlockEntities.CHARNEL_PUMP).alwaysSkipRender().factory(CharnelPumpInstance::new).apply();
+
+        InstancedRenderRegistry.configure(NMBlockEntities.FABRICATOR).alwaysSkipRender().factory(FabricatorInstance::new).apply();
 
         InstancedRenderRegistry.configure(PLCBlocks.ROBOTIC_ARM_ENTITY).alwaysSkipRender().factory(RoboticArmInstance::new).apply();
 

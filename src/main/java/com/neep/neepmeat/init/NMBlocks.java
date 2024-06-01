@@ -37,6 +37,7 @@ import com.neep.neepmeat.machine.crucible.FatCollectorBlock;
 import com.neep.neepmeat.machine.death_blades.DeathBladesBlock;
 import com.neep.neepmeat.machine.deployer.DeployerBlock;
 import com.neep.neepmeat.machine.dumper.DumperBlock;
+import com.neep.neepmeat.machine.fabricator.FabricatorBlock;
 import com.neep.neepmeat.machine.fluid_exciter.FluidExciterBlock;
 import com.neep.neepmeat.machine.fluid_rationer.FluidRationerBlock;
 import com.neep.neepmeat.machine.flywheel.FlywheelBlock;
@@ -229,6 +230,7 @@ public class NMBlocks
     public static Block CRUCIBLE = BlockRegistry.queue(new CrucibleBlock("crucible", block(), FLUID_PIPE_SETTINGS));
     public static Block COLLECTOR = BlockRegistry.queue(new FatCollectorBlock("collector", block(), FLUID_PIPE_SETTINGS));
     public static AssemblerBlock ASSEMBLER = BlockRegistry.queue(new AssemblerBlock("assembler", block().requiresVascular(), MACHINE_SETTINGS));
+    public static Block FABRICATOR = BlockRegistry.queue(new FabricatorBlock("fabricator", block().tooltip(TooltipSupplier.hidden(1)).requiresMotor(), MACHINE_SETTINGS));
 
     public static TallBlock FLUID_EXCITER = BlockRegistry.queue(new FluidExciterBlock("fluid_exciter", block().tooltip(TooltipSupplier.hidden(1)), MeatlibBlockSettings.create(Material.METAL).sounds(NMSoundGroups.MECHANICAL_MACHINE).hardness(4.0f)));
 
