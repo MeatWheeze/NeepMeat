@@ -174,6 +174,7 @@ public class TokenView
 
             builder.append(next());
         }
+        next(); // Advance over last "
         return builder.toString();
     }
 

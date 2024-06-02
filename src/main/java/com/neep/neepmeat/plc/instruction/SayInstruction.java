@@ -93,7 +93,6 @@ public class SayInstruction implements Instruction
                 String message = view.nextString();
                 if (!message.isEmpty())
                 {
-                    view.next();
                     parser.assureLineEnd(view);
                     return ((world, source, program) -> program.addBack(new SayInstruction(message)));
                 }
@@ -114,7 +113,6 @@ public class SayInstruction implements Instruction
             {
                 format = 'd';
             }
-
 
             parser.assureLineEnd(view);
             return ((world, source, program) -> program.addBack(new SayInstruction(format)));
