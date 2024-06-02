@@ -67,7 +67,7 @@ public class FabricatorBlock extends TallBlock implements BlockEntityProvider
         if (ctx.getPlayer() == null)
             return getDefaultState();
 
-        return this.getDefaultState().with(FACING, ctx.getPlayer().isSneaking() ? ctx.getHorizontalPlayerFacing().getOpposite() : ctx.getHorizontalPlayerFacing());
+        return this.getDefaultState().with(FACING, ctx.getPlayer().isSneaking() ? ctx.getPlayerFacing().getOpposite() : ctx.getPlayerFacing());
     }
 
     @Nullable

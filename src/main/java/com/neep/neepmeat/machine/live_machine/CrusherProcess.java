@@ -1,6 +1,5 @@
 package com.neep.neepmeat.machine.live_machine;
 
-import com.google.common.collect.Iterators;
 import com.neep.neepmeat.api.live_machine.ComponentType;
 import com.neep.neepmeat.api.live_machine.LivingMachineBlockEntity;
 import com.neep.neepmeat.api.live_machine.Process;
@@ -8,12 +7,12 @@ import com.neep.neepmeat.machine.live_machine.block.entity.CrusherSegmentBlockEn
 import com.neep.neepmeat.machine.live_machine.block.entity.LuckyOneBlockEntity;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
-import net.fabricmc.fabric.api.transfer.v1.storage.StorageUtil;
+import net.fabricmc.fabric.api.transfer.v1.storage.StorageView;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.minecraft.text.Text;
 
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
 public class CrusherProcess implements Process
@@ -53,7 +52,14 @@ public class CrusherProcess implements Process
             Storage<ItemVariant> input = hoppers.iterator().next().getStorage(null);
             Storage<ItemVariant> output = itemOutputs.iterator().next().getStorage(null);
 
-            boolean hasInput = Iterators.tryFind(input.iterator(), view -> view.getAmount() > 0 && !view.isResourceBlank()).isPresent();
+//            int inputSize = Iterators.size(input.nonEmptyIterator());
+            List<StorageView<ItemVariant>> inputViews = new ArrayList<>();
+            for (var view : input)
+            {
+                if (!view.isResourceBlank() && view.getAmount() > 0)
+                    inputViews.add(view);
+            }
+
             try (Transaction transaction = Transaction.openOuter())
             {
                 for (var crusher : crushers)
@@ -62,8 +68,26 @@ public class CrusherProcess implements Process
                     {
                         CrusherSegmentBlockEntity.InputSlot slot = crusher.getStorage();
 
-                        if (hasInput && slot.isEmpty())
-                            StorageUtil.move(input, slot, v -> true, 1, inner);
+                        if (inputViews.size() > 0 && slot.isEmpty())
+                        {
+                            // Round-robin behaviour
+                            be.inputSequence = (be.inputSequence + 1) % inputViews.size();
+
+                            try (Transaction inner2 = inner.openNested())
+                            {
+                                StorageView<ItemVariant> view = inputViews.get(be.inputSequence);
+                                if (!view.isResourceBlank() && view.getAmount() > 0)
+                                {
+                                    long inserted = slot.insert(view.getResource(), view.getAmount(), inner2);
+                                    long extracted = view.extract(view.getResource(), inserted, inner2);
+
+                                    if (inserted == extracted)
+                                        inner2.commit();
+                                    else
+                                        inner2.abort();
+                                }
+                            }
+                        }
 
                         if (!slot.isEmpty())
                         {

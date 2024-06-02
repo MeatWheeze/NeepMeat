@@ -82,6 +82,9 @@ public abstract class LivingMachineBlockEntity extends SyncableBlockEntity imple
     // Convenient combined item output
     private Storage<ItemVariant> combinedItemOutput = Storage.empty();
 
+    // Public, non-persistent round-robin counter
+    public int inputSequence;
+
     // Use only on client. Use structures.size() elsewhere.
     private int numStructures;
     private int numComponents;

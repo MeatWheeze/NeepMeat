@@ -8,10 +8,10 @@ import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.Drawable;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
 import net.minecraft.client.render.item.ItemRenderer;
+import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketByteBuf;
@@ -51,7 +51,7 @@ public class FabricatorScreen extends BaseHandledScreen<FabricatorScreenHandler>
             return;
 
         if (client.world.getRecipeManager().get(id).orElse(null) instanceof CraftingRecipe recipe)
-            result = recipe.getOutput(client.world.getRegistryManager());
+            result = recipe.getOutput();
         else
             result = ItemStack.EMPTY;
     }
@@ -67,7 +67,7 @@ public class FabricatorScreen extends BaseHandledScreen<FabricatorScreenHandler>
     }
 
     @Override
-    public void render(DrawContext context, int mouseX, int mouseY, float delta)
+    public void render(MatrixStack context, int mouseX, int mouseY, float delta)
     {
         renderBackground(context);
         super.render(context, mouseX, mouseY, delta);
@@ -76,7 +76,7 @@ public class FabricatorScreen extends BaseHandledScreen<FabricatorScreenHandler>
     }
 
     @Override
-    protected void drawBackground(DrawContext matrices, float delta, int mouseX, int mouseY)
+    protected void drawBackground(MatrixStack matrices, float delta, int mouseX, int mouseY)
     {
 //        RenderSystem.setShader(GameRenderer::getPositionTexShader);
 //        RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
@@ -89,9 +89,9 @@ public class FabricatorScreen extends BaseHandledScreen<FabricatorScreenHandler>
     }
 
     @Override
-    protected void drawForeground(DrawContext matrices, int mouseX, int mouseY)
+    protected void drawForeground(MatrixStack matrices, int mouseX, int mouseY)
     {
-        matrices.drawText(textRenderer, this.title, this.playerInventoryTitleX, this.titleY, 0x404040, false);
+        GUIUtil.drawText(matrices, textRenderer, this.title, this.playerInventoryTitleX, this.titleY, 0x404040, false);
     }
 
     @Override
@@ -115,13 +115,14 @@ public class FabricatorScreen extends BaseHandledScreen<FabricatorScreenHandler>
         }
 
         @Override
-        public void render(DrawContext context, int mouseX, int mouseY, float delta)
+        public void render(MatrixStack context, int mouseX, int mouseY, float delta)
         {
-            context.drawItem(result, x, y);
-            context.drawItemInSlot(textRenderer, result, x, y);
+            itemRenderer.renderInGuiWithOverrides(client.player, result, x, y, 0);
+            itemRenderer.renderGuiItemOverlay(textRenderer, result, x, y);
+
             if (!result.isEmpty() && mouseX > x && mouseX < x + 18 && mouseY > y && mouseY < y + 18)
             {
-                context.drawTooltip(textRenderer, getTooltipFromItem(result), mouseX, mouseY);
+                renderTooltip(context, getTooltipFromItem(result), mouseX, mouseY);
             }
         }
     }

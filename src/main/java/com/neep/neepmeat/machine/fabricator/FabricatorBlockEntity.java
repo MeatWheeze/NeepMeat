@@ -7,6 +7,7 @@ import com.neep.meatlib.recipe.MeatlibRecipes;
 import com.neep.meatlib.util.NbtSerialisable;
 import com.neep.neepmeat.api.machine.MotorisedBlock;
 import com.neep.neepmeat.machine.motor.MotorEntity;
+import com.neep.neepmeat.screen_handler.DummyScreenHandler;
 import com.neep.neepmeat.transport.util.ItemPipeUtil;
 import net.fabricmc.fabric.api.lookup.v1.block.BlockApiCache;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
@@ -25,7 +26,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.RecipeInputInventory;
+import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.PacketByteBuf;
@@ -109,7 +110,7 @@ public class FabricatorBlockEntity extends SyncableBlockEntity implements Motori
                     return;
                 }
 
-                ItemStack result = recipe.getOutput(world.getRegistryManager());
+                ItemStack result = recipe.getOutput();
 
                 // ItemVariant.of shouldn't mutate the stack.
                 long ejected = ItemPipeUtil.stackToAny((ServerWorld) world, pos, facing,
@@ -167,7 +168,7 @@ public class FabricatorBlockEntity extends SyncableBlockEntity implements Motori
                     return ItemStack.EMPTY;
                 }
 
-                ItemStack result = recipe.getOutput(world.getRegistryManager()).copy();
+                ItemStack result = recipe.getOutput().copy();
 
                 // Eject remainders
                 for (var taken : takenResources)
@@ -320,9 +321,14 @@ public class FabricatorBlockEntity extends SyncableBlockEntity implements Motori
         }
     }
 
-    public class FabricatorInventory implements ImplementedInventory, RecipeInputInventory
+    public class FabricatorInventory extends CraftingInventory implements ImplementedInventory
     {
         private final DefaultedList<ItemStack> items = DefaultedList.ofSize(9, ItemStack.EMPTY);
+
+        public FabricatorInventory()
+        {
+            super(new DummyScreenHandler(i -> {}), 3, 3);
+        }
 
         @Override
         public DefaultedList<ItemStack> getItems()
@@ -350,12 +356,6 @@ public class FabricatorBlockEntity extends SyncableBlockEntity implements Motori
         }
 
         @Override
-        public List<ItemStack> getInputStacks()
-        {
-            return items;
-        }
-
-        @Override
         public void provideRecipeInputs(RecipeMatcher finder)
         {
             for (ItemStack itemStack : this.items)
@@ -380,7 +380,7 @@ public class FabricatorBlockEntity extends SyncableBlockEntity implements Motori
 
             if (recipe != null)
             {
-                previewStack = recipe.getOutput(world.getRegistryManager()).copy();
+                previewStack = recipe.getOutput().copy();
             }
         }
 

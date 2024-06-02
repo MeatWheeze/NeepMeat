@@ -4,8 +4,8 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.api.plc.PLCCols;
 import com.neep.neepmeat.client.screen.button.PersistentWidget;
-import com.neep.neepmeat.client.screen.util.GUIUtil;
 import com.neep.neepmeat.client.screen.util.BorderScrollRight;
+import com.neep.neepmeat.client.screen.util.GUIUtil;
 import com.neep.neepmeat.client.screen.util.Rectangle;
 import com.neep.neepmeat.transport.network.SyncRequesterScreenS2CPacket;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
@@ -287,12 +287,7 @@ public class ItemPane implements Drawable, Element, Selectable, GUIUtil
 
         RenderSystem.enableDepthTest();
         this.itemRenderer.renderInGuiWithOverrides(this.client.player, itemStack, x, y, 0);
-//        itemRenderer.renderItem(itemStack, ModelTransformation.Mode.GUI, 0xF000F0, OverlayTexture.DEFAULT_UV, matrices, null, 0);
-//        itemRenderer.renderInGui(itemStack, x, y);
         itemRenderer.renderGuiItemOverlay(textRenderer, itemStack, x, y);
-//        matrices.drawItem(itemStack, 0, 0, 100);
-//        matrices.drawItemInSlot(textRenderer, itemStack, 0, 0);
-//        matrices.pop();
     }
 
     public class SearchWidget extends PersistentWidget implements Drawable

@@ -9,7 +9,7 @@ import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.RecipeInputInventory;
+import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketByteBuf;
@@ -34,11 +34,11 @@ public class FabricatorScreenHandler extends BasicScreenHandler
 
     public FabricatorScreenHandler(int syncId, PlayerInventory inventory, PacketByteBuf buf)
     {
-        this(inventory, new SimpleRecipeInputInventory(9), syncId,
+        this(inventory, new SimpleInventory(9), syncId,
                 (FabricatorBlockEntity) inventory.player.getWorld().getBlockEntity(buf.readBlockPos()));
     }
 
-    public FabricatorScreenHandler(PlayerInventory playerInventory, RecipeInputInventory inventory, int syncId, FabricatorBlockEntity be)
+    public FabricatorScreenHandler(PlayerInventory playerInventory, Inventory inventory, int syncId, FabricatorBlockEntity be)
     {
         super(ScreenHandlerInit.FABRICATOR, playerInventory, inventory, syncId, null);
         this.be = be;
@@ -124,7 +124,7 @@ public class FabricatorScreenHandler extends BasicScreenHandler
     }
 
     @Override
-    public void onClosed(PlayerEntity player)
+    public void close(PlayerEntity player)
     {
         if (playerInventory.player instanceof ServerPlayerEntity serverPlayerEntity)
         {
@@ -161,31 +161,5 @@ public class FabricatorScreenHandler extends BasicScreenHandler
     public void onSlotClick(int slotIndex, int button, SlotActionType actionType, PlayerEntity player)
     {
         super.onSlotClick(slotIndex, button, actionType, player);
-    }
-
-    private static class SimpleRecipeInputInventory extends SimpleInventory implements RecipeInputInventory
-    {
-        public SimpleRecipeInputInventory(int size)
-        {
-            super(size);
-        }
-
-        @Override
-        public int getWidth()
-        {
-            return 3;
-        }
-
-        @Override
-        public int getHeight()
-        {
-            return 3;
-        }
-
-        @Override
-        public List<ItemStack> getInputStacks()
-        {
-            return stacks;
-        }
     }
 }
