@@ -10,6 +10,7 @@ import com.neep.neepmeat.datagen.tag.NMTags;
 import com.neep.neepmeat.init.NMBlocks;
 import com.neep.neepmeat.init.NMItems;
 import com.neep.neepmeat.init.NMrecipeTypes;
+import com.neep.neepmeat.init.ScreenHandlerInit;
 import com.neep.neepmeat.machine.live_machine.LivingMachines;
 import com.neep.neepmeat.plc.PLCBlocks;
 import com.neep.neepmeat.plc.recipe.PLCRecipes;
@@ -151,5 +152,9 @@ public class NMEmiPlugin implements EmiPlugin {
 
 //        registry.addRecipe(new VivisectionEmiRecipe(List.of(EntityType.ZOMBIE), NMItems.ANIMAL_HEART));
         registry.addRecipe(new VivisectionEmiRecipe(NMBlocks.INTEGRATOR_EGG.asItem(), NMItems.CHRYSALIS));
+
+
+        // Recipe Handlers
+        registry.addRecipeHandler(ScreenHandlerInit.FABRICATOR, new FabricatorRecipeHandler());
     }
 }

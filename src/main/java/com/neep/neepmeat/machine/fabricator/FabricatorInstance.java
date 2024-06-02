@@ -39,7 +39,7 @@ public class FabricatorInstance extends BlockEntityInstance<FabricatorBlockEntit
     @Override
     public void beginFrame()
     {
-        float mainAngle = (AnimationTickHolder.getRenderTime() * 2) * MathHelper.RADIANS_PER_DEGREE;
+        float mainAngle = MathHelper.wrapDegrees(AnimationTickHolder.getRenderTime() * 2) * MathHelper.RADIANS_PER_DEGREE;
 
         rotor.loadIdentity()
                 .translate(getInstancePosition())
@@ -51,7 +51,10 @@ public class FabricatorInstance extends BlockEntityInstance<FabricatorBlockEntit
         {
             float angle = MathHelper.RADIANS_PER_DEGREE * (((i / 8f) * 360) % 360) + mainAngle;
 
-            float yOffset = 0.05f * (MathHelper.sin(angle * angle / 10) + 1);
+//            float yOffset = 0.05f * (MathHelper.sin(angle * MathHelper.sin(angle * 3)) + 1);
+//            float yOffset = 0.10f * (MathHelper.sin(angle * i * i * MathHelper.sin(angle / 100f)));
+//            float i1 = i + 8 * MathHelper.sin(mainAngle / 10f);
+            float yOffset = 0.10f * (MathHelper.sin(mainAngle * (i - 8 * MathHelper.sin(mainAngle) - 4)));
 
             segments.get(i)
                     .loadIdentity()
