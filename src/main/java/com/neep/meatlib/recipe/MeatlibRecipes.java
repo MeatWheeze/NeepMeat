@@ -5,6 +5,8 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
+import net.minecraft.inventory.Inventory;
+import net.minecraft.recipe.Recipe;
 import net.minecraft.recipe.RecipeManager;
 import net.minecraft.recipe.RecipeType;
 import net.minecraft.util.Identifier;
@@ -69,6 +71,8 @@ public interface MeatlibRecipes
 
     <C, T extends MeatlibRecipe<C>> Optional<T> get(RecipeType<T> type, Identifier id);
 
+    <C extends Inventory, T extends Recipe<C>> Optional<T> getVanilla(RecipeType<T> type, Identifier id);
+
     <C, T extends MeatlibRecipe<C>> Optional<T> getFirstMatch(MeatRecipeType<T> type, C context);
 
     <C, T extends MeatlibRecipe<C>> Map<Identifier, T> getAllOfTypeSafe(MeatRecipeType<T> type);
@@ -85,6 +89,12 @@ public interface MeatlibRecipes
 
         @Override
         public <C, T extends MeatlibRecipe<C>> Optional<T> get(RecipeType<T> type, Identifier id)
+        {
+            return Optional.empty();
+        }
+
+        @Override
+        public <C extends Inventory, T extends Recipe<C>> Optional<T> getVanilla(RecipeType<T> type, Identifier id)
         {
             return Optional.empty();
         }
@@ -143,17 +153,21 @@ public interface MeatlibRecipes
         }
 
         @Override
+        public <C extends Inventory, T extends Recipe<C>> Optional<T> getVanilla(RecipeType<T> type, Identifier id)
+        {
+            var recipe = ((RecipeManagerAccessor) recipeManager.get()).getRecipesById().get(id);
+            if (recipe == null || recipe.getType() != type)
+                return Optional.empty();
+
+            return Optional.ofNullable((T) recipe);
+        }
+
+        @Override
         public <C, T extends MeatlibRecipe<C>> Optional<T> getFirstMatch(MeatRecipeType<T> type, C context)
         {
             return getAllValuesOfType(type)
                     .flatMap(recipe -> type.match(recipe, context).stream()).findFirst();
         }
-
-//        @Override
-//        public <C, T extends MeatlibRecipe<C>> Optional<T> getFirstMatch(C context, MeatRecipeType<T>... types)
-//        {
-//            return Optional.empty();
-//        }
 
         @Override
         public <C, T extends MeatlibRecipe<C>> Map<Identifier, T> getAllOfTypeSafe(MeatRecipeType<T> type)

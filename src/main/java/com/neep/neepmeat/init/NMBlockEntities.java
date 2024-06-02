@@ -447,6 +447,7 @@ public class NMBlockEntities
         BloodAcceptor.SIDED.registerForBlocks(AssemblerBlockEntity::getBloodAcceptorFromTop, NMBlocks.ASSEMBLER.getStructureBlock());
 
         FABRICATOR = register("fabricator", (p, s) -> new FabricatorBlockEntity(FABRICATOR, p, s), NMBlocks.FABRICATOR);
+        ItemStorage.SIDED.registerForBlockEntity(FabricatorBlockEntity::getStorage, FABRICATOR);
 
         WORKSTATION = register("workstation", WorkstationBlockEntity::new, NMBlocks.WORKSTATION);
 
