@@ -50,7 +50,6 @@ import com.neep.neepmeat.machine.item_mincer.ItemMincerBlock;
 import com.neep.neepmeat.machine.large_crusher.LargeCrusherBlock;
 import com.neep.neepmeat.machine.large_crusher.LargeCrusherStructureBlock;
 import com.neep.neepmeat.machine.large_motor.LargeMotorBlock;
-import com.neep.neepmeat.machine.live_machine.block.TestLivingMachineBlock;
 import com.neep.neepmeat.machine.mincer.MincerBlock;
 import com.neep.neepmeat.machine.mixer.MixerBlock;
 import com.neep.neepmeat.machine.motor.MotorBlock;
@@ -116,8 +115,6 @@ public class NMBlocks
 //    public static Block TEST_MULTIBLOCK = BlockRegistry.queue(new TestMultiblock("test_multiblock", MeatlibBlockSettings.create()));
 
     public static PaintedBlockManager<?> SMOOTH_TILE = new PaintedBlockManager<>("smooth_tile", SmoothTileBlock::new ,MeatlibBlockSettings.create(Material.STONE).hardness(3.0f));
-
-    public static Block TEST_LIVING_MACHINE = BlockRegistry.queueWithItem(new TestLivingMachineBlock("test_living_machine", MeatlibBlockSettings.copyOf(MACHINE_SETTINGS)), ItemSettings.block());
 
     public static Block POLISHED_IRON_BRICKS = new BaseBuildingBlock("polished_metal_bricks", true, MeatlibBlockSettings.create(Material.METAL).strength(3.0f).sounds(NMSoundGroups.METAL));
     public static Block POLISHED_MERAL_SMALL_BRICKS = new BaseBuildingBlock("polished_metal_small_bricks", true, MeatlibBlockSettings.create(Material.METAL).strength(3.0f).sounds(NMSoundGroups.METAL));
@@ -229,8 +226,8 @@ public class NMBlocks
     public static Block ALLOY_KILN = BlockRegistry.queue(new AlloyKilnBlock("alloy_kiln", block(), MeatlibBlockSettings.copyOf(NMBlocks.SAND_BRICKS)));
     public static Block CRUCIBLE = BlockRegistry.queue(new CrucibleBlock("crucible", block(), FLUID_PIPE_SETTINGS));
     public static Block COLLECTOR = BlockRegistry.queue(new FatCollectorBlock("collector", block(), FLUID_PIPE_SETTINGS));
-    public static AssemblerBlock ASSEMBLER = BlockRegistry.queue(new AssemblerBlock("assembler", block().requiresVascular(), MACHINE_SETTINGS));
-    public static Block FABRICATOR = BlockRegistry.queue(new FabricatorBlock("fabricator", block().tooltip(TooltipSupplier.hidden(1)).requiresMotor(), MACHINE_SETTINGS));
+    public static AssemblerBlock ASSEMBLER = BlockRegistry.queue(new AssemblerBlock("assembler", block().tooltip(TooltipSupplier.hidden(1)).requiresVascular(), MACHINE_SETTINGS));
+    public static Block FABRICATOR = BlockRegistry.queue(new FabricatorBlock("fabricator", block().tooltip(TooltipSupplier.hidden(1)), MACHINE_SETTINGS));
 
     public static TallBlock FLUID_EXCITER = BlockRegistry.queue(new FluidExciterBlock("fluid_exciter", block().tooltip(TooltipSupplier.hidden(1)), MeatlibBlockSettings.create(Material.METAL).sounds(NMSoundGroups.MECHANICAL_MACHINE).hardness(4.0f)));
 

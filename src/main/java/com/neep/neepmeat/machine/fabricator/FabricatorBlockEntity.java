@@ -56,6 +56,8 @@ public class FabricatorBlockEntity extends SyncableBlockEntity implements Motori
     private final FabricatorInventory inventory = new FabricatorInventory();
     private final FabricatorStorage storage = new FabricatorStorage();
 
+    private float increment;
+    private float progress;
 
     // Use on client only. Immediately set to false by instance.
     public boolean animation;
@@ -68,9 +70,22 @@ public class FabricatorBlockEntity extends SyncableBlockEntity implements Motori
     @Override
     public boolean motorTick(MotorEntity motor)
     {
-        storage.updateRecipe();
-        motorCraft();
+        progress = Math.min(5, progress + increment);
+
+        if (progress >= 5)
+        {
+            progress = 0;
+            storage.updateRecipe();
+            motorCraft();
+        }
+
         return true;
+    }
+
+    @Override
+    public void setInputPower(float power)
+    {
+        this.increment = power;
     }
 
     private void motorCraft()
@@ -94,10 +109,13 @@ public class FabricatorBlockEntity extends SyncableBlockEntity implements Motori
                     return;
                 }
 
-                long ejected = ItemPipeUtil.stackToAny((ServerWorld) world, pos, facing,
-                        ItemVariant.of(recipe.getOutput(world.getRegistryManager())), 1, transaction);
+                ItemStack result = recipe.getOutput(world.getRegistryManager());
 
-                if (ejected != 1)
+                // ItemVariant.of shouldn't mutate the stack.
+                long ejected = ItemPipeUtil.stackToAny((ServerWorld) world, pos, facing,
+                        ItemVariant.of(result), result.getCount(), transaction);
+
+                if (ejected != result.getCount())
                 {
                     transaction.abort();
                     return;
@@ -120,6 +138,7 @@ public class FabricatorBlockEntity extends SyncableBlockEntity implements Motori
                         }
                     }
                 }
+                sendAnimation();
                 transaction.commit();
                 return;
             }
@@ -228,12 +247,6 @@ public class FabricatorBlockEntity extends SyncableBlockEntity implements Motori
         super.readNbt(nbt);
         inventory.readNbt(nbt);
         storage.readNbt(nbt);
-    }
-
-    @Override
-    public void setInputPower(float power)
-    {
-
     }
 
     private CombinedStorage<ItemVariant, Storage<ItemVariant>> getInput(Direction facing)

@@ -34,7 +34,19 @@ public class FabricatorBlock extends TallBlock implements BlockEntityProvider
     @Override
     protected Structure createStructure()
     {
-        return BlockRegistry.queue(new Structure(getRegistryName() + "_structure", MeatlibBlockSettings.copyOf(settings)));
+        return BlockRegistry.queue(new Structure(getRegistryName() + "_structure", MeatlibBlockSettings.copyOf(settings))
+        {
+            @Override
+            public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit)
+            {
+                if (world.getBlockEntity(pos.down()) instanceof NamedScreenHandlerFactory factory)
+                {
+                    player.openHandledScreen(factory);
+                    return ActionResult.SUCCESS;
+                }
+                return super.onUse(state, world, pos, player, hand, hit);
+            }
+        });
     }
 
     @Override
