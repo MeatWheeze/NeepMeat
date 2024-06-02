@@ -2,6 +2,7 @@ package com.neep.neepmeat.machine.fabricator;
 
 import com.jozufozu.flywheel.api.MaterialManager;
 import com.jozufozu.flywheel.api.instance.DynamicInstance;
+import com.jozufozu.flywheel.api.instance.TickableInstance;
 import com.jozufozu.flywheel.backend.instancing.blockentity.BlockEntityInstance;
 import com.jozufozu.flywheel.core.Materials;
 import com.jozufozu.flywheel.core.materials.model.ModelData;
@@ -47,7 +48,6 @@ public class FabricatorInstance extends BlockEntityInstance<FabricatorBlockEntit
     @Override
     public void beginFrame()
     {
-
         boolean paused = client.isPaused();
         speed = MathHelper.lerp(paused ? 0 : 0.1f, speed, blockEntity.animation ? 10 : 0);
 
@@ -89,6 +89,7 @@ public class FabricatorInstance extends BlockEntityInstance<FabricatorBlockEntit
 
     static
     {
+        // I wish I knew how chests sync their animations. This is horrible.
         ClientPlayNetworking.registerGlobalReceiver(FabricatorBlockEntity.CHANNEL_ID, (client, handler, buf, responseSender) ->
         {
             BlockPos pos = buf.readBlockPos();

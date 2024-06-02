@@ -19,6 +19,7 @@ import com.neep.neepmeat.machine.large_crusher.CrusherSegmentInstance;
 import com.neep.neepmeat.machine.large_crusher.LargeCrusherInstance;
 import com.neep.neepmeat.machine.large_crusher.LargeCrusherRenderer;
 import com.neep.neepmeat.machine.large_motor.LargeMotorInstance;
+import com.neep.neepmeat.machine.live_machine.LivingMachineComponents;
 import com.neep.neepmeat.machine.live_machine.LivingMachines;
 import com.neep.neepmeat.machine.motor.MotorInstance;
 import com.neep.neepmeat.machine.phage_ray.PhageRayInstance;
@@ -67,6 +68,7 @@ public class NMInstances
         InstancedRenderRegistry.configure(NMBlockEntities.LARGE_FAN).alwaysSkipRender().factory(LargeFanInstance::new).apply();
 
         InstancedRenderRegistry.configure(NMEntities.PHAGE_RAY).alwaysSkipRender().factory(PhageRayInstance::new).apply();
+        InstancedRenderRegistry.configure(LivingMachines.TREE_VACUUM_BE).alwaysSkipRender().factory(TreeVacuumInstance::new).apply();
 
         InstancedRenderRegistry.configure(NMEntities.LIMB).factory(LimbEntityInstance::new).apply();
 

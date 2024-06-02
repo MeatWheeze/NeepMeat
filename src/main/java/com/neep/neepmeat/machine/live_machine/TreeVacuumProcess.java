@@ -51,6 +51,7 @@ public class TreeVacuumProcess implements Process
                     try (Transaction transaction = Transaction.openOuter())
                     {
                         traverseTree(world, trunkPos, 200, 7, be.getCombinedItemOutput(), transaction);
+                        vacuum.syncAnimation();
                         transaction.commit();
                     }
                 }

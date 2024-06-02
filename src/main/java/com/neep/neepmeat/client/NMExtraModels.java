@@ -52,6 +52,9 @@ public class NMExtraModels implements ExtraModelProvider
     public static final PartialModel LUCKY_ONE_ARM_R = new PartialModel(new Identifier(NeepMeat.NAMESPACE, "block/living_machine/lucky_one/arm_r"));
     public static final PartialModel LUCKY_ONE_BODY = new PartialModel(new Identifier(NeepMeat.NAMESPACE, "block/living_machine/lucky_one/body"));
 
+    public static final PartialModel TREE_VACUUM_PLUNGER = new PartialModel(new Identifier(NeepMeat.NAMESPACE, "block/living_machine/tree_vacuum/tree_vacuum_plunger"));
+    public static final PartialModel TREE_VACUUM_LUNG = new PartialModel(new Identifier(NeepMeat.NAMESPACE, "block/living_machine/tree_vacuum/tree_vacuum_lung"));
+
     public static NMExtraModels EXTRA_MODELS = new NMExtraModels();
 
     public static Identifier BIG_LEVER_HANDLE = new Identifier(NeepMeat.NAMESPACE, "block/big_lever_handle");
@@ -75,8 +78,6 @@ public class NMExtraModels implements ExtraModelProvider
     public static Identifier SURGERY_ROBOT = new Identifier(NeepMeat.NAMESPACE, "block/table_controller/robot");
     public static Identifier EGG = new Identifier(NeepMeat.NAMESPACE, "block/mob_egg");
     public static Identifier CRUSHER_JAW = new Identifier(NeepMeat.NAMESPACE, "block/grinder/jaw");
-
-
 
     @Override
     public void provideExtraModels(ResourceManager manager, Consumer<Identifier> out)
