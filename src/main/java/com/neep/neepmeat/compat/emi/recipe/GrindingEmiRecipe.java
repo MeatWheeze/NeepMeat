@@ -87,7 +87,7 @@ public class GrindingEmiRecipe implements EmiRecipe {
 
         widgets.addSlot(input.get(0), startX + 1, startY + 9);
 
-        widgets.addSlot(output.get(0), startX + 61, startY + 9).appendTooltip(Text.of("Min: " + recipe.getItemOutput().minAmount() + ", Max: " + recipe.getItemOutput().minAmount())).recipeContext(this);
+        widgets.addSlot(output.get(0), startX + 61, startY + 9).appendTooltip(Text.of("Min: " + recipe.getItemOutput().minAmount() + ", Max: " + recipe.getItemOutput().maxAmount())).recipeContext(this);
 
         if (output.size() > 1) {
             float chance = recipe.getItemOutput().chance();

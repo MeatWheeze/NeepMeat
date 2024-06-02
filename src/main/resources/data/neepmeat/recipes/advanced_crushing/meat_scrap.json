@@ -6,8 +6,8 @@
   },
   "output": {
     "resource": "neepmeat:meat_scrap",
-    "min": 2,
-    "max": 3
+    "min": 5,
+    "max": 9
   },
   "experience": 0,
   "processtime": 40
