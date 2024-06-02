@@ -70,7 +70,7 @@ public class LivingMachines
             ItemSettings.block().tooltip(tooltip(LivingMachineComponents.CRUSHER_SEGMENT).append(TooltipSupplier.simple(1)))));
     public static final BigBlock<?> LARGE_TROMMEL = BlockRegistry.queue(new LargeTrommelBlock("large_trommel",FabricBlockSettings.copyOf(MACHINE_SETTINGS), ItemSettings.block().tooltip(tooltip(LivingMachineComponents.LARGE_TROMMEL))));
     public static final BigBlock<LargestHopperBlock.StructureBlock> LARGEST_HOPPER = BlockRegistry.queue(new LargestHopperBlock("largest_hopper", FabricBlockSettings.copyOf(MACHINE_SETTINGS), ItemSettings.block().tooltip(tooltip(LivingMachineComponents.ITEM_INPUT))));
-    public static final BigBlock<TreeVacuumBlock.Structure> TREE_VACUUM = BlockRegistry.queue(new TreeVacuumBlock("tree_vacuum", ItemSettings.block().tooltip(tooltip(LivingMachineComponents.ITEM_INPUT)), FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
+    public static final BigBlock<TreeVacuumBlock.Structure> TREE_VACUUM = BlockRegistry.queue(new TreeVacuumBlock("tree_vacuum", ItemSettings.block().tooltip(tooltip(LivingMachineComponents.TREE_VACUUM).append(TooltipSupplier.simple(1))), FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
 
     public static final TallerBlock LUCKY_ONE = BlockRegistry.queue(new LuckyOneBlock("lucky_one",
             ItemSettings.block().tooltip(tooltip(LivingMachineComponents.LUCKY_ONE).append(TooltipSupplier.simple(1))),

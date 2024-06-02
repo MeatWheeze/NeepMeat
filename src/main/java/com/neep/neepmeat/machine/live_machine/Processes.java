@@ -66,5 +66,6 @@ public class Processes
         getInstance().register(new CrusherProcess());
         getInstance().register(new PhageRayProcess());
         getInstance().register(new LargeTrommelProcess());
+        getInstance().register(new TreeVacuumProcess());
     }
 }
