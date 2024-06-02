@@ -22,6 +22,7 @@ public class LivingMachineComponents
     public static final ComponentType<IntegrationPortBlockEntity> INTEGRATION_PORT = register("integration_port", new ComponentType.Simple<>());
     public static final ComponentType<IntegrationPortBlockEntity> SERVICE_PORT = register("service_port", new ComponentType.Simple<>());
     public static final ComponentType<PhageRayBlockEntity> PHAGE_RAY = register("phage_ray", new ComponentType.Simple<>());
+    public static final ComponentType<TreeVacuumBlockEntity> TREE_VACUUM = register("tree_vacuum", new ComponentType.Simple<>());
 
     public static final ComponentType<HopperComponent> HOPPER = register("hopper", new ComponentType.Simple<>());
     public static final ComponentType<ItemInputComponent> ITEM_INPUT = register("item_input", new ComponentType.Simple<>());

@@ -70,6 +70,7 @@ public class LivingMachines
             ItemSettings.block().tooltip(tooltip(LivingMachineComponents.CRUSHER_SEGMENT).append(TooltipSupplier.simple(1)))));
     public static final BigBlock<?> LARGE_TROMMEL = BlockRegistry.queue(new LargeTrommelBlock("large_trommel",FabricBlockSettings.copyOf(MACHINE_SETTINGS), ItemSettings.block().tooltip(tooltip(LivingMachineComponents.LARGE_TROMMEL))));
     public static final BigBlock<LargestHopperBlock.StructureBlock> LARGEST_HOPPER = BlockRegistry.queue(new LargestHopperBlock("largest_hopper", FabricBlockSettings.copyOf(MACHINE_SETTINGS), ItemSettings.block().tooltip(tooltip(LivingMachineComponents.ITEM_INPUT))));
+    public static final BigBlock<TreeVacuumBlock.Structure> TREE_VACUUM = BlockRegistry.queue(new TreeVacuumBlock("tree_vacuum", ItemSettings.block().tooltip(tooltip(LivingMachineComponents.ITEM_INPUT)), FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
 
     public static final TallerBlock LUCKY_ONE = BlockRegistry.queue(new LuckyOneBlock("lucky_one",
             ItemSettings.block().tooltip(tooltip(LivingMachineComponents.LUCKY_ONE).append(TooltipSupplier.simple(1))),
@@ -94,6 +95,7 @@ public class LivingMachines
     public static BlockEntityType<LuckyOneBlockEntity> LUCKY_ONE_BE;
     public static BlockEntityType<ExtractorBlockEntity> EXTRACTOR_BE;
 
+    public static BlockEntityType<TreeVacuumBlockEntity> TREE_VACUUM_BE;
 
     public static void init()
     {
@@ -111,6 +113,10 @@ public class LivingMachines
         LARGEST_HOPPER_BE = register("largest_hopper", (p, s) -> new LargestHopperBlockEntity(LARGEST_HOPPER_BE, p, s), LARGEST_HOPPER);
         LivingMachineComponent.LOOKUP.registerSelf(LivingMachines.LARGEST_HOPPER_BE);
         ItemStorage.SIDED.registerForBlockEntity(LargestHopperBlockEntity::getStorage, LARGEST_HOPPER_BE);
+
+        TREE_VACUUM_BE = register("tree_vacuum", (p, s) -> new TreeVacuumBlockEntity(TREE_VACUUM_BE, p, s), TREE_VACUUM);
+        LivingMachineComponent.LOOKUP.registerSelf(LivingMachines.TREE_VACUUM_BE);
+
         ITEM_OUTPUT_PORT_BE = register("item_output_port", (p, s) -> new ItemOutputPortBlockEntity(ITEM_OUTPUT_PORT_BE, p, s), ITEM_OUTPUT_PORT);
         LivingMachineComponent.LOOKUP.registerSelf(LivingMachines.ITEM_OUTPUT_PORT_BE);
         ItemStorage.SIDED.registerForBlockEntity(ItemOutputPortBlockEntity::getStorage, ITEM_OUTPUT_PORT_BE);
