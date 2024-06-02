@@ -5,8 +5,10 @@ import com.jozufozu.flywheel.api.instance.DynamicInstance;
 import com.jozufozu.flywheel.backend.instancing.blockentity.BlockEntityInstance;
 import com.jozufozu.flywheel.core.Materials;
 import com.jozufozu.flywheel.core.materials.model.ModelData;
-import com.jozufozu.flywheel.util.AnimationTickHolder;
 import com.neep.neepmeat.client.NMExtraModels;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.MathHelper;
 
@@ -18,9 +20,15 @@ public class FabricatorInstance extends BlockEntityInstance<FabricatorBlockEntit
     private final ModelData rotor;
     private final List<ModelData> segments;
 
+    private float speed;
+    private float mainAngle;
+
+    private final MinecraftClient client;
+
     public FabricatorInstance(MaterialManager materialManager, FabricatorBlockEntity blockEntity)
     {
         super(materialManager, blockEntity);
+        this.client = MinecraftClient.getInstance();
         rotor = materialManager.defaultSolid().material(Materials.TRANSFORMED).getModel(NMExtraModels.FABRICATOR_ROTOR).createInstance();
         segments = IntStream.range(0, 8).mapToObj(i ->
                 materialManager.defaultCutout().material(Materials.TRANSFORMED).getModel(NMExtraModels.FABRICATOR_SEGMENT).createInstance()).toList();
@@ -39,7 +47,14 @@ public class FabricatorInstance extends BlockEntityInstance<FabricatorBlockEntit
     @Override
     public void beginFrame()
     {
-        float mainAngle = MathHelper.wrapDegrees(AnimationTickHolder.getRenderTime() * 2) * MathHelper.RADIANS_PER_DEGREE;
+
+        boolean paused = client.isPaused();
+        speed = MathHelper.lerp(paused ? 0 : 0.1f, speed, blockEntity.animation ? 10 : 0);
+
+        if (blockEntity.animation)
+            blockEntity.animation = false;
+
+        mainAngle += paused ? 0 : client.getLastFrameDuration() * speed;
 
         rotor.loadIdentity()
                 .translate(getInstancePosition())
@@ -54,7 +69,7 @@ public class FabricatorInstance extends BlockEntityInstance<FabricatorBlockEntit
 //            float yOffset = 0.05f * (MathHelper.sin(angle * MathHelper.sin(angle * 3)) + 1);
 //            float yOffset = 0.10f * (MathHelper.sin(angle * i * i * MathHelper.sin(angle / 100f)));
 //            float i1 = i + 8 * MathHelper.sin(mainAngle / 10f);
-            float yOffset = 0.10f * (MathHelper.sin(mainAngle * (i - 8 * MathHelper.sin(mainAngle) - 4)));
+            float yOffset = 0.1f * ((MathHelper.sin(mainAngle * (i - 8 * MathHelper.sin(mainAngle / 100f) - 4))));
 
             segments.get(i)
                     .loadIdentity()
@@ -70,5 +85,20 @@ public class FabricatorInstance extends BlockEntityInstance<FabricatorBlockEntit
     {
         relight(getWorldPosition(), segments.stream());
         relight(getWorldPosition(), rotor);
+    }
+
+    static
+    {
+        ClientPlayNetworking.registerGlobalReceiver(FabricatorBlockEntity.CHANNEL_ID, (client, handler, buf, responseSender) ->
+        {
+            BlockPos pos = buf.readBlockPos();
+            client.execute(() ->
+            {
+                if (client.world.getBlockEntity(pos) instanceof FabricatorBlockEntity fabricator)
+                {
+                    fabricator.animation = true;
+                }
+            });
+        });
     }
 }

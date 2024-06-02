@@ -9,6 +9,9 @@ import com.neep.neepmeat.api.machine.MotorisedBlock;
 import com.neep.neepmeat.machine.motor.MotorEntity;
 import com.neep.neepmeat.transport.util.ItemPipeUtil;
 import net.fabricmc.fabric.api.lookup.v1.block.BlockApiCache;
+import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
+import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
@@ -47,9 +50,15 @@ import java.util.List;
 
 public class FabricatorBlockEntity extends SyncableBlockEntity implements MotorisedBlock, ExtendedScreenHandlerFactory
 {
+    public static final Identifier CHANNEL_ID = new Identifier("fabricator_animation");
+
     private final List<BlockApiCache<Storage<ItemVariant>, Direction>> caches = Arrays.asList(new BlockApiCache[6]);
     private final FabricatorInventory inventory = new FabricatorInventory();
     private final FabricatorStorage storage = new FabricatorStorage();
+
+
+    // Use on client only. Immediately set to false by instance.
+    public boolean animation;
 
     public FabricatorBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
     {
@@ -159,6 +168,7 @@ public class FabricatorBlockEntity extends SyncableBlockEntity implements Motori
                     }
                 }
                 inner.commit();
+                sendAnimation();
                 return result;
             }
         }
@@ -283,6 +293,20 @@ public class FabricatorBlockEntity extends SyncableBlockEntity implements Motori
         return direction == getCachedState().get(FabricatorBlock.FACING) ? storage : null;
     }
 
+    public void sendAnimation()
+    {
+        if (world instanceof ServerWorld serverWorld)
+        {
+            PlayerLookup.tracking(this).forEach(p ->
+            {
+                // Not sure if you can send the same buf to multiple players.
+                PacketByteBuf buf = PacketByteBufs.create();
+                buf.writeBlockPos(getPos());
+                ServerPlayNetworking.send(p, CHANNEL_ID, buf);
+            });
+        }
+    }
+
     public class FabricatorInventory implements ImplementedInventory, RecipeInputInventory
     {
         private final DefaultedList<ItemStack> items = DefaultedList.ofSize(9, ItemStack.EMPTY);
@@ -330,6 +354,8 @@ public class FabricatorBlockEntity extends SyncableBlockEntity implements Motori
 
     public class FabricatorStorage extends SnapshotParticipant<ItemStack> implements Storage<ItemVariant>, StorageView<ItemVariant>, NbtSerialisable
     {
+        private boolean needsLoading = true;
+
         private @Nullable CraftingRecipe recipe;
 
         private ItemStack bufferedStack = ItemStack.EMPTY; // Always real items produced from crafting.
@@ -412,9 +438,8 @@ public class FabricatorBlockEntity extends SyncableBlockEntity implements Motori
         @Override
         public ItemVariant getResource()
         {
-            // Recipe needs to be updated after world loading. Hopefully this will catch it and other weird situations.
-            if (!bufferedStack.isEmpty() && previewStack.isEmpty())
-                updateRecipe();
+            if (needsLoading)
+                load();
 
             if (!bufferedStack.isEmpty())
                 return ItemVariant.of(bufferedStack);
@@ -425,6 +450,9 @@ public class FabricatorBlockEntity extends SyncableBlockEntity implements Motori
         @Override
         public long getAmount()
         {
+            if (needsLoading)
+                load();
+
             if (!bufferedStack.isEmpty())
                 return bufferedStack.getCount();
             else
@@ -434,10 +462,19 @@ public class FabricatorBlockEntity extends SyncableBlockEntity implements Motori
         @Override
         public long getCapacity()
         {
+            if (needsLoading)
+                load();
+
             if (!bufferedStack.isEmpty())
                 return bufferedStack.getCount();
             else
                 return previewStack.getCount();
+        }
+
+        private void load()
+        {
+            needsLoading = false;
+            updateRecipe();
         }
 
         @Override
@@ -478,6 +515,12 @@ public class FabricatorBlockEntity extends SyncableBlockEntity implements Motori
         protected void readSnapshot(ItemStack snapshot)
         {
             this.bufferedStack = snapshot.copy();
+        }
+
+        @Override
+        protected void onFinalCommit()
+        {
+            markDirty();
         }
     }
 }
