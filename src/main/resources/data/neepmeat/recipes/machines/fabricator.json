@@ -1,0 +1,32 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "bob",
+    "bre",
+    "mam"
+  ],
+  "key": {
+    "b": {
+      "item": "neepmeat:whisper_brass_ingot"
+    },
+    "m": {
+      "item": "neepmeat:meat_steel_ingot"
+    },
+    "a": {
+      "item": "minecraft:crafting_table"
+    },
+    "r": {
+      "item": "neepmeat:enlightened_brain"
+    },
+    "o": {
+      "item": "neepmeat:control_unit"
+    },
+    "e": {
+      "item": "neepmeat:ejector"
+    }
+  },
+  "result": {
+    "item": "neepmeat:fabricator",
+    "count": 1
+  }
+}
