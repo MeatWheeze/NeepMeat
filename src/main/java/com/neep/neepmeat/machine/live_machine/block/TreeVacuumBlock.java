@@ -11,7 +11,6 @@ import com.neep.neepmeat.api.big_block.BigBlock;
 import com.neep.neepmeat.api.big_block.BigBlockPattern;
 import com.neep.neepmeat.api.big_block.BigBlockStructure;
 import com.neep.neepmeat.api.big_block.BigBlockStructureEntity;
-import com.neep.neepmeat.machine.live_machine.LivingMachineComponents;
 import com.neep.neepmeat.machine.live_machine.LivingMachines;
 import com.neep.neepmeat.machine.live_machine.block.entity.TreeVacuumBlockEntity;
 import com.neep.neepmeat.util.MiscUtil;
@@ -24,14 +23,13 @@ import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.item.ItemPlacementContext;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.Registry;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.DirectionProperty;
 import net.minecraft.state.property.Properties;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import net.minecraft.util.registry.Registry;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.BlockView;
@@ -84,7 +82,7 @@ public class TreeVacuumBlock extends BigBlock<TreeVacuumBlock.Structure> impleme
     protected TreeVacuumBlock.Structure registerStructureBlock()
     {
         BigBlockStructure.BlockEntityRegisterererer<BigBlockStructureEntity> register = b -> Registry.register(
-                Registries.BLOCK_ENTITY_TYPE, new Identifier(NeepMeat.NAMESPACE, "tree_vacuum_structure"),
+                Registry.BLOCK_ENTITY_TYPE, new Identifier(NeepMeat.NAMESPACE, "tree_vacuum_structure"),
                 FabricBlockEntityTypeBuilder.create(
                         (p, s) -> new BigBlockStructureEntity(b.getBlockEntityType(), p, s), this).build());
 
@@ -98,7 +96,7 @@ public class TreeVacuumBlock extends BigBlock<TreeVacuumBlock.Structure> impleme
         if (ctx.getPlayer() == null)
             return getDefaultState();
 
-        return getDefaultState().with(FACING, ctx.getPlayer().isSneaking() ? ctx.getHorizontalPlayerFacing().getOpposite() : ctx.getHorizontalPlayerFacing());
+        return getDefaultState().with(FACING, ctx.getPlayer().isSneaking() ? ctx.getPlayerFacing().getOpposite() : ctx.getPlayerFacing());
     }
 
     @Override
