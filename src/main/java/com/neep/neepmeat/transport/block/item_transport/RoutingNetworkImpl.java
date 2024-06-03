@@ -11,7 +11,6 @@ import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import net.fabricmc.fabric.api.lookup.v1.block.BlockApiCache;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
-import net.fabricmc.fabric.api.transfer.v1.storage.StoragePreconditions;
 import net.fabricmc.fabric.api.transfer.v1.storage.StorageView;
 import net.fabricmc.fabric.api.transfer.v1.storage.base.ResourceAmount;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
@@ -160,21 +159,20 @@ public class RoutingNetworkImpl implements RoutingNetwork
         return false;
     }
 
-    public boolean request(ResourceAmount<ItemVariant> stack, BlockPos pos, Direction outDir, RequestType type, TransactionContext transaction)
+    @Override
+    public boolean request(Predicate<ItemVariant> predicate, long amount, BlockPos pos, Direction outDir, RequestType type, TransactionContext transaction)
     {
-        StoragePreconditions.notBlankNotNegative(stack.resource(), stack.amount());
-
         try (Transaction inner = transaction.openNested())
         {
-            AtomicLong amount = new AtomicLong(stack.amount());
+            AtomicLong amountRemaining = new AtomicLong(amount);
             boolean satisfied = routablePipes.values().stream().anyMatch(e ->
             {
-                long retrieved = e.find(null).requestItem(stack.resource(), amount.get(), new NodePos(pos, outDir), inner);
-                amount.addAndGet(-retrieved);
-                return amount.get() <= 0;
+                long retrieved = e.find(null).request(predicate, amountRemaining.get(), new NodePos(pos, outDir), inner);
+                amountRemaining.addAndGet(-retrieved);
+                return amountRemaining.get() <= 0;
             });
 
-            if (type.satisfied(stack.amount(), stack.amount() - amount.get()))
+            if (type.satisfied(amount, amount - amountRemaining.get()))
             {
                 worldSupplier.get().spawnParticles(ParticleTypes.SMOKE, this.pos.getX() + 0.5, this.pos.getY() + 1, this.pos.getZ() + 0.5, 20, 0.1, 0, 0.1, 0.01);
                 worldSupplier.get().playSound(null, this.pos.getX(), this.pos.getY(), this.pos.getZ(), SoundEvents.ENTITY_PIGLIN_CELEBRATE, SoundCategory.BLOCKS, 1, 1);

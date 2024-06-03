@@ -14,13 +14,11 @@ import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.minecraft.item.Item;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.registry.Registries;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
 
-import java.nio.file.FileSystem;
-import java.nio.file.FileSystems;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.regex.Pattern;
@@ -101,11 +99,6 @@ public class RouteItemInstruction implements Instruction
         return Instructions.ROUTE;
     }
 
-    public static boolean isSimplePattern(String identifier)
-    {
-        return identifier.matches("^[a-zA-Z0-9_:]+$");
-    }
-
     public static ParsedInstruction parser(TokenView view, ParsedSource parsedSource, Parser parser) throws NeepASM.ParseException
     {
         view.fastForward();
@@ -125,13 +118,13 @@ public class RouteItemInstruction implements Instruction
         view.fastForward();
 
         // If a normal string is given, verify it against all items in the registry.
-        if (isSimplePattern(notGlob))
+        if (Parser.isSimplePattern(notGlob))
         {
-            Item item = Registries.ITEM.getOrEmpty(Identifier.tryParse(notGlob)).orElse(null);
+            Item item = Registry.ITEM.getOrEmpty(Identifier.tryParse(notGlob)).orElse(null);
             if (item == null)
                 throw new NeepASM.ParseException("item '" + notGlob + "' not known");
         }
-        String regex = convertToRegex(notGlob);
+        String regex = Parser.convertToRegex(notGlob);
 
         parser.assureLineEnd(view);
 
@@ -141,8 +134,4 @@ public class RouteItemInstruction implements Instruction
         };
     }
 
-    private static String convertToRegex(String notGlob)
-    {
-        return notGlob.replace("*", ".*");
-    }
 }

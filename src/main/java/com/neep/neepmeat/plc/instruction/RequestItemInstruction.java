@@ -1,9 +1,7 @@
 package com.neep.neepmeat.plc.instruction;
 
-import com.neep.meatlib.MeatLib;
 import com.neep.neepmeat.api.plc.PLC;
 import com.neep.neepmeat.api.plc.robot.AtomicAction;
-import com.neep.neepmeat.api.storage.LazyBlockApiCache;
 import com.neep.neepmeat.neepasm.NeepASM;
 import com.neep.neepmeat.neepasm.compiler.ParsedSource;
 import com.neep.neepmeat.neepasm.compiler.Parser;
@@ -13,43 +11,43 @@ import com.neep.neepmeat.plc.Instructions;
 import com.neep.neepmeat.transport.api.item_network.RoutingNetwork;
 import com.neep.neepmeat.transport.block.item_transport.PipeDriverBlock;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
-import net.fabricmc.fabric.api.transfer.v1.storage.base.ResourceAmount;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.minecraft.item.Item;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.nbt.NbtHelper;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.function.Predicate;
 import java.util.function.Supplier;
+import java.util.regex.Pattern;
+
+import static com.neep.neepmeat.neepasm.compiler.Parser.convertToRegex;
+import static com.neep.neepmeat.neepasm.compiler.Parser.isSimplePattern;
 
 public class RequestItemInstruction implements Instruction
 {
 //    private final LazyBlockApiCache<Void, Void> routerCache;
     private final Argument to;
-    private final ItemVariant item;
+    private final Pattern pattern;
 
-    public RequestItemInstruction(Supplier<World> worldSupplier, Argument to, ItemVariant item)
+    public RequestItemInstruction(Supplier<World> worldSupplier, Argument to, String pattern)
     {
 //        routerCache = LazyBlockApiCache.of(MeatLib.VOID_LOOKUP, router.pos(), worldSupplier, () -> null);
-        this.item = item;
+        this.pattern = Pattern.compile(pattern);
         this.to = to;
     }
 
     public RequestItemInstruction(Supplier<World> world, NbtCompound nbt)
     {
-//        routerCache = LazyBlockApiCache.of(MeatLib.VOID_LOOKUP, NbtHelper.toBlockPos(nbt.getCompound("router")), world, () -> null);
-        this.item = ItemVariant.fromNbt(nbt.getCompound("item"));
-        this.to = Argument.fromNbt(nbt.getCompound("to"));
+        this(world, Argument.fromNbt(nbt.getCompound("to")), nbt.getString("pattern"));
     }
 
     @Override
     public NbtCompound writeNbt(NbtCompound nbt)
     {
-//        nbt.put("router", NbtHelper.fromBlockPos(routerCache.pos()));
-        nbt.put("item", item.toNbt());
+        nbt.putString("pattern", pattern.pattern());
         nbt.put("to", to.toNbt());
         return nbt;
     }
@@ -57,9 +55,6 @@ public class RequestItemInstruction implements Instruction
     @Override
     public void start(PLC plc)
     {
-//        if (!plc.getActuator().capabilities().contains(PLCActuator.Capability.ROUTE_ITEM))
-//            plc.raiseError(new PLC.Error("Acutator does not have routing capability"));
-
         plc.addRobotAction(AtomicAction.of(p ->
         {
             var stack = p.variableStack();
@@ -74,8 +69,9 @@ public class RequestItemInstruction implements Instruction
             {
                 try (Transaction transaction = Transaction.openOuter())
                 {
-                    ResourceAmount<ItemVariant> ra = new ResourceAmount<>(item, amount);
-                    boolean satisfied = be.getNetwork(null).request(ra, to.pos(), to.face(), RoutingNetwork.RequestType.EXACT_AMOUNT, transaction);
+                    Predicate<ItemVariant> predicate = v ->
+                            pattern.asMatchPredicate().test(v.getItem().getRegistryEntry().registryKey().getValue().toString());
+                    boolean satisfied = be.getNetwork(null).request(predicate, amount, to.pos(), to.face(), RoutingNetwork.RequestType.EXACT_AMOUNT, transaction);
 
                     if (satisfied)
                         transaction.commit();
@@ -98,34 +94,31 @@ public class RequestItemInstruction implements Instruction
 
     public static ParsedInstruction parser(TokenView view, ParsedSource parsedSource, Parser parser) throws NeepASM.ParseException
     {
-//        view.fastForward();
-//        Argument router = parser.parseArgument(view);
-//        if (router == null)
-//            throw new NeepASM.ParseException("expected router world target");
-
         view.fastForward();
         Argument to = parser.parseArgument(view);
         if (to == null)
             throw new NeepASM.ParseException("expected output pipe world target");
 
-        String string = view.nextString();
-        if (string == null)
+        String notGlob = view.nextString();
+        if (notGlob == null)
             throw new NeepASM.ParseException("expected item ID string (minecraft:stone)");
 
         view.fastForward();
 
-        Item item = Registry.ITEM.getOrEmpty(Identifier.tryParse(string)).orElse(null);
-        if (item == null)
-            throw new NeepASM.ParseException("item '" + string + "' not known");
-        ItemVariant itemVariant = ItemVariant.of(item);
-
-        view.fastForward();
+        // If a normal string is given, verify it against all items in the registry.
+        if (isSimplePattern(notGlob))
+        {
+            Item item = Registry.ITEM.getOrEmpty(Identifier.tryParse(notGlob)).orElse(null);
+            if (item == null)
+                throw new NeepASM.ParseException("item '" + notGlob + "' not known");
+        }
+        String regex = convertToRegex(notGlob);
 
         parser.assureLineEnd(view);
 
         return (world, parsedSource1, program) ->
         {
-            program.addBack(new RequestItemInstruction(() -> world, to, itemVariant));
+            program.addBack(new RequestItemInstruction(() -> world, to, regex));
         };
     }
 }

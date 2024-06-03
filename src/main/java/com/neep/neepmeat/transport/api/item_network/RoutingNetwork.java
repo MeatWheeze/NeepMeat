@@ -32,7 +32,12 @@ public interface RoutingNetwork
     /**
      * Transferring items into pipes requires outer transaction callbacks. To prevent duping, only commit the outer transaction if all nested operations were successful.
      */
-    boolean request(ResourceAmount<ItemVariant> stack, BlockPos pos, Direction outDir, RequestType type, TransactionContext transaction);
+    default boolean request(ResourceAmount<ItemVariant> stack, BlockPos pos, Direction outDir, RequestType type, TransactionContext transaction)
+    {
+        return request(v -> v.equals(stack.resource()), stack.amount(), pos, outDir, type, transaction);
+    }
+
+    boolean request(Predicate<ItemVariant> predicate, long amount, BlockPos pos, Direction outDir, RequestType type, TransactionContext transaction);
 
     void invalidate();
 
@@ -56,7 +61,7 @@ public interface RoutingNetwork
         }
 
         @Override
-        public boolean request(ResourceAmount<ItemVariant> stack, BlockPos pos, Direction outDir, RequestType type, TransactionContext transaction) { return false; }
+        public boolean request(Predicate<ItemVariant> predicate, long amount, BlockPos pos, Direction outDir, RequestType type, TransactionContext transaction) { return false; }
 
         @Override
         public void invalidate() {}

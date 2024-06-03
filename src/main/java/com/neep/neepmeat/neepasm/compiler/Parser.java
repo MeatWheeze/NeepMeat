@@ -42,6 +42,16 @@ public class Parser
         });
     }
 
+    public static boolean isSimplePattern(String identifier)
+    {
+        return identifier.matches("^[a-zA-Z0-9_:]+$");
+    }
+
+    public static String convertToRegex(String notGlob)
+    {
+        return notGlob.replace("*", ".*");
+    }
+
     public ParsedSource parse(String source) throws NeepASM.ProgramBuildException
     {
         parsedSource = new ParsedSource();
