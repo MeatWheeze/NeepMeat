@@ -230,7 +230,7 @@ public class FabricatorBlockEntity extends SyncableBlockEntity implements Motori
                 }
             }
         }
-        return false;
+        return ingredients.isEmpty();
     }
 
 
@@ -405,38 +405,41 @@ public class FabricatorBlockEntity extends SyncableBlockEntity implements Motori
         @Override
         public long extract(ItemVariant resource, long maxAmount, TransactionContext transaction)
         {
-            if (bufferedStack.isEmpty() && !previewStack.isEmpty())
+            if (!bufferedStack.isEmpty() && resource.matches(bufferedStack) || resource.matches(previewStack))
             {
-                int amountToExtract = (int) Math.min(previewStack.getCount(), maxAmount);
-                if (amountToExtract > 0)
+                if (bufferedStack.isEmpty() && !previewStack.isEmpty())
                 {
-                    updateRecipe();
-
-                    if (recipe != null)
+                    int amountToExtract = (int) Math.min(previewStack.getCount(), maxAmount);
+                    if (amountToExtract > 0)
                     {
-                        updateSnapshots(transaction);
-                        bufferedStack = craft(transaction);
+                        updateRecipe();
 
-                        int extractable = Math.min(bufferedStack.getCount(), amountToExtract);
-
-                        if (extractable > 0)
+                        if (recipe != null)
                         {
-                            bufferedStack.decrement(amountToExtract);
-                            return extractable;
+                            updateSnapshots(transaction);
+                            bufferedStack = craft(transaction);
+
+                            int extractable = Math.min(bufferedStack.getCount(), amountToExtract);
+
+                            if (extractable > 0)
+                            {
+                                bufferedStack.decrement(amountToExtract);
+                                return extractable;
+                            }
                         }
                     }
                 }
-            }
-            else if (!bufferedStack.isEmpty())
-            {
-                int amountToExtract = (int) Math.min(bufferedStack.getCount(), maxAmount);
-                if (amountToExtract > 0)
+                else if (!bufferedStack.isEmpty())
                 {
-                    updateSnapshots(transaction);
+                    int amountToExtract = (int) Math.min(bufferedStack.getCount(), maxAmount);
+                    if (amountToExtract > 0)
+                    {
+                        updateSnapshots(transaction);
 
-                    bufferedStack.decrement(amountToExtract);
+                        bufferedStack.decrement(amountToExtract);
 
-                    return amountToExtract;
+                        return amountToExtract;
+                    }
                 }
             }
             return 0;
