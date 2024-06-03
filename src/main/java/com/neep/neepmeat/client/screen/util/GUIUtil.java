@@ -1,4 +1,4 @@
-package com.neep.neepmeat.client.screen.tablet;
+package com.neep.neepmeat.client.screen.util;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.neep.neepmeat.NeepMeat;

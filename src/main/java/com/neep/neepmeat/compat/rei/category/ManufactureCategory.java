@@ -2,7 +2,7 @@ package com.neep.neepmeat.compat.rei.category;
 
 import com.neep.neepmeat.api.plc.PLCCols;
 import com.neep.neepmeat.api.plc.recipe.ManufactureStep;
-import com.neep.neepmeat.client.screen.tablet.GUIUtil;
+import com.neep.neepmeat.client.screen.util.GUIUtil;
 import com.neep.neepmeat.compat.rei.display.ManufactureDisplay;
 import com.neep.neepmeat.plc.PLCBlocks;
 import com.neep.neepmeat.plc.recipe.CombineStep;

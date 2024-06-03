@@ -2,7 +2,7 @@ package com.neep.neepmeat.compat.emi.recipe;
 
 import com.google.common.collect.Lists;
 import com.neep.neepmeat.api.plc.PLCCols;
-import com.neep.neepmeat.client.screen.tablet.GUIUtil;
+import com.neep.neepmeat.client.screen.util.GUIUtil;
 import com.neep.neepmeat.compat.emi.NMEmiPlugin;
 import com.neep.neepmeat.plc.recipe.EntityToItemRecipe;
 import dev.emi.emi.api.recipe.EmiRecipeCategory;

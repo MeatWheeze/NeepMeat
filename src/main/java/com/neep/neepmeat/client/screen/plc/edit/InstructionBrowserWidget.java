@@ -3,7 +3,7 @@ package com.neep.neepmeat.client.screen.plc.edit;
 import com.google.common.collect.Lists;
 import com.neep.neepmeat.api.plc.PLCCols;
 import com.neep.neepmeat.client.screen.plc.PLCProgramScreen;
-import com.neep.neepmeat.client.screen.tablet.GUIUtil;
+import com.neep.neepmeat.client.screen.util.GUIUtil;
 import com.neep.neepmeat.init.NMSounds;
 import com.neep.neepmeat.plc.Instructions;
 import com.neep.neepmeat.plc.instruction.InstructionProvider;

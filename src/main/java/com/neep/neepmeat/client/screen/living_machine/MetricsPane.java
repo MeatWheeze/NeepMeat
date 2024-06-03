@@ -5,7 +5,7 @@ import com.neep.neepmeat.api.live_machine.StructurePropertyFormatter;
 import com.neep.neepmeat.api.plc.PLCCols;
 import com.neep.neepmeat.api.processing.PowerUtils;
 import com.neep.neepmeat.client.screen.plc.PLCScreenButton;
-import com.neep.neepmeat.client.screen.tablet.GUIUtil;
+import com.neep.neepmeat.client.screen.util.GUIUtil;
 import com.neep.neepmeat.screen_handler.LivingMachineScreenHandler;
 import it.unimi.dsi.fastutil.Pair;
 import net.minecraft.client.MinecraftClient;

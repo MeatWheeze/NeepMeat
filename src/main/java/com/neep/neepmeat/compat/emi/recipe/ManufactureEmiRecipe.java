@@ -2,7 +2,7 @@ package com.neep.neepmeat.compat.emi.recipe;
 
 import com.neep.neepmeat.api.plc.PLCCols;
 import com.neep.neepmeat.api.plc.recipe.ManufactureStep;
-import com.neep.neepmeat.client.screen.tablet.GUIUtil;
+import com.neep.neepmeat.client.screen.util.GUIUtil;
 import com.neep.neepmeat.plc.recipe.CombineStep;
 import com.neep.neepmeat.plc.recipe.ImplantStep;
 import com.neep.neepmeat.plc.recipe.InjectStep;

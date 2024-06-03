@@ -1,5 +1,6 @@
 package com.neep.neepmeat.client.screen.tablet;
 
+import com.neep.neepmeat.client.screen.util.GUIUtil;
 import com.neep.neepmeat.guide.article.Article;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;

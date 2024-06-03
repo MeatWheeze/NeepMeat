@@ -4,7 +4,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.api.plc.PLCCols;
 import com.neep.neepmeat.client.screen.button.PersistentWidget;
-import com.neep.neepmeat.client.screen.tablet.GUIUtil;
+import com.neep.neepmeat.client.screen.util.GUIUtil;
 import com.neep.neepmeat.client.screen.util.BorderScrollRight;
 import com.neep.neepmeat.client.screen.util.Rectangle;
 import com.neep.neepmeat.transport.network.SyncRequesterScreenS2CPacket;

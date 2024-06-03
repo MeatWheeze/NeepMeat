@@ -2,7 +2,7 @@ package com.neep.neepmeat.client.screen.living_machine;
 
 import com.neep.neepmeat.api.live_machine.metrics.DataLog;
 import com.neep.neepmeat.api.plc.PLCCols;
-import com.neep.neepmeat.client.screen.tablet.GUIUtil;
+import com.neep.neepmeat.client.screen.util.GUIUtil;
 import com.neep.neepmeat.client.screen.util.Border;
 import com.neep.neepmeat.client.screen.util.Rectangle;
 import com.neep.neepmeat.screen_handler.LivingMachineScreenHandler;

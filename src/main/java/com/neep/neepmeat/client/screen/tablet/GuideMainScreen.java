@@ -2,6 +2,7 @@ package com.neep.neepmeat.client.screen.tablet;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.neep.neepmeat.NeepMeat;
+import com.neep.neepmeat.client.screen.util.GUIUtil;
 import com.neep.neepmeat.guide.GuideNode;
 import com.neep.neepmeat.guide.GuideReloadListener;
 import com.neep.neepmeat.guide.article.Article;

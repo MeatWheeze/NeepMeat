@@ -2,7 +2,7 @@ package com.neep.neepmeat.compat.rei.category;
 
 import com.google.common.collect.Lists;
 import com.neep.neepmeat.api.plc.PLCCols;
-import com.neep.neepmeat.client.screen.tablet.GUIUtil;
+import com.neep.neepmeat.client.screen.util.GUIUtil;
 import com.neep.neepmeat.compat.rei.NMREIPlugin;
 import com.neep.neepmeat.compat.rei.display.EntityToItemDisplay;
 import me.shedaniel.math.Point;

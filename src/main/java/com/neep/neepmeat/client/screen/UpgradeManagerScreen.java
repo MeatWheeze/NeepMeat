@@ -2,7 +2,7 @@ package com.neep.neepmeat.client.screen;
 
 import com.neep.neepmeat.api.implant.ImplantAttributes;
 import com.neep.neepmeat.api.plc.PLCCols;
-import com.neep.neepmeat.client.screen.tablet.GUIUtil;
+import com.neep.neepmeat.client.screen.util.GUIUtil;
 import com.neep.neepmeat.implant.player.ImplantManager;
 import com.neep.neepmeat.init.NMComponents;
 import com.neep.neepmeat.init.NMSounds;

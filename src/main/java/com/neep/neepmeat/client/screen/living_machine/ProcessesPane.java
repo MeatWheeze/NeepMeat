@@ -4,7 +4,7 @@ import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.api.live_machine.ComponentType;
 import com.neep.neepmeat.api.live_machine.Process;
 import com.neep.neepmeat.api.plc.PLCCols;
-import com.neep.neepmeat.client.screen.tablet.GUIUtil;
+import com.neep.neepmeat.client.screen.util.GUIUtil;
 import com.neep.neepmeat.machine.live_machine.Processes;
 import it.unimi.dsi.fastutil.Pair;
 import net.minecraft.client.util.math.MatrixStack;
