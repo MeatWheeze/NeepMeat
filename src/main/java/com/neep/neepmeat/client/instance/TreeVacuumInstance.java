@@ -113,11 +113,12 @@ public class TreeVacuumInstance extends BlockEntityInstance<TreeVacuumBlockEntit
         ClientPlayNetworking.registerGlobalReceiver(TreeVacuumBlockEntity.CHANNEL_ID, (client, handler, buf, responseSender) ->
         {
             BlockPos pos = buf.readBlockPos();
+            boolean playSound = buf.readBoolean();
             client.execute(() ->
             {
                 if (client.world.getBlockEntity(pos) instanceof TreeVacuumBlockEntity be)
                 {
-                    be.animationTicks = 10;
+                    be.startAnimation(playSound, client.player);
                 }
             });
         });

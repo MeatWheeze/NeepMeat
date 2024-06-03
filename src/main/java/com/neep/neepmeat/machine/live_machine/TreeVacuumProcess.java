@@ -52,15 +52,15 @@ public class TreeVacuumProcess implements Process
                 try (Transaction transaction = Transaction.openOuter())
                 {
                     vacuum.progress = 0;
-                    traverseTree(world, trunkPos, 200, 7, be.getCombinedItemOutput(), transaction);
-                    vacuum.syncAnimation();
+                    boolean broken = traverseTree(world, trunkPos, 200, 7, be.getCombinedItemOutput(), transaction);
+                    vacuum.syncAnimation(broken);
                     transaction.commit();
                 }
             }
         });
     }
 
-    private void traverseTree(World world, BlockPos origin, int maxVisit, int maxBreak, Storage<ItemVariant> output, TransactionContext transaction)
+    private boolean traverseTree(World world, BlockPos origin, int maxVisit, int maxBreak, Storage<ItemVariant> output, TransactionContext transaction)
     {
         Direction[] directions = new Direction[]{Direction.UP, Direction.NORTH, Direction.SOUTH, Direction.EAST, Direction.WEST, Direction.DOWN};
 
@@ -68,7 +68,7 @@ public class TreeVacuumProcess implements Process
         Queue<BlockPos> queue = new ArrayDeque<>();
 
         if (!isTree(world.getBlockState(origin)))
-            return;
+            return false;
 
         visited.add(origin);
         queue.add(origin);
@@ -103,7 +103,6 @@ public class TreeVacuumProcess implements Process
 
             if (!foundOther)
             {
-
                 List<ItemStack> dropped = Block.getDroppedStacks(world.getBlockState(current), (ServerWorld) world, current, world.getBlockEntity(current));
                 for (var stack : dropped)
                 {
@@ -114,6 +113,7 @@ public class TreeVacuumProcess implements Process
                 treeBlocksBroken++;
             }
         }
+        return treeBlocksBroken > 0;
     }
 
     private static boolean isTree(BlockState state)

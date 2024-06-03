@@ -30,6 +30,8 @@ public class NMSounds
     public static SoundEvent METAL_BARREL_OPEN = SoundRegistry.registerSound(NeepMeat.NAMESPACE, "metal_barrel_open");
     public static SoundEvent METAL_BARREL_CLOSE = SoundRegistry.registerSound(NeepMeat.NAMESPACE, "metal_barrel_close");
 
+    public static SoundEvent TREE_VACUUM_SUCK = SoundRegistry.registerSound(NeepMeat.NAMESPACE, "tree_vacuum_suck");
+
     public static SoundEvent MECHANICAL_MACHINE_PLACE = SoundRegistry.registerSound(NeepMeat.NAMESPACE, "mechanical_machine_place");
     public static SoundEvent MECHANICAL_MACHINE_BREAK = SoundRegistry.registerSound(NeepMeat.NAMESPACE, "mechanical_machine_break");
     public static SoundEvent FLESH_MACHINE_PLACE = SoundRegistry.registerSound(NeepMeat.NAMESPACE, "flesh_machine_place");

@@ -946,6 +946,8 @@
   "subtitles.neepmeat.metal_barrel_open": "Metal barrel opened",
   "subtitles.neepmeat.metal_barrel_close": "Metal barrel closed",
 
+  "subtitles.neepmeat.tree_vacuum_suck": "Tree Vacuum Suck",
+
   "subtitles.neepmeat.plc_select_block": "PLC selects",
   "subtitles.neepmeat.plc_select": "PLC selects block",
   "subtitles.neepmeat.implant_instruction_apply": "Implant completed",
