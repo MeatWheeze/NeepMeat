@@ -51,8 +51,8 @@ public class TreeVacuumInstance extends BlockEntityInstance<TreeVacuumBlockEntit
         Direction facing = blockEntity.getCachedState().get(TreeVacuumBlock.FACING);
 
         int animationTicks = blockEntity.animationTicks;
-        float t = MathHelper.lerp(AnimationTickHolder.getPartialTicks(), animationTicks, animationTicks + 1);
-//        float t = animationTicks + AnimationTickHolder.getPartialTicks();
+//        float t = MathHelper.lerp(AnimationTickHolder.getPartialTicks(), animationTicks, animationTicks - 1);
+        float t = animationTicks - (animationTicks > 0 ? AnimationTickHolder.getPartialTicks() : 0);
 
         float plungerOffset;
 //        if (animationTicks < 3)

@@ -42,24 +42,28 @@ public class TreeVacuumProcess implements Process
             TreeVacuumBlockEntity vacuum = vacuums.iterator().next();
             World world = be.getWorld();
 
-            Direction facing = vacuum.getCachedState().get(TreeVacuumBlock.FACING);
-            BlockPos trunkPos = vacuum.getPos().offset(facing, 2);
-            BlockState trunkState = world.getBlockState(trunkPos);
+            vacuum.progress = Math.min(vacuum.progress + be.getProgressIncrement(), vacuum.maxProgress);
 
-                if (world.getTime() % 20 == 0)
+            if (vacuum.progress >= vacuum.maxProgress)
+            {
+                Direction facing = vacuum.getCachedState().get(TreeVacuumBlock.FACING);
+                BlockPos trunkPos = vacuum.getPos().offset(facing, 2);
+
+                try (Transaction transaction = Transaction.openOuter())
                 {
-                    try (Transaction transaction = Transaction.openOuter())
-                    {
-                        traverseTree(world, trunkPos, 200, 7, be.getCombinedItemOutput(), transaction);
-                        vacuum.syncAnimation();
-                        transaction.commit();
-                    }
+                    vacuum.progress = 0;
+                    traverseTree(world, trunkPos, 200, 7, be.getCombinedItemOutput(), transaction);
+                    vacuum.syncAnimation();
+                    transaction.commit();
                 }
+            }
         });
     }
 
     private void traverseTree(World world, BlockPos origin, int maxVisit, int maxBreak, Storage<ItemVariant> output, TransactionContext transaction)
     {
+        Direction[] directions = new Direction[]{Direction.UP, Direction.NORTH, Direction.SOUTH, Direction.EAST, Direction.WEST, Direction.DOWN};
+
         Set<BlockPos> visited = new HashSet<>();
         Queue<BlockPos> queue = new ArrayDeque<>();
 
@@ -80,7 +84,7 @@ public class TreeVacuumProcess implements Process
 
             BlockPos.Mutable mutable = current.mutableCopy();
             boolean foundOther = false;
-            for (Direction direction : Direction.values())
+            for (Direction direction : directions)
             {
                 mutable.set(current, direction);
                 if (!visited.contains(mutable))

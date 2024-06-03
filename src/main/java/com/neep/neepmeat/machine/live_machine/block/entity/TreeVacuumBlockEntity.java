@@ -8,17 +8,18 @@ import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 
 public class TreeVacuumBlockEntity extends SyncableBlockEntity implements LivingMachineComponent
 {
     public static final Identifier CHANNEL_ID = new Identifier("tree_vacuum_anim");
+
+    public float progress;
+    public final int maxProgress = 8;
 
     // Client-only jank
     public int animationTicks;
