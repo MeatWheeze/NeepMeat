@@ -70,24 +70,6 @@ public class NMLootTables
 
                 tableBuilder.pool(builder);
             }
-            else if (GRASS.equals(id))
-            {
-                LootPool.Builder builder = LootPool.builder()
-                        .rolls(ConstantLootNumberProvider.create(1))
-                        .conditionally(RandomChanceLootCondition.builder(0.025f))
-                        .with(ItemEntry.builder(((BaseCropBlock) NMBlocks.WHISPER_WHEAT).getSeedsItem()).weight(1));
-
-                tableBuilder.pool(builder);
-            }
-            else if (TALL_GRASS.equals(id))
-            {
-                LootPool.Builder builder = LootPool.builder()
-                        .rolls(ConstantLootNumberProvider.create(1))
-                        .conditionally(RandomChanceLootCondition.builder(0.025f))
-                        .with(ItemEntry.builder(((BaseCropBlock) NMBlocks.WHISPER_WHEAT).getSeedsItem()).weight(1));
-
-                tableBuilder.pool(builder);
-            }
             else if (POTATOES.equals(id))
             {
                 LootPool.Builder builder = LootPool.builder()
