@@ -1,6 +1,7 @@
 package com.neep.neepmeat.neepasm.compiler;
 
 import com.neep.neepmeat.neepasm.NeepASM;
+import org.jetbrains.annotations.Nullable;
 
 public class TokenView
 {
@@ -156,21 +157,22 @@ public class TokenView
         }
     }
 
+    @Nullable
     public String nextString()
     {
-        while (peek() != '"')
+        fastForward();
+        if (peek() != '"' || lineEnded())
         {
-            if (lineEnded())
-                return "";
-            next();
+            return null;
         }
-        next();
+
+        next(); // Advance over first "
 
         StringBuilder builder = new StringBuilder();
         while (peek() != '"')
         {
             if (lineEnded())
-                return "";
+                return null;
 
             builder.append(next());
         }
@@ -212,6 +214,12 @@ public class TokenView
     public boolean eof()
     {
         return offset >= string.length();
+    }
+
+    @Override
+    public String toString()
+    {
+        return "TokenView: " + peek();
     }
 
     public class Entry implements AutoCloseable

@@ -20,35 +20,36 @@ import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Supplier;
+import java.util.regex.Pattern;
+
+import static com.neep.neepmeat.neepasm.compiler.Parser.convertToRegex;
+import static com.neep.neepmeat.neepasm.compiler.Parser.isSimplePattern;
 
 public class CountInstruction implements Instruction
 {
     private final Supplier<World> world;
     private final LazyBlockApiCache<Storage<ItemVariant>, Direction> targetCache;
     private final Argument target;
-    private final ItemVariant item;
+    private final Pattern pattern;
 
-    public CountInstruction(Supplier<World> world, Argument target, ItemVariant item)
+    public CountInstruction(Supplier<World> world, Argument target, String pattern)
     {
         this.world = world;
         this.target = target;
-        this.item = item;
+        this.pattern = Pattern.compile(pattern);
         this.targetCache = LazyBlockApiCache.of(ItemStorage.SIDED, world, target);
     }
 
     public CountInstruction(Supplier<World> worldSupplier, NbtCompound nbt)
     {
-        this.world = worldSupplier;
-        this.target = Argument.fromNbt(nbt.getCompound("target"));
-        this.item = ItemVariant.fromNbt(nbt.getCompound("item"));
-        this.targetCache = LazyBlockApiCache.of(ItemStorage.SIDED, world, target);
+        this(worldSupplier, Argument.fromNbt(nbt.getCompound("target")), nbt.getString("pattern"));
     }
 
     @Override
     public NbtCompound writeNbt(NbtCompound nbt)
     {
         nbt.put("target", target.toNbt());
-        nbt.put("item", item.toNbt());
+        nbt.putString("pattern", pattern.pattern());
         return nbt;
     }
 
@@ -71,9 +72,9 @@ public class CountInstruction implements Instruction
         plc.advanceCounter();
     }
 
-    boolean matches(ItemVariant variant)
+    private boolean matches(ItemVariant resource)
     {
-        return item.isBlank() || item.equals(variant);
+        return pattern.asMatchPredicate().test(resource.getItem().getRegistryEntry().registryKey().getValue().toString());
     }
 
     @Override
@@ -90,27 +91,31 @@ public class CountInstruction implements Instruction
             throw new NeepASM.ParseException("expected storage world target");
 
         view.fastForward();
-        String name = view.nextString();
-        ItemVariant variant;
-        if (!name.isEmpty())
+
+        String regex;
+        String notGlob = view.nextString();
+        if (notGlob != null)
         {
-            Item item = Registry.ITEM.getOrEmpty(Identifier.tryParse(name)).orElse(null);
-            if (item == null)
-                throw new NeepASM.ParseException("item '" + name + "' not known");
-
-            variant = ItemVariant.of(item);
-
+            if (isSimplePattern(notGlob))
+            {
+                Item item = Registry.ITEM.getOrEmpty(Identifier.tryParse(notGlob)).orElse(null);
+                if (item == null)
+                    throw new NeepASM.ParseException("item '" + notGlob + "' not known");
+            }
+            regex = convertToRegex(notGlob);
         }
         else
         {
-            variant = ItemVariant.blank();
+            char c = view.peek();
+            parser.assureLineEnd(view);
+            regex = ".*";
         }
 
         parser.assureLineEnd(view);
 
         return (world, parsedSource1, program) ->
         {
-            program.addBack(new CountInstruction(() -> world, storage, variant));
+            program.addBack(new CountInstruction(() -> world, storage, regex));
         };
     }
 }

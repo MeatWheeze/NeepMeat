@@ -91,7 +91,7 @@ public class SayInstruction implements Instruction
             if (c == '"')
             {
                 String message = view.nextString();
-                if (!message.isEmpty())
+                if (message != null)
                 {
                     parser.assureLineEnd(view);
                     return ((world, source, program) -> program.addBack(new SayInstruction(message)));
