@@ -121,7 +121,15 @@ public class StorageBusBlockEntity extends ItemPipeBlockEntity implements Storag
             if (storage == null)
                 continue;
 
-            ItemVariant extractable = StorageUtil.findExtractableResource(storage, predicate, transaction);
+//            ItemVariant extractable = StorageUtil.findExtractableResource(storage, predicate, transaction);
+            ItemVariant extractable = null;
+            for (var view : storage)
+            {
+                ItemVariant resource = view.getResource();
+                if (view.getAmount() > 0 && !view.isResourceBlank() && predicate.test(resource))
+                    extractable = resource;
+            }
+
             if (extractable == null)
                 continue;
 
