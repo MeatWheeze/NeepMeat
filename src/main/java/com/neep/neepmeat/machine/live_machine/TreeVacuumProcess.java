@@ -120,9 +120,11 @@ public class TreeVacuumProcess implements Process
     {
         Block block = state.getBlock();
         return
-                block instanceof LeavesBlock
-                || state.isIn(BlockTags.LOGS)
-                || state.isIn(BlockTags.LEAVES);
+                !(block instanceof TreeVacuumBlock)
+                && !(block instanceof TreeVacuumBlock.Structure)
+                && (block instanceof LeavesBlock
+                    || state.isIn(BlockTags.LOGS)
+                    || state.isIn(BlockTags.LEAVES));
     }
 
     @Override

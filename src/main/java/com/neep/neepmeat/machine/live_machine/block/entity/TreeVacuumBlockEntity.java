@@ -19,7 +19,7 @@ public class TreeVacuumBlockEntity extends SyncableBlockEntity implements Living
     public static final Identifier CHANNEL_ID = new Identifier("tree_vacuum_anim");
 
     public float progress;
-    public final int maxProgress = 8;
+    public final int maxProgress = 5;
 
     // Client-only jank
     public int animationTicks;
