@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "ii ",
+    "ecc",
+    "ii "
+  ],
+  "key": {
+    "i": {
+      "item": "neepmeat:meat_steel_ingot"
+    },
+    "e": {
+      "item": "neepmeat:item_pump"
+    },
+    "c": {
+      "item": "neepmeat:contractile_actuator"
+    }
+  },
+  "result": {
+    "item": "neepmeat:tree_vacuum",
+    "count": 1
+  }
+}

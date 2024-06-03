@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:block/block",
-  "model": "neepmeat:block/living_machine/tree_vacuum/tree_vacuum.obj",
+  "model": "neepmeat:block/living_machine/tree_vacuum/tree_vacuum_item.obj",
   "display": {
     "thirdperson_righthand": {
       "rotation": [75, 45, 0],
@@ -27,7 +27,7 @@
     "gui": {
       "rotation": [30, 225, 0],
       "translation": [-1.5, -1, 0],
-      "scale": [0.33, 0.33, 0.33]
+      "scale": [0.43, 0.43, 0.43]
     },
     "fixed": {
       "scale": [0.5, 0.5, 0.5]

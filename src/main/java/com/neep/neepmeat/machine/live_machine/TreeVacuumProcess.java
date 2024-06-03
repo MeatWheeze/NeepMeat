@@ -52,7 +52,7 @@ public class TreeVacuumProcess implements Process
                 try (Transaction transaction = Transaction.openOuter())
                 {
                     vacuum.progress = 0;
-                    boolean broken = traverseTree(world, trunkPos, 200, 7, be.getCombinedItemOutput(), transaction);
+                    boolean broken = traverseTree(world, trunkPos, 300, 7, be.getCombinedItemOutput(), transaction);
                     vacuum.syncAnimation(broken);
                     transaction.commit();
                 }
