@@ -29,6 +29,7 @@ import net.minecraft.util.math.Direction;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 public class ItemRequesterBlockEntity extends ItemPipeBlockEntity implements ItemRequester, ExtendedScreenHandlerFactory
@@ -53,7 +54,7 @@ public class ItemRequesterBlockEntity extends ItemPipeBlockEntity implements Ite
     }
 
     @Override
-    public long requestItem(ItemVariant variant, long amount, NodePos fromPos, TransactionContext transaction)
+    public long request(Predicate<ItemVariant> predicate, long amount, NodePos fromPos, TransactionContext transaction)
     {
         return 0;
     }

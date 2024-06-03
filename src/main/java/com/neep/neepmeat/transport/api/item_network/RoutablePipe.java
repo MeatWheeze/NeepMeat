@@ -9,13 +9,19 @@ import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Direction;
 
+import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 public interface RoutablePipe
 {
     BlockApiLookup<RoutablePipe, Direction> LOOKUP  = BlockApiLookup.get(new Identifier(NeepMeat.NAMESPACE, "routable_pipe"), RoutablePipe.class, Direction.class);
 
-    long requestItem(ItemVariant variant, long amount, NodePos fromPos, TransactionContext transaction);
+    default long requestItem(ItemVariant variant, long amount, NodePos fromPos, TransactionContext transaction)
+    {
+        return request(v -> v.equals(variant), amount, fromPos, transaction);
+    }
+
+    long request(Predicate<ItemVariant> predicate, long amount, NodePos fromPos, TransactionContext transaction);
 
     Stream<StorageView<ItemVariant>> getAvailable(TransactionContext transaction);
 }

@@ -2,7 +2,6 @@ package com.neep.neepmeat.transport.block.item_transport.entity;
 
 import com.google.common.collect.Streams;
 import com.neep.neepmeat.transport.ItemTransport;
-import com.neep.neepmeat.transport.api.PipeCache;
 import com.neep.neepmeat.transport.api.item_network.StorageBus;
 import com.neep.neepmeat.transport.fluid_network.node.NodePos;
 import com.neep.neepmeat.transport.interfaces.IServerWorld;
@@ -13,7 +12,9 @@ import net.fabricmc.fabric.api.lookup.v1.block.BlockApiCache;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
+import net.fabricmc.fabric.api.transfer.v1.storage.StorageUtil;
 import net.fabricmc.fabric.api.transfer.v1.storage.StorageView;
+import net.fabricmc.fabric.api.transfer.v1.storage.base.ResourceAmount;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntityType;
@@ -27,6 +28,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Stack;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 @SuppressWarnings("UnstableApiUsage")
@@ -104,36 +106,45 @@ public class StorageBusBlockEntity extends ItemPipeBlockEntity implements Storag
     }
 
     @Override
-    public long requestItem(ItemVariant variant, long amount, NodePos fromPos, TransactionContext transaction)
+    public long request(Predicate<ItemVariant> predicate, long amount, NodePos fromPos, TransactionContext transaction)
     {
-        List<Pair<RetrievalTarget<ItemVariant>, Long>> foundTargets = new ArrayList<>(6);
+//        List<Pair<RetrievalTarget<ItemVariant>, ResourceAmount<ItemVariant>>> foundTargets = new ArrayList<>(6);
+
+        PipeCacheImpl itemNetwork = ((IServerWorld) world).getItemNetwork();
+        Stack<Direction> route = itemNetwork.findPath(pos, fromPos.pos(), fromPos.face());
+        AtomicLong routed = new AtomicLong();
 
         long remaining = amount;
         for (RetrievalTarget<ItemVariant> target : getTargets())
         {
             Storage<ItemVariant> storage = target.find();
-            if (storage == null) continue;
+            if (storage == null)
+                continue;
 
-            long extracted = storage.extract(variant, remaining, transaction);
+            ItemVariant extractable = StorageUtil.findExtractableResource(storage, predicate, transaction);
+            if (extractable == null)
+                continue;
+
+            long extracted = storage.extract(extractable, amount, transaction);
+
             remaining -= extracted;
             if (extracted > 0)
-                foundTargets.add(Pair.of(target, extracted));
+            {
+//                foundTargets.add(Pair.of(target, new ResourceAmount<>(extractable, extracted)));
+                long l = itemNetwork.route(target.getPos(), target.getFace(), route, extractable, extracted, transaction);
+                routed.addAndGet(l);
+            }
 
             if (remaining <= 0)
                 break;
         }
 
-        PipeCacheImpl itemNetwork = ((IServerWorld) world).getItemNetwork();
-        Stack<Direction> route = itemNetwork.findPath(pos, fromPos.pos(), fromPos.face(), variant, amount);
 
-        AtomicLong routed = new AtomicLong();
-        foundTargets.forEach(p ->
-        {
+//        foundTargets.forEach(p ->
+//        {
 //                ItemPipeUtil.stackToAny((ServerWorld) world, p.first().getPos(), Direction.UP, variant, p.right(), transaction);
 //            long l = ((IServerWorld) world).getItemNetwork().route(p.first().getPos(), p.first().getFace(), fromPos.pos(), fromPos.face(), variant, p.right(), transaction);
-            long l = itemNetwork.route(p.first().getPos(), p.first().getFace(), route, variant, amount, transaction);
-            routed.addAndGet(l);
-        });
+//        });
 
         return routed.get();
 //        return amount - remaining;

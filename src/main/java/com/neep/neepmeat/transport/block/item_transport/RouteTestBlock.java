@@ -34,7 +34,7 @@ public class RouteTestBlock extends BaseBlock
             BlockPos startPos = pos;
             BlockPos endPos = pos.north(10).east(2);
             ItemInPipe item = new ItemInPipe(null, null, ItemVariant.of(Items.STONE), 1, world.getTime());
-            Stack<Direction> route = ((IServerWorld) serverWorld).getItemNetwork().findPath(pos, endPos, Direction.SOUTH, ItemVariant.of(Items.STONE), 1);
+            Stack<Direction> route = ((IServerWorld) serverWorld).getItemNetwork().findPath(pos, endPos, Direction.SOUTH);
             item.setRoute(route);
             try (Transaction transaction = Transaction.openOuter())
             {

@@ -1,6 +1,5 @@
 package com.neep.neepmeat.transport.item_network;
 
-import com.eliotlash.mclib.math.functions.utility.DieRoll;
 import com.neep.neepmeat.transport.api.PipeCache;
 import com.neep.neepmeat.transport.api.pipe.ItemPipe;
 import com.neep.neepmeat.transport.util.ItemPipeUtil;
@@ -42,7 +41,7 @@ public class PipeCacheImpl implements PipeCache
         ItemInPipe item = new ItemInPipe(null, null, variant, (int) amount, world.getTime());
 
         BlockPos fromPos = from.offset(in); // First pipe
-        Stack<Direction> route = findPath(fromPos, to, out, variant, amount);
+        Stack<Direction> route = findPath(fromPos, to, out);
 
         item.setRoute(route);
         return ItemPipeUtil.pipeToAny(item, from, in, world, transaction, false);
@@ -112,7 +111,7 @@ public class PipeCacheImpl implements PipeCache
     }
 
     // TODO: Account for item filters
-    public Stack<Direction> findPath(BlockPos startPos, BlockPos endPos, Direction endDir, ItemVariant variant, long amount)
+    public Stack<Direction> findPath(BlockPos startPos, BlockPos endPos, Direction endDir)
     {
         HashSet<Long> visited = new HashSet<>();
         Stack<BlockPos> posRoute = new Stack<>();

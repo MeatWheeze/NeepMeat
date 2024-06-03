@@ -11,7 +11,6 @@ import com.neep.neepmeat.plc.Instructions;
 import com.neep.neepmeat.transport.api.item_network.RoutingNetwork;
 import com.neep.neepmeat.transport.block.item_transport.PipeDriverBlock;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
-import net.fabricmc.fabric.api.transfer.v1.storage.base.ResourceAmount;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.minecraft.item.Item;
 import net.minecraft.nbt.NbtCompound;
@@ -20,32 +19,38 @@ import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
 
+import java.nio.file.FileSystem;
+import java.nio.file.FileSystems;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
+import java.util.regex.Pattern;
 
 public class RouteItemInstruction implements Instruction
 {
     private final Argument from;
     private final Argument to;
-    private final ItemVariant item;
+    private final Pattern pattern;
 
-    public RouteItemInstruction(Supplier<World> worldSupplier, Argument from, Argument to, ItemVariant item)
+    public RouteItemInstruction(Supplier<World> worldSupplier, Argument from, Argument to, String pattern)
     {
-        this.item = item;
+        this.pattern = Pattern.compile(pattern);
         this.from = from;
         this.to = to;
     }
 
     public RouteItemInstruction(Supplier<World> world, NbtCompound nbt)
     {
-        this.item = ItemVariant.fromNbt(nbt.getCompound("item"));
-        this.from = Argument.fromNbt(nbt.getCompound("from"));
-        this.to = Argument.fromNbt(nbt.getCompound("to"));
+        this(world,
+                Argument.fromNbt(nbt.getCompound("from")),
+                Argument.fromNbt(nbt.getCompound("to")),
+                nbt.getString("pattern")
+        );
     }
 
     @Override
     public NbtCompound writeNbt(NbtCompound nbt)
     {
-        nbt.put("item", item.toNbt());
+        nbt.putString("pattern", pattern.pattern());
         nbt.put("from", from.toNbt());
         nbt.put("to", to.toNbt());
         return nbt;
@@ -58,7 +63,7 @@ public class RouteItemInstruction implements Instruction
         {
             var stack = p.variableStack();
 
-            int amount = 0;
+            int amount;
             if (stack.isEmpty())
                 amount = 1;
             else
@@ -68,8 +73,14 @@ public class RouteItemInstruction implements Instruction
             {
                 try (Transaction transaction = Transaction.openOuter())
                 {
-                    ResourceAmount<ItemVariant> ra = new ResourceAmount<>(item, amount);
-                    boolean satisfied = be.getNetwork(null).route(ra, from.pos(), from.face(), to.pos(), to.face(), RoutingNetwork.RequestType.EXACT_AMOUNT, transaction);
+                    Predicate<ItemVariant> predicate = v ->
+                    {
+                        String id = v.getItem().getRegistryEntry().registryKey().getValue().toString();
+                        return pattern.asMatchPredicate().test(id);
+                    };
+
+//                    ResourceAmount<ItemVariant> ra = new ResourceAmount<>(item, amount);
+                    boolean satisfied = be.getNetwork(null).route(predicate, amount, from.pos(), from.face(), to.pos(), to.face(), RoutingNetwork.RequestType.EXACT_AMOUNT, transaction);
 
                     if (satisfied)
                         transaction.commit();
@@ -90,6 +101,11 @@ public class RouteItemInstruction implements Instruction
         return Instructions.ROUTE;
     }
 
+    public static boolean isSimplePattern(String identifier)
+    {
+        return identifier.matches("^[a-zA-Z0-9_:]+$");
+    }
+
     public static ParsedInstruction parser(TokenView view, ParsedSource parsedSource, Parser parser) throws NeepASM.ParseException
     {
         view.fastForward();
@@ -102,24 +118,31 @@ public class RouteItemInstruction implements Instruction
         if (to == null)
             throw new NeepASM.ParseException("expected output pipe world target");
 
-        String string = view.nextString();
-        if (string == null)
+        String notGlob = view.nextString();
+        if (notGlob == null)
             throw new NeepASM.ParseException("expected item ID string (minecraft:stone)");
 
         view.fastForward();
 
-        Item item = Registries.ITEM.getOrEmpty(Identifier.tryParse(string)).orElse(null);
-        if (item == null)
-            throw new NeepASM.ParseException("item '" + string + "' not known");
-        ItemVariant itemVariant = ItemVariant.of(item);
-
-        view.fastForward();
+        // If a normal string is given, verify it against all items in the registry.
+        if (isSimplePattern(notGlob))
+        {
+            Item item = Registries.ITEM.getOrEmpty(Identifier.tryParse(notGlob)).orElse(null);
+            if (item == null)
+                throw new NeepASM.ParseException("item '" + notGlob + "' not known");
+        }
+        String regex = convertToRegex(notGlob);
 
         parser.assureLineEnd(view);
 
         return (world, parsedSource1, program) ->
         {
-            program.addBack(new RouteItemInstruction(() -> world, from, to, itemVariant));
+            program.addBack(new RouteItemInstruction(() -> world, from, to, regex));
         };
+    }
+
+    private static String convertToRegex(String notGlob)
+    {
+        return notGlob.replace("*", ".*");
     }
 }

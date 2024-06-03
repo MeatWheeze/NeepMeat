@@ -11,6 +11,7 @@ import net.minecraft.util.math.Direction;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Predicate;
 
 public interface RoutingNetwork
 {
@@ -21,7 +22,12 @@ public interface RoutingNetwork
     /**
      * Transferring items into pipes requires outer transaction callbacks. To prevent duping, only commit the outer transaction if all nested operations were successful.
      */
-    boolean route(ResourceAmount<ItemVariant> stack, BlockPos inPos, Direction inDir, BlockPos outPos, Direction outDir, RequestType type, TransactionContext transaction);
+    boolean route(Predicate<ItemVariant> predicate, long amount, BlockPos inPos, Direction inDir, BlockPos outPos, Direction outDir, RequestType type, TransactionContext transaction);
+
+//    default boolean route(ResourceAmount<ItemVariant> stack, BlockPos inPos, Direction inDir, BlockPos outPos, Direction outDir, RequestType type, TransactionContext transaction)
+//    {
+//        return route()
+//    }
 
     /**
      * Transferring items into pipes requires outer transaction callbacks. To prevent duping, only commit the outer transaction if all nested operations were successful.
@@ -44,7 +50,7 @@ public interface RoutingNetwork
         public List<ResourceAmount<ItemVariant>> getAllAvailable(TransactionContext transaction) { return Collections.emptyList(); }
 
         @Override
-        public boolean route(ResourceAmount<ItemVariant> stack, BlockPos inPos, Direction inDir, BlockPos outPos, Direction outDir, RequestType type, TransactionContext transaction)
+        public boolean route(Predicate<ItemVariant> predicate, long amount, BlockPos inPos, Direction inDir, BlockPos outPos, Direction outDir, RequestType type, TransactionContext transaction)
         {
             return false;
         }

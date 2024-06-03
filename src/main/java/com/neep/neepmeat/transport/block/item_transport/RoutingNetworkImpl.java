@@ -29,6 +29,7 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
@@ -131,9 +132,10 @@ public class RoutingNetworkImpl implements RoutingNetwork
         return new ResourceAmount<>(am1.resource(), am1.amount() + am2.amount());
     }
 
-    public boolean route(ResourceAmount<ItemVariant> stack, BlockPos inPos, Direction inDir, BlockPos outPos, Direction outDir, RequestType type, TransactionContext transaction)
+    @Override
+    public boolean route(Predicate<ItemVariant> predicate, long amount, BlockPos inPos, Direction inDir, BlockPos outPos, Direction outDir, RequestType type, TransactionContext transaction)
     {
-        StoragePreconditions.notBlankNotNegative(stack.resource(), stack.amount());
+//        StoragePreconditions.notBlankNotNegative(stack.resource(), stack.amount());
 
         try (Transaction inner = transaction.openNested())
         {
@@ -143,8 +145,8 @@ public class RoutingNetworkImpl implements RoutingNetwork
                 RoutablePipe inPipe = inPipeCache.find(null);
                 if (inPipe != null)
                 {
-                    long routed = inPipe.requestItem(stack.resource(), stack.amount(), new NodePos(outPos, outDir), inner);
-                    if (type.satisfied(stack.amount(), routed))
+                    long routed = inPipe.request(predicate, amount, new NodePos(outPos, outDir), inner);
+                    if (type.satisfied(amount, routed))
                     {
                         worldSupplier.get().spawnParticles(ParticleTypes.SMOKE, this.pos.getX() + 0.5, this.pos.getY() + 1, this.pos.getZ() + 0.5, 20, 0.1, 0, 0.1, 0.01);
                         worldSupplier.get().playSound(null, this.pos.getX(), this.pos.getY(), this.pos.getZ(), SoundEvents.ENTITY_PIGLIN_CELEBRATE, SoundCategory.BLOCKS, 1, 1);
