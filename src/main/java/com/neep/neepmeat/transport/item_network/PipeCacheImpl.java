@@ -1,5 +1,6 @@
 package com.neep.neepmeat.transport.item_network;
 
+import com.eliotlash.mclib.math.functions.utility.DieRoll;
 import com.neep.neepmeat.transport.api.PipeCache;
 import com.neep.neepmeat.transport.api.pipe.ItemPipe;
 import com.neep.neepmeat.transport.util.ItemPipeUtil;
@@ -39,7 +40,18 @@ public class PipeCacheImpl implements PipeCache
     public long route(BlockPos from, Direction in, BlockPos to, Direction out, ItemVariant variant, long amount, TransactionContext transaction)
     {
         ItemInPipe item = new ItemInPipe(null, null, variant, (int) amount, world.getTime());
-        Stack<Direction> route = findPath(from, in, to, out, variant, amount);
+
+        BlockPos fromPos = from.offset(in); // First pipe
+        Stack<Direction> route = findPath(fromPos, to, out, variant, amount);
+
+        item.setRoute(route);
+        return ItemPipeUtil.pipeToAny(item, from, in, world, transaction, false);
+    }
+
+    public long route(BlockPos from, Direction in, Stack<Direction> route, ItemVariant variant, long amount, TransactionContext transaction)
+    {
+        ItemInPipe item = new ItemInPipe(null, null, variant, (int) amount, world.getTime());
+
         item.setRoute(route);
         return ItemPipeUtil.pipeToAny(item, from, in, world, transaction, false);
     }
@@ -100,13 +112,13 @@ public class PipeCacheImpl implements PipeCache
     }
 
     // TODO: Account for item filters
-    public Stack<Direction> findPath(BlockPos startPos, Direction startDir, BlockPos endPos, Direction endDir, ItemVariant variant, long amount)
+    public Stack<Direction> findPath(BlockPos startPos, BlockPos endPos, Direction endDir, ItemVariant variant, long amount)
     {
         HashSet<Long> visited = new HashSet<>();
         Stack<BlockPos> posRoute = new Stack<>();
         Stack<Direction> route = new Stack<>();
 
-        BlockPos current = startPos.offset(startDir);
+        BlockPos current = startPos;
         Direction currentDirection;
 
         while (!current.equals(endPos))
@@ -124,8 +136,9 @@ public class PipeCacheImpl implements PipeCache
                     currentDirection = direction;
 
                     // Only push the initial direction if the starting pipe is a junction
-                    if (!(current.equals(startPos.offset(startDir)) && connections.size() <= 2))
+                    if (!(current.equals(startPos) && connections.size() <= 2))
                         route.push(currentDirection);
+
                     posRoute.push(current);
                     visited.add(nextPos.asLong());
                     current = nextPos;

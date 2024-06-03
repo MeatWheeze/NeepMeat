@@ -7,8 +7,8 @@ import com.neep.neepmeat.transport.api.pipe.ItemPipe;
 import com.neep.neepmeat.transport.block.item_transport.entity.ItemPipeBlockEntity;
 import com.neep.neepmeat.transport.fluid_network.node.NodePos;
 import com.neep.neepmeat.util.BFSGroupFinder;
-import it.unimi.dsi.fastutil.objects.ObjectArrayList;
-import it.unimi.dsi.fastutil.objects.ObjectList;
+import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
+import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import net.fabricmc.fabric.api.lookup.v1.block.BlockApiCache;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.StoragePreconditions;
@@ -43,7 +43,8 @@ public class RoutingNetworkImpl implements RoutingNetwork
     protected Supplier<ServerWorld> worldSupplier;
     protected final BlockPos pos;
 
-    protected final ObjectList<BlockApiCache<RoutablePipe, Direction>> routablePipes = new ObjectArrayList<>(10);
+//    protected final ObjectList<BlockApiCache<RoutablePipe, Direction>> routablePipes = new ObjectArrayList<>(10);
+    protected final Long2ObjectMap<BlockApiCache<RoutablePipe, Direction>> routablePipes = new Long2ObjectOpenHashMap<>();
     protected boolean valid;
 
     public RoutingNetworkImpl(BlockPos pos, Supplier<ServerWorld> worldSupplier)
@@ -86,7 +87,7 @@ public class RoutingNetworkImpl implements RoutingNetwork
             return;
         }
 
-        finder.getResult().forEach((l, c) -> routablePipes.add(c));
+        routablePipes.putAll(finder.getResult());
 
         finder.getVisited().forEach(p ->
         {
@@ -113,7 +114,7 @@ public class RoutingNetworkImpl implements RoutingNetwork
 
     public List<ResourceAmount<ItemVariant>> getAllAvailable(TransactionContext transaction)
     {
-        return routablePipes.stream()
+        return routablePipes.values().stream()
                 .map(c -> c.find(null))
                 .filter(Objects::nonNull)
                 .flatMap(p -> p.getAvailable(transaction))
@@ -130,6 +131,33 @@ public class RoutingNetworkImpl implements RoutingNetwork
         return new ResourceAmount<>(am1.resource(), am1.amount() + am2.amount());
     }
 
+    public boolean route(ResourceAmount<ItemVariant> stack, BlockPos inPos, Direction inDir, BlockPos outPos, Direction outDir, RequestType type, TransactionContext transaction)
+    {
+        StoragePreconditions.notBlankNotNegative(stack.resource(), stack.amount());
+
+        try (Transaction inner = transaction.openNested())
+        {
+            var inPipeCache = routablePipes.get(inPos.asLong());
+            if (inPipeCache != null)
+            {
+                RoutablePipe inPipe = inPipeCache.find(null);
+                if (inPipe != null)
+                {
+                    long routed = inPipe.requestItem(stack.resource(), stack.amount(), new NodePos(outPos, outDir), inner);
+                    if (type.satisfied(stack.amount(), routed))
+                    {
+                        worldSupplier.get().spawnParticles(ParticleTypes.SMOKE, this.pos.getX() + 0.5, this.pos.getY() + 1, this.pos.getZ() + 0.5, 20, 0.1, 0, 0.1, 0.01);
+                        worldSupplier.get().playSound(null, this.pos.getX(), this.pos.getY(), this.pos.getZ(), SoundEvents.ENTITY_PIGLIN_CELEBRATE, SoundCategory.BLOCKS, 1, 1);
+                        inner.commit();
+                        return true;
+                    }
+                }
+            }
+            inner.abort();
+        }
+        return false;
+    }
+
     public boolean request(ResourceAmount<ItemVariant> stack, BlockPos pos, Direction outDir, RequestType type, TransactionContext transaction)
     {
         StoragePreconditions.notBlankNotNegative(stack.resource(), stack.amount());
@@ -137,7 +165,7 @@ public class RoutingNetworkImpl implements RoutingNetwork
         try (Transaction inner = transaction.openNested())
         {
             AtomicLong amount = new AtomicLong(stack.amount());
-            boolean satisfied = routablePipes.stream().anyMatch(e ->
+            boolean satisfied = routablePipes.values().stream().anyMatch(e ->
             {
                 long retrieved = e.find(null).requestItem(stack.resource(), amount.get(), new NodePos(pos, outDir), inner);
                 amount.addAndGet(-retrieved);

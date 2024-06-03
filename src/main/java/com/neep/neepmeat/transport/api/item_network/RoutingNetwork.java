@@ -17,6 +17,15 @@ public interface RoutingNetwork
     BlockApiLookup<RoutingNetwork, Void> LOOKUP = BlockApiLookup.get(new Identifier(NeepMeat.NAMESPACE, "routing_network"), RoutingNetwork.class, Void.class);
 
     List<ResourceAmount<ItemVariant>> getAllAvailable(TransactionContext transaction);
+
+    /**
+     * Transferring items into pipes requires outer transaction callbacks. To prevent duping, only commit the outer transaction if all nested operations were successful.
+     */
+    boolean route(ResourceAmount<ItemVariant> stack, BlockPos inPos, Direction inDir, BlockPos outPos, Direction outDir, RequestType type, TransactionContext transaction);
+
+    /**
+     * Transferring items into pipes requires outer transaction callbacks. To prevent duping, only commit the outer transaction if all nested operations were successful.
+     */
     boolean request(ResourceAmount<ItemVariant> stack, BlockPos pos, Direction outDir, RequestType type, TransactionContext transaction);
 
     void invalidate();
@@ -33,6 +42,12 @@ public interface RoutingNetwork
     {
         @Override
         public List<ResourceAmount<ItemVariant>> getAllAvailable(TransactionContext transaction) { return Collections.emptyList(); }
+
+        @Override
+        public boolean route(ResourceAmount<ItemVariant> stack, BlockPos inPos, Direction inDir, BlockPos outPos, Direction outDir, RequestType type, TransactionContext transaction)
+        {
+            return false;
+        }
 
         @Override
         public boolean request(ResourceAmount<ItemVariant> stack, BlockPos pos, Direction outDir, RequestType type, TransactionContext transaction) { return false; }

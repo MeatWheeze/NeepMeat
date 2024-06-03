@@ -2,9 +2,11 @@ package com.neep.neepmeat.transport.block.item_transport.entity;
 
 import com.google.common.collect.Streams;
 import com.neep.neepmeat.transport.ItemTransport;
+import com.neep.neepmeat.transport.api.PipeCache;
 import com.neep.neepmeat.transport.api.item_network.StorageBus;
 import com.neep.neepmeat.transport.fluid_network.node.NodePos;
 import com.neep.neepmeat.transport.interfaces.IServerWorld;
+import com.neep.neepmeat.transport.item_network.PipeCacheImpl;
 import com.neep.neepmeat.transport.item_network.RetrievalTarget;
 import it.unimi.dsi.fastutil.Pair;
 import net.fabricmc.fabric.api.lookup.v1.block.BlockApiCache;
@@ -23,6 +25,8 @@ import net.minecraft.util.math.Direction;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Stack;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Stream;
 
 @SuppressWarnings("UnstableApiUsage")
@@ -119,13 +123,20 @@ public class StorageBusBlockEntity extends ItemPipeBlockEntity implements Storag
                 break;
         }
 
+        PipeCacheImpl itemNetwork = ((IServerWorld) world).getItemNetwork();
+        Stack<Direction> route = itemNetwork.findPath(pos, fromPos.pos(), fromPos.face(), variant, amount);
+
+        AtomicLong routed = new AtomicLong();
         foundTargets.forEach(p ->
         {
 //                ItemPipeUtil.stackToAny((ServerWorld) world, p.first().getPos(), Direction.UP, variant, p.right(), transaction);
-            ((IServerWorld) world).getItemNetwork().route(p.first().getPos(), p.first().getFace(), fromPos.pos(), fromPos.face(), variant, p.right(), transaction);
+//            long l = ((IServerWorld) world).getItemNetwork().route(p.first().getPos(), p.first().getFace(), fromPos.pos(), fromPos.face(), variant, p.right(), transaction);
+            long l = itemNetwork.route(p.first().getPos(), p.first().getFace(), route, variant, amount, transaction);
+            routed.addAndGet(l);
         });
 
-        return amount - remaining;
+        return routed.get();
+//        return amount - remaining;
     }
 
     @Override

@@ -25,6 +25,7 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
+import org.apache.logging.log4j.core.appender.routing.Route;
 
 import java.util.function.Supplier;
 
@@ -101,6 +102,7 @@ public class Instructions
                     .arg(ArgumentPredicates.IS_FLUID_STORAGE)
                     .arg(ArgumentPredicates.IS_ITEM_MIP)));
 
+    public static final SimplerInstructionProvider ROUTE = register("route", new SimplerInstructionProvider(RouteItemInstruction::new, RouteItemInstruction::parser, Text.of("ROUTE")));
     public static final SimplerInstructionProvider REQUEST = register("request", new SimplerInstructionProvider(RequestItemInstruction::new, RequestItemInstruction::parser, Text.of("REQUEST")));
     public static final SimplerInstructionProvider COUNT = register("count", new SimplerInstructionProvider(CountInstruction::new, CountInstruction::parser, Text.of("COUNT")));
 
