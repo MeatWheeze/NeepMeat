@@ -119,6 +119,11 @@ public class FarmingScutter extends ScutterEntity
 
             dropStack(stack);
 
+            for (int i = 0; i < inventory.size(); ++i)
+            {
+                dropStack(inventory.getStack(i));
+            }
+
             remove(RemovalReason.DISCARDED);
 
             return ActionResult.SUCCESS;
