@@ -42,7 +42,7 @@ public class GrinderBlock extends BaseHorFacingBlock implements BlockEntityProvi
     {
         if (world.getBlockEntity(pos) instanceof GrinderBlockEntity be)
         {
-            if (player.isSneaking() && player.getStackInHand(hand).isEmpty())
+            if (player.isSneaking() && player.getMainHandStack().isEmpty())
             {
                 if (world.isClient()) return ActionResult.SUCCESS;
 

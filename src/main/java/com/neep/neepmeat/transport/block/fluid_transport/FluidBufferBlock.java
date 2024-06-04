@@ -26,6 +26,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
 
+@SuppressWarnings("deprecation")
 public class FluidBufferBlock extends BaseFacingBlock implements BlockEntityProvider
 {
     public static final BooleanProperty NORTH_CONNECTION = BooleanProperty.of("north");
@@ -126,14 +127,15 @@ public class FluidBufferBlock extends BaseFacingBlock implements BlockEntityProv
         return this.getConnectedState(ctx.getWorld(), state, ctx.getBlockPos());
     }
 
-    public BlockState getConnectedState(WorldAccess world, BlockState state, BlockPos pos)
+    protected BlockState getConnectedState(WorldAccess world, BlockState state, BlockPos pos)
     {
         for (Direction direction : Direction.values())
         {
             BlockState pipeState = world.getBlockState(pos.offset(direction));
-//            if (pipeState.getBlock() instanceof FluidPipe pipe && pipe.getConnections(pipeState, (d) -> true).contains(direction.getOpposite()))
             if (pipeState.getBlock() instanceof FluidPipe pipe
-                    && Iterables.contains(pipe.getConnections(pipeState, d -> true), direction.getOpposite()))
+                    && Iterables.contains(pipe.getConnections(pipeState, d -> true), direction.getOpposite())
+                    || pipeState.getBlock() instanceof PumpBlock && (pipeState.get(PumpBlock.FACING).getAxis() == direction.getAxis())
+            )
             {
                 state = state.with(DIR_TO_CONNECTION.get(direction), true);
             }
