@@ -53,6 +53,7 @@ public class ExecutorBlockEntity extends SyncableBlockEntity implements PLC, PLC
         {
             stop();
             say(error.what());
+            error = null;
         }
 
         if (currentInstruction == null && !instructions.isEmpty())
