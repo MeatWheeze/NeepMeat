@@ -24,6 +24,7 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Supplier;
 
@@ -66,8 +67,8 @@ public class Instructions
     public static final SimplerInstructionProvider XOR = registeryBinary("xor", () -> Instructions.XOR, (f, l) -> f ^ l);
     public static final SimplerInstructionProvider XNOR = registeryBinary("xnor", () -> Instructions.XNOR, (f, l) -> ~(f ^ l));
 
-    public static final SimplerInstructionProvider SHR = register("shr", new SimplerInstructionProvider(SHRInstruction::new, SHRInstruction::parser, Text.of("SHR")));
-    public static final SimplerInstructionProvider SHL = register("shl", new SimplerInstructionProvider(SHLInstruction::new, SHLInstruction::parser, Text.of("SHL")));
+    public static final SimplerInstructionProvider SHR = register("shr", new SimplerInstructionProvider(SHRInstruction::new, (view, parsedSource, parser, scope) -> SHRInstruction.parser(view, parsedSource, parser), Text.of("SHR")));
+    public static final SimplerInstructionProvider SHL = register("shl", new SimplerInstructionProvider(SHLInstruction::new, (view, parsedSource, parser, scope) -> SHLInstruction.parser(view, parsedSource, parser), Text.of("SHL")));
 
     public static final InstructionProvider JUMP = register("jump", new SimplerInstructionProvider(JumpInstruction::new, new JumpInstructionParser(JumpInstruction::new), Text.of("JMP")));
     public static final SimplerInstructionProvider BIT = register("bit", new SimplerInstructionProvider(BITInstruction::new, new JumpInstructionParser(BITInstruction::new), Text.of("BIT")));
@@ -80,7 +81,7 @@ public class Instructions
             .factory(PredicatedInstructionBuilder.create()
                     .arg(ArgumentPredicates.IS_ACTUATOR));
 
-    public static final InstructionProvider EXEC = register("exec", new SimplerInstructionProvider(ExecInstruction::new, ExecInstruction::parser, Text.of("EXEC")));
+    public static final InstructionProvider EXEC = register("exec", new SimplerInstructionProvider(ExecInstruction::new, (view, parsedSource, parser, scope) -> ExecInstruction.parser(view, parsedSource, parser), Text.of("EXEC")));
 
     public static final InstructionProvider COMBINE = register("combine", new SimpleInstructionProvider(CombineInstruction::new, CombineInstruction::new, 2, Text.of("COMBINE"))
             .factory(PredicatedInstructionBuilder.create()
@@ -90,7 +91,7 @@ public class Instructions
             .factory(PredicatedInstructionBuilder.create()
                     .arg(ArgumentPredicates.IS_ITEM_STORAGE)
                     .arg(ArgumentPredicates.IS_ITEM_STORAGE)))
-            .parser(MoveInstruction::parser);
+            .parser((view, parsedSource, parser, scope) -> MoveInstruction.parser(view, parsedSource, parser));
     public static final InstructionProvider IMPLANT = register("implant", new SimpleInstructionProvider(ImplantInstruction::new, ImplantInstruction::new, 2, Text.of("IMPLANT"))
             .factory(PredicatedInstructionBuilder.create()
                     .arg(ArgumentPredicates.IS_ITEM_STORAGE)
@@ -100,13 +101,13 @@ public class Instructions
                     .arg(ArgumentPredicates.IS_FLUID_STORAGE)
                     .arg(ArgumentPredicates.IS_ITEM_MIP)));
 
-    public static final SimplerInstructionProvider ROUTE = register("route", new SimplerInstructionProvider(RouteItemInstruction::new, RouteItemInstruction::parser, Text.of("ROUTE")));
-    public static final SimplerInstructionProvider REQUEST = register("request", new SimplerInstructionProvider(RequestItemInstruction::new, RequestItemInstruction::parser, Text.of("REQUEST")));
-    public static final SimplerInstructionProvider COUNT = register("count", new SimplerInstructionProvider(CountInstruction::new, CountInstruction::parser, Text.of("COUNT")));
+    public static final SimplerInstructionProvider ROUTE = register("route", new SimplerInstructionProvider(RouteItemInstruction::new, (view, parsedSource, parser, scope) -> RouteItemInstruction.parser(view, parsedSource, parser), Text.of("ROUTE")));
+    public static final SimplerInstructionProvider REQUEST = register("request", new SimplerInstructionProvider(RequestItemInstruction::new, (view, parsedSource, parser, scope) -> RequestItemInstruction.parser(view, parsedSource, parser), Text.of("REQUEST")));
+    public static final SimplerInstructionProvider COUNT = register("count", new SimplerInstructionProvider(CountInstruction::new, (view, parsedSource, parser, scope) -> CountInstruction.parser(view, parsedSource, parser), Text.of("COUNT")));
 
-    public static final InstructionProvider WAIT_REDSTONE = register("wait_redstone", new SimplerInstructionProvider(WaitRedstoneInstruction::new, WaitRedstoneInstruction::parser, Text.of("RWAIT")));
-    public static final InstructionProvider EMIT_REDSTONE = register("emit_redstone", new SimplerInstructionProvider(EmitRedstoneInstruction::new, EmitRedstoneInstruction::parser, Text.of("REMIT")));
-    public static final InstructionProvider READ_REDSTONE = register("read_redstone", new SimplerInstructionProvider(ReadRedstoneInstruction::new, ReadRedstoneInstruction::parser, Text.of("RREAD")));
+    public static final InstructionProvider WAIT_REDSTONE = register("wait_redstone", new SimplerInstructionProvider(WaitRedstoneInstruction::new, (view, parsedSource, parser, scope) -> WaitRedstoneInstruction.parser(view, parsedSource, parser), Text.of("RWAIT")));
+    public static final InstructionProvider EMIT_REDSTONE = register("emit_redstone", new SimplerInstructionProvider(EmitRedstoneInstruction::new, (view, parsedSource, parser, scope) -> EmitRedstoneInstruction.parser(view, parsedSource, parser), Text.of("REMIT")));
+    public static final InstructionProvider READ_REDSTONE = register("read_redstone", new SimplerInstructionProvider(ReadRedstoneInstruction::new, (view, parsedSource, parser, scope) -> ReadRedstoneInstruction.parser(view, parsedSource, parser), Text.of("RREAD")));
 
     private static <T extends InstructionProvider> T register(String path, T provider)
     {
@@ -131,7 +132,7 @@ public class Instructions
      */
     static InstructionParser parseNoArguments(Supplier<Instruction> supplier)
     {
-        return (TokenView view, ParsedSource parsedSource, Parser parser) ->
+        return (TokenView view, ParsedSource parsedSource, Parser parser, @Nullable String scope) ->
         {
             view.fastForward();
             parser.assureLineEnd(view);

@@ -30,7 +30,7 @@ public class ParsedFunction
 
     public void label(Label label)
     {
-        labels.add(label);
+        labels.add(mangleLabel(label));
     }
 
     public int size()
@@ -41,6 +41,11 @@ public class ParsedFunction
     public String mangledName()
     {
         return "function#" + name;
+    }
+
+    public Label mangleLabel(Label label)
+    {
+        return new Label(ParsedSource.mangleLabel(label.name(), name), label.index());
     }
 
     public String name()

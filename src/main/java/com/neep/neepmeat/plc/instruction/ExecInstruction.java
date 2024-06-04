@@ -90,7 +90,7 @@ public class ExecInstruction implements Instruction
         if (target == null)
             throw new NeepASM.ParseException("expected argument after exec");
 
-        ParsedInstruction parsedInstruction = parser.parseInstruction(view);
+        ParsedInstruction parsedInstruction = parser.parseInstruction(view, null);
         if (parsedInstruction == null)
             throw new NeepASM.ParseException("expected instruction after exec");
 

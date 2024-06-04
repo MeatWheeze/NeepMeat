@@ -65,7 +65,7 @@ public class RobotInstruction implements Instruction
     public static class Parser implements InstructionParser
     {
         @Override
-        public ParsedInstruction parse(TokenView view, ParsedSource parsedSource, com.neep.neepmeat.neepasm.compiler.Parser parser) throws NeepASM.ParseException
+        public ParsedInstruction parse(TokenView view, ParsedSource parsedSource, com.neep.neepmeat.neepasm.compiler.Parser parser, @Nullable String scope) throws NeepASM.ParseException
         {
             view.fastForward();
             Argument target = parser.parseArgument(view);

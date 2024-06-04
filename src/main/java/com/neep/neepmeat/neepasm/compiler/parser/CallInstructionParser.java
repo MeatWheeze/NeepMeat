@@ -6,11 +6,12 @@ import com.neep.neepmeat.neepasm.compiler.ParsedSource;
 import com.neep.neepmeat.neepasm.compiler.Parser;
 import com.neep.neepmeat.neepasm.compiler.TokenView;
 import com.neep.neepmeat.neepasm.program.Label;
+import org.jetbrains.annotations.Nullable;
 
 public class CallInstructionParser implements InstructionParser
 {
     @Override
-    public ParsedInstruction parse(TokenView view, ParsedSource parsedSource, Parser parser) throws NeepASM.ParseException
+    public ParsedInstruction parse(TokenView view, ParsedSource parsedSource, Parser parser, @Nullable String scope) throws NeepASM.ParseException
     {
         view.fastForward();
         String label = view.nextIdentifier();

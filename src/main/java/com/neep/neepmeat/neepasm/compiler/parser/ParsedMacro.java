@@ -17,6 +17,8 @@ public class ParsedMacro
     private final String macroText;
     private final int startLine;
 
+    private int numExpansions;
+
     public ParsedMacro(String name, List<String> parameters, String macroText, int startLine)
     {
         this.name = name;
@@ -27,6 +29,10 @@ public class ParsedMacro
 
     public void expand(TokenView view, ParsedSource parsedSource, Parser parser) throws NeepASM.ParseException
     {
+        // Give each expansion a unique name.
+        String localName = name + "#" + numExpansions;
+        numExpansions++;
+
         // Skip over macro name
         view.nextIdentifier();
 
@@ -59,13 +65,13 @@ public class ParsedMacro
         TokenView macroView = new TokenView(processed);
         while (!macroView.eof())
         {
-            parseLine(macroView, parsedSource, parser);
+            parseLine(macroView, parsedSource, parser, localName);
             macroView.nextLine();
             line++;
         }
     }
 
-    private void parseLine(TokenView view, ParsedSource parsedSource, Parser parser) throws NeepASM.ParseException
+    private void parseLine(TokenView view, ParsedSource parsedSource, Parser parser, String localName) throws NeepASM.ParseException
     {
         String token;
         char follow;
@@ -75,7 +81,8 @@ public class ParsedMacro
             follow = view.nextThing();
             if (follow == ':')
             {
-                parsedSource.label(new Label(token, parsedSource.size()));
+                // Use the mangled label name here to prevent duplicate labels after repeated expansions.
+                parsedSource.label(new Label(ParsedSource.mangleLabel(token, localName), parsedSource.size()));
                 view.fastForward();
                 parser.assureLineEnd(view);
 
@@ -87,7 +94,7 @@ public class ParsedMacro
             throw new RuntimeException(e);
         }
 
-        ParsedInstruction instruction = parser.parseInstruction(view);
+        ParsedInstruction instruction = parser.parseInstruction(view, localName);
         if (instruction != null)
             parsedSource.instruction(instruction, startLine + view.line());
     }

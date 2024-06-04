@@ -14,6 +14,7 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Supplier;
 
@@ -82,7 +83,7 @@ public class SayInstruction implements Instruction
     public static class Parser implements InstructionParser
     {
         @Override
-        public ParsedInstruction parse(TokenView view, ParsedSource parsedSource, com.neep.neepmeat.neepasm.compiler.Parser parser) throws NeepASM.ParseException
+        public ParsedInstruction parse(TokenView view, ParsedSource parsedSource, com.neep.neepmeat.neepasm.compiler.Parser parser, @Nullable String scope) throws NeepASM.ParseException
         {
             view.fastForward();
 

@@ -71,6 +71,7 @@ public class ParsedSource
     {
         return switch (seek)
         {
+            // WRONG!
             case FORWARDS -> labels.stream().filter(l -> l.name().equals(label) && l.index() >= origin).findFirst().orElse(null);
             case BACKWARDS -> labels.stream().filter(l -> l.name().equals(label) && l.index() <= origin).findFirst().orElse(null);
             case ABSOLUTE -> findLabel(label);
@@ -93,5 +94,13 @@ public class ParsedSource
     public ParsedAlias findAlias(String name)
     {
         return aliases.stream().filter(a -> a.name().equals(name)).findFirst().orElse(null);
+    }
+
+    public static String mangleLabel(String label, @Nullable String scope)
+    {
+        if (scope != null)
+            return scope + "#" + label;
+
+        return label;
     }
 }

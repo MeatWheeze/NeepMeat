@@ -8,6 +8,7 @@ import com.neep.neepmeat.neepasm.compiler.TokenView;
 import com.neep.neepmeat.neepasm.program.Label;
 import com.neep.neepmeat.plc.instruction.Instruction;
 import net.minecraft.server.world.ServerWorld;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Function;
 
@@ -21,14 +22,18 @@ public class JumpInstructionParser implements InstructionParser
     }
 
     @Override
-    public ParsedInstruction parse(TokenView view, ParsedSource parsedSource, Parser parser) throws NeepASM.ParseException
+    public ParsedInstruction parse(TokenView view, ParsedSource parsedSource, Parser parser, @Nullable String scope) throws NeepASM.ParseException
     {
         view.fastForward();
+
+//        parsedSource.getScope());
 
         String label = view.nextIdentifier();
 
         if (!label.isEmpty())
         {
+            label = ParsedSource.mangleLabel(label, scope);
+
             view.fastForward();
 
             char c = view.peek();

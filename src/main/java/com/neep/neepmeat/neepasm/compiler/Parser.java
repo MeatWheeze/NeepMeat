@@ -136,7 +136,7 @@ public class Parser
         }
         else
         {
-            ParsedInstruction instruction = parseInstruction(view);
+            ParsedInstruction instruction = parseInstruction(view, null);
             if (instruction != null)
                 parsedSource.instruction(instruction, view.line());
         }
@@ -261,13 +261,13 @@ public class Parser
             }
         }
 
-        ParsedInstruction instruction = parseInstruction(view);
+        ParsedInstruction instruction = parseInstruction(view, function.name());
         if (instruction != null)
             function.instruction(instruction, view.line());
     }
 
     @Nullable
-    public ParsedInstruction parseInstruction(TokenView view) throws NeepASM.ParseException
+    public ParsedInstruction parseInstruction(TokenView view, @Nullable String scope) throws NeepASM.ParseException
     {
         view.fastForward();
         if (view.lineEnded() || isComment(view))
@@ -279,7 +279,7 @@ public class Parser
         if (provider != null)
         {
             InstructionParser parser = provider.getParser();
-            return parser.parse(view, parsedSource, this);
+            return parser.parse(view, parsedSource, this, scope);
         }
 
         ParsedFunction function = parsedSource.findFunction(id);

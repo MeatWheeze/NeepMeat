@@ -9,6 +9,7 @@ import com.neep.neepmeat.neepasm.compiler.TokenView;
 import com.neep.neepmeat.neepasm.program.KeyValue;
 import com.neep.neepmeat.plc.instruction.Argument;
 import com.neep.neepmeat.plc.instruction.InstructionProvider;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
@@ -22,7 +23,7 @@ public class DefaultInstructionParser implements InstructionParser
     }
 
     @Override
-    public ParsedInstruction parse(TokenView view, ParsedSource parsedSource, Parser parser) throws NeepASM.ParseException
+    public ParsedInstruction parse(TokenView view, ParsedSource parsedSource, Parser parser, @Nullable String scope) throws NeepASM.ParseException
     {
         List<Argument> arguments = Lists.newArrayList();
         List<KeyValue> kvs = Lists.newArrayList();
