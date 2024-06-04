@@ -9,6 +9,7 @@ import com.neep.neepmeat.client.effect.ReminaGraphicsEvent;
 import com.neep.neepmeat.client.fluid.NMFluidsClient;
 import com.neep.neepmeat.client.hud.GuideLookupThings;
 import com.neep.neepmeat.client.hud.HUDOverlays;
+import com.neep.neepmeat.client.instance.TreeVacuumInstance;
 import com.neep.neepmeat.client.item.FarmingScutterHudRenderer;
 import com.neep.neepmeat.client.model.GenericModel;
 import com.neep.neepmeat.client.model.GlassTankModel;
@@ -33,6 +34,7 @@ import com.neep.neepmeat.machine.casting_basin.CastingBasinRenderer;
 import com.neep.neepmeat.machine.crucible.AlembicRenderer;
 import com.neep.neepmeat.machine.crucible.CrucibleRenderer;
 import com.neep.neepmeat.machine.death_blades.DeathBladesRenderer;
+import com.neep.neepmeat.machine.fabricator.FabricatorInstance;
 import com.neep.neepmeat.machine.fabricator.FabricatorScreen;
 import com.neep.neepmeat.machine.item_mincer.ItemMincerRenderer;
 import com.neep.neepmeat.machine.live_machine.LivingMachines;
@@ -118,6 +120,8 @@ public class NeepMeatClient implements ClientModInitializer
         DosimeterItem.Client.init();
 
         PhageRayEntity.Client.init();
+        FabricatorInstance.initNetwork();
+        TreeVacuumInstance.initNetwork();
 
         GuideLookupThings.init();
 

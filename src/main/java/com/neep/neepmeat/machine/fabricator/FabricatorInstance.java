@@ -87,7 +87,8 @@ public class FabricatorInstance extends BlockEntityInstance<FabricatorBlockEntit
         relight(getWorldPosition(), rotor);
     }
 
-    static
+    // I put this here because it's the most convenient place.
+    public static void initNetwork()
     {
         // I wish I knew how chests sync their animations. This is horrible.
         ClientPlayNetworking.registerGlobalReceiver(FabricatorBlockEntity.CHANNEL_ID, (client, handler, buf, responseSender) ->

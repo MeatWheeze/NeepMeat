@@ -107,7 +107,8 @@ public class TreeVacuumInstance extends BlockEntityInstance<TreeVacuumBlockEntit
         relight(getWorldPosition(), lungL, lungR, plunger);
     }
 
-    static
+    // I put this here because it's the most convenient place.
+    public static void initNetwork()
     {
         // I wish I knew how chests sync their animations. This is horrible.
         ClientPlayNetworking.registerGlobalReceiver(TreeVacuumBlockEntity.CHANNEL_ID, (client, handler, buf, responseSender) ->
