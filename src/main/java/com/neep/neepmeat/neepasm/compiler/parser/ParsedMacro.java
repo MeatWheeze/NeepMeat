@@ -29,15 +29,10 @@ public class ParsedMacro
         this.startLine = startLine;
     }
 
-    public void expand(TokenView view, InstructionAcceptor parsedSource, Parser parser) throws NeepASM.ParseException
-    {
-        expand(view, parsedSource, parser, new HashSet<>());
-    }
-
     /**
      * @param above For checking for recursive expansions (direct or indirect)
      */
-    private void expand(TokenView view, InstructionAcceptor parsedSource, Parser parser, Set<ParsedMacro> above) throws NeepASM.ParseException
+    public void expand(TokenView view, InstructionAcceptor parsedSource, Parser parser, Set<ParsedMacro> above) throws NeepASM.ParseException
     {
         if (above.contains(this))
             throw new NeepASM.ParseException("recursive macro expansion: " + name);
@@ -103,6 +98,7 @@ public class ParsedMacro
                 return;
             }
         }
+        parser.parseInstructionOrMacro(parsedSource, view, token, localName);
 
         ParsedMacro macro = parsedSource.findMacro(token);
         if (macro != null)

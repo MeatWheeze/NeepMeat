@@ -19,6 +19,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -82,20 +83,20 @@ public class Parser
         return parsedSource;
     }
 
-//    public void parseInstructionOrMacro(ParsedSource parser, TokenView view, @Nullable String scope) throws NeepASM.ParseException
-//    {
-//        ParsedMacro macro = parsedSource.findMacro(token);
-//        if (macro != null)
-//        {
-//            macro.expand(view, parsedSource, parser, above);
-//        }
-//        else
-//        {
-//            ParsedInstruction instruction = parseInstruction(view, scope);
-//            if (instruction != null)
-//                parsedSource.instruction(instruction, view.line());
-//        }
-//    }
+    public void parseInstructionOrMacro(InstructionAcceptor parsedSource, TokenView view, String prevToken, @Nullable String scope) throws NeepASM.ParseException
+    {
+        ParsedMacro macro = parsedSource.findMacro(prevToken);
+        if (macro != null)
+        {
+            macro.expand(view, parsedSource, this, new HashSet<>());
+        }
+        else
+        {
+            ParsedInstruction instruction = parseInstruction(view, scope);
+            if (instruction != null)
+                parsedSource.instruction(instruction, view.line());
+        }
+    }
 
     public void parseLine(TokenView view) throws NeepASM.ParseException
     {
@@ -138,18 +139,7 @@ public class Parser
             }
         }
 
-        // Handle macro expansions and normal instructions differently
-        ParsedMacro macro = parsedSource.findMacro(token);
-        if (macro != null)
-        {
-            macro.expand(view, parsedSource, this);
-        }
-        else
-        {
-            ParsedInstruction instruction = parseInstruction(view, null);
-            if (instruction != null)
-                parsedSource.instruction(instruction, view.line());
-        }
+        parseInstructionOrMacro(parsedSource, view, token, null);
     }
 
     private void parseMacro(TokenView view) throws NeepASM.ParseException
@@ -266,22 +256,7 @@ public class Parser
                 return;
             }
         }
-
-        ParsedMacro macro = parsedSource.findMacro(token);
-        if (macro != null)
-        {
-            macro.expand(view, function, this);
-        }
-        else
-        {
-            ParsedInstruction instruction = parseInstruction(view, function.name());
-            if (instruction != null)
-                function.instruction(instruction, view.line());
-        }
-
-//        ParsedInstruction instruction = parseInstruction(view, function.name());
-//        if (instruction != null)
-//            function.instruction(instruction, view.line());
+        parseInstructionOrMacro(parsedSource, view, token, function.name());
     }
 
     @Nullable
