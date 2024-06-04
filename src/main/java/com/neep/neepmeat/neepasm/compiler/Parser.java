@@ -256,7 +256,7 @@ public class Parser
                 return;
             }
         }
-        parseInstructionOrMacro(parsedSource, view, token, function.name());
+        parseInstructionOrMacro(function, view, token, function.name());
     }
 
     @Nullable
