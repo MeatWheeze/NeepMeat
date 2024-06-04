@@ -84,6 +84,7 @@ public class ParsedSource implements InstructionAcceptor
         return functions.stream().filter(m -> m.name().equals(name)).findFirst().orElse(null);
     }
 
+    @Override
     @Nullable
     public ParsedMacro findMacro(String name)
     {

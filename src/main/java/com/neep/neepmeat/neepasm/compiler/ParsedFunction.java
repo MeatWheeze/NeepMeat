@@ -5,22 +5,32 @@ import com.neep.neepmeat.api.plc.instruction.CallInstruction;
 import com.neep.neepmeat.api.plc.program.MutableProgram;
 import com.neep.neepmeat.neepasm.NeepASM;
 import com.neep.neepmeat.neepasm.compiler.parser.ParsedInstruction;
+import com.neep.neepmeat.neepasm.compiler.parser.ParsedMacro;
 import com.neep.neepmeat.neepasm.program.Label;
 import com.neep.neepmeat.plc.instruction.ReturnInstruction;
 import it.unimi.dsi.fastutil.objects.ObjectIntPair;
 import net.minecraft.server.world.ServerWorld;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
+import java.util.function.Function;
 
 public class ParsedFunction implements InstructionAcceptor
 {
     private final String name;
+    private final Function<String, ParsedMacro> macroFinder;
+
     private final List<ObjectIntPair<ParsedInstruction>> instructions = Lists.newArrayList();
     private final List<Label> labels = Lists.newArrayList();
 
-    public ParsedFunction(String name)
+    /**
+     * @param name Function name
+     * @param macroFinder A link to the main program's list of macros
+     */
+    public ParsedFunction(String name, Function<String, ParsedMacro> macroFinder)
     {
         this.name = name;
+        this.macroFinder = macroFinder;
     }
 
     @Override
@@ -39,6 +49,12 @@ public class ParsedFunction implements InstructionAcceptor
     public int size()
     {
         return instructions.size();
+    }
+
+    @Override
+    public @Nullable ParsedMacro findMacro(String name)
+    {
+        return macroFinder.apply(name);
     }
 
     public String mangledName()
@@ -83,19 +99,4 @@ public class ParsedFunction implements InstructionAcceptor
         }
         parsedSource.instruction(((world, source, program) -> program.addBack(new ReturnInstruction())), line);
     }
-
-//    public void build(ServerWorld serverWorld, ParsedSource parsedSource, MutableProgram program) throws NeepASM.CompilationException
-//    {
-////        program.addLabel(new Label("function#" + name, program.size()));
-////        for (Label label : labels)
-////        {
-////            program.addLabel(new Label(label.name(), program.size() + label.index()));
-////        }
-////
-////        for (ParsedInstruction preInstruction : instructions)
-////        {
-////            preInstruction.build(serverWorld, parsedSource, program);
-////        }
-////        program.addBack(new ReturnInstruction());
-//    }
 }

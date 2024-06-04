@@ -82,6 +82,21 @@ public class Parser
         return parsedSource;
     }
 
+//    public void parseInstructionOrMacro(ParsedSource parser, TokenView view, @Nullable String scope) throws NeepASM.ParseException
+//    {
+//        ParsedMacro macro = parsedSource.findMacro(token);
+//        if (macro != null)
+//        {
+//            macro.expand(view, parsedSource, parser, above);
+//        }
+//        else
+//        {
+//            ParsedInstruction instruction = parseInstruction(view, scope);
+//            if (instruction != null)
+//                parsedSource.instruction(instruction, view.line());
+//        }
+//    }
+
     public void parseLine(TokenView view) throws NeepASM.ParseException
     {
         if (view.peekThing() == '%')
@@ -110,19 +125,14 @@ public class Parser
         }
 
         String token;
-        char follow;
         try (var entry = view.save())
         {
             token = view.nextIdentifier();
-            follow = view.nextThing();
+            char follow = view.nextThing();
             if (follow == ':')
             {
                 parsedSource.label(new Label(token, parsedSource.size()));
-                view.fastForward();
-                if (!view.lineEnded() && !isComment(view))
-                {
-                    throw new NeepASM.ParseException("unexpected token after '" + token + "'");
-                }
+                assureLineEnd(view);
 
                 entry.commit();
             }
@@ -191,8 +201,7 @@ public class Parser
     private String parseMacroParameter(TokenView view)
     {
         view.fastForward();
-        String name = view.nextIdentifier();
-        return name;
+        return view.nextIdentifier();
     }
 
     private void parseAlias(TokenView view) throws NeepASM.ParseException
@@ -225,7 +234,7 @@ public class Parser
 
         view.nextLine();
 
-        ParsedFunction function = new ParsedFunction(name);
+        ParsedFunction function = new ParsedFunction(name, parsedSource::findMacro);
         view.fastForward();
         while (view.peekThing() != '%')
         {
@@ -245,21 +254,16 @@ public class Parser
     private void parseFunctionLine(ParsedFunction function, TokenView view) throws NeepASM.ParseException
     {
         String token;
-        char follow;
         try (var entry = view.save())
         {
             token = view.nextIdentifier();
-            follow = view.nextThing();
+            char follow = view.nextThing();
             if (follow == ':')
             {
                 function.label(function.mangleLabel(token, function.size()));
-                view.fastForward();
-                if (!view.lineEnded() && !isComment(view))
-                {
-                    throw new NeepASM.ParseException("unexpected token after '" + token + "'");
-                }
-
+                assureLineEnd(view);
                 entry.commit();
+                return;
             }
         }
 

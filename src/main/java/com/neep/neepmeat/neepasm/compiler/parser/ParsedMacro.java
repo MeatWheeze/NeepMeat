@@ -2,13 +2,14 @@ package com.neep.neepmeat.neepasm.compiler.parser;
 
 import com.google.common.collect.Lists;
 import com.neep.neepmeat.neepasm.NeepASM;
-import com.neep.neepmeat.neepasm.compiler.InstructionAcceptor;
-import com.neep.neepmeat.neepasm.compiler.ParsedSource;
-import com.neep.neepmeat.neepasm.compiler.Parser;
-import com.neep.neepmeat.neepasm.compiler.TokenView;
+import com.neep.neepmeat.neepasm.compiler.*;
 import com.neep.neepmeat.neepasm.program.Label;
+import com.neep.neepmeat.plc.instruction.DelayInstruction;
 
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 // Stores the raw text of the macro allowing blind substitution of text arguments.
 public class ParsedMacro
@@ -30,6 +31,19 @@ public class ParsedMacro
 
     public void expand(TokenView view, InstructionAcceptor parsedSource, Parser parser) throws NeepASM.ParseException
     {
+        expand(view, parsedSource, parser, new HashSet<>());
+    }
+
+    /**
+     * @param above For checking for recursive expansions (direct or indirect)
+     */
+    private void expand(TokenView view, InstructionAcceptor parsedSource, Parser parser, Set<ParsedMacro> above) throws NeepASM.ParseException
+    {
+        if (above.contains(this))
+            throw new NeepASM.ParseException("recursive macro expansion: " + name);
+
+        above.add(this);
+
         // Give each expansion a unique name.
         String localName = name + "#" + numExpansions;
         numExpansions++;
@@ -66,38 +80,41 @@ public class ParsedMacro
         TokenView macroView = new TokenView(processed);
         while (!macroView.eof())
         {
-            parseLine(macroView, parsedSource, parser, localName);
+            parseLine(macroView, parsedSource, parser, localName, above);
             macroView.nextLine();
             line++;
         }
     }
 
-    private void parseLine(TokenView view, InstructionAcceptor parsedSource, Parser parser, String localName) throws NeepASM.ParseException
+    private void parseLine(TokenView view, InstructionAcceptor parsedSource, Parser parser, String localName, Set<ParsedMacro> above) throws NeepASM.ParseException
     {
         String token;
-        char follow;
         try (var entry = view.save())
         {
             token = view.nextIdentifier();
-            follow = view.nextThing();
+            char follow = view.nextThing();
             if (follow == ':')
             {
                 // Use the mangled label name here to prevent duplicate labels after repeated expansions.
                 parsedSource.label(new Label(ParsedSource.mangleLabel(token, localName), parsedSource.size()));
-                view.fastForward();
                 parser.assureLineEnd(view);
 
                 entry.commit();
+                return;
             }
         }
-        catch (NeepASM.ParseException e)
-        {
-            throw new RuntimeException(e);
-        }
 
-        ParsedInstruction instruction = parser.parseInstruction(view, localName);
-        if (instruction != null)
-            parsedSource.instruction(instruction, startLine + view.line());
+        ParsedMacro macro = parsedSource.findMacro(token);
+        if (macro != null)
+        {
+            macro.expand(view, parsedSource, parser, above);
+        }
+        else
+        {
+            ParsedInstruction instruction = parser.parseInstruction(view, localName);
+            if (instruction != null)
+                parsedSource.instruction(instruction, view.line());
+        }
     }
 
     private String parseArgumentString(TokenView view, Parser parser)
