@@ -1,6 +1,7 @@
 package com.neep.neepmeat.machine.large_motor;
 
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
+import com.neep.neepmeat.BalanceConstants;
 import com.neep.neepmeat.api.machine.MotorisedBlock;
 import com.neep.neepmeat.api.processing.PowerUtils;
 import com.neep.neepmeat.machine.motor.MotorEntity;
@@ -22,7 +23,7 @@ public class LargeMotorBlockEntity extends SyncableBlockEntity implements MotorE
 
     protected float influx;
 
-    protected final float maxInflux = 8000f / PowerUtils.referencePower();
+    protected final float maxInflux = BalanceConstants.LARGE_MOTOR_MAX_POWER / PowerUtils.referencePower();
 
     protected AbstractBloodAcceptor acceptor = new AbstractBloodAcceptor()
     {

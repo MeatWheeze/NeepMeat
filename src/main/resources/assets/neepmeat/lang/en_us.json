@@ -382,11 +382,11 @@
   "block.neepmeat.breaker": "Motorised Breaker",
 
   "block.neepmeat.motor_unit": "Motor",
-  "block.neepmeat.motor_unit.lore_0": "Powers mechanical blocks. Runs on Ethereal Fuel.\nMax output power: 1000eJ/t",
+  "block.neepmeat.motor_unit.lore_0": "Powers mechanical blocks. Runs on Ethereal Fuel.\nMax output power: 400eJ/t",
   "block.neepmeat.advanced_motor": "Advanced Motor",
-  "block.neepmeat.advanced_motor.lore_0": "Powers mechanical blocks. Takes power from a connected vascular network.\nMax output power: 4000eJ/t",
+  "block.neepmeat.advanced_motor.lore_0": "Powers mechanical blocks. Takes power from a connected vascular network.\nMax output power: 800eJ/t",
   "block.neepmeat.large_motor": "Large Motor",
-  "block.neepmeat.large_motor.lore_0": "Powers mechanical blocks.\nMax output power: 8000eJ/t",
+  "block.neepmeat.large_motor.lore_0": "Powers mechanical blocks.\nMax output power: 2000eJ/t",
 
   "block.neepmeat.stirling_engine": "Stirling Engine",
   "block.neepmeat.agitator": "Fluid Agitator",

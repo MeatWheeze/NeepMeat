@@ -1,6 +1,7 @@
 package com.neep.neepmeat.machine.motor;
 
 import com.neep.meatlib.block.BaseFacingBlock;
+import com.neep.neepmeat.BalanceConstants;
 import com.neep.neepmeat.api.machine.MotorisedBlock;
 import com.neep.neepmeat.api.processing.PowerUtils;
 import net.fabricmc.fabric.api.lookup.v1.block.BlockApiCache;
@@ -69,7 +70,10 @@ public class MotorBlockEntity extends LiquidFuelMachine implements MotorEntity
             {
                 newPower = (float) PowerUtils.absoluteToPerUnit(extracted);
             }
-            else newPower = 0;
+            else
+            {
+                newPower = 0;
+            }
 
             if (newPower != outputPower)
             {
@@ -115,6 +119,12 @@ public class MotorBlockEntity extends LiquidFuelMachine implements MotorEntity
     {
         double P = PowerUtils.perUnitToAbsWatt(getMechPUPower());
         return  (float) (P / (loadTorque != 0 ? loadTorque : PowerUtils.MOTOR_TORQUE_LOSS));
+    }
+
+    @Override
+    protected long maxPower()
+    {
+        return BalanceConstants.BASIC_MOTOR_MAX_POWER;
     }
 
     @Override

@@ -2,6 +2,7 @@ package com.neep.neepmeat.machine.advanced_motor;
 
 import com.neep.meatlib.block.BaseFacingBlock;
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
+import com.neep.neepmeat.BalanceConstants;
 import com.neep.neepmeat.api.machine.MotorisedBlock;
 import com.neep.neepmeat.api.processing.PowerUtils;
 import com.neep.neepmeat.machine.motor.MotorEntity;
@@ -26,7 +27,7 @@ public class AdvancedMotorBlockEntity extends SyncableBlockEntity implements Mot
     protected float loadTorque;
     @Nullable protected MotorisedBlock lastMotorised;
 
-    protected final float maxInflux = 4000f / PowerUtils.referencePower();
+    protected final float maxInflux = BalanceConstants.ADVANCED_MOTOR_MAX_POWER / PowerUtils.referencePower();
 
     @Nullable protected BlockApiCache<MotorisedBlock, Void> cache = null;
 
