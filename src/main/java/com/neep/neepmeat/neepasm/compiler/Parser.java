@@ -176,6 +176,8 @@ public class Parser
                         parsedSource.macro(new ParsedMacro(name, parameters, macroText.toString(), startLine));
                         return;
                     }
+//                    else
+//                        throw new NeepASM.ParseException("expected %end");
                 }
             }
 
@@ -250,7 +252,7 @@ public class Parser
             follow = view.nextThing();
             if (follow == ':')
             {
-                function.label(new Label(token, function.size()));
+                function.label(function.mangleLabel(token, function.size()));
                 view.fastForward();
                 if (!view.lineEnded() && !isComment(view))
                 {
@@ -261,9 +263,21 @@ public class Parser
             }
         }
 
-        ParsedInstruction instruction = parseInstruction(view, function.name());
-        if (instruction != null)
-            function.instruction(instruction, view.line());
+        ParsedMacro macro = parsedSource.findMacro(token);
+        if (macro != null)
+        {
+            macro.expand(view, function, this);
+        }
+        else
+        {
+            ParsedInstruction instruction = parseInstruction(view, function.name());
+            if (instruction != null)
+                function.instruction(instruction, view.line());
+        }
+
+//        ParsedInstruction instruction = parseInstruction(view, function.name());
+//        if (instruction != null)
+//            function.instruction(instruction, view.line());
     }
 
     @Nullable

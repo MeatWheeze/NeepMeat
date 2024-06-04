@@ -12,7 +12,7 @@ import net.minecraft.server.world.ServerWorld;
 
 import java.util.List;
 
-public class ParsedFunction
+public class ParsedFunction implements InstructionAcceptor
 {
     private final String name;
     private final List<ObjectIntPair<ParsedInstruction>> instructions = Lists.newArrayList();
@@ -23,16 +23,19 @@ public class ParsedFunction
         this.name = name;
     }
 
+    @Override
     public void instruction(ParsedInstruction instruction, int line)
     {
         instructions.add(ObjectIntPair.of(instruction, line));
     }
 
+    @Override
     public void label(Label label)
     {
-        labels.add(mangleLabel(label));
+        labels.add(label);
     }
 
+    @Override
     public int size()
     {
         return instructions.size();
@@ -43,9 +46,9 @@ public class ParsedFunction
         return "function#" + name;
     }
 
-    public Label mangleLabel(Label label)
+    public Label mangleLabel(String label, int index)
     {
-        return new Label(ParsedSource.mangleLabel(label.name(), name), label.index());
+        return new Label(ParsedSource.mangleLabel(label, name), index);
     }
 
     public String name()

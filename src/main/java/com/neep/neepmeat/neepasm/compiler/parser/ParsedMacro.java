@@ -2,6 +2,7 @@ package com.neep.neepmeat.neepasm.compiler.parser;
 
 import com.google.common.collect.Lists;
 import com.neep.neepmeat.neepasm.NeepASM;
+import com.neep.neepmeat.neepasm.compiler.InstructionAcceptor;
 import com.neep.neepmeat.neepasm.compiler.ParsedSource;
 import com.neep.neepmeat.neepasm.compiler.Parser;
 import com.neep.neepmeat.neepasm.compiler.TokenView;
@@ -27,7 +28,7 @@ public class ParsedMacro
         this.startLine = startLine;
     }
 
-    public void expand(TokenView view, ParsedSource parsedSource, Parser parser) throws NeepASM.ParseException
+    public void expand(TokenView view, InstructionAcceptor parsedSource, Parser parser) throws NeepASM.ParseException
     {
         // Give each expansion a unique name.
         String localName = name + "#" + numExpansions;
@@ -71,7 +72,7 @@ public class ParsedMacro
         }
     }
 
-    private void parseLine(TokenView view, ParsedSource parsedSource, Parser parser, String localName) throws NeepASM.ParseException
+    private void parseLine(TokenView view, InstructionAcceptor parsedSource, Parser parser, String localName) throws NeepASM.ParseException
     {
         String token;
         char follow;
