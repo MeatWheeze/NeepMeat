@@ -5,11 +5,11 @@ import com.jozufozu.flywheel.api.instance.DynamicInstance;
 import com.jozufozu.flywheel.backend.instancing.blockentity.BlockEntityInstance;
 import com.jozufozu.flywheel.core.Materials;
 import com.jozufozu.flywheel.core.materials.model.ModelData;
+import com.jozufozu.flywheel.util.AnimationTickHolder;
 import com.neep.neepmeat.client.NMExtraModels;
 import com.neep.neepmeat.client.renderer.BERenderUtils;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.util.math.MatrixStack;
 
 @Environment(EnvType.CLIENT)
@@ -36,10 +36,12 @@ public class CharnelPumpInstance extends BlockEntityInstance<CharnelPumpBlockEnt
     {
         matrices.push();
 
-        double s = Math.sin((blockEntity.getWorld().getTime() + MinecraftClient.getInstance().getTickDelta()) / 100f);
+//        float s = (NMMaths.sin(blockEntity.getWorld().getTime(), AnimationTickHolder.getPartialTicks(), 0.1f) + 1) / 2;
+        float t = blockEntity.animationTicks > 0 ? 100 - blockEntity.animationTicks + AnimationTickHolder.getPartialTicks() : 0;
+        float s = CharnelPumpRenderer.plungerAnimation(t);
 
         BERenderUtils.rotateFacing(blockEntity.getCachedState().get(CharnelPumpBlock.FACING), matrices);
-        matrices.translate(0, 8 * s, 0);
+        matrices.translate(0, 3 + 3 * s, 0);
 
         plunger.setTransform(matrices);
         matrices.pop();
@@ -48,6 +50,6 @@ public class CharnelPumpInstance extends BlockEntityInstance<CharnelPumpBlockEnt
     @Override
     public void updateLight()
     {
-        relight(getWorldPosition(), plunger);
+        relight(getWorldPosition().up(1), plunger);
     }
 }

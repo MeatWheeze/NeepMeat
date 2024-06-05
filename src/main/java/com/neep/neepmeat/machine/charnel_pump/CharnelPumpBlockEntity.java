@@ -10,6 +10,7 @@ import com.neep.neepmeat.init.NMBlocks;
 import com.neep.neepmeat.init.NMFluids;
 import com.neep.neepmeat.init.NMParticles;
 import com.neep.neepmeat.machine.live_machine.LivingMachineComponents;
+import com.neep.neepmeat.machine.live_machine.component.PoweredComponent;
 import com.neep.neepmeat.machine.well_head.BlockEntityFinder;
 import com.neep.neepmeat.machine.well_head.WellHeadBlockEntity;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
@@ -27,10 +28,11 @@ import net.minecraft.tag.BlockTags;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.Heightmap;
+import net.minecraft.world.World;
 
 import java.util.Set;
 
-public class CharnelPumpBlockEntity extends SyncableBlockEntity implements LivingMachineComponent
+public class CharnelPumpBlockEntity extends SyncableBlockEntity implements LivingMachineComponent, PoweredComponent
 {
     private final Random random = Random.create();
 
@@ -41,6 +43,9 @@ public class CharnelPumpBlockEntity extends SyncableBlockEntity implements Livin
         new BlockEntityFinder<>(getWorld(), NMBlockEntities.WRITHING_EARTH_SPOUT, 20).addAll(BlockEntityFinder.chunkRange(getPos())));
 
     public final long minPower = 1000;
+
+    public int animationTicks;
+    private float progressIncrement;
 
     public CharnelPumpBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
     {
@@ -113,6 +118,13 @@ public class CharnelPumpBlockEntity extends SyncableBlockEntity implements Livin
     }
 
     @Override
+    public NbtCompound toClientTag(NbtCompound nbt)
+    {
+        nbt.putFloat("power", progressIncrement);
+        return nbt;
+    }
+
+    @Override
     public void writeNbt(NbtCompound nbt)
     {
         super.writeNbt(nbt);
@@ -122,6 +134,7 @@ public class CharnelPumpBlockEntity extends SyncableBlockEntity implements Livin
     public void readNbt(NbtCompound nbt)
     {
         super.readNbt(nbt);
+        this.progressIncrement = nbt.getFloat("power");
     }
 
     @Override
@@ -140,5 +153,34 @@ public class CharnelPumpBlockEntity extends SyncableBlockEntity implements Livin
     public ComponentType<? extends LivingMachineComponent> getComponentType()
     {
         return LivingMachineComponents.CHARNEL_PUMP;
+    }
+
+    public static void clientTick(World world, BlockPos pos, BlockState state, CharnelPumpBlockEntity be)
+    {
+        if (be.progressIncrement > 0)
+        {
+            be.animationTicks = Math.max(0, be.animationTicks - 1);
+            if (be.animationTicks == 0)
+            {
+                be.animationTicks = 100;
+            }
+        }
+        else
+        {
+            be.animationTicks = Math.max(0, be.animationTicks - 1);
+        }
+    }
+
+    @Override
+    public float progressIncrement()
+    {
+        return progressIncrement;
+    }
+
+    @Override
+    public void setProgressIncrement(float progressIncrement)
+    {
+        this.progressIncrement = progressIncrement;
+        sync();
     }
 }

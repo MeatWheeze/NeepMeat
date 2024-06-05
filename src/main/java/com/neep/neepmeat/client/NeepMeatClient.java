@@ -31,6 +31,7 @@ import com.neep.neepmeat.item.NetworkingToolItem;
 import com.neep.neepmeat.machine.assembler.AssemblerRenderer;
 import com.neep.neepmeat.machine.bottler.BottlerRenderer;
 import com.neep.neepmeat.machine.casting_basin.CastingBasinRenderer;
+import com.neep.neepmeat.machine.charnel_pump.CharnelPumpRenderer;
 import com.neep.neepmeat.machine.crucible.AlembicRenderer;
 import com.neep.neepmeat.machine.crucible.CrucibleRenderer;
 import com.neep.neepmeat.machine.death_blades.DeathBladesRenderer;
@@ -218,6 +219,8 @@ public class NeepMeatClient implements ClientModInitializer
 //        BlockEntityRendererFactories.register(NMBlockEntities.PYLON, PylonInstance::new);
 
         BlockEntityRendererFactories.register(NMBlockEntities.SYNTHESISER, SynthesiserRenderer::new);
+
+        BlockEntityRendererFactories.register(LivingMachines.CHARNEL_PUMP_BE, CharnelPumpRenderer::new);
 
 //        BlockEntityRendererFactories.register(PLCBlocks.PLC_ENTITY, PLCInstance::new);
 
