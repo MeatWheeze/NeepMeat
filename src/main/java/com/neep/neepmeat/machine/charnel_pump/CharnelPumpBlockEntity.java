@@ -21,6 +21,8 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.tag.BlockTags;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.random.Random;
@@ -39,29 +41,21 @@ public class CharnelPumpBlockEntity extends SyncableBlockEntity implements Livin
         new BlockEntityFinder<>(getWorld(), NMBlockEntities.WRITHING_EARTH_SPOUT, 20).addAll(BlockEntityFinder.chunkRange(getPos())));
 
     public final long minPower = 1000;
-    private float lastPower;
-    private float inputPower;
 
     public CharnelPumpBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
     {
         super(type, pos, state);
     }
 
-    public void serverTick(Storage<FluidVariant> inputStorage)
+    public void serverTick(double puPower, Storage<FluidVariant> inputStorage)
     {
         wellHeadFinder.get().tick();
         writhingSpoutFinder.get().tick();
 
-        if (inputPower != lastPower)
-        {
-            lastPower = inputPower;
-            sync();
-        }
-
         Set<WellHeadBlockEntity> found = wellHeadFinder.get().result();
         long distributeAmount = FluidConstants.BUCKET; // Integer multiple of bucket, will vary based on power input.
 
-        if (inputPower >= (float) minPower / PowerUtils.referencePower())
+        if (puPower >= (float) minPower / PowerUtils.referencePower())
         {
             spawnSpouts();
 
@@ -109,6 +103,7 @@ public class CharnelPumpBlockEntity extends SyncableBlockEntity implements Livin
             if (canSpoutSpawn(surfacePos))
             {
                 world.setBlockState(surfacePos, NMBlocks.WRITHING_EARTH_SPOUT.getDefaultState(), Block.NOTIFY_ALL);
+                world.playSound(null, surfacePos, SoundEvents.ITEM_HONEYCOMB_WAX_ON, SoundCategory.BLOCKS, 1, 1);
 
                 ((ServerWorld) world).spawnParticles(NMParticles.BODY_COMPOUND_SHOWER, surfacePos.getX() + 0.5, surfacePos.getY() + 1, surfacePos.getZ() + 0.5,
                         50,

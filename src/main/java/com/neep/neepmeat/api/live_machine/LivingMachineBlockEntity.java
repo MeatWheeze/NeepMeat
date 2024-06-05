@@ -106,9 +106,11 @@ public abstract class LivingMachineBlockEntity extends SyncableBlockEntity imple
         this.power = nbt.getFloat("power");
         degradationManager.readNbt(nbt);
 
+        // For client only
         this.numStructures = nbt.getInt("num_structures");
         this.numComponents = nbt.getInt("num_components");
         this.processName = Text.of(nbt.getString("process_name"));
+        this.repairAmount = nbt.getFloat("repair");
 
         components.clear();
         NbtList list = nbt.getList("components", NbtElement.STRING_TYPE);
@@ -127,9 +129,11 @@ public abstract class LivingMachineBlockEntity extends SyncableBlockEntity imple
         nbt.putFloat("power", power);
         degradationManager.writeNbt(nbt);
 
+        // For rendering on client only
         nbt.putInt("num_structures", structures.size());
         nbt.putInt("num_components", getNumComponents());
         nbt.putString("process_name", getProcess().getString());
+        nbt.putFloat("repair", repairAmount);
 
         NbtList componentList = new NbtList();
 

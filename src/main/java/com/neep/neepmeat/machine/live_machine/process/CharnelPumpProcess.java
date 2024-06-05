@@ -27,7 +27,7 @@ public class CharnelPumpProcess implements Process
             CharnelPumpBlockEntity pump = with.t1().iterator().next();
 
             Storage<FluidVariant> inputStorage = be.getCombinedFluidInput();
-            pump.serverTick(inputStorage);
+            pump.serverTick(be.getPower(), inputStorage);
         });
     }
 
