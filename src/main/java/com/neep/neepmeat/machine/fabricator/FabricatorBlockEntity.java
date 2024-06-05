@@ -45,10 +45,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 public class FabricatorBlockEntity extends SyncableBlockEntity implements MotorisedBlock, ExtendedScreenHandlerFactory
 {
@@ -69,6 +66,72 @@ public class FabricatorBlockEntity extends SyncableBlockEntity implements Motori
         super(type, pos, state);
     }
 
+    private boolean findMatching(int batchSize, Storage<ItemVariant> input, List<Ingredient> ingredients, List<ItemVariant> takenResources, TransactionContext transaction, Set<FabricatorStorage> visited) throws RecipeMatching.FabricatorLoopException
+    {
+        for (StorageView<ItemVariant> view : input)
+        {
+            // Recipe has been matched fully
+            if (ingredients.isEmpty())
+                return true;
+
+            // Ignore empty views
+            if (view.isResourceBlank() || view.getAmount() <= 0)
+                continue;
+
+            ItemVariant resource = view.getResource();
+
+            var it = ingredients.iterator();
+            while (it.hasNext())
+            {
+                Ingredient ingredient = it.next();
+
+                if (ingredient.isEmpty())
+                {
+                    it.remove();
+                    continue;
+                }
+
+                if (ingredient.test(view.getResource().toStack()))
+                {
+                    long extracted;
+                    if (view instanceof FabricatorStorage fabricatorStorage)
+                    {
+                        ItemStack crafted = fabricatorStorage.getParent().craftRecursive(batchSize, transaction, visited);
+
+                        if (crafted.getCount() == batchSize)
+                        {
+                            takenResources.add(ItemVariant.of(crafted));
+                            it.remove();
+                        }
+                    }
+                    else
+                    {
+                        // maxAmount = batchSize because crafting recipes only take 1 item for each ingredient.
+                        extracted = view.extract(resource, batchSize, transaction);
+                        if (extracted == batchSize)
+                        {
+                            takenResources.add(view.getResource());
+
+                            // Remove the ingredient once it is satisfied
+                            it.remove();
+                        }
+                    }
+                }
+            }
+        }
+        return ingredients.isEmpty();
+    }
+
+    private ItemStack craftRecursive(int batchSize, TransactionContext transaction, Set<FabricatorStorage> visited) throws RecipeMatching.FabricatorLoopException
+    {
+        if (visited.contains(storage))
+            throw new RecipeMatching.FabricatorLoopException();
+
+        visited.add(storage);
+
+        return craft(batchSize, transaction, visited);
+    }
+
     @Override
     public boolean motorTick(MotorEntity motor)
     {
@@ -78,7 +141,14 @@ public class FabricatorBlockEntity extends SyncableBlockEntity implements Motori
         {
             progress = 0;
             storage.updateRecipe();
-            motorCraft();
+
+            try
+            {
+                motorCraft();
+            }
+            catch (RecipeMatching.FabricatorLoopException ignored)
+            {
+            }
         }
 
         return true;
@@ -90,7 +160,7 @@ public class FabricatorBlockEntity extends SyncableBlockEntity implements Motori
         this.increment = power;
     }
 
-    private void motorCraft()
+    private void motorCraft() throws RecipeMatching.FabricatorLoopException
     {
         CraftingRecipe recipe = getCurrentRecipe();
         if (recipe != null)
@@ -104,7 +174,7 @@ public class FabricatorBlockEntity extends SyncableBlockEntity implements Motori
 
             try (Transaction transaction = Transaction.openOuter())
             {
-                boolean foundAll = RecipeMatching.findMatching(1, input, ingredients, takenResources, transaction);
+                boolean foundAll = findMatching(1, input, ingredients, takenResources, transaction, new HashSet<>());
                 if (!foundAll)
                 {
                     transaction.abort();
@@ -148,7 +218,7 @@ public class FabricatorBlockEntity extends SyncableBlockEntity implements Motori
         return;
     }
 
-    private ItemStack craft(int batchSize, TransactionContext transaction)
+    private ItemStack craft(int batchSize, TransactionContext transaction, Set<FabricatorStorage> visited) throws RecipeMatching.FabricatorLoopException
     {
         CraftingRecipe recipe = getCurrentRecipe();
         if (recipe != null)
@@ -162,7 +232,8 @@ public class FabricatorBlockEntity extends SyncableBlockEntity implements Motori
 
             try (Transaction inner = transaction.openNested())
             {
-                boolean foundAll = RecipeMatching.findMatching(batchSize, input, ingredients, takenResources, inner);
+                boolean foundAll = findMatching(batchSize, input, ingredients, takenResources, inner, visited);
+
                 if (!foundAll)
                 {
                     inner.abort();
@@ -339,6 +410,11 @@ public class FabricatorBlockEntity extends SyncableBlockEntity implements Motori
         private ItemStack bufferedStack = ItemStack.EMPTY; // Always real items produced from crafting.
         private ItemStack previewStack = ItemStack.EMPTY; // Always a preview of the craft.
 
+        public FabricatorBlockEntity getParent()
+        {
+            return FabricatorBlockEntity.this;
+        }
+
         public void updateRecipe()
         {
             recipe = world.getRecipeManager().getFirstMatch(RecipeType.CRAFTING, inventory, world).orElse(null);
@@ -383,7 +459,24 @@ public class FabricatorBlockEntity extends SyncableBlockEntity implements Motori
                     int desiredBatchSize = (int) Math.ceil((double) requiredExtra / previewStack.getCount());
 
                     int batchSize = Math.min(maxBatchSize, desiredBatchSize);
-                    bufferedStack = craft(batchSize, transaction);
+
+                    // An exception seemed the best way to interrupt the recursion without loads of return value checking.
+                    try
+                    {
+                        bufferedStack = craftRecursive(batchSize, transaction, new HashSet<>());
+
+                        // If the batch craft failed, default to the result of a single craft.
+                        // This should return a non-zero result when maxAmount = Long.MAX_VALUE as in StorageUtil::findExtractableResource.
+                        if (batchSize > 1 && bufferedStack.isEmpty())
+                        {
+                            bufferedStack = craftRecursive(1, transaction, new HashSet<>());
+                        }
+                    }
+                    catch (RecipeMatching.FabricatorLoopException ignored)
+                    {
+                        return 0;
+                    }
+
 
                     int extractable = (int) Math.min(bufferedStack.getCount(), maxAmount);
 
@@ -393,7 +486,7 @@ public class FabricatorBlockEntity extends SyncableBlockEntity implements Motori
                         return extractable;
                     }
                 }
-                else if (bufferedStack.isEmpty() && !previewStack.isEmpty())
+                else if (bufferedStack.isEmpty() && !previewStack.isEmpty()) // TODO: remove
                 {
                     int amountToExtract = (int) Math.min(previewStack.getCount(), maxAmount);
                     if (amountToExtract > 0)
@@ -403,7 +496,14 @@ public class FabricatorBlockEntity extends SyncableBlockEntity implements Motori
                         if (recipe != null)
                         {
                             updateSnapshots(transaction);
-                            bufferedStack = craft(1, transaction);
+                            try
+                            {
+                                bufferedStack = craft(1, transaction, new HashSet<>());
+                            }
+                            catch (RecipeMatching.FabricatorLoopException e)
+                            {
+                                return 0;
+                            }
 
                             int extractable = Math.min(bufferedStack.getCount(), amountToExtract);
 
@@ -530,5 +630,6 @@ public class FabricatorBlockEntity extends SyncableBlockEntity implements Motori
         {
             markDirty();
         }
+
     }
 }

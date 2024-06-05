@@ -149,6 +149,7 @@ public class Instructions
         {
             try (Transaction transaction = Transaction.openOuter())
             {
+//                ResourceAmount<ItemVariant>
                 ResourceAmount<ItemVariant> found = StorageUtil.findExtractableContent(storage, transaction);
                 if (found != null)
                 {
