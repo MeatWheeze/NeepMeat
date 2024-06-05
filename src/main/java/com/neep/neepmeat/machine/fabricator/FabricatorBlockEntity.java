@@ -104,7 +104,7 @@ public class FabricatorBlockEntity extends SyncableBlockEntity implements Motori
 
             try (Transaction transaction = Transaction.openOuter())
             {
-                boolean foundAll = findMatching(input, ingredients, takenResources, transaction);
+                boolean foundAll = RecipeMatching.findMatching(1, input, ingredients, takenResources, transaction);
                 if (!foundAll)
                 {
                     transaction.abort();
@@ -148,7 +148,7 @@ public class FabricatorBlockEntity extends SyncableBlockEntity implements Motori
         return;
     }
 
-    private ItemStack craft(TransactionContext transaction)
+    private ItemStack craft(int batchSize, TransactionContext transaction)
     {
         CraftingRecipe recipe = getCurrentRecipe();
         if (recipe != null)
@@ -162,7 +162,7 @@ public class FabricatorBlockEntity extends SyncableBlockEntity implements Motori
 
             try (Transaction inner = transaction.openNested())
             {
-                boolean foundAll = findMatching(input, ingredients, takenResources, inner);
+                boolean foundAll = RecipeMatching.findMatching(batchSize, input, ingredients, takenResources, inner);
                 if (!foundAll)
                 {
                     inner.abort();
@@ -170,6 +170,7 @@ public class FabricatorBlockEntity extends SyncableBlockEntity implements Motori
                 }
 
                 ItemStack result = recipe.getOutput().copy();
+                result.setCount(batchSize * result.getCount());
 
                 // Eject remainders
                 for (var taken : takenResources)
@@ -194,44 +195,6 @@ public class FabricatorBlockEntity extends SyncableBlockEntity implements Motori
             }
         }
         return ItemStack.EMPTY;
-    }
-
-    private boolean findMatching(Storage<ItemVariant> input, List<Ingredient> ingredients, List<ItemVariant> takenResources, TransactionContext transaction)
-    {
-        for (StorageView<ItemVariant> view : input)
-        {
-            if (ingredients.isEmpty())
-                return true;
-
-            if (view.isResourceBlank() || view.getAmount() <= 0)
-                continue;
-
-            ItemVariant resource = view.getResource();
-
-            var it = ingredients.iterator();
-            while (it.hasNext())
-            {
-                Ingredient ingredient = it.next();
-
-                if (ingredient.isEmpty())
-                {
-                    it.remove();
-                    continue;
-                }
-
-                if (ingredient.test(view.getResource().toStack()))
-                {
-                    // Remove the ingredient once it is satisfied
-                    long extracted = view.extract(resource, 1, transaction);
-                    if (extracted == 1)
-                    {
-                        takenResources.add(view.getResource());
-                        it.remove();
-                    }
-                }
-            }
-        }
-        return ingredients.isEmpty();
     }
 
 
@@ -409,7 +372,28 @@ public class FabricatorBlockEntity extends SyncableBlockEntity implements Motori
         {
             if (!bufferedStack.isEmpty() && resource.matches(bufferedStack) || resource.matches(previewStack))
             {
-                if (bufferedStack.isEmpty() && !previewStack.isEmpty())
+                long requiredExtra = maxAmount - bufferedStack.getCount();
+
+                if (requiredExtra > 0)
+                {
+                    updateSnapshots(transaction);
+
+                    int remainingCapacity = previewStack.getMaxCount() - bufferedStack.getCount();
+                    int maxBatchSize = Math.min(remainingCapacity / previewStack.getCount(), 64);
+                    int desiredBatchSize = (int) Math.ceil((double) requiredExtra / previewStack.getCount());
+
+                    int batchSize = Math.min(maxBatchSize, desiredBatchSize);
+                    bufferedStack = craft(batchSize, transaction);
+
+                    int extractable = (int) Math.min(bufferedStack.getCount(), maxAmount);
+
+                    if (extractable > 0)
+                    {
+                        bufferedStack.decrement(extractable);
+                        return extractable;
+                    }
+                }
+                else if (bufferedStack.isEmpty() && !previewStack.isEmpty())
                 {
                     int amountToExtract = (int) Math.min(previewStack.getCount(), maxAmount);
                     if (amountToExtract > 0)
@@ -419,11 +403,11 @@ public class FabricatorBlockEntity extends SyncableBlockEntity implements Motori
                         if (recipe != null)
                         {
                             updateSnapshots(transaction);
-                            bufferedStack = craft(transaction);
+                            bufferedStack = craft(1, transaction);
 
                             int extractable = Math.min(bufferedStack.getCount(), amountToExtract);
 
-                            if (extractable > 0)
+                            if (extractable == amountToExtract)
                             {
                                 bufferedStack.decrement(amountToExtract);
                                 return extractable;
@@ -450,6 +434,9 @@ public class FabricatorBlockEntity extends SyncableBlockEntity implements Motori
         @Override
         public boolean isResourceBlank()
         {
+            if (needsLoading)
+                load();
+
             return bufferedStack.isEmpty() && previewStack.isEmpty();
         }
 
@@ -489,16 +476,19 @@ public class FabricatorBlockEntity extends SyncableBlockEntity implements Motori
                 return previewStack.getCount();
         }
 
+        @Override
+        public Iterator<StorageView<ItemVariant>> iterator()
+        {
+            if (needsLoading)
+                load();
+
+            return Iterators.singletonIterator(this);
+        }
+
         private void load()
         {
             needsLoading = false;
             updateRecipe();
-        }
-
-        @Override
-        public Iterator<StorageView<ItemVariant>> iterator()
-        {
-            return Iterators.singletonIterator(this);
         }
 
         @Override
