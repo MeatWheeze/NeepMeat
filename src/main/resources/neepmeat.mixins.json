@@ -8,6 +8,7 @@
     "AbstractMinecartEntityMixin",
     "BrewingRecipeRegistryAccessor",
     "CowEntityMixin",
+    "CraftingInventoryAccessor",
     "EnchantmentTargetMixins$Digger",
     "EnchantmentTargetMixins$Weapon",
     "FurnaceAccessor",

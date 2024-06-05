@@ -7,6 +7,7 @@ import com.neep.meatlib.recipe.MeatlibRecipes;
 import com.neep.meatlib.util.NbtSerialisable;
 import com.neep.neepmeat.api.machine.MotorisedBlock;
 import com.neep.neepmeat.machine.motor.MotorEntity;
+import com.neep.neepmeat.mixin.CraftingInventoryAccessor;
 import com.neep.neepmeat.screen_handler.DummyScreenHandler;
 import com.neep.neepmeat.transport.util.ItemPipeUtil;
 import net.fabricmc.fabric.api.lookup.v1.block.BlockApiCache;
@@ -323,17 +324,18 @@ public class FabricatorBlockEntity extends SyncableBlockEntity implements Motori
 
     public class FabricatorInventory extends CraftingInventory implements ImplementedInventory
     {
-        private final DefaultedList<ItemStack> items = DefaultedList.ofSize(9, ItemStack.EMPTY);
-
         public FabricatorInventory()
         {
-            super(new DummyScreenHandler(i -> {}), 3, 3);
+            super(new DummyScreenHandler(i ->
+            {
+                FabricatorBlockEntity.this.markDirty();
+            }), 3, 3);
         }
 
         @Override
         public DefaultedList<ItemStack> getItems()
         {
-            return items;
+            return ((CraftingInventoryAccessor) this).getStacks();
         }
 
         @Override
@@ -358,7 +360,7 @@ public class FabricatorBlockEntity extends SyncableBlockEntity implements Motori
         @Override
         public void provideRecipeInputs(RecipeMatcher finder)
         {
-            for (ItemStack itemStack : this.items)
+            for (ItemStack itemStack : getItems())
             {
                 finder.addUnenchantedInput(itemStack);
             }
