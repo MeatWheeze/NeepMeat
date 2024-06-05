@@ -396,7 +396,7 @@
   "block.neepmeat.assembler.lore_0": "Replicates a pattern of items in the inventory below. Place above Persistent Crafting Table for auto-crafting.",
 
   "block.neepmeat.fabricator": "Fabricator",
-  "block.neepmeat.fabricator.lore_0": "Crafts items using ingredients from adjacent inventories.\nCrafting can be triggered by extracting the result item from the front.\nIf powered by a motor, it will continuously craft and eject items.",
+  "block.neepmeat.fabricator.lore_0": "Crafts items using ingredients from adjacent inventories.\nCrafting can be triggered by extracting the result item from the front.\nIf powered by a motor, it will continuously craft and eject items.\nLoops and chains are not allowed.",
 
   "block.neepmeat.workstation": "Persistent Crafting Table",
   "block.neepmeat.workstation.lore_0": "Keeps items in the grid.",
