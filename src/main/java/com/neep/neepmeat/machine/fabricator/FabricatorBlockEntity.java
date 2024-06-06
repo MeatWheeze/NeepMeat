@@ -473,35 +473,6 @@ public class FabricatorBlockEntity extends SyncableBlockEntity implements Motori
                         return extractable;
                     }
                 }
-                else if (bufferedStack.isEmpty() && !previewStack.isEmpty()) // TODO: remove
-                {
-                    int amountToExtract = (int) Math.min(previewStack.getCount(), maxAmount);
-                    if (amountToExtract > 0)
-                    {
-                        updateRecipe();
-
-                        if (recipe != null)
-                        {
-                            updateSnapshots(transaction);
-                            try
-                            {
-                                bufferedStack = craft(1, transaction);
-                            }
-                            catch (RecipeMatching.FabricatorLoopException e)
-                            {
-                                return 0;
-                            }
-
-                            int extractable = Math.min(bufferedStack.getCount(), amountToExtract);
-
-                            if (extractable == amountToExtract)
-                            {
-                                bufferedStack.decrement(amountToExtract);
-                                return extractable;
-                            }
-                        }
-                    }
-                }
                 else if (!bufferedStack.isEmpty())
                 {
                     int amountToExtract = (int) Math.min(bufferedStack.getCount(), maxAmount);
