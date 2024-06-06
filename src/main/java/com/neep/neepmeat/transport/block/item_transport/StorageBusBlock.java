@@ -3,7 +3,6 @@ package com.neep.neepmeat.transport.block.item_transport;
 import com.neep.meatlib.item.ItemSettings;
 import com.neep.neepmeat.transport.ItemTransport;
 import com.neep.neepmeat.transport.api.pipe.ItemPipe;
-import com.neep.neepmeat.transport.block.item_transport.entity.StorageBusBlockEntity;
 import com.neep.neepmeat.util.MiscUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -12,12 +11,8 @@ import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
-import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.world.BlockView;
@@ -60,7 +55,7 @@ public class StorageBusBlock extends ItemPipeBlock implements ItemPipe
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type)
     {
-        return MiscUtil.checkType(type, ItemTransport.STORAGE_BUS_BE, StorageBusBlockEntity::serverTick, null, world);
+        return MiscUtil.checkType(type, ItemTransport.STORAGE_BUS_BE, (world1, pos, state1, blockEntity) -> blockEntity.serverTick(world1, pos, state), null, world);
     }
 
     @Override

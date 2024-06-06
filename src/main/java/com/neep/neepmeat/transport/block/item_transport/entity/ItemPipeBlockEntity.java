@@ -79,12 +79,14 @@ public class ItemPipeBlockEntity extends SyncableBlockEntity
             items.add(ItemInPipe.fromNbt(itemList.getCompound(i)));
         }
     }
-    public static void serverTick(World world, BlockPos blockPos, BlockState blockState, ItemPipeBlockEntity be)
+
+    public void serverTick(World world, BlockPos pos, BlockState state)
     {
-        if (be.items.isEmpty())
+        int numItems = items.size();
+        if (numItems == 0)
             return;
 
-        Iterator<ItemInPipe> it = be.items.listIterator();
+        Iterator<ItemInPipe> it = items.listIterator();
         while (it.hasNext())
         {
             ItemInPipe item = it.next();
@@ -93,20 +95,21 @@ public class ItemPipeBlockEntity extends SyncableBlockEntity
             {
                 try (Transaction transaction = Transaction.openOuter())
                 {
-                    long transferred = be.pipeToAny(item, blockPos, item.out, world, transaction);
+                    long transferred = pipeToAny(item, pos, item.out, world, transaction);
                     if (transferred == item.amount() || item.getItemStack().isEmpty())
                     {
                         it.remove();
                     }
                     else
                     {
-                        ItemPipeUtil.bounce(item, world, blockState);
+                        ItemPipeUtil.bounce(item, world, state);
                     }
                     transaction.commit();
                 }
             }
         }
-        be.sync();
+
+        sync();
     }
 
     private long pipeToAny(ItemInPipe item, BlockPos pos, Direction out, World world, TransactionContext transaction)
@@ -147,11 +150,20 @@ public class ItemPipeBlockEntity extends SyncableBlockEntity
             if (!r.wasCommitted())
                 return;
 
-//            Direction out = getOutputDirection(item, state, world, in);
-            item.reset(in, out, world.getTime());
-            this.items.add(item);
+            insertItemCallback(item, in, out, world);
         });
         return item.getItemStack().getCount();
+    }
+
+    private void insertItemCallback(ItemInPipe item, Direction in, Direction out, World world)
+    {
+        if (items.size() < 300)
+        {
+            item.reset(in, out, world.getTime());
+            this.items.add(item);
+        }
+
+        // Void the item. There's no reason why there would be 300 items in a pipe in a legitimate use.
     }
 
 //    private Direction getOutputDirection(ItemInPipe item, BlockState state, World world, Direction in)
