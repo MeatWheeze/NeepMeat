@@ -23,7 +23,7 @@ public class LargeMotorBlockEntity extends SyncableBlockEntity implements MotorE
 
     protected float influx;
 
-    protected final float maxInflux = BalanceConstants.LARGE_MOTOR_MAX_POWER / PowerUtils.referencePower();
+    protected final float maxInflux = (float) BalanceConstants.LARGE_MOTOR_MAX_POWER / PowerUtils.referencePower();
 
     protected AbstractBloodAcceptor acceptor = new AbstractBloodAcceptor()
     {

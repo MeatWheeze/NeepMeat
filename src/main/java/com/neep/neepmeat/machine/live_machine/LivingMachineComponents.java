@@ -4,6 +4,7 @@ import com.neep.meatlib.item.TooltipSupplier;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.api.live_machine.ComponentType;
 import com.neep.neepmeat.api.live_machine.LivingMachineComponent;
+import com.neep.neepmeat.machine.charnel_pump.CharnelPumpBlockEntity;
 import com.neep.neepmeat.machine.live_machine.block.entity.*;
 import com.neep.neepmeat.machine.live_machine.component.*;
 import com.neep.neepmeat.machine.phage_ray.PhageRayBlockEntity;
@@ -23,6 +24,7 @@ public class LivingMachineComponents
     public static final ComponentType<IntegrationPortBlockEntity> SERVICE_PORT = register("service_port", new ComponentType.Simple<>());
     public static final ComponentType<PhageRayBlockEntity> PHAGE_RAY = register("phage_ray", new ComponentType.Simple<>());
     public static final ComponentType<TreeVacuumBlockEntity> TREE_VACUUM = register("tree_vacuum", new ComponentType.Simple<>());
+    public static final ComponentType<CharnelPumpBlockEntity> CHARNEL_PUMP = register("charnel_pump", new ComponentType.Simple<>());
 
     public static final ComponentType<HopperComponent> HOPPER = register("hopper", new ComponentType.Simple<>());
     public static final ComponentType<ItemInputComponent> ITEM_INPUT = register("item_input", new ComponentType.Simple<>());

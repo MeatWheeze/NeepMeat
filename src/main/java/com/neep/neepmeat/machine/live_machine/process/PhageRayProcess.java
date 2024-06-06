@@ -1,8 +1,9 @@
-package com.neep.neepmeat.machine.live_machine;
+package com.neep.neepmeat.machine.live_machine.process;
 
 import com.neep.neepmeat.api.live_machine.ComponentType;
 import com.neep.neepmeat.api.live_machine.LivingMachineBlockEntity;
 import com.neep.neepmeat.api.live_machine.Process;
+import com.neep.neepmeat.machine.live_machine.LivingMachineComponents;
 import com.neep.neepmeat.machine.live_machine.component.ItemOutputComponent;
 import com.neep.neepmeat.machine.phage_ray.PhageRayBlockEntity;
 import com.neep.neepmeat.machine.phage_ray.PhageRayEntity;

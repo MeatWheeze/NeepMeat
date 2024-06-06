@@ -9,18 +9,12 @@ import com.neep.meatlib.registry.BlockRegistry;
 import com.neep.meatlib.registry.ItemRegistry;
 import com.neep.neepmeat.api.big_block.BigBlock;
 import com.neep.neepmeat.api.big_block.BigBlockPattern;
-import com.neep.neepmeat.api.machine.MotorisedBlock;
-import com.neep.neepmeat.init.NMBlockEntities;
-import com.neep.neepmeat.util.MiscUtil;
-import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
-import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
+import com.neep.neepmeat.machine.live_machine.LivingMachines;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.ShapeContext;
 import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.block.entity.BlockEntityTicker;
-import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.DirectionProperty;
@@ -30,7 +24,6 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.BlockView;
-import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
@@ -40,7 +33,6 @@ public class CharnelPumpBlock extends BigBlock<CharnelPumpStructure> implements 
     public static final DirectionProperty FACING = Properties.HORIZONTAL_FACING;
     private final String name;
 
-    private final BigBlockPattern volume;
     private final Map<Direction, BigBlockPattern> patternMap;
 
     public CharnelPumpBlock(String name, ItemSettings itemSettings, Settings settings)
@@ -48,12 +40,11 @@ public class CharnelPumpBlock extends BigBlock<CharnelPumpStructure> implements 
         super(settings);
         ItemRegistry.queue(new BaseBlockItem(this, name, itemSettings));
         this.name = name;
-        volume = BigBlockPattern.makeOddCylinder(1, 0, 7, getStructure().getDefaultState())
-                .set(-2, 0, 0, getStructure().getDefaultState())
-                .set(-2, 1, 0, getStructure().getDefaultState())
-                .enableApi(-2, 1, 0, MotorisedBlock.LOOKUP)
-                .enableApi(0, 0, -1, FluidStorage.SIDED)
-        ;
+        BigBlockPattern volume = BigBlockPattern.makeOddCylinder(1, 0, 7, getStructure().getDefaultState());
+//                .set(-2, 0, 0, getStructure().getDefaultState())
+//                .set(-2, 1, 0, getStructure().getDefaultState());
+//                .enableApi(-2, 1, 0, MotorisedBlock.LOOKUP)
+//                .enableApi(0, 0, -1, FluidStorage.SIDED);
 
         patternMap = ImmutableMap.of(
                 Direction.NORTH, volume,
@@ -66,7 +57,7 @@ public class CharnelPumpBlock extends BigBlock<CharnelPumpStructure> implements 
     @Override
     protected CharnelPumpStructure registerStructureBlock()
     {
-        return BlockRegistry.queue(new CharnelPumpStructure(this, MeatlibBlockSettings.copyOf(this)), "charnel_pump_structure");
+        return BlockRegistry.queue(new CharnelPumpStructure(this, MeatlibBlockSettings.copyOf(this)), "charnel_pump_structure_1");
     }
 
     @Override
@@ -105,13 +96,13 @@ public class CharnelPumpBlock extends BigBlock<CharnelPumpStructure> implements 
     @Override
     public BlockEntity createBlockEntity(BlockPos pos, BlockState state)
     {
-        return NMBlockEntities.CHARNEL_PUMP.instantiate(pos, state);
+        return LivingMachines.CHARNEL_PUMP_BE.instantiate(pos, state);
     }
 
-    @Nullable
-    @Override
-    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type)
-    {
-        return MiscUtil.checkType(type, NMBlockEntities.CHARNEL_PUMP, ((world1, pos, state1, blockEntity) -> blockEntity.serverTick()), null, world);
-    }
+//    @Nullable
+//    @Override
+//    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type)
+//    {
+//        return MiscUtil.checkType(type, LivingMachines.CHARNEL_PUMP_BE, ((world1, pos, state1, blockEntity) -> blockEntity.serverTick()), null, world);
+//    }
 }

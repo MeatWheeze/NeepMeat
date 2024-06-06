@@ -27,7 +27,7 @@ public class AdvancedMotorBlockEntity extends SyncableBlockEntity implements Mot
     protected float loadTorque;
     @Nullable protected MotorisedBlock lastMotorised;
 
-    protected final float maxInflux = BalanceConstants.ADVANCED_MOTOR_MAX_POWER / PowerUtils.referencePower();
+    protected final float maxInflux = (float) BalanceConstants.ADVANCED_MOTOR_MAX_POWER / PowerUtils.referencePower();
 
     @Nullable protected BlockApiCache<MotorisedBlock, Void> cache = null;
 

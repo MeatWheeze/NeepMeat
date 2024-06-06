@@ -13,7 +13,6 @@ import com.neep.neepmeat.init.NMFluids;
 import com.neep.neepmeat.machine.live_machine.LivingMachineComponents;
 import com.neep.neepmeat.machine.live_machine.Processes;
 import com.neep.neepmeat.machine.live_machine.block.entity.MotorPortBlockEntity;
-import com.neep.neepmeat.machine.live_machine.component.ItemOutputComponent;
 import com.neep.neepmeat.machine.live_machine.component.PoweredComponent;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
@@ -81,6 +80,7 @@ public abstract class LivingMachineBlockEntity extends SyncableBlockEntity imple
 
     // Convenient combined item output
     private Storage<ItemVariant> combinedItemOutput = Storage.empty();
+    private Storage<FluidVariant> combinedFluidInput = Storage.empty();
 
     // Public, non-persistent round-robin counter
     public int inputSequence;
@@ -300,9 +300,10 @@ public abstract class LivingMachineBlockEntity extends SyncableBlockEntity imple
 
     private void updateSpecialStorage()
     {
-        Collection<ItemOutputComponent> itemOutputs = getComponent(LivingMachineComponents.ITEM_OUTPUT);
-        List<Storage<ItemVariant>> storages = itemOutputs.stream().map(l -> l.getStorage(null)).toList();
+        List<Storage<ItemVariant>> storages = getComponent(LivingMachineComponents.ITEM_OUTPUT).stream().map(l -> l.getStorage(null)).toList();
         combinedItemOutput = new StorageDelegate(storages);
+
+        combinedFluidInput = new CombinedStorage<>(getComponent(LivingMachineComponents.FLUID_INPUT).stream().map(l -> l.getStorage(null)).toList());
     }
 
     protected float getProperty(StructureProperty property)
@@ -575,6 +576,11 @@ public abstract class LivingMachineBlockEntity extends SyncableBlockEntity imple
     public Storage<ItemVariant> getCombinedItemOutput()
     {
         return combinedItemOutput;
+    }
+
+    public Storage<FluidVariant> getCombinedFluidInput()
+    {
+        return combinedFluidInput;
     }
 
     private class StorageDelegate implements Storage<ItemVariant>

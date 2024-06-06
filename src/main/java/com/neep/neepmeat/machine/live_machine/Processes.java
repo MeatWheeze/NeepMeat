@@ -2,6 +2,7 @@ package com.neep.neepmeat.machine.live_machine;
 
 import com.neep.neepmeat.api.live_machine.ComponentType;
 import com.neep.neepmeat.api.live_machine.Process;
+import com.neep.neepmeat.machine.live_machine.process.*;
 import it.unimi.dsi.fastutil.Pair;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import org.jetbrains.annotations.Nullable;
@@ -67,5 +68,6 @@ public class Processes
         getInstance().register(new PhageRayProcess());
         getInstance().register(new LargeTrommelProcess());
         getInstance().register(new TreeVacuumProcess());
+        getInstance().register(new CharnelPumpProcess());
     }
 }

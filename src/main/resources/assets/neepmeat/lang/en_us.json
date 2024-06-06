@@ -818,6 +818,7 @@
   "component.neepmeat.service_port": "Service Port",
   "component.neepmeat.phage_ray": "Phage Ray",
   "component.neepmeat.tree_vacuum": "Tree Vacuum",
+  "component.neepmeat.charnel_pump": "Charnel Pump",
   "component.neepmeat.extractor": "Harvest Extractor",
   "component.neepmeat.hopper": "Hopper",
   "component.neepmeat.item_input": "Item Input",

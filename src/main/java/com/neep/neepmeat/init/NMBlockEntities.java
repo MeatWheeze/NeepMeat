@@ -19,8 +19,6 @@ import com.neep.neepmeat.machine.assembler.AssemblerBlockEntity;
 import com.neep.neepmeat.machine.bottler.BottlerBlockEntity;
 import com.neep.neepmeat.machine.breaker.LinearOscillatorBlockEntity;
 import com.neep.neepmeat.machine.casting_basin.CastingBasinBlockEntity;
-import com.neep.neepmeat.machine.charnel_pump.CharnelPumpBlockEntity;
-import com.neep.neepmeat.machine.charnel_pump.CharnelPumpStructure;
 import com.neep.neepmeat.machine.charnel_pump.WrithingEarthSpoutBlockEntity;
 import com.neep.neepmeat.machine.content_detector.InventoryDetectorBlockEntity;
 import com.neep.neepmeat.machine.converter.ConverterBlockEntity;
@@ -143,7 +141,6 @@ public class NMBlockEntities
     public static BlockEntityType<ConverterBlockEntity> CONVERTER;
     public static BlockEntityType<ConverterBlockEntity> LARGE_CONVERTER;
 
-    public static BlockEntityType<CharnelPumpBlockEntity> CHARNEL_PUMP;
     public static BlockEntityType<WellHeadBlockEntity> WELL_HEAD;
     public static BlockEntityType<WrithingEarthSpoutBlockEntity> WRITHING_EARTH_SPOUT;
 
@@ -393,10 +390,9 @@ public class NMBlockEntities
 //        ItemStorage.SIDED.registerForBlockEntity(TableControllerBlockEntity::getStorage, PLC);
 //        FluidStorage.SIDED.registerForBlockEntity(BloodMachineBlockEntity::getBuffer, PLC);
 
-        CHARNEL_PUMP = register("charnel_pump", (p, s) -> new CharnelPumpBlockEntity(CHARNEL_PUMP, p, s), NMBlocks.CHARNEL_PUMP);
-        BloodAcceptor.SIDED.registerForBlockEntity(CharnelPumpStructure.CPSBlockEntity::getAcceptor, NMBlocks.CHARNEL_PUMP.getStructure().getBlockEntityType());
-        FluidStorage.SIDED.registerForBlockEntity(CharnelPumpStructure.CPSBlockEntity::getFluidStorage, NMBlocks.CHARNEL_PUMP.getStructure().getBlockEntityType());
-        MotorisedBlock.LOOKUP.registerForBlockEntity(CharnelPumpStructure.CPSBlockEntity::getMotorised, NMBlocks.CHARNEL_PUMP.getStructure().getBlockEntityType());
+//        BloodAcceptor.SIDED.registerForBlockEntity(CharnelPumpStructure.CPSBlockEntity::getAcceptor, NMBlocks.CHARNEL_PUMP.getStructure().getBlockEntityType());
+//        FluidStorage.SIDED.registerForBlockEntity(CharnelPumpStructure.CPSBlockEntity::getFluidStorage, NMBlocks.CHARNEL_PUMP.getStructure().getBlockEntityType());
+//        MotorisedBlock.LOOKUP.registerForBlockEntity(CharnelPumpStructure.CPSBlockEntity::getMotorised, NMBlocks.CHARNEL_PUMP.getStructure().getBlockEntityType());
         WELL_HEAD = register("well_head", (p, s) -> new WellHeadBlockEntity(WELL_HEAD, p, s), NMBlocks.WELL_HEAD);
         FluidStorage.SIDED.registerForBlockEntity(WellHeadBlockEntity::getFluidStorage, WELL_HEAD);
         FluidPump.SIDED.registerForBlockEntity(WellHeadBlockEntity::getFluidPump, WELL_HEAD);

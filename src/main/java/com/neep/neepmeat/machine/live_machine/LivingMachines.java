@@ -10,6 +10,8 @@ import com.neep.neepmeat.api.big_block.BigBlock;
 import com.neep.neepmeat.api.live_machine.LivingMachineComponent;
 import com.neep.neepmeat.api.live_machine.StructureProperty;
 import com.neep.neepmeat.block.MachineBlock;
+import com.neep.neepmeat.init.NMBlocks;
+import com.neep.neepmeat.machine.charnel_pump.CharnelPumpBlockEntity;
 import com.neep.neepmeat.machine.live_machine.block.*;
 import com.neep.neepmeat.machine.live_machine.block.entity.*;
 import com.neep.neepmeat.transport.api.pipe.BloodAcceptor;
@@ -96,6 +98,7 @@ public class LivingMachines
     public static BlockEntityType<ExtractorBlockEntity> EXTRACTOR_BE;
 
     public static BlockEntityType<TreeVacuumBlockEntity> TREE_VACUUM_BE;
+    public static BlockEntityType<CharnelPumpBlockEntity> CHARNEL_PUMP_BE;
 
     public static void init()
     {
@@ -116,6 +119,9 @@ public class LivingMachines
 
         TREE_VACUUM_BE = register("tree_vacuum", (p, s) -> new TreeVacuumBlockEntity(TREE_VACUUM_BE, p, s), TREE_VACUUM);
         LivingMachineComponent.LOOKUP.registerSelf(LivingMachines.TREE_VACUUM_BE);
+
+        CHARNEL_PUMP_BE = register("charnel_pump", (p, s) -> new CharnelPumpBlockEntity(LivingMachines.CHARNEL_PUMP_BE, p, s), NMBlocks.CHARNEL_PUMP);
+        LivingMachineComponent.LOOKUP.registerSelf(CHARNEL_PUMP_BE);
 
         ITEM_OUTPUT_PORT_BE = register("item_output_port", (p, s) -> new ItemOutputPortBlockEntity(ITEM_OUTPUT_PORT_BE, p, s), ITEM_OUTPUT_PORT);
         LivingMachineComponent.LOOKUP.registerSelf(LivingMachines.ITEM_OUTPUT_PORT_BE);
