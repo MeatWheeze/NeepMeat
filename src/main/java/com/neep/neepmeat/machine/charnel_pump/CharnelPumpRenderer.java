@@ -14,8 +14,7 @@ import net.minecraft.client.render.model.BakedQuad;
 import net.minecraft.client.texture.Sprite;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.RotationAxis;
-import org.joml.Vector3f;
+import net.minecraft.util.math.Vec3f;
 
 public class CharnelPumpRenderer implements BlockEntityRenderer<CharnelPumpBlockEntity>
 {
@@ -64,7 +63,7 @@ public class CharnelPumpRenderer implements BlockEntityRenderer<CharnelPumpBlock
 
         matrices.translate(0, 3, 0);
         matrices.translate(0.5, 0, 0.5);
-        matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(-90));
+        matrices.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(-90));
         renderFluidColumn(height, 0.9f, matrices, sprite, emitter, consumer, upLight);
     }
 
@@ -90,11 +89,11 @@ public class CharnelPumpRenderer implements BlockEntityRenderer<CharnelPumpBlock
             float p = MathHelper.cos(seg * 2 * MathHelper.PI / 8.0F) * radius;
             float q = seg / 8.0F;
 
-            emitter.pos(0, new Vector3f(k, l, 0)).uv(0, u1, v0);
-            emitter.pos(1, new Vector3f(k, l, g)).uv(1, u0, v0);
-            emitter.pos(2, new Vector3f(o, p, g)).uv(2, u0, v1);
-            emitter.pos(3, new Vector3f(o, p, 0)).uv(3, u1, v1);
-            BakedQuad quad = emitter.toBakedQuad(sprite);
+            emitter.pos(0, new Vec3f(k, l, 0)).sprite(0, 0, u1, v0);
+            emitter.pos(1, new Vec3f(k, l, g)).sprite(1, 0, u0, v0);
+            emitter.pos(2, new Vec3f(o, p, g)).sprite(2, 0, u0, v1);
+            emitter.pos(3, new Vec3f(o, p, 0)).sprite(3, 0, u1, v1);
+            BakedQuad quad = emitter.toBakedQuad(0, sprite, false);
             consumer.quad(matrices.peek(), quad, cr, cg, cb, light, OverlayTexture.DEFAULT_UV);
 
             k = o;
