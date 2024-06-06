@@ -65,19 +65,18 @@ public class FatTrommelRecipe implements TrommelRecipe
             SingleVariantStorage<FluidVariant> fluidStorage = context.input();
 
             FluidVariant resource = fluidStorage.getResource();
-//            OreFatRegistry.Entry entry = OreFatRegistry.getFromVariant(resource);
 
             long ex2 = fluidStorage.extract(fluidStorage.getResource(), INPUT_AMOUNT, inner);
             if (ex2 != INPUT_AMOUNT)
-            {
-                inner.abort();
                 return false;
-            }
 
             boolean produceExtra = random.nextFloat() > 0.5;
             long outputAmount = INPUT_AMOUNT * (produceExtra ? 2 : 1);
 
-            FluidVariant outputVariant = OreFatRegistry.getClean(OreFatRegistry.getItem(resource));
+            FluidVariant outputVariant = OreFatRegistry.getClean(resource);
+            if (outputVariant == null)
+                return false;
+
             long inserted = context.output().insert(outputVariant, outputAmount, inner);
 
             if (inserted == outputAmount)

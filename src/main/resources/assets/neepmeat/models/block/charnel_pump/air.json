@@ -1,6 +1,6 @@
 {
 	"parent": "minecraft:block/air",
 	"textures": {
-		"particle": "neepmeat:block/rusty_metal.json"
+		"particle": "neepmeat:block/rusty_metal"
 	}
 }

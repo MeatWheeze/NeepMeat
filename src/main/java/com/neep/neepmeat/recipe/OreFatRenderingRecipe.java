@@ -19,9 +19,9 @@ import net.minecraft.item.Item;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.recipe.RecipeSerializer;
 import net.minecraft.recipe.RecipeType;
-import net.minecraft.util.registry.Registry;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.JsonHelper;
+import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 
 import java.util.Optional;
@@ -112,7 +112,7 @@ public class OreFatRenderingRecipe extends ImplementedRecipe<CrucibleStorage>
         try (Transaction eject = transaction.openNested())
         {
             boolean bl1 = true;
-            fluidOutput.setNbt(entry.toNbt());
+            fluidOutput.setNbt(entry.nbt());
             for (int i = 0; i < itemAmount; ++i)
             {
                 bl1 = bl1 && fluidOutput.insertInto(storage.getFluidOutput(), FluidVariant::of, eject);

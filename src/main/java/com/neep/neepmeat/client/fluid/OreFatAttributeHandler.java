@@ -10,7 +10,6 @@ public class OreFatAttributeHandler implements FluidVariantAttributeHandler
 {
     public Text getName(FluidVariant fluidVariant)
     {
-//        NbtCompound nbt = fluidVariant.getNbt();
         OreFatRegistry.Entry entry = OreFatRegistry.getFromVariant(fluidVariant);
         if (entry != null)
         {

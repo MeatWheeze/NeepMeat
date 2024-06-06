@@ -8,7 +8,6 @@ import com.neep.neepmeat.api.storage.WritableSingleFluidStorage;
 import com.neep.neepmeat.init.NMrecipeTypes;
 import com.neep.neepmeat.machine.casting_basin.CastingBasinStorage;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
-import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.minecraft.fluid.Fluid;
@@ -88,7 +87,7 @@ public class FatPressingRecipe extends AbstractPressingRecipe<CastingBasinStorag
 
             // Might need to formalise this
             long insertAmount = 1;
-            long transferred = storage.item(null).insert(ItemVariant.of(entry.result()), insertAmount, inner);
+            long transferred = storage.item(null).insert(entry.result(), insertAmount, inner);
 
             if (transferred == insertAmount)
             {

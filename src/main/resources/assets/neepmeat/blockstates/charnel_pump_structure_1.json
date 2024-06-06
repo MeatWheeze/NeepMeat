@@ -1,7 +1,7 @@
 {
   "variants": {
     "": {
-      "model": "neepmeat:charnel_pump/air"
+      "model": "neepmeat:block/charnel_pump/air"
     }
   }
 }
