@@ -164,6 +164,7 @@ public class NeepMeat implements ModInitializer
 			// Resource reload listeners
 			ResourceManagerHelper.get(ResourceType.CLIENT_RESOURCES).registerReloadListener(GuideReloadListener.getInstance());
 			ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(MobSynthesisRegistry.getInstance());
+			ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(OreFatRegistry.INSTANCE);
 
 			WormActions.init();
 

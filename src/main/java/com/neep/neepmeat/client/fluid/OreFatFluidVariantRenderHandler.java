@@ -63,7 +63,7 @@ public class OreFatFluidVariantRenderHandler implements FluidVariantRenderHandle
 
                     if (sprite != null)
                     {
-                        NativeImage image = ((SpriteContentsAccessor) sprite.getContents()).getImage();
+                        NativeImage image = ((SpriteContentsAccessor) sprite).getImages()[0];
 
                         int pixels = 0;
                         int cumR = 0;

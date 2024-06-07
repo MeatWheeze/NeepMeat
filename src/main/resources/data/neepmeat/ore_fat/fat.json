@@ -1,0 +1,10 @@
+{
+  "__comment": "Routes will be generated for a smelting recipe if its input matches any of the following:",
+  "generate_for_tags": [
+    "c:raw_ores",
+    "c:ores",
+    "mythicmetals:raw_ores"
+  ],
+  "generate_for_items": [
+  ]
+}

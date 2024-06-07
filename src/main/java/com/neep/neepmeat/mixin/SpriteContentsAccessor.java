@@ -1,13 +1,13 @@
 package com.neep.neepmeat.mixin;
 
 import net.minecraft.client.texture.NativeImage;
-import net.minecraft.client.texture.SpriteContents;
+import net.minecraft.client.texture.Sprite;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
 
-@Mixin(SpriteContents.class)
+@Mixin(Sprite.class)
 public interface SpriteContentsAccessor
 {
     @Accessor
-    NativeImage getImage();
+    NativeImage[] getImages();
 }

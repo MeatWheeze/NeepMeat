@@ -1,13 +1,17 @@
 package com.neep.neepmeat.api.processing;
 
 import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.neep.meatlib.mixin.RecipeManagerAccessor;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.fluid.ore_fat.OreFatFluidFactory;
 import com.neep.neepmeat.init.NMFluids;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener;
-import net.fabricmc.fabric.api.tag.convention.v1.ConventionalItemTags;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.minecraft.item.Item;
@@ -18,40 +22,42 @@ import net.minecraft.recipe.RecipeType;
 import net.minecraft.recipe.SmeltingRecipe;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.tag.TagKey;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.JsonHelper;
 import net.minecraft.util.registry.Registry;
 import org.jetbrains.annotations.Nullable;
 
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 @SuppressWarnings("UnstableApiUsage")
 public class OreFatRegistry implements SimpleSynchronousResourceReloadListener
 {
     public static final OreFatRegistry INSTANCE = new OreFatRegistry();
 
+    private final Set<TagKey<Item>> generateForTags = Sets.newHashSet();
+    private final Set<Identifier> generateForItems = Sets.newHashSet();
+
     private final Map<Item, Entry> inputToEntry = Maps.newHashMap();
     private final Map<NbtCompound, Entry> nbtToEntry = Maps.newHashMap();
 
     public static void init()
     {
-//        register(ConventionalItemTags.RAW_IRON_ORES, "Iron", 0xfedec8, Items.IRON_INGOT);
-//        register(ConventionalItemTags.RAW_GOLD_ORES, "Gold", 0xfaea2e, Items.GOLD_INGOT);
-//        register(ConventionalItemTags.RAW_COPPER_ORES, "Copper", 0x4fba98, Items.COPPER_INGOT);
-
-//        if (FabricLoader.getInstance().isModLoaded("modern_industrialization"))
-//        {
-//            register(TagKey.of(Registries.ITEM.getKey(), new Identifier("c:raw_lead_ores")), "Lead", 0x7188ca, Registries.ITEM.get(new Identifier("modern_industrialization:lead_ingot")));
-//            register(TagKey.of(Registries.ITEM.getKey(), new Identifier("c:raw_nickel_ores")), "Nickel", 0xe5e5b7, Registries.ITEM.get(new Identifier("modern_industrialization:nickel_ingot")));
-//            register(TagKey.of(Registries.ITEM.getKey(), new Identifier("c:raw_silver_ores")), "Silver", 0x94aad3, Registries.ITEM.get(new Identifier("modern_industrialization:silver_ingot")));
-//            register(TagKey.of(Registries.ITEM.getKey(), new Identifier("c:raw_tin_ores")), "Tin", 0xe2d9f2, Registries.ITEM.get(new Identifier("modern_industrialization:tin_ingot")));
-//            register(TagKey.of(Registries.ITEM.getKey(), new Identifier("c:raw_antimony_ores")), "Antimony", 0x80808c, Registries.ITEM.get(new Identifier("modern_industrialization:antimony_ingot")));
-//        }
 
         ServerLifecycleEvents.SERVER_STARTED.register(INSTANCE::generate);
         ServerLifecycleEvents.END_DATA_PACK_RELOAD.register((server, resourceManager, success) -> INSTANCE.generate(server));
+    }
+
+    private void addTag(Identifier id)
+    {
+        generateForTags.add(TagKey.of(Registry.ITEM.getKey(), id));
     }
 
     private void generate(MinecraftServer server)
@@ -90,7 +96,8 @@ public class OreFatRegistry implements SimpleSynchronousResourceReloadListener
 
             for (ItemStack stack : ingredient.getMatchingStacks())
             {
-                if (stack.isIn(ConventionalItemTags.RAW_ORES) || stack.isIn(ConventionalItemTags.ORES))
+                Identifier itemId = stack.getItem().getRegistryEntry().registryKey().getValue();
+                if (stack.streamTags().anyMatch(generateForTags::contains) || generateForItems.contains(itemId))
                 {
                     registerRoute(ItemVariant.of(stack), ItemVariant.of(output));
                 }
@@ -178,7 +185,44 @@ public class OreFatRegistry implements SimpleSynchronousResourceReloadListener
     @Override
     public void reload(ResourceManager manager)
     {
-        // TODO: Add disabling and extra entries here
+
+        for (Identifier id : manager.findResources("ore_fat", path -> path.getPath().endsWith(".json")).keySet())
+        {
+            if (manager.getResource(id).isPresent())
+            {
+                // Last file replaces previous ones
+                generateForTags.clear();
+                generateForItems.clear();;
+
+                try (InputStream stream = manager.getResource(id).get().getInputStream())
+                {
+                    Reader reader = new InputStreamReader(stream);
+                    JsonElement rootElement = JsonParser.parseReader(reader);
+                    JsonObject rootObject = (JsonObject) rootElement;
+
+                    // Generate routes for smelting recipes whose inputs are in these tags
+                    JsonArray generateForTags = JsonHelper.getArray(rootObject, "generate_for_tags");
+                    generateForTags.forEach(e ->
+                    {
+                        Identifier tagId = Identifier.tryParse(e.getAsString());
+                        addTag(tagId);
+                    });
+
+                    JsonArray generateForItems = JsonHelper.getArray(rootObject, "generate_for_items");
+                    generateForItems.forEach(e ->
+                    {
+                        Identifier itemId = Identifier.tryParse(e.getAsString());
+
+                        this.generateForItems.add(itemId);
+                    });
+                }
+                catch (Exception e)
+                {
+                    NeepMeat.LOGGER.error("Error while reading ore fat json " + id.toString(), e);
+                }
+            }
+        }
+
     }
 
     public record Entry(Text name, int col, ItemVariant result, NbtCompound nbt)

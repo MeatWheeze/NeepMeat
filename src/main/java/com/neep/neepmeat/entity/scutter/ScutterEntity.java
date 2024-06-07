@@ -4,8 +4,8 @@ import net.minecraft.block.BlockState;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.mob.PathAwareEntity;
+import net.minecraft.network.Packet;
 import net.minecraft.network.listener.ClientPlayPacketListener;
-import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.s2c.play.EntitySpawnS2CPacket;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -26,12 +26,6 @@ public class ScutterEntity extends PathAwareEntity
     @Override
     protected void playStepSound(BlockPos pos, BlockState state)
     {
-    }
-
-    @Override
-    public Packet<ClientPlayPacketListener> createSpawnPacket()
-    {
-        return super.createSpawnPacket();
     }
 
     @Override
