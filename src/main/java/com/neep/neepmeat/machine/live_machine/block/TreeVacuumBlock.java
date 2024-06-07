@@ -100,7 +100,7 @@ public class TreeVacuumBlock extends BigBlock<TreeVacuumBlock.Structure> impleme
     }
 
     @Override
-    protected BigBlockPattern getVolume(BlockState blockState)
+    public BigBlockPattern getVolume(BlockState blockState)
     {
         return patternMap.get(blockState.get(FACING));
     }

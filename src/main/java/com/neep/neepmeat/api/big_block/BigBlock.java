@@ -7,9 +7,6 @@ import net.minecraft.block.ShapeContext;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
-import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.util.shape.VoxelShape;
@@ -32,7 +29,7 @@ public abstract class BigBlock<T extends BigBlockStructure<?>> extends Block
 
     protected abstract T registerStructureBlock();
 
-    protected abstract BigBlockPattern getVolume(BlockState blockState);
+    public abstract BigBlockPattern getVolume(BlockState blockState);
 
 //    protected VoxelShape getShape(BlockState state)
 //    {

@@ -46,7 +46,7 @@ public class CrusherSegmentBlock extends BigBlock<CrusherSegmentBlock.CrusherSeg
     }
 
     @Override
-    protected BigBlockPattern getVolume(BlockState blockState)
+    public BigBlockPattern getVolume(BlockState blockState)
     {
         return pattern;
     }

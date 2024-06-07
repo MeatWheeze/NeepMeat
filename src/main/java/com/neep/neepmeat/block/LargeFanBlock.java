@@ -70,7 +70,7 @@ public class LargeFanBlock extends BigBlock<LargeFanBlock.LargeFanStructureBlock
     }
 
     @Override
-    protected BigBlockPattern getVolume(BlockState blockState)
+    public BigBlockPattern getVolume(BlockState blockState)
     {
         return patternMap.get(blockState.get(AXIS));
     }

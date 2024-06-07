@@ -66,7 +66,7 @@ public class PhageRayBlock extends BigBlock<PhageRayBlock.PhageRayStructureBlock
     }
 
     @Override
-    protected BigBlockPattern getVolume(BlockState blockState)
+    public BigBlockPattern getVolume(BlockState blockState)
     {
         return volume;
     }

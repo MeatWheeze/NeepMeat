@@ -12,7 +12,6 @@ import com.neep.neepmeat.api.big_block.BigBlockPattern;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.machine.motor.MotorEntity;
 import com.neep.neepmeat.util.MiscUtil;
-import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
@@ -74,7 +73,7 @@ public class LargeMotorBlock extends BigBlock<LargeMotorStructureBlock> implemen
     }
 
     @Override
-    protected BigBlockPattern getVolume(BlockState blockState)
+    public BigBlockPattern getVolume(BlockState blockState)
     {
         Direction facing = blockState.get(FACING);
         return volume.rotateY(facing.asRotation() - 180);

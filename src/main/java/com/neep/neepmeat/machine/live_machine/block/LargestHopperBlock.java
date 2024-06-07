@@ -62,7 +62,7 @@ public class LargestHopperBlock extends BigBlock<LargestHopperBlock.StructureBlo
     }
 
     @Override
-    protected BigBlockPattern getVolume(BlockState blockState)
+    public BigBlockPattern getVolume(BlockState blockState)
     {
         return pattern;
     }

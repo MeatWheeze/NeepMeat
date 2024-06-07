@@ -6,8 +6,8 @@ import com.neep.meatlib.item.MeatlibItem;
 import com.neep.meatlib.registry.ItemRegistry;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.api.big_block.BigBlock;
-import com.neep.neepmeat.api.big_block.BigBlockStructure;
 import com.neep.neepmeat.api.big_block.BigBlockPattern;
+import com.neep.neepmeat.api.big_block.BigBlockStructure;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.ShapeContext;
 import net.minecraft.util.math.BlockPos;
@@ -38,7 +38,7 @@ public class CentrifugeBlock extends BigBlock
     }
 
     @Override
-    protected BigBlockPattern getVolume(BlockState blockState)
+    public BigBlockPattern getVolume(BlockState blockState)
     {
         return VOLUME;
     }

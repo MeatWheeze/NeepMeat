@@ -1,7 +1,6 @@
-package com.neep.neepmeat.client.item;
+package com.neep.neepmeat.client.hud;
 
 import com.neep.neepmeat.item.ScutterItem;
-import com.sun.source.tree.WhileLoopTree;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;

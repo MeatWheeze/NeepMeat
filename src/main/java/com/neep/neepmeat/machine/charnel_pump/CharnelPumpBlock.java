@@ -65,7 +65,7 @@ public class CharnelPumpBlock extends BigBlock<CharnelPumpStructure> implements 
     }
 
     @Override
-    protected BigBlockPattern getVolume(BlockState blockState)
+    public BigBlockPattern getVolume(BlockState blockState)
     {
         return patternMap.get(blockState.get(FACING));
     }
