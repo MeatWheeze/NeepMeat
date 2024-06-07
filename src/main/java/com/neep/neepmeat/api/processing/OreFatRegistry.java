@@ -119,6 +119,12 @@ public class OreFatRegistry implements SimpleSynchronousResourceReloadListener
     }
 
     @Nullable
+    public static Entry get(NbtCompound nbt)
+    {
+        return INSTANCE.nbtToEntry.get(nbt);
+    }
+
+    @Nullable
     public static Entry getFromInput(Item item)
     {
         return INSTANCE.inputToEntry.get(item);
