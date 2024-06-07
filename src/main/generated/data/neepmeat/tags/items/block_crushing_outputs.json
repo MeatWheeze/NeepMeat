@@ -1,0 +1,13 @@
+{
+  "replace": false,
+  "values": [
+    {
+      "id": "#c:raw_ores",
+      "required": false
+    },
+    {
+      "id": "#mythicmetals:raw_ores",
+      "required": false
+    }
+  ]
+}

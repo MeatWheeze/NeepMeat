@@ -16,7 +16,9 @@
     "RailPlacementHelperMixin",
     "ServerPlayNetworkHandlerMixin",
     "ServerWorldMixin",
-    "WorldChunkMixin"
+    "WorldChunkMixin",
+    "loot.CombinedEntryAccessor",
+    "loot.ItemEntryAccessor"
   ],
   "client": [
     "BlockModelRendererAccessor",

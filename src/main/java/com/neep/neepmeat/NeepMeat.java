@@ -6,9 +6,13 @@ import com.neep.neepmeat.api.enlightenment.EnlightenmentEvent;
 import com.neep.neepmeat.api.enlightenment.EnlightenmentEventManager;
 import com.neep.neepmeat.api.enlightenment.EnlightenmentUtil;
 import com.neep.neepmeat.api.machine.MotorisedBlock;
+import com.neep.neepmeat.api.processing.BlockCrushingRegistry;
 import com.neep.neepmeat.api.processing.OreFatRegistry;
+import com.neep.neepmeat.arrp.NMARRPThings;
 import com.neep.neepmeat.block.entity.FurnaceBurnerImpl;
 import com.neep.neepmeat.client.datagen.NMModelProvider;
+import com.neep.neepmeat.datagen.NMAdvancements;
+import com.neep.neepmeat.datagen.NMBlockTagProvider;
 import com.neep.neepmeat.datagen.NMItemTagProvider;
 import com.neep.neepmeat.datagen.NMRecipeGenerator;
 import com.neep.neepmeat.datagen.tag.NMTags;
@@ -37,6 +41,7 @@ import com.neep.neepmeat.transport.blood_network.BloodNetworkManager;
 import com.neep.neepmeat.transport.fluid_network.FluidNodeManagerImpl;
 import com.neep.neepmeat.util.Bezier;
 import com.neep.neepmeat.world.NMFeatures;
+import net.devtech.arrp.ARRP;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
@@ -108,6 +113,7 @@ public class NeepMeat implements ModInitializer
 			// They shouldn't be here, but I can only have one datagen entry point
 			NMRecipeGenerator.init();
 			NMItemTagProvider.init();
+			NMBlockTagProvider.init();
 //			NMAdvancements.init();
 			NMModelProvider.init();
 
@@ -165,6 +171,8 @@ public class NeepMeat implements ModInitializer
 			ResourceManagerHelper.get(ResourceType.CLIENT_RESOURCES).registerReloadListener(GuideReloadListener.getInstance());
 			ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(MobSynthesisRegistry.getInstance());
 			ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(OreFatRegistry.INSTANCE);
+			NMARRPThings.init();
+			BlockCrushingRegistry.init();;
 
 			WormActions.init();
 

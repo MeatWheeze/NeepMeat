@@ -1,5 +1,6 @@
 package com.neep.meatlib;
 
+import com.neep.meatlib.api.event.DataPackPostProcess;
 import com.neep.meatlib.api.event.InitialTicks;
 import com.neep.meatlib.graphics.GraphicsEffects;
 import com.neep.meatlib.item.MeatItemGroups;
@@ -10,6 +11,7 @@ import com.neep.meatlib.registry.SoundRegistry;
 import com.neep.meatlib.storage.StorageEvents;
 import com.neep.neepmeat.NeepMeat;
 import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.lookup.v1.block.BlockApiLookup;
 import net.minecraft.util.Identifier;
 import org.apache.logging.log4j.LogManager;
@@ -53,6 +55,10 @@ public class MeatLib implements ModInitializer
         InitialTicks.init();
         MeatItemGroups.init();
         StorageEvents.init();
+        RecipeInputs.init();
+
+        ServerLifecycleEvents.SERVER_STARTED.register(server -> DataPackPostProcess.EVENT.invoker().event(server));
+        ServerLifecycleEvents.END_DATA_PACK_RELOAD.register((server, manager, success) -> DataPackPostProcess.EVENT.invoker().event(server));
     }
 
     public static class Context implements AutoCloseable

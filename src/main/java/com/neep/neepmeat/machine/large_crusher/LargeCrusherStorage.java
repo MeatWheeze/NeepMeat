@@ -88,9 +88,9 @@ public class LargeCrusherStorage implements NbtSerialisable
                 progress = progress + progressIncrement;
                 if (progress >= recipe.getTime())
                 {
-                    if (recipe.takeInputs(this, transaction))
+                    if (recipe.ejectOutputs(this, transaction))
                     {
-                        recipe.ejectOutputs(this, transaction);
+                        recipe.takeInputs(this, transaction);
                     }
                     recipe = null;
                     progress = 0;

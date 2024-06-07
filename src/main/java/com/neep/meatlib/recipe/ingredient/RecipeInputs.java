@@ -71,4 +71,9 @@ public class RecipeInputs
     {
 
     }
+
+    public static RecipeInput<Item> of(Item item, long amount)
+    {
+        return new RecipeInput<>(new RecipeInput.ResourceEntry<>(item), amount, ITEM, ITEM_ID);
+    }
 }

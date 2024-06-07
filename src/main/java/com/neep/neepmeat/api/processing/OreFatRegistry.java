@@ -6,6 +6,8 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.google.gson.*;
+import com.neep.meatlib.api.event.DataPackPostProcess;
 import com.neep.meatlib.mixin.RecipeManagerAccessor;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.fluid.ore_fat.OreFatFluidFactory;
@@ -50,9 +52,7 @@ public class OreFatRegistry implements SimpleSynchronousResourceReloadListener
 
     public static void init()
     {
-
-        ServerLifecycleEvents.SERVER_STARTED.register(INSTANCE::generate);
-        ServerLifecycleEvents.END_DATA_PACK_RELOAD.register((server, resourceManager, success) -> INSTANCE.generate(server));
+        DataPackPostProcess.EVENT.register(INSTANCE::generate);
     }
 
     private void addTag(Identifier id)

@@ -28,6 +28,9 @@ public class NMrecipeTypes
     public static final MeatRecipeSerialiser<AdvancedCrushingRecipe> ADVANCED_CRUSHING_SERIALIZER = RecipeRegistry.registerMeatlibSerializer(NeepMeat.NAMESPACE, "advanced_crushing", new AdvancedCrushingRecipe.Serializer<>(AdvancedCrushingRecipe::new, AdvancedCrushingRecipe.DestroyRecipe::new, 60));
     public static final MeatRecipeType<AdvancedCrushingRecipe> ADVANCED_CRUSHING = RecipeRegistry.registerMeatlibType(NeepMeat.NAMESPACE, "advanced_crushing");
 
+    public static final MeatRecipeSerialiser<BlockCrushingRecipe> BLOCK_CRUSHING_SERIALIZER = RecipeRegistry.registerMeatlibSerializer(NeepMeat.NAMESPACE, "block_crushing", new BlockCrushingRecipe.BlockCrushingSerialiser());
+    public static final MeatRecipeType<BlockCrushingRecipe> BLOCK_CRUSHING = RecipeRegistry.registerMeatlibType(NeepMeat.NAMESPACE, "block_crushing");
+
     public static final MeatRecipeSerialiser<AlloyKilnRecipe> ALLOY_KILN_SERIALIZER = RecipeRegistry.registerMeatlibSerializer(NeepMeat.NAMESPACE, "alloy_smelting", new AlloyKilnRecipe.Serializer(AlloyKilnRecipe::new, 60));
     public static final MeatRecipeType<AlloyKilnRecipe> ALLOY_SMELTING = RecipeRegistry.registerMeatlibType(NeepMeat.NAMESPACE, "alloy_smelting");
 

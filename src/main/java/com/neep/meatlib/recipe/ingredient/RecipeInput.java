@@ -21,7 +21,6 @@ import org.jetbrains.annotations.Nullable;
 import java.util.*;
 import java.util.function.BiFunction;
 import java.util.function.Predicate;
-import java.util.stream.Stream;
 
 /**
  * Represents a required quantity of an ingredient, supplied either by a tag or a specific resource.
@@ -36,7 +35,7 @@ public class RecipeInput<T> implements Predicate<StorageView<? extends TransferV
     // Only one entry at the moment.
     protected Entry<T> entry;
 
-    protected long amount;
+    protected final long amount;
     @Nullable protected T[] matchingObjects;
 
     protected RecipeInput(Entry<T> entry, long amount, Serialiser<T> serialiser, Identifier type)

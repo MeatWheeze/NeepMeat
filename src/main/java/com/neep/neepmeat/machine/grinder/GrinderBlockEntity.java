@@ -185,7 +185,7 @@ public class GrinderBlockEntity extends MotorisedMachineBlockEntity
         {
             try (Transaction transaction = Transaction.openOuter())
             {
-                if (getCurrentRecipe().matches(storage) && getCurrentRecipe().takeInputs(storage, transaction) && getCurrentRecipe().ejectOutputs(storage, transaction))
+                if (getCurrentRecipe().matches(storage) && getCurrentRecipe().ejectOutputs(storage, transaction) && getCurrentRecipe().takeInputs(storage, transaction))
                 {
                     ejectOutput(transaction);
                     transaction.commit();

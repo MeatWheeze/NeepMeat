@@ -116,9 +116,9 @@ public class CrusherSegmentBlockEntity extends SyncableBlockEntity implements Li
                 progress += progressIncrement;
                 if (progress >= recipe.getTime())
                 {
-                    if (recipe.takeInputs(storage, transaction))
+                    if (recipe.ejectOutputs(storage, transaction))
                     {
-                        recipe.ejectOutputs(storage, transaction);
+                        recipe.takeInputs(storage, transaction);
                     }
                     recipe = null;
                     progress = 0;
