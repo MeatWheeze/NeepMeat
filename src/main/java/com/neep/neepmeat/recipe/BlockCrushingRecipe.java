@@ -5,6 +5,7 @@ import com.neep.meatlib.recipe.MeatRecipeSerialiser;
 import com.neep.meatlib.recipe.MeatRecipeType;
 import com.neep.meatlib.recipe.ingredient.RecipeInputs;
 import com.neep.meatlib.recipe.ingredient.RecipeOutput;
+import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.api.processing.BlockCrushingRegistry;
 import com.neep.neepmeat.init.NMrecipeTypes;
 import com.neep.neepmeat.machine.grinder.CrusherRecipeContext;
@@ -13,13 +14,35 @@ import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.minecraft.item.Item;
 import net.minecraft.network.PacketByteBuf;
+import net.minecraft.recipe.RecipeManager;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.JsonHelper;
+import org.jetbrains.annotations.Nullable;
 
-public class BlockCrushingRecipe extends CrushingRecipe
+public class BlockCrushingRecipe extends AdvancedCrushingRecipe
 {
-    private BlockCrushingRecipe(Identifier id)
+    private final long mainAmount;
+    private final long extraAmount;
+    private final float outputChance;
+
+    @Nullable
+    public static BlockCrushingRecipe get(RecipeManager recipeManager)
+    {
+        return (BlockCrushingRecipe) recipeManager.get(new Identifier(NeepMeat.NAMESPACE, "block_crushing")).orElse(null);
+    }
+
+    public BlockCrushingRecipe(Identifier id, long mainAmount, long extraAmount, float outputChance)
     {
         super(id, RecipeInputs.empty(), RecipeOutput.empty(), RecipeOutput.empty(), 5, 40);
+        this.mainAmount = mainAmount;
+        this.extraAmount = extraAmount;
+        this.outputChance = outputChance;
+    }
+
+    @Nullable
+    protected BlockCrushingRegistry.Entry getFromInput(ItemVariant input)
+    {
+        return BlockCrushingRegistry.INSTANCE.getFromInputBasic(input);
     }
 
     @Override
@@ -27,7 +50,7 @@ public class BlockCrushingRecipe extends CrushingRecipe
     {
         for (var view : storage.getInputStorage())
         {
-            if (BlockCrushingRegistry.INSTANCE.getFromInput(view.getResource()) != null)
+            if (getFromInput(view.getResource()) != null)
                 return true;
         }
         return super.matches(storage);
@@ -39,7 +62,7 @@ public class BlockCrushingRecipe extends CrushingRecipe
         for (var view : storage.getInputStorage())
         {
             ItemVariant resource = view.getResource();
-            BlockCrushingRegistry.Entry entry = BlockCrushingRegistry.INSTANCE.getFromInput(resource);
+            BlockCrushingRegistry.Entry entry = getFromInput(resource);
             if (entry != null)
             {
                 Item item = resource.getItem();
@@ -61,12 +84,24 @@ public class BlockCrushingRecipe extends CrushingRecipe
     }
 
     @Override
+    public MeatRecipeSerialiser<?> getSerializer()
+    {
+        return NMrecipeTypes.BLOCK_CRUSHING_SERIALIZER;
+    }
+
+    @Override
+    public MeatRecipeType<?> getType()
+    {
+        return NMrecipeTypes.GRINDING;
+    }
+
+    @Override
     public boolean ejectOutputs(CrusherRecipeContext storage, TransactionContext transaction)
     {
         for (var view : storage.getInputStorage())
         {
             ItemVariant resource = view.getResource();
-            BlockCrushingRegistry.Entry entry = BlockCrushingRegistry.INSTANCE.getFromInput(resource);
+            BlockCrushingRegistry.Entry entry = getFromInput(resource);
             if (entry != null)
             {
                 try (Transaction inner = transaction.openNested())
@@ -86,36 +121,57 @@ public class BlockCrushingRecipe extends CrushingRecipe
         return false;
     }
 
-    @Override
-    public MeatRecipeType<?> getType()
+    public long getBaseAmount()
     {
-        return NMrecipeTypes.ADVANCED_CRUSHING;
+        return mainAmount;
     }
 
-    @Override
-    public MeatRecipeSerialiser<?> getSerializer()
+    public long getExtraAmount()
     {
-        return NMrecipeTypes.BLOCK_CRUSHING_SERIALIZER;
+        return extraAmount;
     }
 
-    public static class BlockCrushingSerialiser implements MeatRecipeSerialiser<BlockCrushingRecipe>
+    public float getChance()
     {
-        @Override
-        public BlockCrushingRecipe read(Identifier id, JsonObject var2)
+        return outputChance;
+    }
+
+    public static class Serialiser<T extends BlockCrushingRecipe> implements MeatRecipeSerialiser<T>
+    {
+        private final Constructor<T> constructor;
+
+        public Serialiser(Constructor<T> constructor)
         {
-            return new BlockCrushingRecipe(id);
+            this.constructor = constructor;
         }
 
         @Override
-        public BlockCrushingRecipe read(Identifier id, PacketByteBuf buf)
+        public T read(Identifier id, JsonObject json)
         {
-            return new BlockCrushingRecipe(id);
+            int mainAmount = JsonHelper.getInt(json, "base_amount");
+            int extraAmount = JsonHelper.getInt(json, "extra_amount");
+            float outputChance = JsonHelper.getFloat(json, "extra_chance");
+            return constructor.create(id, mainAmount, extraAmount, outputChance);
+        }
+
+        @Override
+        public T read(Identifier id, PacketByteBuf buf)
+        {
+            return constructor.create(id, buf.readLong(), buf.readLong(), buf.readFloat());
         }
 
         @Override
         public void write(PacketByteBuf buf, BlockCrushingRecipe recipe)
         {
+            buf.writeLong(recipe.mainAmount);
+            buf.writeLong(recipe.extraAmount);
+            buf.writeFloat(recipe.outputChance);
+        }
 
+        @FunctionalInterface
+        public interface Constructor<T extends BlockCrushingRecipe>
+        {
+            T create(Identifier id, long mainAmount, long extraAmount, float outputChance);
         }
     }
 }

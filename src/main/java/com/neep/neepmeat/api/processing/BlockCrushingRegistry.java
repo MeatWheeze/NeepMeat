@@ -10,6 +10,8 @@ import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.datagen.tag.NMTags;
 import com.neep.neepmeat.mixin.loot.CombinedEntryAccessor;
 import com.neep.neepmeat.mixin.loot.ItemEntryAccessor;
+import com.neep.neepmeat.recipe.AdvancedBlockCrushingRecipe;
+import com.neep.neepmeat.recipe.BlockCrushingRecipe;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.minecraft.block.Block;
 import net.minecraft.item.BlockItem;
@@ -25,28 +27,54 @@ import net.minecraft.registry.tag.TagKey;
 import net.minecraft.server.MinecraftServer;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
 import java.util.Map;
 
 public class BlockCrushingRegistry
 {
-    public static final BlockCrushingRegistry INSTANCE = new BlockCrushingRegistry();
-
-    private final Map<ItemVariant, Entry> inputToEntry = Maps.newHashMap();
+    public static BlockCrushingRegistry INSTANCE;
 
     public static void init()
     {
-        DataPackPostProcess.EVENT.register(INSTANCE::searchForLootTables);
+        DataPackPostProcess.EVENT.register(BlockCrushingRegistry::reload);
+    }
+
+    private static void reload(MinecraftServer server)
+    {
+        INSTANCE = new BlockCrushingRegistry(server);
+    }
+
+    private final Map<ItemVariant, Entry> basicInputToEntry = Maps.newHashMap();
+    private final Map<ItemVariant, Entry> advancedInputToEntry = Maps.newHashMap();
+
+    // Either of these can be disabled by removing the JSON- hang on, that won't work. Erm...
+    @Nullable private final BlockCrushingRecipe blockCrushingRecipe;
+    @Nullable private final AdvancedBlockCrushingRecipe advancedBlockCrushingRecipe;
+
+    private BlockCrushingRegistry(MinecraftServer server)
+    {
+        this.blockCrushingRecipe = BlockCrushingRecipe.get(server.getRecipeManager());
+        this.advancedBlockCrushingRecipe = AdvancedBlockCrushingRecipe.get(server.getRecipeManager());
+
+        searchForLootTables(server);
     }
 
     @Nullable
-    public Entry getFromInput(ItemVariant input)
+    public Entry getFromInputBasic(ItemVariant input)
     {
-        return inputToEntry.get(input);
+        return basicInputToEntry.get(input);
+    }
+
+    @Nullable
+    public Entry getFromInputAdvanced(ItemVariant input)
+    {
+        return advancedInputToEntry.get(input);
     }
 
     private void searchForLootTables(MinecraftServer server)
     {
         NeepMeat.LOGGER.info("Searching for block crushing loot tables");
+
         LootManager lootManager = server.getLootManager();
 
         TagKey<Block> inputs = NMTags.BLOCK_CRUSHING_INPUTS;
@@ -59,8 +87,14 @@ public class BlockCrushingRegistry
         ;
     }
 
+    /**
+     * Incredibly cursed traversal that looks for a structure that roughly matches that of a vanilla ore.
+     */
     private void inspectLootTable(LootManager lootManager, BlockItem blockItem)
     {
+        if (advancedBlockCrushingRecipe == null && blockCrushingRecipe == null)
+            return;
+
         TagKey<Item> outputs = NMTags.BLOCK_CRUSHING_OUTPUTS;
 
         LootTable lootTable = lootManager.getLootTable(blockItem.getBlock().getLootTableId());
@@ -78,8 +112,7 @@ public class BlockCrushingRegistry
                             boolean isRawOre = outputItem.getRegistryEntry().isIn(outputs);
                             if (isRawOre)
                             {
-//                                NeepMeat.LOGGER.info("FOUND RAW ORES: {} - {}", blockItem, outputItem);
-                                register(blockItem, outputItem, 1); // baseAmount should be extracted from the loot table, but I've no idea how.
+                                register(blockItem, outputItem); // baseAmount should be extracted from the loot table, but I've no idea how.
                                 return;
                             }
                         }
@@ -89,12 +122,39 @@ public class BlockCrushingRegistry
         }
     }
 
-    private void register(Item inputVariant, Item outputItem, int baseAmount)
+    private void register(Item inputVariant, Item outputItem)
     {
-        RecipeInput<Item> input = RecipeInputs.of(inputVariant, 1);
-        RecipeOutput<Item> output = new RecipeOutputImpl<>(outputItem, baseAmount * 2, baseAmount * 2, 1);
-        RecipeOutput<Item> extra = new RecipeOutputImpl<>(outputItem, baseAmount, baseAmount, 0.5f);
-        inputToEntry.put(ItemVariant.of(inputVariant), new Entry(input, output, extra));
+        if (blockCrushingRecipe != null)
+        {
+            basicInputToEntry.put(ItemVariant.of(inputVariant), create(inputVariant, outputItem, blockCrushingRecipe));
+        }
+
+        if (advancedBlockCrushingRecipe != null)
+        {
+            advancedInputToEntry.put(ItemVariant.of(inputVariant), create(inputVariant, outputItem, advancedBlockCrushingRecipe));
+        }
+    }
+
+    private Entry create(Item inputItem, Item outputItem, BlockCrushingRecipe recipe)
+    {
+        int baseAmount = (int) recipe.getBaseAmount();
+        int extraAmount = (int) recipe.getExtraAmount();
+
+        RecipeInput<Item> input = RecipeInputs.of(inputItem, 1);
+        RecipeOutput<Item> output = new RecipeOutputImpl<>(outputItem, baseAmount, baseAmount, 1);
+        RecipeOutput<Item> extra = new RecipeOutputImpl<>(outputItem, extraAmount, extraAmount, 0.5f);
+
+        return new Entry(input, output, extra);
+    }
+
+    public Collection<Entry> getBasicEntries()
+    {
+        return basicInputToEntry.values();
+    }
+
+    public Collection<Entry> getAdvancedEntries()
+    {
+        return advancedInputToEntry.values();
     }
 
     public record Entry(RecipeInput<Item> input, RecipeOutput<Item> output, RecipeOutput<Item> extra)

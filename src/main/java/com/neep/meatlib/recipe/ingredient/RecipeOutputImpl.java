@@ -28,6 +28,7 @@ public class RecipeOutputImpl<T> implements RecipeOutput<T>
     protected final float chance;
     protected @Nullable NbtCompound nbt;
 
+    // TODO: Why am I using an int here when it should be long?ZZ
     public RecipeOutputImpl(@NotNull T resource, int min, int max, float probability)
     {
         this.resource = resource;
@@ -39,6 +40,11 @@ public class RecipeOutputImpl<T> implements RecipeOutput<T>
     public RecipeOutputImpl(@NotNull T resource, int min, int max)
     {
         this(resource, min, max, 1);
+    }
+
+    public RecipeOutputImpl(@NotNull T resource, int amount)
+    {
+        this(resource, amount, 1);
     }
 
     @Override

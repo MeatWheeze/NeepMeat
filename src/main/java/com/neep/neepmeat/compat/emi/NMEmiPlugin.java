@@ -4,6 +4,7 @@ import com.google.common.collect.Iterators;
 import com.google.common.collect.UnmodifiableIterator;
 import com.neep.meatlib.recipe.MeatlibRecipes;
 import com.neep.neepmeat.NeepMeat;
+import com.neep.neepmeat.api.processing.BlockCrushingRegistry;
 import com.neep.neepmeat.compat.emi.helper.LazyEmiRecipeCategory;
 import com.neep.neepmeat.compat.emi.recipe.*;
 import com.neep.neepmeat.datagen.tag.NMTags;
@@ -15,6 +16,8 @@ import com.neep.neepmeat.machine.live_machine.LivingMachines;
 import com.neep.neepmeat.plc.PLCBlocks;
 import com.neep.neepmeat.plc.recipe.PLCRecipes;
 import com.neep.neepmeat.plc.recipe.TransformingToolRecipe;
+import com.neep.neepmeat.recipe.AdvancedBlockCrushingRecipe;
+import com.neep.neepmeat.recipe.BlockCrushingRecipe;
 import com.neep.neepmeat.transport.FluidTransport;
 import dev.emi.emi.api.EmiPlugin;
 import dev.emi.emi.api.EmiRegistry;
@@ -22,6 +25,8 @@ import dev.emi.emi.api.recipe.EmiRecipeCategory;
 import dev.emi.emi.api.stack.EmiStack;
 import net.minecraft.item.Item;
 import net.minecraft.recipe.RecipeManager;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.util.registry.RegistryEntry;
@@ -51,6 +56,8 @@ public class NMEmiPlugin implements EmiPlugin {
     public static final EmiRecipeCategory ENLIGHTENING = new LazyEmiRecipeCategory(new Identifier(NeepMeat.NAMESPACE, "plugins/enlightening"), ENLIGHTENING_WORKSTATION);
     public static final EmiRecipeCategory GRINDING = new LazyEmiRecipeCategory(new Identifier(NeepMeat.NAMESPACE, "plugins/grinding"), GRINDING_WORKSTATION);
     public static final EmiRecipeCategory ADVANCED_CRUSHING = new LazyEmiRecipeCategory(new Identifier(NeepMeat.NAMESPACE, "plugins/advanced_crushing"), LARGE_CRUSHER_WORKSTATION);
+    public static final EmiRecipeCategory BLOCK_CRUSHING = new LazyEmiRecipeCategory(new Identifier(NeepMeat.NAMESPACE, "plugins/block_crushing"), GRINDING_WORKSTATION);
+    public static final EmiRecipeCategory ADVANCED_BLOCK_CRUSHING = new LazyEmiRecipeCategory(new Identifier(NeepMeat.NAMESPACE, "plugins/advanced_block_crushing"), LARGE_CRUSHER_WORKSTATION);
     public static final EmiRecipeCategory VIVISECTION = new LazyEmiRecipeCategory(new Identifier(NeepMeat.NAMESPACE, "plugins/vivisection"), VIVISECTION_WORKSTATION);
     public static final EmiRecipeCategory HEATING = new LazyEmiRecipeCategory(new Identifier(NeepMeat.NAMESPACE, "plugins/heating"), HEATING_WORKSTATION);
     public static final EmiRecipeCategory ITEM_MANUFACTURE = new LazyEmiRecipeCategory(new Identifier(NeepMeat.NAMESPACE, "plugins/manufacture"), MANUFACTURE_WORKSTATION);
@@ -68,6 +75,8 @@ public class NMEmiPlugin implements EmiPlugin {
         registry.addCategory(ENLIGHTENING);
         registry.addCategory(GRINDING);
         registry.addCategory(ADVANCED_CRUSHING);
+        registry.addCategory(BLOCK_CRUSHING);
+        registry.addCategory(ADVANCED_BLOCK_CRUSHING);
         registry.addCategory(VIVISECTION);
         registry.addCategory(HEATING);
         registry.addCategory(ITEM_MANUFACTURE);
@@ -88,6 +97,10 @@ public class NMEmiPlugin implements EmiPlugin {
         registry.addWorkstation(GRINDING, CRUSHER_SEGMENT_WORKSTATION);
         registry.addWorkstation(ADVANCED_CRUSHING, LARGE_CRUSHER_WORKSTATION);
         registry.addWorkstation(ADVANCED_CRUSHING, CRUSHER_SEGMENT_WORKSTATION);
+        registry.addWorkstation(BLOCK_CRUSHING, CRUSHER_SEGMENT_WORKSTATION);
+        registry.addWorkstation(BLOCK_CRUSHING, GRINDING_WORKSTATION);
+        registry.addWorkstation(ADVANCED_BLOCK_CRUSHING, CRUSHER_SEGMENT_WORKSTATION);
+        registry.addWorkstation(ADVANCED_BLOCK_CRUSHING, GRINDING_WORKSTATION);
         registry.addWorkstation(VIVISECTION, VIVISECTION_WORKSTATION);
         registry.addWorkstation(HEATING, HEATING_WORKSTATION);
         registry.addWorkstation(ITEM_MANUFACTURE, MANUFACTURE_WORKSTATION);
@@ -118,10 +131,12 @@ public class NMEmiPlugin implements EmiPlugin {
                 .forEach(registry::addRecipe);
         MeatlibRecipes.getInstance().getAllValuesOfType(NMrecipeTypes.GRINDING)
                 .filter(r -> !r.destroy())
+                .filter(r -> !(r instanceof BlockCrushingRecipe))
                 .map(r -> new GrindingEmiRecipe(GRINDING, r))
                 .forEach(registry::addRecipe);
         MeatlibRecipes.getInstance().getAllValuesOfType(NMrecipeTypes.ADVANCED_CRUSHING)
                 .filter(r -> !r.destroy())
+                .filter(r -> !(r instanceof BlockCrushingRecipe))
                 .map(r -> new GrindingEmiRecipe(ADVANCED_CRUSHING, r))
                 .forEach(registry::addRecipe);
         MeatlibRecipes.getInstance().getAllValuesOfType(NMrecipeTypes.HEATING)
@@ -150,9 +165,16 @@ public class NMEmiPlugin implements EmiPlugin {
             registry.addRecipe(new CompactingEmiRecipe(entries, NMItems.CRUDE_INTEGRATION_CHARGE, page++));
         }
 
-//        registry.addRecipe(new VivisectionEmiRecipe(List.of(EntityType.ZOMBIE), NMItems.ANIMAL_HEART));
         registry.addRecipe(new VivisectionEmiRecipe(NMBlocks.INTEGRATOR_EGG.asItem(), NMItems.CHRYSALIS));
 
+       BlockCrushingRecipe crushingRecipe;
+       crushingRecipe = BlockCrushingRecipe.get(registry.getRecipeManager());
+        if (crushingRecipe != null)
+            registry.addRecipe(new BlockCrushingEmiRecipe(BLOCK_CRUSHING, crushingRecipe, BlockCrushingRegistry.INSTANCE.getBasicEntries()));
+
+        crushingRecipe = AdvancedBlockCrushingRecipe.get(registry.getRecipeManager());
+        if (crushingRecipe != null)
+            registry.addRecipe(new BlockCrushingEmiRecipe(ADVANCED_BLOCK_CRUSHING, crushingRecipe, BlockCrushingRegistry.INSTANCE.getAdvancedEntries()));
 
         // Recipe Handlers
         registry.addRecipeHandler(ScreenHandlerInit.FABRICATOR, new FabricatorRecipeHandler());
