@@ -180,7 +180,10 @@ public class CharnelPumpBlockEntity extends SyncableBlockEntity implements Livin
     @Override
     public void setProgressIncrement(float progressIncrement)
     {
-        this.progressIncrement = progressIncrement;
-        sync();
+        if (progressIncrement != this.progressIncrement)
+        {
+            this.progressIncrement = progressIncrement;
+            sync();
+        }
     }
 }
