@@ -19,6 +19,7 @@ public class NMTags
     public static final TagKey<Item> SMOOTH_TILE = TagKey.of(Registry.ITEM.getKey(), new Identifier("neepmeat", "smooth_tile"));
     public static final TagKey<Item> PAINTED_CORRUGATED_ASBESTOS = TagKey.of(Registry.ITEM.getKey(), new Identifier("neepmeat", "painted_corrugated_asbestos"));
     public static final TagKey<Item> GUIDE_LOOKUP = TagKey.of(Registry.ITEM.getKey(), new Identifier(NeepMeat.NAMESPACE, "guide_lookup"));
+    public static final TagKey<Item> RAW_ORES = registerItem("c", "raw_ores");
 
     public static final TagKey<EntityType<?>> CLONEABLE = TagKey.of(Registry.ENTITY_TYPE.getKey(), new Identifier(NeepMeat.NAMESPACE, "cloneable"));
 
