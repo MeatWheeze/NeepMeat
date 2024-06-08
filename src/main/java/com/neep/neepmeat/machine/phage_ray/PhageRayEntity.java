@@ -7,6 +7,7 @@ import com.neep.meatlib.client.api.event.UseAttackCallback;
 import com.neep.meatlib.graphics.GraphicsEffects;
 import com.neep.meatlib.network.PacketBufUtil;
 import com.neep.neepmeat.NeepMeat;
+import com.neep.neepmeat.datagen.tag.NMTags;
 import com.neep.neepmeat.init.NMBlocks;
 import com.neep.neepmeat.init.NMGraphicsEffects;
 import com.neep.neepmeat.init.NMSounds;
@@ -285,6 +286,9 @@ public class PhageRayEntity extends Entity
 
     public float calcBlockBreakingDelta(BlockState state, BlockView world, BlockPos pos)
     {
+        if (state.isIn(NMTags.PHAGE_RAY_OVERRIDE))
+            return 0.1f;
+
         float f = state.getHardness(world, pos);
         if (f == -1.0f)
         {
