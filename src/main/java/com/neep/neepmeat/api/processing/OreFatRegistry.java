@@ -134,7 +134,7 @@ public class OreFatRegistry implements SimpleSynchronousResourceReloadListener
 
     private Text createName(Item outputItem, Block fluid)
     {
-        return outputItem.getName().copy().append(" ").append(fluid.getDefaultState().getBlock().getName());
+        return Text.translatable(fluid.getTranslationKey(), outputItem.getName());
     }
 
     @Nullable
@@ -186,7 +186,6 @@ public class OreFatRegistry implements SimpleSynchronousResourceReloadListener
     /**
      * This works in a very convoluted way.
      * Fats have one output and multiple inputs. Therefore, fats can be identified by their output item.
-     *
      * First the main fat file is processed. This determines which tags will be used to generate fat fluids from
      * smelting recipes.
      * Overrides are then parsed. These pre-populate the maps with some. entries

@@ -625,11 +625,19 @@
 
   "item.neepmeat.eldritch_enzymes_bucket": "Bucket of Eldritch Enzymes",
   "block.neepmeat.eldritch_enzymes": "Eldritch Enzymes",
-  "fluid.neepmeat.snowball.clean": "Clean Snowball Fat",
-  "fluid.neepmeat.snowball.dirty": "Dirty Snowball Fat",
 
-  "block.neepmeat.clean_ore_fat": "Clean Fat",
-  "block.neepmeat.ore_fat": "Dirty Fat",
+  "block.neepmeat.clean_ore_fat": "Clean %s Fat",
+  "block.neepmeat.ore_fat": "Dirty %s Fat",
+  "ore_fat.neepmeat.iron_ingot.dirty": "Dirty Iron-Rich Fat",
+  "ore_fat.neepmeat.iron_ingot.clean": "Clean Iron-Rich Fat",
+  "ore_fat.neepmeat.copper_ingot.dirty": "Dirty Copper-Rich Fat",
+  "ore_fat.neepmeat.copper_ingot.clean": "Clean Copper-Rich Fat",
+  "ore_fat.neepmeat.gold_ingot.dirty": "Dirty Gold-Rich Fat",
+  "ore_fat.neepmeat.gold_ingot.clean": "Clean Gold-Rich Fat",
+  "ore_fat.neepmeat.diamond.dirty": "Dirty Diamond Fat",
+  "ore_fat.neepmeat.diamond.clean": "Clean Diamond Fat",
+  "ore_fat.neepmeat.lapis_lazuli.dirty": "Dirty Lapis Lazuli Fat",
+  "ore_fat.neepmeat.lapis_lazuli.clean": "Clean Lapis Lazuli Fat",
 
   "block.neepmeat.milk": "Milk",
   "block.neepmeat.pasteurised_milk": "Pasteurised Milk",

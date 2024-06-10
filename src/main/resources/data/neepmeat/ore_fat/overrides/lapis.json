@@ -1,0 +1,9 @@
+{
+  "output": "minecraft:lapis_lazuli",
+  "dirty_fat_name": "ore_fat.neepmeat.lapis_lazuli.dirty",
+  "clean_fat_name": "ore_fat.neepmeat.lapis_lazuli.clean",
+  "inputs": [
+  ],
+  "rendering_yield": 1,
+  "trommel_yield": 1.5
+}
