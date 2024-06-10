@@ -19,6 +19,7 @@ import com.neep.neepmeat.init.NMFluids;
 import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
+import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
@@ -50,6 +51,7 @@ public class OreFatRegistry implements SimpleSynchronousResourceReloadListener
     private final Set<TagKey<Item>> generateForTags = Sets.newHashSet();
     private final Set<Identifier> generateForItems = Sets.newHashSet();
 
+    private final Map<Item, Entry> outputToEntry = Maps.newHashMap();
     private final Map<Item, Entry> inputToEntry = Maps.newHashMap();
     private final Map<NbtCompound, Entry> nbtToEntry = Maps.newHashMap();
 
@@ -65,8 +67,6 @@ public class OreFatRegistry implements SimpleSynchronousResourceReloadListener
 
     private void generate(MinecraftServer server)
     {
-        inputToEntry.clear();
-        nbtToEntry.clear();
 
         RecipeManagerAccessor manager = (RecipeManagerAccessor) server.getRecipeManager();
         Map<Identifier, SmeltingRecipe> smeltingRecipes = manager.callGetAllOfType(RecipeType.SMELTING);
@@ -102,18 +102,22 @@ public class OreFatRegistry implements SimpleSynchronousResourceReloadListener
                 Identifier itemId = stack.getItem().getRegistryEntry().registryKey().getValue();
                 if (stack.streamTags().anyMatch(generateForTags::contains) || generateForItems.contains(itemId))
                 {
-                    registerRoute(ItemVariant.of(stack), ItemVariant.of(output));
+                    registerDefaultEntry(stack.getItem(), ItemVariant.of(output));
                 }
             }
         }
     }
 
-    public void registerRoute(ItemVariant input, ItemVariant output)
+    private void registerDefaultEntry(Item input, ItemVariant output)
     {
         NbtCompound nbt = createNbt(output.getItem());
-        Entry entry = new Entry(output.getItem().getName(), output, nbt);
 
-        inputToEntry.putIfAbsent(input.getItem(), entry);
+//        Entry entry = outputToEntry.computeIfAbsent(output.getItem(), )
+        Entry entry = outputToEntry.computeIfAbsent(output.getItem(), i -> new Entry(
+                createName(output.getItem(), NMFluids.DIRTY_ORE_FAT),
+                createName(output.getItem(), NMFluids.DIRTY_ORE_FAT),
+                output, nbt, 1, (float) 1.5));
+        inputToEntry.put(input, entry);
         nbtToEntry.put(nbt, entry);
     }
 
@@ -126,6 +130,11 @@ public class OreFatRegistry implements SimpleSynchronousResourceReloadListener
         NbtCompound nbtCompound = new NbtCompound();
         nbtCompound.putString("item", Registry.ITEM.getId(outputItem).toString());
         return nbtCompound;
+    }
+
+    private Text createName(Item outputItem, Block fluid)
+    {
+        return outputItem.getName().copy().append(" ").append(fluid.getDefaultState().getBlock().getName());
     }
 
     @Nullable
@@ -185,23 +194,41 @@ public class OreFatRegistry implements SimpleSynchronousResourceReloadListener
         return new Identifier(NeepMeat.NAMESPACE, "ore_fat");
     }
 
+    /**
+     * This works in a very convoluted way.
+     * Fats have one output and multiple inputs. Therefore, fats can be identified by their output item.
+     *
+     * First the main fat file is processed. This determines which tags will be used to generate fat fluids from
+     * smelting recipes.
+     * Overrides are then parsed. These pre-populate the maps with some. entries
+     * The generation step occurs after data packs have been reloaded. All smelting recipes are checked for inputs
+     * and outputs that match the tags in fat.json.
+     * Entries that already exist for a given output will not be replaced by generated entries.
+     */
     @Override
     public void reload(ResourceManager manager)
     {
+        inputToEntry.clear();
+        nbtToEntry.clear();
+        outputToEntry.clear();
 
-        for (Identifier id : manager.findResources("ore_fat", path -> path.getPath().endsWith(".json")).keySet())
+        for (Identifier id : manager.findResources("ore_fat", path -> path.getPath().endsWith("fat.json")).keySet())
         {
             if (manager.getResource(id).isPresent())
             {
-                // Last file replaces previous ones
-                generateForTags.clear();
-                generateForItems.clear();;
-
                 try (InputStream stream = manager.getResource(id).get().getInputStream())
                 {
+
                     Reader reader = new InputStreamReader(stream);
                     JsonElement rootElement = JsonParser.parseReader(reader);
                     JsonObject rootObject = (JsonObject) rootElement;
+
+                    if (rootObject.has("replace") && JsonHelper.getBoolean(rootObject, "replace"))
+                    {
+                        // Last file replaces previous ones
+                        generateForTags.clear();
+                        generateForItems.clear();;
+                    }
 
                     // Generate routes for smelting recipes whose inputs are in these tags
                     JsonArray generateForTags = JsonHelper.getArray(rootObject, "generate_for_tags");
@@ -221,14 +248,70 @@ public class OreFatRegistry implements SimpleSynchronousResourceReloadListener
                 }
                 catch (Exception e)
                 {
-                    NeepMeat.LOGGER.error("Error while reading ore fat json " + id.toString(), e);
+                    NeepMeat.LOGGER.error("Error while reading ore fat " + id.toString(), e);
                 }
             }
         }
 
+        readOverrides(manager);
     }
 
-    public record Entry(Text name, ItemVariant result, NbtCompound nbt)
+    private void readOverrides(ResourceManager manager)
+    {
+        for (Identifier id : manager.findResources("ore_fat/overrides", path -> path.getPath().endsWith(".json")).keySet())
+        {
+            if (manager.getResource(id).isPresent())
+            {
+                try (InputStream stream = manager.getResource(id).get().getInputStream())
+                {
+                    Reader reader = new InputStreamReader(stream);
+                    JsonElement rootElement = JsonParser.parseReader(reader);
+                    JsonObject rootObject = (JsonObject) rootElement;
+
+                    String resourceName = JsonHelper.getString(rootObject, "output");
+                    Item result = Registries.ITEM.get(Identifier.tryParse(resourceName));
+
+                    Text dirtyFatName = createName(result, NMFluids.DIRTY_ORE_FAT);
+                    if (rootObject.has("dirty_fat_name"))
+                        dirtyFatName = Text.translatable(JsonHelper.getString(rootObject, "dirty_fat_name"));
+
+                    Text cleanFatName = createName(result, NMFluids.CLEAN_ORE_FAT);
+                    if (rootObject.has("clean_fat_name"))
+                        cleanFatName = Text.translatable(JsonHelper.getString(rootObject, "clean_fat_name"));
+
+                    float renderingYield = 1;
+                    if (rootObject.has("rendering_yield"))
+                        renderingYield = JsonHelper.getFloat(rootObject, "rendering_yield");
+
+                    float trommelYield = 1.5f;
+                    if (rootObject.has("trommel_yield"))
+                        trommelYield = JsonHelper.getFloat(rootObject, "trommel_yield");
+
+                    Entry entry = new Entry(dirtyFatName, cleanFatName, ItemVariant.of(result), createNbt(result), renderingYield, trommelYield);
+                    outputToEntry.put(result, entry);
+                    nbtToEntry.put(createNbt(result), entry);
+
+                    if (rootObject.has("inputs"))
+                    {
+                        JsonArray inputs = JsonHelper.getArray(rootObject, "inputs");
+                        for (var inputObject : inputs)
+                        {
+                            String inputName = inputObject.getAsString();
+                            Item input = Registries.ITEM.get(Identifier.tryParse(inputName));
+                            inputToEntry.put(input, entry);
+                        }
+                    }
+
+                }
+                catch (Exception e)
+                {
+                    NeepMeat.LOGGER.error("Error while reading ore fat override " + id.toString(), e);
+                }
+            }
+        }
+    }
+
+    public record Entry(Text dirtyFatname, Text cleanFatName, ItemVariant result, NbtCompound nbt, float renderingYield, float trommelYield)
     {
     }
 }

@@ -625,6 +625,8 @@
 
   "item.neepmeat.eldritch_enzymes_bucket": "Bucket of Eldritch Enzymes",
   "block.neepmeat.eldritch_enzymes": "Eldritch Enzymes",
+  "fluid.neepmeat.snowball.clean": "Clean Snowball Fat",
+  "fluid.neepmeat.snowball.dirty": "Dirty Snowball Fat",
 
   "block.neepmeat.clean_ore_fat": "Clean Fat",
   "block.neepmeat.ore_fat": "Dirty Fat",

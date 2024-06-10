@@ -1,0 +1,10 @@
+{
+  "output": "minecraft:iron_ingot",
+  "dirty_fat_name": "fluid.neepmeat.iron_ingot.dirty",
+  "clean_fat_name": "fluid.neepmeat.iron_ingot.clean",
+  "inputs": [
+    "minecraft:cobblestone"
+  ],
+  "rendering_yield": 2,
+  "trommel_yield": 2
+}

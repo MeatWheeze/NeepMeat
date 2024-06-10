@@ -1,0 +1,11 @@
+{
+  "output": "minecraft:snowball",
+  "dirty_fat_name": "fluid.neepmeat.snowball.dirty",
+  "clean_fat_name": "fluid.neepmeat.snowball.clean",
+  "inputs": [
+    "minecraft:slime_ball",
+    "minecraft:sponge"
+  ],
+  "rendering_yield": 2,
+  "trommel_yield": 1.5
+}
