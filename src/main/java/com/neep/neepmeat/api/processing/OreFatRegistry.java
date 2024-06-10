@@ -2,6 +2,7 @@ package com.neep.neepmeat.api.processing;
 
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
+import com.google.common.collect.Streams;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -23,6 +24,7 @@ import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.recipe.BlastingRecipe;
 import net.minecraft.recipe.Ingredient;
 import net.minecraft.recipe.RecipeType;
 import net.minecraft.recipe.SmeltingRecipe;
@@ -67,10 +69,10 @@ public class OreFatRegistry implements SimpleSynchronousResourceReloadListener
 
     private void generate(MinecraftServer server)
     {
-
         RecipeManagerAccessor manager = (RecipeManagerAccessor) server.getRecipeManager();
         Map<Identifier, SmeltingRecipe> smeltingRecipes = manager.callGetAllOfType(RecipeType.SMELTING);
-        smeltingRecipes.forEach((id, recipe) ->
+        Map<Identifier, BlastingRecipe> blastingRecipes = manager.callGetAllOfType(RecipeType.BLASTING);
+        Streams.concat(smeltingRecipes.values().stream(), blastingRecipes.values().stream()).forEach(recipe ->
         {
             List<Ingredient> ingredients = recipe.getIngredients();
             ItemStack output = recipe.getOutput();
