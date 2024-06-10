@@ -2,15 +2,11 @@ package com.neep.neepmeat.machine.small_trommel;
 
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
 import com.neep.meatlib.recipe.MeatlibRecipes;
-import com.neep.meatlib.storage.MeatlibStorageUtil;
 import com.neep.neepmeat.api.machine.MotorisedBlock;
-import com.neep.neepmeat.api.processing.OreFatRegistry;
 import com.neep.neepmeat.block.machine.TrommelBlock;
 import com.neep.neepmeat.init.NMBlockEntities;
-import com.neep.neepmeat.init.NMFluids;
 import com.neep.neepmeat.init.NMrecipeTypes;
 import com.neep.neepmeat.machine.motor.MotorEntity;
-import com.neep.neepmeat.recipe.NormalTrommelRecipe;
 import com.neep.neepmeat.transport.util.ItemPipeUtil;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
@@ -31,9 +27,6 @@ import java.util.Random;
 public class SmallTrommelBlockEntity extends SyncableBlockEntity implements MotorisedBlock, MotorisedBlock.DiagnosticsProvider
 {
     public static final float INCREMENT_MIN = 0.1f;
-    public static final float INCREMENT_MAX = 2;
-    public static long CONVERT_MIN = 100;
-    public static long BASE_AMOUNT = 9000;
 
     public SmallTrommelStorage storage;
     public FluidVariant currentFluid;
@@ -44,7 +37,7 @@ public class SmallTrommelBlockEntity extends SyncableBlockEntity implements Moto
     private float progressIncrement;
     protected Random random;
     private float power = 0;
-    private float minPower = 0.02f;
+    private final float minPower = 0.02f;
 
     public SmallTrommelBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
     {
@@ -98,49 +91,18 @@ public class SmallTrommelBlockEntity extends SyncableBlockEntity implements Moto
 
     public void convert()
     {
-        FluidVariant inputVariant = storage.input().getResource();
+        TrommelRecipe recipe = MeatlibRecipes.getInstance().getFirstMatch(NMrecipeTypes.TROMMEL, storage).orElse(null);
+        if (recipe == null)
+            recipe = MeatlibRecipes.getInstance().getFirstMatch(NMrecipeTypes.FAT_TROMMEL, storage).orElse(null);
 
-        NormalTrommelRecipe recipe = MeatlibRecipes.getInstance().getFirstMatch(NMrecipeTypes.TROMMEL, storage).orElse(null);
         if (recipe != null)
         {
             try (Transaction transaction = Transaction.openOuter())
             {
                 if (recipe.takeInputs(storage, transaction) && recipe.ejectOutputs(storage, transaction))
-                {
                     transaction.commit();
-                }
-                else transaction.abort();
-            }
-            return;
-        }
-
-        OreFatRegistry.Entry entry = OreFatRegistry.getFromVariant(inputVariant);
-        if (inputVariant.isOf(NMFluids.STILL_DIRTY_ORE_FAT) && entry != null)
-        {
-            long inputAmount = (long) Math.floor(BASE_AMOUNT);
-            long extractable = MeatlibStorageUtil.simulateExtract(storage.fluidInput, inputVariant, inputAmount, null);
-            boolean produceExtra = random.nextFloat() > 0.5;
-            long outputAmount = produceExtra ? extractable : extractable + extractable;
-
-            if (outputAmount < CONVERT_MIN)
-                return;
-
-            try (Transaction transaction = Transaction.openOuter())
-            {
-
-                NbtCompound nbt = inputVariant.copyNbt();
-                long extracted = storage.fluidInput.extract(inputVariant, inputAmount, transaction);
-                long inserted = storage.fluidOutput.insert(FluidVariant.of(NMFluids.STILL_CLEAN_ORE_FAT, nbt), outputAmount, transaction);
-                if (extracted > 0 && inserted == outputAmount)
-                {
-                    transaction.commit();
-                    currentFluid = storage.fluidInput.getResource();
-                }
                 else
-                {
-                    currentFluid = FluidVariant.blank();
                     transaction.abort();
-                }
             }
         }
     }

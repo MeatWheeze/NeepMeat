@@ -6,5 +6,5 @@
     "minecraft:cobblestone"
   ],
   "rendering_yield": 2,
-  "trommel_yield": 2
+  "trommel_yield": 1.5
 }

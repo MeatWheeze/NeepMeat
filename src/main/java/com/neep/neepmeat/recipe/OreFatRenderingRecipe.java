@@ -8,6 +8,7 @@ import com.neep.meatlib.recipe.ingredient.RecipeOutputImpl;
 import com.neep.neepmeat.api.processing.OreFatRegistry;
 import com.neep.neepmeat.init.NMrecipeTypes;
 import com.neep.neepmeat.machine.crucible.CrucibleStorage;
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
@@ -92,9 +93,7 @@ public class OreFatRenderingRecipe extends ImplementedRecipe<CrucibleStorage>
         {
             Optional<Fluid> fluid = fluidInput.getFirstMatching(fluidStorage, take);
             if (entry == null || fluid.isEmpty())
-            {
-                throw new IllegalStateException("Storage contents do not conform to recipe");
-            }
+                return null;
 
             long ex1 = itemStorage.extract(ItemVariant.of(item), itemAmount, take);
             long ex2 = fluidStorage.extract(FluidVariant.of(fluid.get()), fluidInput.amount() * itemAmount, take);
@@ -113,9 +112,12 @@ public class OreFatRenderingRecipe extends ImplementedRecipe<CrucibleStorage>
         {
             boolean bl1 = true;
             fluidOutput.setNbt(entry.nbt());
+            FluidVariant outputVariant = FluidVariant.of(fluidOutput.resource(), entry.nbt());
             for (int i = 0; i < itemAmount; ++i)
             {
-                bl1 = bl1 && fluidOutput.insertInto(storage.getFluidOutput(), FluidVariant::of, eject);
+                bl1 = bl1 && storage.getFluidOutput().insert(outputVariant,
+                        FluidConstants.INGOT * fluidOutput.randomAmount(entry.renderingYield() - 1),
+                        eject) > 0;
             }
             fluidOutput.setNbt(null);
 

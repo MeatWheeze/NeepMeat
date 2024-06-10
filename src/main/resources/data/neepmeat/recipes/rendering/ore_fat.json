@@ -4,8 +4,9 @@
     "resource": "neepmeat:eldritch_enzymes",
     "amount": 27000
   },
+  "__comment": "Output amount will be multiplied by 9000 so an integer number of ingots is produced even with fractional yields",
   "output": {
     "resource": "neepmeat:ore_fat",
-    "amount": 9000
+    "amount": 1
   }
 }

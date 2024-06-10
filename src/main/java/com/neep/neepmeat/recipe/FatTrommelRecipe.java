@@ -63,19 +63,22 @@ public class FatTrommelRecipe implements TrommelRecipe
         try (Transaction inner = transaction.openNested())
         {
             SingleVariantStorage<FluidVariant> fluidStorage = context.input();
+            FluidVariant inputVariant = fluidStorage.getResource();
 
-            FluidVariant resource = fluidStorage.getResource();
-
-            long ex2 = fluidStorage.extract(fluidStorage.getResource(), INPUT_AMOUNT, inner);
+            long ex2 = fluidStorage.extract(inputVariant, INPUT_AMOUNT, inner);
             if (ex2 != INPUT_AMOUNT)
                 return false;
 
-            boolean produceExtra = random.nextFloat() > 0.5;
-            long outputAmount = INPUT_AMOUNT * (produceExtra ? 2 : 1);
-
-            FluidVariant outputVariant = OreFatRegistry.getClean(resource);
-            if (outputVariant == null)
+            OreFatRegistry.Entry entry = OreFatRegistry.getFromVariant(inputVariant);
+            if (entry == null)
                 return false;
+
+            float trommelYield = entry.trommelYield();
+            float fractional = trommelYield % 1.0f;
+            int ingots = (int) (Math.floor(trommelYield) + (random.nextFloat() < fractional ? 1 : 0));
+            long outputAmount = (long) INPUT_AMOUNT * ingots;
+
+            FluidVariant outputVariant = entry.getClean();
 
             long inserted = context.output().insert(outputVariant, outputAmount, inner);
 

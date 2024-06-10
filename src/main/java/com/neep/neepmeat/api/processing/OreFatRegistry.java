@@ -177,17 +177,6 @@ public class OreFatRegistry implements SimpleSynchronousResourceReloadListener
         return FluidVariant.of(NMFluids.STILL_DIRTY_ORE_FAT, nbt);
     }
 
-    @Nullable
-    public static FluidVariant getClean(FluidVariant dirty)
-    {
-        if (dirty.getFluid() instanceof OreFatFluidFactory.Main)
-        {
-            NbtCompound nbtCompound = dirty.getNbt();
-            return FluidVariant.of(NMFluids.STILL_CLEAN_ORE_FAT, nbtCompound);
-        }
-        return null;
-    }
-
     @Override
     public Identifier getFabricId()
     {
@@ -313,5 +302,14 @@ public class OreFatRegistry implements SimpleSynchronousResourceReloadListener
 
     public record Entry(Text dirtyFatname, Text cleanFatName, ItemVariant result, NbtCompound nbt, float renderingYield, float trommelYield)
     {
+        public FluidVariant getDirty()
+        {
+            return FluidVariant.of(NMFluids.STILL_DIRTY_ORE_FAT, nbt);
+        }
+
+        public FluidVariant getClean()
+        {
+            return FluidVariant.of(NMFluids.STILL_CLEAN_ORE_FAT, nbt);
+        }
     }
 }
