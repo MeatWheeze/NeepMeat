@@ -25,6 +25,7 @@ public class LivingMachineComponents
     public static final ComponentType<PhageRayBlockEntity> PHAGE_RAY = register("phage_ray", new ComponentType.Simple<>());
     public static final ComponentType<TreeVacuumBlockEntity> TREE_VACUUM = register("tree_vacuum", new ComponentType.Simple<>());
     public static final ComponentType<CharnelPumpBlockEntity> CHARNEL_PUMP = register("charnel_pump", new ComponentType.Simple<>());
+    public static final ComponentType<LargeCompressorBlockEntity> LARGE_COMPRESSOR = register("large_compressor", new ComponentType.Simple<>());
 
     public static final ComponentType<HopperComponent> HOPPER = register("hopper", new ComponentType.Simple<>());
     public static final ComponentType<ItemInputComponent> ITEM_INPUT = register("item_input", new ComponentType.Simple<>());

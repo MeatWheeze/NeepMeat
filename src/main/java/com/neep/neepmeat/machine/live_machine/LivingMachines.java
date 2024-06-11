@@ -73,6 +73,7 @@ public class LivingMachines
     public static final BigBlock<?> LARGE_TROMMEL = BlockRegistry.queue(new LargeTrommelBlock("large_trommel",FabricBlockSettings.copyOf(MACHINE_SETTINGS), ItemSettings.block().tooltip(tooltip(LivingMachineComponents.LARGE_TROMMEL))));
     public static final BigBlock<LargestHopperBlock.StructureBlock> LARGEST_HOPPER = BlockRegistry.queue(new LargestHopperBlock("largest_hopper", FabricBlockSettings.copyOf(MACHINE_SETTINGS), ItemSettings.block().tooltip(tooltip(LivingMachineComponents.ITEM_INPUT))));
     public static final BigBlock<TreeVacuumBlock.Structure> TREE_VACUUM = BlockRegistry.queue(new TreeVacuumBlock("tree_vacuum", ItemSettings.block().tooltip(tooltip(LivingMachineComponents.TREE_VACUUM).append(TooltipSupplier.simple(1))), FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
+    public static final LargeCompressorBlock LARGE_COMPRESSOR = BlockRegistry.queue(new LargeCompressorBlock("large_compressor", ItemSettings.block().tooltip(tooltip(LivingMachineComponents.LARGE_COMPRESSOR).append(TooltipSupplier.simple(1))), FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
 
     public static final TallerBlock LUCKY_ONE = BlockRegistry.queue(new LuckyOneBlock("lucky_one",
             ItemSettings.block().tooltip(tooltip(LivingMachineComponents.LUCKY_ONE).append(TooltipSupplier.simple(1))),
@@ -88,6 +89,7 @@ public class LivingMachines
     public static BlockEntityType<CrusherSegmentBlockEntity> CRUSHER_SEGMENT_BE;
     public static BlockEntityType<LargeTrommelBlockEntity> LARGE_TROMMEL_BE;
     public static BlockEntityType<LargestHopperBlockEntity> LARGEST_HOPPER_BE;
+    public static BlockEntityType<LargeCompressorBlockEntity> LARGE_COMPRESSOR_BE;
 
     public static BlockEntityType<LivingMachineControllerBlockEntity> LIVING_MACHINE_CONTROLLER_BE;
     public static BlockEntityType<ItemOutputPortBlockEntity> ITEM_OUTPUT_PORT_BE;
@@ -116,6 +118,8 @@ public class LivingMachines
         LARGEST_HOPPER_BE = register("largest_hopper", (p, s) -> new LargestHopperBlockEntity(LARGEST_HOPPER_BE, p, s), LARGEST_HOPPER);
         LivingMachineComponent.LOOKUP.registerSelf(LivingMachines.LARGEST_HOPPER_BE);
         ItemStorage.SIDED.registerForBlockEntity(LargestHopperBlockEntity::getStorage, LARGEST_HOPPER_BE);
+        LARGE_COMPRESSOR_BE = register("large_compressor", (p, s) -> new LargeCompressorBlockEntity(LARGE_COMPRESSOR_BE, p, s), LARGE_COMPRESSOR);
+        LivingMachineComponent.LOOKUP.registerSelf(LivingMachines.LARGE_COMPRESSOR_BE);
 
         TREE_VACUUM_BE = register("tree_vacuum", (p, s) -> new TreeVacuumBlockEntity(TREE_VACUUM_BE, p, s), TREE_VACUUM);
         LivingMachineComponent.LOOKUP.registerSelf(LivingMachines.TREE_VACUUM_BE);
