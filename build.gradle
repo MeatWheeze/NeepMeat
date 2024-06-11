@@ -28,7 +28,7 @@ repositories {
 	maven { url "https://maven.tterrag.com/" } // Flywheel
 	maven { url "https://mvn.devos.one/snapshots/" } // Milk lib
 	maven { url "https://api.modrinth.com/maven" } // Milk lib's internal dependencies
-	maven { url "https://ueaj.dev/maven" }// ARRP
+//	maven { url "https://ueaj.dev/maven" }// ARRP
 //	maven { url "https://maven.saps.dev/minecraft" } // KubeJS
 }
 
@@ -65,18 +65,18 @@ dependencies {
 	// Couldn't find Fabric releases that were accessible to the average user, so I assume that JiJ is the only way.
 	modApi include("com.jozufozu.flywheel:flywheel-fabric-${project.flywheel_mc_version}:${project.flywheel_version}")
 
+	// Milk lib
+	modImplementation include("io.github.tropheusj:milk-lib:${project.milk_version}")
+
 	// Myron
 	modImplementation include("com.github.MeatWheeze:myron-neepmeat:${project.myron_version}")
 
-	// Milk lib
-	modImplementation include("io.github.tropheusj:milk-lib:${project.milk_version}")
+	// ARRP
+//	modImplementation("net.devtech:arrp:${project.arrp_version}")
 
 	// REI
 	modCompileOnly "me.shedaniel:RoughlyEnoughItems-api-fabric:${project.rei_version}"
 	modCompileOnly "me.shedaniel:RoughlyEnoughItems-default-plugin-fabric:${project.rei_version}"
-
-	// ARRP
-	modImplementation("net.devtech:arrp:${project.arrp_version}")
 
 	// EMI
 	modCompileOnly "dev.emi:emi-fabric:${project.emi_version}:api"

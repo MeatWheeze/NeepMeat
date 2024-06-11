@@ -1,26 +1,26 @@
-package com.neep.neepmeat.arrp;
-
-import com.neep.meatlib.api.event.DataPackPostProcess;
-import com.neep.neepmeat.NeepMeat;
-import com.neep.neepmeat.api.processing.BlockCrushingRegistry;
-import net.devtech.arrp.api.RRPCallback;
-import net.devtech.arrp.api.RuntimeResourcePack;
-import net.minecraft.resource.ResourcePack;
-import net.minecraft.util.Identifier;
-
-import java.util.List;
-
-public class NMARRPThings
-{
-    public static void init()
-    {
-
-        RRPCallback.AFTER_VANILLA.register(NMARRPThings::createPack);
-    }
-
-    private static void createPack(List<ResourcePack> packs)
-    {
-        RuntimeResourcePack pack = RuntimeResourcePack.create(new Identifier(NeepMeat.NAMESPACE, "rrp"));
+//package com.neep.neepmeat.arrp;
+//
+//import com.neep.meatlib.api.event.DataPackPostProcess;
+//import com.neep.neepmeat.NeepMeat;
+//import com.neep.neepmeat.api.processing.BlockCrushingRegistry;
+//import net.devtech.arrp.api.RRPCallback;
+//import net.devtech.arrp.api.RuntimeResourcePack;
+//import net.minecraft.resource.ResourcePack;
+//import net.minecraft.util.Identifier;
+//
+//import java.util.List;
+//
+//public class NMARRPThings
+//{
+//    public static void init()
+//    {
+//
+//        RRPCallback.AFTER_VANILLA.register(NMARRPThings::createPack);
+//    }
+//
+//    private static void createPack(List<ResourcePack> packs)
+//    {
+//        RuntimeResourcePack pack = RuntimeResourcePack.create(new Identifier(NeepMeat.NAMESPACE, "rrp"));
 //        String recipe = new StringBuilder(
 //                """
 //{
@@ -44,7 +44,6 @@ public class NMARRPThings
 //        pack.addResource(ResourceType.SERVER_DATA, new Identifier(NeepMeat.NAMESPACE, "recipes/advanced_crushing_gen/test.json"), recipe.getBytes());
 //        pack.addRecipe(new Identifier(NeepMeat.NAMESPACE, "glophis"), JRecipe.smelting(JIngredient.ingredient().item(NMItems.FARMING_SCUTTER), JResult.item(Items.SAND)).cookingTime(10));
 //        NeepMeat.LOGGER.info("ADDING RECIPES");
-        packs.add(pack);
-    }
-
-}
+//        packs.add(pack);
+//    }
+//}
