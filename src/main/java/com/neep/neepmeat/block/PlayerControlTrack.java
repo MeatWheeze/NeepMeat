@@ -36,7 +36,7 @@ public class PlayerControlTrack extends BaseRailBlock implements BlockEntityProv
             shape -> !shape.isAscending() && (shape != RailShape.NORTH_EAST && shape != RailShape.NORTH_WEST && shape != RailShape.SOUTH_EAST && shape != RailShape.SOUTH_WEST)
     );
 
-    //    public static final EnumProperty<AxialDirection> FACING = EnumProperty.of("direction", AxialDirection.class);
+//    public static final EnumProperty<AxialDirection> FACING = EnumProperty.of("direction", AxialDirection.class);
     public static final EnumProperty<RailShape> SHAPE = RAIL_SHAPE_NO_SLOPE;
     public static final BooleanProperty POWERED = Properties.POWERED;
 
@@ -125,16 +125,6 @@ public class PlayerControlTrack extends BaseRailBlock implements BlockEntityProv
             super(type, pos, state);
         }
 
-        protected static Direction.Axis axis(RailShape railShape)
-        {
-            return switch (railShape)
-            {
-                case NORTH_SOUTH, ASCENDING_NORTH, ASCENDING_SOUTH -> Direction.Axis.Z;
-                case EAST_WEST, ASCENDING_EAST, ASCENDING_WEST -> Direction.Axis.X;
-                default -> throw new IllegalStateException();
-            };
-        }
-
         @Nullable
         private Direction getDirection(AbstractMinecartEntity minecart, boolean powered)
         {
@@ -155,7 +145,7 @@ public class PlayerControlTrack extends BaseRailBlock implements BlockEntityProv
                 }
             }
 
-            if (playerPassenger && !powered)
+            if (!powered)
                 return null;
 
             Vec3d minecartVel = minecart.getVelocity();
@@ -224,6 +214,16 @@ public class PlayerControlTrack extends BaseRailBlock implements BlockEntityProv
                     minecart.setPosition(x, minecart.getY(), z);
                 }
             });
+        }
+
+        protected static Direction.Axis axis(RailShape railShape)
+        {
+            return switch (railShape)
+            {
+                case NORTH_SOUTH, ASCENDING_NORTH, ASCENDING_SOUTH -> Direction.Axis.Z;
+                case EAST_WEST, ASCENDING_EAST, ASCENDING_WEST -> Direction.Axis.X;
+                default -> throw new IllegalStateException();
+            };
         }
     }
 }
