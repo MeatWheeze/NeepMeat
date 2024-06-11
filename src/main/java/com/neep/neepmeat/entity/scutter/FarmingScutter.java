@@ -189,6 +189,7 @@ public class FarmingScutter extends ScutterEntity
         {
             dropStack(stack);
         }
+        inventory.clear();
     }
 
     public void addTargets(Collection<BlockPos> nearest)
