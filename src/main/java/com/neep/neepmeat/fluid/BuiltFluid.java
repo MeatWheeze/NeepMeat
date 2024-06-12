@@ -1,79 +1,76 @@
 package com.neep.neepmeat.fluid;
 
 import com.neep.meatlib.block.MeatlibBlockSettings;
+import com.neep.meatlib.item.MeatlibItemSettings;
 import com.neep.neepmeat.NMItemGroups;
 import com.neep.neepmeat.item.BaseBucketItem;
-import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
-import net.minecraft.block.Block;
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.FluidBlock;
-import net.minecraft.fluid.FlowableFluid;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.Registry;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.Properties;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 import net.minecraft.world.WorldView;
 
-public class FluidFactory
+public class BuiltFluid
 {
-    public final String namespace;
-    public final String baseName;
-    public final String flowingName;
-    public final String stillName;
-    public final String bucketName;
+    private final int levelDecrease;
+    private final int tickRate;
+    private final Item bucketItem;
+    private final Flowing flowing;
+    private final Still still;
 
-    protected FlowableFluid still;
-    protected FlowableFluid flowing;
-    protected Block block;
-    protected Item bucketItem = Items.AIR;
+    private final FluidBlock block;
 
-    protected final boolean isInfinite;
-    protected final int tickRate;
-    protected final int levelDecrease;
-
-    public FluidFactory(final String namespace, final String baseName, boolean isInfinite, int tickRate, int levelDecrease)
+    public BuiltFluid(String namespace, String baseName, int levelDecrease, int tickRate, boolean makeBlock, boolean makeItem)
     {
-        this.namespace = namespace;
-        this.baseName = baseName;
-        this.flowingName = "flowing_" + baseName;
-        this.stillName = baseName;
-        this.bucketName = baseName + "_bucket";
-
-        this.isInfinite = isInfinite;
-        this.tickRate = tickRate;
         this.levelDecrease = levelDecrease;
+        this.tickRate = tickRate;
+
+        still = Registry.register(Registries.FLUID, new Identifier(namespace, baseName), new Still());
+        flowing = Registry.register(Registries.FLUID, new Identifier(namespace, "flowing_" + baseName), new Flowing());
+
+        if (makeBlock)
+            block = Registry.register(Registries.BLOCK, new Identifier(namespace, baseName), new FluidBlock(still, MeatlibBlockSettings.copy(Blocks.WATER)){});
+        else
+            block = null;
+
+        if (makeItem)
+            bucketItem = new BaseBucketItem(namespace, baseName + "_bucket", still, new MeatlibItemSettings().maxCount(1).recipeRemainder(Items.BUCKET).group(NMItemGroups.GENERAL));
+        else
+            bucketItem = null;
     }
 
-    public FlowableFluid registerStill()
+    public Still still()
     {
-        still = Registry.register(Registry.FLUID, new Identifier(namespace, stillName), new Still());
         return still;
     }
 
-    public FlowableFluid registerFlowing()
+    public Flowing flowing()
     {
-        flowing = Registry.register(Registry.FLUID, new Identifier(namespace, flowingName), new Flowing());
         return flowing;
     }
 
-    public Item registerItem()
+    public FluidBlock getBlock()
     {
-        if (bucketItem != Items.AIR)
-            throw new IllegalStateException("A bucket item is already registered for fluid '" + baseName + "'");
-
-        bucketItem = new BaseBucketItem(namespace, bucketName, still, new MeatlibItemSettings().maxCount(1).recipeRemainder(Items.BUCKET).group(NMItemGroups.GENERAL));
-        return bucketItem;
+        return block;
     }
 
-    public Block registerBlock()
+    public FluidVariant variant()
     {
-        block = Registry.register(Registry.BLOCK, new Identifier(namespace, baseName), new FluidBlock(still, MeatlibBlockSettings.copy(Blocks.WATER)){});
-        return block;
+        return FluidVariant.of(still);
+    }
+
+    public Item getItem()
+    {
+        return bucketItem;
     }
 
     protected abstract class Main extends BaseFluid

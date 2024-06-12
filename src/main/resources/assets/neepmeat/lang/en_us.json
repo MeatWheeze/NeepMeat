@@ -651,6 +651,9 @@
   "item.neepmeat.pinkdrink_bucket": "Pinkdrink Bucket",
   "block.neepmeat.pinkdrink": "Pinkdrink",
 
+  "item.neepmeat.compressed_air_bucket": "Compressed Air Bucket",
+  "block.neepmeat.compressed_air": "Compressed Air",
+
   "item.neepmeat.tank_minecart": "Tank Minecart",
 
   "item.neepmeat.essential_saltes": "Essential Saltes: %s",

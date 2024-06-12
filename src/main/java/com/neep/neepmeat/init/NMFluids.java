@@ -3,6 +3,8 @@ package com.neep.neepmeat.init;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.api.processing.FluidEnegyRegistry;
 import com.neep.neepmeat.api.processing.PowerUtils;
+import com.neep.neepmeat.fluid.BuiltFluid;
+import com.neep.neepmeat.fluid.FluidBuilder;
 import com.neep.neepmeat.fluid.FluidFactory;
 import com.neep.neepmeat.fluid.MeatFluidFactory;
 import com.neep.neepmeat.fluid.ore_fat.OreFatFluidFactory;
@@ -108,13 +110,14 @@ public class NMFluids
     public static Block FEED;
     public static FluidFactory FEED_FACTORY = new FluidFactory(NeepMeat.NAMESPACE, "animal_feed", false, 5, 2);
 
-    public static FlowableFluid FLOWING_PINKDRINK;
-    public static FlowableFluid STILL_PINKDRINK;
-    public static Item PINKDRINK_BUCKET;
-    public static Block PINKDRINK;
-    public static FluidFactory PINKDRINK_FACTORY = new FluidFactory(NeepMeat.NAMESPACE, "pinkdrink", false, 5, 2);
+//    public static FlowableFluid FLOWING_PINKDRINK;
+//    public static FlowableFluid STILL_PINKDRINK;
+//    public static Item PINKDRINK_BUCKET;
+//    public static Block PINKDRINK;
+//    public static FluidFactory PINKDRINK_FACTORY = new FluidFactory(NeepMeat.NAMESPACE, "pinkdrink", false, 5, 2);
+    public static BuiltFluid PINKDRINK;
 
-    public static final FluidFactory COMPRESSED_AIR = new FluidFactory(NeepMeat.NAMESPACE, "compressed_air", false, 5, 2);
+    public static BuiltFluid COMPRESSED_AIR;
 
     public static FluidVariant CHARGED;
     public static FluidVariant UNCHARGED;
@@ -193,11 +196,9 @@ public class NMFluids
         FEED_BUCKET = FEED_FACTORY.registerItem();
         FEED = FEED_FACTORY.registerBlock();
 
-        STILL_PINKDRINK = PINKDRINK_FACTORY.registerStill();
-        FLOWING_PINKDRINK = PINKDRINK_FACTORY.registerFlowing();
-        PINKDRINK_BUCKET = PINKDRINK_FACTORY.registerItem();
-        PINKDRINK = PINKDRINK_FACTORY.registerBlock();
+        PINKDRINK = new FluidBuilder(NeepMeat.NAMESPACE, "pinkdrink").withItem().withBlock().build();
 
+        COMPRESSED_AIR = new FluidBuilder(NeepMeat.NAMESPACE, "compressed_air").withItem().withBlock().build();
 
         FluidEnegyRegistry.getInstance().register(STILL_ETHEREAL_FUEL, 2 * PowerUtils.DROPLET_POWER, true, null);
 //        FluidEnegyRegistry.getInstance().register(Fluids.WATER, 1 * PowerUtils.DROPLET_POWER, false, null);
@@ -207,9 +208,9 @@ public class NMFluids
         UNCHARGED = FluidVariant.of(STILL_WORK_FLUID);
 
         FluidStorage.combinedItemApiProvider(NMItems.PINKDRINK).register(context ->
-                new FullItemFluidStorage(context, Items.GLASS_BOTTLE, FluidVariant.of(NMFluids.STILL_PINKDRINK), FluidConstants.BOTTLE));
+                new FullItemFluidStorage(context, Items.GLASS_BOTTLE, PINKDRINK.variant(), FluidConstants.BOTTLE));
         FluidStorage.combinedItemApiProvider(Items.GLASS_BOTTLE).register(context ->
-                new EmptyItemFluidStorage(context, NMItems.PINKDRINK, NMFluids.STILL_PINKDRINK, FluidConstants.BOTTLE));
+                new EmptyItemFluidStorage(context, NMItems.PINKDRINK, PINKDRINK.still(), FluidConstants.BOTTLE));
 
         FluidStorage.combinedItemApiProvider(NMItems.MILK_CARTON).register(context ->
                 new FullItemFluidStorage(context, NMItems.CARTON, FluidVariant.of(NMFluids.STILL_PASTEURISED_MILK), FluidConstants.BOTTLE));
@@ -227,5 +228,10 @@ public class NMFluids
 //                new EmptyItemFluidStorage(context, Items.MILK_BUCKET, Milk.STILL_MILK, FluidConstants.BUCKET));
         Milk.enableCauldron();
         Milk.enableMilkFluid();
+    }
+
+    public static boolean isGas(FluidVariant fluidVariant)
+    {
+        return fluidVariant.isOf(COMPRESSED_AIR.still());
     }
 }
