@@ -120,6 +120,8 @@ public class LivingMachines
         ItemStorage.SIDED.registerForBlockEntity(LargestHopperBlockEntity::getStorage, LARGEST_HOPPER_BE);
         LARGE_COMPRESSOR_BE = register("large_compressor", (p, s) -> new LargeCompressorBlockEntity(LARGE_COMPRESSOR_BE, p, s), LARGE_COMPRESSOR);
         LivingMachineComponent.LOOKUP.registerSelf(LivingMachines.LARGE_COMPRESSOR_BE);
+        FluidStorage.SIDED.registerForBlockEntity(LargeCompressorBlock.StructureBlockEntity::getOutputStorage, LARGE_COMPRESSOR.getStructure().getBlockEntityType());
+        FluidPump.SIDED.registerForBlockEntity(LargeCompressorBlock.StructureBlockEntity::getFluidPump, LARGE_COMPRESSOR.getStructure().getBlockEntityType());
 
         TREE_VACUUM_BE = register("tree_vacuum", (p, s) -> new TreeVacuumBlockEntity(TREE_VACUUM_BE, p, s), TREE_VACUUM);
         LivingMachineComponent.LOOKUP.registerSelf(LivingMachines.TREE_VACUUM_BE);

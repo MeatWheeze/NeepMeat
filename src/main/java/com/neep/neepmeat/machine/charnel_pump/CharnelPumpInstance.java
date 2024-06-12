@@ -38,7 +38,7 @@ public class CharnelPumpInstance extends BlockEntityInstance<CharnelPumpBlockEnt
 
 //        float s = (NMMaths.sin(blockEntity.getWorld().getTime(), AnimationTickHolder.getPartialTicks(), 0.1f) + 1) / 2;
         float t = blockEntity.animationTicks > 0 ? 100 - blockEntity.animationTicks + AnimationTickHolder.getPartialTicks() : 0;
-        float s = CharnelPumpRenderer.plungerAnimation(t);
+        float s = CharnelPumpRenderer.plungerAnimation(blockEntity, t);
 
         BERenderUtils.rotateFacing(blockEntity.getCachedState().get(CharnelPumpBlock.FACING), matrices);
         matrices.translate(0, 3 + 3 * s, 0);

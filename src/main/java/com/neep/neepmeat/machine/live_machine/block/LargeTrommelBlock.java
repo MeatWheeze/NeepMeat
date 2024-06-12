@@ -83,7 +83,7 @@ public class LargeTrommelBlock extends BigBlock<LargeTrommelBlock.StructureBlock
         BigBlockStructure.BlockEntityRegisterererer<LargeTrommelStructureBlockEntity> registerererer = b -> Registry.register(
                 Registry.BLOCK_ENTITY_TYPE, new Identifier(NeepMeat.NAMESPACE, "large_trommel_structure"),
                 FabricBlockEntityTypeBuilder.create(
-                        (p, s) -> new LargeTrommelStructureBlockEntity(b.getBlockEntityType(), p, s), this).build());
+                        (p, s) -> new LargeTrommelStructureBlockEntity(b.getBlockEntityType(), p, s), b).build());
 
         return BlockRegistry.queue(new StructureBlock(this, FabricBlockSettings.copyOf(this), registerererer), "large_trommel_structure");
     }

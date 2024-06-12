@@ -2,6 +2,7 @@ package com.neep.neepmeat.machine.charnel_pump;
 
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
 import com.neep.meatlib.util.LazySupplier;
+import com.neep.neepmeat.BalanceConstants;
 import com.neep.neepmeat.api.live_machine.ComponentType;
 import com.neep.neepmeat.api.live_machine.LivingMachineComponent;
 import com.neep.neepmeat.api.processing.PowerUtils;
@@ -21,6 +22,8 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.particle.ParticleTypes;
+import net.minecraft.registry.tag.BlockTags;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
@@ -47,12 +50,14 @@ public class CharnelPumpBlockEntity extends SyncableBlockEntity implements Livin
     public int animationTicks;
     private float progressIncrement;
 
+    private boolean hasAir;
+
     public CharnelPumpBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
     {
         super(type, pos, state);
     }
 
-    public void serverTick(double puPower, Storage<FluidVariant> inputStorage)
+    public void serverTick(double puPower, Storage<FluidVariant> inputStorage, Transaction transaction)
     {
         wellHeadFinder.get().tick();
         writhingSpoutFinder.get().tick();
@@ -60,23 +65,46 @@ public class CharnelPumpBlockEntity extends SyncableBlockEntity implements Livin
         Set<WellHeadBlockEntity> found = wellHeadFinder.get().result();
         long distributeAmount = FluidConstants.BUCKET; // Integer multiple of bucket, will vary based on power input.
 
+        // Consume compressed air
+        boolean hasAir = false;
+        try (Transaction inner = transaction.openNested())
+        {
+            long droplets = Math.max(10, (long) (puPower * BalanceConstants.CHARNEL_PUMP_POWER_TO_AIR));
+            long extracted = inputStorage.extract(NMFluids.COMPRESSED_AIR.variant(), droplets, inner);
+            if (extracted == droplets)
+            {
+                hasAir = true;
+                inner.commit();
+            }
+        }
+
+        if (this.hasAir != hasAir)
+        {
+            this.hasAir = hasAir;
+            sync();
+        }
+
         if (puPower >= (float) minPower / PowerUtils.referencePower())
         {
             spawnSpouts();
 
-            for (var wellHead : found)
+            // Consume work fluid and eject ores
+            if (hasAir)
             {
-                try (Transaction transaction = Transaction.openOuter())
+                for (var wellHead : found)
                 {
-                    long extracted = inputStorage.extract(FluidVariant.of(NMFluids.STILL_WORK_FLUID), distributeAmount, transaction);
-                    if (extracted == distributeAmount)
+                    try (Transaction inner = transaction.openNested())
                     {
-                        wellHead.receiveFluid(distributeAmount, transaction);
-                        transaction.commit();
-                    }
-                    else
-                    {
-                        transaction.abort();
+                        long extracted = inputStorage.extract(FluidVariant.of(NMFluids.STILL_WORK_FLUID), distributeAmount, inner);
+                        if (extracted == distributeAmount)
+                        {
+                            wellHead.receiveFluid(distributeAmount, inner);
+                            inner.commit();
+                        }
+                        else
+                        {
+                            inner.abort();
+                        }
                     }
                 }
             }
@@ -121,6 +149,7 @@ public class CharnelPumpBlockEntity extends SyncableBlockEntity implements Livin
     public NbtCompound toClientTag(NbtCompound nbt)
     {
         nbt.putFloat("power", progressIncrement);
+        nbt.putBoolean("has_air", hasAir);
         return nbt;
     }
 
@@ -135,6 +164,7 @@ public class CharnelPumpBlockEntity extends SyncableBlockEntity implements Livin
     {
         super.readNbt(nbt);
         this.progressIncrement = nbt.getFloat("power");
+        this.hasAir = nbt.getBoolean("has_air");
     }
 
     @Override
@@ -155,9 +185,42 @@ public class CharnelPumpBlockEntity extends SyncableBlockEntity implements Livin
         return LivingMachineComponents.CHARNEL_PUMP;
     }
 
+    private void spawnAirParticles()
+    {
+        if (world.getTime() % 2 == 0)
+        {
+            double x = getPos().getX() + 0.5;
+            double y = getPos().getY();
+            double z = getPos().getZ() + 0.5;
+
+            world.addParticle(ParticleTypes.POOF, x + 1, y + 1, z + 1, 0.1, 0.1, 0.1);
+            world.addParticle(ParticleTypes.POOF, x - 1, y + 1, z + 1, -0.1, 0.1, 0.1);
+            world.addParticle(ParticleTypes.POOF, x + 1, y + 1, z - 1, 0.1, 0.1, -0.1);
+            world.addParticle(ParticleTypes.POOF, x - 1, y + 1, z - 1, -0.1, 0.1, -0.1);
+        }
+    }
+
+    private void clientTickAir()
+    {
+        if (hasAir)
+        {
+            if (progressIncrement < (float) minPower / PowerUtils.referencePower())
+            {
+                spawnAirParticles();
+            }
+            else if (animationTicks < 30)
+            {
+                spawnAirParticles();
+            }
+        }
+
+    }
+
     public static void clientTick(World world, BlockPos pos, BlockState state, CharnelPumpBlockEntity be)
     {
-        if (be.progressIncrement > 0)
+        be.clientTickAir();
+
+        if (be.progressIncrement > 0 && be.hasAir)
         {
             be.animationTicks = Math.max(0, be.animationTicks - 1);
             if (be.animationTicks == 0)

@@ -7,6 +7,7 @@ import com.neep.neepmeat.machine.charnel_pump.CharnelPumpBlockEntity;
 import com.neep.neepmeat.machine.live_machine.LivingMachineComponents;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
+import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.minecraft.text.Text;
 
 import java.util.List;
@@ -26,8 +27,12 @@ public class CharnelPumpProcess implements Process
         {
             CharnelPumpBlockEntity pump = with.t1().iterator().next();
 
-            Storage<FluidVariant> inputStorage = be.getCombinedFluidInput();
-            pump.serverTick(be.getPower(), inputStorage);
+            try (Transaction transaction = Transaction.openOuter())
+            {
+                Storage<FluidVariant> inputStorage = be.getCombinedFluidInput();
+                pump.serverTick(be.getPower(), inputStorage, transaction);
+                transaction.commit();;
+            }
         });
     }
 

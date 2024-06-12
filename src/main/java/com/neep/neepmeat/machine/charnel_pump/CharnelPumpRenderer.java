@@ -22,7 +22,7 @@ public class CharnelPumpRenderer implements BlockEntityRenderer<CharnelPumpBlock
     {
     }
 
-    public static float plungerAnimation(float t)
+    public static float plungerAnimation(CharnelPumpBlockEntity be, float t)
     {
         float s;
         if (t < 70)
@@ -48,7 +48,7 @@ public class CharnelPumpRenderer implements BlockEntityRenderer<CharnelPumpBlock
 
 //        float s = (NMMaths.sin(be.getWorld().getTime(), AnimationTickHolder.getPartialTicks(), 0.1f) + 1) / 2;
         float t = be.animationTicks > 0 ? 100 - be.animationTicks + tickDelta : 0;
-        float height = 3 * plungerAnimation(t) + 4 / 16f;
+        float height = 3 * plungerAnimation(be, t) + 4 / 16f;
 
         FluidVariant fluidVariant = FluidVariant.of(NMFluids.STILL_WORK_FLUID);
         Sprite sprite = FluidVariantRendering.getSprite(fluidVariant);

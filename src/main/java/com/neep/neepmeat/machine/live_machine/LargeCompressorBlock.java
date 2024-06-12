@@ -1,6 +1,5 @@
 package com.neep.neepmeat.machine.live_machine;
 
-import com.neep.meatlib.MeatLib;
 import com.neep.meatlib.block.MeatlibBlock;
 import com.neep.meatlib.item.BaseBlockItem;
 import com.neep.meatlib.item.ItemSettings;
@@ -17,7 +16,6 @@ import com.neep.neepmeat.api.live_machine.StructureProperty;
 import com.neep.neepmeat.machine.live_machine.block.entity.LargeCompressorBlockEntity;
 import com.neep.neepmeat.transport.fluid_network.node.AcceptorModes;
 import com.neep.neepmeat.util.MiscUtil;
-import net.fabricmc.fabric.api.lookup.v1.block.BlockApiCache;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
@@ -32,7 +30,6 @@ import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
-import net.minecraft.server.world.ServerWorld;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.DirectionProperty;
 import net.minecraft.state.property.Properties;
@@ -76,7 +73,7 @@ public class LargeCompressorBlock extends BigBlock<LargeCompressorBlock.Structur
 
         VoxelShape northShape = VoxelShapes.combineAndSimplify(
                 VoxelShapes.combine(
-                        Block.createCuboidShape(-16, 36, -13, 0, 46, -3),
+                        Block.createCuboidShape(-16, 35, -13, 0, 45, -3),
                         Block.createCuboidShape(-10, 0, -16, 26, 16, 32), BooleanBiFunction.OR),
                 Block.createCuboidShape(-6, 16, -16, 22, 47, 32),
                 BooleanBiFunction.OR);
@@ -102,7 +99,7 @@ public class LargeCompressorBlock extends BigBlock<LargeCompressorBlock.Structur
         BigBlockStructure.BlockEntityRegisterererer<StructureBlockEntity> registerererer = b -> Registry.register(
                 Registries.BLOCK_ENTITY_TYPE, new Identifier(NeepMeat.NAMESPACE, "large_compressor_structure"),
                 FabricBlockEntityTypeBuilder.create(
-                        (p, s) -> new StructureBlockEntity(b.getBlockEntityType(), p, s), this).build());
+                        (p, s) -> new StructureBlockEntity(b.getBlockEntityType(), p, s), b).build());
 
         return BlockRegistry.queue(new Structure(this, FabricBlockSettings.copyOf(this), registerererer), "large_compressor_structure");
     }
@@ -173,7 +170,7 @@ public class LargeCompressorBlock extends BigBlock<LargeCompressorBlock.Structur
                 {
                     Direction facing = controller.getCachedState().get(FACING);
 
-                    if (facing.rotateYClockwise() == direction)
+                    if (facing.rotateYClockwise() == direction.getOpposite())
                     {
                         return PUMP;
                     }
@@ -192,7 +189,8 @@ public class LargeCompressorBlock extends BigBlock<LargeCompressorBlock.Structur
                 {
                     Direction facing = controller.getCachedState().get(FACING);
 
-                    if (facing.rotateYClockwise() == direction)
+                    // Output protrudes on the left side relative to facing/placement direction
+                    if (facing.rotateYClockwise() == direction.getOpposite())
                         return controller.getOutputStorage();
                 }
             }
