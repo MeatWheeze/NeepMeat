@@ -1,28 +1,38 @@
 package com.neep.neepmeat.machine.live_machine;
 
+import com.neep.meatlib.MeatLib;
 import com.neep.meatlib.block.MeatlibBlock;
 import com.neep.meatlib.item.BaseBlockItem;
 import com.neep.meatlib.item.ItemSettings;
 import com.neep.meatlib.registry.BlockRegistry;
 import com.neep.meatlib.registry.ItemRegistry;
 import com.neep.neepmeat.NeepMeat;
+import com.neep.neepmeat.api.FluidPump;
 import com.neep.neepmeat.api.big_block.BigBlock;
 import com.neep.neepmeat.api.big_block.BigBlockPattern;
 import com.neep.neepmeat.api.big_block.BigBlockStructure;
 import com.neep.neepmeat.api.big_block.BigBlockStructureEntity;
 import com.neep.neepmeat.api.live_machine.LivingMachineStructure;
 import com.neep.neepmeat.api.live_machine.StructureProperty;
+import com.neep.neepmeat.machine.live_machine.block.entity.LargeCompressorBlockEntity;
+import com.neep.neepmeat.transport.fluid_network.node.AcceptorModes;
 import com.neep.neepmeat.util.MiscUtil;
+import net.fabricmc.fabric.api.lookup.v1.block.BlockApiCache;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
+import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.ShapeContext;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.DirectionProperty;
 import net.minecraft.state.property.Properties;
@@ -38,7 +48,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.EnumMap;
 import java.util.Map;
 
-public class LargeCompressorBlock extends BigBlock<BigBlockStructure.Simple<BigBlockStructureEntity>> implements MeatlibBlock, BlockEntityProvider
+public class LargeCompressorBlock extends BigBlock<LargeCompressorBlock.Structure> implements MeatlibBlock, BlockEntityProvider
 {
     public static final DirectionProperty FACING = Properties.HORIZONTAL_FACING;
 
@@ -53,7 +63,9 @@ public class LargeCompressorBlock extends BigBlock<BigBlockStructure.Simple<BigB
 
         ItemRegistry.queue(new BaseBlockItem(this, registryName, itemSettings));
 
-        BigBlockPattern pattern = new BigBlockPattern().oddCylinder(1, 0, 2, () -> getStructure().getDefaultState());
+        BigBlockPattern pattern = new BigBlockPattern().oddCylinder(1, 0, 2, () -> getStructure().getDefaultState())
+                .enableApi(-1, 2, -1, FluidStorage.SIDED)
+                .enableApi(-1, 2, -1, FluidPump.SIDED);
 //                .range(0, 2, 1, 0, 2, -1, () -> getStructure().getDefaultState());
 
         patternMap = new EnumMap<>(Direction.class);
@@ -62,8 +74,10 @@ public class LargeCompressorBlock extends BigBlock<BigBlockStructure.Simple<BigB
         patternMap.put(Direction.SOUTH, pattern.rotateY(180));
         patternMap.put(Direction.WEST, pattern.rotateY(270));
 
-        VoxelShape northShape =VoxelShapes.combineAndSimplify(
-                Block.createCuboidShape(-16, 0, -16, 32, 16, 32),
+        VoxelShape northShape = VoxelShapes.combineAndSimplify(
+                VoxelShapes.combine(
+                        Block.createCuboidShape(-16, 36, -13, 0, 46, -3),
+                        Block.createCuboidShape(-10, 0, -16, 26, 16, 32), BooleanBiFunction.OR),
                 Block.createCuboidShape(-6, 16, -16, 22, 47, 32),
                 BooleanBiFunction.OR);
 
@@ -78,19 +92,19 @@ public class LargeCompressorBlock extends BigBlock<BigBlockStructure.Simple<BigB
     @Override
     public BlockState getPlacementState(ItemPlacementContext ctx)
     {
-        return this.getDefaultState().with(FACING, ctx.getHorizontalPlayerFacing());
+        return this.getDefaultState().with(FACING, ctx.getPlayer().isSneaking() ? ctx.getHorizontalPlayerFacing().getOpposite() : ctx.getHorizontalPlayerFacing());
     }
 
     @Override
-    protected BigBlockStructure.Simple<BigBlockStructureEntity> registerStructureBlock()
+    protected Structure registerStructureBlock()
     {
         // Oh, crumbs
-        BigBlockStructure.BlockEntityRegisterererer<BigBlockStructureEntity> registerererer = b -> Registry.register(
+        BigBlockStructure.BlockEntityRegisterererer<StructureBlockEntity> registerererer = b -> Registry.register(
                 Registries.BLOCK_ENTITY_TYPE, new Identifier(NeepMeat.NAMESPACE, "large_compressor_structure"),
                 FabricBlockEntityTypeBuilder.create(
-                        (p, s) -> new BigBlockStructureEntity(b.getBlockEntityType(), p, s), this).build());
+                        (p, s) -> new StructureBlockEntity(b.getBlockEntityType(), p, s), this).build());
 
-        return BlockRegistry.queue(new BigBlockStructure.Simple<>(this, FabricBlockSettings.copyOf(this), registerererer), "large_compressor_structure");
+        return BlockRegistry.queue(new Structure(this, FabricBlockSettings.copyOf(this), registerererer), "large_compressor_structure");
     }
 
     @Override
@@ -102,11 +116,7 @@ public class LargeCompressorBlock extends BigBlock<BigBlockStructure.Simple<BigB
     @Override
     public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context)
     {
-        return VoxelShapes.combineAndSimplify(
-                Block.createCuboidShape(-10, 0, -16, 26, 16, 32),
-                Block.createCuboidShape(-6, 16, -16, 22, 47, 32),
-                BooleanBiFunction.OR);
-//        return shapeMap.get(state.get(FACING));
+        return shapeMap.get(state.get(FACING));
     }
 
     @Override
@@ -129,9 +139,9 @@ public class LargeCompressorBlock extends BigBlock<BigBlockStructure.Simple<BigB
         return LivingMachines.LARGE_COMPRESSOR_BE.instantiate(pos, state);
     }
 
-    public static class Structure extends BigBlockStructure<BigBlockStructureEntity> implements LivingMachineStructure
+    public static class Structure extends BigBlockStructure<StructureBlockEntity> implements LivingMachineStructure
     {
-        public Structure(BigBlock<?> parent, Settings settings, BlockEntityRegisterererer<BigBlockStructureEntity> registerBlockEntity)
+        public Structure(BigBlock<?> parent, Settings settings, BlockEntityRegisterererer<StructureBlockEntity> registerBlockEntity)
         {
             super(parent, settings, registerBlockEntity);
         }
@@ -140,6 +150,53 @@ public class LargeCompressorBlock extends BigBlock<BigBlockStructure.Simple<BigB
         public EnumMap<StructureProperty, StructureProperty.Entry> getProperties()
         {
             return StructureProperty.EMPTY;
+        }
+    }
+
+    public static class StructureBlockEntity extends BigBlockStructureEntity
+    {
+
+        private static final FluidPump PUMP = FluidPump.of(-1, () -> AcceptorModes.PUSH, true);
+
+        public StructureBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
+        {
+            super(type, pos, state);
+        }
+
+        @Nullable
+        public FluidPump getFluidPump(Direction direction)
+        {
+            if (apis.contains(FluidPump.SIDED.getId()))
+            {
+                var controller = getControllerBE(LargeCompressorBlockEntity.class);
+                if (controller != null)
+                {
+                    Direction facing = controller.getCachedState().get(FACING);
+
+                    if (facing.rotateYClockwise() == direction)
+                    {
+                        return PUMP;
+                    }
+                }
+            }
+            return null;
+        }
+
+        @Nullable
+        public Storage<FluidVariant> getOutputStorage(Direction direction)
+        {
+            if (apis.contains(FluidStorage.SIDED.getId()))
+            {
+                var controller = getControllerBE(LargeCompressorBlockEntity.class);
+                if (controller != null)
+                {
+                    Direction facing = controller.getCachedState().get(FACING);
+
+                    if (facing.rotateYClockwise() == direction)
+                        return controller.getOutputStorage();
+                }
+            }
+            return null;
         }
     }
 }

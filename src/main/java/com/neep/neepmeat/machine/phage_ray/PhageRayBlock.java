@@ -155,7 +155,7 @@ public class PhageRayBlock extends BigBlock<PhageRayBlock.PhageRayStructureBlock
             @Override
             public float updateInflux(float influx)
             {
-                var be =  getControllerBE();
+                var be =  getControllerBE(PhageRayBlockEntity.class);
                 if (be != null)
                     return be.getBloodAcceptor().updateInflux(influx);
 
@@ -163,19 +163,19 @@ public class PhageRayBlock extends BigBlock<PhageRayBlock.PhageRayStructureBlock
             }
         }
 
-        @Nullable
-        private PhageRayBlockEntity getControllerBE()
-        {
-            if (controllerPos == null)
-            {
-                return null;
-            }
-            else if (cache == null)
-            {
-                cache = BlockApiCache.create(MeatLib.VOID_LOOKUP, (ServerWorld) getWorld(), controllerPos);
-            }
-
-            return cache.getBlockEntity() instanceof PhageRayBlockEntity controller ? controller : null;
-        }
+//        @Nullable
+//        private PhageRayBlockEntity getControllerBE()
+//        {
+//            if (controllerPos == null)
+//            {
+//                return null;
+//            }
+//            else if (cache == null)
+//            {
+//                cache = BlockApiCache.create(MeatLib.VOID_LOOKUP, (ServerWorld) getWorld(), controllerPos);
+//            }
+//
+//            return cache.getBlockEntity() instanceof PhageRayBlockEntity controller ? controller : null;
+//        }
     }
 }

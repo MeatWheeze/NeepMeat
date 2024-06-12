@@ -114,6 +114,8 @@ public class NMFluids
     public static Block PINKDRINK;
     public static FluidFactory PINKDRINK_FACTORY = new FluidFactory(NeepMeat.NAMESPACE, "pinkdrink", false, 5, 2);
 
+    public static final FluidFactory COMPRESSED_AIR = new FluidFactory(NeepMeat.NAMESPACE, "compressed_air", false, 5, 2);
+
     public static FluidVariant CHARGED;
     public static FluidVariant UNCHARGED;
 
@@ -195,6 +197,7 @@ public class NMFluids
         FLOWING_PINKDRINK = PINKDRINK_FACTORY.registerFlowing();
         PINKDRINK_BUCKET = PINKDRINK_FACTORY.registerItem();
         PINKDRINK = PINKDRINK_FACTORY.registerBlock();
+
 
         FluidEnegyRegistry.getInstance().register(STILL_ETHEREAL_FUEL, 2 * PowerUtils.DROPLET_POWER, true, null);
 //        FluidEnegyRegistry.getInstance().register(Fluids.WATER, 1 * PowerUtils.DROPLET_POWER, false, null);

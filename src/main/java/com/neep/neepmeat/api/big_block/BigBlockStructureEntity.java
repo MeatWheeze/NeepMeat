@@ -4,8 +4,12 @@ import com.google.common.collect.Lists;
 import com.neep.meatlib.MeatLib;
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
 import net.fabricmc.fabric.api.lookup.v1.block.BlockApiCache;
+import com.neep.neepmeat.machine.live_machine.block.entity.LargeCompressorBlockEntity;
+import net.fabricmc.fabric.api.lookup.v1.block.BlockApiCache;
 import net.fabricmc.fabric.api.lookup.v1.block.BlockApiLookup;
+import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.nbt.*;
 import net.minecraft.server.world.ServerWorld;
@@ -20,9 +24,9 @@ import java.util.List;
 
 public class BigBlockStructureEntity extends SyncableBlockEntity
 {
-    @Nullable
-    protected BlockPos controllerPos;
+    @Nullable protected BlockPos controllerPos;
     protected List<Identifier> apis = Lists.newArrayList();
+    @Nullable private BlockApiCache<Void, Void> cache;
 
     public BigBlockStructureEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
     {
@@ -103,18 +107,22 @@ public class BigBlockStructureEntity extends SyncableBlockEntity
         return controllerPos;
     }
 
-//    @Nullable
-//    protected <T> T getControllerBE()
-//    {
-//        if (controllerPos == null)
-//        {
-//            return null;
-//        }
-//        else if (cache == null)
-//        {
-//            cache = BlockApiCache.create(MeatLib.VOID_LOOKUP, (ServerWorld) getWorld(), controllerPos);
-//        }
-//
-//        return cache.getBlockEntity() instanceof CharnelPumpBlockEntity controller ? controller : null;
-//    }
+    @Nullable
+    protected <T extends BlockEntity> T getControllerBE(Class<T> clazz)
+    {
+        if (controllerPos == null)
+        {
+            return null;
+        }
+        else if (cache == null)
+        {
+            cache = BlockApiCache.create(MeatLib.VOID_LOOKUP, (ServerWorld) getWorld(), controllerPos);
+        }
+
+        @Nullable BlockEntity be = cache.getBlockEntity();
+        if (clazz.isInstance(be))
+            return (T) be;
+        else
+            return null;
+    }
 }

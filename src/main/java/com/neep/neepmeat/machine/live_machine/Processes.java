@@ -69,5 +69,6 @@ public class Processes
         getInstance().register(new LargeTrommelProcess());
         getInstance().register(new TreeVacuumProcess());
         getInstance().register(new CharnelPumpProcess());
+        getInstance().register(new LargeCompressorProcess());
     }
 }
