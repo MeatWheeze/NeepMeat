@@ -72,12 +72,12 @@ public class CharnelPumpClient implements ClientComponent
         {
             soundManager.stop(upSound);
 
-            soundManager.play(be.hasFluid ? glugSound : downSound);
+            soundManager.play(be.hasFluidCurrentCycle ? glugSound : downSound);
         }
     }
 
     private static boolean matches(float ticks, int value, float increment)
     {
-        return Math.abs(ticks - value) < Math.min(1, increment);
+        return Math.round(ticks) == value && Math.abs(ticks - value) < Math.min(1, increment);
     }
 }

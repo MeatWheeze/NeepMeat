@@ -18,6 +18,7 @@ import com.neep.neepmeat.machine.well_head.WellHeadBlockEntity;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
+import net.fabricmc.fabric.api.transfer.v1.storage.StorageUtil;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -53,7 +54,10 @@ public class CharnelPumpBlockEntity extends SyncableBlockEntity implements Livin
     private float progressIncrement;
 
     public boolean hasAir;
-    public boolean hasFluid;
+    private boolean hasFluid;
+    public boolean hasFluidCurrentCycle; // Render fluid colum for the current animation cycle
+
+    private float progress;
 
     public CharnelPumpBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
     {
@@ -71,7 +75,7 @@ public class CharnelPumpBlockEntity extends SyncableBlockEntity implements Livin
         writhingSpoutFinder.get().tick();
 
         Set<WellHeadBlockEntity> found = wellHeadFinder.get().result();
-        long distributeAmount = FluidConstants.BUCKET; // Integer multiple of bucket, will vary based on power input.
+        long distributeAmount = FluidConstants.BUCKET;
 
         // Consume compressed air
         boolean hasAir = false;
@@ -97,31 +101,38 @@ public class CharnelPumpBlockEntity extends SyncableBlockEntity implements Livin
             spawnSpouts();
 
             // Consume work fluid and eject ores
-            boolean fluidConsumed = false;
-            if (hasAir)
+            boolean fluidAvailable = StorageUtil.simulateExtract(inputStorage, FluidVariant.of(NMFluids.STILL_WORK_FLUID), distributeAmount, transaction) == distributeAmount;
+
+            if (hasAir && fluidAvailable)
             {
-                for (var wellHead : found)
+                progress = (float) Math.max(0.0f, progress - puPower);
+
+                if (progress <= 0)
                 {
-                    try (Transaction inner = transaction.openNested())
+                    progress = 100;
+
+                    for (var wellHead : found)
                     {
-                        long extracted = inputStorage.extract(FluidVariant.of(NMFluids.STILL_WORK_FLUID), distributeAmount, inner);
-                        if (extracted == distributeAmount)
+                        try (Transaction inner = transaction.openNested())
                         {
-                            wellHead.receiveFluid(distributeAmount, inner);
-                            fluidConsumed = true;
-                            inner.commit();
-                        }
-                        else
-                        {
-                            inner.abort();
+                            long extracted = inputStorage.extract(FluidVariant.of(NMFluids.STILL_WORK_FLUID), distributeAmount, inner);
+                            if (extracted == distributeAmount)
+                            {
+                                wellHead.receiveFluid(distributeAmount, inner);
+                                inner.commit();
+                            }
+                            else
+                            {
+                                inner.abort();
+                            }
                         }
                     }
                 }
             }
 
-            if (this.hasFluid != fluidConsumed)
+            if (this.hasFluid != fluidAvailable)
             {
-                this.hasFluid = fluidConsumed;
+                this.hasFluid = fluidAvailable;
                 sync();
             }
         }
@@ -244,6 +255,7 @@ public class CharnelPumpBlockEntity extends SyncableBlockEntity implements Livin
             if (be.animationTicks == 0)
             {
                 be.animationTicks = 100;
+                be.hasFluidCurrentCycle = be.hasFluid;
             }
         }
         else

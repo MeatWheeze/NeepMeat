@@ -50,7 +50,7 @@ public class CharnelPumpRenderer implements BlockEntityRenderer<CharnelPumpBlock
         float t = be.animationTicks > 0 ? 100 - be.animationTicks + tickDelta * be.progressIncrement() : 0;
 
         float height = 0;
-        if (be.hasFluid)
+        if (be.hasFluidCurrentCycle)
             height = 3 * plungerAnimation(be, t) + 4 / 16f;
 
         FluidVariant fluidVariant = FluidVariant.of(NMFluids.STILL_WORK_FLUID);
