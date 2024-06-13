@@ -188,6 +188,10 @@
     "sounds": [
       "neepmeat:charnel_pump_glug"
     ] },
+  "charnel_pump_idle": { "subtitle": "subtitles.neepmeat.charnel_pump_idle",
+    "sounds": [
+      "neepmeat:charnel_pump_idle"
+    ] },
 
   "plc_select_block": { "subtitle": "subtitles.neepmeat.plc_select_block",
     "sounds": [

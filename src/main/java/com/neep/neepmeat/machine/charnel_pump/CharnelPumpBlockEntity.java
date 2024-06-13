@@ -1,7 +1,6 @@
 package com.neep.neepmeat.machine.charnel_pump;
 
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
-import com.neep.meatlib.util.ClientComponent;
 import com.neep.meatlib.util.ClientComponents;
 import com.neep.meatlib.util.LazySupplier;
 import com.neep.neepmeat.BalanceConstants;
@@ -22,7 +21,6 @@ import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.particle.ParticleTypes;
@@ -50,7 +48,6 @@ public class CharnelPumpBlockEntity extends SyncableBlockEntity implements Livin
 
     private final ClientComponents.Holder<?> holder = new ClientComponents.Holder<>(this);
 
-    public final long minPower = 1000;
 
     public int animationTicks;
     private float progressIncrement;
@@ -61,6 +58,11 @@ public class CharnelPumpBlockEntity extends SyncableBlockEntity implements Livin
     public CharnelPumpBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
     {
         super(type, pos, state);
+    }
+
+    public static boolean canRun(double puPower)
+    {
+        return puPower >= (double) BalanceConstants.CHARNEL_PUMP_MIN_POWER / PowerUtils.referencePower();
     }
 
     public void serverTick(double puPower, Storage<FluidVariant> inputStorage, Transaction transaction)
@@ -90,7 +92,7 @@ public class CharnelPumpBlockEntity extends SyncableBlockEntity implements Livin
             sync();
         }
 
-        if (puPower >= (float) minPower / PowerUtils.referencePower())
+        if (canRun(puPower))
         {
             spawnSpouts();
 
@@ -220,7 +222,7 @@ public class CharnelPumpBlockEntity extends SyncableBlockEntity implements Livin
     {
         if (hasAir)
         {
-            if (progressIncrement < (float) minPower / PowerUtils.referencePower())
+            if (!canRun(progressIncrement))
             {
                 spawnAirParticles();
             }
