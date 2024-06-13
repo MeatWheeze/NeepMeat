@@ -39,6 +39,9 @@ public class WrithingEarthSpoutBlock extends BaseBlock implements BlockEntityPro
         if (!state.isIn(BlockTags.DIRT) && !(air && state.isAir()))
             return false;
 
+        if (distance < 4)
+            return true;
+
         BlockPos.Mutable mutable = pos.mutableCopy();
         int neighbourCount = 0;
 
@@ -88,7 +91,7 @@ public class WrithingEarthSpoutBlock extends BaseBlock implements BlockEntityPro
     @Override
     public void randomTick(BlockState state, ServerWorld world, BlockPos pos, Random random)
     {
-        propagate(world, pos, state, 0, 7, random, !world.getBlockState(pos.up()).isOf(NMBlocks.WELL_HEAD));
+        propagate(world, pos, state, 0, 9, random, !world.getBlockState(pos.up()).isOf(NMBlocks.WELL_HEAD));
 //        if (!canSurvive(state, world, pos))
 //        {
 //            world.setBlockState(pos, Blocks.DIRT.getDefaultState());
