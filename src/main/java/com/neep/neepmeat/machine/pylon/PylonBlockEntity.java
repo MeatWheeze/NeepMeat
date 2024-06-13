@@ -1,35 +1,30 @@
 package com.neep.neepmeat.machine.pylon;
 
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
+import com.neep.meatlib.util.ClientComponents;
 import com.neep.meatlib.util.LazySupplier;
 import com.neep.neepmeat.api.DataPort;
 import com.neep.neepmeat.api.DataVariant;
 import com.neep.neepmeat.api.enlightenment.EnlightenmentUtil;
 import com.neep.neepmeat.api.machine.MotorisedBlock;
-import com.neep.neepmeat.client.hud.HUDOverlays;
-import com.neep.neepmeat.client.sound.PylonSoundInstance;
 import com.neep.neepmeat.entity.GlomeEntity;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.init.NMBlocks;
+import com.neep.neepmeat.init.NMEntities;
 import com.neep.neepmeat.init.NMSounds;
 import com.neep.neepmeat.machine.advanced_integrator.AdvancedIntegratorBlockEntity;
 import com.neep.neepmeat.machine.advanced_integrator.SimpleDataPort;
 import com.neep.neepmeat.machine.motor.MotorEntity;
 import com.neep.neepmeat.machine.well_head.BlockEntityFinder;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntityType;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.world.ServerWorld;
-import net.minecraft.sound.SoundCategory;
 import net.minecraft.util.math.*;
 import net.minecraft.world.World;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.Random;
 
@@ -53,6 +48,8 @@ public class PylonBlockEntity extends SyncableBlockEntity implements MotorisedBl
                     .predicate(be -> be.getPos().isWithinDistance(getPos(), radius * 2)));
 
     protected final Random random = new Random(0);
+
+    private final ClientComponents.Holder<PylonBlockEntity> holder = new ClientComponents.Holder<>(this);
 
     public PylonBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
     {
@@ -197,63 +194,9 @@ public class PylonBlockEntity extends SyncableBlockEntity implements MotorisedBl
 
     // --- Client things ---
 
-    @Environment(value=EnvType.CLIENT)
-    @Nullable
-    private Client client;
-
-    @Environment(EnvType.CLIENT)
     public void clientTick()
     {
-        float clamped = MathHelper.clamp(getSpeed() - RUNNING_SPEED, 0, RUNNING_SPEED * 2) / (RUNNING_SPEED * 2);
-        float threshold = MathHelper.lerp(clamped, 0f, 0.6f);
-        float p = random.nextFloat();
-        if (p < threshold)
-        {
-            world.getNonSpectatingEntities(PlayerEntity.class, getBox()).stream().findFirst().ifPresent(pl ->
-            {
-                Client.causeVignette();
-            });
-        }
 
-        if (client == null)
-            client = new Client(this, pos);
-        client.tick();
-    }
-
-    @Environment(value=EnvType.CLIENT)
-    private static class Client
-    {
-        private final PylonBlockEntity be;
-        private final MinecraftClient client = MinecraftClient.getInstance();
-        private final PylonSoundInstance mainSound;
-        private final PylonSoundInstance runningSound;
-
-        Client(PylonBlockEntity be, BlockPos pos)
-        {
-            this.be = be;
-            this.mainSound = new PylonSoundInstance(be, pos, NMSounds.PYLON_START, SoundCategory.BLOCKS);
-            this.runningSound = new PylonSoundInstance(be, pos, NMSounds.PYLON_ACTIVE, SoundCategory.BLOCKS);
-        }
-
-        protected static void causeVignette()
-        {
-            HUDOverlays.startPylonVignette();
-        }
-
-        public void tick()
-        {
-            if (!client.getSoundManager().isPlaying(mainSound))
-            {
-                client.getSoundManager().play(mainSound);
-            }
-            if (be.isRunning() && !client.getSoundManager().isPlaying(runningSound))
-            {
-                client.getSoundManager().play(runningSound);
-            }
-            if (!be.isRunning() && client.getSoundManager().isPlaying(runningSound))
-            {
-                client.getSoundManager().stop(runningSound);
-            }
-        }
+        holder.get().clientTick();
     }
 }

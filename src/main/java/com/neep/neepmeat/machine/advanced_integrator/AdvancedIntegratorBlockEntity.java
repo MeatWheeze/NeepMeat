@@ -1,29 +1,25 @@
 package com.neep.neepmeat.machine.advanced_integrator;
 
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
+import com.neep.meatlib.util.ClientComponents;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.api.DataVariant;
 import com.neep.neepmeat.api.data.DataUtil;
-import com.neep.neepmeat.client.sound.BlockSoundInstance;
-import com.neep.neepmeat.init.NMSounds;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.transfer.v1.storage.StoragePreconditions;
 import net.fabricmc.fabric.api.transfer.v1.storage.base.SingleVariantStorage;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntityType;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.sound.SoundCategory;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
 
 public class AdvancedIntegratorBlockEntity extends SyncableBlockEntity
 {
     private final DataStorage storage = new DataStorage(this::sync);
+    private final ClientComponents.Holder<AdvancedIntegratorBlockEntity> holder = new ClientComponents.Holder<>(this);
 
     public AdvancedIntegratorBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
     {
@@ -71,10 +67,7 @@ public class AdvancedIntegratorBlockEntity extends SyncableBlockEntity
 
     public void clientTick()
     {
-        if (client == null)
-            client = new Client(this);
-
-        client.tick();
+        holder.get().clientTick();
     }
 
     public static class DataStorage extends SingleVariantStorage<DataVariant>
@@ -139,29 +132,6 @@ public class AdvancedIntegratorBlockEntity extends SyncableBlockEntity
         {
             super.onFinalCommit();
             finalCallback.run();
-        }
-    }
-
-    @Environment(EnvType.CLIENT)
-    private Client client;
-
-    @Environment(EnvType.CLIENT)
-    private static class Client
-    {
-        private final MinecraftClient client = MinecraftClient.getInstance();
-        private final BlockSoundInstance sound;
-
-        public Client(AdvancedIntegratorBlockEntity be)
-        {
-            this.sound = new BlockSoundInstance(NMSounds.ADVANCED_INTEGRATOR_AMBIENT, SoundCategory.BLOCKS, be.getPos().up(3));
-        }
-
-        public void tick()
-        {
-            if (!client.getSoundManager().isPlaying(sound))
-            {
-                client.getSoundManager().play(sound);
-            }
         }
     }
 }
