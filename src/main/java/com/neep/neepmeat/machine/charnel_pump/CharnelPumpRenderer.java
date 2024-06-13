@@ -47,7 +47,7 @@ public class CharnelPumpRenderer implements BlockEntityRenderer<CharnelPumpBlock
         int upLight = WorldRenderer.getLightmapCoordinates(be.getWorld(), be.getPos().up(1));
 
 //        float s = (NMMaths.sin(be.getWorld().getTime(), AnimationTickHolder.getPartialTicks(), 0.1f) + 1) / 2;
-        float t = be.animationTicks > 0 ? 100 - be.animationTicks + tickDelta : 0;
+        float t = be.animationTicks > 0 ? 100 - be.animationTicks + tickDelta * be.progressIncrement() : 0;
 
         float height = 0;
         if (be.hasFluid)

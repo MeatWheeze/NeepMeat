@@ -38,35 +38,46 @@ public class CharnelPumpClient implements ClientComponent
     @Override
     public void clientTick()
     {
+        float increment = be.progressIncrement();
+
         if (be.getWorld().getTime() % 4 == 0)
         {
-            if (be.hasAir && !CharnelPumpBlockEntity.canRun(be.progressIncrement()))
+            if (be.hasAir && !CharnelPumpBlockEntity.canRun(increment))
             {
                 if (!soundManager.isPlaying(idleSound))
                     soundManager.play(idleSound);
             }
             else
+            {
                 soundManager.stop(idleSound);
+            }
         }
 
-        if (be.animationTicks == 100)
+        // Fractional animation ticks allows the animation to run at different speeds.
+        // Unfortunately, executing events at certain ticks now requires more mathematical jank.
+        if (matches(be.animationTicks, 100, increment))
         {
             soundManager.stop(glugSound);
             soundManager.stop(upSound);
         }
-        else if (be.animationTicks == 99)
+        else if (matches(be.animationTicks, 99, increment))
         {
             soundManager.play(upSound);
         }
-        else if (be.animationTicks == 45)
+        else if (matches(be.animationTicks, 45, increment))
         {
             soundManager.play(topSound);
         }
-        else if (be.animationTicks == 40)
+        else if (matches(be.animationTicks, 40, increment))
         {
             soundManager.stop(upSound);
 
             soundManager.play(be.hasFluid ? glugSound : downSound);
         }
+    }
+
+    private static boolean matches(float ticks, int value, float increment)
+    {
+        return Math.abs(ticks - value) < Math.min(1, increment);
     }
 }
