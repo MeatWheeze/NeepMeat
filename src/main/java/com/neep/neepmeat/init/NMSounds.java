@@ -35,6 +35,7 @@ public class NMSounds
     public static SoundEvent CHARNEL_PUMP_UP = SoundRegistry.registerSound(NeepMeat.NAMESPACE, "charnel_pump_up");
     public static SoundEvent CHARNEL_PUMP_TOP = SoundRegistry.registerSound(NeepMeat.NAMESPACE, "charnel_pump_top");
     public static SoundEvent CHARNEL_PUMP_DOWN = SoundRegistry.registerSound(NeepMeat.NAMESPACE, "charnel_pump_down");
+    public static SoundEvent CHARNEL_PUMP_GLUG = SoundRegistry.registerSound(NeepMeat.NAMESPACE, "charnel_pump_glug");
 
     public static SoundEvent MECHANICAL_MACHINE_PLACE = SoundRegistry.registerSound(NeepMeat.NAMESPACE, "mechanical_machine_place");
     public static SoundEvent MECHANICAL_MACHINE_BREAK = SoundRegistry.registerSound(NeepMeat.NAMESPACE, "mechanical_machine_break");
@@ -80,6 +81,8 @@ public class NMSounds
     public static SoundEvent MARATHON_BEEP = SoundRegistry.registerSound(NeepMeat.NAMESPACE, "beep");
 
     public static SoundEvent WRENCH_CLICK = SoundRegistry.registerSound(NeepMeat.NAMESPACE, "wrench_click");
+
+    public static SoundEvent COMPRESSED_AIR_FILL = SoundRegistry.registerSound(NeepMeat.NAMESPACE, "compressed_air_fill");
 
     public static SoundEvent VIVISECTION_COMPLETE = SoundRegistry.registerSound(NeepMeat.NAMESPACE, "vivisection_complete");
     public static SoundEvent SCALPEL_HIT = SoundRegistry.registerSound(NeepMeat.NAMESPACE, "scalpel_hit");

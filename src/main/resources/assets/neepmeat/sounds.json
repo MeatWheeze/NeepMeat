@@ -184,6 +184,10 @@
     "sounds": [
       "neepmeat:charnel_pump_down"
     ] },
+  "charnel_pump_glug": { "subtitle": "subtitles.neepmeat.charnel_pump_glug",
+    "sounds": [
+      "neepmeat:charnel_pump_glug"
+    ] },
 
   "plc_select_block": { "subtitle": "subtitles.neepmeat.plc_select_block",
     "sounds": [
@@ -237,5 +241,11 @@
   "wrench_click": { "subtitle": "subtitles.neepmeat.wrench.click",
     "sounds": [
       "neepmeat:wrench_click"
-    ]}
+    ]},
+
+  "compressed_air_fill": { "subtitle": "subtitles.neepmeat.compressed_air_fill",
+    "sounds": [
+      "neepmeat:compressed_air_fill"
+    ]
+  }
 }

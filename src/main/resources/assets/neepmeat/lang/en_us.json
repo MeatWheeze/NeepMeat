@@ -967,6 +967,11 @@
 
   "subtitles.neepmeat.tree_vacuum_suck": "Tree Vacuum Suck",
 
+  "subtitles.neepmeat.charnel_pump_up": "Charnel Pump Up",
+  "subtitles.neepmeat.charnel_pump_top": "Charnel Pump Top",
+  "subtitles.neepmeat.charnel_pump_down": "Charnel Pump Down",
+  "subtitles.neepmeat.charnel_pump_glug": "Charnel Pump Glug",
+
   "subtitles.neepmeat.plc_select_block": "PLC selects",
   "subtitles.neepmeat.plc_select": "PLC selects block",
   "subtitles.neepmeat.implant_instruction_apply": "Implant completed",
@@ -982,6 +987,8 @@
   "subtitles.neepmeat.scalpel_hit": "Scalpel attack",
 
   "subtitles.neepmeat.wrench.click": "Wrench clicks",
+
+  "subtitles.neepmeat.compressed_air_fill": "Compressed Air Fill",
 
   "subtitles.neepmeat.big_lever_on": "Big lever clicks on",
   "subtitles.neepmeat.big_lever_off": "Big lever clicks off"

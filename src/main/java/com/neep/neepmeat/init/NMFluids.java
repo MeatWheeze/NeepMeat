@@ -3,16 +3,11 @@ package com.neep.neepmeat.init;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.api.processing.FluidEnegyRegistry;
 import com.neep.neepmeat.api.processing.PowerUtils;
-import com.neep.neepmeat.fluid.BuiltFluid;
-import com.neep.neepmeat.fluid.FluidBuilder;
-import com.neep.neepmeat.fluid.FluidFactory;
-import com.neep.neepmeat.fluid.MeatFluidFactory;
+import com.neep.neepmeat.fluid.*;
 import com.neep.neepmeat.fluid.ore_fat.OreFatFluidFactory;
 import com.neep.neepmeat.item.MeatCartonStorage;
 import io.github.tropheusj.milk.Milk;
-import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
-import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
-import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
+import net.fabricmc.fabric.api.transfer.v1.fluid.*;
 import net.fabricmc.fabric.api.transfer.v1.fluid.base.EmptyItemFluidStorage;
 import net.fabricmc.fabric.api.transfer.v1.fluid.base.FullItemFluidStorage;
 import net.minecraft.block.Block;
@@ -199,6 +194,7 @@ public class NMFluids
         PINKDRINK = new FluidBuilder(NeepMeat.NAMESPACE, "pinkdrink").withItem().withBlock().build();
 
         COMPRESSED_AIR = new FluidBuilder(NeepMeat.NAMESPACE, "compressed_air").withItem().withBlock().build();
+        FluidVariantAttributes.register(COMPRESSED_AIR.still(), new CompressedAirFluidVariantAttributeHandler());
 
         FluidEnegyRegistry.getInstance().register(STILL_ETHEREAL_FUEL, 2 * PowerUtils.DROPLET_POWER, true, null);
 //        FluidEnegyRegistry.getInstance().register(Fluids.WATER, 1 * PowerUtils.DROPLET_POWER, false, null);

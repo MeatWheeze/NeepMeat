@@ -26,7 +26,7 @@ public class CharnelPumpClient implements ClientComponent
 
         this.upSound = new BlockSoundInstance(NMSounds.CHARNEL_PUMP_UP, SoundCategory.BLOCKS, be.getPos().up(3));
         this.topSound = new BlockSoundInstance(NMSounds.CHARNEL_PUMP_TOP, SoundCategory.BLOCKS, be.getPos().up(3));
-        this.downSound = new BlockSoundInstance(NMSounds.CHARNEL_PUMP_DOWN, SoundCategory.BLOCKS, be.getPos().up(3));
+        this.downSound = new BlockSoundInstance(NMSounds.CHARNEL_PUMP_GLUG, SoundCategory.BLOCKS, be.getPos().up(3));
     }
 
     @Override

@@ -4,6 +4,7 @@ import com.neep.neepmeat.fluid.MixableFluid;
 import net.fabricmc.fabric.api.transfer.v1.context.ContainerItemContext;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariantAttributes;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.fabricmc.fabric.api.transfer.v1.storage.StoragePreconditions;
 import net.fabricmc.fabric.api.transfer.v1.storage.StorageUtil;
@@ -48,7 +49,6 @@ public class WritableSingleFluidStorage extends SingleVariantStorage<FluidVarian
     {
         ItemStack stack = player.getStackInHand(hand);
         Storage<FluidVariant> storage = FluidStorage.ITEM.find(stack, ContainerItemContext.ofPlayerHand(player, hand));
-        SoundEvent fill = buffer.variant.getFluid().getBucketFillSound().orElse(SoundEvents.ITEM_BUCKET_FILL);
 
         if (world.isClient())
             return true;
@@ -57,13 +57,13 @@ public class WritableSingleFluidStorage extends SingleVariantStorage<FluidVarian
         {
             if (player.isCreative())
             {
-
                 try (Transaction transaction = Transaction.openOuter())
                 {
                     StorageView<FluidVariant> view = storage.iterator().next();
                     if (!view.isResourceBlank())
                     {
-                        world.playSound(null, player.getBlockPos(), fill, SoundCategory.BLOCKS, 1f, 1.5f);
+                        SoundEvent bucketFillSound = FluidVariantAttributes.getEmptySound(view.getResource());
+                        world.playSound(null, player.getBlockPos(), bucketFillSound, SoundCategory.BLOCKS, 1f, 1.5f);
                         buffer.insert(view.getResource(), view.getAmount(), transaction);
                         transaction.commit();
                         return true;
@@ -75,16 +75,21 @@ public class WritableSingleFluidStorage extends SingleVariantStorage<FluidVarian
             Transaction inner;
             try (Transaction transaction = Transaction.openOuter())
             {
+                // Get empty sound before resource can be extracted from the item.
+                FluidVariant stored = StorageUtil.findStoredResource(storage);
+                SoundEvent empty = stored != null ? FluidVariantAttributes.getEmptySound(stored) : SoundEvents.ITEM_BUCKET_EMPTY;
+
                 inner = transaction.openNested();
                 if (StorageUtil.move(storage, buffer, variant -> true, Long.MAX_VALUE, inner) > 0)
                 {
-
-                    world.playSound(null, player.getBlockPos(), fill, SoundCategory.BLOCKS, 1f, 1.5f);
+                    world.playSound(null, player.getBlockPos(), empty, SoundCategory.BLOCKS, 1f, 1.5f);
                     inner.commit();
                     transaction.commit();
                     return true;
                 }
                 inner.abort();
+
+                SoundEvent fill = FluidVariantAttributes.getFillSound(buffer.variant);
 
                 inner = transaction.openNested();
                 if (StorageUtil.move(buffer, storage, variant -> true, Long.MAX_VALUE, inner) > 0)
