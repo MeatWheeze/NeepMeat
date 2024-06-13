@@ -1,6 +1,8 @@
 package com.neep.neepmeat.machine.charnel_pump;
 
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
+import com.neep.meatlib.util.ClientComponent;
+import com.neep.meatlib.util.ClientComponents;
 import com.neep.meatlib.util.LazySupplier;
 import com.neep.neepmeat.BalanceConstants;
 import com.neep.neepmeat.api.live_machine.ComponentType;
@@ -20,6 +22,7 @@ import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.particle.ParticleTypes;
@@ -44,6 +47,8 @@ public class CharnelPumpBlockEntity extends SyncableBlockEntity implements Livin
 
     private final LazySupplier<BlockEntityFinder<WrithingEarthSpoutBlockEntity>> writhingSpoutFinder = LazySupplier.of(() ->
         new BlockEntityFinder<>(getWorld(), NMBlockEntities.WRITHING_EARTH_SPOUT, 20).addAll(BlockEntityFinder.chunkRange(getPos())));
+
+    private final ClientComponents.Holder<?> holder = new ClientComponents.Holder<>(this);
 
     public final long minPower = 1000;
 
@@ -229,6 +234,7 @@ public class CharnelPumpBlockEntity extends SyncableBlockEntity implements Livin
 
     public static void clientTick(World world, BlockPos pos, BlockState state, CharnelPumpBlockEntity be)
     {
+        be.holder.get().clientTick();
         be.clientTickAir();
 
         if (be.progressIncrement > 0 && be.hasAir)
@@ -259,5 +265,10 @@ public class CharnelPumpBlockEntity extends SyncableBlockEntity implements Livin
             this.progressIncrement = progressIncrement;
             sync();
         }
+    }
+
+    public static boolean isRising(float animationTicks)
+    {
+        return animationTicks < 60;
     }
 }

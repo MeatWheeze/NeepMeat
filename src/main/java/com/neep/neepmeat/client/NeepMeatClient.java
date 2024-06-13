@@ -90,6 +90,8 @@ public class NeepMeatClient implements ClientModInitializer
     {
         Myron.registerNamespace(NeepMeat.NAMESPACE);
 
+        NMClientComponents.init();
+
         registerRenderers();
         registerLayers();
         registerScreens();

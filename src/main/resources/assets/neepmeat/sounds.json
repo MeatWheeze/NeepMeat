@@ -172,6 +172,19 @@
     ]
   },
 
+  "charnel_pump_up": { "subtitle": "subtitles.neepmeat.charnel_pump_up",
+    "sounds": [
+      "neepmeat:charnel_pump_up"
+    ] },
+  "charnel_pump_top": { "subtitle": "subtitles.neepmeat.charnel_pump_top",
+    "sounds": [
+      "neepmeat:charnel_pump_top"
+    ] },
+  "charnel_pump_down": { "subtitle": "subtitles.neepmeat.charnel_pump_down",
+    "sounds": [
+      "neepmeat:charnel_pump_down"
+    ] },
+
   "plc_select_block": { "subtitle": "subtitles.neepmeat.plc_select_block",
     "sounds": [
       "neepmeat:plc_select_2"

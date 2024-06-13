@@ -25,13 +25,13 @@ public class CharnelPumpRenderer implements BlockEntityRenderer<CharnelPumpBlock
     public static float plungerAnimation(CharnelPumpBlockEntity be, float t)
     {
         float s;
-        if (t < 70)
+        if (CharnelPumpBlockEntity.isRising(t))
         {
-            s = easeInOutSine(t / 70);
+            s = easeInOutSine(t / 60);
         }
         else
         {
-            s = 1 - (t - 70) / 30;
+            s = 1 - (t - 60) / 40;
         }
         return s;
     }
