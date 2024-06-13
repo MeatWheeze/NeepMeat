@@ -6,6 +6,7 @@ import com.neep.meatlib.client.api.event.InputEvents;
 import com.neep.meatlib.client.api.event.UseAttackCallback;
 import com.neep.meatlib.graphics.GraphicsEffects;
 import com.neep.meatlib.network.PacketBufUtil;
+import com.neep.meatlib.util.ClientComponents;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.datagen.tag.NMTags;
 import com.neep.neepmeat.init.NMBlocks;
@@ -13,8 +14,6 @@ import com.neep.neepmeat.init.NMGraphicsEffects;
 import com.neep.neepmeat.init.NMSounds;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
-import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
@@ -41,7 +40,6 @@ import net.minecraft.network.packet.s2c.play.EntitySpawnS2CPacket;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
@@ -64,9 +62,11 @@ public class PhageRayEntity extends Entity
 
     @Nullable private PhageRayBlockEntity parent;
 
-    private boolean trigger = false;
-    private int triggerTicks = 0;
+    boolean trigger = false;
+    int triggerTicks = 0;
     private double range = 30;
+
+    private final ClientComponents.Holder<PhageRayEntity> holder = new ClientComponents.EntityHolder<>(this);
 
     public PhageRayEntity(EntityType<?> type, World world)
     {
@@ -76,7 +76,7 @@ public class PhageRayEntity extends Entity
 
     private void syncBeamEffect(ServerPlayerEntity player, World world, Vec3d start, Vec3d end, Vec3d velocity, float scale, int maxTime)
     {
-        if (world.isClient)
+        if (getWorld().isClient)
             throw new IllegalStateException("packet create called on the client!");
 
         PacketByteBuf byteBuf = GraphicsEffects.createPacket(NMGraphicsEffects.PHAGE_RAY, world);
@@ -298,7 +298,7 @@ public class PhageRayEntity extends Entity
         return 20 / f / 30f;
     }
 
-    private void setPlayerTrigger(boolean trigger)
+    void setPlayerTrigger(boolean trigger)
     {
         this.trigger = trigger;
     }
@@ -467,43 +467,9 @@ public class PhageRayEntity extends Entity
         });
     }
 
-    // --- Client things ---
-
-    @Environment(EnvType.CLIENT)
-    @Nullable
-    private Client client;
-
-    @Environment(EnvType.CLIENT)
     public void clientTick()
     {
-        if (client == null)
-            client = new Client(this);
-
-        SoundManager manager = MinecraftClient.getInstance().getSoundManager();
-        if (isRunning() && trigger && triggerTicks == 0)
-        {
-            manager.play(new EntityTrackingSoundInstance(NMSounds.PHAGE_RAY_CHARGE, SoundCategory.BLOCKS, 16, 1, this, 0));
-        }
-
-        if (isRunning() && triggerTicks >= 20 && !manager.isPlaying(client.runningInstance))
-        {
-            manager.play(client.runningInstance);
-        }
-        else if (triggerTicks == 0 && manager.isPlaying(client.runningInstance))
-        {
-            manager.stop(client.runningInstance);
-        }
-    }
-
-    @Environment(EnvType.CLIENT)
-    private static class TrackingSoundInstance extends EntityTrackingSoundInstance
-    {
-        public TrackingSoundInstance(SoundEvent sound, SoundCategory category, float volume, float pitch, Entity entity)
-        {
-            super(sound, category, volume, pitch, entity, 0);
-            this.repeat = true;
-            this.repeatDelay = 0;
-        }
+        holder.get().clientTick();
     }
 
     @Nullable
@@ -513,70 +479,4 @@ public class PhageRayEntity extends Entity
         return NMBlocks.PHAGE_RAY.asItem().getDefaultStack();
     }
 
-    @Environment(EnvType.CLIENT)
-    public static class Client
-    {
-        private static boolean prevUse;
-
-        private final TrackingSoundInstance runningInstance;
-
-        public Client(PhageRayEntity parent)
-        {
-            runningInstance = new TrackingSoundInstance(
-                    NMSounds.PHAGE_RAY_RUNNING, SoundCategory.BLOCKS,
-                    16, 1,
-                    parent);
-        }
-
-        public static void init()
-        {
-            InputEvents.POST_INPUT.register((window, key, scancode, action, modifiers) ->
-            {
-                MinecraftClient client = MinecraftClient.getInstance();
-                if (client.player == null)
-                    return;
-
-                if (client.player.getVehicle() instanceof PhageRayEntity phageRay)
-                {
-                    if (client.options.useKey.isPressed())
-                    {
-                        if (!prevUse)
-                        {
-                            phageRay.setPlayerTrigger(true);
-                            sendPacket(client.player, true);
-                            prevUse = true;
-                        }
-                    }
-                    else
-                    {
-                        if (prevUse)
-                        {
-                            phageRay.setPlayerTrigger(false);
-                            sendPacket(client.player, false);
-                            prevUse = false;
-                        }
-                    }
-                }
-            });
-
-            UseAttackCallback.DO_USE.register(client ->
-            {
-                if (client.player.getVehicle() instanceof PhageRayEntity phageRay)
-                {
-                    return false;
-                }
-                return true;
-            });
-        }
-
-        private static void sendPacket(PlayerEntity player, boolean trigger)
-        {
-            PacketByteBuf buf = PacketByteBufs.create();
-
-            buf.writeBoolean(trigger);
-
-            ClientPlayNetworking.send(CHANNEL_ID, buf);
-        }
-
-    }
 }

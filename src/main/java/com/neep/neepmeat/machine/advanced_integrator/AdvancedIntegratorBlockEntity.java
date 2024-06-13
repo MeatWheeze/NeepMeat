@@ -19,7 +19,7 @@ import net.minecraft.util.math.BlockPos;
 public class AdvancedIntegratorBlockEntity extends SyncableBlockEntity
 {
     private final DataStorage storage = new DataStorage(this::sync);
-    private final ClientComponents.Holder<AdvancedIntegratorBlockEntity> holder = new ClientComponents.Holder<>(this);
+    private final ClientComponents.Holder<AdvancedIntegratorBlockEntity> holder = new ClientComponents.BlockEntityHolder<>(this);
 
     public AdvancedIntegratorBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
     {

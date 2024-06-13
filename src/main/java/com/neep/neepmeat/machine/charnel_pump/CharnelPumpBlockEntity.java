@@ -47,7 +47,7 @@ public class CharnelPumpBlockEntity extends SyncableBlockEntity implements Livin
     private final LazySupplier<BlockEntityFinder<WrithingEarthSpoutBlockEntity>> writhingSpoutFinder = LazySupplier.of(() ->
         new BlockEntityFinder<>(getWorld(), NMBlockEntities.WRITHING_EARTH_SPOUT, 20).addAll(BlockEntityFinder.chunkRange(getPos())));
 
-    private final ClientComponents.Holder<?> holder = new ClientComponents.Holder<>(this);
+    private final ClientComponents.Holder<?> holder = new ClientComponents.BlockEntityHolder<>(this);
 
 
     public float animationTicks;
