@@ -35,4 +35,5 @@ run/
 # reaper
 
 *.reapeaks
+*.RPP
 /src/main/generated/.cache/
