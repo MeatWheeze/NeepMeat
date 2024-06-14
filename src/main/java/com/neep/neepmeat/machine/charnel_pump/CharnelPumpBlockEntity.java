@@ -75,7 +75,7 @@ public class CharnelPumpBlockEntity extends SyncableBlockEntity implements Livin
         writhingSpoutFinder.get().tick();
 
         Set<WellHeadBlockEntity> found = wellHeadFinder.get().result();
-        long distributeAmount = FluidConstants.BUCKET;
+        long distributeAmount = FluidConstants.BOTTLE;
 
         // Consume compressed air
         boolean hasAir = false;

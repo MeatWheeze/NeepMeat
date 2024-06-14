@@ -17,6 +17,7 @@
     "ServerPlayNetworkHandlerMixin",
     "ServerWorldMixin",
     "WorldChunkMixin",
+    "feature.CountPlacementModifierAccessor",
     "loot.CombinedEntryAccessor",
     "loot.ItemEntryAccessor"
   ],
