@@ -1,0 +1,26 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "iii",
+    "t t",
+    "bmb"
+  ],
+  "key": {
+    "m": {
+      "item": "neepmeat:meat_steel_ingot"
+    },
+    "i": {
+      "item": "minecraft:iron_ingot"
+    },
+    "b": {
+      "item": "neepmeat:meat_steel_component"
+    },
+    "t": {
+      "item": "neepmeat:basic_tank"
+    }
+  },
+  "result": {
+    "item": "neepmeat:large_compressor",
+    "count": 1
+  }
+}
