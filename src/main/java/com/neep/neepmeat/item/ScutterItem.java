@@ -68,6 +68,7 @@ public abstract class ScutterItem<T extends ScutterEntity> extends BaseItem
                 world.spawnEntity(scutter);
             }
 
+            context.getStack().decrement(1);
             return ActionResult.SUCCESS;
 
         }
