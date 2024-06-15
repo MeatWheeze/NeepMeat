@@ -36,7 +36,7 @@ public class WrithingEarthSpoutBlock extends BaseBlock implements BlockEntityPro
 
     private boolean canSpread(BlockState state, World world, BlockPos pos, int distance, boolean air)
     {
-        if (!state.isIn(BlockTags.DIRT) && !(air && state.isAir()))
+        if (!state.isIn(BlockTags.DIRT) && !state.isIn(BlockTags.NETHER_CARVER_REPLACEABLES) && !(air && state.isAir()))
             return false;
 
         if (distance < 4)

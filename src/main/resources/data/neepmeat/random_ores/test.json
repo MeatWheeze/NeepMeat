@@ -11,7 +11,7 @@
   "modifiers": [
     {
       "type": "neepmeat:biome_list",
-      "value": 4000000,
+      "value": 0,
       "function": "add",
       "biomes": [
         "minecraft:swamp",
@@ -20,7 +20,7 @@
     },
     {
       "type": "neepmeat:biome_tag",
-      "value": 300,
+      "value": 1,
       "function": "mul",
       "tag": "#minecraft:is_ocean"
     }
