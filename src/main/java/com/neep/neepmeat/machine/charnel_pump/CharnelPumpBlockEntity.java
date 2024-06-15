@@ -142,7 +142,12 @@ public class CharnelPumpBlockEntity extends SyncableBlockEntity implements Livin
     {
         BlockState surfaceState = world.getBlockState(surfacePos);
         return BlockEntityFinder.chunkRange(pos).contains(world.getChunk(surfacePos).getPos())
-                && (surfaceState.isIn(BlockTags.DIRT) || surfaceState.isIn(BlockTags.STONE_ORE_REPLACEABLES));
+                && (surfaceState.isIn(BlockTags.DIRT)
+                    || surfaceState.isIn(BlockTags.STONE_ORE_REPLACEABLES)
+                    || surfaceState.isIn(BlockTags.LUSH_GROUND_REPLACEABLE)
+                    || surfaceState.isIn(BlockTags.SNOW)
+                    || surfaceState.isIn(BlockTags.SHOVEL_MINEABLE)
+        );
     }
 
     // Check for existing sprouts. If none are found, spawn a new one.
@@ -157,7 +162,7 @@ public class CharnelPumpBlockEntity extends SyncableBlockEntity implements Livin
         {
             // Find a position on the surface within the adjacent 3x3 square of chunks.
             BlockPos rand = BlockPos.iterateRandomly(random, 1, getPos(), 25).iterator().next();
-            int surfaceHeight = world.getChunk(rand).sampleHeightmap(Heightmap.Type.WORLD_SURFACE, rand.getX(), rand.getZ());
+            int surfaceHeight = world.getChunk(rand).sampleHeightmap(Heightmap.Type.OCEAN_FLOOR_WG, rand.getX(), rand.getZ());
             BlockPos surfacePos = new BlockPos(rand.getX(), surfaceHeight, rand.getZ());
 
             if (canSpoutSpawn(surfacePos))

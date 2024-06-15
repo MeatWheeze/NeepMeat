@@ -208,7 +208,6 @@ public class OreFatRegistry implements SimpleSynchronousResourceReloadListener
             {
                 try (InputStream stream = manager.getResource(id).get().getInputStream())
                 {
-
                     Reader reader = new InputStreamReader(stream);
                     JsonElement rootElement = JsonParser.parseReader(reader);
                     JsonObject rootObject = (JsonObject) rootElement;
