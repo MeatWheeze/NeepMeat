@@ -36,5 +36,8 @@ public class NMBlockTagProvider extends FabricTagProvider.BlockTagProvider
         getOrCreateTagBuilder(NMTags.BLOCK_CRUSHING_INPUTS)
                 .addOptionalTag(ConventionalBlockTags.ORES)
         ;
+
+        getOrCreateTagBuilder(NMTags.CHARNEL_PUMP_OUTPUT_ORES)
+                .addOptionalTag(ConventionalBlockTags.ORES);
     }
 }

@@ -2,6 +2,7 @@ package com.neep.neepmeat.machine.well_head;
 
 import com.neep.meatlib.api.event.DataPackPostProcess;
 import com.neep.neepmeat.NeepMeat;
+import com.neep.neepmeat.datagen.tag.NMTags;
 import com.neep.neepmeat.mixin.feature.CountPlacementModifierAccessor;
 import net.fabricmc.fabric.api.tag.convention.v1.ConventionalBlockTags;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
@@ -42,7 +43,6 @@ public class RandomOres
 
     private final Random random = new Random();
 
-    private final Set<TagKey<Block>> matchTags = new HashSet<>();
     private final MapThing<Entry> entryMap = new MapThing<>();
 
     public static List<ItemStack> random(ServerWorld world, BlockPos origin)
@@ -52,13 +52,7 @@ public class RandomOres
 
     public static void init()
     {
-        INSTANCE.registerTag(ConventionalBlockTags.ORES);
         DataPackPostProcess.EVENT.register(INSTANCE::postProcess);
-    }
-
-    public void registerTag(TagKey<Block> tag)
-    {
-        matchTags.add(tag);
     }
 
     public List<ItemStack> random1(ServerWorld world, BlockPos origin)
@@ -122,7 +116,7 @@ public class RandomOres
 
                         oreFeatureConfig.targets.forEach(t ->
                         {
-                            if (t.state.streamTags().anyMatch(matchTags::contains))
+                            if (t.state.streamTags().anyMatch(NMTags.CHARNEL_PUMP_OUTPUT_ORES::equals))
                             {
                                 // Multiply count by size to hopefully get the expected number of ore blocks.
                                 entryList.add(new MutableEntry(t.state, maxCount * oreFeatureConfig.size));

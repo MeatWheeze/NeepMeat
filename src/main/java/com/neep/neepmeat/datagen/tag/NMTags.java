@@ -27,6 +27,8 @@ public class NMTags
     public static final TagKey<Block> BLOCK_CRUSHING_INPUTS = TagKey.of(Registry.BLOCK.getKey(), new Identifier(NeepMeat.NAMESPACE, "block_crushing_inputs"));
     public static final TagKey<Item> BLOCK_CRUSHING_OUTPUTS = TagKey.of(Registry.ITEM.getKey(), new Identifier(NeepMeat.NAMESPACE, "block_crushing_outputs"));
 
+    public static final TagKey<Block> CHARNEL_PUMP_OUTPUT_ORES = TagKey.of(Registry.BLOCK.getKey(), new Identifier(NeepMeat.NAMESPACE, "charnel_pump_output_ores"));
+
     public static final TagKey<EntityType<?>> CLONEABLE = TagKey.of(Registry.ENTITY_TYPE.getKey(), new Identifier(NeepMeat.NAMESPACE, "cloneable"));
 
     private static TagKey<Item> registerItem(String namespace, String id)
