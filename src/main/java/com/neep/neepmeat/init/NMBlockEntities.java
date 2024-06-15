@@ -294,6 +294,7 @@ public class NMBlockEntities
         BloodAcceptor.SIDED.registerForBlockEntity(VSCBlockEntity::getBloodAcceptor, VSC);
 
         METAL_BARREL = register("metal_barrel", (pos, state) -> new MetalBarrelBlockEntity(METAL_BARREL, pos, state), NMBlocks.METAL_BARREL);
+        ItemStorage.SIDED.registerForBlockEntity(MetalBarrelBlockEntity::getStorage, METAL_BARREL);
         LARGE_FAN = register("large_fan", (pos, state) -> new LargeFanBlockEntity(LARGE_FAN, pos, state), NMBlocks.LARGE_FAN);
 
         // --- Surgery Machine ---

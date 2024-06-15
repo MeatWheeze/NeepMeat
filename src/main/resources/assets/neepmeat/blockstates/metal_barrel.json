@@ -1,54 +1,162 @@
 {
   "variants": {
-    "facing=down,open=false": {
+    "type=single,facing=down,open=false": {
       "model": "neepmeat:block/metal_barrel",
       "x": 180
     },
-    "facing=down,open=true": {
+    "type=single,facing=down,open=true": {
       "model": "neepmeat:block/metal_barrel_open",
       "x": 180
     },
-    "facing=east,open=false": {
+    "type=single,facing=east,open=false": {
       "model": "neepmeat:block/metal_barrel",
       "x": 90,
       "y": 90
     },
-    "facing=east,open=true": {
+    "type=single,facing=east,open=true": {
       "model": "neepmeat:block/metal_barrel_open",
       "x": 90,
       "y": 90
     },
-    "facing=north,open=false": {
+    "type=single,facing=north,open=false": {
       "model": "neepmeat:block/metal_barrel",
       "x": 90
     },
-    "facing=north,open=true": {
+    "type=single,facing=north,open=true": {
       "model": "neepmeat:block/metal_barrel_open",
       "x": 90
     },
-    "facing=south,open=false": {
+    "type=single,facing=south,open=false": {
       "model": "neepmeat:block/metal_barrel",
       "x": 90,
       "y": 180
     },
-    "facing=south,open=true": {
+    "type=single,facing=south,open=true": {
       "model": "neepmeat:block/metal_barrel_open",
       "x": 90,
       "y": 180
     },
-    "facing=up,open=false": {
+    "type=single,facing=up,open=false": {
       "model": "neepmeat:block/metal_barrel"
     },
-    "facing=up,open=true": {
+    "type=single,facing=up,open=true": {
       "model": "neepmeat:block/metal_barrel_open"
     },
-    "facing=west,open=false": {
+    "type=single,facing=west,open=false": {
       "model": "neepmeat:block/metal_barrel",
       "x": 90,
       "y": 270
     },
-    "facing=west,open=true": {
+    "type=single,facing=west,open=true": {
       "model": "neepmeat:block/metal_barrel_open",
+      "x": 90,
+      "y": 270
+    },
+
+
+    "type=top,facing=down,open=false": {
+      "model": "neepmeat:block/metal_barrel_top",
+      "x": 180
+    },
+    "type=top,facing=down,open=true": {
+      "model": "neepmeat:block/metal_barrel_top_open",
+      "x": 180
+    },
+    "type=top,facing=east,open=false": {
+      "model": "neepmeat:block/metal_barrel_top",
+      "x": 90,
+      "y": 90
+    },
+    "type=top,facing=east,open=true": {
+      "model": "neepmeat:block/metal_barrel_top_open",
+      "x": 90,
+      "y": 90
+    },
+    "type=top,facing=north,open=false": {
+      "model": "neepmeat:block/metal_barrel_top",
+      "x": 90
+    },
+    "type=top,facing=north,open=true": {
+      "model": "neepmeat:block/metal_barrel_top_open",
+      "x": 90
+    },
+    "type=top,facing=south,open=false": {
+      "model": "neepmeat:block/metal_barrel_top",
+      "x": 90,
+      "y": 180
+    },
+    "type=top,facing=south,open=true": {
+      "model": "neepmeat:block/metal_barrel_top_open",
+      "x": 90,
+      "y": 180
+    },
+    "type=top,facing=up,open=false": {
+      "model": "neepmeat:block/metal_barrel_top"
+    },
+    "type=top,facing=up,open=true": {
+      "model": "neepmeat:block/metal_barrel_top_open"
+    },
+    "type=top,facing=west,open=false": {
+      "model": "neepmeat:block/metal_barrel_top",
+      "x": 90,
+      "y": 270
+    },
+    "type=top,facing=west,open=true": {
+      "model": "neepmeat:block/metal_barrel_top_open",
+      "x": 90,
+      "y": 270
+    },
+
+
+    "type=bottom,facing=down,open=false": {
+      "model": "neepmeat:block/metal_barrel_bottom",
+      "x": 180
+    },
+    "type=bottom,facing=down,open=true": {
+      "model": "neepmeat:block/metal_barrel_bottom",
+      "x": 180
+    },
+    "type=bottom,facing=east,open=false": {
+      "model": "neepmeat:block/metal_barrel_bottom",
+      "x": 90,
+      "y": 90
+    },
+    "type=bottom,facing=east,open=true": {
+      "model": "neepmeat:block/metal_barrel_bottom",
+      "x": 90,
+      "y": 90
+    },
+    "type=bottom,facing=north,open=false": {
+      "model": "neepmeat:block/metal_barrel_bottom",
+      "x": 90
+    },
+    "type=bottom,facing=north,open=true": {
+      "model": "neepmeat:block/metal_barrel_bottom",
+      "x": 90
+    },
+    "type=bottom,facing=south,open=false": {
+      "model": "neepmeat:block/metal_barrel_bottom",
+      "x": 90,
+      "y": 180
+    },
+    "type=bottom,facing=south,open=true": {
+      "model": "neepmeat:block/metal_barrel_bottom",
+      "x": 90,
+      "y": 180
+    },
+    "type=bottom,facing=up,open=false": {
+      "model": "neepmeat:block/metal_barrel_bottom"
+    },
+    "type=bottom,facing=up,open=true": {
+      "model": "neepmeat:block/metal_barrel_bottom"
+    },
+    "type=bottom,facing=west,open=false": {
+      "model": "neepmeat:block/metal_barrel_bottom",
+      "x": 90,
+      "y": 270
+    },
+    "type=bottom,facing=west,open=true": {
+      "model": "neepmeat:block/metal_barrel_bottom",
       "x": 90,
       "y": 270
     }
