@@ -34,6 +34,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.Heightmap;
 import net.minecraft.world.World;
+import net.minecraft.world.chunk.Chunk;
 
 import java.util.Set;
 
@@ -147,6 +148,7 @@ public class CharnelPumpBlockEntity extends SyncableBlockEntity implements Livin
                     || surfaceState.isIn(BlockTags.LUSH_GROUND_REPLACEABLE)
                     || surfaceState.isIn(BlockTags.SNOW)
                     || surfaceState.isIn(BlockTags.SHOVEL_MINEABLE)
+                    || surfaceState.isIn(BlockTags.NETHER_CARVER_REPLACEABLES)
         );
     }
 
@@ -162,18 +164,31 @@ public class CharnelPumpBlockEntity extends SyncableBlockEntity implements Livin
         {
             // Find a position on the surface within the adjacent 3x3 square of chunks.
             BlockPos rand = BlockPos.iterateRandomly(random, 1, getPos(), 25).iterator().next();
-            int surfaceHeight = world.getChunk(rand).sampleHeightmap(Heightmap.Type.OCEAN_FLOOR_WG, rand.getX(), rand.getZ());
-            BlockPos surfacePos = new BlockPos(rand.getX(), surfaceHeight, rand.getZ());
 
-            if (canSpoutSpawn(surfacePos))
+            Chunk chunk = world.getChunk(rand);
+            BlockPos columnBottom = new BlockPos(rand.getX(), pos.getY() - 10, rand.getZ());
+            BlockPos columnTop = new BlockPos(rand.getX(), pos.getY() + 25, rand.getZ());
+            for (BlockPos blockPos : BlockPos.iterate(columnBottom, columnTop))
             {
-                world.setBlockState(surfacePos, NMBlocks.WRITHING_EARTH_SPOUT.getDefaultState(), Block.NOTIFY_ALL);
-                world.playSound(null, surfacePos, SoundEvents.ITEM_HONEYCOMB_WAX_ON, SoundCategory.BLOCKS, 1, 1);
+                BlockState state = chunk.getBlockState(blockPos);
+                if (state.isAir() || !state.getFluidState().isEmpty())
+                {
+                    BlockPos surfacePos = blockPos.down();
 
-                ((ServerWorld) world).spawnParticles(NMParticles.BODY_COMPOUND_SHOWER, surfacePos.getX() + 0.5, surfacePos.getY() + 1, surfacePos.getZ() + 0.5,
-                        50,
-                        1, 10, 1, 0.1);
+                    if (canSpoutSpawn(surfacePos))
+                    {
+                        world.setBlockState(surfacePos, NMBlocks.WRITHING_EARTH_SPOUT.getDefaultState(), Block.NOTIFY_ALL);
+                        world.playSound(null, surfacePos, SoundEvents.ITEM_HONEYCOMB_WAX_ON, SoundCategory.BLOCKS, 1, 1);
+
+                        ((ServerWorld) world).spawnParticles(NMParticles.BODY_COMPOUND_SHOWER, surfacePos.getX() + 0.5, surfacePos.getY() + 1, surfacePos.getZ() + 0.5,
+                                50,
+                                1, 10, 1, 0.1);
+
+                        return;
+                    }
+                }
             }
+
         }
     }
 
