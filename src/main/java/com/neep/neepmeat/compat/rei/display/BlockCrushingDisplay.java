@@ -43,7 +43,7 @@ public class BlockCrushingDisplay implements Display
                                 .stream()
                                 .flatMap(e -> e.input().getAll().stream())
                                 .collect(Collectors.toUnmodifiableList()),
-                        (int) recipe.getBaseAmount())
+                        1)
         );
     }
 
