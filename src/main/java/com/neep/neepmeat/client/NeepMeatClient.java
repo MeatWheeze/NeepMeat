@@ -114,7 +114,7 @@ public class NeepMeatClient implements ClientModInitializer
         PlayerImplantStatusS2CPacket.Client.registerReceiver();
         EntityAnimationS2C.Client.registerReceiver();
         MachineDiagnosticsRequest.Client.registerReceiver();
-        ClientPlayNetworking.registerGlobalReceiver(OreFatRegistry.SYNC_TYPE, OreFatSyncS2CPacket.Client::onPacket);
+        ClientPlayNetworking.registerGlobalReceiver(OreFatRegistry.SYNC_ID, OreFatSyncS2CPacket.Client::onPacket);
         ClientPlayNetworking.registerGlobalReceiver(BlockCrushingRegistry.CHANNEL_ID, BlockCrushingRegistry.Client::onPacket);
         NMClientNetwork.init();
         NMKeys.registerKeybindings();
