@@ -10,7 +10,6 @@ import com.neep.neepmeat.api.processing.BlockCrushingRegistry;
 import com.neep.neepmeat.api.processing.OreFatRegistry;
 import com.neep.neepmeat.block.entity.FurnaceBurnerImpl;
 import com.neep.neepmeat.client.datagen.NMModelProvider;
-import com.neep.neepmeat.datagen.NMAdvancements;
 import com.neep.neepmeat.datagen.NMBlockTagProvider;
 import com.neep.neepmeat.datagen.NMItemTagProvider;
 import com.neep.neepmeat.datagen.NMRecipeGenerator;

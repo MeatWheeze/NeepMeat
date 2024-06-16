@@ -1,9 +1,9 @@
 package com.neep.neepmeat.fluid;
 
 import com.neep.meatlib.block.MeatlibBlockSettings;
+import com.neep.meatlib.item.MeatlibItemSettings;
 import com.neep.neepmeat.NMItemGroups;
 import com.neep.neepmeat.item.BaseBucketItem;
-import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;

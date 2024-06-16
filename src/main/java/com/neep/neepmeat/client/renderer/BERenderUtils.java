@@ -22,13 +22,11 @@ import net.minecraft.client.render.model.BakedQuad;
 import net.minecraft.client.texture.Sprite;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.Vec3f;
+import net.minecraft.util.math.*;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.BlockRenderView;
 import net.minecraft.world.World;
-
+import org.lwjgl.system.MemoryStack;
 
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
@@ -184,7 +182,7 @@ public class BERenderUtils
         {
             case NORTH:
             {
-                matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(180));
+                matrices.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(180));
                 break;
             }
             case EAST:
@@ -302,9 +300,12 @@ public class BERenderUtils
 
     private static void quad(VertexConsumer consumer, MatrixStack.Entry matrixEntry, BakedQuad quad, float brightness, float red, float green, float blue, float alpha, int light)
     {
-        Vector3f unit = quad.getFace().getUnitVector();
+        Vec3f unit3 = quad.getFace().getUnitVector();
         Matrix4f matrix4f = matrixEntry.getPositionMatrix();
-        Vector3f vector3f = matrixEntry.getNormalMatrix().transform(unit);
+//        Vec3f vector3f = matrixEntry.getNormalMatrix().transform(unit);
+//        matrixEntry.getPositionMatrix().
+        Vector4f unit = new Vector4f(unit3.getX(), unit3.getY(), unit3.getZ(), 1);
+        unit.transform(matrix4f);
 
         int[] js = quad.getVertexData();
         int j = js.length / 8;
@@ -328,8 +329,9 @@ public class BERenderUtils
 
                 float m = byteBuffer.getFloat(16);
                 float n = byteBuffer.getFloat(20);
-                Vector4f vector4f = matrix4f.transform(new Vector4f(f, g, h, 1.0F));
-                consumer.vertex(vector4f.x(), vector4f.y(), vector4f.z(), o, p, q, s, m, n, OverlayTexture.DEFAULT_UV, light, vector3f.x(), vector3f.y(), vector3f.z());
+                Vector4f vector4f = new Vector4f(f, g, h, 1.0F);
+                vector4f.transform(matrix4f);
+                consumer.vertex(vector4f.getX(), vector4f.getY(), vector4f.getZ(), o, p, q, s, m, n, OverlayTexture.DEFAULT_UV, light, unit.getX(), unit.getY(), unit.getZ());
             }
         }
     }

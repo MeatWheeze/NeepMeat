@@ -22,7 +22,7 @@ public class NMTags
     public static final TagKey<Item> GUIDE_LOOKUP = TagKey.of(Registry.ITEM.getKey(), new Identifier(NeepMeat.NAMESPACE, "guide_lookup"));
     public static final TagKey<Item> RAW_ORES = registerItem("c", "raw_ores");
 
-    public static final TagKey<Block> PHAGE_RAY_OVERRIDE = TagKey.of(Registries.BLOCK.getKey(), new Identifier(NeepMeat.NAMESPACE, "phage_ray_override_hardness"));
+    public static final TagKey<Block> PHAGE_RAY_OVERRIDE = TagKey.of(Registry.BLOCK.getKey(), new Identifier(NeepMeat.NAMESPACE, "phage_ray_override_hardness"));
 
     public static final TagKey<Block> BLOCK_CRUSHING_INPUTS = TagKey.of(Registry.BLOCK.getKey(), new Identifier(NeepMeat.NAMESPACE, "block_crushing_inputs"));
     public static final TagKey<Item> BLOCK_CRUSHING_OUTPUTS = TagKey.of(Registry.ITEM.getKey(), new Identifier(NeepMeat.NAMESPACE, "block_crushing_outputs"));

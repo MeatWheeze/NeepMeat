@@ -25,7 +25,7 @@ public class NMItemTagProvider extends FabricTagProvider.ItemTagProvider
     @Override
     public String getName()
     {
-        return "Tags for " + this.registryRef.getValue() + " (" + NeepMeat.NAMESPACE + ")";
+        return "Tags for " + this.registry.getKey().getValue() + " (" + NeepMeat.NAMESPACE + ")";
     }
 
     @Override
@@ -33,13 +33,13 @@ public class NMItemTagProvider extends FabricTagProvider.ItemTagProvider
     {
         getOrCreateTagBuilder(NMTags.CHARNEL_COMPACTOR).addOptionalTag(NMTags.RAW_MEAT);
         getOrCreateTagBuilder(NMTags.CHARNEL_COMPACTOR).addOptionalTag(NMTags.RAW_FISH);
-        getOrCreateTagBuilder(NMTags.CHARNEL_COMPACTOR).addOptionalTag(TagKey.of(Registries.ITEM.getKey(), new Identifier("chestcavity", "salvageable_human_organ_meat")));
-        getOrCreateTagBuilder(NMTags.CHARNEL_COMPACTOR).addOptionalTag(TagKey.of(Registries.ITEM.getKey(), new Identifier("chestcavity", "salvageable_animal_organ_meat")));
-        getOrCreateTagBuilder(NMTags.CHARNEL_COMPACTOR).addOptionalTag(TagKey.of(Registries.ITEM.getKey(), new Identifier("chestcavity", "salvageable_rotten_flesh")));
+        getOrCreateTagBuilder(NMTags.CHARNEL_COMPACTOR).addOptionalTag(TagKey.of(Registry.ITEM.getKey(), new Identifier("chestcavity", "salvageable_human_organ_meat")));
+        getOrCreateTagBuilder(NMTags.CHARNEL_COMPACTOR).addOptionalTag(TagKey.of(Registry.ITEM.getKey(), new Identifier("chestcavity", "salvageable_animal_organ_meat")));
+        getOrCreateTagBuilder(NMTags.CHARNEL_COMPACTOR).addOptionalTag(TagKey.of(Registry.ITEM.getKey(), new Identifier("chestcavity", "salvageable_rotten_flesh")));
 
         getOrCreateTagBuilder(NMTags.BLOCK_CRUSHING_OUTPUTS)
-                .addOptionalTag(ConventionalItemTags.RAW_ORES)
-                .addOptionalTag(TagKey.of(Registries.ITEM.getKey(), new Identifier("mythicmetals", "raw_ores")))
+                .addOptionalTag(NMTags.RAW_ORES)
+                .addOptionalTag(TagKey.of(Registry.ITEM.getKey(), new Identifier("mythicmetals", "raw_ores")))
                 ;
 
         getOrCreateTagBuilder(NMTags.RAW_ORES)
