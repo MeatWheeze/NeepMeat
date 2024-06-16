@@ -8,6 +8,8 @@ public interface NMREIPlugin
 {
     CategoryIdentifier<GrindingDisplay> GRINDING = CategoryIdentifier.of(NeepMeat.NAMESPACE, "plugins/grinding");
     CategoryIdentifier<GrindingDisplay> ADVANCED_CRUSHING = CategoryIdentifier.of(NeepMeat.NAMESPACE, "plugins/advanced_crushing");
+    CategoryIdentifier<BlockCrushingDisplay> BLOCK_CRUSHING = CategoryIdentifier.of(NeepMeat.NAMESPACE, "plugins/block_crushing");
+    CategoryIdentifier<BlockCrushingDisplay> ADVANCED_BLOCK_CRUSHING = CategoryIdentifier.of(NeepMeat.NAMESPACE, "plugins/advanced_block_crushing");
     CategoryIdentifier<CompactingDisplay> COMPACTING = CategoryIdentifier.of(NeepMeat.NAMESPACE, "plugins/compacting");
     CategoryIdentifier<MixingDisplay> MIXING = CategoryIdentifier.of(NeepMeat.NAMESPACE, "plugins/mixing");
     CategoryIdentifier<AlloySmeltingDisplay> ALLOY_SMELTING = CategoryIdentifier.of(NeepMeat.NAMESPACE, "plugins/alloy_smelting");

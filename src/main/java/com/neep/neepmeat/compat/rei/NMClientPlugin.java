@@ -4,6 +4,7 @@ import com.google.common.collect.Iterators;
 import com.google.common.collect.UnmodifiableIterator;
 import com.neep.meatlib.recipe.MeatRecipeType;
 import com.neep.meatlib.recipe.MeatlibRecipe;
+import com.neep.neepmeat.api.processing.BlockCrushingRegistry;
 import com.neep.neepmeat.compat.rei.category.*;
 import com.neep.neepmeat.compat.rei.display.*;
 import com.neep.neepmeat.datagen.tag.NMTags;
@@ -51,8 +52,12 @@ public class NMClientPlugin implements REIClientPlugin, NMREIPlugin
         registerRecipeFiller(registry, ItemManufactureRecipe.class, PLCRecipes.MANUFACTURE, ItemManufactureDisplay::new);
         registerRecipeFiller(registry, EntityToItemRecipe.class, PLCRecipes.ENTITY_TO_ITEM, EntityToItemDisplay::new);
         registry.add(new TransformingToolDisplay(TransformingToolRecipe.getInstance()));
-        registerRecipeFiller(registry, CrushingRecipe.class, NMrecipeTypes.GRINDING, r -> !r.destroy(), GrindingDisplay.filler(GRINDING));
-        registerRecipeFiller(registry, AdvancedCrushingRecipe.class, NMrecipeTypes.ADVANCED_CRUSHING, r -> !r.destroy(), GrindingDisplay.filler(ADVANCED_CRUSHING));
+        registerRecipeFiller(registry, CrushingRecipe.class, NMrecipeTypes.GRINDING, GrindingDisplay::isValid, GrindingDisplay.filler(GRINDING));
+        registerRecipeFiller(registry, AdvancedCrushingRecipe.class, NMrecipeTypes.ADVANCED_CRUSHING, GrindingDisplay::isValid, GrindingDisplay.filler(ADVANCED_CRUSHING));
+        registerRecipeFiller(registry, BlockCrushingRecipe.class, NMrecipeTypes.GRINDING, e -> true,
+                BlockCrushingDisplay.filler(BLOCK_CRUSHING, BlockCrushingRegistry.INSTANCE::getBasicEntries));
+        registerRecipeFiller(registry, AdvancedBlockCrushingRecipe.class, NMrecipeTypes.ADVANCED_CRUSHING,
+                BlockCrushingDisplay.filler(ADVANCED_BLOCK_CRUSHING, BlockCrushingRegistry.INSTANCE::getAdvancedEntries));
         registerRecipeFiller(registry, NormalTrommelRecipe.class, NMrecipeTypes.TROMMEL, TrommelDisplay::new);
         registerRecipeFiller(registry, FluidHeatingRecipe.class, NMrecipeTypes.HEATING, HeatingDisplay::new);
         registerRecipeFiller(registry, AlloyKilnRecipe.class, NMrecipeTypes.ALLOY_SMELTING, AlloySmeltingDisplay::new);
@@ -81,10 +86,11 @@ public class NMClientPlugin implements REIClientPlugin, NMREIPlugin
         registry.add(
                 new ItemManufactureCategory(),
                 new EntityToItemManufactureCategory(),
-//                new SurgeryCategory(),
                 new TransformingToolCategory(),
                 new GrindingCategory(),
                 new AdvancedCrushingCategory(),
+                new BlockCrushingCategory(BLOCK_CRUSHING, EntryStacks.of(NMBlocks.CRUSHER)),
+                new BlockCrushingCategory(ADVANCED_BLOCK_CRUSHING, EntryStacks.of(LivingMachines.CRUSHER_SEGMENT)),
                 new TrommelCategory(),
                 new HeatingCategory(),
                 new CompactingCategory(),
@@ -98,11 +104,20 @@ public class NMClientPlugin implements REIClientPlugin, NMREIPlugin
         registry.addWorkstations(ITEM_MANUFACTURE, EntryStacks.of(PLCBlocks.PLC.asItem()));
         registry.addWorkstations(ENTITY_TO_ITEM, EntryStacks.of(PLCBlocks.PLC.asItem()));
         registry.addWorkstations(TRANSFORMING_TOOL, EntryStacks.of(PLCBlocks.PLC.asItem()));
-        registry.addWorkstations(GRINDING, EntryStacks.of(NMBlocks.CRUSHER.asItem()));
-        registry.addWorkstations(GRINDING, EntryStacks.of(NMBlocks.LARGE_CRUSHER.asItem()));
-        registry.addWorkstations(GRINDING, EntryStacks.of(LivingMachines.CRUSHER_SEGMENT.asItem()));
-        registry.addWorkstations(ADVANCED_CRUSHING, EntryStacks.of(NMBlocks.LARGE_CRUSHER.asItem()));
-        registry.addWorkstations(ADVANCED_CRUSHING, EntryStacks.of(LivingMachines.CRUSHER_SEGMENT.asItem()));
+        registry.addWorkstations(GRINDING,
+                EntryStacks.of(NMBlocks.CRUSHER.asItem()),
+                EntryStacks.of(NMBlocks.LARGE_CRUSHER.asItem()),
+                EntryStacks.of(LivingMachines.CRUSHER_SEGMENT.asItem()));
+        registry.addWorkstations(ADVANCED_CRUSHING,
+                EntryStacks.of(NMBlocks.LARGE_CRUSHER.asItem()),
+                EntryStacks.of(LivingMachines.CRUSHER_SEGMENT.asItem()));
+        registry.addWorkstations(BLOCK_CRUSHING,
+                EntryStacks.of(NMBlocks.CRUSHER.asItem()),
+                EntryStacks.of(NMBlocks.LARGE_CRUSHER.asItem()),
+                EntryStacks.of(LivingMachines.CRUSHER_SEGMENT.asItem()));
+        registry.addWorkstations(ADVANCED_BLOCK_CRUSHING,
+                EntryStacks.of(NMBlocks.LARGE_CRUSHER.asItem()),
+                EntryStacks.of(LivingMachines.CRUSHER_SEGMENT.asItem()));
         registry.addWorkstations(TROMMEL, EntryStacks.of(NMBlocks.SMALL_TROMMEL.asItem()));
         registry.addWorkstations(TROMMEL, EntryStacks.of(LivingMachines.LARGE_TROMMEL.asItem()));
         registry.addWorkstations(HEATING, EntryStacks.of(FluidTransport.MULTI_TANK.asItem()));
@@ -146,4 +161,5 @@ public class NMClientPlugin implements REIClientPlugin, NMREIPlugin
     {
         registry.registerFiller(typeClass, recipe -> type.test((MeatRecipeType<? super T>) recipe.getType()) && ((Predicate<T>) predicate).test(recipe), filler);
     }
+
 }

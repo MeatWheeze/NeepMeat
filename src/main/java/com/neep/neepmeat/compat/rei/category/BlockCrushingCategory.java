@@ -2,9 +2,7 @@ package com.neep.neepmeat.compat.rei.category;
 
 import com.google.common.collect.Lists;
 import com.neep.neepmeat.NeepMeat;
-import com.neep.neepmeat.compat.rei.NMREIPlugin;
-import com.neep.neepmeat.compat.rei.display.GrindingDisplay;
-import com.neep.neepmeat.init.NMBlocks;
+import com.neep.neepmeat.compat.rei.display.BlockCrushingDisplay;
 import me.shedaniel.math.Point;
 import me.shedaniel.math.Rectangle;
 import me.shedaniel.rei.api.client.gui.Renderer;
@@ -12,34 +10,23 @@ import me.shedaniel.rei.api.client.gui.widgets.Widget;
 import me.shedaniel.rei.api.client.gui.widgets.Widgets;
 import me.shedaniel.rei.api.client.registry.display.DisplayCategory;
 import me.shedaniel.rei.api.common.category.CategoryIdentifier;
-import me.shedaniel.rei.api.common.util.EntryStacks;
 import net.minecraft.text.Text;
 
-import java.text.DecimalFormat;
 import java.util.List;
 
-public class GrindingCategory implements DisplayCategory<GrindingDisplay>
+public class BlockCrushingCategory implements DisplayCategory<BlockCrushingDisplay>
 {
-    @Override
-    public CategoryIdentifier<? extends GrindingDisplay> getCategoryIdentifier()
+    private final CategoryIdentifier<BlockCrushingDisplay> category;
+    private final Renderer icon;
+
+    public BlockCrushingCategory(CategoryIdentifier<BlockCrushingDisplay> category, Renderer icon)
     {
-        return NMREIPlugin.GRINDING;
+        this.category = category;
+        this.icon = icon;
     }
 
     @Override
-    public Text getTitle()
-    {
-        return Text.translatable("category." + NeepMeat.NAMESPACE + ".grinding");
-    }
-
-    @Override
-    public Renderer getIcon()
-    {
-        return EntryStacks.of(NMBlocks.CRUSHER);
-    }
-
-    @Override
-    public List<Widget> setupDisplay(GrindingDisplay display, Rectangle bounds)
+    public List<Widget> setupDisplay(BlockCrushingDisplay display, Rectangle bounds)
     {
         Point startPoint = new Point(bounds.getCenterX() - 41, bounds.y + 10);
         List<Widget> widgets = Lists.newArrayList();
@@ -59,5 +46,23 @@ public class GrindingCategory implements DisplayCategory<GrindingDisplay>
     public int getDisplayHeight()
     {
         return 50;
+    }
+
+    @Override
+    public CategoryIdentifier<BlockCrushingDisplay> getCategoryIdentifier()
+    {
+        return category;
+    }
+
+    @Override
+    public Renderer getIcon()
+    {
+        return icon;
+    }
+
+    @Override
+    public Text getTitle()
+    {
+        return Text.translatable("category." + NeepMeat.NAMESPACE + "." + category.getPath());
     }
 }
