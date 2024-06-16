@@ -170,11 +170,11 @@ public class NMEmiPlugin implements EmiPlugin {
        BlockCrushingRecipe crushingRecipe;
        crushingRecipe = BlockCrushingRecipe.get(registry.getRecipeManager());
         if (crushingRecipe != null)
-            registry.addRecipe(new BlockCrushingEmiRecipe(BLOCK_CRUSHING, crushingRecipe, BlockCrushingRegistry.INSTANCE.getBasicEntries()));
+            registry.addRecipe(new BlockCrushingEmiRecipe(BLOCK_CRUSHING, crushingRecipe, () -> BlockCrushingRegistry.INSTANCE.getBasicEntries()));
 
         crushingRecipe = AdvancedBlockCrushingRecipe.get(registry.getRecipeManager());
         if (crushingRecipe != null)
-            registry.addRecipe(new BlockCrushingEmiRecipe(ADVANCED_BLOCK_CRUSHING, crushingRecipe, BlockCrushingRegistry.INSTANCE.getAdvancedEntries()));
+            registry.addRecipe(new BlockCrushingEmiRecipe(ADVANCED_BLOCK_CRUSHING, crushingRecipe, () -> BlockCrushingRegistry.INSTANCE.getAdvancedEntries()));
 
         // Recipe Handlers
         registry.addRecipeHandler(ScreenHandlerInit.FABRICATOR, new FabricatorRecipeHandler());

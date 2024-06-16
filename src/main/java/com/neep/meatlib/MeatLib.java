@@ -10,17 +10,15 @@ import com.neep.meatlib.registry.ItemRegistry;
 import com.neep.meatlib.registry.SoundRegistry;
 import com.neep.meatlib.storage.StorageEvents;
 import com.neep.neepmeat.NeepMeat;
+import com.neep.neepmeat.util.MinecraftServerAccess;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.lookup.v1.block.BlockApiLookup;
-import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.minecraft.util.Identifier;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import javax.xml.crypto.Data;
 import java.util.HashSet;
-import java.util.Set;
 
 public class MeatLib implements ModInitializer
 {
@@ -53,6 +51,8 @@ public class MeatLib implements ModInitializer
     @Override
     public void onInitialize()
     {
+        MinecraftServerAccess.init();
+
         SoundRegistry.init();
         GraphicsEffects.init();
 //        ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(MeatRecipeManager.getInstance());

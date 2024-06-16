@@ -5,6 +5,7 @@ import com.neep.meatlib.block.PaintedBlockManager;
 import com.neep.meatlib.graphics.client.GraphicsEffectClient;
 import com.neep.meatweapons.particle.PhageRayGraphicsEffect;
 import com.neep.neepmeat.NeepMeat;
+import com.neep.neepmeat.api.processing.BlockCrushingRegistry;
 import com.neep.neepmeat.api.processing.OreFatRegistry;
 import com.neep.neepmeat.api.processing.OreFatSyncS2CPacket;
 import com.neep.neepmeat.client.effect.ReminaGraphicsEvent;
@@ -114,6 +115,7 @@ public class NeepMeatClient implements ClientModInitializer
         EntityAnimationS2C.Client.registerReceiver();
         MachineDiagnosticsRequest.Client.registerReceiver();
         ClientPlayNetworking.registerGlobalReceiver(OreFatRegistry.SYNC_TYPE, OreFatSyncS2CPacket.Client::onPacket);
+        ClientPlayNetworking.registerGlobalReceiver(BlockCrushingRegistry.CHANNEL_ID, BlockCrushingRegistry.Client::onPacket);
         NMClientNetwork.init();
         NMKeys.registerKeybindings();
 

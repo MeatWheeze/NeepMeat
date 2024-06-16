@@ -14,7 +14,7 @@ import java.util.Set;
 @Mixin(PlayerManager.class)
 public class PlayerMangerMixin
 {
-    @Inject(method = "onPlayerConnect", at = @At(value = "INVOKE", target = "net/minecraft/network/packet/s2c/play/SynchronizeRecipesS2CPacket.<init>(Ljava/util/Collection;)V"))
+    @Inject(method = "onPlayerConnect", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/PlayerManager;sendCommandTree(Lnet/minecraft/server/network/ServerPlayerEntity;)V"))
     private void hookOnPlayerConnect(ClientConnection connection, ServerPlayerEntity player, CallbackInfo ci)
     {
         DataPackPostProcess.SYNC.invoker().sync(player.server, Set.of(player));

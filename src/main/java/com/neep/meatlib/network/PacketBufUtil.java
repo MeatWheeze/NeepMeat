@@ -5,6 +5,10 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 
+import java.util.Map;
+import java.util.function.BiConsumer;
+import java.util.function.Function;
+
 public final class PacketBufUtil
 {
 
@@ -104,5 +108,26 @@ public final class PacketBufUtil
             buf.readVarInt(),
             buf.readVarInt(),
             buf.readVarInt());
+    }
+
+    public static <K, V> void writeMap(PacketByteBuf buf, Map<K, V> map, BiConsumer<K, PacketByteBuf> writeKey, BiConsumer<V, PacketByteBuf> writeVal)
+    {
+        buf.writeVarInt(map.size());
+        map.forEach((key, val) ->
+        {
+            writeKey.accept(key, buf);
+            writeVal.accept(val, buf);
+        });
+    }
+
+    public static <K, V> void readMap(PacketByteBuf buf, BiConsumer<K, V> add, Function<PacketByteBuf, K> readKey, Function<PacketByteBuf, V> readVal)
+    {
+        int size = buf.readVarInt();
+        for (int i = 0; i < size; ++i)
+        {
+            K key = readKey.apply(buf);
+            V val = readVal.apply(buf);
+            add.accept(key, val);
+        }
     }
 }

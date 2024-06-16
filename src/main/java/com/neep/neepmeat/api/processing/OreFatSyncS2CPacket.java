@@ -1,5 +1,6 @@
 package com.neep.neepmeat.api.processing;
 
+import com.neep.meatlib.network.PacketBufUtil;
 import com.neep.neepmeat.NeepMeat;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -19,14 +20,8 @@ public record OreFatSyncS2CPacket(Map<NbtCompound, OreFatRegistry.Entry> nbtToEn
     public static OreFatSyncS2CPacket fromBuf(PacketByteBuf buf)
     {
         Map<NbtCompound, OreFatRegistry.Entry> map = new HashMap<>();
-        int size = buf.readVarInt();
-        for (int i = 0; i < size; ++i)
-        {
-            NbtCompound key = buf.readNbt();
-            OreFatRegistry.Entry value = OreFatRegistry.Entry.CODEC.parse(NbtOps.INSTANCE, buf.readNbt())
-                    .resultOrPartial(NeepMeat.LOGGER::error).orElseThrow();
-            map.put(key, value);
-        }
+        PacketBufUtil.readMap(buf, map::put, PacketByteBuf::readNbt, b ->
+                OreFatRegistry.Entry.CODEC.parse(NbtOps.INSTANCE, buf.readNbt()).resultOrPartial(NeepMeat.LOGGER::error).orElseThrow());
 
         return new OreFatSyncS2CPacket(map);
     }
@@ -34,13 +29,10 @@ public record OreFatSyncS2CPacket(Map<NbtCompound, OreFatRegistry.Entry> nbtToEn
     @Override
     public void write(PacketByteBuf buf)
     {
-        buf.writeVarInt(nbtToEntry.size());
-        nbtToEntry.forEach((key, value) ->
-        {
-            buf.writeNbt(key);
-            buf.writeNbt((NbtCompound) OreFatRegistry.Entry.CODEC.encode(value, NbtOps.INSTANCE, new NbtCompound())
-                    .resultOrPartial(NeepMeat.LOGGER::error).orElseThrow());
-        });
+        PacketBufUtil.writeMap(buf, nbtToEntry, (k, b) -> b.writeNbt(k), (v, b) ->
+                b.writeNbt((NbtCompound) OreFatRegistry.Entry.CODEC.encode(v, NbtOps.INSTANCE, new NbtCompound())
+                        .resultOrPartial(NeepMeat.LOGGER::error).orElseThrow())
+        );
     }
 
     @Override
