@@ -1,6 +1,5 @@
 package com.neep.neepmeat.api.processing;
 
-import com.google.common.collect.Maps;
 import com.neep.meatlib.api.event.DataPackPostProcess;
 import com.neep.meatlib.network.PacketBufUtil;
 import com.neep.meatlib.recipe.ingredient.RecipeInput;
@@ -38,9 +37,11 @@ import net.minecraft.registry.tag.TagKey;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
@@ -48,41 +49,24 @@ public class BlockCrushingRegistry
 {
     public static final Identifier CHANNEL_ID = new Identifier(NeepMeat.NAMESPACE, "block_crushing_sync");
 
-    @Nullable
-    public static BlockCrushingRegistry INSTANCE;
+    public static final BlockCrushingRegistry INSTANCE = new BlockCrushingRegistry();
 
-    private final Map<ItemVariant, Entry> basicInputToEntry;
-    private final Map<ItemVariant, Entry> advancedInputToEntry;
+    private final Map<ItemVariant, Entry> basicInputToEntry = new HashMap<>();
+    private final Map<ItemVariant, Entry> advancedInputToEntry = new HashMap<>();
 
     // Either of these can be disabled by removing the JSON- hang on, that won't work. Erm...
-    @Nullable private final BlockCrushingRecipe blockCrushingRecipe;
-    @Nullable private final AdvancedBlockCrushingRecipe advancedBlockCrushingRecipe;
+    @Nullable private BlockCrushingRecipe blockCrushingRecipe;
+    @Nullable private AdvancedBlockCrushingRecipe advancedBlockCrushingRecipe;
 
-    private BlockCrushingRegistry(MinecraftServer server)
-    {
-        this(server.getRecipeManager(), Maps.newHashMap(), Maps.newHashMap());
+    private BlockCrushingRegistry() { }
 
-        searchForLootTables(server);
-    }
-
-    private BlockCrushingRegistry(RecipeManager manager, Map<ItemVariant, Entry> basicInputToEntry, Map<ItemVariant, Entry> advancedInputToEntry)
+    public void read(RecipeManager manager, PacketByteBuf buf)
     {
         this.blockCrushingRecipe = BlockCrushingRecipe.get(manager);
         this.advancedBlockCrushingRecipe = AdvancedBlockCrushingRecipe.get(manager);
 
-        this.basicInputToEntry = basicInputToEntry;
-        this.advancedInputToEntry = advancedInputToEntry;
-    }
-
-    public static BlockCrushingRegistry read(RecipeManager manager, PacketByteBuf buf)
-    {
-        Map<ItemVariant, Entry> basicInputToEntry = Maps.newHashMap();
-        Map<ItemVariant, Entry> advancedInputToEntry = Maps.newHashMap();
-
         PacketBufUtil.readMap(buf, basicInputToEntry::put, ItemVariant::fromPacket, Entry::read);
         PacketBufUtil.readMap(buf, advancedInputToEntry::put, ItemVariant::fromPacket, Entry::read);
-
-        return new BlockCrushingRegistry(manager, basicInputToEntry, advancedInputToEntry);
     }
 
     private void write(PacketByteBuf buf)
@@ -93,16 +77,21 @@ public class BlockCrushingRegistry
 
     public static void init()
     {
-        DataPackPostProcess.AFTER_DATA_PACK_LOAD.register(BlockCrushingRegistry::reload);
+        DataPackPostProcess.AFTER_DATA_PACK_LOAD.register(BlockCrushingRegistry.INSTANCE::reload);
         DataPackPostProcess.SYNC.register(BlockCrushingRegistry::sync);
     }
 
-    private static void reload(MinecraftServer server)
+    private void reload(MinecraftServer server)
     {
-        INSTANCE = new BlockCrushingRegistry(server);
+        RecipeManager recipeManager = server.getRecipeManager();
+        LootManager lootManager = server.getLootManager();
+        this.blockCrushingRecipe = BlockCrushingRecipe.get(recipeManager);
+        this.advancedBlockCrushingRecipe = AdvancedBlockCrushingRecipe.get(recipeManager);
+
+        searchForLootTables(lootManager);
     }
 
-    private static void sync(MinecraftServer server, Set<ServerPlayerEntity> players)
+    private static void sync(MinecraftServer server, @NotNull Set<ServerPlayerEntity> players)
     {
         PacketByteBuf buf = PacketByteBufs.create();
         INSTANCE.write(buf);
@@ -234,11 +223,12 @@ public class BlockCrushingRegistry
         {
             if (client.world != null)
             {
-                BlockCrushingRegistry registry = BlockCrushingRegistry.read(client.world.getRecipeManager(), buf);
-                client.execute(() ->
-                {
-                    INSTANCE = registry;
-                });
+                // Hopefully this can be done on the netty thread
+                BlockCrushingRegistry.INSTANCE.read(client.world.getRecipeManager(), buf);
+//                BlockCrushingRegistry registry = BlockCrushingRegistry.read(client.world.getRecipeManager(), buf);
+//                client.execute(() ->
+//                {
+//                });
             }
         }
     }

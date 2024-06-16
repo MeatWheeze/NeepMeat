@@ -24,7 +24,6 @@ public class BlockCrushingEmiRecipe implements EmiRecipe
     private final BlockCrushingRecipe recipe;
     private final Supplier<Collection<BlockCrushingRegistry.Entry>> entries;
 
-    // TODO: networking
     public BlockCrushingEmiRecipe(EmiRecipeCategory category, BlockCrushingRecipe recipe, Supplier<Collection<BlockCrushingRegistry.Entry>> entrySupplier)
     {
         this.category = category;
