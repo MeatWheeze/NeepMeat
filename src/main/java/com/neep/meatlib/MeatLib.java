@@ -13,9 +13,14 @@ import com.neep.neepmeat.NeepMeat;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.lookup.v1.block.BlockApiLookup;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.minecraft.util.Identifier;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import javax.xml.crypto.Data;
+import java.util.HashSet;
+import java.util.Set;
 
 public class MeatLib implements ModInitializer
 {
@@ -57,8 +62,14 @@ public class MeatLib implements ModInitializer
         StorageEvents.init();
         RecipeInputs.init();
 
-        ServerLifecycleEvents.SERVER_STARTED.register(server -> DataPackPostProcess.EVENT.invoker().event(server));
-        ServerLifecycleEvents.END_DATA_PACK_RELOAD.register((server, manager, success) -> DataPackPostProcess.EVENT.invoker().event(server));
+        // Things that need to access the server's data resources
+        ServerLifecycleEvents.SERVER_STARTED.register(server -> DataPackPostProcess.AFTER_DATA_PACK_LOAD.invoker().event(server));
+        ServerLifecycleEvents.END_DATA_PACK_RELOAD.register((server, manager, success) -> DataPackPostProcess.AFTER_DATA_PACK_LOAD.invoker().event(server));
+        DataPackPostProcess.AFTER_DATA_PACK_LOAD.addPhaseOrdering(DataPackPostProcess.FIRST, DataPackPostProcess.SECOND);
+
+        // Synchronise after data packs are loaded/reloaded for every player on the server
+        DataPackPostProcess.AFTER_DATA_PACK_LOAD.register(DataPackPostProcess.SECOND, server ->
+                DataPackPostProcess.SYNC.invoker().sync(server, new HashSet<>(server.getPlayerManager().getPlayerList())));
     }
 
     public static class Context implements AutoCloseable

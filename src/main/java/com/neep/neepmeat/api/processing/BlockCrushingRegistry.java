@@ -36,7 +36,7 @@ public class BlockCrushingRegistry
 
     public static void init()
     {
-        DataPackPostProcess.EVENT.register(BlockCrushingRegistry::reload);
+        DataPackPostProcess.AFTER_DATA_PACK_LOAD.register(BlockCrushingRegistry::reload);
     }
 
     private static void reload(MinecraftServer server)

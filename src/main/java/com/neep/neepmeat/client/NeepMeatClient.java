@@ -5,6 +5,8 @@ import com.neep.meatlib.block.PaintedBlockManager;
 import com.neep.meatlib.graphics.client.GraphicsEffectClient;
 import com.neep.meatweapons.particle.PhageRayGraphicsEffect;
 import com.neep.neepmeat.NeepMeat;
+import com.neep.neepmeat.api.processing.OreFatRegistry;
+import com.neep.neepmeat.api.processing.OreFatSyncS2CPacket;
 import com.neep.neepmeat.client.effect.ReminaGraphicsEvent;
 import com.neep.neepmeat.client.fluid.NMFluidsClient;
 import com.neep.neepmeat.client.hud.BigBlockPlacementHelper;
@@ -61,6 +63,7 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.model.ModelLoadingRegistry;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.client.rendering.v1.ColorProviderRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
@@ -110,6 +113,7 @@ public class NeepMeatClient implements ClientModInitializer
         PlayerImplantStatusS2CPacket.Client.registerReceiver();
         EntityAnimationS2C.Client.registerReceiver();
         MachineDiagnosticsRequest.Client.registerReceiver();
+        ClientPlayNetworking.registerGlobalReceiver(OreFatRegistry.SYNC_TYPE, OreFatSyncS2CPacket.Client::onPacket);
         NMClientNetwork.init();
         NMKeys.registerKeybindings();
 

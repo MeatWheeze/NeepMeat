@@ -11,6 +11,7 @@
     "ItemMixin",
     "ItemStackMixin",
     "PlayerEntityMixin",
+    "PlayerMangerMixin",
     "RecipeManagerAccessor",
     "ServerEntityManagerMixin"
   ],

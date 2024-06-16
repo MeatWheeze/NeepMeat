@@ -12,11 +12,16 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.neep.meatlib.api.event.DataPackPostProcess;
 import com.neep.meatlib.mixin.RecipeManagerAccessor;
+import com.neep.meatlib.storage.MeatlibStorageUtil;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.fluid.ore_fat.OreFatFluidFactory;
 import com.neep.neepmeat.init.NMFluids;
+import net.fabricmc.fabric.api.networking.v1.PacketType;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
@@ -31,10 +36,12 @@ import net.minecraft.recipe.SmeltingRecipe;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.tag.TagKey;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.JsonHelper;
 import net.minecraft.util.registry.Registry;
+import net.minecraft.util.dynamic.Codecs;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.InputStream;
@@ -48,6 +55,10 @@ import java.util.Set;
 @SuppressWarnings("UnstableApiUsage")
 public class OreFatRegistry implements SimpleSynchronousResourceReloadListener
 {
+
+    public static final Identifier SYNC_ID = new Identifier(NeepMeat.NAMESPACE, "ore_fat");
+    public static final PacketType<OreFatSyncS2CPacket> SYNC_TYPE = PacketType.create(SYNC_ID, OreFatSyncS2CPacket::fromBuf);
+
     public static final OreFatRegistry INSTANCE = new OreFatRegistry();
 
     private final Set<TagKey<Item>> generateForTags = Sets.newHashSet();
@@ -59,7 +70,31 @@ public class OreFatRegistry implements SimpleSynchronousResourceReloadListener
 
     public static void init()
     {
-        DataPackPostProcess.EVENT.register(INSTANCE::generate);
+        DataPackPostProcess.AFTER_DATA_PACK_LOAD.register(INSTANCE::generate);
+        DataPackPostProcess.SYNC.register(INSTANCE::sync);
+    }
+
+    @Nullable
+    public static Entry get(NbtCompound nbt)
+    {
+        return INSTANCE.nbtToEntry.get(nbt);
+    }
+
+    @Nullable
+    public static Entry getFromInput(Item item)
+    {
+        return INSTANCE.inputToEntry.get(item);
+    }
+
+    @Nullable
+    public static Entry getFromVariant(FluidVariant variant)
+    {
+        if (variant.getObject() instanceof OreFatFluidFactory.Main)
+        {
+            NbtCompound nbt = variant.getNbt();
+            return INSTANCE.nbtToEntry.get(nbt);
+        }
+        return null;
     }
 
     private void addTag(Identifier id)
@@ -80,6 +115,21 @@ public class OreFatRegistry implements SimpleSynchronousResourceReloadListener
         });
 
         NeepMeat.LOGGER.info("Generated {} ore fat routes", inputToEntry.size());
+    }
+
+    private void sync(MinecraftServer server, Set<ServerPlayerEntity> players)
+    {
+        OreFatSyncS2CPacket packet = new OreFatSyncS2CPacket(nbtToEntry);
+        for (ServerPlayerEntity player : players)
+        {
+            ServerPlayNetworking.send(player, packet);
+        }
+    }
+
+    public void onPacket(OreFatSyncS2CPacket t)
+    {
+        nbtToEntry.clear();
+        nbtToEntry.putAll(t.nbtToEntry());
     }
 
     /**
@@ -114,7 +164,6 @@ public class OreFatRegistry implements SimpleSynchronousResourceReloadListener
     {
         NbtCompound nbt = createNbt(output.getItem());
 
-//        Entry entry = outputToEntry.computeIfAbsent(output.getItem(), )
         Entry entry = outputToEntry.computeIfAbsent(output.getItem(), i -> new Entry(
                 createName(output.getItem(), NMFluids.DIRTY_ORE_FAT),
                 createName(output.getItem(), NMFluids.DIRTY_ORE_FAT),
@@ -137,29 +186,6 @@ public class OreFatRegistry implements SimpleSynchronousResourceReloadListener
     private Text createName(Item outputItem, Block fluid)
     {
         return Text.translatable(fluid.getTranslationKey(), outputItem.getName());
-    }
-
-    @Nullable
-    public static Entry get(NbtCompound nbt)
-    {
-        return INSTANCE.nbtToEntry.get(nbt);
-    }
-
-    @Nullable
-    public static Entry getFromInput(Item item)
-    {
-        return INSTANCE.inputToEntry.get(item);
-    }
-
-    @Nullable
-    public static Entry getFromVariant(FluidVariant variant)
-    {
-        if (variant.getObject() instanceof OreFatFluidFactory.Main)
-        {
-            NbtCompound nbt = variant.getNbt();
-            return INSTANCE.nbtToEntry.get(nbt);
-        }
-        return null;
     }
 
     public Item getItem(FluidVariant variant)
@@ -216,7 +242,8 @@ public class OreFatRegistry implements SimpleSynchronousResourceReloadListener
                     {
                         // Last file replaces previous ones
                         generateForTags.clear();
-                        generateForItems.clear();;
+                        generateForItems.clear();
+                        ;
                     }
 
                     // Generate routes for smelting recipes whose inputs are in these tags
@@ -290,7 +317,6 @@ public class OreFatRegistry implements SimpleSynchronousResourceReloadListener
                             inputToEntry.put(input, entry);
                         }
                     }
-
                 }
                 catch (Exception e)
                 {
@@ -300,8 +326,19 @@ public class OreFatRegistry implements SimpleSynchronousResourceReloadListener
         }
     }
 
-    public record Entry(Text dirtyFatname, Text cleanFatName, ItemVariant result, NbtCompound nbt, float renderingYield, float trommelYield)
+    public record Entry(Text dirtyFatname, Text cleanFatName, ItemVariant result, NbtCompound nbt, float renderingYield,
+                        float trommelYield)
     {
+        public static final Codec<Entry> CODEC = RecordCodecBuilder.create(instance ->
+                instance.group(
+                        Codecs.TEXT.fieldOf("dirty_fat_name").forGetter(Entry::dirtyFatname),
+                        Codecs.TEXT.fieldOf("clean_fat_name").forGetter(Entry::cleanFatName),
+                        MeatlibStorageUtil.ITEM_VARIANT_CODEC.fieldOf("result").forGetter(Entry::result),
+                        NbtCompound.CODEC.fieldOf("nbt").forGetter(Entry::nbt),
+                        Codec.FLOAT.fieldOf("rendering_yield").forGetter(Entry::renderingYield),
+                        Codec.FLOAT.fieldOf("trommel_yield").forGetter(Entry::trommelYield)
+                ).apply(instance, Entry::new));
+
         public FluidVariant getDirty()
         {
             return FluidVariant.of(NMFluids.STILL_DIRTY_ORE_FAT, nbt);

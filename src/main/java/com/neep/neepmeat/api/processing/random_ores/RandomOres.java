@@ -43,7 +43,7 @@ public class RandomOres implements SimpleSynchronousResourceReloadListener
 
     public static void init()
     {
-        DataPackPostProcess.EVENT.register(INSTANCE::postProcess);
+        DataPackPostProcess.AFTER_DATA_PACK_LOAD.register(INSTANCE::postProcess);
 
         Registry.register(WeightModifier.REGISTRY, new Identifier(NeepMeat.NAMESPACE, "biome_list"), BiomeListWeightModifier.CODEC);
         Registry.register(WeightModifier.REGISTRY, new Identifier(NeepMeat.NAMESPACE, "biome_tag"), BiomeTagWeightModifier.CODEC);
