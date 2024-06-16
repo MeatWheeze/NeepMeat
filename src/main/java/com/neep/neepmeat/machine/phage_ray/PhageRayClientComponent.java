@@ -1,6 +1,6 @@
 package com.neep.neepmeat.machine.phage_ray;
 
-import com.neep.meatlib.api.event.KeyboardEvents;
+import com.neep.meatlib.client.api.event.InputEvents;
 import com.neep.meatlib.client.api.event.UseAttackCallback;
 import com.neep.meatlib.util.ClientComponent;
 import com.neep.neepmeat.init.NMSounds;
@@ -36,7 +36,7 @@ public class PhageRayClientComponent implements ClientComponent
 
     public static void init()
     {
-        KeyboardEvents.POST_INPUT.register((window, key, scancode, action, modifiers) ->
+        InputEvents.POST_INPUT.register((window, key, scancode, action, modifiers) ->
         {
             MinecraftClient client = MinecraftClient.getInstance();
             if (client.player == null)

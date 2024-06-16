@@ -20,7 +20,7 @@ import com.neep.meatlib.storage.MeatlibStorageUtil;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.fluid.ore_fat.OreFatFluidFactory;
 import com.neep.neepmeat.init.NMFluids;
-import net.fabricmc.fabric.api.networking.v1.PacketType;
+import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
@@ -29,6 +29,7 @@ import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.network.PacketByteBuf;
 import net.minecraft.recipe.BlastingRecipe;
 import net.minecraft.recipe.Ingredient;
 import net.minecraft.recipe.RecipeType;
@@ -44,6 +45,7 @@ import net.minecraft.util.registry.Registry;
 import net.minecraft.util.dynamic.Codecs;
 import org.jetbrains.annotations.Nullable;
 
+import java.awt.*;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
@@ -57,7 +59,7 @@ public class OreFatRegistry implements SimpleSynchronousResourceReloadListener
 {
 
     public static final Identifier SYNC_ID = new Identifier(NeepMeat.NAMESPACE, "ore_fat");
-    public static final PacketType<OreFatSyncS2CPacket> SYNC_TYPE = PacketType.create(SYNC_ID, OreFatSyncS2CPacket::fromBuf);
+//    public static final PacketType<OreFatSyncS2CPacket> SYNC_TYPE = PacketType.create(SYNC_ID, OreFatSyncS2CPacket::fromBuf);
 
     public static final OreFatRegistry INSTANCE = new OreFatRegistry();
 
@@ -120,9 +122,11 @@ public class OreFatRegistry implements SimpleSynchronousResourceReloadListener
     private void sync(MinecraftServer server, Set<ServerPlayerEntity> players)
     {
         OreFatSyncS2CPacket packet = new OreFatSyncS2CPacket(nbtToEntry);
+        PacketByteBuf buf = PacketByteBufs.create();
+        packet.write(buf);
         for (ServerPlayerEntity player : players)
         {
-            ServerPlayNetworking.send(player, packet);
+            ServerPlayNetworking.send(player, SYNC_ID, buf);
         }
     }
 
@@ -285,7 +289,7 @@ public class OreFatRegistry implements SimpleSynchronousResourceReloadListener
                     JsonObject rootObject = (JsonObject) rootElement;
 
                     String resourceName = JsonHelper.getString(rootObject, "output");
-                    Item result = Registries.ITEM.get(Identifier.tryParse(resourceName));
+                    Item result = Registry.ITEM.get(Identifier.tryParse(resourceName));
 
                     Text dirtyFatName = createName(result, NMFluids.DIRTY_ORE_FAT);
                     if (rootObject.has("dirty_fat_name"))
@@ -329,15 +333,6 @@ public class OreFatRegistry implements SimpleSynchronousResourceReloadListener
     public record Entry(Text dirtyFatname, Text cleanFatName, ItemVariant result, NbtCompound nbt, float renderingYield,
                         float trommelYield)
     {
-        public static final Codec<Entry> CODEC = RecordCodecBuilder.create(instance ->
-                instance.group(
-                        Codecs.TEXT.fieldOf("dirty_fat_name").forGetter(Entry::dirtyFatname),
-                        Codecs.TEXT.fieldOf("clean_fat_name").forGetter(Entry::cleanFatName),
-                        MeatlibStorageUtil.ITEM_VARIANT_CODEC.fieldOf("result").forGetter(Entry::result),
-                        NbtCompound.CODEC.fieldOf("nbt").forGetter(Entry::nbt),
-                        Codec.FLOAT.fieldOf("rendering_yield").forGetter(Entry::renderingYield),
-                        Codec.FLOAT.fieldOf("trommel_yield").forGetter(Entry::trommelYield)
-                ).apply(instance, Entry::new));
 
         public FluidVariant getDirty()
         {

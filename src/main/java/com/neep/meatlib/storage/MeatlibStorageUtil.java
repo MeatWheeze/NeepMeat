@@ -1,7 +1,6 @@
 package com.neep.meatlib.storage;
 
 import com.mojang.serialization.Codec;
-import com.mojang.serialization.RecordBuilder;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
@@ -10,10 +9,9 @@ import net.fabricmc.fabric.api.transfer.v1.storage.base.ResourceAmount;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.registry.Registries;
 import net.minecraft.util.ItemScatterer;
-import net.minecraft.util.dynamic.Codecs;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 import org.apache.commons.lang3.function.TriFunction;
 import org.jetbrains.annotations.Nullable;
@@ -28,8 +26,9 @@ import java.util.function.BiPredicate;
 public class MeatlibStorageUtil
 {
     public static final Codec<ItemVariant> ITEM_VARIANT_CODEC = RecordCodecBuilder.create(instance ->
-        instance.group(Registries.ITEM.getCodec().fieldOf("item").forGetter(ItemVariant::getItem),
-                Codec.optionalField("nbt", NbtCompound.CODEC).<ItemVariant>forGetter(v -> Optional.ofNullable(v.getNbt()))
+        instance.group(
+                Registry.ITEM.getCodec().fieldOf("item").forGetter(ItemVariant::getItem),
+                Codec.optionalField("nbt", NbtCompound.CODEC).forGetter(v -> Optional.ofNullable(v.getNbt()))
                 ).apply(instance, (item, opt) -> ItemVariant.of(item, opt.orElse(null))));
 
     @Nullable

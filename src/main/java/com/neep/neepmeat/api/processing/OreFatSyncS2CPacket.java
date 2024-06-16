@@ -4,18 +4,17 @@ import com.neep.meatlib.network.PacketBufUtil;
 import com.neep.neepmeat.NeepMeat;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.fabricmc.fabric.api.networking.v1.FabricPacket;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
-import net.fabricmc.fabric.api.networking.v1.PacketType;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtOps;
+import net.minecraft.network.Packet;
 import net.minecraft.network.PacketByteBuf;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public record OreFatSyncS2CPacket(Map<NbtCompound, OreFatRegistry.Entry> nbtToEntry) implements FabricPacket
+public record OreFatSyncS2CPacket(Map<NbtCompound, OreFatRegistry.Entry> nbtToEntry) implements
 {
     public static OreFatSyncS2CPacket fromBuf(PacketByteBuf buf)
     {

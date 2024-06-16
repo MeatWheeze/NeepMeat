@@ -5,7 +5,7 @@ import com.neep.neepmeat.init.NMSounds;
 import net.fabricmc.fabric.api.transfer.v1.item.InventoryStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
-import net.fabricmc.fabric.api.transfer.v1.storage.base.CombinedSlottedStorage;
+import net.fabricmc.fabric.api.transfer.v1.storage.base.CombinedStorage;
 import net.minecraft.block.BarrelBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -210,7 +210,7 @@ public class MetalBarrelBlockEntity extends LootableContainerBlockEntity
         }
         else
         {
-            return new CombinedSlottedStorage<>(List.of(
+            return new CombinedStorage<>(List.of(
                     InventoryStorage.of(this, direction),
                     InventoryStorage.of(other, direction)
             ));

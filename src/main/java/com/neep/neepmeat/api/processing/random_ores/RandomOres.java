@@ -13,8 +13,6 @@ import com.neep.neepmeat.mixin.feature.CountPlacementModifierAccessor;
 import net.fabricmc.fabric.api.resource.ResourceReloadListenerKeys;
 import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener;
 import net.minecraft.block.BlockState;
-import net.minecraft.registry.Registry;
-import net.minecraft.registry.RegistryKeys;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.Identifier;
@@ -22,6 +20,7 @@ import net.minecraft.util.JsonHelper;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.intprovider.IntProvider;
 import net.minecraft.util.math.random.Random;
+import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.ConfiguredFeature;
 import net.minecraft.world.gen.feature.OreFeatureConfig;
@@ -66,7 +65,7 @@ public class RandomOres implements SimpleSynchronousResourceReloadListener
     {
         List<MutableEntry> entryList = new ArrayList<>();
 
-        Registry<PlacedFeature> placed = server.getRegistryManager().get(RegistryKeys.PLACED_FEATURE);
+        Registry<PlacedFeature> placed = server.getRegistryManager().get(Registry.PLACED_FEATURE_KEY);
 
         placed.forEach(placedFeature ->
         {

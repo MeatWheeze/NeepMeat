@@ -2,10 +2,10 @@ package com.neep.neepmeat.api.processing.random_ores;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.registry.tag.TagKey;
+import net.minecraft.tag.TagKey;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.registry.Registry;
+import net.minecraft.util.registry.RegistryEntry;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 
@@ -13,7 +13,7 @@ public class BiomeTagWeightModifier implements WeightModifier
 {
     public static final Codec<BiomeTagWeightModifier> CODEC = RecordCodecBuilder.create(instance ->
         instance.group(
-                    TagKey.codec(RegistryKeys.BIOME).fieldOf("tag").forGetter(m -> m.tag),
+                    TagKey.codec(Registry.BIOME_KEY).fieldOf("tag").forGetter(m -> m.tag),
                     Codec.FLOAT.fieldOf("value").forGetter(m -> m.value),
                     Function.CODEC.fieldOf("function").forGetter(m -> m.function)
                 ).apply(instance, BiomeTagWeightModifier::new));

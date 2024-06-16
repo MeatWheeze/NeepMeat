@@ -12,11 +12,10 @@ import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.Registry;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.Properties;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.registry.Registry;
 import net.minecraft.world.WorldView;
 
 public class BuiltFluid
@@ -34,11 +33,11 @@ public class BuiltFluid
         this.levelDecrease = levelDecrease;
         this.tickRate = tickRate;
 
-        still = Registry.register(Registries.FLUID, new Identifier(namespace, baseName), new Still());
-        flowing = Registry.register(Registries.FLUID, new Identifier(namespace, "flowing_" + baseName), new Flowing());
+        still = Registry.register(Registry.FLUID, new Identifier(namespace, baseName), new Still());
+        flowing = Registry.register(Registry.FLUID, new Identifier(namespace, "flowing_" + baseName), new Flowing());
 
         if (makeBlock)
-            block = Registry.register(Registries.BLOCK, new Identifier(namespace, baseName), new FluidBlock(still, MeatlibBlockSettings.copy(Blocks.WATER)){});
+            block = Registry.register(Registry.BLOCK, new Identifier(namespace, baseName), new FluidBlock(still, MeatlibBlockSettings.copy(Blocks.WATER)){});
         else
             block = null;
 

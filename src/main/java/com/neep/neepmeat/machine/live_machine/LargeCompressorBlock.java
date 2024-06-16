@@ -28,8 +28,6 @@ import net.minecraft.block.ShapeContext;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.item.ItemPlacementContext;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.Registry;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.DirectionProperty;
 import net.minecraft.state.property.Properties;
@@ -37,6 +35,7 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.function.BooleanBiFunction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import net.minecraft.util.registry.Registry;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.BlockView;
@@ -89,7 +88,7 @@ public class LargeCompressorBlock extends BigBlock<LargeCompressorBlock.Structur
     @Override
     public BlockState getPlacementState(ItemPlacementContext ctx)
     {
-        return this.getDefaultState().with(FACING, ctx.getPlayer().isSneaking() ? ctx.getHorizontalPlayerFacing().getOpposite() : ctx.getHorizontalPlayerFacing());
+        return this.getDefaultState().with(FACING, ctx.getPlayer().isSneaking() ? ctx.getPlayerFacing().getOpposite() : ctx.getPlayerFacing());
     }
 
     @Override
@@ -97,7 +96,7 @@ public class LargeCompressorBlock extends BigBlock<LargeCompressorBlock.Structur
     {
         // Oh, crumbs
         BigBlockStructure.BlockEntityRegisterererer<StructureBlockEntity> registerererer = b -> Registry.register(
-                Registries.BLOCK_ENTITY_TYPE, new Identifier(NeepMeat.NAMESPACE, "large_compressor_structure"),
+                Registry.BLOCK_ENTITY_TYPE, new Identifier(NeepMeat.NAMESPACE, "large_compressor_structure"),
                 FabricBlockEntityTypeBuilder.create(
                         (p, s) -> new StructureBlockEntity(b.getBlockEntityType(), p, s), b).build());
 

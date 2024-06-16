@@ -1,6 +1,7 @@
 package com.neep.neepmeat.machine.charnel_pump;
 
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
+import com.neep.meatlib.storage.MeatlibStorageUtil;
 import com.neep.meatlib.util.ClientComponents;
 import com.neep.meatlib.util.LazySupplier;
 import com.neep.neepmeat.BalanceConstants;
@@ -25,14 +26,12 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.particle.ParticleTypes;
-import net.minecraft.registry.tag.BlockTags;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.tag.BlockTags;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.random.Random;
-import net.minecraft.world.Heightmap;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 
@@ -102,7 +101,7 @@ public class CharnelPumpBlockEntity extends SyncableBlockEntity implements Livin
             spawnSpouts();
 
             // Consume work fluid and eject ores
-            boolean fluidAvailable = StorageUtil.simulateExtract(inputStorage, FluidVariant.of(NMFluids.STILL_WORK_FLUID), distributeAmount, transaction) == distributeAmount;
+            boolean fluidAvailable = MeatlibStorageUtil.simulateExtract(inputStorage, FluidVariant.of(NMFluids.STILL_WORK_FLUID), distributeAmount, transaction) == distributeAmount;
 
             if (hasAir && fluidAvailable)
             {

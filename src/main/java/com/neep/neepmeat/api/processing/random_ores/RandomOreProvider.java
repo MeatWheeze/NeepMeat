@@ -4,7 +4,7 @@ import com.neep.neepmeat.NeepMeat;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.loot.LootTables;
-import net.minecraft.loot.context.LootContextParameterSet;
+import net.minecraft.loot.context.LootContext;
 import net.minecraft.loot.context.LootContextParameters;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
@@ -48,11 +48,11 @@ public class RandomOreProvider
         }
         else
         {
-            LootContextParameterSet.Builder builder = new LootContextParameterSet.Builder(world)
-                    .add(LootContextParameters.ORIGIN, Vec3d.ofCenter(origin))
-                    .add(LootContextParameters.TOOL, Items.NETHERITE_PICKAXE.getDefaultStack())
-                    .addOptional(LootContextParameters.THIS_ENTITY, null)
-                    .addOptional(LootContextParameters.BLOCK_ENTITY, null);
+            LootContext.Builder builder = new LootContext.Builder(world)
+                    .parameter(LootContextParameters.TOOL, Items.NETHERITE_PICKAXE.getDefaultStack())
+                    .parameter(LootContextParameters.ORIGIN, Vec3d.ofCenter(origin))
+                    .optionalParameter(LootContextParameters.THIS_ENTITY, null)
+                    .optionalParameter(LootContextParameters.BLOCK_ENTITY, null);
             return entry.state().getDroppedStacks(builder);
         }
     }

@@ -32,11 +32,11 @@ import net.minecraft.loot.entry.ItemEntry;
 import net.minecraft.loot.entry.LootPoolEntry;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.recipe.RecipeManager;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.tag.TagKey;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.tag.TagKey;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.registry.Registry;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -119,7 +119,7 @@ public class BlockCrushingRegistry
 
         TagKey<Block> inputs = NMTags.BLOCK_CRUSHING_INPUTS;
 
-        Registries.ITEM.stream()
+        Registry.ITEM.stream()
                 .filter(i -> i instanceof BlockItem)
                 .map(i -> (BlockItem) i)
                 .filter(i -> i.getBlock().getRegistryEntry().isIn(inputs))
@@ -137,7 +137,7 @@ public class BlockCrushingRegistry
 
         TagKey<Item> outputs = NMTags.BLOCK_CRUSHING_OUTPUTS;
 
-        LootTable lootTable = lootManager.getLootTable(blockItem.getBlock().getLootTableId());
+        LootTable lootTable = lootManager.getTable(blockItem.getBlock().getLootTableId());
         for (LootPool pool : lootTable.pools)
         {
             for (LootPoolEntry entry : pool.entries)
@@ -202,8 +202,8 @@ public class BlockCrushingRegistry
         public static Entry read(PacketByteBuf buf)
         {
             RecipeInput<Item> input = RecipeInput.fromBuffer(buf);
-            RecipeOutput<Item> output = RecipeOutputImpl.fromBuffer(Registries.ITEM, buf);
-            RecipeOutput<Item> extra = RecipeOutputImpl.fromBuffer(Registries.ITEM, buf);
+            RecipeOutput<Item> output = RecipeOutputImpl.fromBuffer(Registry.ITEM, buf);
+            RecipeOutput<Item> extra = RecipeOutputImpl.fromBuffer(Registry.ITEM, buf);
 
             return new Entry(input, output, extra);
         }
@@ -211,8 +211,8 @@ public class BlockCrushingRegistry
         public void write(PacketByteBuf buf)
         {
             input.write(buf);
-            output.write(Registries.ITEM, buf);
-            extra.write(Registries.ITEM, buf);
+            output.write(Registry.ITEM, buf);
+            extra.write(Registry.ITEM, buf);
         }
     }
 
