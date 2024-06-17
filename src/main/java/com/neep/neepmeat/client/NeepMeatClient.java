@@ -29,6 +29,7 @@ import com.neep.neepmeat.client.screen.living_machine.ItemOutputPortScreen;
 import com.neep.neepmeat.client.screen.living_machine.LivingMachineScreen;
 import com.neep.neepmeat.client.screen.plc.PLCProgramScreen;
 import com.neep.neepmeat.client.world.NMDimensionEffects;
+import com.neep.neepmeat.entity.follower.FollowerRenderer;
 import com.neep.neepmeat.init.*;
 import com.neep.neepmeat.item.DosimeterItem;
 import com.neep.neepmeat.item.NetworkingToolItem;
@@ -162,6 +163,7 @@ public class NeepMeatClient implements ClientModInitializer
         EntityRendererRegistry.register(NMEntities.BOVINE_HORROR, BovineHorrorRenderer::new);
         EntityRendererRegistry.register(NMEntities.ACID_SPRAY, DummyEntityRenderer::new);
         EntityRendererRegistry.register(NMEntities.PHAGE_RAY, DummyEntityRenderer::new);
+        EntityRendererRegistry.register(NMEntities.FOLLOWER, FollowerRenderer::new);
 
         EntityRendererRegistry.register(NMEntities.FARMING_SCUTTER, DummyEntityRenderer::new);
 
