@@ -34,30 +34,30 @@ public class FollowerRenderer extends EntityRenderer<FollowerEntity>
     public void render(FollowerEntity entity, float yaw, float tickDelta, MatrixStack matrices, VertexConsumerProvider vcp, int light)
     {
 //        Vec3d vector = entity.getLerpedPos(tickDelta).subtract(client.player.getLerpedPos(tickDelta)).normalize();
-        Vec3d entityPos = entity.getLeashPos(tickDelta);
-        Vec3d vector = entityPos.subtract(client.gameRenderer.getCamera().getPos()).normalize();
-        float dot = MathHelper.clamp((float) (1 - (vector.dotProduct(client.player.getRotationVec(tickDelta)))), 0, 1);
-        dot = dot * dot;
-
-        VertexConsumer consumer = vcp.getBuffer(RenderLayer.getEntityTranslucent(TEXTURE));
-        float offset = (float) (entity.getLerpedPos(tickDelta).distanceTo(client.player.getLerpedPos(tickDelta)) / 8.0f);
-        int num = 10;
-        for (int i = 0; i < num; ++i)
-        {
-            matrices.push();
-            float frac = ((i / (float) num) + offset) % (float) num;
-            float x = MathHelper.sin(frac * MathHelper.PI * 2);
-            float z = MathHelper.cos(frac * MathHelper.PI * 2);
-            float y = MathHelper.sin(frac * MathHelper.PI * 8);
-            matrices.translate(x, y, z);
-            matrices.multiply(new Quaternionf(client.gameRenderer.getCamera().getRotation()));
-            matrices.multiply(RotationAxis.NEGATIVE_Z.rotation(frac * MathHelper.PI));
-            matrices.multiply(RotationAxis.NEGATIVE_Y.rotation((1 - frac) * MathHelper.PI));
-            glonkyQuad(consumer, matrices.peek(), 0.5f, 1, 1, 1, dot, light);
-            matrices.translate(0, 1, 0);
-            glonkyQuad(consumer, matrices.peek(), 1.9f, 1, 1, 1, dot, light);
-            matrices.pop();
-        }
+//        Vec3d entityPos = entity.getLeashPos(tickDelta);
+//        Vec3d vector = entityPos.subtract(client.gameRenderer.getCamera().getPos()).normalize();
+//        float dot = MathHelper.clamp((float) (1 - (vector.dotProduct(client.player.getRotationVec(tickDelta)))), 0, 1);
+//        dot = dot * dot;
+//
+//        VertexConsumer consumer = vcp.getBuffer(RenderLayer.getEntityTranslucent(TEXTURE));
+//        float offset = (float) (entity.getLerpedPos(tickDelta).distanceTo(client.player.getLerpedPos(tickDelta)) / 8.0f);
+//        int num = 10;
+//        for (int i = 0; i < num; ++i)
+//        {
+//            matrices.push();
+//            float frac = ((i / (float) num) + offset) % (float) num;
+//            float x = MathHelper.sin(frac * MathHelper.PI * 2);
+//            float z = MathHelper.cos(frac * MathHelper.PI * 2);
+//            float y = MathHelper.sin(frac * MathHelper.PI * 8);
+//            matrices.translate(x, y, z);
+//            matrices.multiply(new Quaternionf(client.gameRenderer.getCamera().getRotation()));
+//            matrices.multiply(RotationAxis.NEGATIVE_Z.rotation(frac * MathHelper.PI));
+//            matrices.multiply(RotationAxis.NEGATIVE_Y.rotation((1 - frac) * MathHelper.PI));
+//            glonkyQuad(consumer, matrices.peek(), 0.5f, 1, 1, 1, dot, light);
+//            matrices.translate(0, 1, 0);
+//            glonkyQuad(consumer, matrices.peek(), 1.9f, 1, 1, 1, dot, light);
+//            matrices.pop();
+//        }
     }
 
     @Override

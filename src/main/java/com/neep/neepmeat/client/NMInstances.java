@@ -6,6 +6,7 @@ import com.neep.neepmeat.client.renderer.LinearOscillatorInstance;
 import com.neep.neepmeat.client.renderer.block.LargeTrommelRenderer;
 import com.neep.neepmeat.client.renderer.block.LargestHopperRenderer;
 import com.neep.neepmeat.client.renderer.entity.LimbEntityInstance;
+import com.neep.neepmeat.entity.follower.FollowerInstance;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.init.NMEntities;
 import com.neep.neepmeat.machine.advanced_motor.AdvancedMotorInstance;
@@ -68,6 +69,8 @@ public class NMInstances
 
         InstancedRenderRegistry.configure(NMEntities.PHAGE_RAY).alwaysSkipRender().factory(PhageRayInstance::new).apply();
         InstancedRenderRegistry.configure(LivingMachines.TREE_VACUUM_BE).alwaysSkipRender().factory(TreeVacuumInstance::new).apply();
+
+        InstancedRenderRegistry.configure(NMEntities.FOLLOWER).factory(FollowerInstance::new).apply();
 
         InstancedRenderRegistry.configure(NMEntities.LIMB).factory(LimbEntityInstance::new).apply();
 

@@ -1,5 +1,8 @@
 package com.neep.neepmeat.entity;
 
+import com.neep.neepmeat.entity.follower.FollowerEntity;
+import com.neep.neepmeat.init.NMEntities;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.Packet;
@@ -9,11 +12,20 @@ import net.minecraft.world.World;
 
 public class LimbEntity extends SimpleEntity
 {
-    private boolean squirm = true;
+    private final int maxAge;
+    public boolean squirm = false;
 
     public LimbEntity(EntityType<? extends LimbEntity> entityType, World world)
     {
         super(entityType, world);
+        maxAge = 300;
+    }
+
+    public LimbEntity(World world, int maxAge, boolean squirm)
+    {
+        super(NMEntities.LIMB, world);
+        this.maxAge = maxAge;
+        this.squirm = squirm;
     }
 
     @Override
@@ -35,7 +47,7 @@ public class LimbEntity extends SimpleEntity
             squirm = false;
         }
 
-        if (age > 300)
+        if (age > maxAge)
         {
             remove(RemovalReason.DISCARDED);
         }
@@ -68,6 +80,22 @@ public class LimbEntity extends SimpleEntity
     protected void writeCustomDataToNbt(NbtCompound nbt)
     {
 
+    }
+
+    @Override
+    public boolean collidesWith(Entity other)
+    {
+        return !(other instanceof FollowerEntity);
+    }
+
+    @Override
+    public void pushAwayFrom(Entity entity)
+    {
+        // I can't work out how to make the Follower not collide with any entity.
+        if (entity instanceof FollowerEntity)
+            return;
+
+        super.pushAwayFrom(entity);
     }
 
     @Override

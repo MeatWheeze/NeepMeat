@@ -74,10 +74,11 @@ public class NMEntities
                 .dimensions(EntityDimensions.fixed(2.8f, 2.8f)).trackedUpdateRate(3).build());
 
         FOLLOWER = EntityRegistry.registerEntity(NeepMeat.NAMESPACE, "follower", FabricEntityTypeBuilder.create(SpawnGroup.MISC, FollowerEntity::new)
-                .dimensions(EntityDimensions.fixed(1f, 3f)).trackedUpdateRate(3).build());
+                .dimensions(EntityDimensions.fixed(0.9f, 0.9f)).trackedUpdateRate(3).build());
+        FabricDefaultAttributeRegistry.register(FOLLOWER, FollowerEntity.createFollowerAttributes());
 
-        LIMB = EntityRegistry.registerEntity(NeepMeat.NAMESPACE, "limb", FabricEntityTypeBuilder.create(SpawnGroup.MISC, LimbEntity::new)
-                .dimensions(EntityDimensions.fixed(0.9f, 0.9f)).trackedUpdateRate(1).build());
+        LIMB = EntityRegistry.registerEntity(NeepMeat.NAMESPACE, "limb", FabricEntityTypeBuilder.<LimbEntity>create(SpawnGroup.MISC, LimbEntity::new)
+                .dimensions(EntityDimensions.fixed(0.9f, 0.6f)).trackedUpdateRate(1).build());
 
         FARMING_SCUTTER = EntityRegistry.registerEntity(NeepMeat.NAMESPACE, "farming_scutter", FabricEntityTypeBuilder.create(SpawnGroup.MISC, FarmingScutter::new)
                 .dimensions(EntityDimensions.fixed(0.8f, 0.5f)).trackedUpdateRate(1).build());
