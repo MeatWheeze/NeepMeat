@@ -35,7 +35,6 @@ public class GrindingDisplay extends BasicDisplay
         this(categoryIdentifier,
                 Util.make(() ->
                 {
-                    System.out.println(recipe);
                     List<EntryIngredient> list = new ArrayList<>();
                     list.add(NMCommonPlugin.inputToIngredient(recipe.getItemInput()));
                     return list;
