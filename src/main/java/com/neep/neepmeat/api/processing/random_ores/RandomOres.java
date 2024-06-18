@@ -83,7 +83,7 @@ public class RandomOres implements SimpleSynchronousResourceReloadListener
 
                         oreFeatureConfig.targets.forEach(t ->
                         {
-                            if (t.state.streamTags().anyMatch(NMTags.CHARNEL_PUMP_OUTPUT_ORES::equals))
+                            if (t.state.isIn(NMTags.CHARNEL_PUMP_OUTPUT_ORES))
                             {
                                 // Multiply count by size to hopefully get the expected number of ore blocks per chunk.
                                 entryList.add(new MutableEntry(t.state, maxCount * oreFeatureConfig.size));

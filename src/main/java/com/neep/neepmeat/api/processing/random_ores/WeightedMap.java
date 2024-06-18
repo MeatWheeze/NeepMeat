@@ -13,6 +13,9 @@ public class WeightedMap<T>
 
     public void put(float weight, T entry)
     {
+        if (weight == 0)
+            return;
+
         weightTotal += weight;
         entryMap.put(weightTotal, entry);
     }

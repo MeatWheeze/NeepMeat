@@ -27,7 +27,9 @@ public class RandomOreProvider
 
         for (var entry : entries)
         {
-            entryMap.put(entry.modifiedWeight(world, pos), entry);
+            float mw = entry.modifiedWeight(world, pos);
+            NeepMeat.LOGGER.info("State: {}, Weight: {}, Modified Weight: {}", entry.state(), entry.weight(), mw);
+            entryMap.put(mw, entry);
         }
     }
 

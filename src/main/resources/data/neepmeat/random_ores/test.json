@@ -1,26 +1,27 @@
 {
   "state": {
-    "Name": "minecraft:emerald_ore"
+    "Name": "minecraft:stone"
   },
 
   "__comment0": "For auto-generated weights, count is the expected number of ore blocks per chunk.",
   "__comment1": "Example: If emerald ore attempts to generate 200 times in clumps of 4, its count will be 800.",
   "__comment2": "Don't be afraid of using very large numbers in order to out-compete the generated entries.",
-  "count": 1,
+  "count": 100000,
 
   "modifiers": [
     {
       "type": "neepmeat:biome_list",
       "value": 0,
-      "function": "add",
+      "function": "mul",
       "biomes": [
+        "minecraft:plains",
         "minecraft:swamp",
         "minecraft:nether_wastes"
       ]
     },
     {
       "type": "neepmeat:biome_tag",
-      "value": 1,
+      "value": 0,
       "function": "mul",
       "tag": "#minecraft:is_ocean"
     }

@@ -44,7 +44,7 @@ public class WellHeadBlockEntity extends SyncableBlockEntity
         if (world instanceof ServerWorld serverWorld)
         {
             Direction facing = getCachedState().get(WellHeadBlock.FACING);
-            for (int i = 0; i < 2; ++i)
+            for (int i = 0; i < 20; ++i)
             {
                 for (ItemStack stack : oreProvider.get().random(serverWorld, pos))
                 {
