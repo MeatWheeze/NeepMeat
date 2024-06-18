@@ -2,22 +2,12 @@ package com.neep.neepmeat.entity.follower;
 
 import com.neep.neepmeat.NeepMeat;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.render.OverlayTexture;
-import net.minecraft.client.render.RenderLayer;
-import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.entity.EntityRenderer;
 import net.minecraft.client.render.entity.EntityRendererFactory;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.entity.Entity;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.RotationAxis;
 import net.minecraft.util.math.Vec3d;
-import org.joml.Matrix4f;
-import org.joml.Quaternionf;
-import org.joml.Vector3f;
-import org.joml.Vector4f;
 
 public class FollowerRenderer extends EntityRenderer<FollowerEntity>
 {
@@ -72,22 +62,22 @@ public class FollowerRenderer extends EntityRenderer<FollowerEntity>
         return TEXTURE;
     }
 
-    private static void glonkyQuad(VertexConsumer consumer, MatrixStack.Entry matrixEntry, float radius, float r, float g, float b, float a, int light)
-    {
-        Matrix4f matrix4f = matrixEntry.getPositionMatrix();
-
-        for (int i = 0; i < 3; ++i)
-        {
-            float ang = i / 4f * MathHelper.PI * 2;
-            float u = 0.5f + MathHelper.sin(ang);
-            float v = 0.5f + MathHelper.cos(ang);
-            float x = radius * MathHelper.sin(i / 3f * MathHelper.PI * 2);
-            float z = radius * MathHelper.cos(i / 3f * MathHelper.PI * 2);
-
-            Vector4f vector4f = matrix4f.transform(new Vector4f(x, 0, z, 1));
-            consumer.vertex(vector4f.x(), vector4f.y(), vector4f.z(), r, g, b, a, u, v, OverlayTexture.DEFAULT_UV, light, 0, 1, 0);
-        }
-        Vector4f vector4f = matrix4f.transform(new Vector4f(1, 0.5f, 0, 1));
-        consumer.vertex(vector4f.x, vector4f.y, vector4f.z, r, g, b, a, 0, 0, OverlayTexture.DEFAULT_UV, light, 0, 1, 0);
-    }
+//    private static void glonkyQuad(VertexConsumer consumer, MatrixStack.Entry matrixEntry, float radius, float r, float g, float b, float a, int light)
+//    {
+//        Matrix4f matrix4f = matrixEntry.getPositionMatrix();
+//
+//        for (int i = 0; i < 3; ++i)
+//        {
+//            float ang = i / 4f * MathHelper.PI * 2;
+//            float u = 0.5f + MathHelper.sin(ang);
+//            float v = 0.5f + MathHelper.cos(ang);
+//            float x = radius * MathHelper.sin(i / 3f * MathHelper.PI * 2);
+//            float z = radius * MathHelper.cos(i / 3f * MathHelper.PI * 2);
+//
+//            Vector4f vector4f = matrix4f.transform(new Vector4f(x, 0, z, 1));
+//            consumer.vertex(vector4f.x(), vector4f.y(), vector4f.z(), r, g, b, a, u, v, OverlayTexture.DEFAULT_UV, light, 0, 1, 0);
+//        }
+//        Vector4f vector4f = matrix4f.transform(new Vector4f(1, 0.5f, 0, 1));
+//        consumer.vertex(vector4f.x, vector4f.y, vector4f.z, r, g, b, a, 0, 0, OverlayTexture.DEFAULT_UV, light, 0, 1, 0);
+//    }
 }

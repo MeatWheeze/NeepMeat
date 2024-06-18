@@ -13,8 +13,7 @@ import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.mob.PathAwareEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.registry.tag.DamageTypeTags;
-import net.minecraft.registry.tag.FluidTags;
+import net.minecraft.tag.FluidTags;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
@@ -62,7 +61,7 @@ public class FollowerEntity extends PathAwareEntity
     @Override
     public boolean damage(DamageSource source, float amount)
     {
-        if (source.isIn(DamageTypeTags.IS_FALL))
+        if (source.isFromFalling())
             return false;
 
         if (!source.isSourceCreativePlayer())
@@ -136,13 +135,13 @@ public class FollowerEntity extends PathAwareEntity
     {
         BlockPos.Mutable mutable = new BlockPos.Mutable(x, y, z);
 
-        while (mutable.getY() > this.getWorld().getBottomY() && !this.getWorld().getBlockState(mutable).blocksMovement())
+        while (mutable.getY() > this.getWorld().getBottomY() && !this.getWorld().getBlockState(mutable).getMaterial().blocksMovement())
         {
             mutable.move(Direction.DOWN);
         }
 
         BlockState blockState = this.getWorld().getBlockState(mutable);
-        boolean bl = blockState.blocksMovement();
+        boolean bl = blockState.getMaterial().blocksMovement();
         boolean bl2 = blockState.getFluidState().isIn(FluidTags.WATER);
         if (bl && !bl2)
         {
