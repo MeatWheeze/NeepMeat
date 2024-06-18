@@ -169,6 +169,8 @@ public class NMFluidsClient
             registry.register(FEED_FLOWING);
             registry.register(PINKDRINK);
             registry.register(PINKDRINK_FLOWING);
+            registry.register(COMPRESSED_AIR);
+            registry.register(COMPRESSED_AIR_FLOWING);
         });
 
     }
