@@ -8,6 +8,7 @@ import com.neep.neepmeat.BalanceConstants;
 import com.neep.neepmeat.api.live_machine.ComponentType;
 import com.neep.neepmeat.api.live_machine.LivingMachineComponent;
 import com.neep.neepmeat.api.processing.PowerUtils;
+import com.neep.neepmeat.datagen.tag.NMTags;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.init.NMBlocks;
 import com.neep.neepmeat.init.NMFluids;
@@ -19,7 +20,6 @@ import com.neep.neepmeat.machine.well_head.WellHeadBlockEntity;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
-import net.fabricmc.fabric.api.transfer.v1.storage.StorageUtil;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -29,7 +29,6 @@ import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
-import net.minecraft.tag.BlockTags;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
@@ -142,12 +141,7 @@ public class CharnelPumpBlockEntity extends SyncableBlockEntity implements Livin
     {
         BlockState surfaceState = world.getBlockState(surfacePos);
         return BlockEntityFinder.chunkRange(pos).contains(world.getChunk(surfacePos).getPos())
-                && (surfaceState.isIn(BlockTags.DIRT)
-                    || surfaceState.isIn(BlockTags.STONE_ORE_REPLACEABLES)
-                    || surfaceState.isIn(BlockTags.LUSH_GROUND_REPLACEABLE)
-                    || surfaceState.isIn(BlockTags.SNOW)
-                    || surfaceState.isIn(BlockTags.SHOVEL_MINEABLE)
-                    || surfaceState.isIn(BlockTags.NETHER_CARVER_REPLACEABLES)
+                && (surfaceState.isIn(NMTags.WRITHING_EARTH_REPLACABLE)
         );
     }
 

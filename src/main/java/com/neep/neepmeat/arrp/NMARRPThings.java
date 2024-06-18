@@ -41,7 +41,7 @@
 //    "processtime": 40
 //}
 //            """).toString();
-//        pack.addResource(ResourceType.SERVER_DATA, new Identifier(NeepMeat.NAMESPACE, "recipes/advanced_crushing_gen/test.json"), recipe.getBytes());
+//        pack.addResource(ResourceType.SERVER_DATA, new Identifier(NeepMeat.NAMESPACE, "recipes/advanced_crushing_gen/example.json"), recipe.getBytes());
 //        pack.addRecipe(new Identifier(NeepMeat.NAMESPACE, "glophis"), JRecipe.smelting(JIngredient.ingredient().item(NMItems.FARMING_SCUTTER), JResult.item(Items.SAND)).cookingTime(10));
 //        NeepMeat.LOGGER.info("ADDING RECIPES");
 //        packs.add(pack);

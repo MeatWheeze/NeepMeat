@@ -1,6 +1,5 @@
 package com.neep.neepmeat.api.processing.random_ores;
 
-import com.neep.neepmeat.NeepMeat;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.loot.LootTables;
@@ -28,7 +27,7 @@ public class RandomOreProvider
         for (var entry : entries)
         {
             float mw = entry.modifiedWeight(world, pos);
-            NeepMeat.LOGGER.info("State: {}, Weight: {}, Modified Weight: {}", entry.state(), entry.weight(), mw);
+//            NeepMeat.LOGGER.info("State: {}, Weight: {}, Modified Weight: {}", entry.state(), entry.weight(), mw);
             entryMap.put(mw, entry);
         }
     }
@@ -39,7 +38,7 @@ public class RandomOreProvider
         RandomOres.Entry entry = entryMap.get(random::nextInt, p);
         if (entry == null)
         {
-            NeepMeat.LOGGER.info("How strange: {}", p);
+//            NeepMeat.LOGGER.info("How strange: {}", p);
             return List.of();
         }
 
