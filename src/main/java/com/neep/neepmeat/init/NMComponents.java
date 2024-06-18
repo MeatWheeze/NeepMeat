@@ -18,6 +18,7 @@ import dev.onyxstudios.cca.api.v3.entity.EntityComponentInitializer;
 import dev.onyxstudios.cca.api.v3.entity.RespawnCopyStrategy;
 import dev.onyxstudios.cca.api.v3.item.ItemComponentFactoryRegistry;
 import dev.onyxstudios.cca.api.v3.item.ItemComponentInitializer;
+import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.mob.ZombieEntity;
 import net.minecraft.entity.passive.CowEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -45,8 +46,9 @@ public class NMComponents implements EntityComponentInitializer, ItemComponentIn
     {
         registry.beginRegistration(PlayerEntity.class, IMPLANT_MANAGER).impl(PlayerImplantManager.class).respawnStrategy(RespawnCopyStrategy.LOSSLESS_ONLY).end(PlayerImplantManager::new);
         registry.beginRegistration(PlayerEntity.class, ENLIGHTENMENT_MANAGER).impl(PlayerEnlightenmentManager.class).respawnStrategy(RespawnCopyStrategy.ALWAYS_COPY).end(PlayerEnlightenmentManager::new);
-        registry.registerFor(CowEntity.class, WORKPIECE, MobWorkpiece::new);
-        registry.registerFor(ZombieEntity.class, WORKPIECE, MobWorkpiece::new);
+//        registry.registerFor(CowEntity.class, WORKPIECE, MobWorkpiece::new);
+//        registry.registerFor(ZombieEntity.class, WORKPIECE, MobWorkpiece::new);
+        registry.registerFor(MobEntity.class, WORKPIECE, MobWorkpiece::new);
         registry.registerFor(PlayerEntity.class, WORKPIECE, PlayerWorkpiece::new);
     }
 

@@ -1,0 +1,25 @@
+{
+  "replace": false,
+  "values": [
+    {
+      "id": "#minecraft:snow",
+      "required": false
+    },
+    {
+      "id": "#minecraft:lush_ground_replaceable",
+      "required": false
+    },
+    {
+      "id": "#minecraft:mineable/shovel",
+      "required": false
+    },
+    {
+      "id": "#minecraft:dirt",
+      "required": false
+    },
+    {
+      "id": "#minecraft:nether_carver_replaceables",
+      "required": false
+    }
+  ]
+}
