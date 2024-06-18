@@ -5,25 +5,33 @@ import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.goal.ActiveTargetGoal;
+import net.minecraft.entity.ai.TargetPredicate;
+import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.mob.PathAwareEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.registry.tag.DamageTypeTags;
 import net.minecraft.registry.tag.FluidTags;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
+import java.util.function.Predicate;
 
 public class FollowerEntity extends PathAwareEntity
 {
     private final List<LimbEntity> limbs = new ArrayList<>();
 
+    @Nullable
+    private UUID targetUUID;
     private int maxLimbs = 9;
     private int limbCooldown = 10;
 
@@ -40,7 +48,8 @@ public class FollowerEntity extends PathAwareEntity
     @Override
     protected void initGoals()
     {
-        targetSelector.add(2, new ActiveTargetGoal<>(this, PlayerEntity.class, false));
+        targetSelector.add(1, new FollowerFindTargetGoal<>(this, p -> true));
+        targetSelector.add(0, new FollowerActiveTargetGoal(this, PlayerEntity.class));
         goalSelector.add(0, new FollowerFollowGoal(this, 0.5, 1));
     }
 
@@ -98,19 +107,27 @@ public class FollowerEntity extends PathAwareEntity
             limbCooldown = 5 + random.nextInt(20);
         }
 
-        if (getTarget() != null && distanceTo(getTarget()) < 1.4)
+        if (getTarget() != null)
         {
-            teleportRandomly();
+            double targetDist = distanceTo(getTarget());
+            if (targetDist < 1.4)
+            {
+                teleportRandomly(getPos());
+            }
+            else if (targetDist > 30)
+            {
+                teleportRandomly(getTarget().getPos());
+            }
         }
     }
 
-    private void teleportRandomly()
+    private void teleportRandomly(Vec3d around)
     {
         if (!this.getWorld().isClient() && this.isAlive())
         {
-            double d = this.getX() + (this.random.nextDouble() - 0.5) * 64.0;
-            double e = this.getY() + (double) (this.random.nextInt(64) - 32);
-            double f = this.getZ() + (this.random.nextDouble() - 0.5) * 64.0;
+            double d = around.getX() + (this.random.nextDouble() - 0.5) * 64.0;
+            double e = around.getY() + (double) (this.random.nextInt(64) - 32);
+            double f = around.getZ() + (this.random.nextDouble() - 0.5) * 64.0;
             teleportTo(d, e, f);
         }
     }
@@ -135,6 +152,30 @@ public class FollowerEntity extends PathAwareEntity
         {
             return false;
         }
+    }
+
+    @Override
+    public NbtCompound writeNbt(NbtCompound nbt)
+    {
+        super.writeNbt(nbt);
+        if (targetUUID != null)
+            nbt.putUuid("persistent_target", targetUUID);
+        return nbt;
+    }
+
+    @Override
+    public void readNbt(NbtCompound nbt)
+    {
+        super.readNbt(nbt);
+        if (nbt.contains("persistent_target"))
+            this.targetUUID = nbt.getUuid("persistent_target");
+        else
+            this.targetUUID = null;
+    }
+
+    public void setPersistentTarget(PlayerEntity player)
+    {
+        targetUUID = player.getUuid();
     }
 
     @Override
@@ -163,5 +204,77 @@ public class FollowerEntity extends PathAwareEntity
     public boolean cannotDespawn()
     {
         return true;
+    }
+
+    private static class FollowerFindTargetGoal<T extends PlayerEntity> extends Goal
+    {
+        private final FollowerEntity mob;
+        private final TargetPredicate predicate;
+        protected PlayerEntity targetEntity;
+
+        public FollowerFindTargetGoal(FollowerEntity mob, Predicate<LivingEntity> predicate)
+        {
+            this.mob = mob;
+            this.predicate = TargetPredicate.createAttackable().setPredicate(predicate);
+        }
+
+        protected void findClosestTarget()
+        {
+            targetEntity = mob.getWorld().getClosestPlayer(predicate, this.mob, this.mob.getX(), this.mob.getEyeY(), this.mob.getZ());
+        }
+
+        @Override
+        public boolean canStart()
+        {
+            if (mob.targetUUID == null && mob.getRandom().nextInt(toGoalTicks(10)) != 0)
+            {
+                return false;
+            }
+            else
+            {
+                this.findClosestTarget();
+                return targetEntity != null;
+            }
+        }
+
+        @Override
+        public void start()
+        {
+            mob.setPersistentTarget(targetEntity);
+            super.start();
+        }
+    }
+
+    // Looks for the targeted player in the world based on the stored UUID
+    private static class FollowerActiveTargetGoal extends Goal
+    {
+        private final FollowerEntity mob;
+
+        public FollowerActiveTargetGoal(FollowerEntity mob, Class<PlayerEntity> targetClass)
+        {
+            this.mob = mob;
+        }
+
+        @Override
+        public boolean canStart()
+        {
+            return (mob.getTarget() == null || !mob.getTarget().isAlive()) && mob.targetUUID != null;
+        }
+
+        @Override
+        public void start()
+        {
+            PlayerEntity playerEntity = mob.getWorld().getPlayerByUuid(mob.targetUUID);
+            if (playerEntity != null)
+            {
+                mob.setTarget(playerEntity);
+            }
+        }
+
+        @Override
+        public boolean shouldContinue()
+        {
+            return false;
+        }
     }
 }
