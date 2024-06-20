@@ -9,6 +9,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.neep.meatlib.api.event.DataPackPostProcess;
 import com.neep.meatlib.mixin.RecipeManagerAccessor;
+import com.neep.neepmeat.BalanceConstants;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.fluid.ore_fat.OreFatFluidFactory;
 import com.neep.neepmeat.init.NMFluids;
@@ -159,7 +160,7 @@ public class OreFatRegistry implements SimpleSynchronousResourceReloadListener
         Entry entry = outputToEntry.computeIfAbsent(output.getItem(), i -> new Entry(
                 createName(output.getItem(), NMFluids.DIRTY_ORE_FAT),
                 createName(output.getItem(), NMFluids.DIRTY_ORE_FAT),
-                output, nbt, 1, (float) 1.5));
+                output, nbt, BalanceConstants.DEFAULT_ORE_RENDERING_YIELD, BalanceConstants.DEFAULT_ORE_TROMMEL_YIELD));
         inputToEntry.put(input, entry);
         nbtToEntry.put(nbt, entry);
     }
@@ -287,11 +288,11 @@ public class OreFatRegistry implements SimpleSynchronousResourceReloadListener
                     if (rootObject.has("clean_fat_name"))
                         cleanFatName = Text.translatable(JsonHelper.getString(rootObject, "clean_fat_name"));
 
-                    float renderingYield = 1;
+                    float renderingYield = BalanceConstants.DEFAULT_ORE_RENDERING_YIELD;
                     if (rootObject.has("rendering_yield"))
                         renderingYield = JsonHelper.getFloat(rootObject, "rendering_yield");
 
-                    float trommelYield = 1.5f;
+                    float trommelYield = BalanceConstants.DEFAULT_ORE_TROMMEL_YIELD;
                     if (rootObject.has("trommel_yield"))
                         trommelYield = JsonHelper.getFloat(rootObject, "trommel_yield");
 
@@ -318,12 +319,12 @@ public class OreFatRegistry implements SimpleSynchronousResourceReloadListener
         }
     }
 
-    public record Entry(Text dirtyFatname, Text cleanFatName, ItemVariant result, NbtCompound nbt, float renderingYield,
+    public record Entry(Text dirtyFatName, Text cleanFatName, ItemVariant result, NbtCompound nbt, float renderingYield,
                         float trommelYield)
     {
 //        public static final Codec<Entry> CODEC = RecordCodecBuilder.create(instance ->
 //                instance.group(
-//                        Codecs.TEXT.fieldOf("dirty_fat_name").forGetter(Entry::dirtyFatname),
+//                        Codecs.TEXT.fieldOf("dirty_fat_name").forGetter(Entry::dirtyFatName),
 //                        Codecs.TEXT.fieldOf("clean_fat_name").forGetter(Entry::cleanFatName),
 //                        MeatlibStorageUtil.ITEM_VARIANT_CODEC.fieldOf("result").forGetter(Entry::result),
 //                        NbtCompound.CODEC.fieldOf("nbt").forGetter(Entry::nbt),
@@ -345,7 +346,7 @@ public class OreFatRegistry implements SimpleSynchronousResourceReloadListener
 
         public void write(PacketByteBuf buf)
         {
-            buf.writeString(Text.Serializer.toJson(dirtyFatname));
+            buf.writeString(Text.Serializer.toJson(dirtyFatName));
             buf.writeString(Text.Serializer.toJson(cleanFatName));
             result.toPacket(buf);
             buf.writeNbt(nbt);

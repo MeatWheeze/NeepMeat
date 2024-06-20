@@ -16,7 +16,7 @@ public class OreFatAttributeHandler implements FluidVariantAttributeHandler
         {
             // TODO: use an enum or something
             if (fluidVariant.isOf(NMFluids.STILL_DIRTY_ORE_FAT))
-                return entry.dirtyFatname();
+                return entry.dirtyFatName();
             else
                 return entry.cleanFatName();
         }

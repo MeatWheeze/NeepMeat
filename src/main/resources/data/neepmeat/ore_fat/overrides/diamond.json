@@ -4,6 +4,6 @@
   "clean_fat_name": "ore_fat.neepmeat.diamond.clean",
   "inputs": [
   ],
-  "rendering_yield": 1,
-  "trommel_yield": 1.5
+  "rendering_yield": 2,
+  "trommel_yield": 2
 }

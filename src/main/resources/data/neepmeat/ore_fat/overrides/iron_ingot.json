@@ -4,6 +4,6 @@
   "clean_fat_name": "ore_fat.neepmeat.iron_ingot.clean",
   "inputs": [
   ],
-  "rendering_yield": 1,
+  "rendering_yield": 1.333,
   "trommel_yield": 1.5
 }
