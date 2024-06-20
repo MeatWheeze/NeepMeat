@@ -235,6 +235,7 @@
   "block.neepmeat.fluid_pipe_black": "Black Fluid Pipe",
 
   "block.neepmeat.copper_pipe": "Copper Pipe",
+  "block.neepmeat.copper_pipe.ore_0": "Does absolutely nothing.",
   "block.neepmeat.stop_valve": "Stop Valve",
   "block.neepmeat.stop_valve.lore_0": "Prevents flow when closed. Responds to redstone.",
   "block.neepmeat.check_valve": "Check Valve [CURRENTLY BROKEN]",
@@ -538,7 +539,7 @@
   "item.neepmeat.networking_tool.lore_1": "Right-click the sender block and then the",
   "item.neepmeat.networking_tool.lore_2": "receiver block to set a connection.",
 
-  "item.neepmeat.flywheel": "Flywheel",
+  "item.neepmeat.large_flywheel": "Flywheel",
   "item.neepmeat.stator": "Copper Stator",
 
   "item.neepmeat.whisper_brass_ingot": "Whispering Brass Ingot",
@@ -672,7 +673,7 @@
   "item.minecraft.lingering_potion.effect.ash_preparation": "Ash Preparation",
 
   "item.neepmeat.goggles": "AR Goggles",
-  "item.neepmeat.lore_0": "Reveals the unseen",
+  "item.neepmeat.goggles.lore_0": "Reveals the unseen",
 
   "item.neepmeat.farming_scutter": "Farming Scutter",
   "item.neepmeat.farming_scutter.lore_0": "Harvests and replants crops. Must be placed on farmland. Harvested items will be inserted into block that is highlighted when placing.\nSneak-click to pick up.",
