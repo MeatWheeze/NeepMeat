@@ -148,7 +148,7 @@
     {"id": "trommel", "contents": [
       {"type": "text", "text": "Trommel\n", "bold": true},
       {"type": "text", "text": "This trommel lifts impurities from fats and meats as others might remove rocks from water. Mundane contaminants remain within the rotating mesh while the desired products drain away.\n"},
-      {"type": "text", "text": "Dirty Ore Fat can be processed in the Trommel for an approximate 150% yield."},
+      {"type": "text", "text": "Dirty Ore Fat can be processed in the Trommel for an approximate 150% yield compared to directly pressing dirty fat."},
       {"type": "text", "text": "Tissue fluid can be separated into Refined Meat with an extra chance of Assorted Biological Solids."},
       {"type": "text", "text": "\nUsage\n", "bold": true},
       {"type": "text", "text": "Fluid is inserted into the top of the nearest block and outputs leave through the bottom of the far end."},
@@ -162,6 +162,7 @@
       {"type": "text", "text": "The enlightened enzymes of the Gland Potato concentrate the fleshly nature of certain minerals into a layer of ethereal fat. Thus, rendering is an efficacious form of mineral extraction."},
       {"type": "text", "text": "\nUsage\n", "bold": true},
       {"type": "text", "text": "To obtain ore fat, fill a Rendering Basin with eldritch enzymes and drop in raw ore from above. The ore fat will appear within an adjacent Fat Collector from which it can be extracted. Each unit of raw ore requires 333mb of Eldritch Enzymes to process."}
+      {"type": "text", "text": "Rendering typically yields 33% more of the resource than smelting."}
     ]
     },
     {"id": "collector", "contents": [
