@@ -1,6 +1,5 @@
 package com.neep.neepmeat.entity.hound;
 
-import com.neep.neepmeat.init.NMItems;
 import com.neep.neepmeat.init.NMSounds;
 import com.neep.neepmeat.util.SightUtil;
 import net.minecraft.entity.EntityType;
@@ -36,7 +35,7 @@ public class HoundEntity extends HostileEntity implements Monster
     @Override
     public boolean isInvisibleTo(PlayerEntity player)
     {
-        return super.isInvisibleTo(player) || !SightUtil.canPlayerSee(player, this);
+        return super.isInvisibleTo(player) || !SightUtil.canPlayerSee(player);
     }
 
     @Override

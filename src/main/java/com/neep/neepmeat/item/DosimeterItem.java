@@ -45,8 +45,13 @@ public class DosimeterItem extends BaseItem
         {
             MinecraftClient client = MinecraftClient.getInstance();
 
-            ItemStack stack = client.player.getMainHandStack();
-            if (stack.isOf(NMItems.DOSIMETER))
+            ItemStack stack = null;
+            if (client.player.getMainHandStack().isOf(NMItems.DOSIMETER))
+                stack = client.player.getMainHandStack();
+            else if (client.player.getOffHandStack().isOf(NMItems.DOSIMETER))
+                stack = client.player.getOffHandStack();
+
+            if (stack != null)
             {
                 EnlightenmentManager manager = NMComponents.ENLIGHTENMENT_MANAGER.get(client.player);
                 int width = client.getWindow().getScaledWidth();

@@ -12,7 +12,6 @@ import net.minecraft.client.render.entity.EntityRendererFactory;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vec3f;
 import software.bernie.geckolib3.core.util.Color;
 import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
@@ -55,7 +54,7 @@ public class BovineHorrorRenderer extends GeoEntityRenderer<BovineHorrorEntity>
     public Color getRenderColor(BovineHorrorEntity animatable, float tickDelta, MatrixStack matrixStack, VertexConsumerProvider vcp, VertexConsumer vertexConsumer, int packedLight)
     {
         float alpha = animatable.prevVisibility;
-        if (SightUtil.canPlayerSee(MinecraftClient.getInstance().player, animatable))
+        if (SightUtil.canPlayerSee(MinecraftClient.getInstance().player))
         {
             alpha = 1;
         }
@@ -65,7 +64,7 @@ public class BovineHorrorRenderer extends GeoEntityRenderer<BovineHorrorEntity>
     @Override
     public RenderLayer getRenderType(BovineHorrorEntity animatable, float partialTick, MatrixStack poseStack, VertexConsumerProvider bufferSource, VertexConsumer buffer, int packedLight, Identifier texture)
     {
-        if (SightUtil.canPlayerSee(MinecraftClient.getInstance().player, animatable))
+        if (SightUtil.canPlayerSee(MinecraftClient.getInstance().player))
         {
             return RenderLayer.getEntityCutout(texture);
         }

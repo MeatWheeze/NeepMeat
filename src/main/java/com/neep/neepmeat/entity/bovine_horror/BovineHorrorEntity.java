@@ -98,8 +98,8 @@ public class BovineHorrorEntity extends HostileEntity implements IAnimatable, An
 
     protected void updateGoals()
     {
-        goalSelector = new GoalSelector(world.getProfilerSupplier());
-        targetSelector = new GoalSelector(world.getProfilerSupplier());
+        goalSelector = new GoalSelector(getWorld().getProfilerSupplier());
+        targetSelector = new GoalSelector(getWorld().getProfilerSupplier());
 
         if (isPhase2())
         {
@@ -202,7 +202,7 @@ public class BovineHorrorEntity extends HostileEntity implements IAnimatable, An
         Vec3d origin = getPos().add(0, 1.5, 0);
         for (int i = 0; i < 150; ++i)
         {
-            spawnParticle(world, NMParticles.BODY_COMPOUND_SHOWER, random, origin);
+            spawnParticle(getWorld(), NMParticles.BODY_COMPOUND_SHOWER, random, origin);
         }
     }
 
@@ -219,14 +219,14 @@ public class BovineHorrorEntity extends HostileEntity implements IAnimatable, An
         double vy = py - origin.y * 1;
         double vz = pz - origin.z * 1;
 
-        world.addParticle(effect, px, py, pz, vx, vy, vz);
+        getWorld().addParticle(effect, px, py, pz, vx, vy, vz);
     }
 
     @Override
     public boolean isInvisibleTo(PlayerEntity player)
     {
-        float visibility = world.isClient() ? prevVisibility : getVisibility();
-        return super.isInvisibleTo(player) || (!SightUtil.canPlayerSee(player, this) && visibility == 0);
+        float visibility = getWorld().isClient() ? prevVisibility : getVisibility();
+        return super.isInvisibleTo(player) || (!SightUtil.canPlayerSee(player) && visibility == 0);
     }
 
     @Nullable
@@ -256,10 +256,10 @@ public class BovineHorrorEntity extends HostileEntity implements IAnimatable, An
             bossBar.setDarkenSky(true);
         }
 
-        if (!world.isClient())
+        if (!getWorld().isClient())
         {
             prevVisibility = getVisibility();
-            if (world.getTime() % 60 == 0)
+            if (getWorld().getTime() % 60 == 0)
             {
                 float p = random.nextFloat();
                 if (p > 0.5 && getVisibility() == 0)
@@ -282,11 +282,11 @@ public class BovineHorrorEntity extends HostileEntity implements IAnimatable, An
         setVisibility(1);
 
 
-        if (world.isClient())
+        if (getWorld().isClient())
         {
             for (int i = 0; i < 100; ++i)
             {
-                world.addParticle(NMParticles.BODY_COMPOUND_SHOWER,
+                getWorld().addParticle(NMParticles.BODY_COMPOUND_SHOWER,
                         getX() + (random.nextFloat() - 0.5) * 3,
                         getY() + (random.nextFloat()) * 2 + 0.5,
                         getZ() + (random.nextFloat() - 0.5) * 3,
@@ -355,11 +355,6 @@ public class BovineHorrorEntity extends HostileEntity implements IAnimatable, An
     public boolean isInRange(Entity entity)
     {
         return distanceTo(entity) <= getAttackRange(entity) * 0.5;
-    }
-
-    public boolean isInMoveRange(Entity entity)
-    {
-        return distanceTo(entity) <= 20;
     }
 
     public boolean isPhase2()

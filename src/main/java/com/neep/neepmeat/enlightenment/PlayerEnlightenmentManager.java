@@ -8,6 +8,7 @@ import dev.onyxstudios.cca.api.v3.component.tick.ServerTickingComponent;
 import dev.onyxstudios.cca.api.v3.entity.RespawnCopyStrategy;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.util.math.MathHelper;
 import org.jetbrains.annotations.NotNull;
 
 public class PlayerEnlightenmentManager implements EnlightenmentManager, ClientTickingComponent, ServerTickingComponent, AutoSyncedComponent
@@ -27,7 +28,6 @@ public class PlayerEnlightenmentManager implements EnlightenmentManager, ClientT
     @Override
     public int getTotal()
     {
-        // TODO: double acute when Pineal Eye is installed
         return (int) (acuteEnlightenment + chronicEnlightenment);
     }
 
@@ -36,7 +36,7 @@ public class PlayerEnlightenmentManager implements EnlightenmentManager, ClientT
     {
         // TODO: half chronic with preventatives
 
-        double corrected = expDistance(base, sqDistance);
+        double corrected = inverseSquare(base, sqDistance);
         acuteEnlightenment += (1 + corrected) * (1 - split);
         chronicEnlightenment += corrected * split;
 
@@ -46,9 +46,13 @@ public class PlayerEnlightenmentManager implements EnlightenmentManager, ClientT
 //        NeepMeat.LOGGER.info("added: " + corrected + ", acute: " + acuteEnlightenment + " chronic: " + chronicEnlightenment);
     }
 
-    public static double expDistance(float base, double sqDistance)
+    public static double inverseSquare(float base, double sqDistance)
     {
-        return base * Math.exp(-Math.sqrt(sqDistance));
+//        return base * Math.exp(-Math.sqrt(sqDistance));
+        if (sqDistance == 0)
+            return base;
+
+        return MathHelper.clamp(base * 1 / sqDistance, 0, base);
     }
 
     @Override
