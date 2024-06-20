@@ -68,8 +68,8 @@ public class BlockCrushingRecipe extends AdvancedCrushingRecipe
                 Item item = resource.getItem();
                 try (Transaction inner = transaction.openNested())
                 {
-                    long extracted = storage.getInputStorage().extract(ItemVariant.of(item), entry.input().amount(), transaction);
-                    if (extracted == itemInput.amount())
+                    long extracted = storage.getInputStorage().extract(ItemVariant.of(item), entry.input().amount(), inner);
+                    if (extracted == entry.input().amount())
                     {
                         inner.commit();
                         return true;

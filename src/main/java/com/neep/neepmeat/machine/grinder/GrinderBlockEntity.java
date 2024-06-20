@@ -168,13 +168,15 @@ public class GrinderBlockEntity extends MotorisedMachineBlockEntity
         {
             CrushingRecipe recipe = MeatlibRecipes.getInstance().getFirstMatch(NMrecipeTypes.GRINDING, storage).orElse(null);
 
-            if (recipe != null && MeatlibStorageUtil.simulateInsert(
-                    storage.outputStorage, ItemVariant.of(recipe.getItemOutput().resource()), recipe.getItemOutput().maxAmount(), null)
-                    == recipe.getItemOutput().maxAmount())
+            try (Transaction transaction = Transaction.openOuter())
             {
-                setCurrentRecipe(recipe);
-                this.processLength = recipe.getTime();
-                sync();
+                if (recipe != null && recipe.ejectOutputs(storage, transaction))
+                {
+                    setCurrentRecipe(recipe);
+                    this.processLength = recipe.getTime();
+                    sync();
+                }
+                transaction.abort();
             }
         }
     }
@@ -185,7 +187,9 @@ public class GrinderBlockEntity extends MotorisedMachineBlockEntity
         {
             try (Transaction transaction = Transaction.openOuter())
             {
-                if (getCurrentRecipe().matches(storage) && getCurrentRecipe().ejectOutputs(storage, transaction) && getCurrentRecipe().takeInputs(storage, transaction))
+                if (getCurrentRecipe().matches(storage)
+                        && getCurrentRecipe().ejectOutputs(storage, transaction)
+                        && getCurrentRecipe().takeInputs(storage, transaction))
                 {
                     ejectOutput(transaction);
                     transaction.commit();

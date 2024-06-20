@@ -98,14 +98,14 @@ public class CrushingRecipe implements MeatlibRecipe<CrusherRecipeContext>
     {
         try (Transaction inner = transaction.openNested())
         {
-            Optional<Item> item = itemInput.getFirstMatching(storage.getInputStorage(), transaction);
+            Optional<Item> item = itemInput.getFirstMatching(storage.getInputStorage(), inner);
             if (item.isEmpty())
             {
                 inner.abort();
                 return false;
             }
 
-            long extracted = storage.getInputStorage().extract(ItemVariant.of(item.get()), itemInput.amount(), transaction);
+            long extracted = storage.getInputStorage().extract(ItemVariant.of(item.get()), itemInput.amount(), inner);
             if (extracted == itemInput.amount())
             {
                 inner.commit();
