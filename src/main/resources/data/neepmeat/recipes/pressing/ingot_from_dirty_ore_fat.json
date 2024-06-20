@@ -1,0 +1,7 @@
+{
+  "type": "neepmeat:fat_pressing",
+  "fluid_input": {
+    "resource": "neepmeat:dirty_ore_fat",
+    "amount": 9000
+  }
+}
