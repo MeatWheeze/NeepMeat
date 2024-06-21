@@ -11,7 +11,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.util.math.MathHelper;
 
-import static com.neep.neepmeat.machine.pylon.PylonBlockEntity.RUNNING_SPEED;
+import static com.neep.neepmeat.BalanceConstants.PYLON_RUNNING_SPEED;
 
 @Environment(value = EnvType.CLIENT)
 public class PylonClientComponent implements ClientComponent
@@ -36,7 +36,7 @@ public class PylonClientComponent implements ClientComponent
     @Override
     public void clientTick()
     {
-        float clamped = MathHelper.clamp(be.getSpeed() - RUNNING_SPEED, 0, RUNNING_SPEED * 2) / (RUNNING_SPEED * 2);
+        float clamped = MathHelper.clamp(be.getSpeed() - PYLON_RUNNING_SPEED, 0, PYLON_RUNNING_SPEED * 2) / (PYLON_RUNNING_SPEED * 2);
         float threshold = MathHelper.lerp(clamped, 0f, 0.6f);
         float p = be.random.nextFloat();
         if (p < threshold)

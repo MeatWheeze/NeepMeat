@@ -5,6 +5,7 @@ import com.jozufozu.flywheel.api.instance.DynamicInstance;
 import com.jozufozu.flywheel.backend.instancing.blockentity.BlockEntityInstance;
 import com.jozufozu.flywheel.core.Materials;
 import com.jozufozu.flywheel.core.materials.model.ModelData;
+import com.jozufozu.flywheel.util.AnimationTickHolder;
 import com.neep.neepmeat.client.NMExtraModels;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -40,11 +41,12 @@ public class PylonInstance extends BlockEntityInstance<PylonBlockEntity> impleme
     public void beginFrame()
     {
         matrices.push();
-        matrices.translate(0.5, 0.5, 0.5);
+        float xOff = blockEntity.isUnstable() ? 0.5f + 0.05f * MathHelper.sin(AnimationTickHolder.getRenderTime()) : 0.5f;
+        matrices.translate(xOff, 0.5, 0.5);
         float delta = !MinecraftClient.getInstance().isPaused() ? MinecraftClient.getInstance().getLastFrameDuration() : 0;
         blockEntity.angle = MathHelper.wrapDegrees(blockEntity.angle + delta * blockEntity.getSpeed());
         matrices.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(blockEntity.angle));
-        matrices.translate(-0.5, -0.5, -0.5);
+        matrices.translate(-xOff, -0.5, -0.5);
 
         if (blockEntity.isRunning())
         {

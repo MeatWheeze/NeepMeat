@@ -1,7 +1,11 @@
 package com.neep.neepmeat.client.sound;
 
+import com.jozufozu.flywheel.util.AnimationTickHolder;
+import com.neep.neepmeat.BalanceConstants;
 import com.neep.neepmeat.machine.pylon.PylonBlockEntity;
-import net.minecraft.client.sound.*;
+import net.minecraft.client.sound.AbstractSoundInstance;
+import net.minecraft.client.sound.Sound;
+import net.minecraft.client.sound.TickableSoundInstance;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.Identifier;
@@ -80,8 +84,14 @@ public class PylonSoundInstance extends AbstractSoundInstance implements Tickabl
     @Override
     public void tick()
     {
-        this.pitch = MathHelper.lerp(0.2f, this.pitch, MathHelper.lerp(MathHelper.clamp(blockEntity.getSpeed(), 0, PylonBlockEntity.RUNNING_SPEED) / PylonBlockEntity.RUNNING_SPEED, 0, 1));
+        this.pitch = MathHelper.lerp(0.2f, this.pitch, MathHelper.lerp(MathHelper.clamp(blockEntity.getSpeed(), 0, BalanceConstants.PYLON_RUNNING_SPEED) / BalanceConstants.PYLON_RUNNING_SPEED, 0, 1));
         this.volume = pitch;
+
+        if (blockEntity.isUnstable())
+        {
+            this.pitch += 0.6 * MathHelper.sin(AnimationTickHolder.getRenderTime());
+        }
+
         if (this.blockEntity.isRemoved())
         {
             this.done = true;

@@ -12,4 +12,7 @@ public class BalanceConstants
     public static final int LARGE_COMPRESSOR_POWER_TO_DROPLETS = 400;
     public static final int CHARNEL_PUMP_MIN_POWER = 500;
     public static final int CHARNEL_PUMP_POWER_TO_AIR = 100;
+
+    public static final float PYLON_MAX_SPEED = 40;
+    public static final float PYLON_RUNNING_SPEED = 16;
 }
