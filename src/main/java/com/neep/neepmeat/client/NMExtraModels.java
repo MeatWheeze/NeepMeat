@@ -3,6 +3,7 @@ package com.neep.neepmeat.client;
 import com.jozufozu.flywheel.core.PartialModel;
 import com.neep.neepmeat.NeepMeat;
 import net.fabricmc.fabric.api.client.model.ExtraModelProvider;
+import net.minecraft.client.util.ModelIdentifier;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.util.Identifier;
 
@@ -79,6 +80,8 @@ public class NMExtraModels implements ExtraModelProvider
     public static Identifier EGG = new Identifier(NeepMeat.NAMESPACE, "block/mob_egg");
     public static Identifier CRUSHER_JAW = new Identifier(NeepMeat.NAMESPACE, "block/grinder/jaw");
 
+    public static ModelIdentifier ROCK_DRILL = new ModelIdentifier(NeepMeat.NAMESPACE, "item/rock_drill/rock_drill");
+
     @Override
     public void provideExtraModels(ResourceManager manager, Consumer<Identifier> out)
     {
@@ -103,6 +106,7 @@ public class NMExtraModels implements ExtraModelProvider
         out.accept(SURGERY_ROBOT);
         out.accept(EGG);
         out.accept(CRUSHER_JAW);
+        out.accept(ROCK_DRILL);
     }
 
     public static void init()
