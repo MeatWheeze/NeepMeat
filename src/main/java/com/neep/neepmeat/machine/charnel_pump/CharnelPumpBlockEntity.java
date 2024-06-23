@@ -186,12 +186,11 @@ public class CharnelPumpBlockEntity extends SyncableBlockEntity implements Livin
     }
 
     @Override
-    public NbtCompound toClientTag(NbtCompound nbt)
+    public void toClientTag(NbtCompound nbt)
     {
         nbt.putFloat("power", progressIncrement);
         nbt.putBoolean("has_air", hasAir);
         nbt.putBoolean("has_fluid", hasFluid);
-        return nbt;
     }
 
     @Override

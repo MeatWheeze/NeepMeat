@@ -68,5 +68,5 @@ public class FilterPipeBlockEntity extends FluidPipeBlockEntity<FilterPipeBlock.
     public void fromClientTag(NbtCompound nbt) { }
 
     @Override
-    public NbtCompound toClientTag(NbtCompound nbt) { return nbt; }
+    public void toClientTag(NbtCompound nbt) { }
 }

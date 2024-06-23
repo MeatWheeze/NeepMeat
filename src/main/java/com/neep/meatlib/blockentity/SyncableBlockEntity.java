@@ -40,7 +40,9 @@ public abstract class SyncableBlockEntity extends BlockEntity implements BlockEn
     @Override
     public NbtCompound toInitialChunkDataNbt()
     {
-        return toClientTag(new NbtCompound());
+        NbtCompound nbt = new NbtCompound();
+        toClientTag(nbt);
+        return nbt;
     }
 
     @Override
@@ -82,10 +84,9 @@ public abstract class SyncableBlockEntity extends BlockEntity implements BlockEn
      * Override to selectively send properties.
      */
     @Override
-    public NbtCompound toClientTag(NbtCompound nbt)
+    public void toClientTag(NbtCompound nbt)
     {
         writeNbt(nbt);
-        return nbt;
     }
 
     @Override

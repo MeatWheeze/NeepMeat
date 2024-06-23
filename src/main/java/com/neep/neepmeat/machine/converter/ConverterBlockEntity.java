@@ -144,9 +144,8 @@ public class ConverterBlockEntity extends SyncableBlockEntity
     }
 
     @Override
-    public NbtCompound toClientTag(NbtCompound tag)
+    public void toClientTag(NbtCompound tag)
     {
         tag.putBoolean("running", running);
-        return tag;
     }
 }

@@ -64,11 +64,10 @@ public class WindowPipeBlockEntity extends FluidPipeBlockEntity<WindowPipeBlockE
     }
 
     @Override
-    public NbtCompound toClientTag(NbtCompound nbt)
+    public void toClientTag(NbtCompound nbt)
     {
         nbt.putLong("amount", vertex.maxAmount);
         nbt.put("variant", vertex.maxVariant.toNbt());
-        return nbt;
     }
 
     public static class WindowPipeVertex extends BlockPipeVertex

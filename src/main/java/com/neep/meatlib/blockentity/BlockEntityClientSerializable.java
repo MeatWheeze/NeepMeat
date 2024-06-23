@@ -12,7 +12,7 @@ public interface BlockEntityClientSerializable
 {
     void fromClientTag(NbtCompound nbt);
 
-    NbtCompound toClientTag(NbtCompound nbt);
+    void toClientTag(NbtCompound nbt);
 
     default void sync()
     {

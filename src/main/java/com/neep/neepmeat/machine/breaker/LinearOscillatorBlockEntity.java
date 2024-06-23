@@ -10,7 +10,6 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.Hand;
@@ -159,12 +158,11 @@ public class LinearOscillatorBlockEntity extends SyncableBlockEntity implements 
     }
 
     @Override
-    public NbtCompound toClientTag(NbtCompound nbt)
+    public void toClientTag(NbtCompound nbt)
     {
         nbt.putLong("world_time", getWorld().getTime());
         nbt.putFloat("prev_extension", prevExtension);
         nbt.putFloat("extension", extension);
-        return nbt;
     }
 
     @Override

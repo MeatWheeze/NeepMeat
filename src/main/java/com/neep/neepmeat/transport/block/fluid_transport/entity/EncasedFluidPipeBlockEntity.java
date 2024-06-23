@@ -1,10 +1,12 @@
 package com.neep.neepmeat.transport.block.fluid_transport.entity;
 
+import com.neep.meatlib.blockentity.BlockEntityClientSerializable;
 import com.neep.meatlib.util.NbtSerialisable;
 import com.neep.neepmeat.transport.block.EncasedBlockEntity;
 import com.neep.neepmeat.transport.block.fluid_transport.EncasedFluidPipeBlock;
 import com.neep.neepmeat.transport.fluid_network.PipeVertex;
 import com.neep.neepmeat.transport.machine.fluid.FluidPipeBlockEntity;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.entity.BlockEntityType;
@@ -18,7 +20,7 @@ import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.util.shape.VoxelShapes;
 import org.jetbrains.annotations.Nullable;
 
-public class EncasedFluidPipeBlockEntity<T extends PipeVertex & NbtSerialisable> extends FluidPipeBlockEntity<T> implements EncasedBlockEntity
+public class EncasedFluidPipeBlockEntity<T extends PipeVertex & NbtSerialisable> extends FluidPipeBlockEntity<T> implements EncasedBlockEntity, BlockEntityClientSerializable
 {
     private BlockState camoState = Blocks.AIR.getDefaultState();
     @Nullable private VoxelShape cachedShape;
@@ -97,5 +99,24 @@ public class EncasedFluidPipeBlockEntity<T extends PipeVertex & NbtSerialisable>
             }
         }
         return cachedShape;
+    }
+
+
+    @Override
+    public void toClientTag(NbtCompound nbt)
+    {
+        writeNbt(nbt);
+    }
+
+    @Override
+    public void fromClientTag(NbtCompound nbt)
+    {
+        readNbt(nbt);
+    }
+
+    @Override
+    public void onReceiveNbt(NbtCompound nbt)
+    {
+        world.updateListeners(pos, getCachedState(), getCamoState(), Block.REDRAW_ON_MAIN_THREAD);
     }
 }
