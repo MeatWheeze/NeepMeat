@@ -26,11 +26,11 @@ public class BlockEntitySync
 {
     private static final Identifier CHANNEL_ID = new Identifier(MeatLib.NAMESPACE, "block_entity_sync");
 
-    public static <T extends BlockEntity & BlockEntityClientSerializable> void send(List<ServerPlayerEntity> players, T be)
+    public static <T extends BlockEntity> void send(List<ServerPlayerEntity> players, T be)
     {
         PacketByteBuf buf = PacketByteBufs.create();
 
-        NbtCompound nbt = be.createSyncNbt();
+        NbtCompound nbt = ((BlockEntityClientSerializable) be).createSyncNbt();
 
         buf.writeBlockPos(be.getPos());
         buf.writeRegistryValue(Registry.BLOCK_ENTITY_TYPE, be.getType());

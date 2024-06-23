@@ -39,12 +39,6 @@ public class EncasedFluidPipeBlockEntity<T extends PipeVertex & NbtSerialisable>
     }
 
     @Override
-    public Packet<ClientPlayPacketListener> toUpdatePacket()
-    {
-        return BlockEntityUpdateS2CPacket.create(this);
-    }
-
-    @Override
     public void tick()
     {
         super.tick();
@@ -75,6 +69,7 @@ public class EncasedFluidPipeBlockEntity<T extends PipeVertex & NbtSerialisable>
     {
         this.camoState = camoState;
         this.cachedShape = null;
+        sync();
     }
 
     @Override

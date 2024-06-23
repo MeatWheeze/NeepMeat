@@ -1,8 +1,10 @@
 package com.neep.neepmeat.transport.block.energy_transport.entity;
 
+import com.neep.meatlib.blockentity.BlockEntityClientSerializable;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.transport.block.EncasedBlockEntity;
 import com.neep.neepmeat.transport.block.energy_transport.EncasedVascularConduitBlock;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.nbt.NbtCompound;
@@ -11,7 +13,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.util.shape.VoxelShapes;
 
-public class EncasedConduitBlockEntity extends VascularConduitBlockEntity implements EncasedBlockEntity
+public class EncasedConduitBlockEntity extends VascularConduitBlockEntity implements EncasedBlockEntity, BlockEntityClientSerializable
 {
     private BlockState camoState = Blocks.AIR.getDefaultState();
     private VoxelShape cachedShape = null;
@@ -84,5 +86,23 @@ public class EncasedConduitBlockEntity extends VascularConduitBlockEntity implem
             }
         }
         return cachedShape;
+    }
+
+    @Override
+    public void fromClientTag(NbtCompound nbt)
+    {
+        readNbt(nbt);
+    }
+
+    @Override
+    public void toClientTag(NbtCompound nbt)
+    {
+        writeNbt(nbt);
+    }
+
+    @Override
+    public void onReceiveNbt(NbtCompound nbt)
+    {
+        world.updateListeners(pos, getCachedState(), getCamoState(), Block.REDRAW_ON_MAIN_THREAD);
     }
 }

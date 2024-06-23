@@ -23,6 +23,8 @@ public interface EncasedBlock
                 && world.getBlockEntity(pos) instanceof EncasedBlockEntity be
         )
         {
+            world.playSound(player, pos, SoundEvents.BLOCK_SCAFFOLDING_BREAK, SoundCategory.BLOCKS, 1, 1);
+
             if (world.isClient())
                 return true;
 
@@ -30,7 +32,6 @@ public interface EncasedBlock
             be.setCamoState(camoState);
 
             world.updateListeners(pos, state, state, Block.REDRAW_ON_MAIN_THREAD | Block.NOTIFY_LISTENERS);
-            world.playSound(player, pos, SoundEvents.BLOCK_SCAFFOLDING_BREAK, SoundCategory.BLOCKS, 1, 1);
 
             return true;
         }

@@ -1,5 +1,7 @@
 package com.neep.meatlib.blockentity;
 
+import com.neep.meatlib.network.BlockEntitySync;
+import net.minecraft.block.Block;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -21,7 +23,7 @@ public interface BlockEntityClientSerializable
             be.markDirty();
             if (be.getWorld() instanceof ServerWorld serverWorld)
             {
-//            be.getWorld().updateListeners(be.getPos(), be.getCachedState(), be.getCachedState(), Block.NOTIFY_LISTENERS);
+//                be.getWorld().updateListeners(be.getPos(), be.getCachedState(), be.getCachedState(), Block.NOTIFY_LISTENERS);
                 serverWorld.getChunkManager().markForUpdate(be.getPos());
             }
         }
@@ -41,5 +43,11 @@ public interface BlockEntityClientSerializable
      */
     default void onReceiveNbt(NbtCompound nbt) { }
 
-    default void sendUpdatePacket(List<ServerPlayerEntity> players) {}
+    default void sendUpdatePacket(List<ServerPlayerEntity> players)
+    {
+        if (this instanceof BlockEntity be)
+        {
+            BlockEntitySync.send(players, be);
+        }
+    }
 }
