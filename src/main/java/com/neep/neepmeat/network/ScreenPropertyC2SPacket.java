@@ -26,11 +26,15 @@ public class ScreenPropertyC2SPacket
     {
         int id = buf.readVarInt();
         int value = buf.readVarInt();
-        var handler = player.currentScreenHandler;
-        if (handler != null)
+
+        server.execute(() ->
         {
-            handler.setProperty(id, value);
-        }
+            var handler = player.currentScreenHandler;
+            if (handler != null)
+            {
+                handler.setProperty(id, value);
+            }
+        });
     }
 
     @Environment(EnvType.CLIENT)

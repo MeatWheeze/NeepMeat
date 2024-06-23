@@ -49,7 +49,6 @@ public class LimiterValveBlockEntity extends FluidPipeBlockEntity<LimiterValveBl
                 case 1 -> mbMode = value;
             }
             markDirty();
-            System.out.println("set value to " + value);
         }
 
         @Override
