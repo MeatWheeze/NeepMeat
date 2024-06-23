@@ -5,6 +5,7 @@ import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.transport.block.fluid_transport.FilterPipeBlock;
 import com.neep.neepmeat.transport.machine.fluid.FluidPipeBlockEntity;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.nbt.NbtCompound;
@@ -53,20 +54,26 @@ public class FilterPipeBlockEntity extends FluidPipeBlockEntity<FilterPipeBlock.
     }
 
     @Override
-    public Packet<ClientPlayPacketListener> toUpdatePacket()
-    {
-        return BlockEntityUpdateS2CPacket.create(this);
-    }
-
-    @Override
     public NbtCompound toInitialChunkDataNbt()
     {
         return createNbt();
     }
 
     @Override
-    public void fromClientTag(NbtCompound nbt) { }
+    public void fromClientTag(NbtCompound nbt)
+    {
+        readNbt(nbt);
+    }
 
     @Override
-    public void toClientTag(NbtCompound nbt) { }
+    public void toClientTag(NbtCompound nbt)
+    {
+        writeNbt(nbt);
+    }
+
+    @Override
+    public void onReceiveNbt(NbtCompound nbt)
+    {
+        world.updateListeners(pos, getCachedState(), getCachedState(), Block.REDRAW_ON_MAIN_THREAD);
+    }
 }

@@ -112,6 +112,6 @@ public class EncasedFluidPipeBlockEntity<T extends PipeVertex & NbtSerialisable>
     @Override
     public void onReceiveNbt(NbtCompound nbt)
     {
-        world.updateListeners(pos, getCachedState(), getCamoState(), Block.REDRAW_ON_MAIN_THREAD);
+        world.updateListeners(pos, getCachedState(), getCachedState(), Block.REDRAW_ON_MAIN_THREAD);
     }
 }
