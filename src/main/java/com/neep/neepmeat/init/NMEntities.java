@@ -11,9 +11,9 @@ import com.neep.neepmeat.entity.follower.FollowerEntity;
 import com.neep.neepmeat.entity.hound.HoundEntity;
 import com.neep.neepmeat.entity.keeper.KeeperEntity;
 import com.neep.neepmeat.entity.scutter.FarmingScutter;
-import com.neep.neepmeat.entity.scutter.ScutterEntity;
 import com.neep.neepmeat.entity.worm.WormEntity;
 import com.neep.neepmeat.machine.phage_ray.PhageRayEntity;
+import com.neep.neepmeat.machine.small_compressor.SmallCompressorMinecart;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
 import net.minecraft.entity.EntityDimensions;
@@ -36,8 +36,10 @@ public class NMEntities
     public static EntityType<FarmingScutter> FARMING_SCUTTER;
 
     public static EntityType<PhageRayEntity> PHAGE_RAY;
+    public static EntityType<SmallCompressorMinecart> SMALL_COMPRESSOR_MINECART;
 
     public static EntityType<FollowerEntity> FOLLOWER;
+
 
     public static void initialise()
     {
@@ -72,6 +74,10 @@ public class NMEntities
 
         PHAGE_RAY = EntityRegistry.registerEntity(NeepMeat.NAMESPACE, "phage_ray", FabricEntityTypeBuilder.create(SpawnGroup.MISC, PhageRayEntity::new)
                 .dimensions(EntityDimensions.fixed(2.8f, 2.8f)).trackedUpdateRate(3).build());
+
+        SMALL_COMPRESSOR_MINECART = EntityRegistry.registerEntity(NeepMeat.NAMESPACE, "small_compressor_minecart",
+//                FabricEntityTypeBuilder.<SmallCompressorMinecart>create(SpawnGroup.MISC, SmallCompressorMinecart::new).dimensions(EntityDimensions.fixed(0.98F, 0.7F)).trackedUpdateRate(1).build());
+        EntityType.Builder.<SmallCompressorMinecart>create(SmallCompressorMinecart::new, SpawnGroup.MISC).setDimensions(0.98F, 0.7F).maxTrackingRange(8).build("small_compressor_minecart"));
 
         FOLLOWER = EntityRegistry.registerEntity(NeepMeat.NAMESPACE, "follower", FabricEntityTypeBuilder.create(SpawnGroup.MISC, FollowerEntity::new)
                 .dimensions(EntityDimensions.fixed(0.9f, 0.9f)).trackedUpdateRate(3).build());

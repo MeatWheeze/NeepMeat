@@ -91,6 +91,7 @@ public class NeepMeatClient implements ClientModInitializer
 {
     public static final EntityModelLayer MODEL_GLASS_TANK_LAYER = new EntityModelLayer(new Identifier(NeepMeat.NAMESPACE, "glass_tank"), "main");
     public static final EntityModelLayer TANK_MINECART = new EntityModelLayer(new Identifier(NeepMeat.NAMESPACE, "tank_minecart"), "main");
+    public static final EntityModelLayer SMALL_COMPRESSOR_MINECART = new EntityModelLayer(new Identifier(NeepMeat.NAMESPACE, "small_compressor_minecart"), "main");
     public static final EntityModelLayer GLOME = new EntityModelLayer(new Identifier(NeepMeat.NAMESPACE, "glome"), "main");
     public static final EntityModelLayer EGG = new EntityModelLayer(new Identifier(NeepMeat.NAMESPACE, "egg"), "main");
 
@@ -159,6 +160,7 @@ public class NeepMeatClient implements ClientModInitializer
         EntityModelLayerRegistry.registerModelLayer(KeeperEntityRenderer.KEEPER_OUTER, () -> keeperOuterLayer);
 
 //        EntityRendererRegistry.register(NMEntities.TANK_MINECART, ctx -> new TankMinecartRenderer(ctx, TANK_MINECART));
+        EntityRendererRegistry.register(NMEntities.SMALL_COMPRESSOR_MINECART, ctx -> new SmallCompressorMinecartRenderer(ctx, SMALL_COMPRESSOR_MINECART));
         EntityRendererRegistry.register(NMEntities.GLOME, ctx -> new GlomeEntityRenderer(ctx, GLOME));
         EntityRendererRegistry.register(NMEntities.EGG, ctx -> new EggEntityRenderer(ctx, EGG));
         EntityRendererRegistry.register(NMEntities.LIMB, DummyEntityRenderer::new);
@@ -173,6 +175,7 @@ public class NeepMeatClient implements ClientModInitializer
         EntityRendererRegistry.register(NMEntities.FARMING_SCUTTER, DummyEntityRenderer::new);
 
         EntityModelLayerRegistry.registerModelLayer(TANK_MINECART, MinecartEntityModel::getTexturedModelData);
+        EntityModelLayerRegistry.registerModelLayer(SMALL_COMPRESSOR_MINECART, MinecartEntityModel::getTexturedModelData);
 
         GeoArmorRenderer.registerArmorRenderer(new GogglesArmourRenderer(new GenericModel<>(
                 NeepMeat.NAMESPACE,

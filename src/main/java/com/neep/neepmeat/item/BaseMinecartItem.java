@@ -20,15 +20,20 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldEvents;
+import net.minecraft.world.event.GameEvent;
 
-public class TankMinecartItem extends MinecartItem implements MeatlibItem
+public class BaseMinecartItem extends MinecartItem implements MeatlibItem
 {
     protected String registryName;
+    private final MinecartFactory factory;
 
-    @FunctionalInterface
-    public interface MinecartFactory
+    public BaseMinecartItem(String registryName, Settings settings, MinecartFactory factory)
     {
-        AbstractMinecartEntity create(World world, double x, double y, double z);
+        super(AbstractMinecartEntity.Type.RIDEABLE, settings);
+        this.registryName = registryName;
+        this.factory = factory;
+        ItemRegistry.queue(this);
+        DispenserBlock.registerBehavior(this, vanillaDispenserBehaviour(factory));
     }
 
     public static DispenserBehavior vanillaDispenserBehaviour(MinecartFactory factory)
@@ -50,11 +55,12 @@ public class TankMinecartItem extends MinecartItem implements MeatlibItem
                 double f = pointer.getZ() + (double) direction.getOffsetZ() * 1.125;
                 BlockPos blockPos = pointer.getPos().offset(direction);
                 BlockState blockState = world.getBlockState(blockPos);
-                railShape = blockState.getBlock() instanceof AbstractRailBlock ? blockState.get(((AbstractRailBlock)blockState.getBlock()).getShapeProperty()) : RailShape.NORTH_SOUTH;
+                railShape = blockState.getBlock() instanceof AbstractRailBlock railBlock ? blockState.get(railBlock.getShapeProperty()) : RailShape.NORTH_SOUTH;
                 if (blockState.isIn(BlockTags.RAILS))
                 {
                     g = railShape.isAscending() ? 0.6 : 0.1;
-                } else if (blockState.isAir() && world.getBlockState(blockPos.down()).isIn(BlockTags.RAILS))
+                }
+                else if (blockState.isAir() && world.getBlockState(blockPos.down()).isIn(BlockTags.RAILS))
                 {
                     RailShape railShape22;
                     blockState2 = world.getBlockState(blockPos.down());
@@ -67,7 +73,7 @@ public class TankMinecartItem extends MinecartItem implements MeatlibItem
                 {
                     return this.defaultBehavior.dispense(pointer, stack);
                 }
-//                TankMinecartEntity minecart = new TankMinecartEntity(world, d, e + g, f);
+
                 AbstractMinecartEntity minecart = factory.create(world, d, e + g, f);
                 if (stack.hasCustomName())
                 {
@@ -79,63 +85,60 @@ public class TankMinecartItem extends MinecartItem implements MeatlibItem
             }
 
             @Override
-            protected void playSound(BlockPointer pointer) {
+            protected void playSound(BlockPointer pointer)
+            {
                 pointer.getWorld().syncWorldEvent(WorldEvents.DISPENSER_DISPENSES, pointer.getPos(), 0);
             }
         };
     }
 
-    public static boolean vanillaPlacement(ItemUsageContext context)
+    protected ActionResult vanillaPlacement(ItemUsageContext context)
     {
-//        BlockPos blockPos;
-//        World world = context.getWorld();
-//        BlockState blockState = world.getBlockState(blockPos = context.getBlockPos());
-//        if (!blockState.isIn(BlockTags.RAILS))
-//        {
-//            return false;
-//        }
-//        ItemStack itemStack = context.getStack();
-//        if (!world.isClient)
-//        {
-//            RailShape railShape = blockState.getBlock() instanceof AbstractRailBlock ? blockState.get(((AbstractRailBlock)blockState.getBlock()).getShapeProperty()) : RailShape.NORTH_SOUTH;
-//            double d = 0.0;
-//            if (railShape.isAscending())
-//            {
-//                d = 0.5;
-//            }
-//
-//            TankMinecartEntity minecart = new TankMinecartEntity(world, blockPos.getX() + 0.5, blockPos.getY() + 0.0625, blockPos.getZ() + 0.5);
-//            if (itemStack.hasCustomName())
-//            {
-//                minecart.setCustomName(itemStack.getName());
-//            }
-//            world.spawnEntity(minecart);
-//            world.emitGameEvent((Entity)context.getPlayer(), GameEvent.ENTITY_PLACE, blockPos);
-//        }
-//        itemStack.decrement(1);
-        return true;
-    }
+        BlockPos blockPos;
+        World world = context.getWorld();
+        BlockState blockState = world.getBlockState(blockPos = context.getBlockPos());
 
-//    private static final DispenserBehavior DISPENSER_BEHAVIOR = vanillaDispenserBehaviour(TankMinecartEntity::new);
+        if (!blockState.isIn(BlockTags.RAILS))
+            return ActionResult.FAIL;
 
-    public TankMinecartItem(String registryName, Settings settings)
-    {
-        super(AbstractMinecartEntity.Type.RIDEABLE, settings);
-        this.registryName = registryName;
-        ItemRegistry.queue(this);
-//        DispenserBlock.registerBehavior(this, DISPENSER_BEHAVIOR);
+        ItemStack itemStack = context.getStack();
+        if (!world.isClient)
+        {
+            RailShape railShape = blockState.getBlock() instanceof AbstractRailBlock ? blockState.get(((AbstractRailBlock)blockState.getBlock()).getShapeProperty()) : RailShape.NORTH_SOUTH;
+            double d = 0.0;
+            if (railShape.isAscending())
+            {
+                d = 0.5;
+            }
+
+            AbstractMinecartEntity minecart = factory.create(world, blockPos.getX() + 0.5, blockPos.getY() + 0.0625, blockPos.getZ() + 0.5);
+
+            if (itemStack.hasCustomName())
+                minecart.setCustomName(itemStack.getName());
+
+            world.spawnEntity(minecart);
+            world.emitGameEvent(context.getPlayer(), GameEvent.ENTITY_PLACE, blockPos);
+        }
+        itemStack.decrement(1);
+        return ActionResult.success(world.isClient());
     }
 
     @Override
     public ActionResult useOnBlock(ItemUsageContext context)
     {
-        return ActionResult.success(vanillaPlacement(context));
+        return vanillaPlacement(context);
     }
-
 
     @Override
     public String getRegistryName()
     {
         return registryName;
+    }
+
+
+    @FunctionalInterface
+    public interface MinecartFactory
+    {
+        AbstractMinecartEntity create(World world, double x, double y, double z);
     }
 }

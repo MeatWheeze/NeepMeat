@@ -13,6 +13,7 @@ import com.neep.neepmeat.implant.player.ExtraMouthImplant;
 import com.neep.neepmeat.implant.player.LungExtensionsImplant;
 import com.neep.neepmeat.implant.player.PinealEyeImplant;
 import com.neep.neepmeat.item.*;
+import com.neep.neepmeat.machine.small_compressor.SmallCompressorMinecart;
 import net.minecraft.block.ComposterBlock;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.item.*;
@@ -20,7 +21,8 @@ import net.minecraft.item.*;
 @SuppressWarnings("unused")
 public class NMItems
 {
-    public static Item TANK_MINECART = new TankMinecartItem("tank_minecart", new MeatlibItemSettings().maxCount(1).group(NMItemGroups.GENERAL));
+//    public static Item TANK_MINECART = new TankMinecartItem("tank_minecart", new MeatlibItemSettings().maxCount(1).group(NMItemGroups.GENERAL));
+    public static Item SMALL_COMPRESSOR_MINECART = new BaseMinecartItem("small_compressor_minecart", new MeatlibItemSettings().maxCount(3).group(NMItemGroups.GENERAL), SmallCompressorMinecart::new);
 
     public static Item COMPOUND_INJECTOR = new CompoundInjectorItem("compound_injector", new MeatlibItemSettings().group(MeatWeapons.WEAPONS));
 

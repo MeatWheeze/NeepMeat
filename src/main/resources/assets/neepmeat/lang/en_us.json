@@ -660,6 +660,7 @@
   "block.neepmeat.compressed_air": "Compressed Air",
 
   "item.neepmeat.tank_minecart": "Tank Minecart",
+  "item.neepmeat.small_compressor_minecart": "Small Compressor Minecart",
 
   "item.neepmeat.essential_saltes": "Essential Saltes: %s",
   "item.neepmeat.essential_saltes.lore_0": "Use in a Synthesiser to replicate an organism.",
