@@ -3,7 +3,8 @@ package com.neep.neepmeat.item;
 import com.neep.meatlib.item.BaseItem;
 import com.neep.meatlib.item.TooltipSupplier;
 import com.neep.meatlib.registry.ItemRegistry;
-import com.neep.neepmeat.api.enlightenment.EnlightenmentManager;
+import com.neep.neepmeat.client.screen.util.GUIUtil;
+import com.neep.neepmeat.enlightenment.EnlightenmentManager;
 import com.neep.neepmeat.init.NMComponents;
 import com.neep.neepmeat.init.NMItems;
 import net.fabricmc.api.EnvType;
@@ -60,8 +61,8 @@ public class DosimeterItem extends BaseItem
                 Text text = Text.of("Dose per tick: " + DF.format(manager.lastDose())).copy().formatted(Formatting.YELLOW);
                 int textWidth = client.textRenderer.getWidth(text);
 
-                client.textRenderer.drawWithShadow(matrices, text,
-                        (float) (width - textWidth) / 2, height - 50, 0xFFFFFFFF);
+                GUIUtil.drawText(matrices, client.textRenderer, text,
+                        (float) (width - textWidth) / 2, height - 50, 0xFFFFFFFF, true);
             }
         }
     }

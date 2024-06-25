@@ -1,6 +1,8 @@
-package com.neep.neepmeat.api.enlightenment;
+package com.neep.neepmeat.enlightenment;
 
 import com.neep.neepmeat.NeepMeat;
+import com.neep.neepmeat.api.enlightenment.EnlightenmentEvent;
+import com.neep.neepmeat.api.enlightenment.EnlightenmentUtil;
 import com.neep.neepmeat.api.network.EnlightenmentEventPacket;
 import com.neep.neepmeat.transport.interfaces.IServerWorld;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;

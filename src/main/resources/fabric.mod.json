@@ -82,7 +82,8 @@
       "neepmeat:blood_network_chunk",
       "neepmeat:implant_manager",
       "neepmeat:enlightenment_manager",
-      "neepmeat:workpiece"
+      "neepmeat:workpiece",
+      "neepmeat:compressed_air"
     ]
   },
   "accessWidener" : "neepmeat.accesswidener"

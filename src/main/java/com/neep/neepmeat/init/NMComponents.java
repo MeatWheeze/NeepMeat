@@ -2,8 +2,9 @@ package com.neep.neepmeat.init;
 
 import com.neep.meatweapons.MWItems;
 import com.neep.neepmeat.NeepMeat;
-import com.neep.neepmeat.api.enlightenment.EnlightenmentManager;
 import com.neep.neepmeat.api.plc.recipe.Workpiece;
+import com.neep.neepmeat.component.CompressedAirComponent;
+import com.neep.neepmeat.enlightenment.EnlightenmentManager;
 import com.neep.neepmeat.enlightenment.PlayerEnlightenmentManager;
 import com.neep.neepmeat.implant.item.ItemImplantManager;
 import com.neep.neepmeat.implant.player.ImplantManager;
@@ -19,8 +20,6 @@ import dev.onyxstudios.cca.api.v3.entity.RespawnCopyStrategy;
 import dev.onyxstudios.cca.api.v3.item.ItemComponentFactoryRegistry;
 import dev.onyxstudios.cca.api.v3.item.ItemComponentInitializer;
 import net.minecraft.entity.mob.MobEntity;
-import net.minecraft.entity.mob.ZombieEntity;
-import net.minecraft.entity.passive.CowEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.Identifier;
 
@@ -41,6 +40,11 @@ public class NMComponents implements EntityComponentInitializer, ItemComponentIn
                     new Identifier(NeepMeat.NAMESPACE, "enlightenment_manager"),
                     EnlightenmentManager.class);
 
+    public static final ComponentKey<CompressedAirComponent> COMPRESSED_AIR =
+            ComponentRegistry.getOrCreate(
+                    new Identifier(NeepMeat.NAMESPACE, "compressed_air"),
+                    CompressedAirComponent.class);
+
     @Override
     public void registerEntityComponentFactories(EntityComponentFactoryRegistry registry)
     {
@@ -50,6 +54,7 @@ public class NMComponents implements EntityComponentInitializer, ItemComponentIn
 //        registry.registerFor(ZombieEntity.class, WORKPIECE, MobWorkpiece::new);
         registry.registerFor(MobEntity.class, WORKPIECE, MobWorkpiece::new);
         registry.registerFor(PlayerEntity.class, WORKPIECE, PlayerWorkpiece::new);
+        registry.registerForPlayers(COMPRESSED_AIR, CompressedAirComponent::new);
     }
 
     @Override

@@ -1,7 +1,9 @@
 package com.neep.neepmeat.item;
 
 import com.neep.meatlib.item.ClientBlockAttackListener;
+import com.neep.neepmeat.component.CompressedAirComponent;
 import com.neep.neepmeat.datagen.tag.NMTags;
+import com.neep.neepmeat.init.NMComponents;
 import com.neep.neepmeat.init.NMSounds;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
@@ -86,7 +88,12 @@ public class RockDrillItem extends Item implements ClientBlockAttackListener
     @Override
     public boolean canMine(BlockState state, World world, BlockPos pos, PlayerEntity miner)
     {
-        return state.isIn(NMTags.ROCK_DRILL_MINEABLE);
+        CompressedAirComponent component = NMComponents.COMPRESSED_AIR.getNullable(miner);
+        if (component != null && component.getAir() > 0)
+        {
+            return state.isIn(NMTags.ROCK_DRILL_MINEABLE);
+        }
+        return false;
     }
 
     @Override

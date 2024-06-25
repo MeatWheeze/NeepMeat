@@ -1,5 +1,6 @@
 package com.neep.neepmeat.api.enlightenment;
 
+import com.neep.neepmeat.enlightenment.EnlightenmentEventManager;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 

@@ -1,4 +1,4 @@
-package com.neep.neepmeat.api.enlightenment;
+package com.neep.neepmeat.enlightenment;
 
 import dev.onyxstudios.cca.api.v3.component.Component;
 

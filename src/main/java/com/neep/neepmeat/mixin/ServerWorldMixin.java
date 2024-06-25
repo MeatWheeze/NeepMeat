@@ -1,7 +1,7 @@
 package com.neep.neepmeat.mixin;
 
 import com.neep.meatlib.util.LazySupplier;
-import com.neep.neepmeat.api.enlightenment.EnlightenmentEventManager;
+import com.neep.neepmeat.enlightenment.EnlightenmentEventManager;
 import com.neep.neepmeat.transport.blood_network.BloodNetworkManager;
 import com.neep.neepmeat.transport.event.WorldChunkEvents;
 import com.neep.neepmeat.transport.fluid_network.FluidNodeManager;
