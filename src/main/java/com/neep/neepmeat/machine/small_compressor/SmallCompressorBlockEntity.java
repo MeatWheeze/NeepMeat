@@ -43,9 +43,9 @@ public class SmallCompressorBlockEntity extends SyncableBlockEntity implements N
 
         if (burner.getBurnTime() > 0)
         {
-            Box box = Box.of(Vec3d.ofCenter(pos), 16, 8, 16);
+            Box box = Box.of(Vec3d.ofCenter(getPos()), 16, 8, 16);
 
-            List<PlayerEntity> players = world.getEntitiesByClass(PlayerEntity.class, box, p -> true);
+            List<PlayerEntity> players = getWorld().getEntitiesByClass(PlayerEntity.class, box, p -> true);
 
             players.forEach(player ->
             {

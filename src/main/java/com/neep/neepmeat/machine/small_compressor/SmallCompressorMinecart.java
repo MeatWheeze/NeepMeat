@@ -1,7 +1,9 @@
 package com.neep.neepmeat.machine.small_compressor;
 
 import com.neep.meatlib.inventory.ImplementedInventory;
+import com.neep.neepmeat.component.CompressedAirComponent;
 import com.neep.neepmeat.init.NMBlocks;
+import com.neep.neepmeat.init.NMComponents;
 import com.neep.neepmeat.init.NMEntities;
 import com.neep.neepmeat.init.NMItems;
 import net.minecraft.block.BlockState;
@@ -16,9 +18,12 @@ import net.minecraft.screen.NamedScreenHandlerFactory;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
+import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.List;
 
 public class SmallCompressorMinecart extends AbstractMinecartEntity implements NamedScreenHandlerFactory
 {
@@ -64,9 +69,25 @@ public class SmallCompressorMinecart extends AbstractMinecartEntity implements N
     @Override
     public void tick()
     {
+        super.tick();
         if (!getWorld().isClient())
         {
             burner.tick();
+        }
+
+        if (burner.getBurnTime() > 0)
+        {
+            Box box = Box.of(Vec3d.ofCenter(getBlockPos()), 16, 8, 16);
+
+            List<PlayerEntity> players = getWorld().getEntitiesByClass(PlayerEntity.class, box, p -> true);
+
+            players.forEach(player ->
+            {
+                CompressedAirComponent component = NMComponents.COMPRESSED_AIR.getNullable(player);
+
+                if (component != null)
+                    component.insertAir(10);
+            });
         }
     }
 

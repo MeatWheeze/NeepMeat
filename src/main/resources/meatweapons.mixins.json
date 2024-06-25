@@ -10,6 +10,7 @@
   "client": [
     "ClientPlayerEntityMixin",
     "HeldItemRendererMixin",
+    "LivingEntityRendererMixin",
     "MixinClientWorld",
     "PlayerEntityRendererMixin"
   ],

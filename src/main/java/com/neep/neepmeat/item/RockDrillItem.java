@@ -1,6 +1,7 @@
 package com.neep.neepmeat.item;
 
 import com.neep.meatlib.item.ClientBlockAttackListener;
+import com.neep.neepmeat.api.item.OverrideSwingItem;
 import com.neep.neepmeat.component.CompressedAirComponent;
 import com.neep.neepmeat.datagen.tag.NMTags;
 import com.neep.neepmeat.init.NMComponents;
@@ -24,7 +25,7 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class RockDrillItem extends Item implements ClientBlockAttackListener
+public class RockDrillItem extends Item implements ClientBlockAttackListener, OverrideSwingItem
 {
     public static final Identifier CHANNEL_ID = new Identifier("rock_drill");
 
