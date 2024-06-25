@@ -61,6 +61,7 @@ import com.neep.neepmeat.machine.power_flower.PowerFlowerGrowthBlock;
 import com.neep.neepmeat.machine.power_flower.PowerFlowerSeedsBlock;
 import com.neep.neepmeat.machine.pylon.PylonBlock;
 import com.neep.neepmeat.machine.separator.SeparatorBlock;
+import com.neep.neepmeat.machine.small_compressor.SmallCompressorBlock;
 import com.neep.neepmeat.machine.small_trommel.SmallTrommelBlock;
 import com.neep.neepmeat.machine.solidity_detector.SolidityDetectorBlock;
 import com.neep.neepmeat.machine.stirling_engine.StirlingEngineBlock;
@@ -287,6 +288,8 @@ public class NMBlocks
     public static Block BOTTLER = BlockRegistry.queue(new BottlerBlock("bottler", block().tooltip(TooltipSupplier.simple(1)).requiresMotor(), FLUID_MACHINE_SETTINGS));
 
     public static Block FLUID_RATIONER = BlockRegistry.queue(new FluidRationerBlock("fluid_rationer", block().tooltip(TooltipSupplier.hidden(2)), MeatlibBlockSettings.copyOf(FLUID_MACHINE_SETTINGS).nonOpaque()));
+
+    public static Block SMALL_COMPRESSOR = BlockRegistry.queue(new SmallCompressorBlock("small_compressor", block().tooltip(TooltipSupplier.hidden(1)), MeatlibBlockSettings.copyOf(FLUID_MACHINE_SETTINGS).nonOpaque()));
 
     // --- Item Transfer ---
     public static Block ITEM_DUCT = BlockRegistry.queue(new ItemDuctBlock("item_duct", block(), MeatlibBlockSettings.copyOf(Blocks.HOPPER)));

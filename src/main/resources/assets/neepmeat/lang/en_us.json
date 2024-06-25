@@ -439,6 +439,9 @@
   "block.neepmeat.upgrade_manager": "Implant Manager",
   "block.neepmeat.upgrade_manager.lore_0": "Removes and tweaks item or entity implants.",
 
+  "block.neepmeat.small_compressor": "Small Compressor",
+  "block.neepmeat.small_compressor.lore_0": "Burns fuel to compress air. Powers rock drill in a 16x16x16 cube.",
+
   "block.neepmeat.duat_stone": "Duat Stone",
   "block.neepmeat.duat_cobblestone": "Duat Cobblestone",
   "block.neepmeat.duat_gravel": "Duat Gravel",

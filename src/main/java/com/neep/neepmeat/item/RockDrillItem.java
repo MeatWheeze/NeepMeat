@@ -28,7 +28,7 @@ public class RockDrillItem extends Item implements ClientBlockAttackListener
 
     public RockDrillItem(Settings settings)
     {
-        super(settings);
+        super(settings.maxCount(1));
 //        super(settings.maxDamage(500);
     }
 
@@ -45,10 +45,16 @@ public class RockDrillItem extends Item implements ClientBlockAttackListener
     @Override
     public boolean postMine(ItemStack stack, World world, BlockState state, BlockPos pos, LivingEntity miner)
     {
-        if (!world.isClient && world.getTime() % 2 == 0)
+        if (!world.isClient)
         {
-//            stack.damage(1, miner, e -> {});
-            world.playSoundFromEntity(null, miner, NMSounds.ROCK_DRILL, SoundCategory.PLAYERS, 1f, 1);
+            NbtCompound nbt = stack.getOrCreateNbt();
+            long lastTime = nbt.getLong("last_time");
+            long time = world.getTime();
+            if (time - lastTime >= 2)
+            {
+                world.playSoundFromEntity(null, miner, NMSounds.ROCK_DRILL, SoundCategory.PLAYERS, 1f, 1);
+                nbt.putLong("last_time",  time);
+            }
         }
         return true;
     }
