@@ -1,0 +1,29 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " d ",
+    "ipc",
+    "imi"
+  ],
+  "key": {
+    "m": {
+      "item": "neepmeat:meat_steel_component"
+    },
+    "d": {
+      "item": "minecraft:diamond"
+    },
+    "i": {
+      "item": "neepmeat:meat_steel_ingot"
+    },
+    "p": {
+      "item": "minecraft:piston"
+    },
+    "c": {
+      "item": "neepmeat:control_unit"
+    }
+  },
+  "result": {
+    "item": "neepmeat:rock_drill",
+    "count": 1
+  }
+}

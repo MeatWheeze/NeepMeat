@@ -99,10 +99,12 @@ public class RockDrillItemRenderer implements BuiltinItemRendererRegistry.Dynami
             else if (mode == ModelTransformationMode.THIRD_PERSON_LEFT_HAND || mode == ModelTransformationMode.THIRD_PERSON_RIGHT_HAND)
             {
                 renderItem(stack, mode, matrices, vertexConsumers, light, overlay, main);
+                renderItem(stack, mode, matrices, vertexConsumers, light, overlay, rod);
             }
             else
             {
                 renderItem(stack, mode, matrices, vertexConsumers, light, overlay, main);
+                renderItem(stack, mode, matrices, vertexConsumers, light, overlay, rod);
             }
         }
     }

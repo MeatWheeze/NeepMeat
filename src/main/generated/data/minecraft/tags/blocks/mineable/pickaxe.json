@@ -191,6 +191,7 @@
     "neepmeat:item_buffer",
     "neepmeat:bottler",
     "neepmeat:fluid_rationer",
+    "neepmeat:small_compressor",
     "neepmeat:item_duct",
     "neepmeat:item_pipe",
     "neepmeat:merge_item_pipe",
