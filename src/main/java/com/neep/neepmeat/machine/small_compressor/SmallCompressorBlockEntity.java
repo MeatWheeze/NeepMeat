@@ -9,12 +9,15 @@ import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.particle.ParticleTypes;
 import net.minecraft.screen.NamedScreenHandlerFactory;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.text.Text;
+import net.minecraft.util.ItemScatterer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.random.Random;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -23,6 +26,7 @@ public class SmallCompressorBlockEntity extends SyncableBlockEntity implements N
 {
     private final ImplementedInventory inventory = ImplementedInventory.ofSize(1);
     private final BurnerBehaviour burner = new BurnerBehaviour(inventory, this::updateState);
+    private final Random random = Random.create();
 
     private void updateState(boolean burning)
     {
@@ -57,6 +61,14 @@ public class SmallCompressorBlockEntity extends SyncableBlockEntity implements N
         }
     }
 
+    public void clientTick()
+    {
+        if (getCachedState().get(SmallCompressorBlock.LIT) && random.nextInt(4) == 0)
+        {
+            this.getWorld().addParticle(ParticleTypes.LARGE_SMOKE, pos.getX() + 0.5, pos.getY() + 0.8, pos.getZ() + 0.5, 0.0, 0.0, 0.0);
+        }
+    }
+
     @Override
     public void writeNbt(NbtCompound nbt)
     {
@@ -88,4 +100,8 @@ public class SmallCompressorBlockEntity extends SyncableBlockEntity implements N
         return new SmallCompressorScreenHandler(playerInventory, inventory, syncId, burner.getDelegate());
     }
 
+    public void dropItems()
+    {
+        ItemScatterer.spawn(getWorld(), getPos(), inventory);
+    }
 }

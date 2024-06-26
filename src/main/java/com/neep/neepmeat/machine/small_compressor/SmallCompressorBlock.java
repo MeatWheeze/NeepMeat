@@ -42,6 +42,16 @@ public class SmallCompressorBlock extends BaseHorFacingBlock implements BlockEnt
     }
 
     @Override
+    public void onStateReplaced(BlockState state, World world, BlockPos pos, BlockState newState, boolean moved)
+    {
+        if (!newState.isOf(this) && world.getBlockEntity(pos) instanceof SmallCompressorBlockEntity be)
+        {
+            be.dropItems();
+        }
+        super.onStateReplaced(state, world, pos, newState, moved);
+    }
+
+    @Override
     protected void appendProperties(StateManager.Builder<Block, BlockState> builder)
     {
         super.appendProperties(builder);
@@ -59,6 +69,6 @@ public class SmallCompressorBlock extends BaseHorFacingBlock implements BlockEnt
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type)
     {
-        return MiscUtil.checkType(type, NMBlockEntities.SMALL_COMPRESSOR, (world1, pos, state1, blockEntity) -> blockEntity.serverTick(), null, world);
+        return MiscUtil.checkType(type, NMBlockEntities.SMALL_COMPRESSOR, (world1, pos, state1, blockEntity) -> blockEntity.serverTick(), (world1, pos, state1, blockEntity) -> blockEntity.clientTick(), world);
     }
 }

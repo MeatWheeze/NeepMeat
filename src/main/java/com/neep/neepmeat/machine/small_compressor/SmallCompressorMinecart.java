@@ -8,16 +8,19 @@ import com.neep.neepmeat.init.NMEntities;
 import com.neep.neepmeat.init.NMItems;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.entity.vehicle.AbstractMinecartEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.particle.ParticleTypes;
 import net.minecraft.screen.NamedScreenHandlerFactory;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
+import net.minecraft.util.ItemScatterer;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
@@ -30,15 +33,6 @@ public class SmallCompressorMinecart extends AbstractMinecartEntity implements N
     private final ImplementedInventory inventory = ImplementedInventory.ofSize(1);
     private final BurnerBehaviour burner = new BurnerBehaviour(inventory, this::updateBlockState);
 
-    private void updateBlockState(boolean burning)
-    {
-        BlockState state = getContainedBlock();
-        if (state.getBlock() instanceof SmallCompressorBlock)
-        {
-            setCustomBlock(state.with(SmallCompressorBlock.LIT, burning));
-        }
-    }
-
     public SmallCompressorMinecart(EntityType<?> entityType, World world)
     {
         super(entityType, world);
@@ -47,6 +41,15 @@ public class SmallCompressorMinecart extends AbstractMinecartEntity implements N
     public SmallCompressorMinecart(World world, double x, double y, double z)
     {
         super(NMEntities.SMALL_COMPRESSOR_MINECART, world, x, y, z);
+    }
+
+    private void updateBlockState(boolean burning)
+    {
+        BlockState state = getContainedBlock();
+        if (state.getBlock() instanceof SmallCompressorBlock)
+        {
+            setCustomBlock(state.with(SmallCompressorBlock.LIT, burning));
+        }
     }
 
     @Override
@@ -70,6 +73,7 @@ public class SmallCompressorMinecart extends AbstractMinecartEntity implements N
     public void tick()
     {
         super.tick();
+
         if (!getWorld().isClient())
         {
             burner.tick();
@@ -88,6 +92,12 @@ public class SmallCompressorMinecart extends AbstractMinecartEntity implements N
                 if (component != null)
                     component.insertAir(10);
             });
+
+        }
+
+        if (getWorld().isClient() && getContainedBlock().get(SmallCompressorBlock.LIT) && this.random.nextInt(4) == 0)
+        {
+            this.getWorld().addParticle(ParticleTypes.LARGE_SMOKE, this.getX(), this.getY() + 0.8, this.getZ(), 0.0, 0.0, 0.0);
         }
     }
 
@@ -126,6 +136,13 @@ public class SmallCompressorMinecart extends AbstractMinecartEntity implements N
     public ItemStack getPickBlockStack()
     {
         return NMItems.SMALL_COMPRESSOR_MINECART.getDefaultStack();
+    }
+
+    @Override
+    public void dropItems(DamageSource damageSource)
+    {
+        super.dropItems(damageSource);
+        ItemScatterer.spawn(getWorld(), this, inventory);
     }
 
     @Nullable
