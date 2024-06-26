@@ -37,7 +37,7 @@ public class RockDrillItem extends Item implements ClientBlockAttackListener, Ov
 
     public RockDrillItem(Settings settings)
     {
-        super(settings.maxCount(1).maxDamage(1024));
+        super(settings.maxCount(1).maxDamage(2000));
 //        super(settings.maxDamage(500);
     }
 
