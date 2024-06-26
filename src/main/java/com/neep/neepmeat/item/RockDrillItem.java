@@ -11,6 +11,7 @@ import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.block.BlockState;
+import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
@@ -29,9 +30,14 @@ public class RockDrillItem extends Item implements ClientBlockAttackListener, Ov
 {
     public static final Identifier CHANNEL_ID = new Identifier("rock_drill");
 
+    static
+    {
+        ServerPlayNetworking.registerGlobalReceiver(CHANNEL_ID, RockDrillItem::onAttackPacket);
+    }
+
     public RockDrillItem(Settings settings)
     {
-        super(settings.maxCount(1));
+        super(settings.maxCount(1).maxDamage(1024));
 //        super(settings.maxDamage(500);
     }
 
@@ -45,18 +51,35 @@ public class RockDrillItem extends Item implements ClientBlockAttackListener, Ov
         return false;
     }
 
+    private static void onAttackPacket(MinecraftServer server, ServerPlayerEntity player, ServerPlayNetworkHandler handler, PacketByteBuf buf, PacketSender responseSender)
+    {
+        boolean attacking = buf.readBoolean();
+
+        server.execute(() ->
+        {
+            ItemStack mainStack = player.getMainHandStack();
+            if (mainStack.getItem() instanceof RockDrillItem)
+            {
+                mainStack.getOrCreateNbt().putBoolean("attacking", attacking);
+            }
+        });
+    }
+
     @Override
     public boolean postMine(ItemStack stack, World world, BlockState state, BlockPos pos, LivingEntity miner)
     {
         if (!world.isClient)
         {
+            if (state.getHardness(world, pos) != 0)
+                stack.damage(1, miner, e -> e.sendEquipmentBreakStatus(EquipmentSlot.MAINHAND));
+
             NbtCompound nbt = stack.getOrCreateNbt();
             long lastTime = nbt.getLong("last_time");
             long time = world.getTime();
             if (time - lastTime >= 2)
             {
                 world.playSoundFromEntity(null, miner, NMSounds.ROCK_DRILL, SoundCategory.PLAYERS, 1f, 1);
-                nbt.putLong("last_time",  time);
+                nbt.putLong("last_time", time);
             }
         }
         return true;
@@ -107,24 +130,5 @@ public class RockDrillItem extends Item implements ClientBlockAttackListener, Ov
     public void onFinishAttackBlock(ItemStack stack, PlayerEntity player)
     {
         sendAttack(false);
-    }
-
-    static
-    {
-        ServerPlayNetworking.registerGlobalReceiver(CHANNEL_ID, RockDrillItem::onAttackPacket);
-    }
-
-    private static void onAttackPacket(MinecraftServer server, ServerPlayerEntity player, ServerPlayNetworkHandler handler, PacketByteBuf buf, PacketSender responseSender)
-    {
-        boolean attacking = buf.readBoolean();
-
-        server.execute(() ->
-        {
-            ItemStack mainStack = player.getMainHandStack();
-            if (mainStack.getItem() instanceof RockDrillItem)
-            {
-                mainStack.getOrCreateNbt().putBoolean("attacking", attacking);
-            }
-        });
     }
 }
