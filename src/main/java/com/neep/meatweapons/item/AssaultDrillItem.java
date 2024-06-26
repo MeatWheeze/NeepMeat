@@ -245,7 +245,10 @@ public class AssaultDrillItem extends Item implements MeatlibItem, IAnimatable, 
     {
         if (!world.isClient && state.getHardness(world, pos) != 0.0F && stack.getDamage() < getMaxDamage())
         {
-            stack.damage(1, miner, e -> {});
+            if (stack.getDamage() == getMaxDamage(stack) - 1)
+                stack.setDamage(getMaxDamage(stack));
+            else
+                stack.damage(1, miner, e -> {});
         }
         return true;
     }
