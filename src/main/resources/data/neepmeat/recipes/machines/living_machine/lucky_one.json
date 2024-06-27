@@ -1,7 +1,7 @@
 {
   "type": "neepmeat:entity_to_item",
   "base": {
-    "id": "minecraft:skeleton"
+    "id": "minecraft:zombie"
   },
   "steps":[
     {
