@@ -79,11 +79,11 @@ public class EntityToItemManufactureEmiRecipe extends ManufactureEmiRecipe<Entit
         var widgetBase = new LabelledEntitySlot(startX, startY, Text.of("Base: "), base, widgets);
         widgets.add(widgetBase);
 
-        var widgetOutput = new LabelledSlot(startX + 20 + widgetBase.width(), startY, Text.of("Output: "), output.get(0), widgets, this);
+        var widgetOutput = new LabelledSlot(startX + 20 + 18 + widgetBase.width(), startY, Text.of("Output: "), output.get(0), widgets, this);
         widgets.add(widgetOutput);
 
         int entryX = startX + 1;
-        int entryY = startY + 22;
+        int entryY = startY + 22 + 18;
         for (var step : steps)
         {
             var widget = new EntryWidget(entryX, entryY, step, getDisplayWidth() - 20, widgets);

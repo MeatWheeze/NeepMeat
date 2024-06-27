@@ -37,10 +37,10 @@ public class EntityToItemManufactureCategory extends ManufactureCategory<EntityT
         var base = new LabelledEntitySlot(startPoint, Text.of("Base: "), display.getBase());
         widgets.add(base);
 
-        var output = new LabelledSlot(new Point(startPoint.x + 20 + base.width(), startPoint.y), Text.of("Output: "), display.getOutputEntries().get(0).get(0));
+        var output = new LabelledSlot(new Point(startPoint.x + 20 + base.width(), startPoint.y + 18), Text.of("Output: "), display.getOutputEntries().get(0).get(0));
         widgets.add(output);
 
-        int entryY = startPoint.y + 22;
+        int entryY = startPoint.y + 22 + 18;
         int entryX = startPoint.x + 1;
 
         for (var step : display.getSteps())
