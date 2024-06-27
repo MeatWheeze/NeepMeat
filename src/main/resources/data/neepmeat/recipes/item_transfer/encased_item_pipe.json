@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " s ",
+    "svs",
+    " s "
+  ],
+  "key": {
+    "s": {
+      "item": "minecraft:stick"
+    },
+    "v": {
+      "item": "neepmeat:item_pipe"
+    }
+  },
+  "result": {
+    "item": "neepmeat:encased_item_pipe",
+    "count": 1
+  }
+}

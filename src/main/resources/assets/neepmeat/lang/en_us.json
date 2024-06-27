@@ -250,6 +250,8 @@
   "block.neepmeat.window_fluid_pipe": "Window Fluid pipe",
 
   "block.neepmeat.item_pipe": "Item Pipe",
+  "block.neepmeat.encased_item_pipe": "Encased Item Pipe",
+  "block.neepmeat.encased_item_pipe.lore_0": "Takes on the model and shape of the block it is right-clicked with.",
   "block.neepmeat.item_pipe.lore_0": "Items must be inserted with an Ejector or Item Pump.",
   "block.neepmeat.opaque_item_pipe": "Opaque Item Pipe",
   "block.neepmeat.opaque_item_pipe.lore_0": "Items must be inserted with an Ejector or Item Pump.",

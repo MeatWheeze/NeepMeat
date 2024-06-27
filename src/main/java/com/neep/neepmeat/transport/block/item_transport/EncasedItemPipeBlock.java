@@ -3,7 +3,7 @@ package com.neep.neepmeat.transport.block.item_transport;
 import com.neep.meatlib.item.ItemSettings;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.transport.block.EncasedBlock;
-import com.neep.neepmeat.transport.block.energy_transport.entity.EncasedConduitBlockEntity;
+import com.neep.neepmeat.transport.block.item_transport.entity.EncasedItemPipeBlockEntity;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.ShapeContext;
@@ -35,7 +35,7 @@ public class EncasedItemPipeBlock extends ItemPipeBlock implements EncasedBlock
     @Override
     public VoxelShape getOutlineShape(BlockState state, BlockView view, BlockPos pos, ShapeContext context)
     {
-        if (view.getBlockEntity(pos) instanceof EncasedConduitBlockEntity be)
+        if (view.getBlockEntity(pos) instanceof EncasedItemPipeBlockEntity be)
         {
             return be.getCamoShape();
         }
@@ -46,7 +46,7 @@ public class EncasedItemPipeBlock extends ItemPipeBlock implements EncasedBlock
     public void neighborUpdate(BlockState state, World world, BlockPos pos, Block sourceBlock, BlockPos sourcePos, boolean notify)
     {
         super.neighborUpdate(state, world, pos, sourceBlock, sourcePos, notify);
-        if (world.getBlockEntity(pos) instanceof EncasedConduitBlockEntity be)
+        if (world.getBlockEntity(pos) instanceof EncasedItemPipeBlockEntity be)
         {
             be.setCachedState(state);
             be.onNeighbourUpdate();
@@ -57,7 +57,7 @@ public class EncasedItemPipeBlock extends ItemPipeBlock implements EncasedBlock
     public void onConnectionUpdate(World world, BlockState state, BlockState newState, BlockPos pos, PlayerEntity entity)
     {
         super.onConnectionUpdate(world, state, newState, pos, entity);
-        if (world.getBlockEntity(pos) instanceof EncasedConduitBlockEntity be)
+        if (world.getBlockEntity(pos) instanceof EncasedItemPipeBlockEntity be)
         {
             be.onNeighbourUpdate();
         }
