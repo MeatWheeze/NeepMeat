@@ -9,8 +9,8 @@ import java.util.function.Supplier;
 
 public enum NMToolMaterials implements ToolMaterial
 {
-    MEAT_STEEL(MiningLevels.DIAMOND, 750, 7.0F, 2F, 14, () -> Ingredient.ofItems(NMItems.MEAT_STEEL)),
-    EMBOSSED_MEAT_STEEL(MiningLevels.DIAMOND, 750, 7.0F, 2F, 22, () -> Ingredient.ofItems(NMItems.MEAT_STEEL))
+    MEAT_STEEL(MiningLevels.DIAMOND, 1500, 7.0F, 2F, 14, () -> Ingredient.ofItems(NMItems.MEAT_STEEL)),
+    EMBOSSED_MEAT_STEEL(MiningLevels.DIAMOND, 1500, 7.0F, 2F, 22, () -> Ingredient.ofItems(NMItems.MEAT_STEEL))
 
     ;
 
