@@ -20,8 +20,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
-import org.joml.Quaternionf;
-import org.joml.Vector3f;
 
 import java.util.Objects;
 
@@ -58,19 +56,6 @@ public class SurgicalRobot implements PLCRobot, NbtSerialisable
     private final BlockPos basePos;
     private final Vec3d dockingPos;
     private final Vec3d attachPos;
-
-    protected boolean pressingLeft;
-    protected boolean pressingRight;
-    protected boolean pressingForward;
-    protected boolean pressingBack;
-    protected boolean pressingUp;
-    protected boolean pressingDown;
-    protected boolean prevForward;
-    protected boolean prevBack;
-    protected boolean prevLeft;
-    protected boolean prevRight;
-    protected boolean prevUp;
-    protected boolean prevDown;
 
     @Nullable private PlayerEntity controller;
 
@@ -416,7 +401,6 @@ public class SurgicalRobot implements PLCRobot, NbtSerialisable
 
         public void tick()
         {
-            updateKeys();
             motion();
 
             if (be.getWorld().getTime() % 4 == 0)
@@ -429,6 +413,10 @@ public class SurgicalRobot implements PLCRobot, NbtSerialisable
         {
             if (!robot.parent.overrideController())
             {
+                if (robot.controller == null)
+                    return;
+
+                GameOptions options = MinecraftClient.getInstance().options;
                 Camera camera = MinecraftClient.getInstance().gameRenderer.getCamera();
 
                 double speed = 0.2;
@@ -442,33 +430,33 @@ public class SurgicalRobot implements PLCRobot, NbtSerialisable
                 double fvy = 0;
                 double fvz = 0;
 
-                if (robot.pressingForward)
+                if (options.forwardKey.isPressed())
                 {
                     fvx += vx;
                     fvz += vz;
                 }
-                if (robot.pressingBack)
+                if (options.backKey.isPressed())
                 {
                     fvx -= vx;
                     fvz -= vz;
                 }
 
-                if (robot.pressingLeft)
+                if (options.leftKey.isPressed())
                 {
                     fvx -= normal.x;
                     fvz -= normal.z;
                 }
-                if (robot.pressingRight)
+                if (options.rightKey.isPressed())
                 {
                     fvx += normal.x;
                     fvz += normal.z;
                 }
 
-                if (robot.pressingUp)
+                if (options.jumpKey.isPressed())
                 {
                     fvy += speed;
                 }
-                if (robot.pressingDown)
+                if (options.sneakKey.isPressed())
                 {
                     fvy -= speed;
                 }
@@ -477,7 +465,6 @@ public class SurgicalRobot implements PLCRobot, NbtSerialisable
                 if (l != 0)
                 {
                     fvx = fvx / l * speed;
-//                    fvy = fvy * speed;
                     fvz = fvz / l * speed;
 
                     robot.vx = fvx;
@@ -497,28 +484,6 @@ public class SurgicalRobot implements PLCRobot, NbtSerialisable
                 robot.vy *= 0.05;
                 robot.vx *= 0.05;
             }
-        }
-
-        public void updateKeys()
-        {
-            if (robot.controller == null)
-                return;
-
-            GameOptions options = MinecraftClient.getInstance().options;
-
-            robot.prevForward = robot.pressingForward;
-            robot.prevBack = robot.pressingBack;
-            robot.prevLeft = robot.pressingLeft;
-            robot.prevRight = robot.pressingRight;
-            robot.prevUp = robot.pressingUp;
-            robot.prevDown = robot.pressingDown;
-
-            robot.pressingForward = options.forwardKey.isPressed();
-            robot.pressingBack = options.backKey.isPressed();
-            robot.pressingLeft = options.leftKey.isPressed();
-            robot.pressingRight = options.rightKey.isPressed();
-            robot.pressingUp = options.jumpKey.isPressed();
-            robot.pressingDown = options.sneakKey.isPressed();
         }
     }
 }
