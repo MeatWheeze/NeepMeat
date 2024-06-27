@@ -80,10 +80,8 @@ import com.neep.neepmeat.transport.block.energy_transport.entity.VascularConduit
 import com.neep.neepmeat.transport.block.fluid_transport.CheckValveBlock;
 import com.neep.neepmeat.transport.block.fluid_transport.StopValveBlock;
 import com.neep.neepmeat.transport.block.fluid_transport.entity.*;
-import com.neep.neepmeat.transport.block.item_transport.entity.ItemDuctBlockEntity;
-import com.neep.neepmeat.transport.block.item_transport.entity.ItemPipeBlockEntity;
-import com.neep.neepmeat.transport.block.item_transport.entity.MergePipeBlockEntity;
-import com.neep.neepmeat.transport.block.item_transport.entity.RouterBlockEntity;
+import com.neep.neepmeat.transport.block.item_transport.ItemPipeBlock;
+import com.neep.neepmeat.transport.block.item_transport.entity.*;
 import com.neep.neepmeat.transport.fluid_network.node.BlockPipeVertex;
 import com.neep.neepmeat.transport.machine.fluid.*;
 import com.neep.neepmeat.transport.machine.item.BufferBlockEntity;
@@ -157,6 +155,7 @@ public class NMBlockEntities
     public static BlockEntityType<BigLeverBlockEntity> BIG_LEVER;
 
     public static BlockEntityType<ItemPipeBlockEntity> PNEUMATIC_PIPE;
+    public static BlockEntityType<? extends ItemPipeBlockEntity> ENCASED_PNEUMATIC_PIPE;
     public static BlockEntityType<MergePipeBlockEntity> MERGE_ITEM_PIPE;
     public static BlockEntityType<BufferBlockEntity> BUFFER;
     public static BlockEntityType<ChuteBlock.ChuteBlockEntity> CHUTE;
@@ -314,6 +313,7 @@ public class NMBlockEntities
         // --- Item Transfer ---
         ITEM_DUCT_BLOCK_ENTITY = register("item_duct", ItemDuctBlockEntity::new, NMBlocks.ITEM_DUCT);
         PNEUMATIC_PIPE = register("pneumatic_pipe", ItemPipeBlockEntity::new, NMBlocks.PNEUMATIC_TUBE);
+        ENCASED_PNEUMATIC_PIPE = register("encased_item_pioe", (p, s) -> new EncasedItemPipeBlockEntity(ENCASED_PNEUMATIC_PIPE, p, s), NMBlocks.ENCASED_PNEUMATIC_PIPE);
         MERGE_ITEM_PIPE = register("merge_item_pipe", MergePipeBlockEntity::new, NMBlocks.MERGE_ITEM_PIPE);
         BUFFER = register("buffer", BufferBlockEntity::new, NMBlocks.BUFFER);
         CHUTE = register("chute", (p, s) -> new ChuteBlock.ChuteBlockEntity(CHUTE, p, s), NMBlocks.CHUTE);

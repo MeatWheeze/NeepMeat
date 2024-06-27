@@ -210,6 +210,7 @@ public class NeepMeatClient implements ClientModInitializer
         BlockEntityRendererFactories.register(NMBlockEntities.ADVANCED_INTEGRATOR, AdvancedIntegratorRenderer::new);
         BlockEntityRendererFactories.register(NMBlockEntities.BIG_LEVER, BigLeverRenderer::new);
         BlockEntityRendererFactories.register(NMBlockEntities.PNEUMATIC_PIPE, ItemPipeRenderer::new);
+        BlockEntityRendererFactories.register(NMBlockEntities.ENCASED_PNEUMATIC_PIPE, ItemPipeRenderer::new);
         BlockEntityRendererFactories.register(ItemTransport.STORAGE_BUS_BE, ItemPipeRenderer::new);
         BlockEntityRendererFactories.register(NMBlockEntities.MERGE_ITEM_PIPE, MergePipeRenderer::new);
         BlockEntityRendererFactories.register(NMBlockEntities.ITEM_PUMP, ItemPumpRenderer::new);
@@ -360,6 +361,7 @@ public class NeepMeatClient implements ClientModInitializer
         BlockRenderLayerMap.INSTANCE.putBlocks(RenderLayer.getTranslucent(), NMBlocks.SCAFFOLD_TRAPDOOR);
         BlockRenderLayerMap.INSTANCE.putBlocks(RenderLayer.getCutout(), NMBlocks.ENCASED_VASCULAR_CONDUIT);
         BlockRenderLayerMap.INSTANCE.putBlocks(RenderLayer.getCutout(), FluidTransport.ENCASED_FLUID_PIPE);
+        BlockRenderLayerMap.INSTANCE.putBlocks(RenderLayer.getCutout(), NMBlocks.ENCASED_PNEUMATIC_PIPE);
         BlockRenderLayerMap.INSTANCE.putBlocks(RenderLayer.getCutout(), NMBlocks.CHUTE);
 
         BlockRenderLayerMap.INSTANCE.putBlocks(RenderLayer.getCutout(), FluidTransport.FLUID_DRAIN);

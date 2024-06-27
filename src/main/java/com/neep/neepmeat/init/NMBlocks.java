@@ -294,6 +294,7 @@ public class NMBlocks
     // --- Item Transfer ---
     public static Block ITEM_DUCT = BlockRegistry.queue(new ItemDuctBlock("item_duct", block(), MeatlibBlockSettings.copyOf(Blocks.HOPPER)));
     public static Block PNEUMATIC_TUBE = BlockRegistry.queue(new ItemPipeBlock("item_pipe", block().tooltip(TooltipSupplier.simple(1)), MeatlibBlockSettings.copyOf(ITEM_PIPE_SETTINGS)));
+    public static Block ENCASED_PNEUMATIC_PIPE = BlockRegistry.queue(new EncasedItemPipeBlock("encased_item_pipe", block().tooltip(TooltipSupplier.simple(1)), MeatlibBlockSettings.copyOf(ITEM_PIPE_SETTINGS)));
     public static Block MERGE_ITEM_PIPE = BlockRegistry.queue(new MergePipeBlock("merge_item_pipe", block(), MeatlibBlockSettings.copyOf(ITEM_PIPE_SETTINGS)));
     public static Block ITEM_PUMP = BlockRegistry.queue(new ItemPumpBlock("item_pump", block().tooltip(TooltipSupplier.simple(1)), MeatlibBlockSettings.copyOf(MACHINE_SETTINGS)));
     public static Block EJECTOR = BlockRegistry.queue(new EjectorBlock("ejector", block().tooltip(TooltipSupplier.simple(1)), MeatlibBlockSettings.copyOf(MACHINE_SETTINGS)));

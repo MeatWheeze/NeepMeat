@@ -6,6 +6,7 @@ import com.neep.meatlib.storage.MeatlibStorageUtil;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.transport.api.pipe.AbstractPipeBlock;
 import com.neep.neepmeat.transport.api.pipe.ItemPipe;
+import com.neep.neepmeat.transport.api.pipe.VascularConduit;
 import com.neep.neepmeat.transport.block.item_transport.entity.ItemPipeBlockEntity;
 import com.neep.neepmeat.transport.fluid_network.PipeConnectionType;
 import com.neep.neepmeat.transport.item_network.ItemInPipe;
@@ -23,6 +24,7 @@ import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.Fluids;
+import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.ActionResult;
@@ -42,6 +44,11 @@ public class ItemPipeBlock extends AbstractPipeBlock implements BlockEntityProvi
     public ItemPipeBlock(String itemName, ItemSettings itemSettings, Settings settings)
     {
         super(itemName, itemSettings, settings);
+    }
+
+    protected static boolean matches(ItemStack stack)
+    {
+        return stack.getItem() instanceof BlockItem bi && bi.getBlock() instanceof ItemPipeBlock;
     }
 
     @Override
