@@ -182,15 +182,11 @@ public class FluidPipeBlock extends AbstractPipeBlock implements BlockEntityProv
                 if (be.getPipeVertex() instanceof BlockPipeVertex vertex && !vertex.canSimplify())
                 {
                     player.sendMessage(Text.of("Amount: " + vertex.getAmount() + ", Pump height: " + vertex.getPumpHeight() + ", Total height: " + vertex.getTotalHeight()));
-//                    System.out.println(vertex.getAmount());
-//                    System.out.println(vertex.getVariant());
-//                    System.out.println(vertex.getPumpHeight());
-//                    System.out.println(vertex.getTotalHeight());
                 }
-
-//                Collection<FluidNode> nodes = FluidNodeManager.getInstance(world).getNodes(pos);
-//                FluidNode node = nodes.iterator().next();
-//                node.hasPump = true;
+                else
+                {
+                    player.sendMessage(Text.of("No vertex"));
+                }
             }
             return ActionResult.SUCCESS;
         }
