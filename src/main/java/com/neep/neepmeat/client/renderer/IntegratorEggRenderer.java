@@ -35,60 +35,6 @@ public class IntegratorEggRenderer extends GeoBlockRenderer<IntegratorBlockEntit
         super(new IntegratorEggModel<IntegratorBlockEntity>());
     }
 
-    @Override
-    public void render(IntegratorBlockEntity be, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int packedLightIn)
-    {
-        if (!be.isMature)
-        {
-            renderEgg(matrices, be, vertexConsumers);
-        }
-        else
-        {
-            Vec2f vec = NMMaths.flattenY(be.getLookTarget().subtract(Vec3d.ofCenter(be.getPos())));
-            be.targetFacing = NMMaths.getAngle(vec);
-
-            be.facing = NMMaths.angleLerp(0.03f, be.facing, be.targetFacing);
-
-            // Rotate towards target
-            renderBase(matrices, be, vertexConsumers);
-            matrices.push();
-            matrices.translate(0.5d, 0d, 0.5d);
-            matrices.multiply(Vec3f.POSITIVE_Y.getRadialQuaternion(be.facing));
-            matrices.translate(-0.5d, 0d, -0.5d);
-            float s = NMMaths.sin(be.getWorld().getTime(), tickDelta, 1 / 20f);
-            matrices.translate(0, 1.8 + s / 15, 0);
-
-            AnimatedGeoModel<IntegratorBlockEntity> modelProvider = getGeoModelProvider();
-            GeoModel model = modelProvider.getModel(modelProvider.getModelResource(be));
-            modelProvider.setCustomAnimations(be, this.getInstanceId(be));
-            matrices.push();
-            matrices.translate(0, 0.01f, 0);
-            matrices.translate(0.5, 0, 0.5);
-
-            // Render main model
-            MinecraftClient.getInstance().getTextureManager().bindTexture(getTextureLocation(be));
-            Color renderColor = getRenderColor(be, tickDelta, matrices, vertexConsumers, null, packedLightIn);
-            RenderLayer renderType = getRenderType(be, tickDelta, matrices, vertexConsumers, null, packedLightIn, getTextureLocation(be));
-            render(model, be, tickDelta, renderType, matrices, vertexConsumers, null, packedLightIn, OverlayTexture.DEFAULT_UV,
-                    (float) renderColor.getRed() / 255f, (float) renderColor.getGreen() / 255f,
-                    (float) renderColor.getBlue() / 255f, (float) renderColor.getAlpha() / 255);
-
-            // Render enlightenment overlay
-            float dataPropt = (float) be.getData(DataVariant.NORMAL) / IntegratorBlockEntity.MAX_DATA;
-            RenderLayer cameo =  RenderLayer.getEntityTranslucent(LAYER);
-            render(model, be, tickDelta, cameo, matrices, vertexConsumers,
-                    vertexConsumers.getBuffer(cameo), packedLightIn, OverlayTexture.DEFAULT_UV, 1f, 1f, 1f, dataPropt);
-
-            matrices.pop();
-            matrices.pop();
-        }
-    }
-
-    public void renderBase(MatrixStack matrices, IntegratorBlockEntity be, VertexConsumerProvider vertexConsumers)
-    {
-        BERenderUtils.renderModelSmooth(NMExtraModels.INTEGRATOR_BASE, matrices, be.getWorld(), be.getPos(), be.getCachedState(), vertexConsumers);
-    }
-
     public static void renderEgg(MatrixStack matrices, IntegratorBlockEntity blockEntity, VertexConsumerProvider vertexConsumers)
     {
         matrices.push();
@@ -120,5 +66,60 @@ public class IntegratorEggRenderer extends GeoBlockRenderer<IntegratorBlockEntit
         matrices.translate(-1, 0, -1);
         matrices.scale(3, 2, 3);
         matrices.pop();
+    }
+
+    @Override
+    public void render(IntegratorBlockEntity be, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int packedLightIn)
+    {
+        if (!be.isMature)
+        {
+            renderEgg(matrices, be, vertexConsumers);
+        }
+        else
+        {
+            Vec2f vec = NMMaths.flattenY(be.getLookTarget().subtract(Vec3d.ofCenter(be.getPos())));
+            be.targetFacing = NMMaths.getAngle(vec);
+
+            be.facing = NMMaths.angleLerp(0.03f, be.facing, be.targetFacing);
+
+            // Rotate towards target
+            renderBase(matrices, be, vertexConsumers);
+            matrices.push();
+            matrices.translate(0.5d, 0d, 0.5d);
+            matrices.multiply(Vec3f.POSITIVE_Y.getRadialQuaternion(be.facing));
+            matrices.translate(-0.5d, 0d, -0.5d);
+//            matrices.translate(0, 1.8 + Math.sin((be.getWorld().getTime() + tickDelta) / 20) / 15, 0);
+            float s = NMMaths.sin(Integer.MAX_VALUE + be.getWorld().getTime(), tickDelta, 1 / 20f);
+            matrices.translate(0, 1.8 + s / 15, 0);
+
+            AnimatedGeoModel<IntegratorBlockEntity> modelProvider = getGeoModelProvider();
+            GeoModel model = modelProvider.getModel(modelProvider.getModelResource(be));
+            modelProvider.setCustomAnimations(be, this.getInstanceId(be));
+            matrices.push();
+            matrices.translate(0, 0.01f, 0);
+            matrices.translate(0.5, 0, 0.5);
+
+            // Render main model
+            MinecraftClient.getInstance().getTextureManager().bindTexture(getTextureLocation(be));
+            Color renderColor = getRenderColor(be, tickDelta, matrices, vertexConsumers, null, packedLightIn);
+            RenderLayer renderType = getRenderType(be, tickDelta, matrices, vertexConsumers, null, packedLightIn, getTextureLocation(be));
+            render(model, be, tickDelta, renderType, matrices, vertexConsumers, null, packedLightIn, OverlayTexture.DEFAULT_UV,
+                    (float) renderColor.getRed() / 255f, (float) renderColor.getGreen() / 255f,
+                    (float) renderColor.getBlue() / 255f, (float) renderColor.getAlpha() / 255);
+
+            // Render enlightenment overlay
+            float dataPropt = (float) be.getData(DataVariant.NORMAL) / IntegratorBlockEntity.MAX_DATA;
+            RenderLayer cameo =  RenderLayer.getEntityTranslucent(LAYER);
+            render(model, be, tickDelta, cameo, matrices, vertexConsumers,
+                    vertexConsumers.getBuffer(cameo), packedLightIn, OverlayTexture.DEFAULT_UV, 1f, 1f, 1f, dataPropt);
+
+            matrices.pop();
+            matrices.pop();
+        }
+    }
+
+    public void renderBase(MatrixStack matrices, IntegratorBlockEntity be, VertexConsumerProvider vertexConsumers)
+    {
+        BERenderUtils.renderModelSmooth(NMExtraModels.INTEGRATOR_BASE, matrices, be.getWorld(), be.getPos(), be.getCachedState(), vertexConsumers);
     }
 }

@@ -33,16 +33,20 @@ public class NMMaths
     {
         switch (direction)
         {
-            case UP -> {
+            case UP ->
+            {
                 return EAST;
             }
-            case DOWN -> {
+            case DOWN ->
+            {
                 return WEST;
             }
-            case EAST -> {
+            case EAST ->
+            {
                 return DOWN;
             }
-            case WEST -> {
+            case WEST ->
+            {
                 return UP;
             }
         }
@@ -112,7 +116,8 @@ public class NMMaths
         return manhattanDistance(v1, v2);
     }
 
-    /**Converts a 3D vector to pitch and yaw in degrees, neglecting roll.
+    /**
+     * Converts a 3D vector to pitch and yaw in degrees, neglecting roll.
      */
     public static Vec2f rectToPol(double u, double v, double w)
     {
@@ -129,6 +134,24 @@ public class NMMaths
 
     public static float sin(long time, float tickDelta, float timeFactor)
     {
-        return (float) (Math.sin(time * timeFactor) * MathHelper.cos(tickDelta * timeFactor) + Math.cos(time * timeFactor) * MathHelper.sin(tickDelta * timeFactor));
+        float time1 = wrapDegrees(time);
+        return MathHelper.sin((time1 + tickDelta) * timeFactor);
+//        return (float) (Math.sin(time * timeFactor) * MathHelper.cos(tickDelta * timeFactor) + Math.cos(time * timeFactor) * MathHelper.sin(tickDelta * timeFactor));
+    }
+
+    public static long wrapDegrees(long degrees)
+    {
+        long l = degrees % 360;
+        if (l >= 180)
+        {
+            l -= 360;
+        }
+
+        if (l < -180)
+        {
+            l += 360;
+        }
+
+        return l;
     }
 }

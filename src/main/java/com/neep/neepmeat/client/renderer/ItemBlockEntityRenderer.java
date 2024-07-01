@@ -39,7 +39,7 @@ public class ItemBlockEntityRenderer<T extends BlockEntity> implements BlockEnti
 
         matrices.translate(0.5, offsetFunction.apply(entity), 0.5);
         // Wrap degrees to ensure precision for long-lived worlds
-        matrices.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion((MathHelper.wrapDegrees(entity.getWorld().getTime()) + tickDelta) * 1));
+        matrices.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion((MathHelper.wrapDegrees(entity.getWorld().getTime())) + tickDelta));
 
         MinecraftClient.getInstance().getItemRenderer().renderItem(stack, ModelTransformation.Mode.GROUND, light, overlay, matrices, vertexConsumers, 0);
 
