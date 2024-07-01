@@ -19,7 +19,11 @@
     "WorldChunkMixin",
     "feature.CountPlacementModifierAccessor",
     "loot.CombinedEntryAccessor",
-    "loot.ItemEntryAccessor"
+    "loot.ConstantLootNumberProviderAccessor",
+    "loot.ItemEntryAccessor",
+    "loot.LeafEntryAccessor",
+    "loot.SetCountLootFunctionAccessor",
+    "loot.UniformLootNumberProviderAccessor"
   ],
   "client": [
     "BlockModelRendererAccessor",

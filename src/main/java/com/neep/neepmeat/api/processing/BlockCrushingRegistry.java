@@ -8,8 +8,7 @@ import com.neep.meatlib.recipe.ingredient.RecipeOutput;
 import com.neep.meatlib.recipe.ingredient.RecipeOutputImpl;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.datagen.tag.NMTags;
-import com.neep.neepmeat.mixin.loot.CombinedEntryAccessor;
-import com.neep.neepmeat.mixin.loot.ItemEntryAccessor;
+import com.neep.neepmeat.mixin.loot.*;
 import com.neep.neepmeat.recipe.AdvancedBlockCrushingRecipe;
 import com.neep.neepmeat.recipe.BlockCrushingRecipe;
 import net.fabricmc.api.EnvType;
@@ -30,6 +29,11 @@ import net.minecraft.loot.LootTable;
 import net.minecraft.loot.entry.AlternativeEntry;
 import net.minecraft.loot.entry.ItemEntry;
 import net.minecraft.loot.entry.LootPoolEntry;
+import net.minecraft.loot.function.LootFunction;
+import net.minecraft.loot.function.SetCountLootFunction;
+import net.minecraft.loot.provider.number.ConstantLootNumberProvider;
+import net.minecraft.loot.provider.number.LootNumberProvider;
+import net.minecraft.loot.provider.number.UniformLootNumberProvider;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.recipe.RecipeManager;
 import net.minecraft.server.MinecraftServer;
@@ -128,7 +132,7 @@ public class BlockCrushingRegistry
     }
 
     /**
-     * Incredibly cursed traversal that looks for a structure that roughly matches that of a vanilla ore.
+     * Incredibly cursed traversal that looks for a structure that roughly resembles a vanilla ore.
      */
     private void inspectLootTable(LootManager lootManager, BlockItem blockItem)
     {
@@ -152,7 +156,38 @@ public class BlockCrushingRegistry
                             boolean isRawOre = outputItem.getRegistryEntry().isIn(outputs);
                             if (isRawOre)
                             {
-                                register(blockItem, outputItem); // baseAmount should be extracted from the loot table, but I've no idea how.
+                                int min = 1;
+                                int max = 1;
+
+                                LootFunction[] lootFunctions = ((LeafEntryAccessor) itemEntry).getFunctions();
+
+                                for (var function : lootFunctions)
+                                {
+                                    if (function instanceof SetCountLootFunction setCount)
+                                    {
+                                        LootNumberProvider number = ((SetCountLootFunctionAccessor) setCount).getCountRange();
+                                        if (number instanceof UniformLootNumberProvider uniform)
+                                        {
+                                            if (((UniformLootNumberProviderAccessor) uniform).getMin() instanceof ConstantLootNumberProvider constant)
+                                            {
+                                                // Trick the compiler as the class is final
+                                                min = (int) ((ConstantLootNumberProviderAccessor) (Object) constant).getValue();
+                                            }
+                                            if (((UniformLootNumberProviderAccessor) uniform).getMax() instanceof ConstantLootNumberProvider constant)
+                                            {
+                                                // Trick the compiler as the class is final
+                                                max = (int) ((ConstantLootNumberProviderAccessor) (Object) constant).getValue();
+                                            }
+                                        }
+                                    }
+                                }
+
+                                if (max < min)
+                                {
+                                    max = min;
+                                }
+
+                                register(blockItem, outputItem, min, max);
                                 return;
                             }
                         }
@@ -162,26 +197,30 @@ public class BlockCrushingRegistry
         }
     }
 
-    private void register(Item inputVariant, Item outputItem)
+    private void register(Item inputVariant, Item outputItem, int min, int max)
     {
         if (blockCrushingRecipe != null)
         {
-            basicInputToEntry.put(ItemVariant.of(inputVariant), create(inputVariant, outputItem, blockCrushingRecipe));
+            basicInputToEntry.put(ItemVariant.of(inputVariant), create(inputVariant, outputItem, blockCrushingRecipe, min, max));
         }
 
         if (advancedBlockCrushingRecipe != null)
         {
-            advancedInputToEntry.put(ItemVariant.of(inputVariant), create(inputVariant, outputItem, advancedBlockCrushingRecipe));
+            advancedInputToEntry.put(ItemVariant.of(inputVariant), create(inputVariant, outputItem, advancedBlockCrushingRecipe, min, max));
         }
     }
 
-    private Entry create(Item inputItem, Item outputItem, BlockCrushingRecipe recipe)
+    private Entry create(Item inputItem, Item outputItem, BlockCrushingRecipe recipe, int min, int max)
     {
-        int baseAmount = (int) recipe.getBaseAmount();
+        // Increase the amounts if the recipe is set to provide higher yields than the loot table.
+        // Relevant for advanced crushing.
+        min = (int) Math.max(recipe.getBaseAmount(), min);
+        max = (int) Math.max(recipe.getBaseAmount(), max);
+
         int extraAmount = (int) recipe.getExtraAmount();
 
         RecipeInput<Item> input = RecipeInputs.of(inputItem, 1);
-        RecipeOutput<Item> output = new RecipeOutputImpl<>(outputItem, baseAmount, baseAmount, 1);
+        RecipeOutput<Item> output = new RecipeOutputImpl<>(outputItem, min, max, 1);
         RecipeOutput<Item> extra = new RecipeOutputImpl<>(outputItem, extraAmount, extraAmount, 0.5f);
 
         return new Entry(input, output, extra);
