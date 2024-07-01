@@ -147,6 +147,12 @@ public class FarmingScutter extends ScutterEntity
         targets.removeIf(p -> !isGrownCrop(getWorld().getBlockState(p)));
     }
 
+    @Override
+    public void tickMovement()
+    {
+        super.tickMovement();
+    }
+
     public void harvest(World world, BlockPos pos, BlockState state, CropBlock block)
     {
         BlockEntity blockEntity = state.hasBlockEntity() ? world.getBlockEntity(pos) : null;

@@ -64,6 +64,7 @@ public abstract class ScutterItem<T extends ScutterEntity> extends BaseItem
             if (scutter != null)
             {
                 scutter.setPos(valid.x, valid.y, valid.z);
+                scutter.setPosition(valid.x, valid.y, valid.z);
                 processEntity(scutter, context);
                 world.spawnEntity(scutter);
             }
