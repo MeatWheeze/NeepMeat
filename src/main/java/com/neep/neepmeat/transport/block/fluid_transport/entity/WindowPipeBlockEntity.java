@@ -5,7 +5,6 @@ import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.transport.fluid_network.node.BlockPipeVertex;
 import com.neep.neepmeat.transport.machine.fluid.FluidPipeBlockEntity;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.nbt.NbtCompound;
@@ -43,13 +42,6 @@ public class WindowPipeBlockEntity extends FluidPipeBlockEntity<WindowPipeBlockE
     {
         super.writeNbt(nbt);
         toClientTag(nbt);
-    }
-
-    @Override
-    public void sync()
-    {
-        markDirty();
-        world.updateListeners(pos, getCachedState(), getCachedState(), Block.NOTIFY_LISTENERS);
     }
 
     @Override

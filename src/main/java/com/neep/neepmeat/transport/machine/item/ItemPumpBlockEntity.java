@@ -5,7 +5,6 @@ import com.neep.meatlib.storage.MeatlibStorageUtil;
 import com.neep.neepmeat.api.machine.BloodMachineBlockEntity;
 import com.neep.neepmeat.api.storage.LazyBlockApiCache;
 import com.neep.neepmeat.init.NMBlockEntities;
-import com.neep.neepmeat.plc.Instructions;
 import com.neep.neepmeat.plc.instruction.Instruction;
 import com.neep.neepmeat.transport.api.pipe.ItemPipe;
 import com.neep.neepmeat.transport.interfaces.IServerWorld;
@@ -284,6 +283,7 @@ public class ItemPumpBlockEntity extends BloodMachineBlockEntity
     @Override
     public void fromClientTag(NbtCompound tag)
     {
+        this.shuttle = tag.getInt("shuttle_ticks");
     }
 
     @Override

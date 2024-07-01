@@ -10,6 +10,9 @@ import net.minecraft.block.Blocks;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtHelper;
+import net.minecraft.network.Packet;
+import net.minecraft.network.listener.ClientPlayPacketListener;
+import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.util.shape.VoxelShapes;
@@ -31,6 +34,12 @@ public class EncasedFluidPipeBlockEntity<T extends PipeVertex & NbtSerialisable>
         var nbt = super.toInitialChunkDataNbt();
         writeNbt(nbt);
         return nbt;
+    }
+
+    @Override
+    public Packet<ClientPlayPacketListener> toUpdatePacket()
+    {
+        return BlockEntityUpdateS2CPacket.create(this);
     }
 
     @Override
