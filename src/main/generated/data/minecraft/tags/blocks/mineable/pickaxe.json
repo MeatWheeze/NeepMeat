@@ -194,6 +194,7 @@
     "neepmeat:small_compressor",
     "neepmeat:item_duct",
     "neepmeat:item_pipe",
+    "neepmeat:encased_item_pipe",
     "neepmeat:merge_item_pipe",
     "neepmeat:item_pump",
     "neepmeat:ejector",
@@ -259,6 +260,7 @@
     "neepmeat:flex_tank",
     "neepmeat:advanced_flex_tank",
     "neepmeat:fluid_gauge",
-    "neepmeat:item_gauge"
+    "neepmeat:item_gauge",
+    "neepmeat:filtered_ejector"
   ]
 }

@@ -20,6 +20,13 @@
     {
       "id": "#chestcavity:salvageable_rotten_flesh",
       "required": false
-    }
+    },
+    "minecraft:bone",
+    "minecraft:spider_eye",
+    "minecraft:fermented_spider_eye",
+    "minecraft:egg",
+    "minecraft:turtle_egg",
+    "minecraft:frogspawn",
+    "minecraft:sniffer_egg"
   ]
 }
