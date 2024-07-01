@@ -552,6 +552,7 @@
   "item.neepmeat.meat_steel_axe": "Meat Steel Axe",
   "item.neepmeat.meat_steel_shovel": "Meat Steel Shovel",
   "item.neepmeat.meat_steel_hoe": "Meat Steel Hoe",
+  "item.neepmeat.rock_drill": "Rock Drill",
 
   "item.neepmeat.transforming_tool_base": "Transforming Tool Base",
   "item.neepmeat.transforming_tool_base.lore_0": "Can combine two items into one.",
@@ -954,6 +955,8 @@
   "subtitles.neepmeat.flesh_machine_place": "Flesh machine placed",
   "subtitles.neepmeat.multiblock_assemble": "Multiblock assembles",
   "subtitles.neepmeat.multiblock_disassemble": "Multiblock disassembles",
+
+  "subtitles.neepmeat.rock_drill": "Rock Drill",
 
   "subtitles.neepmeat.glome_hit": "Glome hurts",
   "subtitles.neepmeat.hound_hit": "Hound hurts",

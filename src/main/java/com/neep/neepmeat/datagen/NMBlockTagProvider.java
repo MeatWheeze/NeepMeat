@@ -55,5 +55,11 @@ public class NMBlockTagProvider extends FabricTagProvider.BlockTagProvider
                 .addOptionalTag(BlockTags.DIRT)
                 .addOptionalTag(BlockTags.NETHER_CARVER_REPLACEABLES)
         ;
+
+        getOrCreateTagBuilder(NMTags.ROCK_DRILL_MINEABLE)
+                .addOptionalTag(BlockTags.STONE_ORE_REPLACEABLES)
+                .addOptionalTag(BlockTags.NETHER_CARVER_REPLACEABLES)
+                .addOptionalTag(BlockTags.DEEPSLATE_ORE_REPLACEABLES)
+        ;
     }
 }

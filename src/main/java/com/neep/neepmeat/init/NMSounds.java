@@ -67,6 +67,7 @@ public class NMSounds
     public static SoundEvent HAND_CANNON_RELOAD = SoundRegistry.registerSound(MeatWeapons.NAMESPACE, "fusion_reload");
 
     public static SoundEvent DRILL_RUNNING = SoundRegistry.registerSound(MeatWeapons.NAMESPACE, "drill_running");
+    public static SoundEvent ROCK_DRILL = SoundRegistry.registerSound(NeepMeat.NAMESPACE, "rock_drill");
 
     public static SoundEvent AIRTRUCK_STARTING = SoundRegistry.registerSound(MeatWeapons.NAMESPACE, "airtruck_starting");
     public static SoundEvent AIRTRUCK_RUNNING = SoundRegistry.registerSound(MeatWeapons.NAMESPACE, "airtruck_running");

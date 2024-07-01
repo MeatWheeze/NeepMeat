@@ -33,6 +33,8 @@ public class NMTags
 
     public static final TagKey<EntityType<?>> CLONEABLE = TagKey.of(Registry.ENTITY_TYPE.getKey(), new Identifier(NeepMeat.NAMESPACE, "cloneable"));
 
+    public static final TagKey<Block> ROCK_DRILL_MINEABLE = TagKey.of(Registry.BLOCK.getKey(), new Identifier(NeepMeat.NAMESPACE, "rock_drill_mineable"));
+
     private static TagKey<Item> registerItem(String namespace, String id)
     {
         return TagKey.of(Registry.ITEM.getKey(), new Identifier(namespace, id));

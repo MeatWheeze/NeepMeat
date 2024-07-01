@@ -241,6 +241,10 @@
     "sounds": [
       "neepmeat:scalpel_hit"
     ]},
+  "rock_drill": { "subtitle": "subtitles.neepmeat.rock_drill",
+    "sounds": [
+      "neepmeat:rock_drill_short"
+    ]},
 
   "wrench_click": { "subtitle": "subtitles.neepmeat.wrench.click",
     "sounds": [

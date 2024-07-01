@@ -1,0 +1,17 @@
+{
+  "replace": false,
+  "values": [
+    {
+      "id": "#minecraft:stone_ore_replaceables",
+      "required": false
+    },
+    {
+      "id": "#minecraft:nether_carver_replaceables",
+      "required": false
+    },
+    {
+      "id": "#minecraft:deepslate_ore_replaceables",
+      "required": false
+    }
+  ]
+}

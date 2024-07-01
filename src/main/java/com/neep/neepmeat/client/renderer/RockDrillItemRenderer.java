@@ -2,6 +2,8 @@ package com.neep.neepmeat.client.renderer;
 
 import com.neep.meatweapons.client.renderer.meatgun.MeatgunModuleRenderer;
 import com.neep.neepmeat.client.NMExtraModels;
+import com.neep.neepmeat.item.RockDrillItem;
+import com.neep.neepmeat.util.NMMaths;
 import dev.monarkhes.myron_neepmeat.impl.client.model.MyronBakedModel;
 import net.fabricmc.fabric.api.client.rendering.v1.BuiltinItemRendererRegistry;
 import net.minecraft.client.MinecraftClient;
@@ -57,7 +59,8 @@ public class RockDrillItemRenderer implements BuiltinItemRendererRegistry.Dynami
     @Override
     public void render(ItemStack stack, ModelTransformation.Mode mode, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay)
     {
-        BakedModel model = client.getItemRenderer().getModels().getModelManager().getModel(NMExtraModels.ROCK_DRILL);
+        BakedModel main = client.getItemRenderer().getModels().getModelManager().getModel(NMExtraModels.ROCK_DRILL);
+        BakedModel rod = client.getItemRenderer().getModels().getModelManager().getModel(NMExtraModels.ROCK_DRILL_ROD);
         if (mode == ModelTransformation.Mode.FIRST_PERSON_LEFT_HAND || mode == ModelTransformation.Mode.FIRST_PERSON_RIGHT_HAND)
         {
             // Remove all the other transformations including the equip animation and display settings.
@@ -72,11 +75,16 @@ public class RockDrillItemRenderer implements BuiltinItemRendererRegistry.Dynami
             matrices.scale(16f, 16f, 16f);
             matrices.multiply(Vec3f.NEGATIVE_X.getDegreesQuaternion(-15));
 
-            renderItem(stack, mode, matrices, vertexConsumers, light, overlay, model);
+            renderItem(stack, mode, matrices, vertexConsumers, light, overlay, main);
+
+            if (RockDrillItem.using(stack))
+                matrices.translate(0, 0, 3 / 16f * (1 + NMMaths.sin(client.world.getTime(), client.getTickDelta(), 10)));
+
+            renderItem(stack, mode, matrices, vertexConsumers, light, overlay, rod);
         }
         else
         {
-            renderItem(stack, mode, matrices, vertexConsumers, light, overlay, model);
+            renderItem(stack, mode, matrices, vertexConsumers, light, overlay, main);
         }
     }
 }

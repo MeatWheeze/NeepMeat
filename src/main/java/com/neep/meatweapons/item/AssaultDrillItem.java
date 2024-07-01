@@ -2,7 +2,7 @@ package com.neep.meatweapons.item;
 
 import com.google.common.collect.Iterators;
 import com.google.common.collect.Multimap;
-import com.neep.meatlib.client.api.event.InputEvents;
+import com.neep.meatlib.item.ClientBlockAttackListener;
 import com.neep.meatlib.item.CustomEnchantable;
 import com.neep.meatlib.item.MeatlibItem;
 import com.neep.meatlib.item.PoweredItem;
@@ -79,18 +79,18 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-public class AssaultDrillItem extends Item implements MeatlibItem, IAnimatable, ISyncable, PoweredItem, CustomEnchantable, OverrideSwingItem
+public class AssaultDrillItem extends Item implements MeatlibItem, IAnimatable, ISyncable, PoweredItem, CustomEnchantable, OverrideSwingItem, ClientBlockAttackListener
 {
     public static final Identifier CHANNEL_ID = new Identifier("assault_drill");
 
     public final String controllerName = "controller";
     private final AnimationFactory factory = new SingletonAnimationFactory(this);
     private final TagKey<Block> effectiveBlocks;
+    private final float miningSpeed;
 
     private final EntityAttributeModifier eam = new EntityAttributeModifier("aa", 8, EntityAttributeModifier.Operation.ADDITION);
     protected String registryName;
     protected float attackDamage;
-    private final float miningSpeed;
 
     public AssaultDrillItem(String registryName, int maxDamage, FabricItemSettings settings)
     {
@@ -342,12 +342,14 @@ public class AssaultDrillItem extends Item implements MeatlibItem, IAnimatable, 
         return 1;
     }
 
+    @Override
     public void onAttackBlock(ItemStack stack, PlayerEntity player)
     {
         if (stack.getDamage() < getMaxDamage())
             sendAttack(true);
     }
 
+    @Override
     public void onFinishAttackBlock(ItemStack stack, PlayerEntity player)
     {
         sendAttack(false);
@@ -464,31 +466,6 @@ public class AssaultDrillItem extends Item implements MeatlibItem, IAnimatable, 
         public static void init()
         {
             ClientTickEvents.START_CLIENT_TICK.register(Client::tick);
-
-            InputEvents.POST_INPUT.register((window, key, scancode, action, modifiers) ->
-            {
-                MinecraftClient client = MinecraftClient.getInstance();
-                if (client.player != null && client.options != null)
-                {
-                    ItemStack mainStack = client.player.getMainHandStack();
-
-                    if (mainStack.getItem() instanceof AssaultDrillItem drill &&
-                            (client.options.attackKey.matchesKey(key, scancode)
-                                    || client.options.attackKey.matchesMouse(key))
-                    )
-                    {
-                        if (client.options.attackKey.isPressed())
-                        {
-                            drill.onAttackBlock(mainStack, client.player);
-                        }
-                        else
-                        {
-                            drill.onFinishAttackBlock(mainStack, client.player);
-                        }
-                    }
-                }
-            });
-
         }
 
         public static void tick(MinecraftClient client)

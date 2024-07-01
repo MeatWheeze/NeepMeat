@@ -15,6 +15,7 @@ import com.neep.neepmeat.client.hud.FarmingScutterHudRenderer;
 import com.neep.neepmeat.client.hud.GuideLookupThings;
 import com.neep.neepmeat.client.hud.HUDOverlays;
 import com.neep.neepmeat.client.instance.TreeVacuumInstance;
+import com.neep.neepmeat.client.item.RockDrillItemClient;
 import com.neep.neepmeat.client.model.GenericModel;
 import com.neep.neepmeat.client.model.GlassTankModel;
 import com.neep.neepmeat.client.model.GlomeEntityModel;
@@ -107,6 +108,7 @@ public class NeepMeatClient implements ClientModInitializer
         MachineHudOverlay.init();
         FarmingScutterHudRenderer.init();
         BigBlockPlacementHelper.init();
+        RockDrillItemClient.init();
 
         TransportClient.init();
 
