@@ -1,5 +1,5 @@
 # Made in Blockbench 4.10.1
-mtllib rock_drill.mtl
+mtllib rock_drill_off.mtl
 
 o cube
 v 0.125 0.125 -0.8125

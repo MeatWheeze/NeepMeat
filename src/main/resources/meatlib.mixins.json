@@ -20,6 +20,7 @@
     "ItemRendererMixin",
     "KeyboardMixin",
     "MinecraftClientMixin",
+    "ModelManagerMixin",
     "MouseMixin"
   ],
   "injectors": {

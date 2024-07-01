@@ -1,6 +1,5 @@
 package com.neep.neepmeat.enlightenment;
 
-import com.neep.neepmeat.api.enlightenment.EnlightenmentManager;
 import com.neep.neepmeat.init.NMComponents;
 import dev.onyxstudios.cca.api.v3.component.sync.AutoSyncedComponent;
 import dev.onyxstudios.cca.api.v3.component.tick.ClientTickingComponent;
