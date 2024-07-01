@@ -10,11 +10,11 @@
       "item": "neepmeat:whisper_brass_ingot"
     },
     "l": {
-      "item": "minecraft:glass_pane"
+      "item": "minecraft:iron_bars"
     }
   },
   "result": {
-    "item": "neepmeat:item_pipe",
+    "item": "neepmeat:opaque_item_pipe",
     "count": 8
   }
 }

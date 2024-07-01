@@ -1,0 +1,32 @@
+{
+	"credit": "Made with Blockbench",
+	"texture_size": [32, 32],
+	"textures": {
+		"1": "neepmeat:block/opaque_item_pipe/pipe_centre",
+		"particle": "neepmeat:block/opaque_item_pipe/pipe_centre"
+	},
+	"elements": [
+		{
+			"from": [4, 5, 4],
+			"to": [12, 11, 12],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 8, 8]},
+			"faces": {
+				"east": {"uv": [0, 3, 4, 6], "texture": "#1"},
+				"west": {"uv": [0, 3, 4, 6], "texture": "#1"},
+				"up": {"uv": [5.5, 12, 5, 8], "texture": "#1"},
+				"down": {"uv": [6, 8, 5.5, 12], "texture": "#1"}
+			}
+		},
+		{
+			"from": [5, 4, 4],
+			"to": [11, 12, 12],
+			"rotation": {"angle": 0, "axis": "x", "origin": [8, 8, 8]},
+			"faces": {
+				"east": {"uv": [0, 10, 4, 10.5], "texture": "#1"},
+				"west": {"uv": [10, 3, 14, 3.5], "texture": "#1"},
+				"up": {"uv": [0, 3, 4, 6], "rotation": 90, "texture": "#1"},
+				"down": {"uv": [0, 3, 4, 6], "rotation": 90, "texture": "#1"}
+			}
+		}
+	]
+}

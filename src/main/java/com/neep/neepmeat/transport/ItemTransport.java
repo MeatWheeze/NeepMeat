@@ -36,8 +36,7 @@ public class ItemTransport
 {
     public static final int BFS_MAX_DEPTH = 800;
 
-    public static BlockApiLookup<ItemPipe, Direction> ITEM_PIPE = BlockApiLookup.get(new Identifier(NeepMeat.NAMESPACE, "item_pipe"), ItemPipe.class, Direction.class);
-
+    public static BlockApiLookup<ItemPipe, Direction> ITEM_PIPE_LOOKUP = BlockApiLookup.get(new Identifier(NeepMeat.NAMESPACE, "item_pipe"), ItemPipe.class, Direction.class);
     public static BlockEntityType<PipeDriverBlock.PipeDriverBlockEntity> PIPE_DRIVER_BE;
     public static BlockEntityType<StorageBusBlockEntity> STORAGE_BUS_BE;
     public static BlockEntityType<ItemRequesterBlockEntity> ITEM_REQUESTER_BE;
@@ -46,7 +45,8 @@ public class ItemTransport
     public static final Block STORAGE_BUS = BlockRegistry.queue(new StorageBusBlock("storage_bus", ItemSettings.block().tooltip(TooltipSupplier.simple(1)), MeatlibBlockSettings.create(Material.METAL).hardness(0.3f).sounds(BlockSoundGroup.METAL)));
     public static final Block ITEM_REQUESTER = BlockRegistry.queue(new ItemRequesterBlock("item_requester", ItemSettings.block().tooltip(TooltipSupplier.simple(1)), MeatlibBlockSettings.create(Material.METAL).hardness(0.3f).sounds(BlockSoundGroup.METAL)));
     public static final Block FILTERED_EJECTOR = BlockRegistry.queue(new FilteredEjectorBlock("filtered_ejector", ItemSettings.block().tooltip(TooltipSupplier.simple(1)), MeatlibBlockSettings.create(Material.METAL)));
-    public static final Block PNEUMATIC_TUBE = BlockRegistry.queue(new ItemPipeBlock("item_pipe", NMBlocks.block().tooltip(TooltipSupplier.simple(1)), MeatlibBlockSettings.copyOf(NMBlocks.ITEM_PIPE_SETTINGS)));
+    public static final Block ITEM_PIPE = BlockRegistry.queue(new ItemPipeBlock("item_pipe", NMBlocks.block().tooltip(TooltipSupplier.simple(1)), MeatlibBlockSettings.copyOf(NMBlocks.ITEM_PIPE_SETTINGS)));
+    public static final Block OPAQUE_ITEM_PIPE = BlockRegistry.queue(new ItemPipeBlock("opaque_item_pipe", NMBlocks.block().tooltip(TooltipSupplier.simple(1)), MeatlibBlockSettings.copyOf(NMBlocks.ITEM_PIPE_SETTINGS)));
     public static final Block ENCASED_PNEUMATIC_PIPE = BlockRegistry.queue(new EncasedItemPipeBlock("encased_item_pipe", NMBlocks.block().tooltip(TooltipSupplier.simple(1)), MeatlibBlockSettings.copyOf(NMBlocks.ITEM_PIPE_SETTINGS)));
     public static final Block MERGE_ITEM_PIPE = BlockRegistry.queue(new MergePipeBlock("merge_item_pipe", NMBlocks.block(), MeatlibBlockSettings.copyOf(NMBlocks.ITEM_PIPE_SETTINGS)));
     public static final Block ITEM_PUMP = BlockRegistry.queue(new ItemPumpBlock("item_pump", NMBlocks.block().tooltip(TooltipSupplier.simple(1)), MeatlibBlockSettings.copyOf(NMBlocks.MACHINE_SETTINGS)));
@@ -67,7 +67,7 @@ public class ItemTransport
         RoutablePipe.LOOKUP.registerSelf(ITEM_REQUESTER_BE);
         FILTERED_EJECTOR_BE = NMBlockEntities.register("filtered_ejector", (p, s) -> new FilteredEjectorBlockEntity(ItemTransport.FILTERED_EJECTOR_BE, p, s), FILTERED_EJECTOR);
 
-        ITEM_PIPE.registerFallback((world, pos, state, blockEntity, context) -> state.getBlock() instanceof ItemPipe pipe ? pipe : null);
+        ITEM_PIPE_LOOKUP.registerFallback((world, pos, state, blockEntity, context) -> state.getBlock() instanceof ItemPipe pipe ? pipe : null);
 
         TransportScreenHandlers.ITEM_REQUESTER_HANDLER = ScreenHandlerInit.registerExtended(NeepMeat.NAMESPACE, "item_requester", ItemRequesterScreenHandler::new);
     }

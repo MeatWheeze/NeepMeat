@@ -22,7 +22,7 @@ public class RoutingNetworkDFSFinder extends DFSFinder<BlockApiCache<RoutingNetw
     @Override
     protected State processPos(BlockPos current, Direction fromDir)
     {
-        ItemPipe fromPipe = ItemTransport.ITEM_PIPE.find(world, current, fromDir);
+        ItemPipe fromPipe = ItemTransport.ITEM_PIPE_LOOKUP.find(world, current, fromDir);
 
         BlockApiCache<RoutingNetwork, Void> cache = BlockApiCache.create(RoutingNetwork.LOOKUP, (ServerWorld) world, current);
         if (cache.find(null) != null)
@@ -37,7 +37,7 @@ public class RoutingNetworkDFSFinder extends DFSFinder<BlockApiCache<RoutingNetw
             mutable.set(current, direction);
             if (visited(mutable)) continue;
 
-            ItemPipe offsetPipe = ItemTransport.ITEM_PIPE.find(world, mutable, direction);
+            ItemPipe offsetPipe = ItemTransport.ITEM_PIPE_LOOKUP.find(world, mutable, direction);
             if (offsetPipe != null)
             {
                 setVisited(mutable);

@@ -156,7 +156,7 @@ public class PipeDriverBlock extends BaseBlock implements BlockEntityProvider, I
                         return;
                     }
 
-                    ItemPipe nextPipe = ItemTransport.ITEM_PIPE.find(world, mutable, direction.getOpposite());
+                    ItemPipe nextPipe = ItemTransport.ITEM_PIPE_LOOKUP.find(world, mutable, direction.getOpposite());
                     if (nextPipe != null)
                     {
                         queue.add(mutable.toImmutable());

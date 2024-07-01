@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "neepmeat:opaque_item_pipe"
+    }
+  ],
+  "result": {
+    "item": "neepmeat:item_pipe",
+    "count": 1
+  }
+}
