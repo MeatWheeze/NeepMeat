@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "sms"
+  ],
+  "key": {
+    "m": {
+      "item": "neepmeat:motor_unit"
+    },
+    "s": {
+      "item": "neepmeat:meat_steel_ingot"
+    }
+  },
+  "result": {
+    "item": "neepmeat:advanced_motor",
+    "count": 1
+  }
+}
