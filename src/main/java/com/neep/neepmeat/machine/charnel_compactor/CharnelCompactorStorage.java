@@ -3,7 +3,6 @@ package com.neep.neepmeat.machine.charnel_compactor;
 import com.google.common.collect.MapMaker;
 import com.neep.neepmeat.init.NMItems;
 import com.neep.neepmeat.machine.integrator.Integrator;
-import com.neep.neepmeat.machine.integrator.IntegratorBlockEntity;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.fabricmc.fabric.api.transfer.v1.storage.StoragePreconditions;
@@ -29,25 +28,23 @@ import java.util.Objects;
 
 import static net.minecraft.util.math.Direction.UP;
 
-// Most of this is copied from ComposterWrapper. It looks awful, I'm never doing this again.
+// Most of this is copied from ComposterWrapper. It looks awful. I'm never doing this again.
 @SuppressWarnings("UnstableApiUsage")
 public class CharnelCompactorStorage extends SnapshotParticipant<Float>
 {
     // It appears that these are the lengths one must go for avoiding BlockEntities
     private static final Map<WorldLocation, CharnelCompactorStorage> CHARNEL_STORAGES = new MapMaker().concurrencyLevel(1).weakValues().makeMap();
     private static final ItemVariant OUTPUT = ItemVariant.of(NMItems.CRUDE_INTEGRATION_CHARGE);
-
-    public record WorldLocation(World world, BlockPos pos)
+    private static final float DO_NOTHING = 0f;
+    private static final float EXTRACT_OUTPUT = -1f;
+    private final WorldLocation location;
+    private final TopStorage upStorage = new TopStorage();
+    private final BottomStorage downStorage = new BottomStorage();
+    // -1 if output was extracted, otherwise the composter increase probability of the (pending) inserted item.
+    private Float increaseProbability = DO_NOTHING;
+    private CharnelCompactorStorage(WorldLocation location)
     {
-        private BlockState getBlockState()
-        {
-            return world.getBlockState(pos);
-        }
-
-        private void setBlockState(BlockState state)
-        {
-            world.setBlockState(pos, state);
-        }
+        this.location = location;
     }
 
     @Nullable
@@ -66,18 +63,35 @@ public class CharnelCompactorStorage extends SnapshotParticipant<Float>
         }
     }
 
-    private static final float DO_NOTHING = 0f;
-    private static final float EXTRACT_OUTPUT = -1f;
-
-    private final WorldLocation location;
-    // -1 if output was extracted, otherwise the composter increase probability of the (pending) inserted item.
-    private Float increaseProbability = DO_NOTHING;
-    private final TopStorage upStorage = new TopStorage();
-    private final BottomStorage downStorage = new BottomStorage();
-
-    private CharnelCompactorStorage(WorldLocation location)
+    public static void extractOutput(WorldLocation location, boolean spawnItem)
     {
-        this.location = location;
+        location.setBlockState(location.getBlockState().with(CharnelCompactorBlock.LEVEL, 0));
+        World world = location.world;
+        BlockPos pos = location.pos;
+        if (spawnItem)
+        {
+            double d = (world.random.nextFloat() * 0.7f) + 0.15f;
+            double e = (world.random.nextFloat() * 0.7f) + 0.06000000238418579 + 0.6;
+            double g = (world.random.nextFloat() * 0.7f) + 0.15f;
+            ItemEntity itemEntity = new ItemEntity(world, pos.getX() + d, pos.getY() + e, pos.getZ() + g, OUTPUT.toStack(1));
+            itemEntity.setToDefaultPickupDelay();
+            world.spawnEntity(itemEntity);
+            world.playSound(null, pos, SoundEvents.BLOCK_COMPOSTER_EMPTY, SoundCategory.BLOCKS, 1.0f, 1.0f);
+        }
+    }
+
+    public static void addLevel(WorldLocation location)
+    {
+        BlockState state = location.getBlockState();
+        int newLevel = Math.min(7, state.get(CharnelCompactorBlock.LEVEL) + 3);
+        BlockState newState = state.with(CharnelCompactorBlock.LEVEL, newLevel);
+        location.setBlockState(newState);
+
+        if (newLevel == 7)
+        {
+            location.world.createAndScheduleBlockTick(location.pos, state.getBlock(), 20);
+        }
+
     }
 
     @Override
@@ -115,35 +129,17 @@ public class CharnelCompactorStorage extends SnapshotParticipant<Float>
         increaseProbability = DO_NOTHING;
     }
 
-    public static void extractOutput(WorldLocation location, boolean spawnItem)
+    public record WorldLocation(World world, BlockPos pos)
     {
-        location.setBlockState(location.getBlockState().with(CharnelCompactorBlock.LEVEL, 0));
-        World world = location.world;
-        BlockPos pos = location.pos;
-        if (spawnItem)
+        private BlockState getBlockState()
         {
-            double d = (world.random.nextFloat() * 0.7f) + 0.15f;
-            double e = (world.random.nextFloat() * 0.7f) + 0.06000000238418579 + 0.6;
-            double g = (world.random.nextFloat() * 0.7f) + 0.15f;
-            ItemEntity itemEntity = new ItemEntity(world, pos.getX() + d, pos.getY() + e, pos.getZ() + g, OUTPUT.toStack(1));
-            itemEntity.setToDefaultPickupDelay();
-            world.spawnEntity(itemEntity);
-            world.playSound(null, pos, SoundEvents.BLOCK_COMPOSTER_EMPTY, SoundCategory.BLOCKS, 1.0f, 1.0f);
-        }
-    }
-
-    public static void addLevel(WorldLocation location)
-    {
-        BlockState state = location.getBlockState();
-        int newLevel = state.get(CharnelCompactorBlock.LEVEL) + 1;
-        BlockState newState = state.with(CharnelCompactorBlock.LEVEL, newLevel);
-        location.setBlockState(newState);
-
-        if (newLevel == 7)
-        {
-            location.world.createAndScheduleBlockTick(location.pos, state.getBlock(), 20);
+            return world.getBlockState(pos);
         }
 
+        private void setBlockState(BlockState state)
+        {
+            world.setBlockState(pos, state);
+        }
     }
 
     private class TopStorage implements InsertionOnlyStorage<ItemVariant>
@@ -155,14 +151,22 @@ public class CharnelCompactorStorage extends SnapshotParticipant<Float>
 
             // Check amount.
             if (maxAmount < 1) return 0;
+
             // Check Integrator presence.
             Integrator integrator = Integrator.findIntegrator(location.world(), location.pos(), 10);
-            if (increaseProbability != DO_NOTHING || integrator == null || !integrator.canEnlighten()) return 0;
+
+            if (increaseProbability != DO_NOTHING || integrator == null || !integrator.canEnlighten())
+                return 0;
+
             // Check that the composter can accept items.
-            if (location.getBlockState().get(CharnelCompactorBlock.LEVEL) >= 7) return 0;
+            if (location.getBlockState().get(CharnelCompactorBlock.LEVEL) >= 7)
+                return 0;
+
             // Check that the item is compostable.
             float insertedIncreaseProbability = CharnelCompactorBlock.getIncreaseChance(resource.getItem());
-            if (insertedIncreaseProbability <= 0) return 0;
+
+            if (insertedIncreaseProbability <= 0)
+                return 0;
 
             // Schedule insertion.
             updateSnapshots(transaction);
