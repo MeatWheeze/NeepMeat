@@ -49,6 +49,7 @@ import com.neep.neepmeat.machine.mixer.MixerRenderer;
 import com.neep.neepmeat.machine.multitank.MultiTankRenderer;
 import com.neep.neepmeat.machine.phage_ray.PhageRayClientComponent;
 import com.neep.neepmeat.machine.separator.SeparatorScreen;
+import com.neep.neepmeat.machine.small_compressor.SmallCompressorScreen;
 import com.neep.neepmeat.machine.small_trommel.SmallTrommelRenderer;
 import com.neep.neepmeat.machine.synthesiser.SynthesiserRenderer;
 import com.neep.neepmeat.machine.trough.TroughRenderer;
@@ -279,6 +280,7 @@ public class NeepMeatClient implements ClientModInitializer
         HandledScreens.register(ScreenHandlerInit.UPGRADE_MANAGER, UpgradeManagerScreen::new);
         HandledScreens.register(ScreenHandlerInit.DISPLAY_PLATE, DisplayPlateScreen::new);
         HandledScreens.register(ScreenHandlerInit.FABRICATOR, FabricatorScreen::new);
+        HandledScreens.register(ScreenHandlerInit.SMALL_COMPRESSOR, SmallCompressorScreen::new);
 
         HandledScreens.register(ScreenHandlerInit.LIVING_MACHINE, LivingMachineScreen::new);
         HandledScreens.register(ScreenHandlerInit.ITEM_OUTPUT, ItemOutputPortScreen::new);

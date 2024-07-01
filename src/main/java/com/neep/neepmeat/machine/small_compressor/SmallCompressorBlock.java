@@ -10,8 +10,12 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;
 import net.minecraft.block.entity.BlockEntityType;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.BooleanProperty;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.Hand;
+import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
@@ -24,6 +28,17 @@ public class SmallCompressorBlock extends BaseHorFacingBlock implements BlockEnt
     {
         super(itemName, itemSettings, settings);
         setDefaultState(getStateManager().getDefaultState().with(LIT, false));
+    }
+
+    @Override
+    public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit)
+    {
+        if (world.getBlockEntity(pos) instanceof SmallCompressorBlockEntity be)
+        {
+            player.openHandledScreen(be);
+            return ActionResult.SUCCESS;
+        }
+        return super.onUse(state, world, pos, player, hand, hit);
     }
 
     @Override
