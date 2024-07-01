@@ -4,14 +4,12 @@ import com.neep.meatlib.blockentity.SyncableBlockEntity;
 import com.neep.meatlib.inventory.ImplementedInventory;
 import com.neep.neepmeat.component.CompressedAirComponent;
 import com.neep.neepmeat.init.NMComponents;
-import net.fabricmc.fabric.api.registry.FuelRegistry;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.screen.NamedScreenHandlerFactory;
-import net.minecraft.screen.PropertyDelegate;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
@@ -24,11 +22,15 @@ import java.util.List;
 public class SmallCompressorBlockEntity extends SyncableBlockEntity implements NamedScreenHandlerFactory
 {
     private final ImplementedInventory inventory = ImplementedInventory.ofSize(1);
+    private final BurnerBehaviour burner = new BurnerBehaviour(inventory, this::updateState);
 
-    private int burnTime;
-    private int maxBurnTime;
-
-    private final Delegate delegate = new Delegate();
+    private void updateState(boolean burning)
+    {
+        if (getCachedState().get(SmallCompressorBlock.LIT) != burning)
+        {
+            world.setBlockState(pos, getCachedState().with(SmallCompressorBlock.LIT, burning));
+        }
+    }
 
     public SmallCompressorBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
     {
@@ -37,9 +39,9 @@ public class SmallCompressorBlockEntity extends SyncableBlockEntity implements N
 
     public void serverTick()
     {
-        tickBurn();
+        burner.tick();
 
-        if (burnTime > 0)
+        if (burner.getBurnTime() > 0)
         {
             Box box = Box.of(Vec3d.ofCenter(pos), 16, 8, 16);
 
@@ -55,41 +57,22 @@ public class SmallCompressorBlockEntity extends SyncableBlockEntity implements N
         }
     }
 
-    private void tickBurn()
-    {
-        burnTime = Math.max(0, burnTime - 1);
-
-        if (burnTime == 0)
-        {
-            Integer time = FuelRegistry.INSTANCE.get(inventory.getStack(0).getItem());
-            if (time != null)
-            {
-                maxBurnTime = time;
-                burnTime = maxBurnTime;
-                inventory.getStack(0).decrement(1);
-                world.setBlockState(pos, getCachedState().with(SmallCompressorBlock.LIT, true));
-            }
-            else
-            {
-                world.setBlockState(pos, getCachedState().with(SmallCompressorBlock.LIT, false));
-            }
-        }
-    }
-
     @Override
     public void writeNbt(NbtCompound nbt)
     {
         super.writeNbt(nbt);
-        nbt.putInt("max_burn_time", maxBurnTime);
-        nbt.putInt("burn_time", burnTime);
+
+        inventory.writeNbt(nbt);
+        burner.writeNbt(nbt);
     }
 
     @Override
     public void readNbt(NbtCompound nbt)
     {
         super.readNbt(nbt);
-        this.maxBurnTime = nbt.getInt("max_burn_time");
-        this.burnTime = nbt.getInt("burn_time");
+
+        inventory.readNbt(nbt);
+        burner.readNbt(nbt);
     }
 
     @Override
@@ -102,32 +85,7 @@ public class SmallCompressorBlockEntity extends SyncableBlockEntity implements N
     @Override
     public ScreenHandler createMenu(int syncId, PlayerInventory playerInventory, PlayerEntity player)
     {
-        return new SmallCompressorScreenHandler(playerInventory, inventory, syncId, delegate);
+        return new SmallCompressorScreenHandler(playerInventory, inventory, syncId, burner.getDelegate());
     }
 
-    public class Delegate implements PropertyDelegate
-    {
-        @Override
-        public int get(int index)
-        {
-            return switch (index)
-            {
-                case 0 -> burnTime;
-                case 1 -> maxBurnTime;
-                default -> 0;
-            };
-        }
-
-        @Override
-        public void set(int index, int value)
-        {
-
-        }
-
-        @Override
-        public int size()
-        {
-            return 2;
-        }
-    }
 }
