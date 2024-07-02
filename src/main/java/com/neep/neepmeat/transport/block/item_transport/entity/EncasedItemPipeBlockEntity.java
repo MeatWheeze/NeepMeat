@@ -8,7 +8,6 @@ import net.minecraft.block.Blocks;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtHelper;
-import net.minecraft.registry.Registries;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.util.shape.VoxelShapes;
@@ -35,7 +34,7 @@ public class EncasedItemPipeBlockEntity extends ItemPipeBlockEntity implements E
     public void readNbt(NbtCompound nbt)
     {
         super.readNbt(nbt);
-        this.camoState = NbtHelper.toBlockState(Registries.BLOCK.getReadOnlyWrapper(), nbt.getCompound("camo_state"));
+        this.camoState = NbtHelper.toBlockState(nbt.getCompound("camo_state"));
     }
 
     @Override

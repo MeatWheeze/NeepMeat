@@ -16,7 +16,6 @@ import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.model.BakedModel;
 import net.minecraft.client.render.model.json.ModelTransformation;
-import net.minecraft.client.util.ModelIdentifier;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
@@ -96,7 +95,7 @@ public class RockDrillItemRenderer implements BuiltinItemRendererRegistry.Dynami
 
                 renderItem(stack, mode, matrices, vertexConsumers, light, overlay, rod);
             }
-            else if (mode == ModelTransformationMode.THIRD_PERSON_LEFT_HAND || mode == ModelTransformationMode.THIRD_PERSON_RIGHT_HAND)
+            else if (mode == ModelTransformation.Mode.THIRD_PERSON_LEFT_HAND || mode == ModelTransformation.Mode.THIRD_PERSON_RIGHT_HAND)
             {
                 renderItem(stack, mode, matrices, vertexConsumers, light, overlay, main);
                 renderItem(stack, mode, matrices, vertexConsumers, light, overlay, rod);
