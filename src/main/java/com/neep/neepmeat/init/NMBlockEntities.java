@@ -72,6 +72,7 @@ import com.neep.neepmeat.machine.well_head.WellHeadBlockEntity;
 import com.neep.neepmeat.plc.component.MutateInPlace;
 import com.neep.neepmeat.plc.component.TableComponent;
 import com.neep.neepmeat.transport.FluidTransport;
+import com.neep.neepmeat.transport.ItemTransport;
 import com.neep.neepmeat.transport.api.pipe.BloodAcceptor;
 import com.neep.neepmeat.transport.api.pipe.VascularConduitEntity;
 import com.neep.neepmeat.transport.block.energy_transport.entity.EncasedConduitBlockEntity;
@@ -311,18 +312,18 @@ public class NMBlockEntities
 
         // --- Item Transfer ---
         ITEM_DUCT_BLOCK_ENTITY = register("item_duct", ItemDuctBlockEntity::new, NMBlocks.ITEM_DUCT);
-        PNEUMATIC_PIPE = register("pneumatic_pipe", ItemPipeBlockEntity::new, NMBlocks.PNEUMATIC_TUBE);
-        ENCASED_PNEUMATIC_PIPE = register("encased_item_pioe", (p, s) -> new EncasedItemPipeBlockEntity(ENCASED_PNEUMATIC_PIPE, p, s), NMBlocks.ENCASED_PNEUMATIC_PIPE);
-        MERGE_ITEM_PIPE = register("merge_item_pipe", MergePipeBlockEntity::new, NMBlocks.MERGE_ITEM_PIPE);
-        BUFFER = register("buffer", BufferBlockEntity::new, NMBlocks.BUFFER);
+        PNEUMATIC_PIPE = register("pneumatic_pipe", ItemPipeBlockEntity::new, ItemTransport.PNEUMATIC_TUBE);
+        ENCASED_PNEUMATIC_PIPE = register("encased_item_pioe", (p, s) -> new EncasedItemPipeBlockEntity(ENCASED_PNEUMATIC_PIPE, p, s), ItemTransport.ENCASED_PNEUMATIC_PIPE);
+        MERGE_ITEM_PIPE = register("merge_item_pipe", MergePipeBlockEntity::new, ItemTransport.MERGE_ITEM_PIPE);
+        BUFFER = register("buffer", BufferBlockEntity::new, ItemTransport.BUFFER);
         CHUTE = register("chute", (p, s) -> new ChuteBlock.ChuteBlockEntity(CHUTE, p, s), NMBlocks.CHUTE);
         INVENTORY_DETECTOR = register("content_detector", InventoryDetectorBlockEntity::new, NMBlocks.CONTENT_DETECTOR);
         SOLIDITY_DETECTOR = register("solidity_detector", SolidityDetectorBlockEntity::new, NMBlocks.SOLIDITY_DETECTOR);
         ItemStorage.SIDED.registerForBlockEntity(InventoryDetectorBlockEntity::getStorage, INVENTORY_DETECTOR);
-        EJECTOR = register("ejector", EjectorBlockEntity::new, NMBlocks.EJECTOR);
-        ITEM_PUMP = register("item_pump", ItemPumpBlockEntity::new, NMBlocks.ITEM_PUMP);
-        ROUTER = register("router", RouterBlockEntity::new, NMBlocks.ROUTER);
-        DUMPER = register("dumper", DumperBlockEntity::new, NMBlocks.DUMPER);
+        EJECTOR = register("ejector", EjectorBlockEntity::new, ItemTransport.EJECTOR);
+        ITEM_PUMP = register("item_pump", ItemPumpBlockEntity::new, ItemTransport.ITEM_PUMP);
+        ROUTER = register("router", RouterBlockEntity::new, ItemTransport.ROUTER);
+        DUMPER = register("dumper", DumperBlockEntity::new, ItemTransport.DUMPER);
         ItemStorage.SIDED.registerForBlockEntity(DumperBlockEntity::getStorage, DUMPER);
 
         // --- Machines ---

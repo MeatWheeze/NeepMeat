@@ -36,7 +36,6 @@ import com.neep.neepmeat.machine.crucible.CrucibleBlock;
 import com.neep.neepmeat.machine.crucible.FatCollectorBlock;
 import com.neep.neepmeat.machine.death_blades.DeathBladesBlock;
 import com.neep.neepmeat.machine.deployer.DeployerBlock;
-import com.neep.neepmeat.machine.dumper.DumperBlock;
 import com.neep.neepmeat.machine.fabricator.FabricatorBlock;
 import com.neep.neepmeat.machine.fluid_exciter.FluidExciterBlock;
 import com.neep.neepmeat.machine.fluid_rationer.FluidRationerBlock;
@@ -74,10 +73,8 @@ import com.neep.neepmeat.machine.well_head.WellHeadBlock;
 import com.neep.neepmeat.transport.block.energy_transport.EncasedVascularConduitBlock;
 import com.neep.neepmeat.transport.block.energy_transport.VSCBlock;
 import com.neep.neepmeat.transport.block.energy_transport.VascularConduitBlock;
-import com.neep.neepmeat.transport.block.item_transport.*;
-import com.neep.neepmeat.transport.machine.item.BufferBlock;
-import com.neep.neepmeat.transport.machine.item.EjectorBlock;
-import com.neep.neepmeat.transport.machine.item.ItemPumpBlock;
+import com.neep.neepmeat.transport.block.item_transport.DisplayPlateBlock;
+import com.neep.neepmeat.transport.block.item_transport.ItemDuctBlock;
 import net.fabricmc.fabric.api.mininglevel.v1.FabricMineableTags;
 import net.minecraft.block.*;
 import net.minecraft.entity.EntityType;
@@ -293,18 +290,10 @@ public class NMBlocks
 
     // --- Item Transfer ---
     public static Block ITEM_DUCT = BlockRegistry.queue(new ItemDuctBlock("item_duct", block(), MeatlibBlockSettings.copyOf(Blocks.HOPPER)));
-    public static Block PNEUMATIC_TUBE = BlockRegistry.queue(new ItemPipeBlock("item_pipe", block().tooltip(TooltipSupplier.simple(1)), MeatlibBlockSettings.copyOf(ITEM_PIPE_SETTINGS)));
-    public static Block ENCASED_PNEUMATIC_PIPE = BlockRegistry.queue(new EncasedItemPipeBlock("encased_item_pipe", block().tooltip(TooltipSupplier.simple(1)), MeatlibBlockSettings.copyOf(ITEM_PIPE_SETTINGS)));
-    public static Block MERGE_ITEM_PIPE = BlockRegistry.queue(new MergePipeBlock("merge_item_pipe", block(), MeatlibBlockSettings.copyOf(ITEM_PIPE_SETTINGS)));
-    public static Block ITEM_PUMP = BlockRegistry.queue(new ItemPumpBlock("item_pump", block().tooltip(TooltipSupplier.simple(1)), MeatlibBlockSettings.copyOf(MACHINE_SETTINGS)));
-    public static Block EJECTOR = BlockRegistry.queue(new EjectorBlock("ejector", block().tooltip(TooltipSupplier.simple(1)), MeatlibBlockSettings.copyOf(MACHINE_SETTINGS)));
-    public static Block ROUTER = BlockRegistry.queue(new RouterBlock("router", block().tooltip(TooltipSupplier.simple(1)), MeatlibBlockSettings.copyOf(MACHINE_SETTINGS)));
-    public static Block BUFFER = BlockRegistry.queue(new BufferBlock("buffer", block().tooltip(TooltipSupplier.simple(1)), MeatlibBlockSettings.copyOf(Blocks.CHEST).tags(AXE_MINEABLE)));
     public static Block CHUTE = BlockRegistry.queue(new ChuteBlock("chute", block().tooltip(TooltipSupplier.simple(1)), MeatlibBlockSettings.copyOf(Blocks.HOPPER)));
     public static Block METAL_BARREL = BlockRegistry.queue(new MetalBarrelBlock("metal_barrel", MeatlibBlockSettings.copyOf(RUSTY_METAL_BLOCK)));
     public static Block CONTENT_DETECTOR = BlockRegistry.queue(new InventoryDetectorBlock("content_detector", block().tooltip(TooltipSupplier.simple(1)), MeatlibBlockSettings.copyOf(Blocks.OBSERVER)));
     public static Block SOLIDITY_DETECTOR = BlockRegistry.queue(new SolidityDetectorBlock("solidity_detector", block().tooltip(TooltipSupplier.simple(1)), MeatlibBlockSettings.copyOf(Blocks.OBSERVER)));
-    public static Block DUMPER = BlockRegistry.queue(new DumperBlock("dumper", block().tooltip(TooltipSupplier.simple(1)), MeatlibBlockSettings.copyOf(Blocks.OAK_WOOD).tags(AXE_MINEABLE)));
 
     // --- Data ---
     public static Block DATA_CABLE = BlockRegistry.queue(new DataCableBlock("data_cable", block(), VASCULAR_CONDUIT_SETTINGS));
