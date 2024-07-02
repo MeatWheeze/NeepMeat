@@ -23,9 +23,9 @@ public class FilterItem extends BaseItem
         }
 
         @Override
-        public boolean matches(ItemVariant variant, long amount)
+        public boolean matches(ItemVariant variant)
         {
-            return filter.matches(variant, amount);
+            return filter.matches(variant);
         }
 
         @Override

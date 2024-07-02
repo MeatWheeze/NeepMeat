@@ -10,11 +10,11 @@ public class FilterList implements Filter
     private final List<Entry> entries = new ObjectArrayList<>();
 
     @Override
-    public boolean matches(ItemVariant variant, long amount)
+    public boolean matches(ItemVariant variant)
     {
         for (var entry : entries)
         {
-            if (entry.matches(variant, amount))
+            if (entry.matches(variant))
                 return true;
         }
         return false;
@@ -31,9 +31,9 @@ public class FilterList implements Filter
         }
 
         @Override
-        public boolean matches(ItemVariant variant, long amount)
+        public boolean matches(ItemVariant variant)
         {
-            return filter.matches(variant, amount);
+            return filter.matches(variant);
         }
     }
 }

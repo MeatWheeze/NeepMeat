@@ -1,10 +1,9 @@
 package com.neep.neepmeat.transport.machine.item;
 
-import com.neep.meatlib.block.BaseFacingBlock;
 import com.neep.meatlib.item.ItemSettings;
 import com.neep.neepmeat.transport.ItemTransport;
 import com.neep.neepmeat.util.MiscUtil;
-import net.minecraft.block.BlockEntityProvider;
+import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;
@@ -13,11 +12,11 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
-public class ItemRetrieverBlock extends BaseFacingBlock implements BlockEntityProvider
+public class FilteredEjectorBlock extends EjectorBlock
 {
-    public ItemRetrieverBlock(String itemName, ItemSettings itemSettings, Settings settings)
+    public FilteredEjectorBlock(String registryName, ItemSettings itemSettings, FabricBlockSettings settings)
     {
-        super(itemName, itemSettings, settings);
+        super(registryName, itemSettings, settings);
     }
 
     @Nullable

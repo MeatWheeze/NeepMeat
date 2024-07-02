@@ -2,7 +2,6 @@ package com.neep.neepmeat.transport.machine.item;
 
 import com.neep.meatlib.block.BaseFacingBlock;
 import com.neep.meatlib.storage.MeatlibStorageUtil;
-import com.neep.neepmeat.api.storage.LazyBlockApiCache;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.transport.api.pipe.ItemPipe;
 import com.neep.neepmeat.transport.interfaces.IServerWorld;
@@ -28,11 +27,6 @@ import java.util.List;
 public class ItemPumpBlockEntity extends EjectorBlockEntity
 {
     protected List<RetrievalTarget<ItemVariant>> retrievalCache = new ArrayList<>();
-    protected LazyBlockApiCache<Storage<ItemVariant>, Direction> insertionCache = LazyBlockApiCache.of(ItemStorage.SIDED,
-            pos.offset(getCachedState().get(ItemPumpBlock.FACING)),
-            this::getWorld,
-            () -> getCachedState().get(ItemPumpBlock.FACING).getOpposite());
-
 
     public ItemPumpBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
     {
@@ -58,7 +52,7 @@ public class ItemPumpBlockEntity extends EjectorBlockEntity
     }
 
     @Override
-    protected void transferTick()
+    protected void tryTransfer()
     {
         BlockState state = getCachedState();
         Direction facing = state.get(BaseFacingBlock.FACING);

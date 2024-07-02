@@ -12,7 +12,7 @@ class TagFilter implements Filter
     private final Set<TagKey<Item>> tags = new HashSet<>();
 
     @Override
-    public boolean matches(ItemVariant variant, long amount)
+    public boolean matches(ItemVariant variant)
     {
         return variant.getItem().getRegistryEntry().streamTags().anyMatch(tags::contains);
     }

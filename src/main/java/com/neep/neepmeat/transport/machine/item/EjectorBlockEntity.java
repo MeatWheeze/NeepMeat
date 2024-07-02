@@ -107,11 +107,11 @@ public class EjectorBlockEntity extends SyncableBlockEntity
         if (cooldown == 0 && getCachedState().get(EjectorBlock.ACTIVE) && stored == null)
         {
             cooldown = 10;
-            transferTick();
+            tryTransfer();
         }
     }
 
-    protected void transferTick()
+    protected void tryTransfer()
     {
         Storage<ItemVariant> storage;
         if ((storage = extractionCache.find()) != null)
