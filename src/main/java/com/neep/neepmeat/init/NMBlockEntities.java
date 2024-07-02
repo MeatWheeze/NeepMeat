@@ -80,7 +80,6 @@ import com.neep.neepmeat.transport.block.energy_transport.entity.VascularConduit
 import com.neep.neepmeat.transport.block.fluid_transport.CheckValveBlock;
 import com.neep.neepmeat.transport.block.fluid_transport.StopValveBlock;
 import com.neep.neepmeat.transport.block.fluid_transport.entity.*;
-import com.neep.neepmeat.transport.block.item_transport.ItemPipeBlock;
 import com.neep.neepmeat.transport.block.item_transport.entity.*;
 import com.neep.neepmeat.transport.fluid_network.node.BlockPipeVertex;
 import com.neep.neepmeat.transport.machine.fluid.*;

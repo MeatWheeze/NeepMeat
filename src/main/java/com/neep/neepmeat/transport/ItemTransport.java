@@ -1,5 +1,6 @@
 package com.neep.neepmeat.transport;
 
+import com.neep.meatlib.block.MeatlibBlockSettings;
 import com.neep.meatlib.item.ItemSettings;
 import com.neep.meatlib.item.TooltipSupplier;
 import com.neep.meatlib.registry.BlockRegistry;
@@ -14,6 +15,8 @@ import com.neep.neepmeat.transport.block.item_transport.PipeDriverBlock;
 import com.neep.neepmeat.transport.block.item_transport.StorageBusBlock;
 import com.neep.neepmeat.transport.block.item_transport.entity.ItemRequesterBlockEntity;
 import com.neep.neepmeat.transport.block.item_transport.entity.StorageBusBlockEntity;
+import com.neep.neepmeat.transport.machine.item.FilteredEjectorBlockEntity;
+import com.neep.neepmeat.transport.machine.item.ItemRetrieverBlock;
 import com.neep.neepmeat.transport.screen_handler.ItemRequesterScreenHandler;
 import com.neep.neepmeat.transport.screen_handler.TransportScreenHandlers;
 import net.fabricmc.fabric.api.lookup.v1.block.BlockApiLookup;
@@ -40,6 +43,8 @@ public class ItemTransport
     public static final Block PIPE_DRIVER = BlockRegistry.queue(new PipeDriverBlock("pipe_driver", ItemSettings.block().tooltip(TooltipSupplier.hidden(2)).plcActuator(), FabricBlockSettings.of(Material.METAL).hardness(0.3f).sounds(BlockSoundGroup.METAL)));
     public static final Block STORAGE_BUS = BlockRegistry.queue(new StorageBusBlock("storage_bus", ItemSettings.block().tooltip(TooltipSupplier.simple(1)), FabricBlockSettings.of(Material.METAL).hardness(0.3f).sounds(BlockSoundGroup.METAL)));
     public static final Block ITEM_REQUESTER = BlockRegistry.queue(new ItemRequesterBlock("item_requester", ItemSettings.block().tooltip(TooltipSupplier.simple(1)), FabricBlockSettings.of(Material.METAL).hardness(0.3f).sounds(BlockSoundGroup.METAL)));
+    public static final Block FILTERED_EJECTOR = BlockRegistry.queue(new ItemRetrieverBlock("filtered_ejector", ItemSettings.block().tooltip(TooltipSupplier.simple(1)), MeatlibBlockSettings.create(Material.METAL)));
+    public static BlockEntityType<FilteredEjectorBlockEntity> FILTERED_EJECTOR_BE;
 
     public static void init()
     {
@@ -49,6 +54,7 @@ public class ItemTransport
         RoutablePipe.LOOKUP.registerSelf(STORAGE_BUS_BE);
         ITEM_REQUESTER_BE = NMBlockEntities.register("item_requester", ItemRequesterBlockEntity::new, ITEM_REQUESTER);
         RoutablePipe.LOOKUP.registerSelf(ITEM_REQUESTER_BE);
+        FILTERED_EJECTOR_BE = NMBlockEntities.register("filtered_ejector", (p, s) -> new FilteredEjectorBlockEntity(ItemTransport.FILTERED_EJECTOR_BE, p, s), FILTERED_EJECTOR);
 
         ITEM_PIPE.registerFallback((world, pos, state, blockEntity, context) -> state.getBlock() instanceof ItemPipe pipe ? pipe : null);
 

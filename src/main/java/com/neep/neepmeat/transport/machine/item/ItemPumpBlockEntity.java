@@ -2,13 +2,10 @@ package com.neep.neepmeat.transport.machine.item;
 
 import com.neep.meatlib.block.BaseFacingBlock;
 import com.neep.meatlib.storage.MeatlibStorageUtil;
-import com.neep.neepmeat.api.machine.BloodMachineBlockEntity;
 import com.neep.neepmeat.api.storage.LazyBlockApiCache;
 import com.neep.neepmeat.init.NMBlockEntities;
-import com.neep.neepmeat.plc.instruction.Instruction;
 import com.neep.neepmeat.transport.api.pipe.ItemPipe;
 import com.neep.neepmeat.transport.interfaces.IServerWorld;
-import com.neep.neepmeat.transport.item_network.ItemInPipe;
 import com.neep.neepmeat.transport.item_network.RetrievalTarget;
 import com.neep.neepmeat.transport.util.ItemPipeUtil;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
@@ -20,39 +17,22 @@ import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntityType;
-import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
-import net.minecraft.world.World;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @SuppressWarnings("UnstableApiUsage")
-public class ItemPumpBlockEntity extends BloodMachineBlockEntity
+public class ItemPumpBlockEntity extends EjectorBlockEntity
 {
-    public static final String NBT_ACTIVE = "active";
-    public static final String NBT_COOLDOWN = "cooldown";
-
-    public int cooldown;
-    public boolean active;
-
-    public int shuttle;
-    public boolean needsRefresh;
-
-    // Client only
-    public double offset;
-
     protected List<RetrievalTarget<ItemVariant>> retrievalCache = new ArrayList<>();
     protected LazyBlockApiCache<Storage<ItemVariant>, Direction> insertionCache = LazyBlockApiCache.of(ItemStorage.SIDED,
             pos.offset(getCachedState().get(ItemPumpBlock.FACING)),
             this::getWorld,
             () -> getCachedState().get(ItemPumpBlock.FACING).getOpposite());
 
-    @Nullable
-    protected ResourceAmount<ItemVariant> stored;
 
     public ItemPumpBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
     {
@@ -65,53 +45,20 @@ public class ItemPumpBlockEntity extends BloodMachineBlockEntity
         this(NMBlockEntities.ITEM_PUMP, pos, state);
     }
 
-    public static void serverTick(World world, BlockPos pos, BlockState state, ItemPumpBlockEntity be)
+    @Override
+    public void serverTick()
     {
-        be.cooldown = Math.max(be.cooldown - 1, 0);
-        if (be.needsRefresh)
+        if (needsRefresh)
         {
-            Direction face = state.get(ItemPumpBlock.FACING).getOpposite();
-            be.updateRetrievalCache((ServerWorld) world, pos, face, be);
+            Direction face = getCachedState().get(ItemPumpBlock.FACING).getOpposite();
+            updateRetrievalCache((ServerWorld) world, pos, face, this);
         }
 
-        if (be.shuttle > 0)
-        {
-            --be.shuttle;
-            if (be.shuttle == 0)
-                be.sync();
-        }
-
-        be.eject();
-
-        if (be.cooldown == 0 && be.active && be.stored == null)
-        {
-            be.cooldown = 10;
-            be.transferTick();
-        }
-
+        super.serverTick();
     }
 
-    protected void eject()
-    {
-        if (stored == null)
-            return;
-
-        try (Transaction transaction = Transaction.openOuter())
-        {
-            long forwarded = forwardItem(new ResourceAmount<>(stored.resource(), Math.min(16, stored.amount())), transaction);
-            if (forwarded == stored.amount())
-            {
-                stored = null;
-            }
-            else
-            {
-                stored = new ResourceAmount<>(stored.resource(), stored.amount() - forwarded);
-            }
-            transaction.commit();
-        }
-    }
-
-    private void transferTick()
+    @Override
+    protected void transferTick()
     {
         BlockState state = getCachedState();
         Direction facing = state.get(BaseFacingBlock.FACING);
@@ -142,6 +89,7 @@ public class ItemPumpBlockEntity extends BloodMachineBlockEntity
             succeed();
             transaction.commit();
         }
+
         // Try to retrieve from pipes
         else if (world.getBlockState(pos.offset(facing.getOpposite())).getBlock() instanceof ItemPipe pipe)
         {
@@ -215,40 +163,9 @@ public class ItemPumpBlockEntity extends BloodMachineBlockEntity
         return success;
     }
 
-    public void succeed()
-    {
-        this.shuttle = 3;
-        sync();
-    }
-
     public void markNeedsRefresh()
     {
         this.needsRefresh = true;
-    }
-
-    public void updateRedstone(boolean redstone)
-    {
-        this.active = redstone;
-    }
-
-    public long forwardItem(ResourceAmount<ItemVariant> amount, TransactionContext transaction)
-    {
-        return forwardItem(new ItemInPipe(amount, world.getTime()), transaction);
-    }
-
-    public long forwardItem(ItemInPipe item, TransactionContext transaction)
-    {
-        Direction facing = getCachedState().get(ItemPumpBlock.FACING);
-
-        Storage<ItemVariant> storage;
-        if (insertionCache != null && (storage = insertionCache.find()) != null)
-        {
-            Transaction nested = transaction.openNested();
-            long transferred = storage.insert(item.resource(), item.amount(), nested);
-            nested.commit();
-            return transferred;
-        }
-        return ItemPipeUtil.pipeToAny(item, getPos(), facing, getWorld(), transaction, true);
     }
 
     public long forwardRetrieval(ResourceAmount<ItemVariant> amount, RetrievalTarget<ItemVariant> target, TransactionContext transaction)
@@ -271,7 +188,6 @@ public class ItemPumpBlockEntity extends BloodMachineBlockEntity
 
     public long canForward(ResourceAmount<ItemVariant> amount, Transaction transaction)
     {
-        Direction facing = getCachedState().get(ItemPumpBlock.FACING);
         Storage<ItemVariant> storage;
         if (insertionCache != null && (storage = insertionCache.find()) != null)
         {
@@ -279,42 +195,4 @@ public class ItemPumpBlockEntity extends BloodMachineBlockEntity
         }
         return amount.amount();
     }
-
-    @Override
-    public void fromClientTag(NbtCompound tag)
-    {
-        this.shuttle = tag.getInt("shuttle_ticks");
-    }
-
-    @Override
-    public void toClientTag(NbtCompound tag)
-    {
-        tag.putInt("shuttle_ticks", shuttle);
-    }
-
-    @Override
-    public void writeNbt(NbtCompound tag)
-    {
-        super.writeNbt(tag);
-        tag.putBoolean(NBT_ACTIVE, active);
-        tag.putInt(NBT_COOLDOWN, cooldown);
-
-        tag.put("stored", Instruction.writeItem(stored));
-
-//        if (stored != null)
-//            tag.put("stored", MeatlibStorageUtil.amountToNbt(stored));
-    }
-
-    @Override
-    public void readNbt(NbtCompound nbt)
-    {
-        super.readNbt(nbt);
-        this.shuttle = nbt.getInt("shuttle_ticks");
-        this.active = nbt.getBoolean(NBT_ACTIVE);
-        this.cooldown = nbt.getInt(NBT_COOLDOWN);
-        this.stored = Instruction.readItem(nbt.getCompound("stored"));
-//        if (nbt.contains("stored"))
-//            this.stored = MeatlibStorageUtil.amountFromNbt(nbt.getCompound("stored"));
-    }
-
 }

@@ -106,6 +106,14 @@ public class MeatlibStorageUtil
         return null;
     }
 
+    public static void scatterAmount(World world, BlockPos pos, @Nullable ResourceAmount<ItemVariant> resourceAmount)
+    {
+        if (resourceAmount != null)
+        {
+            ItemScatterer.spawn(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ()+ 0.5, resourceAmount.resource().toStack((int) resourceAmount.amount()));
+        }
+    }
+
     public static NbtCompound amountToNbt(ResourceAmount<ItemVariant> resourceAmount)
     {
         NbtCompound nbt = resourceAmount.resource().toNbt();

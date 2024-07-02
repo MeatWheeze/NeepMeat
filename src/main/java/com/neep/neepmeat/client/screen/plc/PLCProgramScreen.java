@@ -27,6 +27,7 @@ import net.minecraft.client.texture.Sprite;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.item.ItemStack;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.hit.BlockHitResult;
@@ -246,11 +247,11 @@ public class PLCProgramScreen extends Screen implements ScreenHandlerProvider<PL
             var mip2 = MutateInPlace.ENTITY.find(client.world, result.getBlockPos(), null);
             if (mip1 != null)
             {
-                var stack = mip1.get();
+                ItemStack stack = mip1.get();
                 if (stack == null || stack.isEmpty())
                     return;
 
-                tooltipText.addAll(stack.getTooltip(client.player, TooltipContext.Default.BASIC));
+                tooltipText.addAll(stack.getTooltip(client.player, TooltipContext.Default.NORMAL));
             }
             else if (mip2 != null)
             {

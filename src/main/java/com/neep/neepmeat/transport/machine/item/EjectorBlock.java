@@ -3,6 +3,7 @@ package com.neep.neepmeat.transport.machine.item;
 import com.neep.meatlib.block.BaseFacingBlock;
 import com.neep.meatlib.item.ItemSettings;
 import com.neep.neepmeat.init.NMBlockEntities;
+import com.neep.neepmeat.init.NMSounds;
 import com.neep.neepmeat.machine.content_detector.InventoryDetectorBlock;
 import com.neep.neepmeat.transport.api.pipe.ItemPipe;
 import com.neep.neepmeat.transport.item_network.ItemInPipe;
@@ -15,9 +16,12 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;
 import net.minecraft.block.entity.BlockEntityType;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.state.StateManager;
+import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
@@ -28,16 +32,16 @@ import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.EnumSet;
-import java.util.Set;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class EjectorBlock extends BaseFacingBlock implements BlockEntityProvider, ItemPipe
 {
+    public static final BooleanProperty ACTIVE = BooleanProperty.of("active");
+
     public EjectorBlock(String registryName, ItemSettings itemSettings, FabricBlockSettings settings)
     {
         super(registryName, itemSettings, settings.nonOpaque().solidBlock(InventoryDetectorBlock::never));
+        setDefaultState(getDefaultState().with(ACTIVE, false));
     }
 
     @Nullable
@@ -50,15 +54,39 @@ public class EjectorBlock extends BaseFacingBlock implements BlockEntityProvider
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type)
     {
-        return MiscUtil.checkType(type, NMBlockEntities.EJECTOR, EjectorBlockEntity::serverTick, null, world);
+        return MiscUtil.checkType(type, NMBlockEntities.EJECTOR, (world1, pos, state1, blockEntity) -> blockEntity.serverTick(), null, world);
+    }
+
+    @Override
+    public BlockState getPlacementState(ItemPlacementContext context)
+    {
+        boolean redstone = context.getWorld().isReceivingRedstonePower(context.getBlockPos());
+        BlockState superState = super.getPlacementState(context);
+
+        if (superState == null)
+            return null;
+
+        // Not inverted by default
+        return superState.with(ACTIVE, redstone);
     }
 
     @Override
     public void neighborUpdate(BlockState state, World world, BlockPos pos, Block block, BlockPos fromPos, boolean notify)
     {
-        if (world.getBlockEntity(pos) instanceof ItemPumpBlockEntity be && !world.isClient)
+        super.neighborUpdate(state, world, pos, block, fromPos, notify);
+        if (world.getBlockEntity(pos) instanceof EjectorBlockEntity be && !world.isClient())
         {
-            be.updateRedstone(world.isReceivingRedstonePower(pos));
+            be.updatePowered(world.isReceivingRedstonePower(pos));
+        }
+    }
+
+    @Override
+    public void onBlockAdded(BlockState state, World world, BlockPos pos, BlockState oldState, boolean notify)
+    {
+        super.onBlockAdded(state, world, pos, oldState, notify);
+        if (!oldState.isOf(this) && world.getBlockEntity(pos) instanceof EjectorBlockEntity be && !world.isClient())
+        {
+            be.updatePowered(world.isReceivingRedstonePower(pos));
         }
     }
 
@@ -73,16 +101,34 @@ public class EjectorBlock extends BaseFacingBlock implements BlockEntityProvider
     @Override
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit)
     {
+        if (world.getBlockEntity(pos) instanceof EjectorBlockEntity be)
+        {
+            if (player.isSneaking())
+            {
+                if (!world.isClient())
+                {
+                    be.changeMode();
+                    world.playSound(null, pos, NMSounds.CLICK, SoundCategory.BLOCKS, 1, 1);
+                }
+
+                return ActionResult.SUCCESS;
+            }
+        }
+
         return super.onUse(state, world, pos, player, hand, hit);
+    }
+
+    @Override
+    protected void appendProperties(StateManager.Builder<Block, BlockState> builder)
+    {
+        super.appendProperties(builder);
+        builder.add(ACTIVE);
     }
 
     // TODO: make this do things
     @Override
     public long insert(World world, BlockPos pos, BlockState state, Direction direction, ItemInPipe item, TransactionContext transaction)
     {
-        if (world.getBlockEntity(pos) instanceof ItemPumpBlockEntity be)
-        {
-        }
         return 0;
     }
 
@@ -102,7 +148,5 @@ public class EjectorBlock extends BaseFacingBlock implements BlockEntityProvider
             return EnumSet.of(facing.getOpposite());
         else
             return EnumSet.of(facing);
-
-//        return Stream.of(facing, facing.getOpposite()).filter(forbidden).collect(Collectors.toSet());
     }
 }
