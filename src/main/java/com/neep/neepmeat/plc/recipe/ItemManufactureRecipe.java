@@ -53,7 +53,7 @@ public class ItemManufactureRecipe implements ManufactureRecipe<MutateInPlace<It
     {
         ItemStack stack = context.get();
 
-        if (!stack.isOf(base))
+        if (stack == null || !stack.isOf(base))
             return false;
 
         var workpiece = NMComponents.WORKPIECE.maybeGet(stack).orElse(null);

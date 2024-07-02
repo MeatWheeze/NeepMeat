@@ -5,6 +5,7 @@ import net.fabricmc.fabric.api.lookup.v1.block.BlockApiLookup;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
+import org.jetbrains.annotations.Nullable;
 
 public interface MutateInPlace<T>
 {
@@ -29,13 +30,7 @@ public interface MutateInPlace<T>
         return (Class<MutateInPlace<T>>) (Object) TableComponent.class;
     }
 
-    @SuppressWarnings("unchecked")
-    static Class<MutateInPlace<?>> asClass1()
-    {
-        return (Class<MutateInPlace<?>>) (Object) TableComponent.class;
-    }
-
-
+    @Nullable
     T get();
 
     void set(T t);

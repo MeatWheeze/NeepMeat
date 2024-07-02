@@ -2,6 +2,7 @@ package com.neep.neepmeat.plc.instruction;
 
 import com.neep.meatlib.recipe.MeatlibRecipes;
 import com.neep.neepmeat.api.plc.PLC;
+import com.neep.neepmeat.api.plc.recipe.Workpiece;
 import com.neep.neepmeat.api.plc.robot.AtomicAction;
 import com.neep.neepmeat.api.plc.robot.DelayAction;
 import com.neep.neepmeat.api.plc.robot.GroupedRobotAction;
@@ -120,37 +121,40 @@ public class InjectInstruction implements Instruction
 
             var step = new InjectStep(stored.resource());
 
-            var workpiece = NMComponents.WORKPIECE.maybeGet(stack).orElse(null);
-            if (workpiece != null && PLCRecipes.isValidStep(PLCRecipes.MANUFACTURE, workpiece, step, stack.getItem()))
+            if (stack != null)
             {
-                workpiece.addStep(step);
-
-                mip.set(stack);
-
-                ItemManufactureRecipe recipe = MeatlibRecipes.getInstance().getFirstMatch(PLCRecipes.MANUFACTURE, mip).orElse(null);
-                if (recipe != null)
+                Workpiece workpiece = NMComponents.WORKPIECE.getNullable(stack);
+                if (workpiece != null && PLCRecipes.isValidStep(PLCRecipes.MANUFACTURE, workpiece, step, stack.getItem()))
                 {
-                    recipe.ejectOutputs(mip, null);
-                    workpiece.clearSteps();
-                }
-                else
-                {
-//                     Special handling for transforming tools.
-                    TransformingToolRecipe transformingToolRecipe = TransformingToolRecipe.getInstance();
-                    if (transformingToolRecipe.matches(mip))
+                    workpiece.addStep(step);
+
+                    mip.set(stack);
+
+                    ItemManufactureRecipe recipe = MeatlibRecipes.getInstance().getFirstMatch(PLCRecipes.MANUFACTURE, mip).orElse(null);
+                    if (recipe != null)
                     {
-                        transformingToolRecipe.ejectOutputs(mip, null);
+                        recipe.ejectOutputs(mip, null);
                         workpiece.clearSteps();
                     }
-                }
+                    else
+                    {
+//                     Special handling for transforming tools.
+                        TransformingToolRecipe transformingToolRecipe = TransformingToolRecipe.getInstance();
+                        if (transformingToolRecipe.matches(mip))
+                        {
+                            transformingToolRecipe.ejectOutputs(mip, null);
+                            workpiece.clearSteps();
+                        }
+                    }
 
-                if (world.get() instanceof ServerWorld serverWorld)
-                {
+                    if (world.get() instanceof ServerWorld serverWorld)
+                    {
 //                    ParticleSpawnS2C.sendNearby(serverWorld, plc.getRobot().getBlockPos(), new BlockStateParticleEffect(ParticleTypes.BLOCK, stored.resource().getFluid().getDefaultState().getBlockState()),
 //                            plc.getRobot().getPos(), new Vec3d(0, -0.4, 0), new Vec3d(0.1, 0.1, 0.1), 6);
-                }
+                    }
 
-                stored = null;
+                    stored = null;
+                }
             }
         }
 

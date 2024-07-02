@@ -250,7 +250,7 @@ public class PLCProgramScreen extends Screen implements ScreenHandlerProvider<PL
                 if (stack == null || stack.isEmpty())
                     return;
 
-                tooltipText.addAll(mip1.get().getTooltip(client.player, TooltipContext.Default.NORMAL));
+                tooltipText.addAll(stack.getTooltip(client.player, TooltipContext.Default.BASIC));
             }
             else if (mip2 != null)
             {
