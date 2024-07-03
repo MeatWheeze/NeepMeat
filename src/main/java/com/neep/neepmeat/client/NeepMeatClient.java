@@ -61,7 +61,7 @@ import com.neep.neepmeat.transport.block.fluid_transport.FilterPipeBlock;
 import com.neep.neepmeat.transport.block.fluid_transport.FluidPipeBlock;
 import com.neep.neepmeat.transport.client.TransportClient;
 import com.neep.neepmeat.transport.client.renderer.WindowPipeRenderer;
-import com.neep.neepmeat.transport.client.screen.FilterScreen;
+import com.neep.neepmeat.transport.client.screen.filter.FilterScreen;
 import dev.monarkhes.myron_neepmeat.api.Myron;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;

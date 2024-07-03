@@ -1,6 +1,6 @@
 package com.neep.neepmeat.transport.machine.item;
 
-import com.neep.meatweapons.item.filter.FilterList;
+import com.neep.neepmeat.item.filter.FilterList;
 import com.neep.neepmeat.transport.screen_handler.FilterScreenHandler;
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;

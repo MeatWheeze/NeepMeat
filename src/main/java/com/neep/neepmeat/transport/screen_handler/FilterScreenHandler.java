@@ -5,15 +5,21 @@ import com.neep.meatlib.api.network.ParamCodec;
 import com.neep.meatlib.network.ChannelManager;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.init.ScreenHandlerInit;
+import com.neep.neepmeat.item.filter.Filter;
+import com.neep.neepmeat.item.filter.FilterList;
 import com.neep.neepmeat.screen_handler.BasicScreenHandler;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.util.Identifier;
 
+import java.util.List;
+
 public class FilterScreenHandler extends BasicScreenHandler
 {
-    public final ChannelManager<Test> channel;
+    public final ChannelManager<ReceiveFilter> channel;
+
+    private FilterList filter;
 
     public FilterScreenHandler(int syncId, PlayerInventory playerInventory, PacketByteBuf buf)
     {
@@ -25,8 +31,8 @@ public class FilterScreenHandler extends BasicScreenHandler
         super(ScreenHandlerInit.FILTER, playerInventory, null, syncId, null);
 
         channel = ChannelManager.create(
-                new Identifier(NeepMeat.NAMESPACE, "filter_test"),
-                ChannelFormat.builder(Test.class)
+                new Identifier(NeepMeat.NAMESPACE, "receive_filter"),
+                ChannelFormat.builder(ReceiveFilter.class)
                         .param(ParamCodec.INT)
                         .param(ParamCodec.STRING)
                         .build(),
@@ -42,9 +48,8 @@ public class FilterScreenHandler extends BasicScreenHandler
         channel.emitter().apply(123, "ooer");
     }
 
-    public void test(int i, String s)
+    public void receiveFilter(int i, String s)
     {
-        System.out.println(s);
     }
 
     @Override
@@ -53,7 +58,12 @@ public class FilterScreenHandler extends BasicScreenHandler
         channel.close();
     }
 
-    public interface Test
+    public FilterList getFilters()
+    {
+        return filter;
+    }
+
+    public interface ReceiveFilter
     {
         void apply(int i, String s);
     }

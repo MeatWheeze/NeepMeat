@@ -1,4 +1,4 @@
-package com.neep.meatweapons.item.filter;
+package com.neep.neepmeat.item.filter;
 
 import com.neep.meatlib.item.BaseItem;
 import com.neep.meatlib.item.TooltipSupplier;
@@ -6,9 +6,9 @@ import dev.onyxstudios.cca.api.v3.component.Component;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.minecraft.nbt.NbtCompound;
 
-public class FilterItem extends BaseItem
+public class ItemFilter extends BaseItem
 {
-    public FilterItem(String registryName, TooltipSupplier tooltipSupplier, Settings settings)
+    public ItemFilter(String registryName, TooltipSupplier tooltipSupplier, Settings settings)
     {
         super(registryName, tooltipSupplier, settings);
     }
