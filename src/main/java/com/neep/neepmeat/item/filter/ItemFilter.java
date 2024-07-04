@@ -1,44 +1,69 @@
 package com.neep.neepmeat.item.filter;
 
-import com.neep.meatlib.item.BaseItem;
-import com.neep.meatlib.item.TooltipSupplier;
-import dev.onyxstudios.cca.api.v3.component.Component;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.minecraft.nbt.NbtCompound;
 
-public class ItemFilter extends BaseItem
+import java.util.Objects;
+
+public class ItemFilter implements Filter
 {
-    public ItemFilter(String registryName, TooltipSupplier tooltipSupplier, Settings settings)
+    private ItemVariant item = ItemVariant.blank();
+    private boolean ignoreNbt = true;
+    private boolean ignoreDamage = true;
+
+    public ItemFilter()
     {
-        super(registryName, tooltipSupplier, settings);
+
     }
 
-    static class FilterComponent implements Filter, Component
+    @Override
+    public NbtCompound writeNbt(NbtCompound nbt)
     {
-        private final Filter filter;
+        nbt.put("item", item.toNbt());
 
-        public FilterComponent(Filter filter)
+        nbt.putBoolean("ignore_nbt", ignoreNbt);
+        nbt.putBoolean("ignore_damage", ignoreDamage && !ignoreNbt);
+
+        return nbt;
+    }
+
+    @Override
+    public void readNbt(NbtCompound nbt)
+    {
+        this.item = ItemVariant.fromNbt(nbt.getCompound("item"));
+
+        this.ignoreNbt = nbt.getBoolean("ignore_nbt");
+        this.ignoreDamage = nbt.getBoolean("ignore_damage");
+
+        if (!ignoreNbt)
+            ignoreDamage = false;
+    }
+
+    @Override
+    public boolean matches(ItemVariant variant)
+    {
+        boolean itemsEqual = variant.getItem() == this.item.getItem();
+        if (ignoreNbt && ignoreDamage)
+            return itemsEqual;
+
+        NbtCompound filterNbt = item.getNbt();
+        NbtCompound nbt = variant.getNbt();
+        int filterDamage = filterNbt == null ? 0 : filterNbt.getInt("Damage");
+        int itemDamage = nbt == null ? 0 : nbt.getInt("Damage");
+        if (ignoreNbt && !ignoreDamage)
         {
-            this.filter = filter;
+            return itemsEqual && filterDamage == itemDamage;
         }
-
-        @Override
-        public boolean matches(ItemVariant variant)
+        else
         {
-            return filter.matches(variant);
-        }
-
-        @Override
-        public void readFromNbt(NbtCompound tag)
-        {
-
-        }
-
-        @Override
-        public void writeToNbt(NbtCompound tag)
-        {
-
+            // ignoreDamage should never be true if ignoreNbt is true.
+            return itemsEqual && Objects.equals(filterNbt, nbt);
         }
     }
 
+    @Override
+    public Constructor<?> getType()
+    {
+        return Filters.ITEM;
+    }
 }

@@ -2,7 +2,7 @@ package com.neep.neepmeat.transport.client.screen.filter;
 
 import com.neep.neepmeat.item.filter.TagFilter;
 
-public class TagFilterWidget extends FilterScreen.FilterEntryWidget
+public class TagFilterWidget extends FilterEntryWidget
 {
     private final TagFilter filter;
 

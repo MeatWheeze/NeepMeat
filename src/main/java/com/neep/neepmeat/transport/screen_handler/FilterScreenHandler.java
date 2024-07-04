@@ -10,34 +10,52 @@ import com.neep.neepmeat.item.filter.FilterList;
 import com.neep.neepmeat.screen_handler.BasicScreenHandler;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.util.Identifier;
 
-import java.util.List;
-
 public class FilterScreenHandler extends BasicScreenHandler
 {
-    public final ChannelManager<ReceiveFilter> channel;
+    public final ChannelManager<UpdateToClient> updateToClient;
+    public final ChannelManager<UpdateToServer> updateToServer;
+    public final ChannelManager<AddFilter> addFilter;
 
     private FilterList filter;
 
     public FilterScreenHandler(int syncId, PlayerInventory playerInventory, PacketByteBuf buf)
     {
-        this(playerInventory, syncId);
+        this(new FilterList(), playerInventory, syncId);
     }
 
-    public FilterScreenHandler(PlayerInventory playerInventory, int syncId)
+    public FilterScreenHandler(FilterList filter, PlayerInventory playerInventory, int syncId)
     {
         super(ScreenHandlerInit.FILTER, playerInventory, null, syncId, null);
+        this.filter = filter;
 
-        channel = ChannelManager.create(
-                new Identifier(NeepMeat.NAMESPACE, "receive_filter"),
-                ChannelFormat.builder(ReceiveFilter.class)
-                        .param(ParamCodec.INT)
-                        .param(ParamCodec.STRING)
+        updateToServer = ChannelManager.create(new Identifier(NeepMeat.NAMESPACE, "update_to_server"),
+            ChannelFormat.builder(UpdateToServer.class)
+                    .param(ParamCodec.INT)
+                    .param(ParamCodec.NBT)
+                    .build(),
+                playerInventory.player
+                );
+
+        updateToClient = ChannelManager.create(new Identifier(NeepMeat.NAMESPACE, "update_to_client"),
+                ChannelFormat.builder(UpdateToClient.class)
+                        .param(FilterList.CODEC)
                         .build(),
                 playerInventory.player
                 );
+
+        addFilter = ChannelManager.create(new Identifier(NeepMeat.NAMESPACE, "add_filter"),
+                ChannelFormat.builder(AddFilter.class)
+                        .param(ParamCodec.IDENTIFIER)
+                        .build(),
+                playerInventory.player
+        );
+
+        updateToServer.receiver(this::updateToServer);
+        addFilter.receiver(this::addFilter);
     }
 
     @Override
@@ -45,17 +63,25 @@ public class FilterScreenHandler extends BasicScreenHandler
     {
         super.sendContentUpdates();
 
-        channel.emitter().apply(123, "ooer");
+        updateToClient.emitter().apply(filter);
     }
 
-    public void receiveFilter(int i, String s)
+    public void updateToClient(FilterList filter)
     {
+        this.filter = filter;
+    }
+
+    public void updateToServer(int index, NbtCompound nbt)
+    {
+        filter.getEntries().get(index).update(nbt);
     }
 
     @Override
     public void onClosed(PlayerEntity player)
     {
-        channel.close();
+        updateToClient.close();
+        updateToServer.close();
+        addFilter.close();
     }
 
     public FilterList getFilters()
@@ -63,8 +89,34 @@ public class FilterScreenHandler extends BasicScreenHandler
         return filter;
     }
 
-    public interface ReceiveFilter
+    public void addFilter(Filter.Constructor<?> filter)
     {
-        void apply(int i, String s);
+        Identifier id = Filter.REGISTRY.getId(filter);
+        addFilter.emitter().apply(id);
+    }
+
+    private void addFilter(Identifier id)
+    {
+        Filter.Constructor<?> constructor = Filter.REGISTRY.get(id);
+        if (constructor != null) // Don't trust client
+        {
+            Filter filter = constructor.create();
+            this.filter.add(filter);
+        }
+    }
+
+    public interface UpdateToClient
+    {
+        void apply(FilterList filterList);
+    }
+
+    public interface UpdateToServer
+    {
+        void apply(int index, NbtCompound nbt);
+    }
+
+    public interface AddFilter
+    {
+        void apply(Identifier id);
     }
 }

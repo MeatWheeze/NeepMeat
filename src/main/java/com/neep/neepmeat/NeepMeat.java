@@ -21,6 +21,7 @@ import com.neep.neepmeat.entity.worm.WormActions;
 import com.neep.neepmeat.guide.GuideReloadListener;
 import com.neep.neepmeat.implant.player.*;
 import com.neep.neepmeat.init.*;
+import com.neep.neepmeat.item.filter.Filters;
 import com.neep.neepmeat.machine.charnel_compactor.CharnelCompactorStorage;
 import com.neep.neepmeat.machine.homogeniser.MeatAdditives;
 import com.neep.neepmeat.machine.integrator.IntegratorBlockEntity;
@@ -127,6 +128,7 @@ public class NeepMeat implements ModInitializer
 			NMStatusEffects.init();
 			NMPotions.init();
 			NMGraphicsEffects.init();
+			Filters.init();
 
 			NMItemGroups.init();
 //			DataType.init();

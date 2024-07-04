@@ -21,6 +21,16 @@ public interface Rectangle
                 && my >= y() && my <= y() + h();
     }
 
+    default int x2()
+    {
+        return x() + w();
+    }
+
+    default int y2()
+    {
+        return y() + h();
+    }
+
     class Immutable implements Rectangle
     {
         public final int x, y, w, h;

@@ -72,7 +72,7 @@ public class FilteredEjectorBlockEntity extends EjectorBlockEntity implements Ex
     @Override
     public ScreenHandler createMenu(int syncId, PlayerInventory playerInventory, PlayerEntity player)
     {
-        return new FilterScreenHandler(playerInventory, syncId);
+        return new FilterScreenHandler(filterList, playerInventory, syncId);
     }
 
     @Override
