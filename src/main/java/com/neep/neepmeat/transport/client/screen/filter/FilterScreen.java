@@ -3,9 +3,8 @@ package com.neep.neepmeat.transport.client.screen.filter;
 import com.neep.neepmeat.api.plc.PLCCols;
 import com.neep.neepmeat.client.screen.BaseHandledScreen;
 import com.neep.neepmeat.client.screen.plc.PLCScreenButton;
-import com.neep.neepmeat.client.screen.util.Background;
-import com.neep.neepmeat.client.screen.util.Border;
 import com.neep.neepmeat.client.screen.util.BorderScrollRight;
+import com.neep.neepmeat.client.screen.util.PlayerSlotsBorder;
 import com.neep.neepmeat.client.screen.util.Rectangle;
 import com.neep.neepmeat.item.filter.*;
 import com.neep.neepmeat.transport.screen_handler.FilterScreenHandler;
@@ -55,10 +54,11 @@ public class FilterScreen extends BaseHandledScreen<FilterScreenHandler>
 
 //        Rectangle inventoryBounds = new Rectangle.Immutable(
 //        int inventoryX =
-        var inventoryBorder = new Border(entriesX, withoutPadding.y() + withoutPadding.h() - 76, 18 * 9 + 2, 3 * 19, 0, () -> PLCCols.BORDER.col);
-        var hotbarBorder = new Border(entriesX, withoutPadding.y() + withoutPadding.h() - 19, 18 * 9 + 2, 20, 0, () -> PLCCols.BORDER.col);
+//        var inventoryBorder = new Border(entriesX, withoutPadding.y() + withoutPadding.h() - 76, 18 * 9 + 2, 3 * 19, 0, () -> PLCCols.BORDER.col);
+//        var hotbarBorder = new Border(entriesX, withoutPadding.y() + withoutPadding.h() - 19, 18 * 9 + 2, 20, 0, () -> PLCCols.BORDER.col);
+        var inventoryBorder = new PlayerSlotsBorder(entriesX, withoutPadding.y() + withoutPadding.h() - 76, () -> PLCCols.BORDER.col);
         addDrawable(inventoryBorder);
-        addDrawable(hotbarBorder);
+//        addDrawable(hotbarBorder);
 
         createEntries();
     }

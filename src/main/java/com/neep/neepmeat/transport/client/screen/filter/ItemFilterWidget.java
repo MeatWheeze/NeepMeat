@@ -2,6 +2,7 @@ package com.neep.neepmeat.transport.client.screen.filter;
 
 import com.neep.neepmeat.api.plc.PLCCols;
 import com.neep.neepmeat.client.screen.StyledTooltipUser;
+import com.neep.neepmeat.client.screen.util.CheckboxWidget;
 import com.neep.neepmeat.client.screen.util.ClickableWidget;
 import com.neep.neepmeat.client.screen.util.GUIUtil;
 import com.neep.neepmeat.client.screen.util.Point;
@@ -47,6 +48,18 @@ public class ItemFilterWidget extends FilterEntryWidget<ItemFilter>
                 addWWidget(new ItemSlotWidget(slotsX + i * 17, slotsY + 17 * j, i + j * 3));
             }
         }
+
+        addWWidget(new CheckboxWidget(x + 17 * 3 + 4, y + textRenderer.fontHeight + 4, 50, 16, filter::ignoreDamage, Text.of("Use damage"), (b, t) ->
+        {
+            filter.setUseDamage(t);
+            updateToServer();
+        }));
+
+        addWWidget(new CheckboxWidget(x + 17 * 3 + 4, y + textRenderer.fontHeight + 4 + 17, 50, 16, filter::ignoreNbt, Text.of("Use all NBT"), (b, t) ->
+        {
+            filter.setUseNbt(t);
+            updateToServer();
+        }));
     }
 
     @Override
@@ -77,7 +90,7 @@ public class ItemFilterWidget extends FilterEntryWidget<ItemFilter>
             ItemStack stack = filter.getItem(slotIndex).toStack(1);
             context.drawItem(stack, this.getX() + 1, this.getY() + 1);
 
-            if (isMouseOver(mouseX, mouseY) && !stack.isEmpty())
+            if (isMouseOver(mouseX, mouseY) && !stack.isEmpty() && handler.getCursorStack().isEmpty())
             {
                 parent.renderTooltipText(context, stack.getTooltip(client.player, TooltipContext.BASIC), false, mouseX, mouseY, PLCCols.TEXT.col);
             }

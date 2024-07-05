@@ -12,8 +12,8 @@ import java.util.Objects;
 public class ItemFilter implements Filter
 {
     private final List<ItemVariant> items = DefaultedList.ofSize(6, ItemVariant.blank());
-    private boolean ignoreNbt = true;
-    private boolean ignoreDamage = true;
+    private boolean useNbt = false;
+    private boolean useDamage = false;
 
     public ItemFilter()
     {
@@ -30,8 +30,8 @@ public class ItemFilter implements Filter
         }
         nbt.put("items", itemList);
 
-        nbt.putBoolean("ignore_nbt", ignoreNbt);
-        nbt.putBoolean("ignore_damage", ignoreDamage && !ignoreNbt);
+        nbt.putBoolean("use_nbt", useNbt);
+        nbt.putBoolean("use_damage", useDamage);
 
         return nbt;
     }
@@ -45,11 +45,8 @@ public class ItemFilter implements Filter
             items.set(i, ItemVariant.fromNbt(itemList.getCompound(i)));
         }
 
-        this.ignoreNbt = nbt.getBoolean("ignore_nbt");
-        this.ignoreDamage = nbt.getBoolean("ignore_damage");
-
-        if (!ignoreNbt)
-            ignoreDamage = false;
+        this.useNbt = nbt.getBoolean("use_nbt");
+        this.useDamage = nbt.getBoolean("use_damage");
     }
 
     public void setItem(int index, ItemVariant item)
@@ -82,20 +79,19 @@ public class ItemFilter implements Filter
     private boolean testItem(ItemVariant filterItem, ItemVariant variant)
     {
         boolean itemsEqual = variant.getItem() == filterItem.getItem();
-        if (ignoreNbt && ignoreDamage)
+        if (!useNbt && !useDamage)
             return itemsEqual;
 
         NbtCompound filterNbt = filterItem.getNbt();
         NbtCompound nbt = variant.getNbt();
         int filterDamage = filterNbt == null ? 0 : filterNbt.getInt("Damage");
         int itemDamage = nbt == null ? 0 : nbt.getInt("Damage");
-        if (ignoreNbt && !ignoreDamage)
+        if (useDamage && !useNbt)
         {
             return itemsEqual && filterDamage == itemDamage;
         }
         else
         {
-            // ignoreDamage should never be true if ignoreNbt is true.
             return itemsEqual && Objects.equals(filterNbt, nbt);
         }
     }
@@ -104,5 +100,29 @@ public class ItemFilter implements Filter
     public Constructor<?> getType()
     {
         return Filters.ITEM;
+    }
+
+    public boolean ignoreDamage()
+    {
+        return useDamage;
+    }
+
+    public boolean ignoreNbt()
+    {
+        return useNbt;
+    }
+
+    public void setUseDamage(boolean useDamage)
+    {
+        this.useDamage = useDamage;
+        if (!useDamage)
+            this.useNbt = false;
+    }
+
+    public void setUseNbt(boolean useNbt)
+    {
+        this.useNbt = useNbt;
+        if (useNbt)
+            this.useDamage = true;
     }
 }

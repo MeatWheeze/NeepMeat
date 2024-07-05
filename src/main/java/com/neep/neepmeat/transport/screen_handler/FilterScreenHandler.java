@@ -36,7 +36,7 @@ public class FilterScreenHandler extends BasicScreenHandler
         this.filter = filter;
 
         createInventory(8, BACKGROUND_HEIGHT - 80, playerInventory);
-        createHotbar(   8, BACKGROUND_HEIGHT - 23, playerInventory);
+        createHotbar(   8, BACKGROUND_HEIGHT - 22, playerInventory);
 
         updateToServer = ChannelManager.create(new Identifier(NeepMeat.NAMESPACE, "update_to_server"),
             ChannelFormat.builder(UpdateToServer.class)
