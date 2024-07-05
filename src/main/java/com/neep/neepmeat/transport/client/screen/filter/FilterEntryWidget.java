@@ -2,28 +2,36 @@ package com.neep.neepmeat.transport.client.screen.filter;
 
 import com.neep.neepmeat.api.plc.PLCCols;
 import com.neep.neepmeat.client.screen.util.GUIUtil;
+import com.neep.neepmeat.item.filter.Filter;
+import com.neep.neepmeat.transport.screen_handler.FilterScreenHandler;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.widget.ClickableWidget;
+import net.minecraft.nbt.NbtCompound;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class FilterEntryWidget
+public abstract class FilterEntryWidget<T extends Filter>
 {
     protected final List<ClickableWidget> children = new ArrayList<>();
+    protected final T filter;
 
     protected int x;
     protected int y;
 
-    private final int w;
-    private final int index;
-    private int h;
+    protected final int index;
+    protected final FilterScreenHandler handler;
 
-    public FilterEntryWidget(int w, int index)
+    protected int h;
+    protected final int w;
+
+    public FilterEntryWidget(int w, int h, int index, T filter, FilterScreenHandler handler)
     {
         this.w = w;
+        this.h = h;
         this.index = index;
-        this.h = 40;
+        this.filter = filter;
+        this.handler = handler;
     }
 
     public void init()
@@ -59,9 +67,17 @@ public abstract class FilterEntryWidget
 
     public void render(DrawContext context, double mouseX, double mouseY, float delta)
     {
-        GUIUtil.renderBorder(context, x + 2, y + 2, w - 5, h - 2, PLCCols.BORDER.col, -1);
+        GUIUtil.renderBorderInner(context, x, y, w, h, PLCCols.BORDER.col, 0);
 
-        GUIUtil.renderBorder(context, x + 6, y + 6, 10, 3, PLCCols.BORDER.col, -1);
+        for (var widget : children)
+        {
+            widget.render(context, (int) mouseX, (int) mouseY, delta);
+        }
+    }
+
+    protected void updateToServer()
+    {
+        handler.updateToServer.emitter().apply(index, filter.writeNbt(new NbtCompound()));
     }
 
     public int h()

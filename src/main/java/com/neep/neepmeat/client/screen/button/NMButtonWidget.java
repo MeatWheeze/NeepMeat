@@ -13,7 +13,7 @@ import net.minecraft.util.Identifier;
 public class NMButtonWidget extends ButtonWidget
 {
     public static final Identifier NM_WIDGETS_TEXTURE = new Identifier(NeepMeat.NAMESPACE, "textures/gui/inventory_background.png");
-    private boolean showBackground = true;
+    protected boolean showBackground = true;
 
     public NMButtonWidget(int x, int y, int width, int height, Text message, PressAction onPress)
     {

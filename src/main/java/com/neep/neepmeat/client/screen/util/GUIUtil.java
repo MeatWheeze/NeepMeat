@@ -16,20 +16,6 @@ public interface GUIUtil
 {
     Identifier INVENTORY_BACKGROUND = new Identifier(NeepMeat.NAMESPACE, "textures/gui/inventory_background.png");
 
-    static void renderBorder(MatrixStack context, int x, int y, int dx, int dy, int col, int offset)
-    {
-        drawHorizontalLine1(context, x - offset, x + dx + offset, y - offset, col);
-        drawVerticalLine1(context, x - offset, y - offset, y + dy + offset, col);
-        drawHorizontalLine1(context, x - offset, x + dx + offset, y + dy + offset, col);
-        drawVerticalLine1(context, x + dx + offset, y - offset, y + dy + offset, col);
-    }
-
-    static void drawCenteredText(MatrixStack context, TextRenderer textRenderer, Text text, float centerX, float y, int color, boolean shadow)
-    {
-//        OrderedText orderedText = text.asOrderedText();
-        drawText(context, textRenderer, text, centerX - textRenderer.getWidth(text) / 2f, y, color, shadow);
-    }
-
     static void drawTexture(Identifier texture, MatrixStack context, int x, int y, int u, int v, int width, int height)
     {
         drawTexture(texture, context, x, y, 0, (float) u, (float) v, width, height, 256, 256, 1, 1, 1, 1);
@@ -82,12 +68,23 @@ public interface GUIUtil
         RenderSystem.disableBlend();
     }
 
-    static int drawText(MatrixStack context, TextRenderer textRenderer, Text text, float x, float y, int color, boolean shadow)
+    static void renderBorder(MatrixStack context, int x, int y, int dx, int dy, int col, int offset)
     {
-        if (shadow)
-            return textRenderer.drawWithShadow(context, text, x, y, color);
-        else
-            return textRenderer.draw(context, text, x, y, color);
+        drawHorizontalLine1(context, x - offset, x + dx + offset, y - offset, col);
+        drawVerticalLine1(context, x - offset, y - offset, y + dy + offset, col);
+        drawHorizontalLine1(context, x - offset, x + dx + offset, y + dy + offset, col);
+        drawVerticalLine1(context, x + dx + offset, y - offset, y + dy + offset, col);
+    }
+
+    static void renderBorderInner(MatrixStack context, int x, int y, int dx, int dy, int col, int offset)
+    {
+        renderBorder(context, x, y, dx - 1, dy - 1, col, offset);
+    }
+
+    static void drawCenteredText(MatrixStack context, TextRenderer textRenderer, Text text, float centerX, float y, int color, boolean shadow)
+    {
+//        OrderedText orderedText = text.asOrderedText();
+        drawText(context, textRenderer, text, centerX - textRenderer.getWidth(text) / 2f, y, color, shadow);
     }
 
     static int drawText(MatrixStack context, TextRenderer textRenderer, OrderedText text, float x, float y, int color, boolean shadow)

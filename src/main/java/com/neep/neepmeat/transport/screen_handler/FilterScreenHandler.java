@@ -16,6 +16,9 @@ import net.minecraft.util.Identifier;
 
 public class FilterScreenHandler extends BasicScreenHandler
 {
+    public static final int BACKGROUND_WIDTH = 230;
+    public static final int BACKGROUND_HEIGHT = 239;
+
     public final ChannelManager<UpdateToClient> updateToClient;
     public final ChannelManager<UpdateToServer> updateToServer;
     public final ChannelManager<AddFilter> addFilter;
@@ -31,6 +34,9 @@ public class FilterScreenHandler extends BasicScreenHandler
     {
         super(ScreenHandlerInit.FILTER, playerInventory, null, syncId, null);
         this.filter = filter;
+
+        createInventory(8, BACKGROUND_HEIGHT - 80, playerInventory);
+        createHotbar(   8, BACKGROUND_HEIGHT - 23, playerInventory);
 
         updateToServer = ChannelManager.create(new Identifier(NeepMeat.NAMESPACE, "update_to_server"),
             ChannelFormat.builder(UpdateToServer.class)
@@ -82,6 +88,7 @@ public class FilterScreenHandler extends BasicScreenHandler
         updateToClient.close();
         updateToServer.close();
         addFilter.close();
+        super.onClosed(player);
     }
 
     public FilterList getFilters()

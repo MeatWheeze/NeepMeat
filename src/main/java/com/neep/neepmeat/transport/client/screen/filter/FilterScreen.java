@@ -2,8 +2,9 @@ package com.neep.neepmeat.transport.client.screen.filter;
 
 import com.neep.neepmeat.api.plc.PLCCols;
 import com.neep.neepmeat.client.screen.BaseHandledScreen;
-import com.neep.neepmeat.client.screen.button.NMButtonWidget;
+import com.neep.neepmeat.client.screen.plc.PLCScreenButton;
 import com.neep.neepmeat.client.screen.util.Background;
+import com.neep.neepmeat.client.screen.util.Border;
 import com.neep.neepmeat.client.screen.util.BorderScrollRight;
 import com.neep.neepmeat.client.screen.util.Rectangle;
 import com.neep.neepmeat.item.filter.*;
@@ -18,7 +19,7 @@ import java.util.List;
 
 public class FilterScreen extends BaseHandledScreen<FilterScreenHandler>
 {
-    private final List<FilterEntryWidget> entries = new ArrayList<>();
+    private final List<FilterEntryWidget<?>> entries = new ArrayList<>();
 
     private float scroll;
     private BorderScrollRight entriesBorder;
@@ -32,20 +33,32 @@ public class FilterScreen extends BaseHandledScreen<FilterScreenHandler>
     @Override
     protected void init()
     {
-        this.backgroundWidth = 300;
-        this.backgroundHeight = 200;
+        this.backgroundWidth = FilterScreenHandler.BACKGROUND_WIDTH;
+        this.backgroundHeight = FilterScreenHandler.BACKGROUND_HEIGHT;
         super.init();
 
         Background background = new Background(x, y, backgroundWidth, backgroundHeight, 6, () -> PLCCols.BORDER.col);
         Rectangle withoutPadding = background.withoutPadding();
 
+        int entriesX = withoutPadding.x();
+        int entriesWidth = withoutPadding.w() - 17;
+        int entriesHeight = 150;
+
         addDrawable(background);
 
-        addDrawableChild(new AddFilterButton(withoutPadding.x(), withoutPadding.y(), Filters.ITEM, Text.empty(), b -> {}));
-        addDrawableChild(new AddFilterButton(withoutPadding.x(), withoutPadding.y() + 18, Filters.TAG, Text.empty(), b -> {}));
+        int buttonX = withoutPadding.x() + entriesWidth + 1;
+        addDrawableChild(new AddFilterButton(buttonX, withoutPadding.y(), 128, Filters.ITEM, Text.empty()));
+        addDrawableChild(new AddFilterButton(buttonX, withoutPadding.y() + 17, 144, Filters.TAG, Text.empty()));
 
-        Rectangle entriesBounds = new Rectangle.Immutable(withoutPadding.x() + 18, withoutPadding.y(), withoutPadding.w() - 18, withoutPadding.h());
+        Rectangle entriesBounds = new Rectangle.Immutable(withoutPadding.x(), withoutPadding.y(), withoutPadding.w() - 18, entriesHeight);
         entriesBorder = new BorderScrollRight(entriesBounds, 0, () -> PLCCols.BORDER.col);
+
+//        Rectangle inventoryBounds = new Rectangle.Immutable(
+//        int inventoryX =
+        var inventoryBorder = new Border(entriesX, withoutPadding.y() + withoutPadding.h() - 76, 18 * 9 + 2, 3 * 19, 0, () -> PLCCols.BORDER.col);
+        var hotbarBorder = new Border(entriesX, withoutPadding.y() + withoutPadding.h() - 19, 18 * 9 + 2, 20, 0, () -> PLCCols.BORDER.col);
+        addDrawable(inventoryBorder);
+        addDrawable(hotbarBorder);
 
         createEntries();
     }
@@ -55,16 +68,16 @@ public class FilterScreen extends BaseHandledScreen<FilterScreenHandler>
         entries.clear();
 
         FilterList filters = handler.getFilters();
-        int yOff = (int) (entriesBorder.y() + scroll);
-        int xOff = entriesBorder.x();
+        int yOff = (int) (entriesBorder.y() + scroll) + 2;
+        int xOff = entriesBorder.x() + 2;
         for (int i = 0; i < filters.size(); i++)
         {
             FilterEntryWidget widget = createWidget(i, filters.getFilter(i));
             entries.add(widget);
             widget.init();
 
-            widget.setPos(xOff,yOff);
-            yOff += widget.h();
+            widget.setPos(xOff, yOff);
+            yOff += widget.h() + 1;
         }
     }
 
@@ -80,6 +93,8 @@ public class FilterScreen extends BaseHandledScreen<FilterScreenHandler>
             entry.render(context, mouseX, mouseY, delta);
         }
         context.disableScissor();
+
+        drawMouseoverTooltip(context, mouseX, mouseY);
     }
 
     private float maxScroll()
@@ -113,12 +128,12 @@ public class FilterScreen extends BaseHandledScreen<FilterScreenHandler>
     {
         scroll = (float) MathHelper.clamp(scroll + amount, maxScroll(), 0);
 
-        int yOff = (int) (entriesBorder.y() + scroll);
-        int xOff = entriesBorder.x();
+        int yOff = (int) (entriesBorder.y() + scroll) + 2;
+        int xOff = entriesBorder.x() + 2;
         for (var entry : entries)
         {
             entry.setPos(xOff, yOff);
-            yOff += entry.h();
+            yOff += entry.h() + 1;
         }
 
         return true;
@@ -130,53 +145,62 @@ public class FilterScreen extends BaseHandledScreen<FilterScreenHandler>
         createEntries();
     }
 
-    @Override
-    public void close()
-    {
-        super.close();
-    }
-
     // Jank!
     private FilterEntryWidget createWidget(int index, Filter filter)
     {
-        int w = entriesBorder.w();
+        int w = entriesBorder.w() - 4;
         if (filter instanceof ItemFilter itemFilter)
         {
-            return new ItemFilterWidget(w, index, itemFilter);
+            return new ItemFilterWidget(w, index, itemFilter, this, handler);
         }
         else if (filter instanceof TagFilter tagFilter)
         {
-            return new TagFilterWidget(w, index, tagFilter);
+            return new TagFilterWidget(w, index, tagFilter, handler);
         }
         return new EmptyFilterWidget(w, index);
     }
 
-    private class AddFilterButton extends NMButtonWidget
+    private class AddFilterButton extends PLCScreenButton
     {
+        private final int u;
         private final Filter.Constructor<?> filter;
         private final Text tooltip;
 
-        public AddFilterButton(int x, int y, Filter.Constructor<?> filter, Text tooltip, PressAction onPress)
+        public AddFilterButton(int x, int y, int u, Filter.Constructor<?> filter, Text tooltip)
         {
-            super(x, y, 16, 16, Text.empty(), onPress);
+            super(x, y, Text.empty());
+            this.u = u;
             this.filter = filter;
             this.tooltip = tooltip;
-            showBackground(false);
         }
 
         @Override
-        public void onPress()
+        public void renderTooltip(DrawContext matrices, int mouseX, int mouseY)
         {
-            super.onPress();
+
+        }
+
+        @Override
+        public void onClick(double mouseX, double mouseY)
+        {
+            super.onClick(mouseX, mouseY);
             handler.addFilter(filter);
+
+
+        }
+
+        @Override
+        protected int getU()
+        {
+            return u;
         }
     }
 
-    public static class EmptyFilterWidget extends FilterEntryWidget
+    public class EmptyFilterWidget extends FilterEntryWidget<Filter>
     {
         public EmptyFilterWidget(int w, int index)
         {
-            super(w, index);
+            super(w, 10, index, null, FilterScreen.this.handler);
         }
     };
 }

@@ -2,12 +2,16 @@ package com.neep.neepmeat.item.filter;
 
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtElement;
+import net.minecraft.nbt.NbtList;
+import net.minecraft.util.collection.DefaultedList;
 
+import java.util.List;
 import java.util.Objects;
 
 public class ItemFilter implements Filter
 {
-    private ItemVariant item = ItemVariant.blank();
+    private final List<ItemVariant> items = DefaultedList.ofSize(6, ItemVariant.blank());
     private boolean ignoreNbt = true;
     private boolean ignoreDamage = true;
 
@@ -19,7 +23,12 @@ public class ItemFilter implements Filter
     @Override
     public NbtCompound writeNbt(NbtCompound nbt)
     {
-        nbt.put("item", item.toNbt());
+        NbtList itemList = new NbtList();
+        for (var item : items)
+        {
+            itemList.add(item.toNbt());
+        }
+        nbt.put("items", itemList);
 
         nbt.putBoolean("ignore_nbt", ignoreNbt);
         nbt.putBoolean("ignore_damage", ignoreDamage && !ignoreNbt);
@@ -30,7 +39,11 @@ public class ItemFilter implements Filter
     @Override
     public void readNbt(NbtCompound nbt)
     {
-        this.item = ItemVariant.fromNbt(nbt.getCompound("item"));
+        NbtList itemList = nbt.getList("items", NbtElement.COMPOUND_TYPE);
+        for (int i = 0; i < itemList.size(); ++i)
+        {
+            items.set(i, ItemVariant.fromNbt(itemList.getCompound(i)));
+        }
 
         this.ignoreNbt = nbt.getBoolean("ignore_nbt");
         this.ignoreDamage = nbt.getBoolean("ignore_damage");
@@ -39,14 +52,40 @@ public class ItemFilter implements Filter
             ignoreDamage = false;
     }
 
+    public void setItem(int index, ItemVariant item)
+    {
+        if (index < 0 || index >= 6)
+            return;
+
+        items.set(index, item);
+    }
+
+    public ItemVariant getItem(int index)
+    {
+        if (index < 0 || index >= 6)
+            return ItemVariant.blank();
+
+        return items.get(index);
+    }
+
     @Override
     public boolean matches(ItemVariant variant)
     {
-        boolean itemsEqual = variant.getItem() == this.item.getItem();
+        for (var item : items)
+        {
+            if (testItem(item, variant))
+                return true;
+        }
+        return false;
+    }
+
+    private boolean testItem(ItemVariant filterItem, ItemVariant variant)
+    {
+        boolean itemsEqual = variant.getItem() == filterItem.getItem();
         if (ignoreNbt && ignoreDamage)
             return itemsEqual;
 
-        NbtCompound filterNbt = item.getNbt();
+        NbtCompound filterNbt = filterItem.getNbt();
         NbtCompound nbt = variant.getNbt();
         int filterDamage = filterNbt == null ? 0 : filterNbt.getInt("Damage");
         int itemDamage = nbt == null ? 0 : nbt.getInt("Damage");

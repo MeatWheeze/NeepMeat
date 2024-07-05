@@ -19,6 +19,11 @@ public class FilterList implements NbtSerialisable
 
     private final List<Entry> entries = new ObjectArrayList<>();
 
+    public FilterList()
+    {
+
+    }
+
     public boolean matches(ItemVariant variant)
     {
         for (var entry : entries)
@@ -92,7 +97,10 @@ public class FilterList implements NbtSerialisable
             Filter.Constructor<?> constructor = Filter.REGISTRY.get(id);
             if (constructor != null)
             {
-                entries.add(new Entry(constructor.create()));
+                Entry entry = new Entry(constructor.create());
+                entry.update(entryNbt);
+                entries.add(entry);
+
             }
         }
     }
