@@ -2,7 +2,9 @@ package com.neep.neepmeat.transport.client.screen.filter;
 
 import com.neep.neepmeat.api.plc.PLCCols;
 import com.neep.neepmeat.client.screen.StyledTooltipUser;
+import com.neep.neepmeat.client.screen.util.ClickableWidget;
 import com.neep.neepmeat.client.screen.util.GUIUtil;
+import com.neep.neepmeat.client.screen.util.Point;
 import com.neep.neepmeat.item.filter.ItemFilter;
 import com.neep.neepmeat.transport.screen_handler.FilterScreenHandler;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
@@ -10,7 +12,6 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder;
-import net.minecraft.client.gui.widget.ClickableWidget;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.client.render.item.ItemRenderer;
 import net.minecraft.item.ItemStack;
@@ -57,7 +58,7 @@ public class ItemFilterWidget extends FilterEntryWidget<ItemFilter>
     }
 
 
-    class ItemSlotWidget extends ClickableWidget
+    class ItemSlotWidget extends ClickableWidget implements Point.Mutable
     {
         private final int slotIndex;
 

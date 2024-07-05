@@ -1,11 +1,12 @@
 package com.neep.neepmeat.transport.client.screen.filter;
 
 import com.neep.neepmeat.api.plc.PLCCols;
+import com.neep.neepmeat.client.screen.util.ClickableWidget;
 import com.neep.neepmeat.client.screen.util.GUIUtil;
+import com.neep.neepmeat.client.screen.util.Point;
 import com.neep.neepmeat.item.filter.Filter;
 import com.neep.neepmeat.transport.screen_handler.FilterScreenHandler;
 import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.gui.widget.ClickableWidget;
 import net.minecraft.nbt.NbtCompound;
 
 import java.util.ArrayList;
@@ -52,8 +53,7 @@ public abstract class FilterEntryWidget<T extends Filter>
 
         children.forEach(c ->
         {
-            c.setX(c.getX() + dx);
-            c.setY(c.getY() + dy);
+            c.setPos(c.x() + dx, c.y() + dy);
         });
     }
 
