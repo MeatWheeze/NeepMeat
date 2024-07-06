@@ -20,6 +20,8 @@ public class NMTextField extends TextFieldWidget implements ClickableWidget
 
     protected boolean drawFancyBackground = true;
 
+    protected TextFieldWidgetAccessor accessor = (TextFieldWidgetAccessor) this;
+
     public NMTextField(TextRenderer textRenderer, int x, int y, int width, int height, Text text)
     {
         super(textRenderer, x, y, width, height, text);
@@ -32,12 +34,6 @@ public class NMTextField extends TextFieldWidget implements ClickableWidget
         this.drawFancyBackground = draw;
         return this;
     }
-
-//    public NMTextField setTooltip(Function<NMTextField, Text> function)
-//    {
-//        this.tooltipSupplier = function;
-//        return this;
-//    }
 
     protected void renderBackground(DrawContext context, int mouseX, int mouseY, float delta)
     {
@@ -58,11 +54,8 @@ public class NMTextField extends TextFieldWidget implements ClickableWidget
         int j = accessor.getSelectionStart() - accessor.getFirstCharacterIndex();
         int k = accessor.getSelectionEnd() - accessor.getFirstCharacterIndex();
         String string = this.textRenderer.trimToWidth(accessor.getText().substring(accessor.getFirstCharacterIndex()), this.getInnerWidth());
-        boolean bl = j >= 0 && j <= string.length();
-        boolean bl2 = this.isFocused() && accessor.getFocusedTicks() / 6 % 2 == 0 && bl;
-        int l = x + 4;
-        int m = y + (this.height - 8) / 2;
-        int n = l;
+        boolean selectionWithin = j >= 0 && j <= string.length();
+        boolean bl2 = this.isFocused() && accessor.getFocusedTicks() / 6 % 2 == 0 && selectionWithin;
 
         String prefix = getPrefix();
         int prefixStart = this.x + 4;
@@ -82,13 +75,12 @@ public class NMTextField extends TextFieldWidget implements ClickableWidget
 
         if (!string.isEmpty())
         {
-            String string2 = bl ? string.substring(0, j) : string;
-            n = GUIUtil.drawText(context, this.textRenderer, this.renderTextProvider.apply(string2, accessor.getFirstCharacterIndex()), textStart, m, col, true);
+            n = renderUnselectedText(context, string, selectionWithin, textStart, m, col, j);
         }
 
         boolean bl3 = accessor.getSelectionStart() < accessor.getText().length() || accessor.getText().length() >= accessor.callGetMaxLength();
         int o = n;
-        if (!bl)
+        if (!selectionWithin)
         {
             o = j > 0 ? textStart + this.width : textStart;
         }
@@ -98,7 +90,7 @@ public class NMTextField extends TextFieldWidget implements ClickableWidget
             --n;
         }
 
-        if (!string.isEmpty() && bl && j < string.length())
+        if (!string.isEmpty() && selectionWithin && j < string.length())
         {
             GUIUtil.drawText(context, this.textRenderer, this.renderTextProvider.apply(string.substring(j), accessor.getSelectionStart()), n, m, col, true);
         }
@@ -120,6 +112,12 @@ public class NMTextField extends TextFieldWidget implements ClickableWidget
             int p = textStart + this.textRenderer.getWidth(string.substring(0, k));
             accessor.callDrawSelectionHighlight(o, m - 1, p - 1, m + 1 + 9);
         }
+    }
+
+    protected int renderUnselectedText(DrawContext context, String string, boolean selectionWithin, int textStart, int m, int col, int j)
+    {
+        String string2 = selectionWithin ? string.substring(0, j) : string;
+        return GUIUtil.drawText(context, this.textRenderer, this.renderTextProvider.apply(string2, accessor.getFirstCharacterIndex()), textStart, m, col, true);
     }
 
     public String getPrefix()

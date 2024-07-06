@@ -4,8 +4,6 @@
     "neepmeat:power_flower_growth",
     "neepmeat:power_flower_controller",
     "neepmeat:power_flower_fluid_port",
-    "neepmeat:buffer",
-    "neepmeat:dumper",
     "neepmeat:blood_bubble_log",
     "neepmeat:blood_bubble_wood",
     "neepmeat:blood_bubble_planks_stairs",
@@ -16,6 +14,8 @@
     "neepmeat:blood_bubble_planks_door",
     "neepmeat:blood_bubble_planks_button",
     "neepmeat:blood_bubble_planks_fence_gate",
-    "neepmeat:blood_bubble_planks_pressure_plate"
+    "neepmeat:blood_bubble_planks_pressure_plate",
+    "neepmeat:buffer",
+    "neepmeat:dumper"
   ]
 }

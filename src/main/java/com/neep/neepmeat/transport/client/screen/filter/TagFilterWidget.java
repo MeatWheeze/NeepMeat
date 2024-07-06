@@ -10,6 +10,11 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.text.Text;
+import net.minecraft.util.Identifier;
+import org.lwjgl.glfw.GLFW;
+
+import java.util.Collections;
+import java.util.List;
 
 public class TagFilterWidget extends FilterEntryWidget<TagFilter>
 {
@@ -28,6 +33,8 @@ public class TagFilterWidget extends FilterEntryWidget<TagFilter>
 
     private static class TagTextField extends NMTextField
     {
+        private List<Identifier> suggestions = List.of();
+
         public TagTextField(TextRenderer textRenderer, int x, int y, int width, int height, Text text)
         {
             super(textRenderer, x, y, width, height, text);
@@ -43,6 +50,15 @@ public class TagFilterWidget extends FilterEntryWidget<TagFilter>
         @Override
         public boolean keyPressed(int keyCode, int scanCode, int modifiers)
         {
+            if (keyCode == GLFW.GLFW_KEY_TAB)
+            {
+                cycleSuggestion();
+            }
+            else if (keyCode == GLFW.GLFW_KEY_ENTER)
+            {
+                confirmSuggestion();
+            }
+
             return super.keyPressed(keyCode, scanCode, modifiers);
         }
 
@@ -54,6 +70,43 @@ public class TagFilterWidget extends FilterEntryWidget<TagFilter>
         }
 
         @Override
+        public void renderButton(DrawContext context, int mouseX, int mouseY, float delta)
+        {
+            super.renderButton(context, mouseX, mouseY, delta);
+
+            int maxSuggestions = 5;
+            if (!suggestions.isEmpty() && isActive())
+            {
+                int suggestionY = y2();
+
+                int end = Math.min(suggestions.size(), maxSuggestions);
+                int stride = textRenderer.fontHeight + 2;
+                int yOffsetEnd = end * stride;
+                context.fill(x(), y2(), x() + w(), y2() + yOffsetEnd, 0xBB331111);
+
+                for (int i = 0; i < end; i++)
+                {
+                    Identifier suggestion = suggestions.get(i);
+                    int yOffset = suggestionY + stride * i;
+                    GUIUtil.drawText(context, textRenderer, suggestion.toString(), x() + textRenderer.getWidth("#") + 4, yOffset, PLCCols.BORDER.col, false);
+                }
+
+                GUIUtil.renderBorderInner(context, x(), y2(), w(), yOffsetEnd,  PLCCols.BORDER.col, 0);
+            }
+        }
+
+        @Override
+        protected int renderUnselectedText(DrawContext context, String string, boolean selectionWithin, int textStart, int m, int col, int j)
+        {
+            if (!suggestions.isEmpty())
+            {
+                GUIUtil.drawText(context, this.textRenderer, suggestions.get(0).toString(), textStart, m, PLCCols.INVALID.col, true);
+            }
+
+            return super.renderUnselectedText(context, string, selectionWithin, textStart, m, col, j);
+        }
+
+        @Override
         public String getPrefix()
         {
             return "#";
@@ -61,13 +114,24 @@ public class TagFilterWidget extends FilterEntryWidget<TagFilter>
 
         private void suggestTag(String current)
         {
-            System.out.println(TagSuggestions.INSTANCE.get(current));
+            suggestions = TagSuggestions.INSTANCE.get(current);
+        }
+
+        private void cycleSuggestion()
+        {
+            Collections.rotate(suggestions,  1);
+        }
+
+        private void confirmSuggestion()
+        {
+            if (!suggestions.isEmpty())
+                setText(suggestions.get(0).toString());
         }
 
         @Override
         protected int prefixCol()
         {
-            return PLCCols.INVALID.col;
+            return PLCCols.LINE_NUMBER.col;
         }
     }
 }
