@@ -40,6 +40,7 @@ import com.neep.neepmeat.transport.block.fluid_transport.TankBlock;
 import com.neep.neepmeat.transport.blood_network.BloodNetworkManager;
 import com.neep.neepmeat.transport.fluid_network.FluidNodeManagerImpl;
 import com.neep.neepmeat.util.Bezier;
+import com.neep.neepmeat.util.TagSuggestions;
 import com.neep.neepmeat.world.NMFeatures;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
@@ -149,6 +150,8 @@ public class NeepMeat implements ModInitializer
 			NMTrackedData.init();
 
 			NMFeatures.init();
+
+			TagSuggestions.init();
 
 
 			ItemStorage.SIDED.registerForBlocks((world, pos, state, blockEntity, direction) -> CharnelCompactorStorage.getStorage(world, pos, direction), NMBlocks.CHARNEL_COMPACTOR);

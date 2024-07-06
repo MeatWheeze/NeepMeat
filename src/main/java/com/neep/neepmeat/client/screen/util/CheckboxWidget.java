@@ -8,7 +8,7 @@ import net.minecraft.text.Text;
 
 import java.util.function.BooleanSupplier;
 
-public class CheckboxWidget extends ClickableWidget
+public class CheckboxWidget extends AbstractClickableWidget
 {
     private final TextRenderer textRenderer = client.textRenderer;
     private final BooleanSupplier toggled;

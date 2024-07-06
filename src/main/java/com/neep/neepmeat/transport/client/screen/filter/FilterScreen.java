@@ -12,6 +12,7 @@ import net.minecraft.client.gui.DrawContext;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.MathHelper;
+import org.lwjgl.glfw.GLFW;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -65,16 +66,33 @@ public class FilterScreen extends BaseHandledScreen<FilterScreenHandler>
 
     private void createEntries()
     {
-        entries.clear();
-
         FilterList filters = handler.getFilters();
         int yOff = (int) (entriesBorder.y() + scroll) + 2;
         int xOff = entriesBorder.x() + 2;
+
+        // In order make the state of each EntryWidget persistent across syncs, some jank is necessary.
         for (int i = 0; i < filters.size(); i++)
         {
-            FilterEntryWidget widget = createWidget(i, filters.getFilter(i));
-            entries.add(widget);
-            widget.init();
+            Filter filter = filters.getFilter(i);
+            FilterEntryWidget<?> widget;
+            if (i < entries.size() && entries.get(i).filter.getType() != filter.getType())
+            {
+                // Change type
+                widget = createWidget(i, filter);
+                entries.set(i, widget);
+                widget.init();
+            }
+            else if (i == entries.size())
+            {
+                widget = createWidget(i, filter);
+                entries.add(i, widget);
+                widget.init();
+            }
+            else
+            {
+                widget = entries.get(i);
+                widget.updateFilter(filter);
+            }
 
             widget.setPos(xOff, yOff);
             yOff += widget.h() + 1;
@@ -118,9 +136,38 @@ public class FilterScreen extends BaseHandledScreen<FilterScreenHandler>
     {
         for (var entry : entries)
         {
-            entry.mouseClicked(mouseX, mouseY, button);
+            if (entry.mouseClicked(mouseX, mouseY, button))
+                return true;
         }
         return super.mouseClicked(mouseX, mouseY, button);
+    }
+
+    @Override
+    public boolean keyPressed(int keyCode, int scanCode, int modifiers)
+    {
+        if (keyCode == GLFW.GLFW_KEY_ESCAPE && this.shouldCloseOnEsc())
+        {
+            this.close();
+            return true;
+        }
+
+        for (var entry : entries)
+        {
+            if (entry.keyPressed(keyCode, scanCode, modifiers))
+                return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean charTyped(char chr, int modifiers)
+    {
+        for (var entry : entries)
+        {
+            if (entry.charTyped(chr, modifiers))
+                return true;
+        }
+        return super.charTyped(chr, modifiers);
     }
 
     @Override
@@ -146,7 +193,7 @@ public class FilterScreen extends BaseHandledScreen<FilterScreenHandler>
     }
 
     // Jank!
-    private FilterEntryWidget createWidget(int index, Filter filter)
+    private FilterEntryWidget<?> createWidget(int index, Filter filter)
     {
         int w = entriesBorder.w() - 4;
         if (filter instanceof ItemFilter itemFilter)

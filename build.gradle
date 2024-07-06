@@ -3,6 +3,8 @@ plugins {
 	id 'maven-publish'
 
 	id "com.modrinth.minotaur" version "2.+"
+
+//	id 'com.github.johnrengelman.shadow' version '7.1.2'
 }
 
 sourceCompatibility = JavaVersion.VERSION_19
@@ -44,6 +46,8 @@ configurations.configureEach {
 
 dependencies {
     implementation 'org.jetbrains:annotations:23.0.0'
+	implementation include("org.apache.commons:commons-collections4:${project.commons_collections4_version}")
+//	shadow "org.apache.commons:commons-collections4:${project.commons_collections4_version}"
 
 	// Base things
 	minecraft "com.mojang:minecraft:${project.minecraft_version}"
@@ -100,6 +104,10 @@ processResources {
 		expand "version": project.version
 	}
 }
+
+//shadowJar {
+//	configurations = [project.configurations
+//}
 
 tasks.withType(JavaCompile).configureEach {
 	it.options.release = 17

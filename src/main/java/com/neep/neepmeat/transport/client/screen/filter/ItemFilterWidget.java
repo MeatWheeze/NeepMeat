@@ -2,8 +2,8 @@ package com.neep.neepmeat.transport.client.screen.filter;
 
 import com.neep.neepmeat.api.plc.PLCCols;
 import com.neep.neepmeat.client.screen.StyledTooltipUser;
+import com.neep.neepmeat.client.screen.util.AbstractClickableWidget;
 import com.neep.neepmeat.client.screen.util.CheckboxWidget;
-import com.neep.neepmeat.client.screen.util.ClickableWidget;
 import com.neep.neepmeat.client.screen.util.GUIUtil;
 import com.neep.neepmeat.client.screen.util.Point;
 import com.neep.neepmeat.item.filter.ItemFilter;
@@ -45,25 +45,26 @@ public class ItemFilterWidget extends FilterEntryWidget<ItemFilter>
         {
             for (int i = 0; i < 3; i++)
             {
-                addWWidget(new ItemSlotWidget(slotsX + i * 17, slotsY + 17 * j, i + j * 3));
+                addDrawableChild(new ItemSlotWidget(slotsX + i * 17, slotsY + 17 * j, i + j * 3));
             }
         }
 
-        addWWidget(new CheckboxWidget(x + 17 * 3 + 4, y + textRenderer.fontHeight + 4, 50, 16, filter::ignoreDamage, Text.of("Use damage"), (b, t) ->
+        addDrawableChild(new CheckboxWidget(x + 17 * 3 + 4, y + textRenderer.fontHeight + 4, 50, 16, () -> filter.ignoreDamage(), Text.of("Use damage"), (b, t) ->
         {
             filter.setUseDamage(t);
             updateToServer();
         }));
 
-        addWWidget(new CheckboxWidget(x + 17 * 3 + 4, y + textRenderer.fontHeight + 4 + 17, 50, 16, filter::ignoreNbt, Text.of("Use all NBT"), (b, t) ->
+        addDrawableChild(new CheckboxWidget(x + 17 * 3 + 4, y + textRenderer.fontHeight + 4 + 17, 50, 16, () -> filter.ignoreNbt(), Text.of("Use all NBT"), (b, t) ->
         {
             filter.setUseNbt(t);
             updateToServer();
         }));
     }
 
+
     @Override
-    public void render(DrawContext context, double mouseX, double mouseY, float delta)
+    public void render(DrawContext context, int mouseX, int mouseY, float delta)
     {
         super.render(context, mouseX, mouseY, delta);
 
@@ -71,7 +72,7 @@ public class ItemFilterWidget extends FilterEntryWidget<ItemFilter>
     }
 
 
-    class ItemSlotWidget extends ClickableWidget implements Point.Mutable
+    class ItemSlotWidget extends AbstractClickableWidget implements Point.Mutable
     {
         private final int slotIndex;
 
