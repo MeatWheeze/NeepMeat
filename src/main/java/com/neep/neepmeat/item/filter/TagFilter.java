@@ -1,6 +1,7 @@
 package com.neep.neepmeat.item.filter;
 
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
+import net.minecraft.client.font.ReferenceFont;
 import net.minecraft.item.Item;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.registry.Registries;
@@ -50,5 +51,16 @@ public class TagFilter implements Filter
         {
             tag = null;
         }
+    }
+
+    public void setTag(@Nullable TagKey<Item> tag)
+    {
+        this.tag = tag;
+    }
+
+    @Nullable
+    public TagKey<Item> getTag()
+    {
+        return tag;
     }
 }

@@ -44,4 +44,9 @@ public class TagSuggestions
             INSTANCE.itemRegistry = registries.get(Registries.ITEM.getKey());
         });
     }
+
+    public boolean isValid(Identifier tagId)
+    {
+        return trie.containsValue(tagId);
+    }
 }

@@ -7,17 +7,21 @@ import com.neep.neepmeat.client.screen.util.GUIUtil;
 import com.neep.neepmeat.item.filter.TagFilter;
 import com.neep.neepmeat.transport.screen_handler.FilterScreenHandler;
 import com.neep.neepmeat.util.TagSuggestions;
+import net.fabricmc.fabric.api.tag.convention.v1.TagUtil;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.tag.TagKey;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import org.lwjgl.glfw.GLFW;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Consumer;
 
 public class TagFilterWidget extends FilterEntryWidget<TagFilter>
 {
@@ -37,8 +41,18 @@ public class TagFilterWidget extends FilterEntryWidget<TagFilter>
         addDrawableChild(new TagTextField(MinecraftClient.getInstance().textRenderer,
                 x() + 2, y() + textRenderer.fontHeight + 2,
                 w - 4, 16,
-                () -> handler.updateToServer.emitter().apply(index, filter.writeNbt(new NbtCompound())),
-                Text.empty()));
+                this::update,
+                filter.getTag() != null ? filter.getTag().id().toString() : ""));
+    }
+
+    private void update(String text)
+    {
+        Identifier id = Identifier.tryParse(text);
+        if (TagSuggestions.INSTANCE.isValid(id))
+        {
+            filter.setTag(TagKey.of(Registries.ITEM.getKey(), id));
+            handler.updateToServer.emitter().apply(index, filter.writeNbt(new NbtCompound()));
+        }
     }
 
     @Override
@@ -51,13 +65,14 @@ public class TagFilterWidget extends FilterEntryWidget<TagFilter>
 
     private class TagTextField extends NMTextField
     {
-        private final Runnable update;
+        private final Consumer<String> update;
         private List<Identifier> suggestions = List.of();
 
-        public TagTextField(TextRenderer textRenderer, int x, int y, int width, int height, Runnable update, Text text)
+        public TagTextField(TextRenderer textRenderer, int x, int y, int width, int height, Consumer<String> update, String initial)
         {
-            super(textRenderer, x, y, width, height, text);
+            super(textRenderer, x, y, width, height, Text.empty());
             this.update = update;
+            setText(initial);
             setChangedListener(this::onChanged);
         }
 
@@ -135,7 +150,7 @@ public class TagFilterWidget extends FilterEntryWidget<TagFilter>
         private void onChanged(String current)
         {
             suggestions = TagSuggestions.INSTANCE.get(current);
-            update.run();
+            update.accept(current);
         }
 
         private void cycleSuggestion(int distance)
