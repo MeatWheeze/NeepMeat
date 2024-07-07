@@ -16,12 +16,13 @@ import net.minecraft.util.Identifier;
 
 public class FilterScreenHandler extends BasicScreenHandler
 {
-    public static final int BACKGROUND_WIDTH = 230;
+    public static final int BACKGROUND_WIDTH = 215;
     public static final int BACKGROUND_HEIGHT = 239;
 
     public final ChannelManager<UpdateToClient> updateToClient;
     public final ChannelManager<UpdateToServer> updateToServer;
     public final ChannelManager<AddFilter> addFilter;
+    public final ChannelManager<RemoveFilter> removeFilter;
 
     private FilterList filter;
 
@@ -39,29 +40,37 @@ public class FilterScreenHandler extends BasicScreenHandler
         createHotbar(   8, BACKGROUND_HEIGHT - 22, playerInventory);
 
         updateToServer = ChannelManager.create(new Identifier(NeepMeat.NAMESPACE, "update_to_server"),
-            ChannelFormat.builder(UpdateToServer.class)
-                    .param(ParamCodec.INT)
-                    .param(ParamCodec.NBT)
-                    .build(),
+            ChannelFormat.builder(UpdateToServer.class).param(ParamCodec.INT).param(ParamCodec.NBT).build(),
                 playerInventory.player
                 );
 
         updateToClient = ChannelManager.create(new Identifier(NeepMeat.NAMESPACE, "update_to_client"),
-                ChannelFormat.builder(UpdateToClient.class)
-                        .param(FilterList.CODEC)
-                        .build(),
+                ChannelFormat.builder(UpdateToClient.class).param(FilterList.CODEC).build(),
                 playerInventory.player
                 );
 
         addFilter = ChannelManager.create(new Identifier(NeepMeat.NAMESPACE, "add_filter"),
-                ChannelFormat.builder(AddFilter.class)
-                        .param(ParamCodec.IDENTIFIER)
-                        .build(),
+                ChannelFormat.builder(AddFilter.class).param(ParamCodec.IDENTIFIER).build(),
+                playerInventory.player
+        );
+
+        removeFilter = ChannelManager.create(new Identifier(NeepMeat.NAMESPACE, "remove_filter"),
+                ChannelFormat.builder(RemoveFilter.class).param(ParamCodec.INT).build(),
                 playerInventory.player
         );
 
         updateToServer.receiver(this::updateToServer);
         addFilter.receiver(this::addFilter);
+        removeFilter.receiver(this::removeFilter);
+    }
+
+    private void removeFilter(int index)
+    {
+        if (index >= 0 && index < filter.size()) // Don't trust client
+        {
+            filter.remove(index);
+            filter.markDirty();
+        }
     }
 
     @Override
@@ -79,7 +88,11 @@ public class FilterScreenHandler extends BasicScreenHandler
 
     public void updateToServer(int index, NbtCompound nbt)
     {
-        filter.getEntries().get(index).update(nbt);
+        if (index >= 0 && index < filter.size()) // Don't trust client
+        {
+            filter.getEntries().get(index).update(nbt);
+            filter.markDirty();
+        }
     }
 
     @Override
@@ -109,6 +122,7 @@ public class FilterScreenHandler extends BasicScreenHandler
         {
             Filter filter = constructor.create();
             this.filter.add(filter);
+            this.filter.markDirty();
         }
     }
 
@@ -125,5 +139,10 @@ public class FilterScreenHandler extends BasicScreenHandler
     public interface AddFilter
     {
         void apply(Identifier id);
+    }
+
+    public interface RemoveFilter
+    {
+        void apply(int index);
     }
 }

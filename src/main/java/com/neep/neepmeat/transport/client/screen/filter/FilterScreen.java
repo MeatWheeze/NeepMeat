@@ -3,10 +3,12 @@ package com.neep.neepmeat.transport.client.screen.filter;
 import com.neep.neepmeat.api.plc.PLCCols;
 import com.neep.neepmeat.client.screen.BaseHandledScreen;
 import com.neep.neepmeat.client.screen.plc.PLCScreenButton;
+import com.neep.neepmeat.client.screen.util.Border;
 import com.neep.neepmeat.client.screen.util.BorderScrollRight;
 import com.neep.neepmeat.client.screen.util.PlayerSlotsBorder;
 import com.neep.neepmeat.client.screen.util.Rectangle;
 import com.neep.neepmeat.item.filter.*;
+import com.neep.neepmeat.mixin.AbstractParentElementAccessor;
 import com.neep.neepmeat.transport.screen_handler.FilterScreenHandler;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.Element;
@@ -39,27 +41,29 @@ public class FilterScreen extends BaseHandledScreen<FilterScreenHandler>
         this.backgroundHeight = FilterScreenHandler.BACKGROUND_HEIGHT;
         super.init();
 
-        Background background = new Background(x, y, backgroundWidth, backgroundHeight, 6, () -> PLCCols.BORDER.col);
+//        Background background = new Background(x, y, backgroundWidth, backgroundHeight, 6, () -> PLCCols.BORDER.col);
+        Border background = addDrawable(new Border(x, y, backgroundWidth, backgroundHeight, 6, () -> PLCCols.BORDER.col));
         Rectangle withoutPadding = background.withoutPadding();
 
         int entriesX = withoutPadding.x();
-        int entriesWidth = withoutPadding.w() - 17;
+        int entriesWidth = withoutPadding.w();
         int entriesHeight = 150;
 
         addDrawable(background);
 
-        int buttonX = withoutPadding.x() + entriesWidth + 1;
-        addDrawableChild(new AddFilterButton(buttonX, withoutPadding.y(), 128, Filters.ITEM, Text.empty()));
-        addDrawableChild(new AddFilterButton(buttonX, withoutPadding.y() + 17, 144, Filters.TAG, Text.empty()));
+        int buttonX = withoutPadding.x() + entriesWidth + 1 - 17;
+        int buttonY = withoutPadding.y() + entriesHeight + 1;
+        addDrawableChild(new AddFilterButton(buttonX, buttonY, 128, Filters.ITEM, Text.empty()));
+        addDrawableChild(new AddFilterButton(buttonX, buttonY + 17, 144, Filters.TAG, Text.empty()));
 
-        Rectangle entriesBounds = new Rectangle.Immutable(withoutPadding.x(), withoutPadding.y(), withoutPadding.w() - 18, entriesHeight);
+        Rectangle entriesBounds = new Rectangle.Immutable(withoutPadding.x(), withoutPadding.y(), entriesWidth, entriesHeight);
         entriesBorder = new BorderScrollRight(entriesBounds, 0, () -> PLCCols.BORDER.col);
 
 //        Rectangle inventoryBounds = new Rectangle.Immutable(
 //        int inventoryX =
 //        var inventoryBorder = new Border(entriesX, withoutPadding.y() + withoutPadding.h() - 76, 18 * 9 + 2, 3 * 19, 0, () -> PLCCols.BORDER.col);
 //        var hotbarBorder = new Border(entriesX, withoutPadding.y() + withoutPadding.h() - 19, 18 * 9 + 2, 20, 0, () -> PLCCols.BORDER.col);
-        var inventoryBorder = new PlayerSlotsBorder(entriesX, withoutPadding.y() + withoutPadding.h() - 76, () -> PLCCols.BORDER.col);
+        var inventoryBorder = new PlayerSlotsBorder(entriesX, entriesBounds.y() + entriesBounds.h() + 1, () -> PLCCols.BORDER.col);
         addDrawable(inventoryBorder);
 //        addDrawable(hotbarBorder);
 
@@ -97,7 +101,7 @@ public class FilterScreen extends BaseHandledScreen<FilterScreenHandler>
             }
 
             widget.setPos(xOff, yOff);
-            yOff += widget.h() + 1;
+            yOff += widget.h() - 1;
         }
     }
 
@@ -107,7 +111,7 @@ public class FilterScreen extends BaseHandledScreen<FilterScreenHandler>
         super.render(context, mouseX, mouseY, delta);
         entriesBorder.render(context, mouseX, mouseY, delta, scroll / maxScroll());
 
-        context.enableScissor(entriesBorder.x(), entriesBorder.y(), entriesBorder.x() + entriesBorder.w(), entriesBorder.y() + entriesBorder.h());
+        context.enableScissor(entriesBorder.x(), entriesBorder.y() + 2, entriesBorder.x() + entriesBorder.w(), entriesBorder.y() + entriesBorder.h() - 2);
         for (var entry : entries)
         {
             entry.render(context, mouseX, mouseY, delta);
@@ -119,7 +123,7 @@ public class FilterScreen extends BaseHandledScreen<FilterScreenHandler>
 
     private float maxScroll()
     {
-        return -10;
+        return -100;
     }
 
     @Override
@@ -156,6 +160,17 @@ public class FilterScreen extends BaseHandledScreen<FilterScreenHandler>
             return true;
         }
 
+        if (keyCode == GLFW.GLFW_KEY_DELETE)
+        {
+            for (var entry : entries)
+            {
+                if (entry.isFocused())
+                {
+                    handler.removeFilter.emitter().apply(entry.index);
+                }
+            }
+        }
+
         for (var entry : entries)
         {
             if (entry.keyPressed(keyCode, scanCode, modifiers))
@@ -178,7 +193,7 @@ public class FilterScreen extends BaseHandledScreen<FilterScreenHandler>
     @Override
     public boolean mouseScrolled(double mouseX, double mouseY, double amount)
     {
-        scroll = (float) MathHelper.clamp(scroll + amount, maxScroll(), 0);
+        scroll = (float) MathHelper.clamp(scroll + amount * 2, maxScroll(), 0);
 
         int yOff = (int) (entriesBorder.y() + scroll) + 2;
         int xOff = entriesBorder.x() + 2;
@@ -200,7 +215,16 @@ public class FilterScreen extends BaseHandledScreen<FilterScreenHandler>
     @Override
     public void setFocused(@Nullable Element focused)
     {
-        super.setFocused(focused);
+        AbstractParentElementAccessor accessor = (AbstractParentElementAccessor) this;
+        if (accessor.getFieldFocused() != null && accessor.getFieldFocused() != focused)
+            accessor.getFieldFocused().setFocused(false);
+
+        if (focused != null)
+        {
+            focused.setFocused(true);
+        }
+
+        accessor.setFieldFocused(focused);
     }
 
     // Jank!
@@ -260,5 +284,7 @@ public class FilterScreen extends BaseHandledScreen<FilterScreenHandler>
         {
             super(w, 10, index, null, FilterScreen.this.handler);
         }
-    };
+    }
+
+    ;
 }

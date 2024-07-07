@@ -113,7 +113,7 @@ public class ChannelFormatFormatImpl<T> implements ChannelFormat<T>
             }
             catch (InvocationTargetException e)
             {
-                throw new IllegalArgumentException("Incorrect type");
+                throw new IllegalStateException(e.getCause());
             }
         });
     }

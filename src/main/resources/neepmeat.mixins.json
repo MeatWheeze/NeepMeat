@@ -26,6 +26,7 @@
     "loot.UniformLootNumberProviderAccessor"
   ],
   "client": [
+    "AbstractParentElementAccessor",
     "BlockModelRendererAccessor",
     "CameraAccessor",
     "CameraMixin",

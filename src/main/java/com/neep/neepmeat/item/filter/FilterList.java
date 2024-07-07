@@ -110,6 +110,11 @@ public class FilterList implements NbtSerialisable
         return entries.get(i).filter;
     }
 
+    public void markDirty()
+    {
+
+    }
+
     public static class Entry
     {
         private final Filter filter;

@@ -68,6 +68,12 @@ public class TagFilterWidget extends FilterEntryWidget<TagFilter>
         }
 
         @Override
+        public boolean mouseClicked(double mouseX, double mouseY, int button)
+        {
+            return super.mouseClicked(mouseX, mouseY, button);
+        }
+
+        @Override
         public boolean keyPressed(int keyCode, int scanCode, int modifiers)
         {
             if (keyCode == GLFW.GLFW_KEY_TAB)
@@ -101,8 +107,8 @@ public class TagFilterWidget extends FilterEntryWidget<TagFilter>
 
                 int end = Math.min(suggestions.size(), maxSuggestions);
                 int stride = textRenderer.fontHeight + 2;
-                int yOffsetEnd = end * stride;
-                context.fill(x(), y2(), x() + w(), y2() + yOffsetEnd, 0xBB331111);
+//                int yOffsetEnd = end * stride;
+//                context.fill(x(), y2(), x() + w(), y2() + yOffsetEnd, 0xBB331111);
 
                 List<Text> texts = suggestions.stream().limit(maxSuggestions).map(i -> Text.of(i.toString())).toList();
                 parent.renderTooltipText(context, texts, false, x(), suggestionY, PLCCols.TEXT.col);
@@ -147,6 +153,12 @@ public class TagFilterWidget extends FilterEntryWidget<TagFilter>
         protected int prefixCol()
         {
             return PLCCols.LINE_NUMBER.col;
+        }
+
+        @Override
+        public void setFocused(boolean focused)
+        {
+            super.setFocused(focused);
         }
     }
 }
