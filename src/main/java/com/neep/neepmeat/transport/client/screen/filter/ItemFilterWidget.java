@@ -92,6 +92,7 @@ public class ItemFilterWidget extends FilterEntryWidget<ItemFilter>
 
             ItemStack stack = filter.getItem(slotIndex).toStack(1);
             context.drawItem(stack, this.getX() + 1, this.getY() + 1);
+            context.drawItemInSlot(textRenderer, stack, this.getX() + 1, this.getY() + 1);
 
             if (isMouseOver(mouseX, mouseY) && !stack.isEmpty() && handler.getCursorStack().isEmpty())
             {

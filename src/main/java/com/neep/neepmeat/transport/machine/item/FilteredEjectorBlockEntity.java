@@ -12,6 +12,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -26,6 +27,20 @@ public class FilteredEjectorBlockEntity extends EjectorBlockEntity implements Ex
     public FilteredEjectorBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
     {
         super(type, pos, state);
+    }
+
+    @Override
+    public void writeNbt(NbtCompound tag)
+    {
+        filterList.writeNbt(tag);
+        super.writeNbt(tag);
+    }
+
+    @Override
+    public void readNbt(NbtCompound nbt)
+    {
+        filterList.readNbt(nbt);
+        super.readNbt(nbt);
     }
 
     public void serverTick()

@@ -28,8 +28,16 @@ public class FilteredEjectorBlock extends EjectorBlock
     {
         if (world.getBlockEntity(pos) instanceof FilteredEjectorBlockEntity be)
         {
-            player.openHandledScreen(be);
-            return ActionResult.SUCCESS;
+            if (player.isSneaking() && player.getMainHandStack().isEmpty())
+            {
+                be.changeMode();
+                return ActionResult.SUCCESS;
+            }
+            else
+            {
+                player.openHandledScreen(be);
+                return ActionResult.SUCCESS;
+            }
         }
         return super.onUse(state, world, pos, player, hand, hit);
     }
