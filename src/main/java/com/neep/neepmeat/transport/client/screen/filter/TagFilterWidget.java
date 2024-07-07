@@ -2,6 +2,7 @@ package com.neep.neepmeat.transport.client.screen.filter;
 
 import com.neep.neepmeat.api.plc.PLCCols;
 import com.neep.neepmeat.client.screen.NMTextField;
+import com.neep.neepmeat.client.screen.StyledTooltipUser;
 import com.neep.neepmeat.client.screen.util.GUIUtil;
 import com.neep.neepmeat.item.filter.TagFilter;
 import com.neep.neepmeat.transport.screen_handler.FilterScreenHandler;
@@ -9,6 +10,8 @@ import com.neep.neepmeat.util.TagSuggestions;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import org.lwjgl.glfw.GLFW;
@@ -18,9 +21,12 @@ import java.util.List;
 
 public class TagFilterWidget extends FilterEntryWidget<TagFilter>
 {
-    public TagFilterWidget(int w, int index, TagFilter filter, FilterScreenHandler handler)
+    private final StyledTooltipUser parent;
+
+    public TagFilterWidget(int w, int index, TagFilter filter, StyledTooltipUser parent, FilterScreenHandler handler)
     {
-        super(w, 41, index, filter, handler);
+        super(w, 32, index, filter, handler);
+        this.parent = parent;
     }
 
     @Override
@@ -28,17 +34,31 @@ public class TagFilterWidget extends FilterEntryWidget<TagFilter>
     {
         super.init();
 
-        addDrawableChild(new TagTextField(MinecraftClient.getInstance().textRenderer, x() + 2, y() + 2, w - 4, 16, Text.empty()));
+        addDrawableChild(new TagTextField(MinecraftClient.getInstance().textRenderer,
+                x() + 2, y() + textRenderer.fontHeight + 2,
+                w - 4, 16,
+                () -> handler.updateToServer.emitter().apply(index, filter.writeNbt(new NbtCompound())),
+                Text.empty()));
     }
 
-    private static class TagTextField extends NMTextField
+    @Override
+    public void render(DrawContext context, int mouseX, int mouseY, float delta)
     {
+        GUIUtil.drawText(context, textRenderer, "Tag filter", x() + 2, y() + 2, PLCCols.TEXT.col, false);
+
+        super.render(context, mouseX, mouseY, delta);
+    }
+
+    private class TagTextField extends NMTextField
+    {
+        private final Runnable update;
         private List<Identifier> suggestions = List.of();
 
-        public TagTextField(TextRenderer textRenderer, int x, int y, int width, int height, Text text)
+        public TagTextField(TextRenderer textRenderer, int x, int y, int width, int height, Runnable update, Text text)
         {
             super(textRenderer, x, y, width, height, text);
-            setChangedListener(this::suggestTag);
+            this.update = update;
+            setChangedListener(this::onChanged);
         }
 
         @Override
@@ -52,7 +72,7 @@ public class TagFilterWidget extends FilterEntryWidget<TagFilter>
         {
             if (keyCode == GLFW.GLFW_KEY_TAB)
             {
-                cycleSuggestion();
+                cycleSuggestion(Screen.hasShiftDown() ? -1 : 1);
             }
             else if (keyCode == GLFW.GLFW_KEY_ENTER)
             {
@@ -84,14 +104,8 @@ public class TagFilterWidget extends FilterEntryWidget<TagFilter>
                 int yOffsetEnd = end * stride;
                 context.fill(x(), y2(), x() + w(), y2() + yOffsetEnd, 0xBB331111);
 
-                for (int i = 0; i < end; i++)
-                {
-                    Identifier suggestion = suggestions.get(i);
-                    int yOffset = suggestionY + stride * i;
-                    GUIUtil.drawText(context, textRenderer, suggestion.toString(), x() + textRenderer.getWidth("#") + 4, yOffset, PLCCols.BORDER.col, false);
-                }
-
-                GUIUtil.renderBorderInner(context, x(), y2(), w(), yOffsetEnd,  PLCCols.BORDER.col, 0);
+                List<Text> texts = suggestions.stream().limit(maxSuggestions).map(i -> Text.of(i.toString())).toList();
+                parent.renderTooltipText(context, texts, false, x(), suggestionY, PLCCols.TEXT.col);
             }
         }
 
@@ -112,14 +126,15 @@ public class TagFilterWidget extends FilterEntryWidget<TagFilter>
             return "#";
         }
 
-        private void suggestTag(String current)
+        private void onChanged(String current)
         {
             suggestions = TagSuggestions.INSTANCE.get(current);
+            update.run();
         }
 
-        private void cycleSuggestion()
+        private void cycleSuggestion(int distance)
         {
-            Collections.rotate(suggestions,  1);
+            Collections.rotate(suggestions, distance);
         }
 
         private void confirmSuggestion()

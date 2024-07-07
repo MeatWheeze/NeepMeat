@@ -11,7 +11,7 @@ import java.util.Objects;
 
 public class ItemFilter implements Filter
 {
-    private final List<ItemVariant> items = DefaultedList.ofSize(6, ItemVariant.blank());
+    private final List<ItemVariant> items = DefaultedList.ofSize(10, ItemVariant.blank());
     private boolean useNbt = false;
     private boolean useDamage = false;
 
@@ -51,7 +51,7 @@ public class ItemFilter implements Filter
 
     public void setItem(int index, ItemVariant item)
     {
-        if (index < 0 || index >= 6)
+        if (index < 0 || index >= items.size())
             return;
 
         items.set(index, item);
@@ -59,7 +59,7 @@ public class ItemFilter implements Filter
 
     public ItemVariant getItem(int index)
     {
-        if (index < 0 || index >= 6)
+        if (index < 0 || index >= items.size())
             return ItemVariant.blank();
 
         return items.get(index);

@@ -27,7 +27,7 @@ public class ItemFilterWidget extends FilterEntryWidget<ItemFilter>
 
     public ItemFilterWidget(int w, int index, ItemFilter filter, StyledTooltipUser parent, FilterScreenHandler handler)
     {
-        super(w, 51, index, filter, handler);
+        super(w, 50, index, filter, handler);
         this.parent = parent;
     }
 
@@ -41,21 +41,23 @@ public class ItemFilterWidget extends FilterEntryWidget<ItemFilter>
         int slotsY = y + textRenderer.fontHeight + 4;
         int slotsX = x + 2;
 
-        for (int j = 0; j < 2; j++)
+        int slotsW = 5;
+        int slotsH = 2;
+        for (int j = 0; j < slotsH; j++)
         {
-            for (int i = 0; i < 3; i++)
+            for (int i = 0; i < slotsW; i++)
             {
-                addDrawableChild(new ItemSlotWidget(slotsX + i * 17, slotsY + 17 * j, i + j * 3));
+                addDrawableChild(new ItemSlotWidget(slotsX + i * 17, slotsY + 17 * j, i + j * slotsW));
             }
         }
 
-        addDrawableChild(new CheckboxWidget(x + 17 * 3 + 4, y + textRenderer.fontHeight + 4, 50, 16, () -> filter.ignoreDamage(), Text.of("Use damage"), (b, t) ->
+        addDrawableChild(new CheckboxWidget(x + 17 * 5 + 4, y + textRenderer.fontHeight + 4, 50, 16, () -> filter.ignoreDamage(), Text.of("Use damage"), (b, t) ->
         {
             filter.setUseDamage(t);
             updateToServer();
         }));
 
-        addDrawableChild(new CheckboxWidget(x + 17 * 3 + 4, y + textRenderer.fontHeight + 4 + 17, 50, 16, () -> filter.ignoreNbt(), Text.of("Use all NBT"), (b, t) ->
+        addDrawableChild(new CheckboxWidget(x + 17 * 5 + 4, y + textRenderer.fontHeight + 4 + 17, 50, 16, () -> filter.ignoreNbt(), Text.of("Use all NBT"), (b, t) ->
         {
             filter.setUseNbt(t);
             updateToServer();

@@ -126,4 +126,14 @@ public abstract class FilterEntryWidget<T extends Filter> extends ScreenSubEleme
     {
         return filter;
     }
+
+    @Override
+    public void setFocused(boolean focused)
+    {
+        super.setFocused(focused);
+        if (!focused)
+        {
+            children.forEach(c -> c.setFocused(false));
+        }
+    }
 }

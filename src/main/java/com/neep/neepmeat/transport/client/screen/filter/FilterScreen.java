@@ -9,9 +9,11 @@ import com.neep.neepmeat.client.screen.util.Rectangle;
 import com.neep.neepmeat.item.filter.*;
 import com.neep.neepmeat.transport.screen_handler.FilterScreenHandler;
 import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.gui.Element;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.MathHelper;
+import org.jetbrains.annotations.Nullable;
 import org.lwjgl.glfw.GLFW;
 
 import java.util.ArrayList;
@@ -137,7 +139,10 @@ public class FilterScreen extends BaseHandledScreen<FilterScreenHandler>
         for (var entry : entries)
         {
             if (entry.mouseClicked(mouseX, mouseY, button))
+            {
+                setFocused(entry);
                 return true;
+            }
         }
         return super.mouseClicked(mouseX, mouseY, button);
     }
@@ -192,6 +197,12 @@ public class FilterScreen extends BaseHandledScreen<FilterScreenHandler>
         createEntries();
     }
 
+    @Override
+    public void setFocused(@Nullable Element focused)
+    {
+        super.setFocused(focused);
+    }
+
     // Jank!
     private FilterEntryWidget<?> createWidget(int index, Filter filter)
     {
@@ -202,7 +213,7 @@ public class FilterScreen extends BaseHandledScreen<FilterScreenHandler>
         }
         else if (filter instanceof TagFilter tagFilter)
         {
-            return new TagFilterWidget(w, index, tagFilter, handler);
+            return new TagFilterWidget(w, index, tagFilter, this, handler);
         }
         return new EmptyFilterWidget(w, index);
     }
