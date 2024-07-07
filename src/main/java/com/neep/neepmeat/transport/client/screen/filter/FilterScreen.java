@@ -103,6 +103,9 @@ public class FilterScreen extends BaseHandledScreen<FilterScreenHandler>
             widget.setPos(xOff, yOff);
             yOff += widget.h() - 1;
         }
+
+        // Remove excess entries
+        entries.removeIf(entry -> entry.index >= filters.size());
     }
 
     @Override
