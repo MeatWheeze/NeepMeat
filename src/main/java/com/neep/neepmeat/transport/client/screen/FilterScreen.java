@@ -1,7 +1,5 @@
 package com.neep.neepmeat.transport.client.screen;
 
-import com.neep.meatlib.client.ClientChannelReceiver;
-import com.neep.meatlib.network.Receiver;
 import com.neep.neepmeat.client.screen.BaseHandledScreen;
 import com.neep.neepmeat.transport.screen_handler.FilterScreenHandler;
 import net.minecraft.client.gui.DrawContext;
@@ -10,13 +8,11 @@ import net.minecraft.text.Text;
 
 public class FilterScreen extends BaseHandledScreen<FilterScreenHandler>
 {
-    private final Receiver<FilterScreenHandler.Test> receiver;
-
     public FilterScreen(FilterScreenHandler handler, PlayerInventory inventory, Text title)
     {
         super(handler, inventory, title);
 
-        receiver = new ClientChannelReceiver<>(FilterScreenHandler.CHANNEL_ID, FilterScreenHandler.FORMAT, handler::test);
+        handler.channel.receiver(handler::test);
     }
 
     @Override
@@ -47,7 +43,6 @@ public class FilterScreen extends BaseHandledScreen<FilterScreenHandler>
     @Override
     public void close()
     {
-        receiver.close();
         super.close();
     }
 }

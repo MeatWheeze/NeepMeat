@@ -28,6 +28,13 @@ public class MeatLib implements ModInitializer
     public static String CURRENT_NAMESPACE;
     private static boolean active;
 
+//    /**
+//     * This should remain null unless VS2 is loaded.
+//     */
+//    public static ValkyrienSkiesUtil vsUtil = null;
+
+    public static boolean isClient = false;
+
     public static void assertActive(Object object)
     {
         if (CURRENT_NAMESPACE == null)
@@ -59,9 +66,9 @@ public class MeatLib implements ModInitializer
 //        ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(MeatRecipeManager.getInstance());
         MeatlibRecipes.init();
         InitialTicks.init();
-        MeatItemGroups.init();
         StorageEvents.init();
         RecipeInputs.init();
+        MeatItemGroups.init();
 
         // Things that need to access the server's data resources
         ServerLifecycleEvents.SERVER_STARTED.register(server -> DataPackPostProcess.AFTER_DATA_PACK_LOAD.invoker().event(server));
@@ -71,6 +78,10 @@ public class MeatLib implements ModInitializer
         // Synchronise after data packs are loaded/reloaded for every player on the server
         DataPackPostProcess.AFTER_DATA_PACK_LOAD.register(DataPackPostProcess.SECOND, server ->
                 DataPackPostProcess.SYNC.invoker().sync(server, new HashSet<>(server.getPlayerManager().getPlayerList())));
+
+//        if (FabricLoader.getInstance().isModLoaded("valkyrienskies")) {
+//            vsUtil = new ValkyrienSkiesUtil();
+//        }
     }
 
     public static class Context implements AutoCloseable
