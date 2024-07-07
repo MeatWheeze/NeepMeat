@@ -14,6 +14,7 @@ import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.fabricmc.fabric.api.transfer.v1.storage.StorageView;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
+import net.fabricmc.fabric.impl.transfer.fluid.CauldronStorage;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
@@ -100,7 +101,7 @@ public class MixerBlockEntity extends MotorisedMachineBlockEntity
     public List<Storage<FluidVariant>> getAdjacentStorages()
     {
         if (getWorld().isClient())
-            return null;
+            return List.of();
 
         List<Storage<FluidVariant>> out = new LinkedList<>();
         for (Direction direction : Direction.values())
@@ -111,9 +112,14 @@ public class MixerBlockEntity extends MotorisedMachineBlockEntity
             BlockPos offset = getPos().offset(direction);
             BlockState state = getWorld().getBlockState(offset);
             BlockEntity be = getWorld().getBlockEntity(offset);
+
             Storage<FluidVariant> storage;
             if ((storage = FluidStorage.SIDED.find(getWorld(), pos, state, be, direction.getOpposite())) != null)
             {
+                // Cauldron storages hate the mixer, so we ignore them. Easy peasy.
+                if (storage instanceof CauldronStorage)
+                    continue;
+
                 out.add(storage);
             }
         }
