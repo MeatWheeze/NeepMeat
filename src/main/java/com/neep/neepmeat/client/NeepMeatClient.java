@@ -61,6 +61,7 @@ import com.neep.neepmeat.transport.block.fluid_transport.FilterPipeBlock;
 import com.neep.neepmeat.transport.block.fluid_transport.FluidPipeBlock;
 import com.neep.neepmeat.transport.client.TransportClient;
 import com.neep.neepmeat.transport.client.renderer.WindowPipeRenderer;
+import com.neep.neepmeat.transport.client.screen.FilterScreen;
 import dev.monarkhes.myron_neepmeat.api.Myron;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
@@ -285,11 +286,13 @@ public class NeepMeatClient implements ClientModInitializer
         HandledScreens.register(ScreenHandlerInit.DISPLAY_PLATE, DisplayPlateScreen::new);
         HandledScreens.register(ScreenHandlerInit.FABRICATOR, FabricatorScreen::new);
         HandledScreens.register(ScreenHandlerInit.SMALL_COMPRESSOR, SmallCompressorScreen::new);
+        HandledScreens.register(ScreenHandlerInit.FILTER, FilterScreen::new);
 
         HandledScreens.register(ScreenHandlerInit.LIVING_MACHINE, LivingMachineScreen::new);
         HandledScreens.register(ScreenHandlerInit.ITEM_OUTPUT, ItemOutputPortScreen::new);
 
         HandledScreens.register(ScreenHandlerInit.PLC, PLCProgramScreen::new);
+
     }
 
     public static void registerLayers()

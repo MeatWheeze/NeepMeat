@@ -8,6 +8,10 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;
 import net.minecraft.block.entity.BlockEntityType;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.Hand;
+import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
@@ -17,6 +21,16 @@ public class FilteredEjectorBlock extends EjectorBlock
     public FilteredEjectorBlock(String registryName, ItemSettings itemSettings, FabricBlockSettings settings)
     {
         super(registryName, itemSettings, settings);
+    }
+
+    @Override
+    public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit)
+    {
+        if (world.getBlockEntity(pos) instanceof FilteredEjectorBlockEntity be)
+        {
+            player.openHandledScreen(be);
+        }
+        return super.onUse(state, world, pos, player, hand, hit);
     }
 
     @Nullable
