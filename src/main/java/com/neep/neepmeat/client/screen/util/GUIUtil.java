@@ -87,6 +87,14 @@ public interface GUIUtil
         drawText(context, textRenderer, text, centerX - textRenderer.getWidth(text) / 2f, y, color, shadow);
     }
 
+    static int drawText(MatrixStack context, TextRenderer textRenderer, Text text, float x, float y, int color, boolean shadow)
+    {
+        if (shadow)
+            return textRenderer.drawWithShadow(context, text, x, y, color);
+        else
+            return textRenderer.draw(context, text, x, y, color);
+    }
+
     static int drawText(MatrixStack context, TextRenderer textRenderer, OrderedText text, float x, float y, int color, boolean shadow)
     {
         if (shadow)

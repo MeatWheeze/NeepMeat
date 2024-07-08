@@ -10,8 +10,9 @@ import com.neep.neepmeat.client.screen.util.Rectangle;
 import com.neep.neepmeat.item.filter.*;
 import com.neep.neepmeat.mixin.AbstractParentElementAccessor;
 import com.neep.neepmeat.transport.screen_handler.FilterScreenHandler;
-import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.gui.Element;
+import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.MathHelper;
@@ -109,17 +110,17 @@ public class FilterScreen extends BaseHandledScreen<FilterScreenHandler>
     }
 
     @Override
-    public void render(DrawContext context, int mouseX, int mouseY, float delta)
+    public void render(MatrixStack context, int mouseX, int mouseY, float delta)
     {
         super.render(context, mouseX, mouseY, delta);
         entriesBorder.render(context, mouseX, mouseY, delta, scroll / maxScroll());
 
-        context.enableScissor(entriesBorder.x(), entriesBorder.y() + 2, entriesBorder.x() + entriesBorder.w(), entriesBorder.y() + entriesBorder.h() - 2);
+        DrawableHelper.enableScissor(entriesBorder.x(), entriesBorder.y() + 2, entriesBorder.x() + entriesBorder.w(), entriesBorder.y() + entriesBorder.h() - 2);
         for (var entry : entries)
         {
             entry.render(context, mouseX, mouseY, delta);
         }
-        context.disableScissor();
+        DrawableHelper.disableScissor();
 
         drawMouseoverTooltip(context, mouseX, mouseY);
     }
@@ -130,13 +131,13 @@ public class FilterScreen extends BaseHandledScreen<FilterScreenHandler>
     }
 
     @Override
-    protected void drawBackground(DrawContext context, float delta, int mouseX, int mouseY)
+    protected void drawBackground(MatrixStack context, float delta, int mouseX, int mouseY)
     {
         renderBackground(context);
     }
 
     @Override
-    protected void drawForeground(DrawContext context, int mouseX, int mouseY)
+    protected void drawForeground(MatrixStack context, int mouseX, int mouseY)
     {
     }
 
@@ -219,12 +220,12 @@ public class FilterScreen extends BaseHandledScreen<FilterScreenHandler>
     public void setFocused(@Nullable Element focused)
     {
         AbstractParentElementAccessor accessor = (AbstractParentElementAccessor) this;
-        if (accessor.getFieldFocused() != null && accessor.getFieldFocused() != focused)
-            accessor.getFieldFocused().setFocused(false);
+//        if (accessor.getFieldFocused() != null && accessor.getFieldFocused() != focused)
+//            accessor.getFieldFocused().setFocused(false);
 
         if (focused != null)
         {
-            focused.setFocused(true);
+//            focused.setFocused(true);
         }
 
         accessor.setFieldFocused(focused);
@@ -260,7 +261,7 @@ public class FilterScreen extends BaseHandledScreen<FilterScreenHandler>
         }
 
         @Override
-        public void renderTooltip(DrawContext matrices, int mouseX, int mouseY)
+        public void renderTooltip(MatrixStack matrices, int mouseX, int mouseY)
         {
 
         }

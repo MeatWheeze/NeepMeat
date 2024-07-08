@@ -11,10 +11,10 @@ import com.neep.neepmeat.transport.screen_handler.FilterScreenHandler;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
-import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.client.render.item.ItemRenderer;
+import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
 import net.minecraft.text.Text;
 
@@ -66,7 +66,7 @@ public class ItemFilterWidget extends FilterEntryWidget<ItemFilter>
 
 
     @Override
-    public void render(DrawContext context, int mouseX, int mouseY, float delta)
+    public void render(MatrixStack context, int mouseX, int mouseY, float delta)
     {
         super.render(context, mouseX, mouseY, delta);
 
@@ -85,18 +85,18 @@ public class ItemFilterWidget extends FilterEntryWidget<ItemFilter>
         }
 
         @Override
-        protected void renderButton(DrawContext context, int mouseX, int mouseY, float delta)
+        public void renderButton(MatrixStack context, int mouseX, int mouseY, float delta)
         {
-            GUIUtil.renderBorderInner(context, this.getX(), this.getY(), 18, 18, PLCCols.BORDER.col, 0);
-            GUIUtil.renderBorderInner(context, this.getX(), this.getY(), 18, 18, PLCCols.TRANSPARENT.col, -1);
+            GUIUtil.renderBorderInner(context, x(), y(), 18, 18, PLCCols.BORDER.col, 0);
+            GUIUtil.renderBorderInner(context, x(), y(), 18, 18, PLCCols.TRANSPARENT.col, -1);
 
             ItemStack stack = filter.getItem(slotIndex).toStack(1);
-            context.drawItem(stack, this.getX() + 1, this.getY() + 1);
-            context.drawItemInSlot(textRenderer, stack, this.getX() + 1, this.getY() + 1);
+            itemRenderer.renderInGuiWithOverrides(stack, x() + 1, y() + 1);
+            itemRenderer.renderGuiItemOverlay(textRenderer, stack, x() + 1, y() + 1);
 
             if (isMouseOver(mouseX, mouseY) && !stack.isEmpty() && handler.getCursorStack().isEmpty())
             {
-                parent.renderTooltipText(context, stack.getTooltip(client.player, TooltipContext.BASIC), false, mouseX, mouseY, PLCCols.TEXT.col);
+                parent.renderTooltipText(context, stack.getTooltip(client.player, TooltipContext.Default.NORMAL), false, mouseX, mouseY, PLCCols.TEXT.col);
             }
         }
 
@@ -109,8 +109,9 @@ public class ItemFilterWidget extends FilterEntryWidget<ItemFilter>
             updateToServer();
         }
 
+
         @Override
-        protected void appendClickableNarrations(NarrationMessageBuilder builder)
+        public void appendNarrations(NarrationMessageBuilder builder)
         {
 
         }

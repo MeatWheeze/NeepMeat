@@ -1,8 +1,8 @@
 package com.neep.neepmeat.item.filter;
 
 import com.neep.neepmeat.NeepMeat;
-import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.registry.Registry;
 
 public class Filters
 {

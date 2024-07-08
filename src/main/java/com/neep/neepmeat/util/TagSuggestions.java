@@ -2,9 +2,8 @@ package com.neep.neepmeat.util;
 
 import net.fabricmc.fabric.api.event.lifecycle.v1.CommonLifecycleEvents;
 import net.minecraft.item.Item;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.registry.Registry;
 import org.apache.commons.collections4.Trie;
 import org.apache.commons.collections4.trie.PatriciaTrie;
 
@@ -41,7 +40,7 @@ public class TagSuggestions
     {
         CommonLifecycleEvents.TAGS_LOADED.register((registries, client) ->
         {
-            INSTANCE.itemRegistry = registries.get(Registries.ITEM.getKey());
+            INSTANCE.itemRegistry = registries.get(Registry.ITEM.getKey());
         });
     }
 

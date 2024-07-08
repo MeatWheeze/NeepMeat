@@ -8,16 +8,22 @@ import com.neep.neepmeat.mixin.TextFieldWidgetAccessor;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.gui.widget.TextFieldWidget;
+import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.text.OrderedText;
+import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 
+import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
 public class NMTextField extends TextFieldWidget implements ClickableWidget
 {
-    private final TextRenderer textRenderer;
+    protected final TextRenderer textRenderer;
     private Function<NMTextField, Text> tooltipSupplier;
-
+    private final BiFunction<String, Integer, OrderedText> renderTextProvider = (string, firstCharacterIndex) -> OrderedText.styledForwardsVisitedString(
+            string, Style.EMPTY
+    );
     protected boolean drawFancyBackground = true;
 
     protected TextFieldWidgetAccessor accessor = (TextFieldWidgetAccessor) this;
@@ -35,7 +41,7 @@ public class NMTextField extends TextFieldWidget implements ClickableWidget
         return this;
     }
 
-    protected void renderBackground(DrawContext context, int mouseX, int mouseY, float delta)
+    protected void renderBackground(MatrixStack context, int mouseX, int mouseY, float delta)
     {
         if (drawFancyBackground)
         {
@@ -44,7 +50,7 @@ public class NMTextField extends TextFieldWidget implements ClickableWidget
     }
 
     @Override
-    public void renderButton(DrawContext context, int mouseX, int mouseY, float delta)
+    public void renderButton(MatrixStack context, int mouseX, int mouseY, float delta)
     {
         renderBackground(context, mouseX, mouseY, delta);
 
@@ -114,7 +120,7 @@ public class NMTextField extends TextFieldWidget implements ClickableWidget
         }
     }
 
-    protected int renderUnselectedText(DrawContext context, String string, boolean selectionWithin, int textStart, int m, int col, int j)
+    protected int renderUnselectedText(MatrixStack context, String string, boolean selectionWithin, int textStart, int m, int col, int j)
     {
         String string2 = selectionWithin ? string.substring(0, j) : string;
         return GUIUtil.drawText(context, this.textRenderer, this.renderTextProvider.apply(string2, accessor.getFirstCharacterIndex()), textStart, m, col, true);

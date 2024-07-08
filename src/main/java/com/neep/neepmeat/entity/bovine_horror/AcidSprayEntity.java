@@ -1,6 +1,5 @@
 package com.neep.neepmeat.entity.bovine_horror;
 
-import com.neep.meatlib.maths.Vec2d;
 import com.neep.neepmeat.init.NMEntities;
 import com.neep.neepmeat.init.NMParticles;
 import net.minecraft.entity.EntityType;

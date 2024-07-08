@@ -15,13 +15,13 @@ public abstract class AbstractClickableWidget extends net.minecraft.client.gui.w
     @Override
     public int x()
     {
-        return getX();
+        return x;
     }
 
     @Override
     public int y()
     {
-        return getY();
+        return y;
     }
 
     @Override
@@ -39,7 +39,7 @@ public abstract class AbstractClickableWidget extends net.minecraft.client.gui.w
     @Override
     public void setPos(int x, int y)
     {
-        setX(x);
-        setY(y);
+        this.x = x;
+        this.y = y;
     }
 }

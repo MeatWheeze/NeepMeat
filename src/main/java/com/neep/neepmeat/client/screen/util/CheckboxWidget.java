@@ -2,8 +2,8 @@ package com.neep.neepmeat.client.screen.util;
 
 import com.neep.neepmeat.api.plc.PLCCols;
 import net.minecraft.client.font.TextRenderer;
-import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder;
+import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
 
 import java.util.function.BooleanSupplier;
@@ -32,7 +32,7 @@ public class CheckboxWidget extends AbstractClickableWidget
     }
 
     @Override
-    protected void renderButton(DrawContext context, int mouseX, int mouseY, float delta)
+    public void renderButton(MatrixStack context, int mouseX, int mouseY, float delta)
     {
         String box = isToggled() ? "☒" : "☐";
         int borderCol = borderActive(mouseX, mouseY) ? PLCCols.SELECTED.col : PLCCols.BORDER.col;
@@ -56,7 +56,7 @@ public class CheckboxWidget extends AbstractClickableWidget
     }
 
     @Override
-    protected void appendClickableNarrations(NarrationMessageBuilder builder)
+    public void appendNarrations(NarrationMessageBuilder builder)
     {
 
     }

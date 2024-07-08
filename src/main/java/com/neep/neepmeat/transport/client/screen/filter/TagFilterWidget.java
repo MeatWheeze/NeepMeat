@@ -7,16 +7,15 @@ import com.neep.neepmeat.client.screen.util.GUIUtil;
 import com.neep.neepmeat.item.filter.TagFilter;
 import com.neep.neepmeat.transport.screen_handler.FilterScreenHandler;
 import com.neep.neepmeat.util.TagSuggestions;
-import net.fabricmc.fabric.api.tag.convention.v1.TagUtil;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
-import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.tag.TagKey;
+import net.minecraft.tag.TagKey;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.registry.Registry;
 import org.lwjgl.glfw.GLFW;
 
 import java.util.Collections;
@@ -50,13 +49,13 @@ public class TagFilterWidget extends FilterEntryWidget<TagFilter>
         Identifier id = Identifier.tryParse(text);
         if (TagSuggestions.INSTANCE.isValid(id))
         {
-            filter.setTag(TagKey.of(Registries.ITEM.getKey(), id));
+            filter.setTag(TagKey.of(Registry.ITEM.getKey(), id));
             handler.updateToServer.emitter().apply(index, filter.writeNbt(new NbtCompound()));
         }
     }
 
     @Override
-    public void render(DrawContext context, int mouseX, int mouseY, float delta)
+    public void render(MatrixStack context, int mouseX, int mouseY, float delta)
     {
         GUIUtil.drawText(context, textRenderer, "Tag filter", x() + 2, y() + 2, PLCCols.TEXT.col, false);
 
@@ -104,14 +103,14 @@ public class TagFilterWidget extends FilterEntryWidget<TagFilter>
         }
 
         @Override
-        protected void renderBackground(DrawContext context, int mouseX, int mouseY, float delta)
+        protected void renderBackground(MatrixStack context, int mouseX, int mouseY, float delta)
         {
-            int borderCol = isSelected() ? PLCCols.SELECTED.col : PLCCols.BORDER.col;
+            int borderCol = isFocused() ? PLCCols.SELECTED.col : PLCCols.BORDER.col;
             GUIUtil.renderBorderInner(context, x(), y(), w(), h(), borderCol, 0);
         }
 
         @Override
-        public void renderButton(DrawContext context, int mouseX, int mouseY, float delta)
+        public void renderButton(MatrixStack context, int mouseX, int mouseY, float delta)
         {
             super.renderButton(context, mouseX, mouseY, delta);
 
@@ -131,7 +130,7 @@ public class TagFilterWidget extends FilterEntryWidget<TagFilter>
         }
 
         @Override
-        protected int renderUnselectedText(DrawContext context, String string, boolean selectionWithin, int textStart, int m, int col, int j)
+        protected int renderUnselectedText(MatrixStack context, String string, boolean selectionWithin, int textStart, int m, int col, int j)
         {
             if (!suggestions.isEmpty())
             {

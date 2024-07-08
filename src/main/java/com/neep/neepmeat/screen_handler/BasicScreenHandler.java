@@ -57,19 +57,26 @@ public abstract class BasicScreenHandler extends ScreenHandler
 
     protected void createPlayerSlots(int startX, int startY, PlayerInventory playerInventory)
     {
-        int m;
-        int l;
-        for (m = 0; m < 3; ++m)
+        createInventory(startX, startY, playerInventory);
+        createHotbar(startX, startY + 58, playerInventory);
+    }
+
+    protected void createInventory(int startX, int startY, PlayerInventory playerInventory)
+    {
+        for (int m = 0; m < 3; ++m)
         {
-            for (l = 0; l < 9; ++l)
+            for (int l = 0; l < 9; ++l)
             {
                 this.addSlot(new Slot(playerInventory, l + m * 9 + 9, startX + l * 18, startY + m * 18));
             }
         }
+    }
 
-        for (m = 0; m < 9; ++m)
+    protected void createHotbar(int startX, int startY, PlayerInventory playerInventory)
+    {
+        for (int m = 0; m < 9; ++m)
         {
-            this.addSlot(new Slot(playerInventory, m, startX + m * 18, startY + 58));
+            this.addSlot(new Slot(playerInventory, m, startX + m * 18, startY));
         }
     }
 

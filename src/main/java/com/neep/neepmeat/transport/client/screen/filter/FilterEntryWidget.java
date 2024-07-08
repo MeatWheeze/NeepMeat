@@ -8,10 +8,11 @@ import com.neep.neepmeat.client.screen.util.Point;
 import com.neep.neepmeat.client.screen.util.Rectangle;
 import com.neep.neepmeat.item.filter.Filter;
 import com.neep.neepmeat.transport.screen_handler.FilterScreenHandler;
-import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.Drawable;
 import net.minecraft.client.gui.Element;
 import net.minecraft.client.gui.Selectable;
+import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.nbt.NbtCompound;
 
 import java.util.ArrayList;
@@ -96,7 +97,7 @@ public abstract class FilterEntryWidget<T extends Filter> extends ScreenSubEleme
     }
 
     @Override
-    public void render(DrawContext context, int mouseX, int mouseY, float delta)
+    public void render(MatrixStack context, int mouseX, int mouseY, float delta)
     {
         int col = isFocused() ? PLCCols.SELECTED.col : PLCCols.BORDER.col;
         GUIUtil.renderBorderInner(context, x, y, w, h, col, 0);
@@ -143,21 +144,17 @@ public abstract class FilterEntryWidget<T extends Filter> extends ScreenSubEleme
         return filter;
     }
 
-    @Override
     public void setFocused(boolean focused)
     {
         this.focused = focused;
-        super.setFocused(focused);
         if (!focused)
         {
             setFocused(null);
-//            children.forEach(c -> c.setFocused(false));
         }
     }
 
-    @Override
     public boolean isFocused()
     {
-        return focused || super.isFocused();
+        return focused;
     }
 }

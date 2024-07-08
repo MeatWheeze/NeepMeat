@@ -37,7 +37,7 @@ public class FilterScreenHandler extends BasicScreenHandler
         this.filter = filter;
 
         createInventory(8, BACKGROUND_HEIGHT - 80, playerInventory);
-        createHotbar(   8, BACKGROUND_HEIGHT - 22, playerInventory);
+        createHotbar(8, BACKGROUND_HEIGHT - 22, playerInventory);
 
         updateToServer = ChannelManager.create(new Identifier(NeepMeat.NAMESPACE, "update_to_server"),
             ChannelFormat.builder(UpdateToServer.class).param(ParamCodec.INT).param(ParamCodec.NBT).build(),
@@ -96,12 +96,12 @@ public class FilterScreenHandler extends BasicScreenHandler
     }
 
     @Override
-    public void onClosed(PlayerEntity player)
+    public void close(PlayerEntity player)
     {
         updateToClient.close();
         updateToServer.close();
         addFilter.close();
-        super.onClosed(player);
+        super.close(player);
     }
 
     public FilterList getFilters()

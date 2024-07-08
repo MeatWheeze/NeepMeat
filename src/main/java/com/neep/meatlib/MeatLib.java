@@ -1,5 +1,6 @@
 package com.neep.meatlib;
 
+import com.mojang.serialization.Lifecycle;
 import com.neep.meatlib.api.event.DataPackPostProcess;
 import com.neep.meatlib.api.event.InitialTicks;
 import com.neep.meatlib.graphics.GraphicsEffects;
@@ -14,8 +15,12 @@ import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.util.MinecraftServerAccess;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
+import net.fabricmc.fabric.api.event.registry.FabricRegistryBuilder;
 import net.fabricmc.fabric.api.lookup.v1.block.BlockApiLookup;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.registry.Registry;
+import net.minecraft.util.registry.RegistryKey;
+import net.minecraft.util.registry.SimpleRegistry;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -55,6 +60,11 @@ public class MeatLib implements ModInitializer
 
     public static BlockApiLookup<Void, Void> VOID_LOOKUP =
             BlockApiLookup.get(new Identifier(NeepMeat.NAMESPACE, "sided_void"), Void.class, Void.class);
+
+    public static <T> FabricRegistryBuilder<T, SimpleRegistry<T>> createSimple(RegistryKey<Registry<T>> key)
+    {
+        return FabricRegistryBuilder.from(new SimpleRegistry<>(key, Lifecycle.stable(), null));
+    }
 
     @Override
     public void onInitialize()
