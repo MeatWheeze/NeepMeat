@@ -1,6 +1,7 @@
 package com.neep.meatlib.util;
 
 import kotlin.jvm.functions.Function0;
+import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.util.math.MatrixStack;
@@ -8,7 +9,6 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import org.jetbrains.annotations.NotNull;
 import org.joml.Matrix4dc;
 import org.joml.Quaterniondc;
 import org.joml.Vector3d;
@@ -16,16 +16,14 @@ import org.valkyrienskies.mod.common.PlayerUtil;
 import org.valkyrienskies.mod.common.VSClientGameUtils;
 import org.valkyrienskies.mod.common.VSGameUtilsKt;
 
-import java.util.function.Function;
-import java.util.function.Supplier;
-
 /**
  * This class should never be initialized if VS2 is not present. It exists to serve as a buffer such that things don't explode if VS2 isn't present, that
  * way it is not a hard dependency.
  */
 public class ValkyrienSkiesUtil {
 
-    public Client CLIENT = new Client();
+    @Environment(EnvType.CLIENT)
+    public Client CLIENT;
 
     public ValkyrienSkiesUtil() {
         if (!FabricLoader.getInstance().isModLoaded("valkyrienskies")) {

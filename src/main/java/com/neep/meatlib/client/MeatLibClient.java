@@ -5,6 +5,7 @@ import com.neep.meatlib.client.network.screen.ScreenPacketClient;
 import com.neep.meatlib.graphics.client.GraphicsEffectClient;
 import com.neep.meatlib.network.BlockEntitySync;
 import com.neep.meatlib.recipe.MeatlibRecipes;
+import com.neep.meatlib.util.ValkyrienSkiesUtil;
 import com.neep.neepmeat.client.item.BlockAttackListenerThings;
 import net.fabricmc.api.ClientModInitializer;
 
@@ -14,6 +15,9 @@ public class MeatLibClient implements ClientModInitializer
     public void onInitializeClient()
     {
         MeatLib.isClient = true;
+
+        if (MeatLib.vsUtil != null)
+            MeatLib.vsUtil.CLIENT = new ValkyrienSkiesUtil.Client();
 
         MeatlibRecipes.initClient();
         GraphicsEffectClient.init();

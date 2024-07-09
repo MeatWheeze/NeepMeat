@@ -28,7 +28,6 @@ public class MeatLib implements ModInitializer
     public static final String NAMESPACE = "meatlib";
     public static final Logger LOGGER = LogManager.getLogger(NAMESPACE);
     public static String CURRENT_NAMESPACE;
-    private static boolean active;
 
     /**
      * This should remain null unless VS2 is loaded.
