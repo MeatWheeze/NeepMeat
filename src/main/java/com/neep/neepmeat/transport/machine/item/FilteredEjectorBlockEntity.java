@@ -22,7 +22,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class FilteredEjectorBlockEntity extends EjectorBlockEntity implements ExtendedScreenHandlerFactory
 {
-    private final FilterList filterList = new FilterList();
+    private final FilterList filterList = new FilterList(4);
 
     public FilteredEjectorBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
     {

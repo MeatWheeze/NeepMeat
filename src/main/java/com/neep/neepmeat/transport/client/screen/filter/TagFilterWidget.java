@@ -8,7 +8,6 @@ import com.neep.neepmeat.item.filter.FilterList;
 import com.neep.neepmeat.item.filter.TagFilter;
 import com.neep.neepmeat.transport.screen_handler.FilterScreenHandler;
 import com.neep.neepmeat.util.TagSuggestions;
-import net.fabricmc.fabric.api.tag.convention.v1.TagUtil;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
@@ -94,7 +93,7 @@ public class TagFilterWidget extends FilterEntryWidget<TagFilter>
         {
             if (keyCode == GLFW.GLFW_KEY_TAB)
             {
-                cycleSuggestion(Screen.hasShiftDown() ? -1 : 1);
+                cycleSuggestion(Screen.hasShiftDown() ? 1 : -1);
             }
             else if (keyCode == GLFW.GLFW_KEY_ENTER)
             {

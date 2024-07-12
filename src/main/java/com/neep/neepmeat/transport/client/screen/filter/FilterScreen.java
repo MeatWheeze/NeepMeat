@@ -204,7 +204,7 @@ public class FilterScreen extends BaseHandledScreen<FilterScreenHandler>
         for (var entry : entries)
         {
             entry.setPos(xOff, yOff);
-            yOff += entry.h() + 1;
+            yOff += entry.h() - 1;
         }
 
         return true;
@@ -272,8 +272,6 @@ public class FilterScreen extends BaseHandledScreen<FilterScreenHandler>
         {
             super.onClick(mouseX, mouseY);
             handler.addFilter(filter);
-
-
         }
 
         @Override

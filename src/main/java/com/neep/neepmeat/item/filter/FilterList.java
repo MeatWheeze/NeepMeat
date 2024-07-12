@@ -18,10 +18,11 @@ public class FilterList implements NbtSerialisable
         FilterList::write, FilterList::read);
 
     private final List<Entry> entries = new ObjectArrayList<>();
+    private final int maxEntries;
 
-    public FilterList()
+    public FilterList(int maxEntries)
     {
-
+        this.maxEntries = maxEntries;
     }
 
     public boolean matches(ItemVariant variant)
@@ -36,7 +37,8 @@ public class FilterList implements NbtSerialisable
 
     public void add(Filter filter)
     {
-        entries.add(new Entry(filter));
+        if (entries.size() < maxEntries)
+            entries.add(new Entry(filter));
     }
 
     public void remove(int i)
@@ -51,12 +53,14 @@ public class FilterList implements NbtSerialisable
 
     public void write(PacketByteBuf buf)
     {
+        buf.writeInt(maxEntries);
         buf.writeNbt(writeNbt(new NbtCompound()));
     }
 
     public static FilterList read(PacketByteBuf buf)
     {
-        FilterList filterList = new FilterList();
+        int maxEntries = buf.readInt();
+        FilterList filterList = new FilterList(maxEntries);
         NbtCompound nbt = buf.readNbt();
 
         // Null check probably unnecessary

@@ -29,7 +29,7 @@ public class FilterScreenHandler extends BasicScreenHandler
 
     public FilterScreenHandler(int syncId, PlayerInventory playerInventory, PacketByteBuf buf)
     {
-        this(new FilterList(), playerInventory, syncId);
+        this(new FilterList(1), playerInventory, syncId);
     }
 
     public FilterScreenHandler(FilterList filter, PlayerInventory playerInventory, int syncId)
@@ -108,6 +108,8 @@ public class FilterScreenHandler extends BasicScreenHandler
         updateToClient.close();
         updateToServer.close();
         addFilter.close();
+        removeFilter.close();
+        setInverted.close();
         super.onClosed(player);
     }
 
