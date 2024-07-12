@@ -23,6 +23,7 @@ public class FilterScreenHandler extends BasicScreenHandler
     public final ChannelManager<UpdateToServer> updateToServer;
     public final ChannelManager<AddFilter> addFilter;
     public final ChannelManager<RemoveFilter> removeFilter;
+    public final ChannelManager<SetInverted> setInverted;
 
     private FilterList filter;
 
@@ -59,9 +60,15 @@ public class FilterScreenHandler extends BasicScreenHandler
                 playerInventory.player
         );
 
+        setInverted = ChannelManager.create(new Identifier(NeepMeat.NAMESPACE, "set_inverted"),
+                ChannelFormat.builder(SetInverted.class).param(ParamCodec.INT).param(ParamCodec.BOOLEAN).build(),
+                playerInventory.player
+        );
+
         updateToServer.receiver(this::updateToServer);
         addFilter.receiver(this::addFilter);
         removeFilter.receiver(this::removeFilter);
+        setInverted.receiver(this::onSetInverted);
     }
 
     private void removeFilter(int index)
@@ -126,6 +133,16 @@ public class FilterScreenHandler extends BasicScreenHandler
         }
     }
 
+    public void setInverted(int index, boolean inverted)
+    {
+        setInverted.emitter().apply(index, inverted);
+    }
+
+    private void onSetInverted(int index, boolean inverted)
+    {
+        filter.getEntries().get(index).setInverted(inverted);
+    }
+
     public interface UpdateToClient
     {
         void apply(FilterList filterList);
@@ -144,5 +161,10 @@ public class FilterScreenHandler extends BasicScreenHandler
     public interface RemoveFilter
     {
         void apply(int index);
+    }
+
+    public interface SetInverted
+    {
+        void apply(int index, boolean inverted);
     }
 }

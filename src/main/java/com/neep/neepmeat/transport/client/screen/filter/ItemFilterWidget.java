@@ -6,6 +6,7 @@ import com.neep.neepmeat.client.screen.util.CheckboxWidget;
 import com.neep.neepmeat.client.screen.util.AbstractClickableWidget;
 import com.neep.neepmeat.client.screen.util.GUIUtil;
 import com.neep.neepmeat.client.screen.util.Point;
+import com.neep.neepmeat.item.filter.FilterList;
 import com.neep.neepmeat.item.filter.ItemFilter;
 import com.neep.neepmeat.transport.screen_handler.FilterScreenHandler;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
@@ -25,9 +26,9 @@ public class ItemFilterWidget extends FilterEntryWidget<ItemFilter>
     private final ItemRenderer itemRenderer = client.getItemRenderer();
     private final StyledTooltipUser parent;
 
-    public ItemFilterWidget(int w, int index, ItemFilter filter, StyledTooltipUser parent, FilterScreenHandler handler)
+    public ItemFilterWidget(int w, int index, FilterList.Entry entry, ItemFilter filter, StyledTooltipUser parent, FilterScreenHandler handler)
     {
-        super(w, 50, index, filter, handler);
+        super(w, 50, index, entry, filter, handler);
         this.parent = parent;
     }
 

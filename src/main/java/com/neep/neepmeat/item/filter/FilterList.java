@@ -4,7 +4,6 @@ import com.neep.meatlib.api.network.ParamCodec;
 import com.neep.meatlib.util.NbtSerialisable;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
-import net.fabricmc.loader.impl.lib.sat4j.specs.Constr;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
@@ -80,6 +79,7 @@ public class FilterList implements NbtSerialisable
         {
             NbtCompound entryNbt = new NbtCompound();
             entryNbt.putString("id", Filter.REGISTRY.getId(entry.filter.getType()).toString());
+            entryNbt.putBoolean("entry_inverted", entry.getInverted());
             list.add(entry.filter.writeNbt(entryNbt));
         }
         nbt.put("entries", list);
@@ -99,6 +99,7 @@ public class FilterList implements NbtSerialisable
             if (constructor != null)
             {
                 Entry entry = new Entry(constructor.create());
+                entry.setInverted(entryNbt.getBoolean("entry_inverted"));
                 entry.update(entryNbt);
                 entries.add(entry);
 
@@ -119,6 +120,7 @@ public class FilterList implements NbtSerialisable
     public static class Entry
     {
         private final Filter filter;
+        private boolean inverted = false;
 
         public Entry(Filter filter)
         {
@@ -127,12 +129,27 @@ public class FilterList implements NbtSerialisable
 
         public boolean matches(ItemVariant variant)
         {
-            return filter.matches(variant);
+            return filter.matches(variant) == !inverted;
         }
 
         public void update(NbtCompound nbt)
         {
             filter.readNbt(nbt);
+        }
+
+        public void setInverted(boolean inverted)
+        {
+            this.inverted = inverted;
+        }
+
+        public Filter getFilter()
+        {
+            return filter;
+        }
+
+        public boolean getInverted()
+        {
+            return inverted;
         }
     }
 }

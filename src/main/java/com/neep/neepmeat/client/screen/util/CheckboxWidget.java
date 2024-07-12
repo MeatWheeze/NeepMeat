@@ -10,7 +10,7 @@ import java.util.function.BooleanSupplier;
 
 public class CheckboxWidget extends AbstractClickableWidget
 {
-    private final TextRenderer textRenderer = client.textRenderer;
+    protected final TextRenderer textRenderer = client.textRenderer;
     private final BooleanSupplier toggled;
     private final ToggleAction onToggle;
 

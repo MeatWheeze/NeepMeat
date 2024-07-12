@@ -4,6 +4,7 @@ import com.neep.neepmeat.api.plc.PLCCols;
 import com.neep.neepmeat.client.screen.NMTextField;
 import com.neep.neepmeat.client.screen.StyledTooltipUser;
 import com.neep.neepmeat.client.screen.util.GUIUtil;
+import com.neep.neepmeat.item.filter.FilterList;
 import com.neep.neepmeat.item.filter.TagFilter;
 import com.neep.neepmeat.transport.screen_handler.FilterScreenHandler;
 import com.neep.neepmeat.util.TagSuggestions;
@@ -27,9 +28,9 @@ public class TagFilterWidget extends FilterEntryWidget<TagFilter>
 {
     private final StyledTooltipUser parent;
 
-    public TagFilterWidget(int w, int index, TagFilter filter, StyledTooltipUser parent, FilterScreenHandler handler)
+    public TagFilterWidget(int w, int index, FilterList.Entry entry, TagFilter filter, StyledTooltipUser parent, FilterScreenHandler handler)
     {
-        super(w, 32, index, filter, handler);
+        super(w, 32, index, entry, filter, handler);
         this.parent = parent;
     }
 
@@ -39,7 +40,7 @@ public class TagFilterWidget extends FilterEntryWidget<TagFilter>
         super.init();
 
         addDrawableChild(new TagTextField(MinecraftClient.getInstance().textRenderer,
-                x() + 2, y() + textRenderer.fontHeight + 2,
+                x() + 2, y() + textRenderer.fontHeight + 4,
                 w - 4, 16,
                 this::update,
                 filter.getTag() != null ? filter.getTag().id().toString() : ""));
@@ -58,7 +59,7 @@ public class TagFilterWidget extends FilterEntryWidget<TagFilter>
     @Override
     public void render(DrawContext context, int mouseX, int mouseY, float delta)
     {
-        GUIUtil.drawText(context, textRenderer, "Tag filter", x() + 2, y() + 2, PLCCols.TEXT.col, false);
+        GUIUtil.drawText(context, textRenderer, "Tag filter", x() + 3, y() + 3, PLCCols.TEXT.col, false);
 
         super.render(context, mouseX, mouseY, delta);
     }

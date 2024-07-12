@@ -1,6 +1,7 @@
 package com.neep.neepmeat.transport.machine.item;
 
 import com.neep.meatlib.item.ItemSettings;
+import com.neep.neepmeat.init.NMSounds;
 import com.neep.neepmeat.transport.ItemTransport;
 import com.neep.neepmeat.util.MiscUtil;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
@@ -9,6 +10,7 @@ import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.sound.SoundCategory;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
@@ -31,13 +33,13 @@ public class FilteredEjectorBlock extends EjectorBlock
             if (player.isSneaking() && player.getMainHandStack().isEmpty())
             {
                 be.changeMode();
-                return ActionResult.SUCCESS;
+                world.playSound(null, pos, NMSounds.CLICK, SoundCategory.BLOCKS, 1, 1);
             }
             else
             {
                 player.openHandledScreen(be);
-                return ActionResult.SUCCESS;
             }
+            return ActionResult.SUCCESS;
         }
         return super.onUse(state, world, pos, player, hand, hit);
     }

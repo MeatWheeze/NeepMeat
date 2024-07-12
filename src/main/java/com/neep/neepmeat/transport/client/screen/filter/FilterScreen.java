@@ -79,25 +79,26 @@ public class FilterScreen extends BaseHandledScreen<FilterScreenHandler>
         // In order make the state of each EntryWidget persistent across syncs, some jank is necessary.
         for (int i = 0; i < filters.size(); i++)
         {
-            Filter filter = filters.getFilter(i);
+            FilterList.Entry entry = filters.getEntries().get(i);
+            Filter filter = entry.getFilter();
             FilterEntryWidget<?> widget;
             if (i < entries.size() && entries.get(i).filter.getType() != filter.getType())
             {
                 // Change type
-                widget = createWidget(i, filter);
+                widget = createWidget(i, entry);
                 entries.set(i, widget);
                 widget.init();
             }
             else if (i == entries.size())
             {
-                widget = createWidget(i, filter);
+                widget = createWidget(i, entry);
                 entries.add(i, widget);
                 widget.init();
             }
             else
             {
                 widget = entries.get(i);
-                widget.updateFilter(filter);
+                widget.updateFilter(entry);
             }
 
             widget.setPos(xOff, yOff);
@@ -231,17 +232,18 @@ public class FilterScreen extends BaseHandledScreen<FilterScreenHandler>
     }
 
     // Jank!
-    private FilterEntryWidget<?> createWidget(int index, Filter filter)
+    private FilterEntryWidget<?> createWidget(int index, FilterList.Entry entry)
     {
         int w = entriesBorder.w() - 4;
-        if (filter instanceof ItemFilter itemFilter)
+        if (entry.getFilter() instanceof ItemFilter itemFilter)
         {
-            return new ItemFilterWidget(w, index, itemFilter, this, handler);
+            return new ItemFilterWidget(w, index, entry, itemFilter, this, handler);
         }
-        else if (filter instanceof TagFilter tagFilter)
+        else if (entry.getFilter() instanceof TagFilter tagFilter)
         {
-            return new TagFilterWidget(w, index, tagFilter, this, handler);
+            return new TagFilterWidget(w, index, entry, tagFilter, this, handler);
         }
+
         return new EmptyFilterWidget(w, index);
     }
 
@@ -285,9 +287,7 @@ public class FilterScreen extends BaseHandledScreen<FilterScreenHandler>
     {
         public EmptyFilterWidget(int w, int index)
         {
-            super(w, 10, index, null, FilterScreen.this.handler);
+            super(w, 10, index, null, null, FilterScreen.this.handler);
         }
     }
-
-    ;
 }
