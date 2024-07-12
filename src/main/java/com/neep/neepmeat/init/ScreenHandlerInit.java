@@ -7,6 +7,7 @@ import com.neep.neepmeat.screen_handler.DisplayPlateScreenHandler;
 import com.neep.neepmeat.machine.separator.SeparatorScreenHandler;
 import com.neep.neepmeat.plc.screen.PLCScreenHandler;
 import com.neep.neepmeat.screen_handler.*;
+import com.neep.neepmeat.transport.client.screen.AdvancedRouterScreen;
 import com.neep.neepmeat.transport.screen_handler.FilterScreenHandler;
 import com.neep.neepmeat.transport.screen_handler.TransportScreenHandlers;
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerType;
@@ -23,6 +24,7 @@ public class ScreenHandlerInit
     public static ScreenHandlerType<BufferScreenHandler> BUFFER_SCREEN_HANDLER;
     public static ScreenHandlerType<ContentDetectorScreenHandler> CONTENT_DETECTOR_SCREEN_HANDLER;
     public static ScreenHandlerType<RouterScreenHandler> ROUTER;
+    public static ScreenHandlerType<AdvancedRouterScreenHandler> ADVANCED_ROUTER;
     public static ScreenHandlerType<StirlingEngineScreenHandler> STIRLING_ENGINE;
     public static ScreenHandlerType<AlloyKilnScreenHandler> ALLOY_KILN;
     public static ScreenHandlerType<AssemblerScreenHandler> ASSEMBLER;
@@ -47,6 +49,7 @@ public class ScreenHandlerInit
         BUFFER_SCREEN_HANDLER = ScreenHandlerRegistry.registerSimple(new Identifier(NeepMeat.NAMESPACE, "buffer_screen"), BufferScreenHandler::new);
         CONTENT_DETECTOR_SCREEN_HANDLER = ScreenHandlerRegistry.registerSimple(new Identifier(NeepMeat.NAMESPACE, "content_detector"), ContentDetectorScreenHandler::new);
         ROUTER = ScreenHandlerRegistry.registerSimple(new Identifier(NeepMeat.NAMESPACE, "router"), RouterScreenHandler::new);
+        ADVANCED_ROUTER = register(NeepMeat.NAMESPACE, "advanced_router", AdvancedRouterScreenHandler::new);
         STIRLING_ENGINE = ScreenHandlerRegistry.registerSimple(new Identifier(NeepMeat.NAMESPACE, "stirling_engine"), StirlingEngineScreenHandler::new);
         ALLOY_KILN = ScreenHandlerRegistry.registerSimple(new Identifier(NeepMeat.NAMESPACE, "alloy_kiln"), AlloyKilnScreenHandler::new);
         ASSEMBLER = ScreenHandlerRegistry.registerSimple(new Identifier(NeepMeat.NAMESPACE, "assembler"), AssemblerScreenHandler::new);

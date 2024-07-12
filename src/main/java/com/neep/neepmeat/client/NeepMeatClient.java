@@ -60,6 +60,7 @@ import com.neep.neepmeat.transport.block.fluid_transport.FilterPipeBlock;
 import com.neep.neepmeat.transport.block.fluid_transport.FluidPipeBlock;
 import com.neep.neepmeat.transport.client.TransportClient;
 import com.neep.neepmeat.transport.client.renderer.WindowPipeRenderer;
+import com.neep.neepmeat.transport.client.screen.AdvancedRouterScreen;
 import com.neep.neepmeat.transport.client.screen.filter.FilterScreen;
 import dev.monarkhes.myron_neepmeat.api.Myron;
 import net.fabricmc.api.ClientModInitializer;
@@ -273,6 +274,7 @@ public class NeepMeatClient implements ClientModInitializer
         HandledScreens.register(ScreenHandlerInit.BUFFER_SCREEN_HANDLER, BufferScreen::new);
         HandledScreens.register(ScreenHandlerInit.CONTENT_DETECTOR_SCREEN_HANDLER, ContentDetectorScreen::new);
         HandledScreens.register(ScreenHandlerInit.ROUTER, RouterScreen::new);
+        HandledScreens.register(ScreenHandlerInit.ADVANCED_ROUTER, AdvancedRouterScreen::new);
         HandledScreens.register(ScreenHandlerInit.STIRLING_ENGINE, StirlingEngineScreen::new);
         HandledScreens.register(ScreenHandlerInit.ALLOY_KILN, AlloyKilnScreen::new);
         HandledScreens.register(ScreenHandlerInit.ASSEMBLER, AssemblerScreen::new);

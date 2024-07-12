@@ -51,6 +51,7 @@ public class ItemTransport
     public static final Block ITEM_PUMP = BlockRegistry.queue(new ItemPumpBlock("item_pump", NMBlocks.block().tooltip(TooltipSupplier.simple(1)), MeatlibBlockSettings.copyOf(NMBlocks.MACHINE_SETTINGS)));
     public static final Block EJECTOR = BlockRegistry.queue(new EjectorBlock("ejector", NMBlocks.block().tooltip(TooltipSupplier.simple(1)), MeatlibBlockSettings.copyOf(NMBlocks.MACHINE_SETTINGS)));
     public static final Block ROUTER = BlockRegistry.queue(new RouterBlock("router", NMBlocks.block().tooltip(TooltipSupplier.simple(1)), MeatlibBlockSettings.copyOf(NMBlocks.MACHINE_SETTINGS)));
+    public static final Block ADVANCED_ROUTER = BlockRegistry.queue(new AdvancedRouterBlock("advanced_router", NMBlocks.block().tooltip(TooltipSupplier.simple(1)), MeatlibBlockSettings.copyOf(ROUTER)));
     public static final Block BUFFER = BlockRegistry.queue(new BufferBlock("buffer", NMBlocks.block().tooltip(TooltipSupplier.simple(1)), MeatlibBlockSettings.copyOf(Blocks.CHEST).tags(AXE_MINEABLE)));
     public static final Block DUMPER = BlockRegistry.queue(new DumperBlock("dumper", NMBlocks.block().tooltip(TooltipSupplier.simple(1)), MeatlibBlockSettings.copyOf(Blocks.OAK_WOOD).tags(AXE_MINEABLE)));
 

@@ -1,0 +1,19 @@
+{
+  "parent": "block/cube",
+  "display": {
+    "firstperson_righthand": {
+      "rotation": [ 0, 135, 0 ],
+      "translation": [ 0, 0, 0 ],
+      "scale": [ 0.40, 0.40, 0.40 ]
+    }
+  },
+  "textures": {
+    "down": "neepmeat:block/router/down",
+    "up": "neepmeat:block/router/up",
+    "north": "neepmeat:block/router/north",
+    "east": "neepmeat:block/router/east",
+    "south": "neepmeat:block/router/south",
+    "west": "neepmeat:block/router/west",
+    "particle": "#down"
+  }
+}

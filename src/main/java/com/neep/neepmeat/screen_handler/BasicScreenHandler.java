@@ -23,7 +23,8 @@ public abstract class BasicScreenHandler extends ScreenHandler
         this.inventory = inventory;
         this.playerInventory = playerInventory;
 
-        if (inventory != null) inventory.onOpen(playerInventory.player);
+        if (inventory != null)
+            inventory.onOpen(playerInventory.player);
 
         if (propertyDelegate != null)
             this.addProperties(delegate);

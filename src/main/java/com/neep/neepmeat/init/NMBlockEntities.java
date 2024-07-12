@@ -163,7 +163,7 @@ public class NMBlockEntities
     public static BlockEntityType<ItemPumpBlockEntity> ITEM_PUMP;
     public static BlockEntityType<EjectorBlockEntity> EJECTOR;
     public static BlockEntityType<RouterBlockEntity> ROUTER;
-
+    public static BlockEntityType<AdvancedRouterBlockEntity> ADVANCED_ROUTER;
 
     public static BlockEntityType<MixerBlockEntity> MIXER;
     public static BlockEntityType<GrinderBlockEntity> CRUSHER;
@@ -324,7 +324,8 @@ public class NMBlockEntities
         ItemStorage.SIDED.registerForBlockEntity(InventoryDetectorBlockEntity::getStorage, INVENTORY_DETECTOR);
         EJECTOR = register("ejector", EjectorBlockEntity::new, ItemTransport.EJECTOR);
         ITEM_PUMP = register("item_pump", ItemPumpBlockEntity::new, ItemTransport.ITEM_PUMP);
-        ROUTER = register("router", RouterBlockEntity::new, ItemTransport.ROUTER);
+        ROUTER = register("router", (p, s) -> new RouterBlockEntity(ROUTER, p, s), ItemTransport.ROUTER);
+        ADVANCED_ROUTER = register("advanced_router", (p, s) -> new AdvancedRouterBlockEntity(ADVANCED_ROUTER, p, s), ItemTransport.ADVANCED_ROUTER);
         DUMPER = register("dumper", DumperBlockEntity::new, ItemTransport.DUMPER);
         ItemStorage.SIDED.registerForBlockEntity(DumperBlockEntity::getStorage, DUMPER);
 

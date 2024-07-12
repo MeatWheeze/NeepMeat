@@ -37,21 +37,12 @@ public class RouterBlock extends BaseBlock implements BlockEntityProvider, ItemP
     {
         if (!world.isClient)
         {
-            NamedScreenHandlerFactory screenHandlerFactory = state.createScreenHandlerFactory(world, pos);
-            if (screenHandlerFactory != null)
+            if (world.getBlockEntity(pos) instanceof RouterBlockEntity be)
             {
-                player.openHandledScreen(screenHandlerFactory);
+                player.openHandledScreen(be);
             }
         }
         return ActionResult.SUCCESS;
-    }
-
-    @Override
-    @Nullable
-    public NamedScreenHandlerFactory createScreenHandlerFactory(BlockState state, World world, BlockPos pos)
-    {
-        BlockEntity blockEntity = world.getBlockEntity(pos);
-        return blockEntity instanceof NamedScreenHandlerFactory ? (NamedScreenHandlerFactory) blockEntity : null;
     }
 
     @Override
