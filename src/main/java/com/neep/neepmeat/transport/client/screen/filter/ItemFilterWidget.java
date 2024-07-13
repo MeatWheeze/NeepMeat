@@ -1,5 +1,6 @@
 package com.neep.neepmeat.transport.client.screen.filter;
 
+import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.api.plc.PLCCols;
 import com.neep.neepmeat.client.screen.StyledTooltipUser;
 import com.neep.neepmeat.client.screen.util.CheckboxWidget;
@@ -28,7 +29,7 @@ public class ItemFilterWidget extends FilterEntryWidget<ItemFilter>
 
     public ItemFilterWidget(int w, int index, FilterList.Entry entry, ItemFilter filter, StyledTooltipUser parent, FilterScreenHandler handler)
     {
-        super(w, 50, index, entry, filter, handler);
+        super(w, 50, index, NeepMeat.translationKey("screen", "filter.item_filter"), entry, filter, handler);
         this.parent = parent;
     }
 
@@ -64,16 +65,6 @@ public class ItemFilterWidget extends FilterEntryWidget<ItemFilter>
             updateToServer();
         }));
     }
-
-
-    @Override
-    public void render(DrawContext context, int mouseX, int mouseY, float delta)
-    {
-        super.render(context, mouseX, mouseY, delta);
-
-        GUIUtil.drawText(context, textRenderer, Text.of("Item filter"), x + 3, y + 3, PLCCols.TEXT.col, true);
-    }
-
 
     class ItemSlotWidget extends AbstractClickableWidget implements Point.Mutable
     {

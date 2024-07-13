@@ -23,6 +23,7 @@ public abstract class FilterEntryWidget<T extends Filter> extends ScreenSubEleme
     protected final List<ClickableWidget> positionables = new ArrayList<>();
     protected boolean focused;
 
+    private final Text name;
     protected FilterList.Entry entry;
     protected T filter;
 
@@ -32,11 +33,12 @@ public abstract class FilterEntryWidget<T extends Filter> extends ScreenSubEleme
     protected int h;
     protected final int w;
 
-    public FilterEntryWidget(int w, int h, int index, FilterList.Entry entry, T filter, FilterScreenHandler handler)
+    public FilterEntryWidget(int w, int h, int index, Text name, FilterList.Entry entry, T filter, FilterScreenHandler handler)
     {
         this.w = w;
         this.h = h;
         this.index = index;
+        this.name = name;
         this.entry = entry;
         this.filter = filter;
         this.handler = handler;
@@ -109,6 +111,8 @@ public abstract class FilterEntryWidget<T extends Filter> extends ScreenSubEleme
     {
         int col = isFocused() ? PLCCols.SELECTED.col : PLCCols.BORDER.col;
         GUIUtil.renderBorderInner(context, x, y, w, h, col, 0);
+
+        GUIUtil.drawText(context, textRenderer, name, x() + 3, y() + 3, PLCCols.TEXT.col, false);
 
         super.render(context, mouseX, mouseY, delta);
     }

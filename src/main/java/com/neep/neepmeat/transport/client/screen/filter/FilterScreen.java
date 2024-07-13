@@ -285,7 +285,7 @@ public class FilterScreen extends BaseHandledScreen<FilterScreenHandler>
     {
         public EmptyFilterWidget(int w, int index)
         {
-            super(w, 10, index, null, null, FilterScreen.this.handler);
+            super(w, 10, index, Text.empty(), null, null, FilterScreen.this.handler);
         }
     }
 }

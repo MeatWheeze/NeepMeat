@@ -1,5 +1,6 @@
 package com.neep.neepmeat.transport.client.screen.filter;
 
+import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.api.plc.PLCCols;
 import com.neep.neepmeat.client.screen.NMTextField;
 import com.neep.neepmeat.client.screen.StyledTooltipUser;
@@ -29,7 +30,7 @@ public class TagFilterWidget extends FilterEntryWidget<TagFilter>
 
     public TagFilterWidget(int w, int index, FilterList.Entry entry, TagFilter filter, StyledTooltipUser parent, FilterScreenHandler handler)
     {
-        super(w, 32, index, entry, filter, handler);
+        super(w, 32, index, NeepMeat.translationKey("screen", "filter.tag_filter"), entry, filter, handler);
         this.parent = parent;
     }
 
@@ -53,14 +54,6 @@ public class TagFilterWidget extends FilterEntryWidget<TagFilter>
             filter.setTag(TagKey.of(Registries.ITEM.getKey(), id));
             handler.updateToServer.emitter().apply(index, filter.writeNbt(new NbtCompound()));
         }
-    }
-
-    @Override
-    public void render(DrawContext context, int mouseX, int mouseY, float delta)
-    {
-        GUIUtil.drawText(context, textRenderer, "Tag filter", x() + 3, y() + 3, PLCCols.TEXT.col, false);
-
-        super.render(context, mouseX, mouseY, delta);
     }
 
     private class TagTextField extends NMTextField

@@ -284,6 +284,7 @@
   "block.neepmeat.item_pump": "Item Pump",
   "block.neepmeat.item_pump.lore_0": "Requests and ejects stacks of sixteen into connected pipes.",
   "block.neepmeat.ejector": "Ejector",
+  "block.neepmeat.filtered_ejector": "Filtered Ejector",
   "block.neepmeat.ejector.lore_0": "Ejects single items into connected pipes.",
   "block.neepmeat.buffer": "Buffer",
   "block.neepmeat.chute": "Chute",
@@ -787,6 +788,9 @@
 
   "screen.neepmeat.advanced_router": "Advanced Router",
   "screen.neepmeat.advanced_router.choose_side": "Configure sides",
+
+  "screen.neepmeat.filter.item_filter": "Item filter",
+  "screen.neepmeat.filter.tag_filter": "Tag filter",
 
   "button.neepmeat.assembler.select": "Select Output Slots",
 
