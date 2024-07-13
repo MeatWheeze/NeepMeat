@@ -325,7 +325,9 @@ public class NMBlockEntities
         EJECTOR = register("ejector", EjectorBlockEntity::new, ItemTransport.EJECTOR);
         ITEM_PUMP = register("item_pump", ItemPumpBlockEntity::new, ItemTransport.ITEM_PUMP);
         ROUTER = register("router", (p, s) -> new RouterBlockEntity(ROUTER, p, s), ItemTransport.ROUTER);
+        ItemStorage.SIDED.registerForBlockEntity(RouterBlockEntity::getStorage, ROUTER);
         ADVANCED_ROUTER = register("advanced_router", (p, s) -> new AdvancedRouterBlockEntity(ADVANCED_ROUTER, p, s), ItemTransport.ADVANCED_ROUTER);
+        ItemStorage.SIDED.registerForBlockEntity(RouterBlockEntity::getStorage, ADVANCED_ROUTER);
         DUMPER = register("dumper", DumperBlockEntity::new, ItemTransport.DUMPER);
         ItemStorage.SIDED.registerForBlockEntity(DumperBlockEntity::getStorage, DUMPER);
 
