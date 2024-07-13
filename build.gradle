@@ -113,8 +113,8 @@ dependencies {
 	}
 
 	// VS2
-	modApi("org.valkyrienskies:valkyrienskies-1201-fabric:${project.vs2_version}") { transitive = false }
-//	modCompileOnly("org.valkyrienskies:valkyrienskies-1201-fabric:${project.vs2_version}") { transitive = false }
+//	modApi("org.valkyrienskies:valkyrienskies-1201-fabric:${project.vs2_version}") { transitive = false }
+	modCompileOnly("org.valkyrienskies:valkyrienskies-1201-fabric:${project.vs2_version}") { transitive = false }
 	implementation("org.valkyrienskies.core:api:${project.vscore_version}") {
 		exclude group: 'org.joml', module: ''
 	}
