@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "e",
+    "b"
+  ],
+  "key": {
+    "e": {
+      "item": "neepmeat:ejector"
+    },
+    "b": {
+      "item": "neepmeat:brain_rough"
+    }
+  },
+  "result": {
+    "item": "neepmeat:filtered_ejector",
+    "count": 1
+  }
+}
