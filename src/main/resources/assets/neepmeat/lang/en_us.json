@@ -785,6 +785,9 @@
   "container.neepmeat.router": "Item Sorter",
   "container.neepmeat.alloy_kiln": "Alloy Kiln",
 
+  "screen.neepmeat.advanced_router": "Advanced Router",
+  "screen.neepmeat.advanced_router.choose_side": "Configure sides",
+
   "button.neepmeat.assembler.select": "Select Output Slots",
 
   "screen.neepmeat.fluid_rationer": "Fluid Rationer",

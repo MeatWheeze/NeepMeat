@@ -61,7 +61,7 @@ public class ScreenHandlerInit
         DISPLAY_PLATE = registerExtended(NeepMeat.NAMESPACE, "display_plate", DisplayPlateScreenHandler::new);
         FABRICATOR = registerExtended(NeepMeat.NAMESPACE, "fabricator", FabricatorScreenHandler::new);
         SMALL_COMPRESSOR = register(NeepMeat.NAMESPACE, "small_compressor", SmallCompressorScreenHandler::new);
-        FILTER = registerExtended(NeepMeat.NAMESPACE, "filter", FilterScreenHandler::new);
+        FILTER = register(NeepMeat.NAMESPACE, "filter", FilterScreenHandler::new);
 
         LIVING_MACHINE = registerExtended(NeepMeat.NAMESPACE, "living_machine", LivingMachineScreenHandler::new);
         ITEM_OUTPUT = register(NeepMeat.NAMESPACE, "item_output", ItemOutputScreenHandler::new);

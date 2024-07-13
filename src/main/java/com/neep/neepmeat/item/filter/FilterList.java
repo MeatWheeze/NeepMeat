@@ -51,6 +51,11 @@ public class FilterList implements NbtSerialisable
         return entries.size();
     }
 
+    public boolean isEmpty()
+    {
+        return entries.size() == 0;
+    }
+
     public void write(PacketByteBuf buf)
     {
         buf.writeInt(maxEntries);

@@ -14,13 +14,14 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.PacketByteBuf;
+import net.minecraft.screen.NamedScreenHandlerFactory;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
 import org.jetbrains.annotations.Nullable;
 
-public class FilteredEjectorBlockEntity extends EjectorBlockEntity implements ExtendedScreenHandlerFactory
+public class FilteredEjectorBlockEntity extends EjectorBlockEntity implements NamedScreenHandlerFactory
 {
     private final FilterList filterList = new FilterList(4);
 
@@ -88,11 +89,5 @@ public class FilteredEjectorBlockEntity extends EjectorBlockEntity implements Ex
     public ScreenHandler createMenu(int syncId, PlayerInventory playerInventory, PlayerEntity player)
     {
         return new FilterScreenHandler(filterList, playerInventory, syncId);
-    }
-
-    @Override
-    public void writeScreenOpeningData(ServerPlayerEntity player, PacketByteBuf buf)
-    {
-
     }
 }

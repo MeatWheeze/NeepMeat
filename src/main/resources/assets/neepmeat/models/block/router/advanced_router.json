@@ -8,12 +8,12 @@
     }
   },
   "textures": {
-    "down": "neepmeat:block/router/down",
-    "up": "neepmeat:block/router/up",
-    "north": "neepmeat:block/router/north",
-    "east": "neepmeat:block/router/east",
-    "south": "neepmeat:block/router/south",
-    "west": "neepmeat:block/router/west",
+    "down": "neepmeat:block/advanced_router/down",
+    "up": "neepmeat:block/advanced_router/up",
+    "north": "neepmeat:block/advanced_router/north",
+    "east": "neepmeat:block/advanced_router/east",
+    "south": "neepmeat:block/advanced_router/south",
+    "west": "neepmeat:block/advanced_router/west",
     "particle": "#down"
   }
 }

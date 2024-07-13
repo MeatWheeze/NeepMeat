@@ -2,16 +2,19 @@ package com.neep.neepmeat.transport.block.item_transport.entity;
 
 import com.neep.neepmeat.item.filter.FilterList;
 import com.neep.neepmeat.screen_handler.AdvancedRouterScreenHandler;
+import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.util.Util;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
@@ -31,6 +34,18 @@ public class AdvancedRouterBlockEntity extends RouterBlockEntity
     public AdvancedRouterBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
     {
         super(type, pos, state);
+    }
+
+    @Nullable
+    public Direction getOutputDirection(ItemVariant item)
+    {
+        for (Direction direction : Direction.values())
+        {
+            FilterList filterList = filters.get(direction.ordinal());
+            if (filterList.matches(item))
+                return direction;
+        }
+        return null;
     }
 
     @Override
@@ -64,6 +79,6 @@ public class AdvancedRouterBlockEntity extends RouterBlockEntity
     @Override
     public ScreenHandler createMenu(int syncId, PlayerInventory inv, PlayerEntity player)
     {
-        return new AdvancedRouterScreenHandler(syncId, inv);
+        return new AdvancedRouterScreenHandler(syncId, inv, filters);
     }
 }

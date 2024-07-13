@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "igi",
+    "gbg",
+    "igi"
+  ],
+  "key": {
+    "g": {
+      "item": "neepmeat:whisper_brass_ingot"
+    },
+    "b": {
+      "item": "neepmeat:enlightened_brain"
+    },
+    "i": {
+      "item": "minecraft:iron_ingot"
+    }
+  },
+  "result": {
+    "item": "neepmeat:advanced_router",
+    "count": 1
+  }
+}

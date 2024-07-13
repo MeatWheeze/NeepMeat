@@ -22,8 +22,8 @@ import org.jetbrains.annotations.Nullable;
 
 public class RouterBlockEntity extends BlockEntity implements NamedScreenHandlerFactory
 {
-    public ImplementedInventory inventory = new RouterInventory();
-    public static Direction[] DIRECTIONS = {Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST, Direction.UP, Direction.DOWN};
+    protected final ImplementedInventory inventory = new RouterInventory();
+    public static final Direction[] DIRECTIONS = {Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST, Direction.UP, Direction.DOWN};
 
     public RouterBlockEntity(BlockPos pos, BlockState state)
     {

@@ -11,8 +11,11 @@ import com.neep.neepmeat.screen_handler.BasicScreenHandler;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.network.PacketByteBuf;
+import net.minecraft.screen.NamedScreenHandlerFactory;
+import net.minecraft.screen.ScreenHandler;
+import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
+import org.jetbrains.annotations.Nullable;
 
 public class FilterScreenHandler extends BasicScreenHandler
 {
@@ -27,7 +30,7 @@ public class FilterScreenHandler extends BasicScreenHandler
 
     private FilterList filter;
 
-    public FilterScreenHandler(int syncId, PlayerInventory playerInventory, PacketByteBuf buf)
+    public FilterScreenHandler(int syncId, PlayerInventory playerInventory)
     {
         this(new FilterList(1), playerInventory, syncId);
     }
@@ -168,5 +171,28 @@ public class FilterScreenHandler extends BasicScreenHandler
     public interface SetInverted
     {
         void apply(int index, boolean inverted);
+    }
+
+    public static class Factory implements NamedScreenHandlerFactory
+    {
+        private final FilterList filterList;
+
+        public Factory(FilterList filterList)
+        {
+            this.filterList = filterList;
+        }
+
+        @Override
+        public Text getDisplayName()
+        {
+            return Text.empty();
+        }
+
+        @Nullable
+        @Override
+        public ScreenHandler createMenu(int syncId, PlayerInventory playerInventory, PlayerEntity player)
+        {
+            return new FilterScreenHandler(filterList, playerInventory, syncId);
+        }
     }
 }

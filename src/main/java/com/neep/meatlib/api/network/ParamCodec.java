@@ -4,11 +4,12 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.util.Identifier;
 
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.IntStream;
 
 public interface ParamCodec<T>
 {
-
     Class<T> clazz();
 
     T decode(PacketByteBuf buf);
@@ -21,6 +22,23 @@ public interface ParamCodec<T>
     ParamCodec<UUID> UUID = of(UUID.class, (o, buf) -> buf.writeUuid(o), PacketByteBuf::readUuid);
     ParamCodec<NbtCompound> NBT = of(NbtCompound.class, (o, buf) -> buf.writeNbt(o), PacketByteBuf::readNbt);
     ParamCodec<Identifier> IDENTIFIER = of(Identifier.class, (o, buf) -> buf.writeIdentifier(o), PacketByteBuf::readIdentifier);
+
+    static <T> ParamCodec<List<T>> list(ParamCodec<T> codec)
+    {
+        return ParamCodec.<List<T>>of((Class<List<T>>) (Object) List.class, (o, buf) ->
+        {
+            buf.writeInt(o.size());
+            for (T t : o)
+            {
+                codec.encode(t, buf);
+            }
+        },
+        buf ->
+        {
+            int size = buf.readInt();
+            return IntStream.range(0, size).mapToObj(i -> codec.decode(buf)).toList();
+        });
+    }
 
     static <T> ParamCodec<T> of(Class<T> clazz, Encoder<T> encoder, Decoder<T> decoder)
     {
