@@ -2,10 +2,7 @@ package com.neep.meatweapons.item;
 
 import com.google.common.collect.Iterators;
 import com.google.common.collect.Multimap;
-import com.neep.meatlib.item.ClientBlockAttackListener;
-import com.neep.meatlib.item.CustomEnchantable;
-import com.neep.meatlib.item.MeatlibItem;
-import com.neep.meatlib.item.PoweredItem;
+import com.neep.meatlib.item.*;
 import com.neep.meatlib.registry.ItemRegistry;
 import com.neep.meatweapons.MWItems;
 import com.neep.meatweapons.MeatWeapons;
@@ -133,7 +130,7 @@ public class AssaultDrillItem extends Item implements MeatlibItem, GeoItem, Powe
     @Override
     public void appendTooltip(ItemStack itemStack, World world, List<Text> tooltip, TooltipContext tooltipContext)
     {
-        tooltip.add(Text.translatable("item." + MeatWeapons.NAMESPACE + "." + registryName + ".lore"));
+        TooltipSupplier.wrapLines(tooltip, Text.translatable("item." + MeatWeapons.NAMESPACE + "." + registryName + ".lore"));
         tooltip.add(Text.translatable("item." + MeatWeapons.NAMESPACE + "." + registryName + ".damage_per_tick", getDamage(itemStack, null) / 2f).formatted(Formatting.BLUE));
     }
 
