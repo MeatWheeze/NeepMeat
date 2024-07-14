@@ -1,6 +1,6 @@
 package com.neep.neepmeat.api.processing.random_ores;
 
-import com.neep.neepmeat.NeepMeat;
+import it.unimi.dsi.fastutil.floats.FloatObjectPair;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.loot.LootTables;
@@ -13,23 +13,27 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 public class RandomOreProvider
 {
     private final Random random;
+    private final List<FloatObjectPair<RandomOres.Entry>> entries;
     private final WeightedMap<RandomOres.Entry> entryMap = new WeightedMap<>();
 
     public RandomOreProvider(World world, BlockPos pos, Random random, List<RandomOres.Entry> entries)
     {
         this.random = random;
+        this.entries = new ArrayList<>();
 
         for (var entry : entries)
         {
             float mw = entry.modifiedWeight(world, pos);
 //            NeepMeat.LOGGER.info("State: {}, Weight: {}, Modified Weight: {}", entry.state(), entry.weight(), mw);
             entryMap.put(mw, entry);
+            this.entries.add(FloatObjectPair.of(mw, entry));
         }
     }
 
@@ -57,5 +61,16 @@ public class RandomOreProvider
                     .addOptional(LootContextParameters.BLOCK_ENTITY, null);
             return entry.state().getDroppedStacks(builder);
         }
+    }
+
+    public String print()
+    {
+        StringBuilder builder = new StringBuilder();
+         for (int i = 0; i < entries.size(); ++i)
+         {
+             var pair = entries.get(i);
+             builder.append(pair.value().state()).append(": ").append(pair.firstFloat()).append("\n");
+         }
+         return builder.toString();
     }
 }
