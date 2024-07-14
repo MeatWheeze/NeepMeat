@@ -1,5 +1,6 @@
 package com.neep.meatweapons.item.meatgun;
 
+import com.neep.meatlib.MeatLib;
 import com.neep.meatweapons.client.meatgun.RecoilManager;
 import com.neep.meatweapons.meatgun.module.BasePistolModule;
 import com.neep.meatweapons.meatgun.module.MeatgunModule;
@@ -7,6 +8,8 @@ import com.neep.meatweapons.network.MWAttackC2SPacket;
 import com.neep.meatweapons.network.MeatgunModuleNetwork;
 import dev.onyxstudios.cca.api.v3.component.ComponentKey;
 import dev.onyxstudios.cca.api.v3.item.ItemComponent;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -25,6 +28,14 @@ public class MeatgunComponentImpl extends ItemComponent implements MeatgunCompon
     private boolean dirty = true;
     private boolean invalidated = false;
     private final Listener listener = new Listener();
+
+    // We don't know anything immediately after instantiation, so this field must be set in tick().
+    // Not 100% reliable.
+    private boolean isClient = MeatLib.isClient;
+
+    // Eeek! A bit unsafe, but normally fine.
+    @Environment(EnvType.CLIENT)
+    private MeatgunAnimationManager animationManager;
 
     // TODO: cache modules in UUID-object map
 
@@ -93,21 +104,35 @@ public class MeatgunComponentImpl extends ItemComponent implements MeatgunCompon
     }
 
     @Override
-    public void tick(PlayerEntity player)
+    public void commonTick(PlayerEntity player)
     {
         root.tick(player);
 
-        if (dirty)
+        if (!player.getWorld().isClient())
         {
-            root.writeNbt(getOrCreateRootTag());
-            dirty = false;
-        }
+            if (dirty)
+            {
+                root.writeNbt(getOrCreateRootTag());
+                dirty = false;
+            }
 
-        if (invalidated)
-        {
-            root.readNbt(getOrCreateRootTag());
-            invalidated = false;
+            if (invalidated)
+            {
+                root.readNbt(getOrCreateRootTag());
+                invalidated = false;
+            }
         }
+    }
+
+    @Override
+    public void clientTick(PlayerEntity player)
+    {
+        isClient = true;
+
+        if (animationManager == null)
+            animationManager = new MeatgunAnimationManager(this);
+
+        animationManager.tick();
     }
 
     @Override
@@ -156,8 +181,11 @@ public class MeatgunComponentImpl extends ItemComponent implements MeatgunCompon
     public void onTagInvalidated()
     {
         super.onTagInvalidated();
-        dirty = true;
-        invalidated = true;
+        if (!isClient)
+        {
+            dirty = true;
+            invalidated = true;
+        }
     }
 
     public int getInt()
@@ -197,7 +225,8 @@ public class MeatgunComponentImpl extends ItemComponent implements MeatgunCompon
         @Override
         public void markDirty()
         {
-            MeatgunComponentImpl.this.markDirty();
+            if (!isClient)
+                MeatgunComponentImpl.this.markDirty();
         }
     }
 }

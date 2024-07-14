@@ -8,6 +8,8 @@ import java.util.List;
 
 public class BaseStaffModule extends AbstractMeatgunModule
 {
+    private long startTime = 0;
+
     public BaseStaffModule(MeatgunComponent.Listener listener)
     {
         super(listener);
@@ -28,5 +30,31 @@ public class BaseStaffModule extends AbstractMeatgunModule
     public static BaseStaffModule fromNbt(MeatgunComponent.Listener listener, NbtCompound nbtCompound)
     {
         return new BaseStaffModule(listener);
+    }
+
+    @Override
+    public NbtCompound writeNbt(NbtCompound nbt)
+    {
+        super.writeNbt(nbt);
+        nbt.putLong("animation_start", startTime);
+        return nbt;
+    }
+
+    @Override
+    public void readNbt(NbtCompound nbt)
+    {
+        super.readNbt(nbt);
+        this.startTime = nbt.getLong("animation_start");
+    }
+
+    public void animateTest(long time)
+    {
+        startTime = time;
+        listener.markDirty();
+    }
+
+    public long getAnimationStart()
+    {
+        return startTime;
     }
 }

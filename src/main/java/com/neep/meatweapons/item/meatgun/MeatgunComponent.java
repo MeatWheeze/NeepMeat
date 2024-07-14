@@ -22,7 +22,9 @@ public interface MeatgunComponent extends Component
 
     void tickTrigger(World world, PlayerEntity player, ItemStack stack, int id, double pitch, double yaw, MWAttackC2SPacket.HandType handType);
 
-    void tick(PlayerEntity player);
+    void commonTick(PlayerEntity player);
+
+    void clientTick(PlayerEntity player);
 
     void markDirty();
 

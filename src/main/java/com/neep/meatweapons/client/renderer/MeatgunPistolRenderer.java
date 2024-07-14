@@ -24,6 +24,7 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Arm;
 import net.minecraft.util.Hand;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RotationAxis;
 import org.joml.Matrix4f;
 
@@ -69,8 +70,16 @@ public class MeatgunPistolRenderer extends BuiltinModelItemRenderer implements B
         if (mode.isFirstPerson())
         {
             float lastFrame = !client.isPaused() ? client.getLastFrameDuration() : 0;
-            recoil.horAmount = Math.max(0, recoil.horAmount - recoil.horReturnSpeed * lastFrame);
-            recoil.amount = Math.max(0, recoil.amount - recoil.returnSpeed * lastFrame);
+
+            float prevHorAmount = recoil.horAmount;
+            recoil.horAmount = recoil.horAmount - Math.signum(recoil.horAmount) * recoil.horReturnSpeed * lastFrame;
+            if (Math.signum(prevHorAmount) != Math.signum(recoil.horAmount))
+                recoil.horReturnSpeed = 0;
+
+            float prevAmount = recoil.amount;
+            recoil.amount = recoil.amount - Math.signum(recoil.amount) * recoil.returnSpeed * lastFrame;
+            if (Math.signum(prevAmount) != Math.signum(recoil.amount))
+                recoil.returnSpeed = 0;
 
             transformRecoil(matrices, recoil);
         }

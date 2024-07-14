@@ -55,8 +55,18 @@ public abstract class MeatgunItem extends BaseItem implements Meatgun, WeakTwoHa
 
         if (entity instanceof PlayerEntity player)
         {
-            MWComponents.MEATGUN.maybeGet(stack).ifPresentOrElse(c -> c.tick(player),
-                    () -> MeatLib.LOGGER.error("Meatgun component has not been registered for item {}", this));
+            @Nullable MeatgunComponent component = MWComponents.MEATGUN.getNullable(stack);
+            if (component != null)
+            {
+                component.commonTick(player);
+
+                if (world.isClient())
+                    component.clientTick(player);
+            }
+            else
+            {
+                MeatLib.LOGGER.error("Meatgun component has not been registered for item {}", this);
+            }
         }
     }
 

@@ -28,6 +28,7 @@ public class MeatgunNetwork
     {
         UP,
         DOWN,
-        BACK
+        BACK,
+        FORWARDS
     }
 }

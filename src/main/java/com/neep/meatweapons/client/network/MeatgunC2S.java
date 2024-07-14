@@ -1,6 +1,5 @@
 package com.neep.meatweapons.client.network;
 
-import com.neep.meatweapons.client.meatgun.RecoilManager;
 import com.neep.meatweapons.init.MWComponents;
 import com.neep.meatweapons.item.meatgun.MeatgunComponent;
 import com.neep.meatweapons.network.MeatgunNetwork;
