@@ -1,5 +1,6 @@
 package com.neep.meatweapons.client.renderer.meatgun;
 
+import com.neep.meatweapons.meatgun.module.HalberdModule;
 import com.neep.meatweapons.meatgun.module.MeatgunModule;
 import com.neep.meatweapons.meatgun.module.MeatgunModules;
 import net.fabricmc.api.EnvType;
@@ -40,5 +41,6 @@ public class MeatgunModuleRenderers
         register(MeatgunModules.DOUBLE_CAROUSEL, DoubleCarouselModuleRenderer::new);
         register(MeatgunModules.UNDERBARREL, UnderbarrelModuleRenderer::new);
         register(MeatgunModules.BATTERY, BatteryModuleRenderer::new);
+        register(MeatgunModules.HALBERD, HalberdModuleRenderer::new);
     }
 }

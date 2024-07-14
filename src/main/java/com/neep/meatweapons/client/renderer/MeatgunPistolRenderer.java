@@ -30,17 +30,12 @@ import org.joml.Matrix4f;
 @Environment(EnvType.CLIENT)
 public class MeatgunPistolRenderer extends BuiltinModelItemRenderer implements BuiltinItemRendererRegistry.DynamicItemRenderer
 {
+    private final MinecraftClient client;
+
     public MeatgunPistolRenderer()
     {
         super(MinecraftClient.getInstance().getBlockEntityRenderDispatcher(), MinecraftClient.getInstance().getEntityModelLoader());
-    }
-
-    public static void transformRecoil(MatrixStack matrices, RecoilManager recoil)
-    {
-        matrices.translate(0, 0, recoil.horAmount);
-        matrices.translate(0, 0, 1.4);
-        matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(recoil.amount));
-        matrices.translate(0, 0, -1.4);
+        this.client = MinecraftClient.getInstance();
     }
 
     @Override
@@ -50,7 +45,6 @@ public class MeatgunPistolRenderer extends BuiltinModelItemRenderer implements B
         matrices.pop();
         matrices.push();
 
-        MinecraftClient client = MinecraftClient.getInstance();
         AbstractClientPlayerEntity player = client.player;
         PlayerEntityRenderer playerEntityRenderer = (PlayerEntityRenderer) MinecraftClient.getInstance().getEntityRenderDispatcher().getRenderer(player);
 
@@ -63,6 +57,12 @@ public class MeatgunPistolRenderer extends BuiltinModelItemRenderer implements B
         transformation.apply(leftHanded, matrices);
         matrices.translate(-0.5F, -0.5F, -0.5F);
 
+        renderInner(stack, player, playerEntityRenderer, mode, matrices, vcp, mainHand, leftHanded, light, overlay);
+    }
+
+    // It's easier to override this one
+    protected void renderInner(ItemStack stack, AbstractClientPlayerEntity player, PlayerEntityRenderer playerEntityRenderer, ModelTransformationMode mode, MatrixStack matrices, VertexConsumerProvider vcp, boolean mainHand, boolean leftHanded, int light, int overlay)
+    {
         // Step recoil
         MeatgunComponent component = MWComponents.MEATGUN.get(stack);
         RecoilManager recoil = component.getRecoil();
@@ -75,34 +75,50 @@ public class MeatgunPistolRenderer extends BuiltinModelItemRenderer implements B
             transformRecoil(matrices, recoil);
         }
 
-//        float s = MathHelper.sin(AnimationTickHolder.getRenderTime() / 5) / 2 + 0.5f;
-
-        float modelScale = 1.2f;
-        Matrix4f firstPersonModelTransform = new Matrix4f()
-                .scaleAround(modelScale, modelScale, modelScale, 8 / 16f, 0 / 16f, 0 / 16f)
-                .translate(0, 3.5f / 16f, -9 / 16f)
-                ;
+        Matrix4f firstPersonModelTransform = getFirstPersonModelTransform();
 
         // Recursive module rendering
         matrices.push();
         if (mode.isFirstPerson())
-        {
             matrices.multiplyPositionMatrix(firstPersonModelTransform);
-        }
+
         var root = component.getRoot();
         renderRecursive(matrices, root, stack, component, mode, vcp,
                 MinecraftClient.getInstance().world.getTime(),
                 MinecraftClient.getInstance().getTickDelta(), light, overlay);
         matrices.pop();
 
-        // Particles
+        renderParticles(matrices, mode, firstPersonModelTransform, vcp, light, overlay);
+
+        renderArms(matrices, mode, player, playerEntityRenderer, vcp, light, mainHand, leftHanded);
+    }
+
+    protected void transformRecoil(MatrixStack matrices, RecoilManager recoil)
+    {
+        matrices.translate(0, 0, recoil.horAmount);
+        matrices.translate(0, 0, 1.4);
+        matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(recoil.amount));
+        matrices.translate(0, 0, -1.4);
+    }
+
+    protected Matrix4f getFirstPersonModelTransform()
+    {
+        float modelScale = 1.2f;
+        return new Matrix4f()
+                .scaleAround(modelScale, modelScale, modelScale, 8 / 16f, 0 / 16f, 0 / 16f)
+                .translate(0, 3.5f / 16f, -9 / 16f)
+                ;
+    }
+
+    protected void renderParticles(MatrixStack matrices, ModelTransformationMode mode, Matrix4f modelTransform, VertexConsumerProvider vcp, int light, int overlay)
+    {
         if (mode.isFirstPerson())
         {
             matrices.push();
-            matrices.multiplyPositionMatrix(firstPersonModelTransform);
+            matrices.multiplyPositionMatrix(modelTransform);
             Camera camera = client.gameRenderer.getCamera();
             matrices.translate(0.5, 0, 1); // No idea why this transform is necessary, but this puts (0,0,0) at (8,0,16) in model coords.
-//            transformRecoil(matrices, recoil);
+
             VertexConsumer consumer = vcp.getBuffer(RenderLayer.getEntityTranslucent(SpriteAtlasTexture.PARTICLE_ATLAS_TEXTURE));
             for (var particle : MeatgunParticleManager.getParticles())
             {
@@ -110,10 +126,10 @@ public class MeatgunPistolRenderer extends BuiltinModelItemRenderer implements B
             }
             matrices.pop();
         }
+    }
 
-//        matrices.pop();
-//        matrices.push();
-
+    protected void renderArms(MatrixStack matrices, ModelTransformationMode mode, AbstractClientPlayerEntity player, PlayerEntityRenderer playerEntityRenderer, VertexConsumerProvider vcp, int light, boolean mainHand, boolean leftHanded)
+    {
         Hand hand = mainHand ? Hand.MAIN_HAND : Hand.OFF_HAND;
         Hand otherHand = mainHand ? Hand.OFF_HAND : Hand.MAIN_HAND;
 

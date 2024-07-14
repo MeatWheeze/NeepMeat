@@ -13,6 +13,7 @@ public class MWExtraModels implements ExtraModelProvider
     public static MWExtraModels EXTRA_MODELS = new MWExtraModels();
 
     public static Identifier MEATGUN_BASE = new Identifier(MeatWeapons.NAMESPACE, "item/meatgun/base_module");
+    public static Identifier STAFF_BASE = new Identifier(MeatWeapons.NAMESPACE, "item/meatgun/staff");
     public static Identifier BOSHER = new Identifier(MeatWeapons.NAMESPACE, "item/meatgun/bosher");
     public static Identifier MEATGUN_PISTOL = new Identifier(MeatWeapons.NAMESPACE, "item/meatgun/pistol");
     public static Identifier MEATGUN_CHUGGER = new Identifier(MeatWeapons.NAMESPACE, "item/meatgun/chugger");
@@ -23,6 +24,7 @@ public class MWExtraModels implements ExtraModelProvider
     public static Identifier DOUBLE_CAROUSEL = new Identifier(MeatWeapons.NAMESPACE, "item/meatgun/double_carousel");
     public static Identifier UNDERBARREL = new Identifier(MeatWeapons.NAMESPACE, "item/meatgun/underbarrel");
     public static Identifier BATTERY = new Identifier(MeatWeapons.NAMESPACE, "item/meatgun/battery");
+    public static Identifier HALBERD = new Identifier(MeatWeapons.NAMESPACE, "item/meatgun/halberd");
 
     public static final PartialModel BOUNCE_GRENADE = new PartialModel(new Identifier(MeatWeapons.NAMESPACE, "entity/bounce_grenade"));
 
@@ -30,6 +32,7 @@ public class MWExtraModels implements ExtraModelProvider
     public void provideExtraModels(ResourceManager manager, Consumer<Identifier> out)
     {
         out.accept(MEATGUN_BASE);
+        out.accept(STAFF_BASE);
         out.accept(MEATGUN_PISTOL);
         out.accept(BOSHER);
         out.accept(MEATGUN_CHUGGER);
@@ -39,5 +42,6 @@ public class MWExtraModels implements ExtraModelProvider
         out.accept(DOUBLE_CAROUSEL);
         out.accept(UNDERBARREL);
         out.accept(BATTERY);
+        out.accept(HALBERD);
     }
 }

@@ -13,8 +13,10 @@
   "item.meatweapons.heavy_cannon": "Pocket Howitzer",
   "item.meatweapons.engine": "Engine",
 
-  "item.meatweapons.meatgun": "Meatgun - WIP",
-  "item.meatweapons.meatgun.lore_0": "HERE FOR DEMO PURPOSES ONLY!\nFUTURE UPDATES MAY DELETE THIS ITEM OR MAKE IT CORRUPT!\nUSE AT YOUR OWN RISK!",
+  "item.meatweapons.meatgun_pistol": "Meatgun Pistol - WIP",
+  "item.meatweapons.meatgun_pistol.lore_0": "HERE FOR DEMO PURPOSES ONLY!\nFUTURE UPDATES MAY DELETE THIS ITEM OR CORRUPT!\nUSE AT YOUR OWN RISK!",
+  "item.meatweapons.meatgun_staff": "Meatgun Staff - WIP",
+  "item.meatweapons.meatgun_staff.lore_0": "HERE FOR DEMO PURPOSES ONLY!\nFUTURE UPDATES MAY DELETE OR CORRUPT THIS ITEM!\nUSE AT YOUR OWN RISK!",
 
   "item.meatweapons.assault_drill": "Assault Drill",
   "item.meatweapons.assault_drill.lore": "Shred your enemies! Amuse your friends! Guaranteed to break the ice at parties!",
@@ -32,6 +34,8 @@
 
   "enchantment.meatweapons.spikes": "Spikes",
 
+  "meatgun_module.meatweapons.base_pistol": "Pistol Base",
+  "meatgun_module.meatweapons.base_staff": "Staff Base",
   "meatgun_module.meatweapons.pistol": "Pistol",
   "meatgun_module.meatweapons.chugger": "Chugger",
   "meatgun_module.meatweapons.bosher": "Bøsher",
@@ -43,6 +47,7 @@
   "meatgun_module.meatweapons.battery": "Battery",
   "meatgun_module.meatweapons.base": "Base",
   "meatgun_module.meatweapons.bloodthrower": "Bloodthrower",
+  "meatgun_module.meatweapons.halberd": "Halberd",
 
   "text.meatweapons.tinker_table.item_here": "Place Meatgun here",
   "tooltip.meatweapons.meatgun_module_1": "Meatgun Module - install in a Tinker Table"
