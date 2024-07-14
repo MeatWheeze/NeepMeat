@@ -1,6 +1,7 @@
 package com.neep.meatweapons.item.meatgun;
 
 import com.neep.meatweapons.client.meatgun.RecoilManager;
+import com.neep.meatweapons.meatgun.module.MeatgunModule;
 import com.neep.meatweapons.network.MWAttackC2SPacket;
 import dev.onyxstudios.cca.api.v3.component.Component;
 import net.minecraft.entity.player.PlayerEntity;

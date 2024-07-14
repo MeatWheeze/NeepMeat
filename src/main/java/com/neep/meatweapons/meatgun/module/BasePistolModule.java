@@ -1,11 +1,12 @@
-package com.neep.meatweapons.item.meatgun;
+package com.neep.meatweapons.meatgun.module;
 
+import com.neep.meatweapons.item.meatgun.MeatgunComponent;
 import net.minecraft.nbt.NbtCompound;
 import org.joml.Matrix4f;
 
 import java.util.List;
 
-public class BaseModule extends AbstractMeatgunModule
+public class BasePistolModule extends AbstractMeatgunModule
 {
 //    private MeatgunModule child = new ChuggerModule();
 //    private MeatgunModule child = new TripleCarouselModule();
@@ -16,7 +17,7 @@ public class BaseModule extends AbstractMeatgunModule
 
     private final ModuleSlot front;
 
-    public BaseModule(MeatgunComponent.Listener listener)
+    public BasePistolModule(MeatgunComponent.Listener listener)
     {
         super(listener);
         front = new SimpleModuleSlot(this.listener, new Matrix4f());
@@ -26,7 +27,7 @@ public class BaseModule extends AbstractMeatgunModule
         front.set(child);
     }
 
-    public BaseModule(MeatgunComponent.Listener listener, NbtCompound nbt)
+    public BasePistolModule(MeatgunComponent.Listener listener, NbtCompound nbt)
     {
         this(listener);
     }
@@ -34,11 +35,11 @@ public class BaseModule extends AbstractMeatgunModule
     @Override
     public Type<? extends MeatgunModule> getType()
     {
-        return MeatgunModules.BASE;
+        return MeatgunModules.BASE_PISTOL;
     }
 
-    public static BaseModule fromNbt(MeatgunComponent.Listener listener, NbtCompound nt)
+    public static BasePistolModule fromNbt(MeatgunComponent.Listener listener, NbtCompound nt)
     {
-        return new BaseModule(listener, nt);
+        return new BasePistolModule(listener, nt);
     }
 }

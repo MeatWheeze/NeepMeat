@@ -8,10 +8,11 @@ import com.neep.meatweapons.MWItems;
 import com.neep.meatweapons.MeatWeapons;
 import com.neep.meatweapons.init.MWComponents;
 import com.neep.meatweapons.init.MWScreenHandlers;
-import com.neep.meatweapons.item.MeatgunModuleItem;
+import com.neep.meatweapons.item.meatgun.Meatgun;
+import com.neep.meatweapons.item.meatgun.MeatgunModuleItem;
 import com.neep.meatweapons.item.meatgun.MeatgunComponent;
-import com.neep.meatweapons.item.meatgun.MeatgunModule;
-import com.neep.meatweapons.item.meatgun.ModuleSlot;
+import com.neep.meatweapons.meatgun.module.MeatgunModule;
+import com.neep.meatweapons.meatgun.module.ModuleSlot;
 import com.neep.neepmeat.screen_handler.BasicScreenHandler;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -51,7 +52,7 @@ public class TinkerTableScreenHandler extends BasicScreenHandler
             @Override
             public boolean canInsert(ItemStack stack)
             {
-                return stack.isOf(MWItems.MEATGUN);
+                return stack.getItem() instanceof Meatgun;
             }
         });
         createInventory(5 + 24, BACKGROUND_HEIGHT - 80, playerInventory);

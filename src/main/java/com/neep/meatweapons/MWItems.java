@@ -5,7 +5,11 @@ import com.neep.meatlib.item.MeatlibItemSettings;
 import com.neep.meatlib.item.TooltipSupplier;
 import com.neep.meatlib.registry.ItemRegistry;
 import com.neep.meatweapons.item.*;
-import com.neep.meatweapons.item.meatgun.MeatgunModules;
+import com.neep.meatweapons.item.meatgun.MeatgunItem;
+import com.neep.meatweapons.item.meatgun.MeatgunModuleItem;
+import com.neep.meatweapons.item.meatgun.MeatgunPistolItem;
+import com.neep.meatweapons.item.meatgun.MeatgunStaffItem;
+import com.neep.meatweapons.meatgun.module.MeatgunModules;
 import net.minecraft.item.Item;
 
 public class MWItems
@@ -19,7 +23,8 @@ public class MWItems
 
     public static Item MA75 = new MA75Item();
 
-    public static Item MEATGUN = ItemRegistry.queue(new MeatgunItem("meatgun", TooltipSupplier.simple(1), new MeatlibItemSettings().group(MeatWeapons.WEAPONS)));
+    public static Item MEATGUN_PISTOL = ItemRegistry.queue(new MeatgunPistolItem("meatgun_pistol", TooltipSupplier.simple(1), new MeatlibItemSettings().group(MeatWeapons.WEAPONS)));
+    public static Item MEATGUN_STAFF = ItemRegistry.queue(new MeatgunStaffItem("meatgun_staff", TooltipSupplier.simple(1), new MeatlibItemSettings().group(MeatWeapons.WEAPONS)));
 
 //    public static Item BLASTER = new BlasterItem();
     public static Item HEAVY_CANNON = new HeavyCannonItem();

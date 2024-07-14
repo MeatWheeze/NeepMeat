@@ -1,6 +1,6 @@
 package com.neep.meatweapons.client.renderer;
 
-import com.neep.meatweapons.item.MeatgunItem;
+import com.neep.meatweapons.item.meatgun.MeatgunItem;
 import com.neep.meatweapons.item.WeakTwoHanded;
 import com.neep.meatweapons.mixin.HeldItemRendererAccessor;
 import net.minecraft.client.network.AbstractClientPlayerEntity;

@@ -1,5 +1,6 @@
-package com.neep.meatweapons.item.meatgun;
+package com.neep.meatweapons.meatgun.module;
 
+import com.neep.meatweapons.item.meatgun.MeatgunComponent;
 import net.minecraft.nbt.NbtCompound;
 
 public class BatteryModule extends AbstractMeatgunModule

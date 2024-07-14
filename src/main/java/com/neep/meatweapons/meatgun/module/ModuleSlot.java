@@ -1,4 +1,4 @@
-package com.neep.meatweapons.item.meatgun;
+package com.neep.meatweapons.meatgun.module;
 
 import org.jetbrains.annotations.NotNull;
 import org.joml.Matrix4f;

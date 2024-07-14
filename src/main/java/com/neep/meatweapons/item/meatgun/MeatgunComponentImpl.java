@@ -1,6 +1,8 @@
 package com.neep.meatweapons.item.meatgun;
 
 import com.neep.meatweapons.client.meatgun.RecoilManager;
+import com.neep.meatweapons.meatgun.module.BasePistolModule;
+import com.neep.meatweapons.meatgun.module.MeatgunModule;
 import com.neep.meatweapons.network.MWAttackC2SPacket;
 import com.neep.meatweapons.network.MeatgunModuleNetwork;
 import dev.onyxstudios.cca.api.v3.component.ComponentKey;
@@ -18,7 +20,8 @@ import java.util.UUID;
 public class MeatgunComponentImpl extends ItemComponent implements MeatgunComponent
 {
     @Nullable private RecoilManager recoil;
-    private final BaseModule root;
+    private final MeatgunModule root;
+
     private boolean dirty = true;
     private boolean invalidated = false;
     private final Listener listener = new Listener();
@@ -28,7 +31,14 @@ public class MeatgunComponentImpl extends ItemComponent implements MeatgunCompon
     public MeatgunComponentImpl(ItemStack stack, ComponentKey<MeatgunComponent> key)
     {
         super(stack, key);
-        root = new BaseModule(listener);
+
+        if (stack.getItem() instanceof Meatgun meatgun)
+            root = meatgun.createBase(listener);
+        else
+            // Fail silently in case someone is doing something weird that I can't control.
+            // I have no examples.
+            root = new BasePistolModule(listener);
+
         root.readNbt(getOrCreateRootTag());
         getUuid();
     }

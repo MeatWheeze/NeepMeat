@@ -41,7 +41,7 @@ class DisplayPane extends TinkerTableScreen.PaneWidget
         float cx = bounds.x() + bounds.w() / 2f + offsetX;
         float cy = bounds.y() + bounds.h() / 2f + offsetY;
 
-        int zOffset = stack.isOf(MWItems.MEATGUN) ? 4 : 0;
+        int zOffset = stack.isOf(MWItems.MEATGUN_PISTOL) ? 4 : 0;
         Matrix4f modelTransform = new Matrix4f()
                 .translate(0, 8, zOffset)
                 .scale(scale)

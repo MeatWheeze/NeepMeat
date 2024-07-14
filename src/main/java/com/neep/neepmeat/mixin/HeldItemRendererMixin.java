@@ -1,7 +1,7 @@
 package com.neep.neepmeat.mixin;
 
 import com.neep.meatweapons.item.AssaultDrillItem;
-import com.neep.meatweapons.item.MeatgunItem;
+import com.neep.meatweapons.item.meatgun.MeatgunItem;
 import com.neep.neepmeat.api.item.OverrideSwingItem;
 import com.neep.neepmeat.client.plc.PLCHudRenderer;
 import net.minecraft.client.MinecraftClient;

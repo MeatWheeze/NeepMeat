@@ -1,7 +1,8 @@
-package com.neep.meatweapons.item.meatgun;
+package com.neep.meatweapons.meatgun.module;
 
-import com.neep.meatweapons.entity.BounceGrenadeEntity;
+import com.neep.meatweapons.entity.BulletDamageSource;
 import com.neep.meatweapons.item.GunItem;
+import com.neep.meatweapons.item.meatgun.MeatgunComponent;
 import com.neep.meatweapons.network.MWAttackC2SPacket;
 import com.neep.meatweapons.network.MeatgunNetwork;
 import com.neep.meatweapons.particle.MWGraphicsEffects;
@@ -9,6 +10,7 @@ import com.neep.meatweapons.particle.MWParticles;
 import com.neep.meatweapons.particle.MuzzleFlashParticleType;
 import com.neep.neepmeat.init.NMSounds;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -21,26 +23,34 @@ import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
 import org.joml.Vector4d;
 
-public class GrenadeLauncherModule extends ShooterModule
+import java.util.Optional;
+
+import static com.neep.meatweapons.item.BaseGunItem.hitScan;
+
+public class PistolModule extends ShooterModule
 {
     private final Random shotRandom = Random.create();
 
-    public GrenadeLauncherModule(MeatgunComponent.Listener listener)
+    private final int maxShots = 8;
+    private final int maxCooldown = 10;
+
+    private int shotsRemaining = maxShots;
+    private int cooldown = 0;
+
+    public PistolModule(MeatgunComponent.Listener listener)
     {
-        super(listener, 8, 15);
-        shotsRemaining = maxShots;
+        super(listener, 8, 10);
     }
 
-    public GrenadeLauncherModule(MeatgunComponent.Listener listener, NbtCompound nbt)
+    public PistolModule(MeatgunComponent.Listener listener, NbtCompound nbt)
     {
         this(listener);
-        readNbt(nbt);
     }
 
     @Override
     public Type<? extends MeatgunModule> getType()
     {
-        return MeatgunModules.GRENADE_LAUNCHER;
+        return MeatgunModules.PISTOL;
     }
 
     @Override
@@ -88,7 +98,7 @@ public class GrenadeLauncherModule extends ShooterModule
         boolean sneak = entity.isSneaking();
         return new Vec3d(
                 sneak ? 0 : entity.getMainHandStack().equals(stack) ? -0.13 : 0.13,
-                0,
+                -0.04,
                 .25);
     }
 
@@ -102,20 +112,23 @@ public class GrenadeLauncherModule extends ShooterModule
         Vec3d transform = getMuzzleOffset(player, stack).rotateX((float) -pitchd).rotateY((float) -yawd);
         pos = pos.add(transform);
 
-        double speed = 0.8;
-        Vec3d vel = GunItem.getRotationVector(pitch, yaw).multiply(speed);
-
-        BounceGrenadeEntity entity = new BounceGrenadeEntity(world, 1.7f, 40, false, pos.x, pos.y, pos.z, vel.x, vel.y, vel.z);
-        world.spawnEntity(entity);
+        Vec3d end = pos.add(GunItem.getRotationVector(pitch, yaw).multiply(40));
+        Optional<Entity> target = hitScan(player, pos, end, 40, this::syncBeamEffect);
+        if (target.isPresent())
+        {
+            Entity entity = target.get();
+            target.get().damage(BulletDamageSource.create(world, player, 0.1f), 4);
+            entity.timeUntilRegen = 0;
+        }
 
         MeatgunNetwork.sendRecoil((ServerPlayerEntity) player, MeatgunNetwork.RecoilDirection.UP, 7, 0.2f,0.7f, 0.03f);
-        world.playSoundFromEntity(null, player, NMSounds.GRENADE_LAUNCHER_FIRE, SoundCategory.PLAYERS, 1f, 1f);
+        world.playSoundFromEntity(null, player, NMSounds.CHUGGER_FIRE, SoundCategory.PLAYERS, 1f, 1f);
         if (world instanceof ServerWorld serverWorld)
         {
-            Vector4d v = new Vector4d(0, 0, -13 / 16f, 1);
+            Vector4d v = new Vector4d(0, 0, -8 / 16f, 1);
             v.mul(this.transform);
             serverWorld.spawnParticles(
-                    new MuzzleFlashParticleType.MuzzleFlashParticleEffect(MWParticles.BLOB_MUZZLE_FLASH, player, v.x, v.y, v.z, 2.2f, 1)
+                    new MuzzleFlashParticleType.MuzzleFlashParticleEffect(MWParticles.BLOB_MUZZLE_FLASH, player, v.x, v.y, v.z, 1.9f, 1)
                     , pos.getX(), pos.getY(), pos.getZ(),
                     1, 0, 0, 0, 0.1);
         }

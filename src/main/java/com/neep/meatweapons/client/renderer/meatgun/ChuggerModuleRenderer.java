@@ -1,7 +1,7 @@
 package com.neep.meatweapons.client.renderer.meatgun;
 
 import com.neep.meatweapons.client.MWExtraModels;
-import com.neep.meatweapons.item.meatgun.ChuggerModule;
+import com.neep.meatweapons.meatgun.module.ChuggerModule;
 import com.neep.meatweapons.item.meatgun.MeatgunComponent;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.VertexConsumerProvider;

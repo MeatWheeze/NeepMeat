@@ -1,5 +1,6 @@
-package com.neep.meatweapons.item.meatgun;
+package com.neep.meatweapons.meatgun.module;
 
+import com.neep.meatweapons.item.meatgun.MeatgunComponent;
 import com.neep.meatweapons.network.MWAttackC2SPacket;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;

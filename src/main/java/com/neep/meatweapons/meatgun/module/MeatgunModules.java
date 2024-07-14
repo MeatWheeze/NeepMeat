@@ -1,4 +1,4 @@
-package com.neep.meatweapons.item.meatgun;
+package com.neep.meatweapons.meatgun.module;
 
 import com.neep.meatweapons.MeatWeapons;
 import net.fabricmc.fabric.api.event.registry.FabricRegistryBuilder;
@@ -12,7 +12,8 @@ public class MeatgunModules
     public static RegistryKey<Registry<MeatgunModule.Type<? extends MeatgunModule>>> REGISTRY_KEY = RegistryKey.ofRegistry(new Identifier(MeatWeapons.NAMESPACE, "meatgun_module"));
     public static final DefaultedRegistry<MeatgunModule.Type<? extends MeatgunModule>> REGISTRY = FabricRegistryBuilder.createDefaulted(REGISTRY_KEY, MeatgunModule.DEFAULT_TYPE.getId()).buildAndRegister();
 
-    public static final MeatgunModule.Type<BaseModule> BASE = register(new Identifier(MeatWeapons.NAMESPACE, "base"), (l, p) -> new BaseModule(l), BaseModule::fromNbt);
+    public static final MeatgunModule.Type<BasePistolModule> BASE_PISTOL = register(new Identifier(MeatWeapons.NAMESPACE, "base_pistol"), (l, p) -> new BasePistolModule(l), BasePistolModule::fromNbt);
+    public static final MeatgunModule.Type<BaseStaffModule> BASE_STAFF = register(new Identifier(MeatWeapons.NAMESPACE, "base_staff"), (l, p) -> new BaseStaffModule(l), BaseStaffModule::fromNbt);
     public static final MeatgunModule.Type<PistolModule> PISTOL = register(new Identifier(MeatWeapons.NAMESPACE, "pistol"), (l, p) -> new PistolModule(l), PistolModule::new);
     public static final MeatgunModule.Type<ChuggerModule> CHUGGER = register(new Identifier(MeatWeapons.NAMESPACE, "chugger"), (l, p) -> new ChuggerModule(l), ChuggerModule::new);
     public static final MeatgunModule.Type<BosherModule> BOSHER = register(new Identifier(MeatWeapons.NAMESPACE, "bosher"), (l, p) -> new BosherModule(l), BosherModule::new);

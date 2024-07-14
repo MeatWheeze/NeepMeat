@@ -3,7 +3,7 @@ package com.neep.meatweapons.network;
 import com.neep.meatweapons.MeatWeapons;
 import com.neep.meatweapons.init.MWComponents;
 import com.neep.meatweapons.item.meatgun.MeatgunComponent;
-import com.neep.meatweapons.item.meatgun.MeatgunModule;
+import com.neep.meatweapons.meatgun.module.MeatgunModule;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;

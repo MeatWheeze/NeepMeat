@@ -28,7 +28,8 @@ public class MWComponents implements ItemComponentInitializer, WorldComponentIni
     @Override
     public void registerItemComponentFactories(@NotNull ItemComponentFactoryRegistry registry)
     {
-        registry.register(MWItems.MEATGUN, MEATGUN, stack -> new MeatgunComponentImpl(stack, MEATGUN));
+        registry.register(MWItems.MEATGUN_PISTOL, MEATGUN, stack -> new MeatgunComponentImpl(stack, MEATGUN));
+        registry.register(MWItems.MEATGUN_STAFF, MEATGUN, stack -> new MeatgunComponentImpl(stack, MEATGUN));
     }
 
     @Override

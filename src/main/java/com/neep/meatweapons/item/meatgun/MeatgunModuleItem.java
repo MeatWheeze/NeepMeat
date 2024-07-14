@@ -1,7 +1,7 @@
-package com.neep.meatweapons.item;
+package com.neep.meatweapons.item.meatgun;
 
 import com.neep.meatlib.item.TooltipSupplier;
-import com.neep.meatweapons.item.meatgun.MeatgunModule;
+import com.neep.meatweapons.meatgun.module.MeatgunModule;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;

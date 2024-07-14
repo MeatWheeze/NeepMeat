@@ -1,7 +1,7 @@
 package com.neep.meatweapons.client.renderer.meatgun;
 
 import com.neep.meatweapons.item.meatgun.MeatgunComponent;
-import com.neep.meatweapons.item.meatgun.MeatgunModule;
+import com.neep.meatweapons.meatgun.module.MeatgunModule;
 import dev.monarkhes.myron_neepmeat.impl.client.model.MyronBakedModel;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;

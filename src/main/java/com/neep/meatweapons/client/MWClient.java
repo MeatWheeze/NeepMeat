@@ -1,17 +1,17 @@
 package com.neep.meatweapons.client;
 
 import com.neep.meatlib.graphics.client.GraphicsEffectClient;
+import com.neep.meatweapons.MWItems;
 import com.neep.meatweapons.MeatWeapons;
-import com.neep.meatweapons.client.network.MeatgunC2S;
 import com.neep.meatweapons.client.model.BulletEntityModel;
 import com.neep.meatweapons.client.model.CannonBulletEntityModel;
 import com.neep.meatweapons.client.model.PlasmaEntityModel;
+import com.neep.meatweapons.client.network.MeatgunC2S;
 import com.neep.meatweapons.client.renderer.*;
 import com.neep.meatweapons.client.renderer.meatgun.MeatgunModuleRenderers;
 import com.neep.meatweapons.client.renderer.meatgun.MeatgunParticleManager;
 import com.neep.meatweapons.client.sound.AirtruckSoundInstance;
 import com.neep.meatweapons.item.AssaultDrillItem;
-import com.neep.meatweapons.item.BaseGunItem;
 import com.neep.meatweapons.network.MeatgunModuleNetwork;
 import com.neep.meatweapons.particle.*;
 import dev.monarkhes.myron_neepmeat.api.Myron;
@@ -19,6 +19,7 @@ import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.model.ModelLoadingRegistry;
+import net.fabricmc.fabric.api.client.rendering.v1.BuiltinItemRendererRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.minecraft.client.render.entity.model.EntityModelLayer;
@@ -102,6 +103,9 @@ public class MWClient implements ClientModInitializer
         GraphicsEffectClient.registerEffect(MWGraphicsEffects.ZAP, ZapBeamEffect::new);
 
         ModelLoadingRegistry.INSTANCE.registerModelProvider(MWExtraModels.EXTRA_MODELS);
+
+        BuiltinItemRendererRegistry.INSTANCE.register(MWItems.MEATGUN_PISTOL, new MeatgunPistolRenderer());
+        BuiltinItemRendererRegistry.INSTANCE.register(MWItems.MEATGUN_STAFF, new MeatgunStaffRenderer());
 
         MeatgunModuleRenderers.init();
         MeatgunParticleManager.init();
