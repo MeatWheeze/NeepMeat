@@ -1,5 +1,6 @@
 package com.neep.meatweapons.client.renderer;
 
+import com.jozufozu.flywheel.util.AnimationTickHolder;
 import com.neep.meatweapons.client.meatgun.RecoilManager;
 import com.neep.meatweapons.client.renderer.meatgun.MeatgunModuleRenderer;
 import com.neep.meatweapons.client.renderer.meatgun.MeatgunModuleRenderers;
@@ -75,8 +76,20 @@ public class MeatgunRenderer extends BuiltinModelItemRenderer
             transformRecoil(matrices, recoil);
         }
 
+//        float s = MathHelper.sin(AnimationTickHolder.getRenderTime() / 5) / 2 + 0.5f;
+
+        float modelScale = 1.2f;
+        Matrix4f firstPersonModelTransform = new Matrix4f()
+                .scaleAround(modelScale, modelScale, modelScale, 8 / 16f, 0 / 16f, 0 / 16f)
+                .translate(0, 3.5f / 16f, -9 / 16f)
+                ;
+
         // Recursive module rendering
         matrices.push();
+        if (mode.isFirstPerson())
+        {
+            matrices.multiplyPositionMatrix(firstPersonModelTransform);
+        }
         var root = component.getRoot();
         renderRecursive(matrices, root, stack, component, mode, vcp,
                 MinecraftClient.getInstance().world.getTime(),
@@ -87,6 +100,7 @@ public class MeatgunRenderer extends BuiltinModelItemRenderer
         if (mode.isFirstPerson())
         {
             matrices.push();
+            matrices.multiplyPositionMatrix(firstPersonModelTransform);
             Camera camera = client.gameRenderer.getCamera();
             matrices.translate(0.5, 0, 1); // No idea why this transform is necessary, but this puts (0,0,0) at (8,0,16) in model coords.
 //            transformRecoil(matrices, recoil);
@@ -98,35 +112,49 @@ public class MeatgunRenderer extends BuiltinModelItemRenderer
             matrices.pop();
         }
 
-        matrices.pop();
-        matrices.push();
+//        matrices.pop();
+//        matrices.push();
 
         Hand hand = mainHand ? Hand.MAIN_HAND : Hand.OFF_HAND;
         Hand otherHand = mainHand ? Hand.OFF_HAND : Hand.MAIN_HAND;
+
+        float armScale = 1.4f;
+
+        float cx = -4 / 16f;
+        float cy = 4 / 16f;
+        float cz = (2 - 10) / 16f;
+
+        Matrix4f t = new Matrix4f()
+                .translate(cx, cy, cz)
+                .scale(armScale, armScale, armScale)
+                .translate(-cx, -cy, -cz)
+                .translate(12 / 16f / armScale, -4 / 16f / armScale, 20 / 16f / armScale)
+                ;
+        matrices.multiplyPositionMatrix(t);
+
         if (mode.isFirstPerson()
                 && player.getStackInHand(otherHand).isEmpty()
                 && hand == Hand.MAIN_HAND) // Prevent three arms when the main hand is empty
         {
-            transformRecoil(matrices, recoil);
             if (leftHanded)
             {
-                matrices.translate(0.6, -0.4, 0.2);
-                renderArm(playerEntityRenderer.getModel().rightArm, true, matrices, player, vcp, light);
-                renderArm(playerEntityRenderer.getModel().rightSleeve, true, matrices, player, vcp, light);
+                renderArm(playerEntityRenderer.getModel().leftArm, true, matrices, player, vcp, light);
+                renderArm(playerEntityRenderer.getModel().leftSleeve, true, matrices, player, vcp, light);
             }
             else
             {
-                matrices.translate(-0.6, -0.4, 0.2);
-                renderArm(playerEntityRenderer.getModel().leftArm, false, matrices, player, vcp, light);
-                renderArm(playerEntityRenderer.getModel().leftSleeve, false, matrices, player, vcp, light);
+                renderArm(playerEntityRenderer.getModel().rightArm, false, matrices, player, vcp, light);
+                renderArm(playerEntityRenderer.getModel().rightSleeve, false, matrices, player, vcp, light);
             }
         }
     }
 
     private void renderArm(ModelPart armPart, boolean leftHanded, MatrixStack matrices, AbstractClientPlayerEntity player, VertexConsumerProvider vcp, int light)
     {
-        armPart.pitch = (float) Math.toRadians(-120);
-        armPart.yaw = (leftHanded ? -1 : 1) * MathHelper.PI / 6;
+//        armPart.pitch = (float) Math.toRadians(-120);
+        armPart.pitch = (float) Math.toRadians(-90f);
+        armPart.yaw = 0;
+//        armPart.yaw = (leftHanded ? -1 : 1) * MathHelper.PI / 6;
         armPart.roll = (float) Math.PI;
         armPart.render(matrices, vcp.getBuffer(RenderLayer.getEntityCutout(player.getSkinTexture())),
                 light, OverlayTexture.DEFAULT_UV);
