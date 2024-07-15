@@ -1,36 +1,30 @@
 package com.neep.meatlib.network;
 
+import com.neep.meatlib.MeatLib;
 import com.neep.meatlib.api.network.ChannelFormat;
-import com.neep.meatlib.client.ClientChannelReceiver;
 import com.neep.meatlib.client.ClientChannelSender;
+import com.neep.meatlib.client.GlobalClientChannelReceiver;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class GlobalChannelManager<T>
 {
     private final Identifier name;
     private final ChannelFormat<T> format;
-    private final PlayerEntity player;
-
-    private final List<Receiver<T>> receivers = new ArrayList<>();
 
     // If sources are split in the future, I may need to instantiate this through an opaque functional interface
     // that changes depending on environment.
-    public static <T> GlobalChannelManager<T> create(Identifier name, ChannelFormat<T> format, PlayerEntity player)
+    public static <T> GlobalChannelManager<T> create(Identifier name, ChannelFormat<T> format)
     {
-        return new GlobalChannelManager<>(name, format, player);
+        return new GlobalChannelManager<>(name, format);
     }
 
-    protected GlobalChannelManager(Identifier name, ChannelFormat<T> format, PlayerEntity player)
+    protected GlobalChannelManager(Identifier name, ChannelFormat<T> format)
     {
         this.name = name;
         this.format = format;
-        this.player = player;
     }
 
     private Sender<T> createSender(PlayerEntity player)
@@ -58,22 +52,13 @@ public class GlobalChannelManager<T>
 
     public void receiver(T listener)
     {
-        Receiver<T> receiver;
-
-        if (player instanceof ServerPlayerEntity)
+        if (!MeatLib.isClient())
         {
-            receiver = new ServerChannelReceiver<>((ServerPlayerEntity) player, name, format, listener);
-            receivers.add(receiver);
+            GlobalServerChannelReceiver.register(name, format, listener);
         }
         else
         {
-            receiver = new ClientChannelReceiver<>(name, format, listener);
-            receivers.add(receiver);
+            GlobalClientChannelReceiver.register(name, format, listener);
         }
-    }
-
-    public void close()
-    {
-        receivers.forEach(Receiver::close);
     }
 }

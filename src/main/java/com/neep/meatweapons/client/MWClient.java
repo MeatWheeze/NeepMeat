@@ -6,7 +6,7 @@ import com.neep.meatweapons.MeatWeapons;
 import com.neep.meatweapons.client.model.BulletEntityModel;
 import com.neep.meatweapons.client.model.CannonBulletEntityModel;
 import com.neep.meatweapons.client.model.PlasmaEntityModel;
-import com.neep.meatweapons.client.network.MeatgunC2S;
+import com.neep.meatweapons.client.network.MeatgunClient;
 import com.neep.meatweapons.client.renderer.*;
 import com.neep.meatweapons.client.renderer.meatgun.MeatgunModuleRenderers;
 import com.neep.meatweapons.client.renderer.meatgun.MeatgunParticleManager;
@@ -90,7 +90,7 @@ public class MWClient implements ClientModInitializer
         MWKeys.registerKeybinds();
         AirtruckSoundInstance.initEvent();
 
-        MeatgunC2S.init();
+        MeatgunClient.init();
         MeatgunModuleNetwork.Client.init();
 
         AssaultDrillItem.Client.init();
