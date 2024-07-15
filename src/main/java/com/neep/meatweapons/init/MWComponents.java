@@ -2,8 +2,8 @@ package com.neep.meatweapons.init;
 
 import com.neep.meatweapons.MWItems;
 import com.neep.meatweapons.MeatWeapons;
-import com.neep.meatweapons.item.meatgun.MeatgunComponent;
-import com.neep.meatweapons.item.meatgun.MeatgunComponentImpl;
+import com.neep.meatweapons.component.MeatgunComponent;
+import com.neep.meatweapons.component.MeatgunComponentImpl;
 import dev.onyxstudios.cca.api.v3.component.ComponentKey;
 import dev.onyxstudios.cca.api.v3.component.ComponentRegistry;
 import dev.onyxstudios.cca.api.v3.item.ItemComponentFactoryRegistry;

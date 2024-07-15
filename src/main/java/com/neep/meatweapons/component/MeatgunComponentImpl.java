@@ -1,7 +1,9 @@
-package com.neep.meatweapons.item.meatgun;
+package com.neep.meatweapons.component;
 
 import com.neep.meatlib.MeatLib;
 import com.neep.meatweapons.client.meatgun.RecoilManager;
+import com.neep.meatweapons.item.meatgun.Meatgun;
+import com.neep.meatweapons.item.meatgun.MeatgunAnimationManager;
 import com.neep.meatweapons.meatgun.module.BasePistolModule;
 import com.neep.meatweapons.meatgun.module.MeatgunModule;
 import com.neep.meatweapons.network.MWAttackC2SPacket;
@@ -68,9 +70,27 @@ public class MeatgunComponentImpl extends ItemComponent implements MeatgunCompon
         return foundUUID;
     }
 
+    @Override
     public void trigger(World world, PlayerEntity player, ItemStack stack, int id, double pitch, double yaw, MWAttackC2SPacket.HandType handType)
     {
         root.trigger(world, player, stack, id, pitch, yaw, handType);
+//        var module = root.getChildren().get(0).get();
+//        if (module instanceof BosherModule)
+//        {
+//            root.getChildren().get(0).set(new UnderbarrelModule());
+//            markDirty();
+//        }
+//        else
+//        {
+//            root.getChildren().get(0).set(new BosherModule());
+//            markDirty();
+//        }
+    }
+
+    @Override
+    public void release(World world, PlayerEntity player, ItemStack stack, int id, double pitch, double yaw, MWAttackC2SPacket.HandType handType)
+    {
+        root.release(world, player, stack, id, pitch, yaw, handType);
 //        var module = root.getChildren().get(0).get();
 //        if (module instanceof BosherModule)
 //        {
@@ -100,6 +120,12 @@ public class MeatgunComponentImpl extends ItemComponent implements MeatgunCompon
     }
 
     @Override
+    public @Nullable MeatgunAnimationManager getAnimationManager()
+    {
+        return animationManager;
+    }
+
+    @Override
     public void commonTick(PlayerEntity player)
     {
         root.tick(player);
@@ -124,7 +150,7 @@ public class MeatgunComponentImpl extends ItemComponent implements MeatgunCompon
     public void clientTick(PlayerEntity player)
     {
         if (animationManager == null)
-            animationManager = new MeatgunAnimationManager(this);
+            this.animationManager = (MeatgunAnimationManager) ((Meatgun) stack.getItem()).createAnimationManager(this).get();
 
         animationManager.tick();
     }
@@ -148,6 +174,28 @@ public class MeatgunComponentImpl extends ItemComponent implements MeatgunCompon
     public Listener getListener()
     {
         return listener;
+    }
+
+    @Nullable
+    public static MeatgunModule findRecursive(MeatgunModule module, MeatgunModule.Type<?> type)
+    {
+        if (module.getType() == type)
+            return module;
+
+        for (var slot : module.getChildren())
+        {
+            MeatgunModule child = slot.get();
+            if (child == MeatgunModule.DEFAULT)
+                continue;
+
+            if (child.getType() == type)
+                return child;
+
+            MeatgunModule next = findRecursive(child, type);
+            if (next != null)
+                return next;
+        }
+        return null;
     }
 
     @Nullable

@@ -3,11 +3,10 @@ package com.neep.meatweapons.item.meatgun;
 import com.neep.meatlib.MeatLib;
 import com.neep.meatlib.item.BaseItem;
 import com.neep.meatlib.item.TooltipSupplier;
+import com.neep.meatweapons.component.MeatgunComponent;
 import com.neep.meatweapons.init.MWComponents;
 import com.neep.meatweapons.item.GunItem;
 import com.neep.meatweapons.item.WeakTwoHanded;
-import com.neep.meatweapons.meatgun.module.BasePistolModule;
-import com.neep.meatweapons.meatgun.module.MeatgunModule;
 import com.neep.meatweapons.network.MWAttackC2SPacket;
 import com.neep.neepmeat.api.item.OverrideSwingItem;
 import net.minecraft.entity.Entity;
@@ -40,6 +39,12 @@ public abstract class MeatgunItem extends BaseItem implements Meatgun, WeakTwoHa
     public void trigger(World world, PlayerEntity player, ItemStack stack, int id, double pitch, double yaw, MWAttackC2SPacket.HandType handType)
     {
         MWComponents.MEATGUN.get(stack).trigger(world, player, stack, id, pitch, yaw, handType);
+    }
+
+    @Override
+    public void release(World world, PlayerEntity player, ItemStack stack, int id, double pitch, double yaw, MWAttackC2SPacket.HandType handType)
+    {
+        MWComponents.MEATGUN.get(stack).release(world, player, stack, id, pitch, yaw, handType);
     }
 
     @Override

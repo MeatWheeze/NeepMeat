@@ -7,7 +7,7 @@ import com.neep.meatweapons.MeatWeapons;
 import com.neep.meatweapons.init.MWComponents;
 import com.neep.meatweapons.init.MWScreenHandlers;
 import com.neep.meatweapons.item.meatgun.Meatgun;
-import com.neep.meatweapons.item.meatgun.MeatgunComponent;
+import com.neep.meatweapons.component.MeatgunComponent;
 import com.neep.meatweapons.item.meatgun.MeatgunModuleItem;
 import com.neep.meatweapons.meatgun.module.MeatgunModule;
 import com.neep.meatweapons.meatgun.module.ModuleSlot;

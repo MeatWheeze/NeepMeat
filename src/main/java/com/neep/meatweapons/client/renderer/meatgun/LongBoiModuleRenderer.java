@@ -2,7 +2,7 @@ package com.neep.meatweapons.client.renderer.meatgun;
 
 import com.neep.meatweapons.client.MWExtraModels;
 import com.neep.meatweapons.meatgun.module.LongBoiModule;
-import com.neep.meatweapons.item.meatgun.MeatgunComponent;
+import com.neep.meatweapons.component.MeatgunComponent;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.item.ItemRenderer;

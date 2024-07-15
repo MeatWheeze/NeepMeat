@@ -1,6 +1,7 @@
-package com.neep.meatweapons.item.meatgun;
+package com.neep.meatweapons.component;
 
 import com.neep.meatweapons.client.meatgun.RecoilManager;
+import com.neep.meatweapons.item.meatgun.MeatgunAnimationManager;
 import com.neep.meatweapons.meatgun.module.MeatgunModule;
 import com.neep.meatweapons.network.MWAttackC2SPacket;
 import dev.onyxstudios.cca.api.v3.component.Component;
@@ -20,6 +21,8 @@ public interface MeatgunComponent extends Component
 
     void trigger(World world, PlayerEntity player, ItemStack stack, int id, double pitch, double yaw, MWAttackC2SPacket.HandType handType);
 
+    void release(World world, PlayerEntity player, ItemStack stack, int id, double pitch, double yaw, MWAttackC2SPacket.HandType handType);
+
     void tickTrigger(World world, PlayerEntity player, ItemStack stack, int id, double pitch, double yaw, MWAttackC2SPacket.HandType handType);
 
     void commonTick(PlayerEntity player);
@@ -34,6 +37,8 @@ public interface MeatgunComponent extends Component
     Listener getListener();
 
     RecoilManager getRecoil();
+
+    @Nullable MeatgunAnimationManager getAnimationManager();
 
     interface Listener
     {

@@ -1,6 +1,6 @@
 package com.neep.meatweapons.meatgun.module;
 
-import com.neep.meatweapons.item.meatgun.MeatgunComponent;
+import com.neep.meatweapons.component.MeatgunComponent;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Matrix4f;
 

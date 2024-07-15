@@ -1,11 +1,12 @@
 package com.neep.meatweapons.client.renderer;
 
+import com.jozufozu.flywheel.util.AnimationTickHolder;
 import com.neep.meatweapons.client.meatgun.RecoilManager;
 import com.neep.meatweapons.client.renderer.meatgun.MeatgunModuleRenderer;
 import com.neep.meatweapons.client.renderer.meatgun.MeatgunModuleRenderers;
 import com.neep.meatweapons.client.renderer.meatgun.MeatgunParticleManager;
 import com.neep.meatweapons.init.MWComponents;
-import com.neep.meatweapons.item.meatgun.MeatgunComponent;
+import com.neep.meatweapons.component.MeatgunComponent;
 import com.neep.meatweapons.meatgun.module.MeatgunModule;
 import com.neep.meatweapons.mixin.HeldItemRendererAccessor;
 import net.fabricmc.api.EnvType;
@@ -24,7 +25,6 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Arm;
 import net.minecraft.util.Hand;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RotationAxis;
 import org.joml.Matrix4f;
 
@@ -58,11 +58,11 @@ public class MeatgunPistolRenderer extends BuiltinModelItemRenderer implements B
         transformation.apply(leftHanded, matrices);
         matrices.translate(-0.5F, -0.5F, -0.5F);
 
-        renderInner(stack, player, playerEntityRenderer, mode, matrices, vcp, mainHand, leftHanded, light, overlay);
+        renderInner(stack, player, playerEntityRenderer, mode, matrices, vcp, mainHand, leftHanded, AnimationTickHolder.getPartialTicks(), light, overlay);
     }
 
     // It's easier to override this one
-    protected void renderInner(ItemStack stack, AbstractClientPlayerEntity player, PlayerEntityRenderer playerEntityRenderer, ModelTransformationMode mode, MatrixStack matrices, VertexConsumerProvider vcp, boolean mainHand, boolean leftHanded, int light, int overlay)
+    protected void renderInner(ItemStack stack, AbstractClientPlayerEntity player, PlayerEntityRenderer playerEntityRenderer, ModelTransformationMode mode, MatrixStack matrices, VertexConsumerProvider vcp, boolean mainHand, boolean leftHanded, float tickDelta, int light, int overlay)
     {
         // Step recoil
         MeatgunComponent component = MWComponents.MEATGUN.get(stack);

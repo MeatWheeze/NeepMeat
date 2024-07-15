@@ -1,14 +1,16 @@
 package com.neep.meatweapons.client.network;
 
 import com.neep.meatweapons.init.MWComponents;
-import com.neep.meatweapons.item.meatgun.MeatgunComponent;
+import com.neep.meatweapons.item.meatgun.MeatgunAnimationManager;
+import com.neep.meatweapons.component.MeatgunComponent;
 import com.neep.meatweapons.network.MeatgunNetwork;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
+import net.minecraft.client.MinecraftClient;
 
 @Environment(EnvType.CLIENT)
-public class MeatgunC2S
+public class MeatgunClient
 {
     public static void init()
     {
@@ -29,5 +31,19 @@ public class MeatgunC2S
                 }
             });
         });
+
+        MeatgunNetwork.SEND_ANIMATION.receiver(MeatgunClient::receiveAnimation);
+    }
+
+    private static void receiveAnimation(String name)
+    {
+        MinecraftClient client = MinecraftClient.getInstance();
+        MeatgunComponent component = MWComponents.MEATGUN.getNullable(client.player.getMainHandStack());
+        if (component != null)
+        {
+            MeatgunAnimationManager animationManager = component.getAnimationManager();
+            if (animationManager != null)
+                animationManager.queue(name);
+        }
     }
 }

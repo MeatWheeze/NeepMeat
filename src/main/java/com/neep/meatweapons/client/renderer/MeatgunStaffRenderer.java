@@ -1,8 +1,9 @@
 package com.neep.meatweapons.client.renderer;
 
 import com.neep.meatweapons.client.meatgun.RecoilManager;
+import com.neep.meatweapons.client.meatgun.animation.MeatgunAnimation;
 import com.neep.meatweapons.init.MWComponents;
-import com.neep.meatweapons.meatgun.module.BaseStaffModule;
+import com.neep.meatweapons.component.MeatgunComponent;
 import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.entity.PlayerEntityRenderer;
@@ -14,24 +15,19 @@ import net.minecraft.util.math.RotationAxis;
 public class MeatgunStaffRenderer extends MeatgunPistolRenderer
 {
     @Override
-    protected void renderInner(ItemStack stack, AbstractClientPlayerEntity player, PlayerEntityRenderer playerEntityRenderer, ModelTransformationMode mode, MatrixStack matrices, VertexConsumerProvider vcp, boolean mainHand, boolean leftHanded, int light, int overlay)
+    protected void renderInner(ItemStack stack, AbstractClientPlayerEntity player, PlayerEntityRenderer playerEntityRenderer, ModelTransformationMode mode, MatrixStack matrices, VertexConsumerProvider vcp, boolean mainHand, boolean leftHanded, float tickDelta, int light, int overlay)
     {
         if (mode.isFirstPerson())
         {
-            int yRot = 5;
-            if (MWComponents.MEATGUN.get(stack).getRoot() instanceof BaseStaffModule staff)
+            MeatgunComponent component = MWComponents.MEATGUN.getNullable(stack);
+            if (component != null)
             {
-                long start = staff.getAnimationStart();
-                if (player.getWorld().getTime() - start < 20)
-                    yRot = 20;
+                MeatgunAnimation animation = component.getAnimationManager().getActive();
+                animation.applyRender(matrices, tickDelta);
             }
 
-            matrices.translate(0, -4 / 16f, 0 / 16f);
-            matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(-0));
-            matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(yRot));
-            matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(-20));
         }
-        super.renderInner(stack, player, playerEntityRenderer, mode, matrices, vcp, mainHand, leftHanded, light, overlay);
+        super.renderInner(stack, player, playerEntityRenderer, mode, matrices, vcp, mainHand, leftHanded, tickDelta, light, overlay);
     }
 
     @Override

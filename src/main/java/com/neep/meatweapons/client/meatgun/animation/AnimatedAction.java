@@ -1,5 +1,8 @@
 package com.neep.meatweapons.client.meatgun.animation;
 
+import com.neep.meatweapons.component.MeatgunComponent;
+import net.minecraft.client.util.math.MatrixStack;
+
 public abstract class AnimatedAction<E, T extends RenderAction<E>> implements RenderAction<E>, MeatgunAnimation
 {
     protected final Class<T> clazz;
@@ -21,19 +24,24 @@ public abstract class AnimatedAction<E, T extends RenderAction<E>> implements Re
     public void tick()
     {
         ++counter;
+
+        if (sequence != null && !finished)
+            sequence.tick(clazz.cast(this), counter);
     }
 
-    public void onRender(float tickDelta)
+    public void applyRender(MatrixStack matrices, float tickDelta)
     {
-        if (sequence != null && !finished)
-            sequence.tick(clazz.cast(this), counter, tickDelta);
+        if (sequence != null)
+            sequence.applyRender(matrices, counter, tickDelta);
+        else
+            System.out.println("else");
     }
 
     public void setSequence(Sequence<T> sequence)
     {
         // Reset the tick counter and replace the current sequence
         this.sequence = sequence;
-        counter = 0;
+        counter = 0; // Jank
     }
 
     public void markFinished()
@@ -44,6 +52,6 @@ public abstract class AnimatedAction<E, T extends RenderAction<E>> implements Re
     @Override
     public boolean finished()
     {
-        return true;
+        return finished;
     }
 }

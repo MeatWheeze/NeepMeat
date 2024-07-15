@@ -1,7 +1,7 @@
 package com.neep.meatweapons.meatgun.module;
 
 import com.neep.meatweapons.MeatWeapons;
-import com.neep.meatweapons.item.meatgun.MeatgunComponent;
+import com.neep.meatweapons.component.MeatgunComponent;
 import com.neep.meatweapons.network.MWAttackC2SPacket;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -32,6 +32,11 @@ public interface MeatgunModule
     default void trigger(World world, PlayerEntity player, ItemStack stack, int id, double pitch, double yaw, MWAttackC2SPacket.HandType handType)
     {
         getChildren().forEach(c -> c.get().trigger(world, player, stack, id, pitch, yaw, handType));
+    }
+
+    default void release(World world, PlayerEntity player, ItemStack stack, int id, double pitch, double yaw, MWAttackC2SPacket.HandType handType)
+    {
+        getChildren().forEach(c -> c.get().release(world, player, stack, id, pitch, yaw, handType));
     }
 
     default void tickTrigger(World world, PlayerEntity player, ItemStack stack, int id, double pitch, double yaw, MWAttackC2SPacket.HandType handType)
@@ -149,7 +154,6 @@ public interface MeatgunModule
         {
             return nbtFactory.create(listener, nbt);
         }
-
     }
 
     enum ChildProperties
