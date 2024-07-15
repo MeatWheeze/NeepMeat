@@ -3,6 +3,7 @@ package com.neep.meatlib.network;
 import com.neep.meatlib.api.network.ChannelFormat;
 import com.neep.meatlib.client.ClientChannelReceiver;
 import com.neep.meatlib.client.ClientChannelSender;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
@@ -10,38 +11,37 @@ import net.minecraft.util.Identifier;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ChannelManager<T>
+public class GlobalChannelManager<T>
 {
     private final Identifier name;
     private final ChannelFormat<T> format;
     private final PlayerEntity player;
 
     private final List<Receiver<T>> receivers = new ArrayList<>();
-    private final Sender<T> sender;
 
     // If sources are split in the future, I may need to instantiate this through an opaque functional interface
     // that changes depending on environment.
-    public static <T> ChannelManager<T> create(Identifier name, ChannelFormat<T> format, PlayerEntity player)
+    public static <T> GlobalChannelManager<T> create(Identifier name, ChannelFormat<T> format, PlayerEntity player)
     {
-        return new ChannelManager<>(name, format, player);
+        return new GlobalChannelManager<>(name, format, player);
     }
 
-    protected ChannelManager(Identifier name, ChannelFormat<T> format, PlayerEntity player)
+    protected GlobalChannelManager(Identifier name, ChannelFormat<T> format, PlayerEntity player)
     {
         this.name = name;
         this.format = format;
         this.player = player;
-        this.sender = createSender(player);
     }
 
     private Sender<T> createSender(PlayerEntity player)
     {
         if (player instanceof ServerPlayerEntity serverPlayerEntity)
         {
-            return new ServerChannelSender<>(name, format, serverPlayerEntity);
+            return buf -> ServerPlayNetworking.send(serverPlayerEntity, name, buf);
         }
         else
         {
+            // This should be server-safe as this will never be called on the server, but it's a bit naughty.
             return new ClientChannelSender<>(name, format);
         }
     }
@@ -51,9 +51,9 @@ public class ChannelManager<T>
         return format;
     }
 
-    public T emitter()
+    public T emitter(PlayerEntity to)
     {
-        return format.emitter(sender);
+        return format.emitter(createSender(to));
     }
 
     public void receiver(T listener)

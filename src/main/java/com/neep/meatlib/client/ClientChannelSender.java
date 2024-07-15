@@ -22,12 +22,6 @@ public class ClientChannelSender<T> implements Sender<T>
     }
 
     @Override
-    public T emitter()
-    {
-        return format.emitter(this);
-    }
-
-    @Override
     public void send(PacketByteBuf buf)
     {
         ClientPlayNetworking.send(name, buf);
