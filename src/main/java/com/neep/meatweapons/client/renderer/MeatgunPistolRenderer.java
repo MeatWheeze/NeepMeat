@@ -152,13 +152,13 @@ public class MeatgunPistolRenderer extends BuiltinModelItemRenderer implements B
                 .translate(cx, cy, cz)
                 .scale(armScale, armScale, armScale)
                 .translate(-cx, -cy, -cz)
-                .translate(12 / 16f / armScale, -4 / 16f / armScale, 20 / 16f / armScale)
+                .translate((leftHanded ? 0 : 12) / 16f / armScale, -4 / 16f / armScale, 20 / 16f / armScale)
                 ;
         matrices.multiplyPositionMatrix(t);
 
-        if (mode.isFirstPerson()
-                && player.getStackInHand(otherHand).isEmpty()
-                && hand == Hand.MAIN_HAND) // Prevent three arms when the main hand is empty
+        if (mode.isFirstPerson())
+//                && player.getStackInHand(otherHand).isEmpty())
+//                && hand == Hand.MAIN_HAND) // Prevent three arms when the main hand is empty
         {
             if (leftHanded)
             {
