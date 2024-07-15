@@ -1,10 +1,8 @@
 package com.neep.meatweapons.client.screen.meatgun;
 
-import com.neep.meatlib.client.ClientChannelSender;
-import com.neep.meatlib.network.Sender;
 import com.neep.meatweapons.init.MWComponents;
-import com.neep.meatweapons.item.meatgun.MeatgunModuleItem;
 import com.neep.meatweapons.item.meatgun.MeatgunComponent;
+import com.neep.meatweapons.item.meatgun.MeatgunModuleItem;
 import com.neep.meatweapons.meatgun.module.MeatgunModule;
 import com.neep.meatweapons.meatgun.module.ModuleSlot;
 import com.neep.meatweapons.screen.TinkerTableScreenHandler;
@@ -27,18 +25,20 @@ class TreePane extends TinkerTableScreen.PaneWidget
 {
     private final TextRenderer textRenderer = MinecraftClient.getInstance().textRenderer;
     private final List<ModuleWidget> moduleWidgets = new ArrayList<>();
+    private final TinkerTableScreenHandler handler;
     private final Slot slot;
     @Nullable private MeatgunComponent meatgun;
     private boolean scissor;
 
     private float ox, oy;
 
-    private final Sender<TinkerTableScreenHandler.SlotClick> sender;
+//    private final Sender<TinkerTableScreenHandler.SlotClick> sender;
 
     public TreePane(TinkerTableScreenHandler handler, Slot itemSlot)
     {
+        this.handler = handler;
         this.slot = itemSlot;
-        this.sender = new ClientChannelSender<>(TinkerTableScreenHandler.CHANNEL_ID, TinkerTableScreenHandler.CHANNEL_FORMAT);
+//        this.sender = new ClientChannelSender<>(TinkerTableScreenHandler.CHANNEL_ID, TinkerTableScreenHandler.CHANNEL_FORMAT);
     }
 
     @Override
@@ -250,7 +250,8 @@ class TreePane extends TinkerTableScreen.PaneWidget
         {
             if (bounds.isWithin(mouseX, mouseY))
             {
-                sender.emitter().apply(module.getUuid(), slotIdx);
+//                sender.emitter().apply(module.getUuid(), slotIdx);
+                handler.slotClick.emitter().apply(module.getUuid(), slotIdx);
 
                 return true;
             }

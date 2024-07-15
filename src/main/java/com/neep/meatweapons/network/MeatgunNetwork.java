@@ -24,6 +24,15 @@ public class MeatgunNetwork
         ServerPlayNetworking.send(player, CHANNEL, buf);
     }
 
+    public static void playAnimation(ServerPlayerEntity player, String name)
+    {
+        PacketByteBuf buf = PacketByteBufs.create();
+
+        buf.writeString(name);
+
+        ServerPlayNetworking.send(player, CHANNEL, buf);
+    }
+
     public enum RecoilDirection
     {
         UP,

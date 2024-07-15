@@ -2,15 +2,13 @@ package com.neep.meatweapons.screen;
 
 import com.neep.meatlib.api.network.ChannelFormat;
 import com.neep.meatlib.api.network.ParamCodec;
-import com.neep.meatlib.network.Receiver;
-import com.neep.meatlib.network.ServerChannelReceiver;
-import com.neep.meatweapons.MWItems;
+import com.neep.meatlib.network.ChannelManager;
 import com.neep.meatweapons.MeatWeapons;
 import com.neep.meatweapons.init.MWComponents;
 import com.neep.meatweapons.init.MWScreenHandlers;
 import com.neep.meatweapons.item.meatgun.Meatgun;
-import com.neep.meatweapons.item.meatgun.MeatgunModuleItem;
 import com.neep.meatweapons.item.meatgun.MeatgunComponent;
+import com.neep.meatweapons.item.meatgun.MeatgunModuleItem;
 import com.neep.meatweapons.meatgun.module.MeatgunModule;
 import com.neep.meatweapons.meatgun.module.ModuleSlot;
 import com.neep.neepmeat.screen_handler.BasicScreenHandler;
@@ -20,7 +18,6 @@ import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.screen.slot.Slot;
-import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
 
 import java.util.UUID;
@@ -36,7 +33,7 @@ public class TinkerTableScreenHandler extends BasicScreenHandler
             .param(ParamCodec.INT)
             .build();
 
-    private Receiver<SlotClick> receiver = Receiver.empty();
+    public final ChannelManager<SlotClick> slotClick;
 
     public TinkerTableScreenHandler(int syncId, PlayerInventory playerInventory)
     {
@@ -46,6 +43,7 @@ public class TinkerTableScreenHandler extends BasicScreenHandler
     public TinkerTableScreenHandler(int syncId, PlayerInventory playerInventory, Inventory blockInv)
     {
         super(MWScreenHandlers.MEATGUN, playerInventory, blockInv, syncId, null);
+        this.slotClick = ChannelManager.create(CHANNEL_ID, CHANNEL_FORMAT, playerInventory.player);
 
         addSlot(new Slot(blockInv, 0, 8, BACKGROUND_HEIGHT - 2 - 21)
         {
@@ -58,8 +56,7 @@ public class TinkerTableScreenHandler extends BasicScreenHandler
         createInventory(5 + 24, BACKGROUND_HEIGHT - 80, playerInventory);
         createHotbar(5 + 24, BACKGROUND_HEIGHT - 23, playerInventory);
 
-        if (playerInventory.player instanceof ServerPlayerEntity serverPlayerEntity)
-            this.receiver = new ServerChannelReceiver<>(serverPlayerEntity, CHANNEL_ID, CHANNEL_FORMAT, this::onSlotClick);
+        slotClick.receiver(this::onSlotClick);
     }
 
     @Override
@@ -79,7 +76,7 @@ public class TinkerTableScreenHandler extends BasicScreenHandler
     public void onClosed(PlayerEntity player)
     {
         super.onClosed(player);
-        receiver.close();
+        slotClick.close();
     }
 
     public void onSlotClick(UUID uuid, int slotIdx)

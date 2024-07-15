@@ -29,10 +29,6 @@ public class MeatgunComponentImpl extends ItemComponent implements MeatgunCompon
     private boolean invalidated = false;
     private final Listener listener = new Listener();
 
-    // We don't know anything immediately after instantiation, so this field must be set in tick().
-    // Not 100% reliable.
-    private boolean isClient = MeatLib.isClient;
-
     // Eeek! A bit unsafe, but normally fine.
     @Environment(EnvType.CLIENT)
     private MeatgunAnimationManager animationManager;
@@ -127,8 +123,6 @@ public class MeatgunComponentImpl extends ItemComponent implements MeatgunCompon
     @Override
     public void clientTick(PlayerEntity player)
     {
-        isClient = true;
-
         if (animationManager == null)
             animationManager = new MeatgunAnimationManager(this);
 
@@ -138,6 +132,7 @@ public class MeatgunComponentImpl extends ItemComponent implements MeatgunCompon
     @Override
     public void markDirty()
     {
+//        dirty = true;
         if (root != null)
             root.writeNbt(getOrCreateRootTag());
     }
@@ -181,11 +176,8 @@ public class MeatgunComponentImpl extends ItemComponent implements MeatgunCompon
     public void onTagInvalidated()
     {
         super.onTagInvalidated();
-        if (!isClient)
-        {
-            dirty = true;
-            invalidated = true;
-        }
+        dirty = true;
+        invalidated = true;
     }
 
     public int getInt()
@@ -225,7 +217,7 @@ public class MeatgunComponentImpl extends ItemComponent implements MeatgunCompon
         @Override
         public void markDirty()
         {
-            if (!isClient)
+            if (!MeatLib.isClient())
                 MeatgunComponentImpl.this.markDirty();
         }
     }
