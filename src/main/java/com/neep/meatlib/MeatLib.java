@@ -34,8 +34,6 @@ public class MeatLib implements ModInitializer
      */
     public static ValkyrienSkiesUtil vsUtil = null;
 
-    public static boolean isClient = false;
-
     public static void assertActive(Object object)
     {
         if (CURRENT_NAMESPACE == null)
@@ -106,5 +104,13 @@ public class MeatLib implements ModInitializer
             CURRENT_NAMESPACE = null;
             ACTIVE = false;
         }
+    }
+
+    /**
+     * A really horrible way of checking environment. Use as a last resort or not at all.
+     */
+    public static boolean isClient()
+    {
+        return Thread.currentThread().getName().equals("Render thread");
     }
 }

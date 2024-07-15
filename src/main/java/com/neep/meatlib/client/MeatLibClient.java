@@ -14,8 +14,6 @@ public class MeatLibClient implements ClientModInitializer
     @Override
     public void onInitializeClient()
     {
-        MeatLib.isClient = true;
-
         if (MeatLib.vsUtil != null)
             MeatLib.vsUtil.CLIENT = new ValkyrienSkiesUtil.Client();
 
