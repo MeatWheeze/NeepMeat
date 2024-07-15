@@ -22,5 +22,6 @@ public class MeatLibClient implements ClientModInitializer
         ScreenPacketClient.init();
         BlockAttackListenerThings.init();
         BlockEntitySync.Client.init();
+        MWHudThings.init();
     }
 }
