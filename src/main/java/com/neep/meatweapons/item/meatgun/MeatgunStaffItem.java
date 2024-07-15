@@ -33,7 +33,7 @@ public class MeatgunStaffItem extends MeatgunItem
     }
 
     @Override
-    public Supplier<Object> createAnimationManager(MeatgunComponent component)
+    public Supplier<Object> createAnimationManager()
     {
         return new Supplier<Object>()
         {
@@ -41,8 +41,8 @@ public class MeatgunStaffItem extends MeatgunItem
             public Object get()
             {
                 return new MeatgunAnimationManager(new StaffIdleMeatgunAnimation())
-                        .add("blade_swing_down", new ChopMeatgunAnimation(component))
-                        .add("upper_thrust", new TridentStaffAnimation(component))
+                        .add("blade_swing_down", new ChopMeatgunAnimation())
+                        .add("upper_thrust", new TridentStaffAnimation())
                         ;
             }
         };

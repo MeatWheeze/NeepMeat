@@ -9,17 +9,10 @@ import net.minecraft.client.util.math.MatrixStack;
 @Environment(EnvType.CLIENT)
 public class ChopMeatgunAnimation extends AnimatedAction<MeatgunComponent, ChopMeatgunAnimation> implements MeatgunAnimation
 {
-    private final MeatgunComponent component;
-
-    public ChopMeatgunAnimation(MeatgunComponent component)
-    {
-        this.component = component;
-    }
-
     private final RenderAction.Sequence<ChopMeatgunAnimation> down = new Sequence<>()
     {
         @Override
-        public void tick(ChopMeatgunAnimation parent, int counter)
+        public void tick(ChopMeatgunAnimation parent, MeatgunComponent component, int counter)
         {
             if (counter >= 4)
                 setSequence(up);
@@ -41,7 +34,7 @@ public class ChopMeatgunAnimation extends AnimatedAction<MeatgunComponent, ChopM
     private final RenderAction.Sequence<ChopMeatgunAnimation> up = new Sequence<>()
     {
         @Override
-        public void tick(ChopMeatgunAnimation parent, int counter)
+        public void tick(ChopMeatgunAnimation parent, MeatgunComponent component, int counter)
         {
             if (counter >= 10)
                 markFinished();
@@ -58,13 +51,6 @@ public class ChopMeatgunAnimation extends AnimatedAction<MeatgunComponent, ChopM
             StaffIdleMeatgunAnimation.apply(matrices, rx, ry, 0);
         }
     };
-
-
-    @Override
-    public void tick()
-    {
-        super.tick();
-    }
 
     @Override
     public void start()

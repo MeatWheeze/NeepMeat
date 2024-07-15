@@ -21,12 +21,12 @@ public abstract class AnimatedAction<E, T extends RenderAction<E>> implements Re
     }
 
     @Override
-    public void tick()
+    public void tick(MeatgunComponent component)
     {
         ++counter;
 
         if (sequence != null && !finished)
-            sequence.tick(clazz.cast(this), counter);
+            sequence.tick(clazz.cast(this), component, counter);
     }
 
     public void applyRender(MatrixStack matrices, float tickDelta)

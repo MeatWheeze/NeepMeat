@@ -9,5 +9,8 @@ public interface Meatgun
 {
     MeatgunModule createBase(MeatgunComponent.Listener listener);
 
-    Supplier<Object> createAnimationManager(MeatgunComponent component);
+    /**
+     * @return An anonymous instance of {@link Supplier<MeatgunAnimationManager>} so that it won't get loaded on the server.
+     */
+    Supplier<Object> createAnimationManager();
 }

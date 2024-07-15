@@ -8,7 +8,7 @@ import java.util.WeakHashMap;
 
 public class RecoilManager
 {
-    private static final Map<UUID, RecoilManager> INSTANCE = new WeakHashMap<>();
+    private static final Map<UUID, RecoilManager> INSTANCES = new WeakHashMap<>();
 
     public MeatgunNetwork.RecoilDirection direction;
 
@@ -19,7 +19,7 @@ public class RecoilManager
 
     public static RecoilManager getOrCreate(UUID uuid)
     {
-        return INSTANCE.computeIfAbsent(uuid, u -> new RecoilManager());
+        return INSTANCES.computeIfAbsent(uuid, u -> new RecoilManager());
     }
 
     public void set(MeatgunNetwork.RecoilDirection direction, float amount, float horAmount, float returnSpeed, float horReturnSpeed)

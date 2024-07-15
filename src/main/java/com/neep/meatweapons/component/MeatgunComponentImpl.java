@@ -150,9 +150,9 @@ public class MeatgunComponentImpl extends ItemComponent implements MeatgunCompon
     public void clientTick(PlayerEntity player)
     {
         if (animationManager == null)
-            this.animationManager = (MeatgunAnimationManager) ((Meatgun) stack.getItem()).createAnimationManager(this).get();
+            this.animationManager = MeatgunAnimationManager.getOrCreate(getUuid(), (Meatgun) stack.getItem());
 
-        animationManager.tick();
+        animationManager.tick(this);
     }
 
     @Override

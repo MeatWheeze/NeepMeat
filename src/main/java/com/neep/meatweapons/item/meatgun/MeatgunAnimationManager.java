@@ -1,18 +1,26 @@
 package com.neep.meatweapons.item.meatgun;
 
-import com.neep.meatweapons.client.meatgun.animation.ChopMeatgunAnimation;
 import com.neep.meatweapons.client.meatgun.animation.MeatgunAnimation;
 import com.neep.meatweapons.component.MeatgunComponent;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import org.apache.commons.collections4.map.AbstractReferenceMap;
+import org.apache.commons.collections4.map.ReferenceMap;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 @Environment(EnvType.CLIENT)
 public class MeatgunAnimationManager
 {
+    private static final Map<UUID, MeatgunAnimationManager> INSTANCES = new ReferenceMap<>(AbstractReferenceMap.ReferenceStrength.HARD, AbstractReferenceMap.ReferenceStrength.SOFT);
+
+    public static MeatgunAnimationManager getOrCreate(UUID uuid, Meatgun meatgun)
+    {
+        return INSTANCES.computeIfAbsent(uuid, u -> (MeatgunAnimationManager) meatgun.createAnimationManager().get());
+    }
 
     private final MeatgunAnimation idle;
     private MeatgunAnimation activeAnimation = MeatgunAnimation.EMPTY;
@@ -42,7 +50,7 @@ public class MeatgunAnimationManager
         }
     }
 
-    public void tick()
+    public void tick(MeatgunComponent component)
     {
         if (activeAnimation.finished())
         {
@@ -50,7 +58,7 @@ public class MeatgunAnimationManager
             activeAnimation.start();
         }
 
-        activeAnimation.tick();
+        activeAnimation.tick(component);
     }
 
     public MeatgunAnimation getActive()

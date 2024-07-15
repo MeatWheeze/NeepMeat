@@ -22,7 +22,7 @@ public class MeatgunPistolItem extends MeatgunItem
     }
 
     @Override
-    public Supplier<Object> createAnimationManager(MeatgunComponent component)
+    public Supplier<Object> createAnimationManager()
     {
         return new Supplier<Object>()
         {

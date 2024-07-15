@@ -1,5 +1,6 @@
 package com.neep.meatweapons.client.meatgun.animation;
 
+import com.neep.meatweapons.component.MeatgunComponent;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.util.math.MatrixStack;
@@ -13,7 +14,7 @@ public interface MeatgunAnimation
 
     boolean finished();
 
-    void tick();
+    void tick(MeatgunComponent component);
 
     void applyRender(MatrixStack matrices, float tickDelta);
 
@@ -35,7 +36,7 @@ public interface MeatgunAnimation
         }
 
         @Override
-        public void tick()
+        public void tick(MeatgunComponent component)
         {
 
         }

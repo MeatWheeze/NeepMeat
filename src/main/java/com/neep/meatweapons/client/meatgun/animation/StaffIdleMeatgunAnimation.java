@@ -12,7 +12,7 @@ public class StaffIdleMeatgunAnimation extends AnimatedAction<MeatgunComponent, 
     private final Sequence<StaffIdleMeatgunAnimation> idle = new Sequence<>()
     {
         @Override
-        public void tick(StaffIdleMeatgunAnimation parent, int counter)
+        public void tick(StaffIdleMeatgunAnimation parent, MeatgunComponent component, int counter)
         {
         }
 
@@ -26,10 +26,10 @@ public class StaffIdleMeatgunAnimation extends AnimatedAction<MeatgunComponent, 
     public static void apply(MatrixStack matrices, float xRot, float yRot, float zRot)
     {
         matrices.translate(0, -4 / 16f, 0 / 16f);
-        matrices.translate(0, 0, 1);
+        matrices.translate(0, 0, 1.5);
         matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(5 + yRot));
         matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(xRot));
-        matrices.translate(0, 0, -1);
+        matrices.translate(0, 0, -1.5);
         matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(-20 + zRot));
     }
 
