@@ -1,5 +1,7 @@
 package com.neep.meatlib.api.network;
 
+import it.unimi.dsi.fastutil.bytes.ByteByteImmutablePair;
+import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.util.Identifier;
@@ -22,6 +24,30 @@ public interface ParamCodec<T>
     ParamCodec<UUID> UUID = of(UUID.class, (o, buf) -> buf.writeUuid(o), PacketByteBuf::readUuid);
     ParamCodec<NbtCompound> NBT = of(NbtCompound.class, (o, buf) -> buf.writeNbt(o), PacketByteBuf::readNbt);
     ParamCodec<Identifier> IDENTIFIER = of(Identifier.class, (o, buf) -> buf.writeIdentifier(o), PacketByteBuf::readIdentifier);
+
+    ParamCodec<PacketByteBuf> BUF = of(PacketByteBuf.class, (o, buf) ->
+    {
+        if (o != null)
+        {
+            buf.writeBoolean(true);
+            buf.writeVarInt(o.readableBytes()); // Hopefully this works.
+            buf.asByteBuf().writeBytes(o.asByteBuf());
+        }
+        else
+        {
+            buf.writeBoolean(false);
+        }
+    }, buf ->
+    {
+        boolean present = buf.readBoolean();
+        if (present)
+        {
+            int bytes = buf.readVarInt();
+            return PacketByteBufs.copy(PacketByteBufs.readSlice(buf, bytes));
+        }
+        return null;
+    });
+
 
     static <T> ParamCodec<List<T>> list(ParamCodec<T> codec)
     {
