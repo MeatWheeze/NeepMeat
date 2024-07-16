@@ -42,5 +42,6 @@ public class MeatgunModuleRenderers
         register(MeatgunModules.UNDERBARREL, UnderbarrelModuleRenderer::new);
         register(MeatgunModules.BATTERY, BatteryModuleRenderer::new);
         register(MeatgunModules.HALBERD, HalberdModuleRenderer::new);
+        register(MeatgunModules.SHOCK_STAFF, ShockStaffModuleRenderer::new);
     }
 }

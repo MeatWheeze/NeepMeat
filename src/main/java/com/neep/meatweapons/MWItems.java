@@ -45,6 +45,7 @@ public class MWItems
     public static MeatgunModuleItem BATTERY = ItemRegistry.queue("battery", new MeatgunModuleItem(MeatgunModules.BATTERY, new MeatlibItemSettings().group(MeatWeapons.WEAPONS)));
 
     public static MeatgunModuleItem HALBERD = ItemRegistry.queue("halberd", new MeatgunModuleItem(MeatgunModules.HALBERD, new MeatlibItemSettings().group(MeatWeapons.WEAPONS)));
+    public static MeatgunModuleItem SHOCK_STAFF = ItemRegistry.queue("shock_staff", new MeatgunModuleItem(MeatgunModules.SHOCK_STAFF, new MeatlibItemSettings().group(MeatWeapons.WEAPONS)));
 
     public static void init()
     {

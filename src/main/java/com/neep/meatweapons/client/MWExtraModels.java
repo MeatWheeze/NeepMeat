@@ -25,6 +25,7 @@ public class MWExtraModels implements ExtraModelProvider
     public static Identifier UNDERBARREL = new Identifier(MeatWeapons.NAMESPACE, "item/meatgun/underbarrel");
     public static Identifier BATTERY = new Identifier(MeatWeapons.NAMESPACE, "item/meatgun/battery");
     public static Identifier HALBERD = new Identifier(MeatWeapons.NAMESPACE, "item/meatgun/halberd");
+    public static Identifier SHOCK_STAFF = new Identifier(MeatWeapons.NAMESPACE, "item/meatgun/shock_staff");
 
     public static final PartialModel BOUNCE_GRENADE = new PartialModel(new Identifier(MeatWeapons.NAMESPACE, "entity/bounce_grenade"));
 

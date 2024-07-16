@@ -27,6 +27,7 @@ public class MeatgunModules
     public static final MeatgunModule.Type<BatteryModule> BATTERY = register(new Identifier(MeatWeapons.NAMESPACE, "battery"), (l, p) -> new BatteryModule(l), BatteryModule::new);
 
     public static final MeatgunModule.Type<HalberdModule> HALBERD = register(new Identifier(MeatWeapons.NAMESPACE, "halberd"), (l, p) -> new HalberdModule(l), HalberdModule::new);
+    public static final MeatgunModule.Type<ShockStaffModule> SHOCK_STAFF = register(new Identifier(MeatWeapons.NAMESPACE, "shock_staff"), (l, p) -> new ShockStaffModule(l), ShockStaffModule::new);
 
     public static <T extends MeatgunModule> MeatgunModule.Type<T> register(Identifier id, MeatgunModule.Factory<T> factory, MeatgunModule.NbtFactory<T> nbtFactory)
     {

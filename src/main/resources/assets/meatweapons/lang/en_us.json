@@ -48,6 +48,7 @@
   "meatgun_module.meatweapons.base": "Base",
   "meatgun_module.meatweapons.bloodthrower": "Bloodthrower",
   "meatgun_module.meatweapons.halberd": "Halberd",
+  "meatgun_module.meatweapons.shock_staff": "Shock Staff",
 
   "text.meatweapons.tinker_table.item_here": "Place Meatgun here",
   "tooltip.meatweapons.meatgun_module_1": "Meatgun Module - install in a Tinker Table"
