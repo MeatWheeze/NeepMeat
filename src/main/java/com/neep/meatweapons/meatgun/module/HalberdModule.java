@@ -5,7 +5,6 @@ import com.neep.meatweapons.component.MeatgunComponent;
 import com.neep.meatweapons.entity.BulletDamageSource;
 import com.neep.meatweapons.entity.HitOnCollideEntity;
 import com.neep.meatweapons.interfaces.HookableEntity;
-import com.neep.meatweapons.interfaces.VehicleMovementHolder;
 import com.neep.meatweapons.item.BaseGunItem;
 import com.neep.meatweapons.item.GunItem;
 import com.neep.meatweapons.network.MWAttackC2SPacket;
@@ -35,7 +34,9 @@ public class HalberdModule extends AbstractMeatgunModule
 {
     private boolean triggerHeld;
     private int triggerTicks;
+
     private int swingDownCooldown;
+    private int hookGrabCooldown;
 
     public HalberdModule(MeatgunComponent.Listener listener)
     {
@@ -127,6 +128,7 @@ public class HalberdModule extends AbstractMeatgunModule
         super.tick(player);
 
         swingDownCooldown = Math.max(0, swingDownCooldown - 1);
+        hookGrabCooldown = Math.max(0, hookGrabCooldown - 1);
 
         if (!player.isSprinting())
         {
@@ -141,16 +143,20 @@ public class HalberdModule extends AbstractMeatgunModule
 
     protected void hookWhenMounted(World world, PlayerEntity player, Entity vehicle, double pitch, double yaw)
     {
+        if (hookGrabCooldown > 0)
+            return;
+
+        hookGrabCooldown = 5;
         world.playSoundFromEntity(null, player, SoundEvents.ENTITY_PLAYER_ATTACK_SWEEP, SoundCategory.PLAYERS, 0.5f, 1);
         Vec3d pos = player.getEyePos();
         Vec3d end = pos.add(GunItem.getRotationVector(pitch, yaw).multiply(4));
         Entity target = BaseGunItem.hitScan(player, pos, end, 4, e -> e != vehicle, (world1, pos1, end1, width, maxTime, showRadius) -> {}).orElse(null);
 
-
         if (target instanceof LivingEntity livingEntity)
         {
             if (player instanceof ServerPlayerEntity serverPlayer)
             {
+                hookGrabCooldown = 20;
                 world.playSoundFromEntity(null, player, SoundEvents.ENTITY_PLAYER_HURT_SWEET_BERRY_BUSH, SoundCategory.PLAYERS, 1, 1);
 
                 Vec3d offset = livingEntity.getPos().subtract(player.getPos());
@@ -256,6 +262,7 @@ public class HalberdModule extends AbstractMeatgunModule
         nbt.putBoolean("trigger_held", triggerHeld);
         nbt.putInt("trigger_ticks", triggerTicks);
         nbt.putInt("down_cooldown", swingDownCooldown);
+        nbt.putInt("grab_cooldown", hookGrabCooldown);
         return nbt;
     }
 
@@ -265,7 +272,7 @@ public class HalberdModule extends AbstractMeatgunModule
         super.readNbt(nbt);
         this.triggerHeld = nbt.getBoolean("trigger_held");
         this.triggerTicks = nbt.getInt("trigger_ticks");
-        this.swingDownCooldown = nbt.getInt("down_cooldown");
+        this.hookGrabCooldown = nbt.getInt("grab_cooldown");
     }
 
     public boolean triggerHeld()

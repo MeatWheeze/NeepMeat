@@ -7,6 +7,7 @@ import com.neep.meatweapons.meatgun.module.MeatgunModule;
 import com.neep.meatweapons.meatgun.module.MeatgunModules;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.util.math.RotationAxis;
@@ -22,6 +23,9 @@ public class HalberdChargeAnimation extends AnimatedAction<MeatgunComponent, Hal
         @Override
         public void tick(HalberdChargeAnimation parent, MeatgunComponent component, int counter)
         {
+            if (!MinecraftClient.getInstance().player.isSprinting())
+                markFinished();
+
             @Nullable MeatgunModule module = MeatgunComponentImpl.findRecursive(component.getRoot(), MeatgunModules.HALBERD);
             if (module instanceof HalberdModule halberd && halberd.triggerHeld())
             {

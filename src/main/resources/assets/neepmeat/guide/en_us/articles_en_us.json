@@ -517,6 +517,19 @@
       {"type": "text", "text": "Assault Drill\n", "bold": true},
       {"type": "text", "text": "The Assault Drill is a drill rated for offensive use. It continuously damages entities with a range of one block. \n"},
       {"type": "text", "text": "The drill runs on Ethereal Fuel. To refuel, right-click on a container of Ethereal Fuel or use a bottler. This item can also be enchanted to increase its damage output."}
+    ]},
+
+    {"id": "halberd", "contents": [
+      {"type": "text", "text": "Halberd\n", "bold": true},
+      {"type": "text", "text": "The halberd is a module for the Staff base. It has a number of different melee attacks.\n"},
+      {"type": "text", "text": "When unmounted:"},
+      {"type": "text", "text": "Attack 1: Charges if held while sprinting. When released, the user leaps forwards a number of blocks, damaging entities in the way."},
+      {"type": "text", "text": " Base damage: 6"},
+      {"type": "text", "text": "Attack 2: Attacks the targeted entity."},
+      {"type": "text", "text": " Base damage: 7"},
+      {"type": "text", "text": " Range: 3"},
+      {"type": "text", "text": "When mounted:\n"},
+      {"type": "text", "text": "- Attack 1: ."}
     ]}
   ]
 }
