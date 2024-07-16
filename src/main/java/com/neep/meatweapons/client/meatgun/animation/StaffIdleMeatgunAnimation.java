@@ -4,7 +4,9 @@ import com.neep.meatweapons.component.MeatgunComponent;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.network.PacketByteBuf;
 import net.minecraft.util.math.RotationAxis;
+import org.jetbrains.annotations.Nullable;
 
 @Environment(EnvType.CLIENT)
 public class StaffIdleMeatgunAnimation extends AnimatedAction<MeatgunComponent, StaffIdleMeatgunAnimation> implements MeatgunAnimation
@@ -17,9 +19,10 @@ public class StaffIdleMeatgunAnimation extends AnimatedAction<MeatgunComponent, 
         }
 
         @Override
-        public void applyRender(MatrixStack matrices, int counter, float tickDelta)
+        public boolean applyRender(MatrixStack matrices, int counter, float tickDelta)
         {
             apply(matrices, 0, 0, 0);
+            return true;
         }
     };
 
@@ -34,9 +37,9 @@ public class StaffIdleMeatgunAnimation extends AnimatedAction<MeatgunComponent, 
     }
 
     @Override
-    public void start()
+    public void start(@Nullable PacketByteBuf buf)
     {
-        super.start();
+        super.start(buf);
         setSequence(idle);
     }
 

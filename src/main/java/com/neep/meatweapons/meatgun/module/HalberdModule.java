@@ -1,5 +1,6 @@
 package com.neep.meatweapons.meatgun.module;
 
+import com.neep.meatlib.network.PacketBufUtil;
 import com.neep.meatweapons.component.MeatgunComponent;
 import com.neep.meatweapons.entity.BulletDamageSource;
 import com.neep.meatweapons.entity.HitOnCollideEntity;
@@ -10,12 +11,14 @@ import com.neep.meatweapons.item.GunItem;
 import com.neep.meatweapons.network.MWAttackC2SPacket;
 import com.neep.meatweapons.network.MeatgunNetwork;
 import com.neep.neepmeat.NeepMeat;
+import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.passive.AbstractHorseEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.network.PacketByteBuf;
 import net.minecraft.network.packet.c2s.play.VehicleMoveC2SPacket;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
@@ -59,7 +62,7 @@ public class HalberdModule extends AbstractMeatgunModule
         {
             fireBeam(world, player, player.getVehicle(), pitch, yaw);
             world.playSoundFromEntity(null, player, SoundEvents.ENTITY_PLAYER_ATTACK_SWEEP, SoundCategory.PLAYERS, 1, 1);
-            MeatgunNetwork.SEND_ANIMATION.emitter(player).apply("blade_swing_down"); // Sword attack
+            MeatgunNetwork.SEND_ANIMATION.emitter(player).apply("blade_swing_down", null); // Sword attack
             swingDownCooldown = 15;
         }
 
@@ -74,7 +77,7 @@ public class HalberdModule extends AbstractMeatgunModule
             {
                 triggerHeld = true;
                 listener.markDirty();
-                MeatgunNetwork.SEND_ANIMATION.emitter(player).apply("upper_thrust");
+                MeatgunNetwork.SEND_ANIMATION.emitter(player).apply("upper_thrust", null);
             }
         }
     }
@@ -111,7 +114,7 @@ public class HalberdModule extends AbstractMeatgunModule
                 if (!triggerHeld)
                 {
                     triggerHeld = true;
-                    MeatgunNetwork.SEND_ANIMATION.emitter(player).apply("upper_thrust");
+                    MeatgunNetwork.SEND_ANIMATION.emitter(player).apply("upper_thrust", null);
                     listener.markDirty();
                 }
             }
@@ -143,13 +146,19 @@ public class HalberdModule extends AbstractMeatgunModule
         Vec3d end = pos.add(GunItem.getRotationVector(pitch, yaw).multiply(4));
         Entity target = BaseGunItem.hitScan(player, pos, end, 4, e -> e != vehicle, (world1, pos1, end1, width, maxTime, showRadius) -> {}).orElse(null);
 
+
         if (target instanceof LivingEntity livingEntity)
         {
             if (player instanceof ServerPlayerEntity serverPlayer)
             {
-                VehicleMovementHolder holder = ((VehicleMovementHolder) serverPlayer.networkHandler);
-
                 world.playSoundFromEntity(null, player, SoundEvents.ENTITY_PLAYER_HURT_SWEET_BERRY_BUSH, SoundCategory.PLAYERS, 1, 1);
+
+                Vec3d offset = livingEntity.getPos().subtract(player.getPos());
+
+                PacketByteBuf buf = PacketByteBufs.create();
+                PacketBufUtil.writeVec3d(buf, offset);
+                MeatgunNetwork.SEND_ANIMATION.emitter(player).apply("hook_grab", buf);
+
                 if (target.hasVehicle() && player.getRandom().nextBoolean())
                 {
                     target.dismountVehicle();
@@ -164,7 +173,7 @@ public class HalberdModule extends AbstractMeatgunModule
 //                target.velocityModified = true;
 //                target.velocityDirty = true;
 
-                ((HookableEntity) livingEntity).meatweapons$setHookParent(player, livingEntity.getPos().subtract(player.getPos()));
+                ((HookableEntity) livingEntity).meatweapons$setHookParent(player, offset);
                 ((HookableEntity) livingEntity).meatweapons$setHookTicks(20);
                 livingEntity.damage(world.getDamageSources().playerAttack(player), 2);
             }

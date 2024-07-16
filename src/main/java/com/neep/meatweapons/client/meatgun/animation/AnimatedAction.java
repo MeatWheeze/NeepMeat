@@ -2,6 +2,8 @@ package com.neep.meatweapons.client.meatgun.animation;
 
 import com.neep.meatweapons.component.MeatgunComponent;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.network.PacketByteBuf;
+import org.jetbrains.annotations.Nullable;
 
 public abstract class AnimatedAction<E, T extends RenderAction<E>> implements RenderAction<E>, MeatgunAnimation
 {
@@ -15,7 +17,7 @@ public abstract class AnimatedAction<E, T extends RenderAction<E>> implements Re
         this.clazz = (Class<T>) getClass();
     }
 
-    public void start()
+    public void start(@Nullable PacketByteBuf buf)
     {
         finished = false;
     }
@@ -29,12 +31,12 @@ public abstract class AnimatedAction<E, T extends RenderAction<E>> implements Re
             sequence.tick(clazz.cast(this), component, counter);
     }
 
-    public void applyRender(MatrixStack matrices, float tickDelta)
+    public boolean applyRender(MatrixStack matrices, float tickDelta)
     {
         if (sequence != null)
-            sequence.applyRender(matrices, counter, tickDelta);
-        else
-            System.out.println("else");
+            return sequence.applyRender(matrices, counter, tickDelta);
+
+        return true;
     }
 
     public void setSequence(Sequence<T> sequence)

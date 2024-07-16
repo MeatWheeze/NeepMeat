@@ -4,11 +4,13 @@ import com.neep.meatweapons.component.MeatgunComponent;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.network.PacketByteBuf;
+import org.jetbrains.annotations.Nullable;
 
 @Environment(EnvType.CLIENT)
 public interface MeatgunAnimation
 {
-    void start();
+    void start(@Nullable PacketByteBuf buf);
 
     boolean canStop();
 
@@ -16,12 +18,12 @@ public interface MeatgunAnimation
 
     void tick(MeatgunComponent component);
 
-    void applyRender(MatrixStack matrices, float tickDelta);
+    boolean applyRender(MatrixStack matrices, float tickDelta);
 
     MeatgunAnimation EMPTY = new MeatgunAnimation()
     {
         @Override
-        public void start() { }
+        public void start(@Nullable PacketByteBuf buf) { }
 
         @Override
         public boolean canStop()
@@ -42,9 +44,9 @@ public interface MeatgunAnimation
         }
 
         @Override
-        public void applyRender(MatrixStack matrices, float tickDelta)
+        public boolean applyRender(MatrixStack matrices, float tickDelta)
         {
-
+            return true;
         }
     };
 

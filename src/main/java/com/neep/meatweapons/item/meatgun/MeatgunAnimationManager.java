@@ -4,6 +4,7 @@ import com.neep.meatweapons.client.meatgun.animation.MeatgunAnimation;
 import com.neep.meatweapons.component.MeatgunComponent;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.minecraft.network.PacketByteBuf;
 import org.apache.commons.collections4.map.AbstractReferenceMap;
 import org.apache.commons.collections4.map.ReferenceMap;
 import org.jetbrains.annotations.Nullable;
@@ -31,22 +32,22 @@ public class MeatgunAnimationManager
     {
         this.idle = idle;
         this.activeAnimation = idle;
-        this.activeAnimation.start();
+        this.activeAnimation.start(null);
     }
 
-    public void queue(String name)
+    public void queue(String name, @Nullable PacketByteBuf buf)
     {
         @Nullable MeatgunAnimation animation = animations.get(name);
         if (animation != null)
-            queue(animation);
+            queue(animation, buf);
     }
 
-    public void queue(MeatgunAnimation animation)
+    public void queue(MeatgunAnimation animation, @Nullable PacketByteBuf buf)
     {
         if (activeAnimation.canStop())
         {
             activeAnimation = animation;
-            activeAnimation.start();
+            activeAnimation.start(buf);
         }
     }
 
@@ -55,7 +56,7 @@ public class MeatgunAnimationManager
         if (activeAnimation.finished())
         {
             activeAnimation = idle;
-            activeAnimation.start();
+            activeAnimation.start(null);
         }
 
         activeAnimation.tick(component);

@@ -58,11 +58,11 @@ public class MeatgunPistolRenderer extends BuiltinModelItemRenderer implements B
         transformation.apply(leftHanded, matrices);
         matrices.translate(-0.5F, -0.5F, -0.5F);
 
-        renderInner(stack, player, playerEntityRenderer, mode, matrices, vcp, mainHand, leftHanded, AnimationTickHolder.getPartialTicks(), light, overlay);
+        renderInner(stack, player, playerEntityRenderer, mode, matrices, vcp, true, mainHand, leftHanded, AnimationTickHolder.getPartialTicks(), light, overlay);
     }
 
     // It's easier to override this one
-    protected void renderInner(ItemStack stack, AbstractClientPlayerEntity player, PlayerEntityRenderer playerEntityRenderer, ModelTransformationMode mode, MatrixStack matrices, VertexConsumerProvider vcp, boolean mainHand, boolean leftHanded, float tickDelta, int light, int overlay)
+    protected void renderInner(ItemStack stack, AbstractClientPlayerEntity player, PlayerEntityRenderer playerEntityRenderer, ModelTransformationMode mode, MatrixStack matrices, VertexConsumerProvider vcp, boolean showArm, boolean mainHand, boolean leftHanded, float tickDelta, int light, int overlay)
     {
         // Step recoil
         MeatgunComponent component = MWComponents.MEATGUN.get(stack);
@@ -99,7 +99,8 @@ public class MeatgunPistolRenderer extends BuiltinModelItemRenderer implements B
 
         renderParticles(matrices, mode, firstPersonModelTransform, vcp, light, overlay);
 
-        renderArms(matrices, mode, player, playerEntityRenderer, vcp, light, mainHand, leftHanded);
+        if (showArm)
+            renderArms(matrices, mode, player, playerEntityRenderer, vcp, light, mainHand, leftHanded);
     }
 
     protected void transformRecoil(MatrixStack matrices, RecoilManager recoil)

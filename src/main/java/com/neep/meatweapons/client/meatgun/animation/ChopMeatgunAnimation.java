@@ -5,6 +5,8 @@ import com.neep.neepmeat.util.Easing;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.network.PacketByteBuf;
+import org.jetbrains.annotations.Nullable;
 
 @Environment(EnvType.CLIENT)
 public class ChopMeatgunAnimation extends AnimatedAction<MeatgunComponent, ChopMeatgunAnimation> implements MeatgunAnimation
@@ -19,7 +21,7 @@ public class ChopMeatgunAnimation extends AnimatedAction<MeatgunComponent, ChopM
         }
 
         @Override
-        public void applyRender(MatrixStack matrices, int counter, float tickDelta)
+        public boolean applyRender(MatrixStack matrices, int counter, float tickDelta)
         {
             float time = counter + tickDelta;
             float delta = time / 4;
@@ -28,6 +30,7 @@ public class ChopMeatgunAnimation extends AnimatedAction<MeatgunComponent, ChopM
             float ry = 50 * ease;
 
             StaffIdleMeatgunAnimation.apply(matrices, rx, ry, 0);
+            return true;
         }
     };
 
@@ -41,7 +44,7 @@ public class ChopMeatgunAnimation extends AnimatedAction<MeatgunComponent, ChopM
         }
 
         @Override
-        public void applyRender(MatrixStack matrices, int counter, float tickDelta)
+        public boolean applyRender(MatrixStack matrices, int counter, float tickDelta)
         {
             float time = counter + tickDelta;
             float delta = time / 11;
@@ -49,13 +52,14 @@ public class ChopMeatgunAnimation extends AnimatedAction<MeatgunComponent, ChopM
             float rx = -40 * ease;
             float ry = 50 * ease;
             StaffIdleMeatgunAnimation.apply(matrices, rx, ry, 0);
+            return true;
         }
     };
 
     @Override
-    public void start()
+    public void start(@Nullable PacketByteBuf buf)
     {
-        super.start();
+        super.start(buf);
         setSequence(down);
     }
 

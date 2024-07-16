@@ -8,6 +8,7 @@ import com.neep.meatweapons.meatgun.module.MeatgunModules;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.network.PacketByteBuf;
 import net.minecraft.util.math.RotationAxis;
 import org.jetbrains.annotations.Nullable;
 
@@ -33,7 +34,7 @@ public class HalberdChargeAnimation extends AnimatedAction<MeatgunComponent, Hal
         }
 
         @Override
-        public void applyRender(MatrixStack matrices, int counter, float tickDelta)
+        public boolean applyRender(MatrixStack matrices, int counter, float tickDelta)
         {
             // Let's use trial and error to find the shoulder!
             matrices.translate(9 / 16f, -2 / 16f, 1.5);
@@ -49,13 +50,14 @@ public class HalberdChargeAnimation extends AnimatedAction<MeatgunComponent, Hal
             matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(-90));
 //            matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(-90));
             matrices.translate(-9 / 16f, 2 / 16f, -1.5);
+            return true;
         }
     };
 
     @Override
-    public void start()
+    public void start(@Nullable PacketByteBuf buf)
     {
-        super.start();
+        super.start(buf);
         started = false;
         setSequence(up);
     }

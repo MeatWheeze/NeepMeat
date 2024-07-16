@@ -2,6 +2,7 @@ package com.neep.meatweapons.item.meatgun;
 
 import com.neep.meatlib.item.TooltipSupplier;
 import com.neep.meatweapons.client.meatgun.animation.ChopMeatgunAnimation;
+import com.neep.meatweapons.client.meatgun.animation.HalberdGrabAnimation;
 import com.neep.meatweapons.client.meatgun.animation.StaffIdleMeatgunAnimation;
 import com.neep.meatweapons.client.meatgun.animation.HalberdChargeAnimation;
 import com.neep.meatweapons.component.MeatgunComponent;
@@ -43,6 +44,7 @@ public class MeatgunStaffItem extends MeatgunItem
                 return new MeatgunAnimationManager(new StaffIdleMeatgunAnimation())
                         .add("blade_swing_down", new ChopMeatgunAnimation())
                         .add("upper_thrust", new HalberdChargeAnimation())
+                        .add("hook_grab", new HalberdGrabAnimation())
                         ;
             }
         };

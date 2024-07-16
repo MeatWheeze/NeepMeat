@@ -15,7 +15,7 @@ import net.minecraft.util.math.RotationAxis;
 public class MeatgunStaffRenderer extends MeatgunPistolRenderer
 {
     @Override
-    protected void renderInner(ItemStack stack, AbstractClientPlayerEntity player, PlayerEntityRenderer playerEntityRenderer, ModelTransformationMode mode, MatrixStack matrices, VertexConsumerProvider vcp, boolean mainHand, boolean leftHanded, float tickDelta, int light, int overlay)
+    protected void renderInner(ItemStack stack, AbstractClientPlayerEntity player, PlayerEntityRenderer playerEntityRenderer, ModelTransformationMode mode, MatrixStack matrices, VertexConsumerProvider vcp, boolean showArm, boolean mainHand, boolean leftHanded, float tickDelta, int light, int overlay)
     {
         if (mode.isFirstPerson())
         {
@@ -23,11 +23,11 @@ public class MeatgunStaffRenderer extends MeatgunPistolRenderer
             if (component != null)
             {
                 MeatgunAnimation animation = component.getAnimationManager().getActive();
-                animation.applyRender(matrices, tickDelta);
+                showArm = animation.applyRender(matrices, tickDelta);
             }
 
         }
-        super.renderInner(stack, player, playerEntityRenderer, mode, matrices, vcp, mainHand, leftHanded, tickDelta, light, overlay);
+        super.renderInner(stack, player, playerEntityRenderer, mode, matrices, vcp, showArm, mainHand, leftHanded, tickDelta, light, overlay);
     }
 
     @Override

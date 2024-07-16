@@ -8,6 +8,7 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.network.PacketByteBuf;
 
 @Environment(EnvType.CLIENT)
 public class MeatgunClient
@@ -35,7 +36,7 @@ public class MeatgunClient
         MeatgunNetwork.SEND_ANIMATION.receiver(MeatgunClient::receiveAnimation);
     }
 
-    private static void receiveAnimation(String name)
+    private static void receiveAnimation(String name, PacketByteBuf buf)
     {
         MinecraftClient client = MinecraftClient.getInstance();
         MeatgunComponent component = MWComponents.MEATGUN.getNullable(client.player.getMainHandStack());
@@ -43,7 +44,7 @@ public class MeatgunClient
         {
             MeatgunAnimationManager animationManager = component.getAnimationManager();
             if (animationManager != null)
-                animationManager.queue(name);
+                animationManager.queue(name, buf);
         }
     }
 }
