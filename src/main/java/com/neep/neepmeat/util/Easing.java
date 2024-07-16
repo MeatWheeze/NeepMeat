@@ -2,6 +2,21 @@ package com.neep.neepmeat.util;
 
 public class Easing
 {
+    public static double easeInCubic(double x)
+    {
+        return x * x * x;
+    }
+
+    public static double easeOutCubic(double x)
+    {
+        return 1 - Math.pow(1 - x, 3);
+    }
+
+    public static double easeInOutCubic(double x)
+    {
+        return x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2;
+    }
+
     public static double easeInOutBack(double x)
     {
         var c1 = 1.70158;

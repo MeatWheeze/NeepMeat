@@ -1,10 +1,12 @@
 package com.neep.neepmeat.util;
 
+import com.neep.meatweapons.mixin.BoxMixin;
 import com.neep.neepmeat.transport.fluid_network.node.FluidNode;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec2f;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.*;
+import org.checkerframework.framework.qual.NoDefaultQualifierForUse;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.Optional;
 
 import static net.minecraft.util.math.Direction.*;
 
@@ -153,5 +155,42 @@ public class NMMaths
         }
 
         return l;
+    }
+
+//    public static boolean boxIntersectsLine(Box box, Vec3d min, Vec3d max)
+//    {
+//        // Check if start point is within the box
+//        boolean xStart = min.x >= box.minX && min.x <= box.maxX;
+//        boolean yStart = min.y >= box.minY && min.y <= box.maxY;
+//        boolean zStart = min.z >= box.minZ && min.z <= box.maxZ;
+//
+//        if (xStart && yStart && zStart)
+//            return true;
+//
+//
+//
+//        return false;
+//    }
+
+    @Nullable
+    public static Vec3d raycast(Box box, Vec3d min, Vec3d max)
+    {
+        double[] ds = new double[]{1.0};
+        double d = max.x - min.x;
+        double e = max.y - min.y;
+        double f = max.z - min.z;
+        Direction direction = BoxMixin.traceCollisionSide(box, min, ds, null, d, e, f);
+        if (direction == null)
+        {
+            if (box.contains(min))
+                return min;
+
+            return null;
+        }
+        else
+        {
+            double g = ds[0];
+            return min.add(g * d, g * e, g * f);
+        }
     }
 }

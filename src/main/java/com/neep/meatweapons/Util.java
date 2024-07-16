@@ -1,5 +1,6 @@
 package com.neep.meatweapons;
 
+import com.neep.neepmeat.util.NMMaths;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.hit.EntityHitResult;
@@ -7,6 +8,7 @@ import net.minecraft.util.math.Box;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.Optional;
@@ -24,11 +26,11 @@ public class Util
                 .stream()
                 .<EntityHitResult>mapMulti((entity, consumer) ->
         {
-            Optional<Vec3d> optional = entity.getBoundingBox().expand(entity.getTargetingMargin() + margin).raycast(startPos, endPos);
-            optional.ifPresent(vec3d -> consumer.accept(new EntityHitResult(entity, vec3d)));
+            @Nullable Vec3d vec3d = NMMaths.raycast(entity.getBoundingBox().expand(entity.getTargetingMargin() + margin), startPos, endPos);
+            if (vec3d != null)
+                consumer.accept(new EntityHitResult(entity, vec3d));
         }).toList();
     }
-
 
     public static Vec3d getRotationVector(float pitch, float yaw)
     {
