@@ -67,6 +67,7 @@ public class NMSounds
     public static SoundEvent LONG_BOI_FIRE = SoundRegistry.registerSound(MeatWeapons.NAMESPACE, "long_boi_fire");
     public static SoundEvent GRENADE_LAUNCHER_FIRE = SoundRegistry.registerSound(MeatWeapons.NAMESPACE, "grenade_launcher_fire");
     public static SoundEvent BLOODTHROWER_ACTIVE = SoundRegistry.registerSound(MeatWeapons.NAMESPACE, "bloodthrower_active");
+    public static SoundEvent SHOCK_STAFF_ATTACK = SoundRegistry.registerSound(MeatWeapons.NAMESPACE, "shock_staff_attack");
 
     public static SoundEvent HAND_CANNON_FIRE = SoundRegistry.registerSound(MeatWeapons.NAMESPACE, "hand_cannon_fire");
     public static SoundEvent HAND_CANNON_HIT = SoundRegistry.registerSound(MeatWeapons.NAMESPACE, "fusion_hit");
@@ -98,5 +99,6 @@ public class NMSounds
     public static SoundEvent LMG_FIRE = SoundRegistry.registerSound(MeatWeapons.NAMESPACE, "light_machine_gun_fire");
     public static SoundEvent AR_FIRE = SoundRegistry.registerSound(MeatWeapons.NAMESPACE, "ar_fire");
     public static SoundEvent GRENADE = SoundRegistry.registerSound(MeatWeapons.NAMESPACE, "grenade_fire");
+
 
 }

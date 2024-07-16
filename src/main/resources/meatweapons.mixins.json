@@ -4,6 +4,7 @@
   "package": "com.neep.meatweapons.mixin",
   "compatibilityLevel": "JAVA_16",
   "mixins": [
+    "BoxMixin",
     "LivingEntityMixin",
     "PlayerEntityMixin",
     "ServerPlayNetworkHandlerMixin"

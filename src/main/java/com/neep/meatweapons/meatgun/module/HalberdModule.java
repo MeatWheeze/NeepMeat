@@ -2,7 +2,6 @@ package com.neep.meatweapons.meatgun.module;
 
 import com.neep.meatlib.network.PacketBufUtil;
 import com.neep.meatweapons.component.MeatgunComponent;
-import com.neep.meatweapons.entity.BulletDamageSource;
 import com.neep.meatweapons.entity.HitOnCollideEntity;
 import com.neep.meatweapons.interfaces.HookableEntity;
 import com.neep.meatweapons.item.BaseGunItem;
@@ -13,7 +12,6 @@ import com.neep.neepmeat.NeepMeat;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.passive.AbstractHorseEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
@@ -25,12 +23,10 @@ import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import org.jetbrains.annotations.Nullable;
-import org.joml.Vector4d;
 
-import java.util.Optional;
+import java.util.List;
 
-public class HalberdModule extends AbstractMeatgunModule
+public class HalberdModule extends MeleeModule
 {
     private boolean triggerHeld;
     private int triggerTicks;
@@ -40,7 +36,7 @@ public class HalberdModule extends AbstractMeatgunModule
 
     public HalberdModule(MeatgunComponent.Listener listener)
     {
-        super(listener);
+        super(listener, List.of());
     }
 
     public HalberdModule(MeatgunComponent.Listener listener, NbtCompound nbt)
@@ -61,7 +57,7 @@ public class HalberdModule extends AbstractMeatgunModule
 
         if (id == 2 && swingDownCooldown == 0)
         {
-            fireBeam(world, player, player.getVehicle(), pitch, yaw);
+            fireBeam(world, player, pitch, yaw, 3);
             world.playSoundFromEntity(null, player, SoundEvents.ENTITY_PLAYER_ATTACK_SWEEP, SoundCategory.PLAYERS, 1, 1);
             MeatgunNetwork.SEND_ANIMATION.emitter(player).apply("blade_swing_down", null); // Sword attack
             swingDownCooldown = 15;
@@ -150,7 +146,7 @@ public class HalberdModule extends AbstractMeatgunModule
         world.playSoundFromEntity(null, player, SoundEvents.ENTITY_PLAYER_ATTACK_SWEEP, SoundCategory.PLAYERS, 0.5f, 1);
         Vec3d pos = player.getEyePos();
         Vec3d end = pos.add(GunItem.getRotationVector(pitch, yaw).multiply(4));
-        Entity target = BaseGunItem.hitScan(player, pos, end, 4, e -> e != vehicle, (world1, pos1, end1, width, maxTime, showRadius) -> {}).orElse(null);
+        Entity target = BaseGunItem.hitScan(player, pos, end, 4, e -> e != vehicle, (world1, pos1, end1, width, maxTime, showRadius) -> {}, 0.1f).orElse(null);
 
         if (target instanceof LivingEntity livingEntity)
         {
@@ -203,34 +199,7 @@ public class HalberdModule extends AbstractMeatgunModule
         MeatgunNetwork.sendRecoil((ServerPlayerEntity) player, MeatgunNetwork.RecoilDirection.UP, 7, 0.2f,0.7f, 0.03f);
     }
 
-    protected void fireBeam(World world, PlayerEntity player, @Nullable Entity vehicle, double pitch, double yaw)
-    {
-        Vec3d pos = player.getEyePos();
-
-        Vec3d end = pos.add(GunItem.getRotationVector(pitch, yaw).multiply(3));
-//        System.out.println();
-        Optional<Entity> target = BaseGunItem.hitScan(player, pos, end, 3, e -> e != vehicle, (world1, pos1, end1, width, maxTime, showRadius) -> {});
-        if (target.isPresent() && !target.get().hasPassenger(player))
-        {
-            Entity entity = target.get();
-            target.get().damage(BulletDamageSource.create(world, player, 0.1f), 7);
-            entity.timeUntilRegen = 0;
-        }
-
-        MeatgunNetwork.sendRecoil((ServerPlayerEntity) player, MeatgunNetwork.RecoilDirection.UP, 7, 0.2f,0.7f, 0.03f);
-        if (world instanceof ServerWorld serverWorld)
-        {
-            Vector4d v = new Vector4d(0, 0, -13 / 16f, 1);
-            v.mul(this.transform);
-//            serverWorld.spawnParticles(
-//                    new MuzzleFlashParticleType.MuzzleFlashParticleEffect(MWParticles.NORMAL_MUZZLE_FLASH, player, v.x, v.y, v.z, 2.2f, 1)
-//                    , pos.getX(), pos.getY(), pos.getZ(),
-//                    1, 0, 0, 0, 0.1);
-        }
-    }
-
     // I can't think of a better place to put this. It needs to be outside the mixin so that it can be hot-swapped.
-
     public static void onEntityCollide(PlayerEntity origin, Entity target, int ticksRemaining, float damage)
     {
         if (!origin.getWorld().isClient())
@@ -241,12 +210,6 @@ public class HalberdModule extends AbstractMeatgunModule
                 target.damage(origin.getWorld().getDamageSources().playerAttack(origin), damage);
             }
         }
-    }
-
-    public static void onTickControlled(AbstractHorseEntity abstractHorseEntity, PlayerEntity controllingPlayer, Vec3d movementInput)
-    {
-//        if (!abstractHorseEntity.getWorld().isClient())
-//            System.out.println(abstractHorseEntity.horizontalSpeed);
     }
 
     public static void onOnVehicleMove(VehicleMoveC2SPacket packet, Entity entity, ServerWorld serverWorld, double d, double e, double f, double g, double h, double i, float j, float k, double l, double m, double n, double o, double p, boolean bl, boolean bl2)
@@ -272,6 +235,7 @@ public class HalberdModule extends AbstractMeatgunModule
         super.readNbt(nbt);
         this.triggerHeld = nbt.getBoolean("trigger_held");
         this.triggerTicks = nbt.getInt("trigger_ticks");
+        this.swingDownCooldown = nbt.getInt("down_cooldown");
         this.hookGrabCooldown = nbt.getInt("grab_cooldown");
     }
 

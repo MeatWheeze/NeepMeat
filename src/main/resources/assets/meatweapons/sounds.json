@@ -139,6 +139,12 @@
     "sounds": [
       "meatweapons:bloodthrower_active"
     ]
+  },
+  "shock_staff_attack": {
+    "subtitle": "subtitles.meatweapons.shock_staff.attack",
+    "sounds": [
+      "meatweapons:shock_staff_attack"
+    ]
   }
 
 }
