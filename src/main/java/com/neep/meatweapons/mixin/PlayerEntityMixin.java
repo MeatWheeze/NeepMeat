@@ -5,7 +5,10 @@ import com.neep.meatweapons.entity.PlayerWeaponManager;
 import com.neep.meatweapons.interfaces.MWPlayerEntity;
 import com.neep.meatweapons.meatgun.module.HalberdModule;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -14,7 +17,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(PlayerEntity.class)
-public abstract class PlayerEntityMixin implements MWPlayerEntity, HitOnCollideEntity
+public abstract class PlayerEntityMixin extends Entity implements MWPlayerEntity, HitOnCollideEntity
 {
     @Unique
     private int collideHitTicks;
@@ -23,6 +26,11 @@ public abstract class PlayerEntityMixin implements MWPlayerEntity, HitOnCollideE
 
     @Unique
     protected PlayerWeaponManager manager = new PlayerWeaponManager((PlayerEntity) (Object) this);
+
+    public PlayerEntityMixin(EntityType<?> type, World world)
+    {
+        super(type, world);
+    }
 
     @Override
     public PlayerWeaponManager meatweapons$getWeaponManager()
@@ -53,6 +61,6 @@ public abstract class PlayerEntityMixin implements MWPlayerEntity, HitOnCollideE
     @Inject(method = "collideWithEntity", at = @At("HEAD"))
     private void onCollideWithEntity(Entity entity, CallbackInfo ci)
     {
-        HalberdModule.onEntityCollide(((PlayerEntity) (Object) this), entity, collideHitTicks, collideHitDamage);
+        HalberdModule.onEntityCollide((PlayerEntity) (Object) this, entity, collideHitTicks, collideHitDamage);
     }
 }

@@ -217,6 +217,11 @@ public abstract class BaseGunItem extends Item implements MeatlibItem, GunItem, 
 
     public static Optional<Entity> hitScan(@NotNull LivingEntity caster, Vec3d start, Vec3d end, double distance, BeamEffectProvider gunItem)
     {
+        return hitScan(caster, start, end, distance, e -> true, gunItem);
+    }
+
+    public static Optional<Entity> hitScan(@NotNull LivingEntity caster, Vec3d start, Vec3d end, double distance, Predicate<Entity> predicate, BeamEffectProvider gunItem)
+    {
         World world = caster.getWorld();
         if (!world.isClient)
         {
@@ -224,7 +229,7 @@ public abstract class BaseGunItem extends Item implements MeatlibItem, GunItem, 
             RaycastContext ctx = new RaycastContext(start, end, RaycastContext.ShapeType.COLLIDER, RaycastContext.FluidHandling.NONE, caster);
             BlockHitResult blockResult = world.raycast(ctx);
 
-            Predicate<Entity> entityFilter = entity -> !entity.isSpectator() && entity.canHit();
+            Predicate<Entity> entityFilter = entity -> !entity.isSpectator() && entity.canHit() && predicate.test(entity);
 
             double minDistance = distance;
             Entity entity = null;

@@ -1,9 +1,12 @@
 package com.neep.meatweapons.mixin;
 
 import com.neep.meatweapons.entity.BulletDamageSource;
+import com.neep.meatweapons.interfaces.HookableEntity;
 import net.minecraft.advancement.criterion.Criteria;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerEntity;
@@ -14,28 +17,38 @@ import net.minecraft.stat.Stats;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(LivingEntity.class)
-public abstract class LivingEntityMixin
+public abstract class LivingEntityMixin extends Entity implements HookableEntity
 {
     // Intercepts the custom bullet DamageSource in order to prevent silly amounts of knockback
     @Shadow protected int playerHitTimer;
     @Shadow protected PlayerEntity attackingPlayer;
 
+    @Unique @Nullable private Entity hookParent;
+    @Unique private int hookTicks;
+    @Unique private Vec3d initialOffset = Vec3d.ZERO;
+
+    public LivingEntityMixin(EntityType<?> type, World world)
+    {
+        super(type, world);
+    }
+
     @Shadow public abstract void setAttacker(@Nullable LivingEntity attacker);
 
     @Shadow public abstract boolean blockedByShield(DamageSource source);
 
-    @Shadow protected abstract void damageShield(float amount);
-
-    @Shadow protected abstract void takeShieldHit(LivingEntity attacker);
+    @Shadow public abstract void damageShield(float amount);
 
     @Shadow public abstract ItemStack getStackInHand(Hand hand);
 
@@ -64,6 +77,12 @@ public abstract class LivingEntityMixin
     @Shadow public int hurtTime;
 
     @Shadow public int maxHurtTime;
+
+    @Shadow public abstract void equipStack(EquipmentSlot slot, ItemStack stack);
+
+    @Shadow protected abstract void initDataTracker();
+
+    @Shadow protected abstract Vec3d getAttackPos();
 
     @Inject(method = "damage(Lnet/minecraft/entity/damage/DamageSource;F)Z", at = @At("HEAD"), cancellable = true)
     private void injectMethod(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir)
@@ -168,6 +187,7 @@ public abstract class LivingEntityMixin
         }
     }
 
+    @Unique
     protected void knockback(LivingEntity thisEntity, BulletDamageSource bulletSource, Entity attacker)
     {
         double dx = attacker.getX() - thisEntity.getX();
@@ -183,6 +203,7 @@ public abstract class LivingEntityMixin
         thisEntity.takeKnockback(bulletSource.getPunch(), dx, dz);
     }
 
+    @Unique
     protected void playSounds(LivingEntity thisEntity, DamageSource source)
     {
         if (isDead())
@@ -203,4 +224,36 @@ public abstract class LivingEntityMixin
         }
     }
 
+    @Inject(method = "tick", at = @At("HEAD"))
+    private void onTick(CallbackInfo ci)
+    {
+        this.hookTicks = Math.max(0, hookTicks - 1);
+        if (hookTicks == 0)
+            this.hookParent = null;
+
+        if (hookParent != null)
+        {
+            double maxVel = 1;
+            Vec3d target = hookParent.getPos().add(initialOffset);
+            Vec3d pos = getPos();
+            addVelocity(
+                    target.x - pos.x,
+                    target.y - pos.y,
+                    target.z - pos.z
+            );
+        }
+    }
+
+    @Override
+    public void meatweapons$setHookParent(@Nullable Entity entity, Vec3d initialOffset)
+    {
+        this.hookParent = entity;
+        this.initialOffset = initialOffset;
+    }
+
+    @Override
+    public void meatweapons$setHookTicks(int ticks)
+    {
+        this.hookTicks = ticks;
+    }
 }

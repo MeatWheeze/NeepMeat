@@ -4,8 +4,10 @@
   "package": "com.neep.meatweapons.mixin",
   "compatibilityLevel": "JAVA_16",
   "mixins": [
+    "AbstractHorseEntityMixin",
     "LivingEntityMixin",
-    "PlayerEntityMixin"
+    "PlayerEntityMixin",
+    "ServerPlayNetworkHandlerMixin"
   ],
   "client": [
     "ClientPlayerEntityMixin",
