@@ -6,6 +6,7 @@ import com.google.common.util.concurrent.AtomicDouble;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
+import com.neep.neepmeat.BalanceConstants;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.api.live_machine.metrics.DataLog;
 import com.neep.neepmeat.api.processing.PowerUtils;
@@ -70,7 +71,7 @@ public abstract class LivingMachineBlockEntity extends SyncableBlockEntity imple
 
     protected long age = 0;
     protected int updateInterval = 80;
-    protected int maxSize = 100;
+    protected int maxSize = BalanceConstants.LARGE_MACHINE_MAX_SIZE;
 
     protected float power;
     protected float repairAmount;

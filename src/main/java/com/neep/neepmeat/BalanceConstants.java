@@ -15,4 +15,5 @@ public class BalanceConstants
 
     public static final float PYLON_MAX_SPEED = 40;
     public static final float PYLON_RUNNING_SPEED = 16;
+    public static int LARGE_MACHINE_MAX_SIZE = 128;
 }
