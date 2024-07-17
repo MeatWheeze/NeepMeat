@@ -64,8 +64,8 @@ public class ChopMeatgunAnimation extends AnimatedAction<MeatgunComponent, ChopM
     }
 
     @Override
-    public boolean canStop()
+    public boolean canStop(MeatgunAnimation replace)
     {
-        return false;
+        return replace == this;
     }
 }

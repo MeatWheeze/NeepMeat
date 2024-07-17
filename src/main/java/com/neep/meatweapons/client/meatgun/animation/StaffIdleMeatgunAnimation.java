@@ -44,7 +44,7 @@ public class StaffIdleMeatgunAnimation extends AnimatedAction<MeatgunComponent, 
     }
 
     @Override
-    public boolean canStop()
+    public boolean canStop(MeatgunAnimation replace)
     {
         return true;
     }

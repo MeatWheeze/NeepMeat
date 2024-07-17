@@ -67,7 +67,7 @@ public class HalberdChargeAnimation extends AnimatedAction<MeatgunComponent, Hal
     }
 
     @Override
-    public boolean canStop()
+    public boolean canStop(MeatgunAnimation replace)
     {
         return false;
     }

@@ -52,7 +52,7 @@ public class ShockStaffModule extends MeleeModule
             world.playSoundFromEntity(null, player, NMSounds.SHOCK_STAFF_ATTACK, SoundCategory.PLAYERS, 1, 1);
             MeatgunNetwork.sendRecoil((ServerPlayerEntity) player, MeatgunNetwork.RecoilDirection.UP, 7, 0.3f,0.7f, 0.02f);
             fireBeam(world, player, pitch, yaw, 3);
-            swingDownCooldown = 15;
+            swingDownCooldown = 20;
         }
         if (id == 1 && projectileCooldown == 0)
         {
@@ -68,7 +68,7 @@ public class ShockStaffModule extends MeleeModule
             entity.setHomingRadius(5);
             entity.setVelocity(player, (float) Math.toDegrees(pitch), (float) Math.toDegrees(yaw), 0, 0.9f, 0);
             world.spawnEntity(entity);
-            projectileCooldown = 10;
+            projectileCooldown = 20;
         }
     }
 
@@ -99,7 +99,7 @@ public class ShockStaffModule extends MeleeModule
         @Nullable EntityHitResult target = BaseGunItem.hitScan(player, pos, end, range, e -> e != player.getVehicle(),
                 (world1, pos1, end1, width, maxTime, showRadius) -> {}, 0.4f).orElse(null);
 
-        MeatgunNetwork.sendRecoil((ServerPlayerEntity) player, MeatgunNetwork.RecoilDirection.UP, 7, 0.2f, 0.7f, 0.03f);
+        MeatgunNetwork.sendRecoil((ServerPlayerEntity) player, MeatgunNetwork.RecoilDirection.UP, 4, 0.2f, 0.7f, 0.03f);
 
         if (target != null && !target.getEntity().hasPassenger(player))
         {

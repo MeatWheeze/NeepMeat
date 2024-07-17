@@ -62,7 +62,7 @@ public class HalberdGrabAnimation extends AnimatedAction<MeatgunComponent, Halbe
     }
 
     @Override
-    public boolean canStop()
+    public boolean canStop(MeatgunAnimation replace)
     {
         return false;
     }

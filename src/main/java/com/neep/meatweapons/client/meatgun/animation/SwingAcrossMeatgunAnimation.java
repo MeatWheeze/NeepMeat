@@ -64,8 +64,8 @@ public class SwingAcrossMeatgunAnimation extends AnimatedAction<MeatgunComponent
     }
 
     @Override
-    public boolean canStop()
+    public boolean canStop(MeatgunAnimation replace)
     {
-        return false;
+        return replace == this;
     }
 }

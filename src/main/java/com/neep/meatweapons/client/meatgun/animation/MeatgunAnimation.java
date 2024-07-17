@@ -12,7 +12,7 @@ public interface MeatgunAnimation
 {
     void start(@Nullable PacketByteBuf buf);
 
-    boolean canStop();
+    boolean canStop(MeatgunAnimation replace);
 
     boolean finished();
 
@@ -26,7 +26,7 @@ public interface MeatgunAnimation
         public void start(@Nullable PacketByteBuf buf) { }
 
         @Override
-        public boolean canStop()
+        public boolean canStop(MeatgunAnimation replace)
         {
             return true;
         }

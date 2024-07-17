@@ -44,7 +44,7 @@ public class MeatgunAnimationManager
 
     public void queue(MeatgunAnimation animation, @Nullable PacketByteBuf buf)
     {
-        if (activeAnimation.canStop())
+        if (activeAnimation.canStop(animation))
         {
             activeAnimation = animation;
             activeAnimation.start(buf);
