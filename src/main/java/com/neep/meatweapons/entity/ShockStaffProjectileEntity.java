@@ -30,24 +30,7 @@ public class ShockStaffProjectileEntity extends MeatgunProjectileEntity
     @Override
     public void tick()
     {
-        double prevX = getX();
-        double prevY = getY();
-        double prevZ = getZ();
         super.tick();
-        double dx = getX() - prevX;
-        double dy = getY() - prevY;
-        double dz = getZ() - prevZ;
-        distanceMoved += Math.sqrt(dx * dx + dy * dy + dz * dz);
-
-        if (collisions > 0)
-            collidedTicks++;
-
-        if (collisions == 0 && random.nextFloat() < 0.7)
-            getWorld().addParticle(
-                    MWParticles.SHOCK_STAFF, getX(), getY(), getZ(),
-                    random.nextTriangular(0, 0.3),
-                    random.nextTriangular(0, 0.3),
-                    random.nextTriangular(0, 0.3));
 
         if (age > 500 || collidedTicks > 2 || distanceMoved > 60)
             discard();
