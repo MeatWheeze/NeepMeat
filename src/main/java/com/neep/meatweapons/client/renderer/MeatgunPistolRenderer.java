@@ -5,8 +5,8 @@ import com.neep.meatweapons.client.meatgun.RecoilManager;
 import com.neep.meatweapons.client.renderer.meatgun.MeatgunModuleRenderer;
 import com.neep.meatweapons.client.renderer.meatgun.MeatgunModuleRenderers;
 import com.neep.meatweapons.client.renderer.meatgun.MeatgunParticleManager;
-import com.neep.meatweapons.init.MWComponents;
 import com.neep.meatweapons.component.MeatgunComponent;
+import com.neep.meatweapons.init.MWComponents;
 import com.neep.meatweapons.meatgun.module.MeatgunModule;
 import com.neep.meatweapons.mixin.HeldItemRendererAccessor;
 import net.fabricmc.api.EnvType;
@@ -17,7 +17,6 @@ import net.minecraft.client.model.ModelPart;
 import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.minecraft.client.render.*;
 import net.minecraft.client.render.entity.PlayerEntityRenderer;
-import net.minecraft.client.render.item.BuiltinModelItemRenderer;
 import net.minecraft.client.render.model.json.ModelTransformationMode;
 import net.minecraft.client.render.model.json.Transformation;
 import net.minecraft.client.texture.SpriteAtlasTexture;
@@ -29,13 +28,12 @@ import net.minecraft.util.math.RotationAxis;
 import org.joml.Matrix4f;
 
 @Environment(EnvType.CLIENT)
-public class MeatgunPistolRenderer extends BuiltinModelItemRenderer implements BuiltinItemRendererRegistry.DynamicItemRenderer
+public class MeatgunPistolRenderer implements BuiltinItemRendererRegistry.DynamicItemRenderer
 {
     private final MinecraftClient client;
 
     public MeatgunPistolRenderer()
     {
-        super(MinecraftClient.getInstance().getBlockEntityRenderDispatcher(), MinecraftClient.getInstance().getEntityModelLoader());
         this.client = MinecraftClient.getInstance();
     }
 
