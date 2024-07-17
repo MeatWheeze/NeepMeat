@@ -37,7 +37,7 @@ public class MeatgunComponentImpl extends ItemComponent implements MeatgunCompon
         super(stack, key);
         getUuid();
 
-        holder = RootModuleCache.getOrCreate(getUuid(), (Meatgun) stack.getItem());
+        holder = RootModuleCache.getOrCreate(getUuid(), (Meatgun) stack.getItem(), !MeatLib.isClient());
         holder.setComponent(this);
 
         holder.readNbt(getOrCreateRootTag());

@@ -19,6 +19,7 @@ public class BaseStaffModule extends AbstractMeatgunModule
         var auxSlot = new SimpleModuleSlot(listener, new Matrix4f()
                 .rotateX((float) Math.toRadians(90))
                 .rotateY((float) Math.toRadians(-90))
+                .rotateZ((float) Math.toRadians(90))
                 .translate(-3 / 16f, 0, -1 / 16f));
 
         setSlots(List.of(mainSlot, auxSlot));

@@ -10,10 +10,13 @@ import java.util.UUID;
 public class RootModuleCache
 {
     // Caching allows the module tree to outlive the item component which is replaced each time the ItemStack syncs.
-    private static final Map<UUID, RootModuleHolder> MAP = new ReferenceMap<>(AbstractReferenceMap.ReferenceStrength.HARD, AbstractReferenceMap.ReferenceStrength.SOFT, true);
+    private static final Map<UUID, RootModuleHolder> SERVER_MAP = new ReferenceMap<>(AbstractReferenceMap.ReferenceStrength.HARD, AbstractReferenceMap.ReferenceStrength.SOFT, true);
+    private static final Map<UUID, RootModuleHolder> CLIENT_MAP = new ReferenceMap<>(AbstractReferenceMap.ReferenceStrength.HARD, AbstractReferenceMap.ReferenceStrength.SOFT, true);
 
-    public static RootModuleHolder getOrCreate(UUID uuid, Meatgun meatgun)
+    public static RootModuleHolder getOrCreate(UUID uuid, Meatgun meatgun, boolean isServer)
     {
-        return MAP.computeIfAbsent(uuid, u -> new RootModuleHolder(uuid, meatgun));
+        return isServer ?
+                SERVER_MAP.computeIfAbsent(uuid, u -> new RootModuleHolder(uuid, meatgun))
+                : CLIENT_MAP.computeIfAbsent(uuid, u -> new RootModuleHolder(uuid, meatgun));
     }
 }
