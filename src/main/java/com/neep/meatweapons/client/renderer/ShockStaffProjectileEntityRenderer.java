@@ -53,23 +53,14 @@ public class ShockStaffProjectileEntityRenderer extends EntityRenderer<ShockStaf
     @Override
     public void render(ShockStaffProjectileEntity entity, float yaw, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light)
     {
-        if (entity.age >= 2 || !(this.dispatcher.camera.getFocusedEntity().squaredDistanceTo(entity) < 12.25))
+        if (entity.age >= 3 || !(this.dispatcher.camera.getFocusedEntity().squaredDistanceTo(entity) < 12.25))
         {
             matrices.push();
             matrices.scale(this.scale, this.scale, this.scale);
             matrices.multiply(this.dispatcher.getRotation());
             matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(180.0F));
-//            this.itemRenderer
-//                    .renderItem(
-//                            Items.SNOWBALL.getDefaultStack(), ModelTransformationMode.GROUND, light, OverlayTexture.DEFAULT_UV, matrices, vertexConsumers, entity.getWorld(), entity.getId()
-//                    );
 
-//            QuadEmitter emitter = RendererAccess.INSTANCE.getRenderer().meshBuilder().getEmitter();
             VertexConsumer consumer = vertexConsumers.getBuffer(RenderLayer.getEntityTranslucent(getTexture(entity)));
-
-//            float f = (float) entity.getX();
-//            float g = (float) entity.getY();
-//            float h = (float) entity.getX();
             float f = 0;
             float g = 0;
             float h = 0;
