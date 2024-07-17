@@ -1,6 +1,6 @@
 package com.neep.meatweapons.meatgun.module;
 
-import com.neep.meatweapons.component.MeatgunComponent;
+import com.neep.meatweapons.meatgun.RootModuleHolder;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
@@ -16,15 +16,15 @@ public abstract class AbstractMeatgunModule implements MeatgunModule
     protected Matrix4f transform = new Matrix4f();
     protected List<ModuleSlot> slots;
     protected UUID uuid = UUID.randomUUID();
-    protected final MeatgunComponent.Listener listener;
+    protected final RootModuleHolder.Listener listener;
 
-    public AbstractMeatgunModule(MeatgunComponent.Listener listener, List<ModuleSlot> slots)
+    public AbstractMeatgunModule(RootModuleHolder.Listener listener, List<ModuleSlot> slots)
     {
         this.listener = listener;
         this.slots = Collections.unmodifiableList(slots);
     }
 
-    public AbstractMeatgunModule(MeatgunComponent.Listener listener)
+    public AbstractMeatgunModule(RootModuleHolder.Listener listener)
     {
         this.listener = listener;
         this.slots = Collections.emptyList();

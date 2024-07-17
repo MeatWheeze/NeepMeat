@@ -2,7 +2,7 @@ package com.neep.meatweapons.meatgun.module;
 
 import com.neep.meatweapons.entity.BulletDamageSource;
 import com.neep.meatweapons.item.GunItem;
-import com.neep.meatweapons.component.MeatgunComponent;
+import com.neep.meatweapons.meatgun.RootModuleHolder;
 import com.neep.meatweapons.network.MWAttackC2SPacket;
 import com.neep.meatweapons.particle.MWGraphicsEffects;
 import com.neep.meatweapons.particle.MWParticles;
@@ -37,13 +37,13 @@ public class BloodthrowerModule extends ShooterModule
 {
     private final Random shotRandom = Random.create();
 
-    public BloodthrowerModule(MeatgunComponent.Listener listener)
+    public BloodthrowerModule(RootModuleHolder.Listener listener)
     {
         super(listener, 1, 3);
         shotsRemaining = maxShots;
     }
 
-    public BloodthrowerModule(MeatgunComponent.Listener listener, NbtCompound nbt)
+    public BloodthrowerModule(RootModuleHolder.Listener listener, NbtCompound nbt)
     {
         this(listener);
         readNbt(nbt);

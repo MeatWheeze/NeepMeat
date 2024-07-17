@@ -3,7 +3,7 @@ package com.neep.meatweapons.meatgun.module;
 import com.neep.meatweapons.entity.BulletDamageSource;
 import com.neep.meatweapons.item.BeamEffectProvider;
 import com.neep.meatweapons.item.GunItem;
-import com.neep.meatweapons.component.MeatgunComponent;
+import com.neep.meatweapons.meatgun.RootModuleHolder;
 import com.neep.meatweapons.network.MWAttackC2SPacket;
 import com.neep.meatweapons.network.MeatgunNetwork;
 import com.neep.meatweapons.particle.MWGraphicsEffects;
@@ -39,13 +39,13 @@ public class BosherModule extends ShooterModule
 {
     private final Random random = Random.create();
 
-    public BosherModule(MeatgunComponent.Listener listener)
+    public BosherModule(RootModuleHolder.Listener listener)
     {
         super(listener, 1, 20);
         shotsRemaining = maxShots;
     }
 
-    public BosherModule(MeatgunComponent.Listener listener, NbtCompound nbt)
+    public BosherModule(RootModuleHolder.Listener listener, NbtCompound nbt)
     {
         this(listener);
     }

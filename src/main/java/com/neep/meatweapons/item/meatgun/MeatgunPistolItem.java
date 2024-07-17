@@ -2,7 +2,7 @@ package com.neep.meatweapons.item.meatgun;
 
 import com.neep.meatlib.item.TooltipSupplier;
 import com.neep.meatweapons.client.meatgun.animation.MeatgunAnimation;
-import com.neep.meatweapons.component.MeatgunComponent;
+import com.neep.meatweapons.meatgun.RootModuleHolder;
 import com.neep.meatweapons.meatgun.module.BasePistolModule;
 import com.neep.meatweapons.meatgun.module.MeatgunModule;
 
@@ -16,7 +16,7 @@ public class MeatgunPistolItem extends MeatgunItem
     }
 
     @Override
-    public MeatgunModule createBase(MeatgunComponent.Listener listener)
+    public MeatgunModule createBase(RootModuleHolder.Listener listener)
     {
         return new BasePistolModule(listener);
     }

@@ -1,16 +1,16 @@
 package com.neep.meatweapons.meatgun.module;
 
-import com.neep.meatweapons.component.MeatgunComponent;
+import com.neep.meatweapons.meatgun.RootModuleHolder;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Matrix4f;
 
 public class SimpleModuleSlot implements ModuleSlot
 {
     protected final Matrix4f matrix;
-    private final MeatgunComponent.Listener listener;
+    private final RootModuleHolder.Listener listener;
     private MeatgunModule module = MeatgunModule.DEFAULT;
 
-    public SimpleModuleSlot(MeatgunComponent.Listener listener, Matrix4f matrix)
+    public SimpleModuleSlot(RootModuleHolder.Listener listener, Matrix4f matrix)
     {
         this.listener = listener;
         this.matrix = new Matrix4f(matrix);
@@ -27,7 +27,7 @@ public class SimpleModuleSlot implements ModuleSlot
     {
         this.module = module;
         module.setTransform(new Matrix4f(matrix));
-        listener.markDirty();
+        listener.markDirty(RootModuleHolder.Reason.MODULE_SWAPPED);
     }
 
     @Override

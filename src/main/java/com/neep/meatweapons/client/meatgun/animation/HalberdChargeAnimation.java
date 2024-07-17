@@ -1,7 +1,7 @@
 package com.neep.meatweapons.client.meatgun.animation;
 
 import com.neep.meatweapons.component.MeatgunComponent;
-import com.neep.meatweapons.component.MeatgunComponentImpl;
+import com.neep.meatweapons.meatgun.RootModuleHolder;
 import com.neep.meatweapons.meatgun.module.HalberdModule;
 import com.neep.meatweapons.meatgun.module.MeatgunModule;
 import com.neep.meatweapons.meatgun.module.MeatgunModules;
@@ -26,7 +26,7 @@ public class HalberdChargeAnimation extends AnimatedAction<MeatgunComponent, Hal
             if (!MinecraftClient.getInstance().player.isSprinting())
                 markFinished();
 
-            @Nullable MeatgunModule module = MeatgunComponentImpl.findRecursive(component.getRoot().root, MeatgunModules.HALBERD);
+            @Nullable MeatgunModule module = RootModuleHolder.findRecursive(component.getRootHolder().root, MeatgunModules.HALBERD);
             if (module instanceof HalberdModule halberd && halberd.triggerHeld())
             {
                 started = true;

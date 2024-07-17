@@ -1,11 +1,11 @@
 package com.neep.meatweapons.meatgun.module;
 
 import com.neep.meatlib.network.PacketBufUtil;
-import com.neep.meatweapons.component.MeatgunComponent;
 import com.neep.meatweapons.entity.HitOnCollideEntity;
 import com.neep.meatweapons.interfaces.HookableEntity;
 import com.neep.meatweapons.item.BaseGunItem;
 import com.neep.meatweapons.item.GunItem;
+import com.neep.meatweapons.meatgun.RootModuleHolder;
 import com.neep.meatweapons.network.MWAttackC2SPacket;
 import com.neep.meatweapons.network.MeatgunNetwork;
 import com.neep.neepmeat.NeepMeat;
@@ -35,12 +35,12 @@ public class HalberdModule extends MeleeModule
     private int swingDownCooldown;
     private int hookGrabCooldown;
 
-    public HalberdModule(MeatgunComponent.Listener listener)
+    public HalberdModule(RootModuleHolder.Listener listener)
     {
         super(listener, List.of());
     }
 
-    public HalberdModule(MeatgunComponent.Listener listener, NbtCompound nbt)
+    public HalberdModule(RootModuleHolder.Listener listener, NbtCompound nbt)
     {
         this(listener);
     }
@@ -74,7 +74,7 @@ public class HalberdModule extends MeleeModule
             else if (player.isSprinting())
             {
                 triggerHeld = true;
-                listener.markDirty();
+                listener.markDirty(RootModuleHolder.Reason.SAVE_DATA);
                 MeatgunNetwork.SEND_ANIMATION.emitter(player).apply("upper_thrust", null);
             }
         }
@@ -94,7 +94,7 @@ public class HalberdModule extends MeleeModule
 
             triggerHeld = false;
             triggerTicks = 0;
-            listener.markDirty();
+            listener.markDirty(RootModuleHolder.Reason.SAVE_DATA);
         }
     }
 
@@ -113,7 +113,7 @@ public class HalberdModule extends MeleeModule
                 {
                     triggerHeld = true;
                     MeatgunNetwork.SEND_ANIMATION.emitter(player).apply("upper_thrust", null);
-                    listener.markDirty();
+                    listener.markDirty(RootModuleHolder.Reason.SAVE_DATA);
                 }
             }
         }
@@ -133,7 +133,7 @@ public class HalberdModule extends MeleeModule
             if (triggerHeld)
             {
                 triggerHeld = false;
-                listener.markDirty();
+                listener.markDirty(RootModuleHolder.Reason.SAVE_DATA);
             }
         }
     }

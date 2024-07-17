@@ -1,6 +1,6 @@
 package com.neep.meatweapons.meatgun.module;
 
-import com.neep.meatweapons.component.MeatgunComponent;
+import com.neep.meatweapons.meatgun.RootModuleHolder;
 import com.neep.meatweapons.network.MWAttackC2SPacket;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -20,7 +20,7 @@ public class TripleCarouselModule extends AbstractMeatgunModule
     private int selected = 0;
     private long rotateStartTime = 0;
 
-    public TripleCarouselModule(MeatgunComponent.Listener listener)
+    public TripleCarouselModule(RootModuleHolder.Listener listener)
     {
         super(listener);
         var slot0 = new TCSlot(this.listener, 0);
@@ -30,7 +30,7 @@ public class TripleCarouselModule extends AbstractMeatgunModule
         setSlots(List.of(slot0, slot1, slot2));
     }
 
-    public TripleCarouselModule(MeatgunComponent.Listener listener, NbtCompound nbt)
+    public TripleCarouselModule(RootModuleHolder.Listener listener, NbtCompound nbt)
     {
         this(listener);
     }
@@ -112,7 +112,7 @@ public class TripleCarouselModule extends AbstractMeatgunModule
 //        buf.writeLong(rotateStartTime);
 //        buf.writeInt(selected);
 //        listener.send(player, buf);
-        listener.markDirty();
+        listener.markDirty(RootModuleHolder.Reason.SAVE_DATA);
     }
 
     @Override
@@ -164,7 +164,7 @@ public class TripleCarouselModule extends AbstractMeatgunModule
     private class TCSlot extends SimpleModuleSlot
     {
         private final int index;
-        public TCSlot(MeatgunComponent.Listener listener, int index)
+        public TCSlot(RootModuleHolder.Listener listener, int index)
         {
             super(listener,
                 new Matrix4f().rotateZ(index * 2f / 3f * MathHelper.PI).translate(0, 4 / 16f, -2 / 16f));

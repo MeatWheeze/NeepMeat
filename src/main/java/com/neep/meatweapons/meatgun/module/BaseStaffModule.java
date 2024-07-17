@@ -1,6 +1,6 @@
 package com.neep.meatweapons.meatgun.module;
 
-import com.neep.meatweapons.component.MeatgunComponent;
+import com.neep.meatweapons.meatgun.RootModuleHolder;
 import net.minecraft.nbt.NbtCompound;
 import org.joml.Matrix4f;
 
@@ -8,9 +8,7 @@ import java.util.List;
 
 public class BaseStaffModule extends AbstractMeatgunModule
 {
-    private long startTime = 0;
-
-    public BaseStaffModule(MeatgunComponent.Listener listener)
+    public BaseStaffModule(RootModuleHolder.Listener listener)
     {
         super(listener);
 
@@ -32,7 +30,7 @@ public class BaseStaffModule extends AbstractMeatgunModule
         return MeatgunModules.BASE_STAFF;
     }
 
-    public static BaseStaffModule fromNbt(MeatgunComponent.Listener listener, NbtCompound nbtCompound)
+    public static BaseStaffModule fromNbt(RootModuleHolder.Listener listener, NbtCompound nbtCompound)
     {
         return new BaseStaffModule(listener);
     }
@@ -41,7 +39,6 @@ public class BaseStaffModule extends AbstractMeatgunModule
     public NbtCompound writeNbt(NbtCompound nbt)
     {
         super.writeNbt(nbt);
-        nbt.putLong("animation_start", startTime);
         return nbt;
     }
 
@@ -49,17 +46,5 @@ public class BaseStaffModule extends AbstractMeatgunModule
     public void readNbt(NbtCompound nbt)
     {
         super.readNbt(nbt);
-        this.startTime = nbt.getLong("animation_start");
-    }
-
-    public void animateTest(long time)
-    {
-        startTime = time;
-        listener.markDirty();
-    }
-
-    public long getAnimationStart()
-    {
-        return startTime;
     }
 }

@@ -91,7 +91,7 @@ class TreePane extends TinkerTableScreen.PaneWidget
             return;
 
         List<List<ModuleWidget>> levels = new ArrayList<>();
-        MeatgunModule root = meatgun.getRoot().root;
+        MeatgunModule root = meatgun.getRootHolder().root;
         process(levels, 0, root);
 
         int thingHeight = ModuleWidget.height() + 5;

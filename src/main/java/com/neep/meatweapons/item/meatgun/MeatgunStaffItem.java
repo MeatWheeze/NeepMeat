@@ -2,7 +2,7 @@ package com.neep.meatweapons.item.meatgun;
 
 import com.neep.meatlib.item.TooltipSupplier;
 import com.neep.meatweapons.client.meatgun.animation.*;
-import com.neep.meatweapons.component.MeatgunComponent;
+import com.neep.meatweapons.meatgun.RootModuleHolder;
 import com.neep.meatweapons.meatgun.module.BaseStaffModule;
 import com.neep.meatweapons.meatgun.module.MeatgunModule;
 import net.minecraft.client.network.AbstractClientPlayerEntity;
@@ -25,7 +25,7 @@ public class MeatgunStaffItem extends MeatgunItem
     }
 
     @Override
-    public MeatgunModule createBase(MeatgunComponent.Listener listener)
+    public MeatgunModule createBase(RootModuleHolder.Listener listener)
     {
         return new BaseStaffModule(listener);
     }

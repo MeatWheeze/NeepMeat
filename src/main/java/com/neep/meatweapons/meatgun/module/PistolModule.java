@@ -2,7 +2,7 @@ package com.neep.meatweapons.meatgun.module;
 
 import com.neep.meatweapons.entity.BulletDamageSource;
 import com.neep.meatweapons.item.GunItem;
-import com.neep.meatweapons.component.MeatgunComponent;
+import com.neep.meatweapons.meatgun.RootModuleHolder;
 import com.neep.meatweapons.network.MWAttackC2SPacket;
 import com.neep.meatweapons.network.MeatgunNetwork;
 import com.neep.meatweapons.particle.MWGraphicsEffects;
@@ -38,12 +38,12 @@ public class PistolModule extends ShooterModule
     private int shotsRemaining = maxShots;
     private int cooldown = 0;
 
-    public PistolModule(MeatgunComponent.Listener listener)
+    public PistolModule(RootModuleHolder.Listener listener)
     {
         super(listener, 8, 10);
     }
 
-    public PistolModule(MeatgunComponent.Listener listener, NbtCompound nbt)
+    public PistolModule(RootModuleHolder.Listener listener, NbtCompound nbt)
     {
         this(listener);
     }

@@ -1,6 +1,6 @@
 package com.neep.meatweapons.meatgun.module;
 
-import com.neep.meatweapons.component.MeatgunComponent;
+import com.neep.meatweapons.meatgun.RootModuleHolder;
 import com.neep.meatweapons.network.MWAttackC2SPacket;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -16,7 +16,7 @@ public class UnderbarrelModule extends AbstractMeatgunModule
     private final ModuleSlot upSlot;
     private final ModuleSlot downSlot;
 
-    public UnderbarrelModule(MeatgunComponent.Listener listener)
+    public UnderbarrelModule(RootModuleHolder.Listener listener)
     {
         super(listener);
         upSlot = new SimpleModuleSlot(this.listener, new Matrix4f().translate(0, 0, -3 / 16f));
@@ -28,7 +28,7 @@ public class UnderbarrelModule extends AbstractMeatgunModule
         setSlots(List.of(upSlot, downSlot));
     }
 
-    public UnderbarrelModule(MeatgunComponent.Listener listener, NbtCompound nbt)
+    public UnderbarrelModule(RootModuleHolder.Listener listener, NbtCompound nbt)
     {
         this(listener);
         readNbt(nbt);

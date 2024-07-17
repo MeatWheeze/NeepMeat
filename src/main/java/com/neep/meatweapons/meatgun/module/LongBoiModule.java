@@ -2,7 +2,7 @@ package com.neep.meatweapons.meatgun.module;
 
 import com.neep.meatweapons.entity.BulletDamageSource;
 import com.neep.meatweapons.item.GunItem;
-import com.neep.meatweapons.component.MeatgunComponent;
+import com.neep.meatweapons.meatgun.RootModuleHolder;
 import com.neep.meatweapons.network.MWAttackC2SPacket;
 import com.neep.meatweapons.network.MeatgunNetwork;
 import com.neep.meatweapons.particle.MWGraphicsEffects;
@@ -32,12 +32,12 @@ public class LongBoiModule extends ShooterModule
 {
     private final Random shotRandom = Random.create();
 
-    public LongBoiModule(MeatgunComponent.Listener listener)
+    public LongBoiModule(RootModuleHolder.Listener listener)
     {
         super(listener, 4, 20);
     }
 
-    public LongBoiModule(MeatgunComponent.Listener listener, NbtCompound nbt)
+    public LongBoiModule(RootModuleHolder.Listener listener, NbtCompound nbt)
     {
         this(listener);
     }

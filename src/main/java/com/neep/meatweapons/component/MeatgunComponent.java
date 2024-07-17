@@ -8,7 +8,6 @@ import com.neep.meatweapons.network.MWAttackC2SPacket;
 import dev.onyxstudios.cca.api.v3.component.Component;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.network.PacketByteBuf;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
@@ -16,7 +15,7 @@ import java.util.UUID;
 
 public interface MeatgunComponent extends Component
 {
-    RootModuleHolder getRoot();
+    RootModuleHolder getRootHolder();
 
     UUID getUuid();
 
@@ -35,14 +34,7 @@ public interface MeatgunComponent extends Component
     @Nullable
     MeatgunModule find(UUID uuid);
 
-    Listener getListener();
-
     RecoilManager getRecoil();
 
     @Nullable MeatgunAnimationManager getAnimationManager();
-
-    interface Listener
-    {
-        void markDirty();
-    }
 }

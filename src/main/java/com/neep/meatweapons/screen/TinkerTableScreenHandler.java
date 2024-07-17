@@ -125,7 +125,7 @@ public class TinkerTableScreenHandler extends BasicScreenHandler
                         {
                             setCursorStack(MeatgunModuleItem.get(slot1.get().getType()));
 
-                            slot1.set(cursorType.create(meatgun.getListener(), parent));
+                            slot1.set(cursorType.create(meatgun.getRootHolder().getListener(), parent));
                             syncState();
                         }
                     }
@@ -135,7 +135,7 @@ public class TinkerTableScreenHandler extends BasicScreenHandler
                     MeatgunModule.Type<?> cursorType = MeatgunModuleItem.get(getCursorStack());
                     if (cursorType != MeatgunModule.DEFAULT_TYPE)
                     {
-                        slot1.set(cursorType.create(meatgun.getListener(), parent));
+                        slot1.set(cursorType.create(meatgun.getRootHolder().getListener(), parent));
                         getCursorStack().decrement(1);
                         syncState();
                     }

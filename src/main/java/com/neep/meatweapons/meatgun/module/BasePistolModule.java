@@ -1,6 +1,6 @@
 package com.neep.meatweapons.meatgun.module;
 
-import com.neep.meatweapons.component.MeatgunComponent;
+import com.neep.meatweapons.meatgun.RootModuleHolder;
 import net.minecraft.nbt.NbtCompound;
 import org.joml.Matrix4f;
 
@@ -17,7 +17,7 @@ public class BasePistolModule extends AbstractMeatgunModule
 
     private final ModuleSlot front;
 
-    public BasePistolModule(MeatgunComponent.Listener listener)
+    public BasePistolModule(RootModuleHolder.Listener listener)
     {
         super(listener);
         front = new SimpleModuleSlot(this.listener, new Matrix4f());
@@ -27,7 +27,7 @@ public class BasePistolModule extends AbstractMeatgunModule
         front.set(child);
     }
 
-    public BasePistolModule(MeatgunComponent.Listener listener, NbtCompound nbt)
+    public BasePistolModule(RootModuleHolder.Listener listener, NbtCompound nbt)
     {
         this(listener);
     }
@@ -38,7 +38,7 @@ public class BasePistolModule extends AbstractMeatgunModule
         return MeatgunModules.BASE_PISTOL;
     }
 
-    public static BasePistolModule fromNbt(MeatgunComponent.Listener listener, NbtCompound nt)
+    public static BasePistolModule fromNbt(RootModuleHolder.Listener listener, NbtCompound nt)
     {
         return new BasePistolModule(listener, nt);
     }

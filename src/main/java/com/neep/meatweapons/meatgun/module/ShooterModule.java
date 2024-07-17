@@ -1,6 +1,6 @@
 package com.neep.meatweapons.meatgun.module;
 
-import com.neep.meatweapons.component.MeatgunComponent;
+import com.neep.meatweapons.meatgun.RootModuleHolder;
 import net.minecraft.nbt.NbtCompound;
 
 public abstract class ShooterModule extends AbstractMeatgunModule
@@ -11,7 +11,7 @@ public abstract class ShooterModule extends AbstractMeatgunModule
     protected int shotsRemaining;
     protected int cooldown;
 
-    public ShooterModule(MeatgunComponent.Listener listener, int maxShots, int maxCooldown)
+    public ShooterModule(RootModuleHolder.Listener listener, int maxShots, int maxCooldown)
     {
         super(listener);
         this.maxShots = maxShots;

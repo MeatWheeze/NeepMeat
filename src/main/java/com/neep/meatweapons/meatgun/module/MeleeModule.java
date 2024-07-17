@@ -1,10 +1,9 @@
 package com.neep.meatweapons.meatgun.module;
 
-import com.neep.meatweapons.component.MeatgunComponent;
 import com.neep.meatweapons.item.BaseGunItem;
 import com.neep.meatweapons.item.GunItem;
+import com.neep.meatweapons.meatgun.RootModuleHolder;
 import com.neep.meatweapons.network.MeatgunNetwork;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.hit.EntityHitResult;
@@ -16,7 +15,7 @@ import java.util.List;
 
 public abstract class MeleeModule extends AbstractMeatgunModule
 {
-    public MeleeModule(MeatgunComponent.Listener listener, List<ModuleSlot> slots)
+    public MeleeModule(RootModuleHolder.Listener listener, List<ModuleSlot> slots)
     {
         super(listener, slots);
     }

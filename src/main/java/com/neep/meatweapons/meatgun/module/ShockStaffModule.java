@@ -1,10 +1,10 @@
 package com.neep.meatweapons.meatgun.module;
 
 import com.neep.meatweapons.MeatWeapons;
-import com.neep.meatweapons.component.MeatgunComponent;
 import com.neep.meatweapons.entity.ShockStaffProjectileEntity;
 import com.neep.meatweapons.item.BaseGunItem;
 import com.neep.meatweapons.item.GunItem;
+import com.neep.meatweapons.meatgun.RootModuleHolder;
 import com.neep.meatweapons.network.MWAttackC2SPacket;
 import com.neep.meatweapons.network.MeatgunNetwork;
 import com.neep.meatweapons.particle.MWParticles;
@@ -27,12 +27,12 @@ public class ShockStaffModule extends MeleeModule
     private int swingDownCooldown;
     private int projectileCooldown;
 
-    public ShockStaffModule(MeatgunComponent.Listener listener)
+    public ShockStaffModule(RootModuleHolder.Listener listener)
     {
         super(listener, List.of());
     }
 
-    public ShockStaffModule(MeatgunComponent.Listener listener, NbtCompound nbt)
+    public ShockStaffModule(RootModuleHolder.Listener listener, NbtCompound nbt)
     {
         this(listener);
     }
@@ -65,10 +65,10 @@ public class ShockStaffModule extends MeleeModule
             entity.setDamage(1);
             entity.setPos(entityPos.x, entityPos.y, entityPos.z);
             entity.setPosition(entityPos.x, entityPos.y, entityPos.z);
-//            if (listener.get().getCapabilities())
-//            {
-//                entity.setHomingRadius(5);
-//            }
+            if (listener.getHolder().containsType(MeatgunModules.HOMING_BRAIN))
+            {
+                entity.setHomingRadius(5);
+            }
             entity.setVelocity(player, (float) Math.toDegrees(pitch), (float) Math.toDegrees(yaw), 0, 0.9f, 0);
             world.spawnEntity(entity);
             projectileCooldown = 20;

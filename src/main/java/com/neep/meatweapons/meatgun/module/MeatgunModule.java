@@ -1,7 +1,7 @@
 package com.neep.meatweapons.meatgun.module;
 
 import com.neep.meatweapons.MeatWeapons;
-import com.neep.meatweapons.component.MeatgunComponent;
+import com.neep.meatweapons.meatgun.RootModuleHolder;
 import com.neep.meatweapons.network.MWAttackC2SPacket;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -117,13 +117,13 @@ public interface MeatgunModule
     @FunctionalInterface
     interface Factory<T extends MeatgunModule>
     {
-        T create(MeatgunComponent.Listener listener, MeatgunModule parent);
+        T create(RootModuleHolder.Listener listener, MeatgunModule parent);
     }
 
     @FunctionalInterface
     interface NbtFactory<T extends MeatgunModule>
     {
-        T create(MeatgunComponent.Listener listener, NbtCompound nbt);
+        T create(RootModuleHolder.Listener listener, NbtCompound nbt);
     }
 
     class Type<T extends MeatgunModule>
@@ -145,12 +145,12 @@ public interface MeatgunModule
             return id;
         }
 
-        public T create(MeatgunComponent.Listener listener, MeatgunModule parent)
+        public T create(RootModuleHolder.Listener listener, MeatgunModule parent)
         {
             return factory.create(listener, parent);
         }
 
-        public T create(MeatgunComponent.Listener listener, NbtCompound nbt)
+        public T create(RootModuleHolder.Listener listener, NbtCompound nbt)
         {
             return nbtFactory.create(listener, nbt);
         }

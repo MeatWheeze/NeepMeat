@@ -22,18 +22,15 @@ import java.util.UUID;
 public class MeatgunComponentImpl extends ItemComponent implements MeatgunComponent
 {
     @Nullable private RecoilManager recoil;
-//    private final MeatgunModule root;
     private final RootModuleHolder holder;
 
     private boolean dirty = true;
     private boolean invalidated = false;
-    private final Listener listener = new Listener();
+//    private final Listener listener = new Listener();
 
     // Eeek! A bit unsafe, but normally fine.
     @Environment(EnvType.CLIENT)
     private MeatgunAnimationManager animationManager;
-
-    // TODO: cache modules in UUID-object map
 
     public MeatgunComponentImpl(ItemStack stack, ComponentKey<MeatgunComponent> key)
     {
@@ -47,7 +44,7 @@ public class MeatgunComponentImpl extends ItemComponent implements MeatgunCompon
     }
 
     @Override
-    public RootModuleHolder getRoot()
+    public RootModuleHolder getRootHolder()
     {
         return holder;
     }
@@ -85,17 +82,6 @@ public class MeatgunComponentImpl extends ItemComponent implements MeatgunCompon
     public void release(World world, PlayerEntity player, ItemStack stack, int id, double pitch, double yaw, MWAttackC2SPacket.HandType handType)
     {
         holder.root.release(world, player, stack, id, pitch, yaw, handType);
-//        var module = root.getChildren().get(0).get();
-//        if (module instanceof BosherModule)
-//        {
-//            root.getChildren().get(0).set(new UnderbarrelModule());
-//            markDirty();
-//        }
-//        else
-//        {
-//            root.getChildren().get(0).set(new BosherModule());
-//            markDirty();
-//        }
     }
 
     @Override
@@ -162,33 +148,11 @@ public class MeatgunComponentImpl extends ItemComponent implements MeatgunCompon
         return findRecursive(holder.root, uuid);
     }
 
-    @Override
-    public Listener getListener()
-    {
-        return listener;
-    }
-
-    @Nullable
-    public static MeatgunModule findRecursive(MeatgunModule module, MeatgunModule.Type<?> type)
-    {
-        if (module.getType() == type)
-            return module;
-
-        for (var slot : module.getChildren())
-        {
-            MeatgunModule child = slot.get();
-            if (child == MeatgunModule.DEFAULT)
-                continue;
-
-            if (child.getType() == type)
-                return child;
-
-            MeatgunModule next = findRecursive(child, type);
-            if (next != null)
-                return next;
-        }
-        return null;
-    }
+//    @Override
+//    public Listener getListener()
+//    {
+//        return listener;
+//    }
 
     @Nullable
     private MeatgunModule findRecursive(MeatgunModule module, UUID uuid)
@@ -230,8 +194,8 @@ public class MeatgunComponentImpl extends ItemComponent implements MeatgunCompon
         putInt("ooer", i);
     }
 
-    private class Listener implements MeatgunComponent.Listener
-    {
+//    private class Listener implements RootModuleHolder.Listener
+//    {
 //        @Override
 //        public PacketByteBuf getBuf(MeatgunModule module)
 //        {
@@ -248,11 +212,11 @@ public class MeatgunComponentImpl extends ItemComponent implements MeatgunCompon
 //                MeatgunModuleNetwork.send(serverPlayerEntity, buf);
 //        }
 
-        @Override
-        public void markDirty()
-        {
-            if (!MeatLib.isClient())
-                MeatgunComponentImpl.this.markDirty();
-        }
-    }
+//        @Override
+//        public void markDirty(RootModuleHolder.Reason reason)
+//        {
+//            if (!MeatLib.isClient())
+//                MeatgunComponentImpl.this.markDirty();
+//        }
+//    }
 }

@@ -2,7 +2,7 @@ package com.neep.meatweapons.meatgun.module;
 
 import com.neep.meatweapons.entity.BounceGrenadeEntity;
 import com.neep.meatweapons.item.GunItem;
-import com.neep.meatweapons.component.MeatgunComponent;
+import com.neep.meatweapons.meatgun.RootModuleHolder;
 import com.neep.meatweapons.network.MWAttackC2SPacket;
 import com.neep.meatweapons.network.MeatgunNetwork;
 import com.neep.meatweapons.particle.MWGraphicsEffects;
@@ -26,13 +26,13 @@ public class GrenadeLauncherModule extends ShooterModule
 {
     private final Random shotRandom = Random.create();
 
-    public GrenadeLauncherModule(MeatgunComponent.Listener listener)
+    public GrenadeLauncherModule(RootModuleHolder.Listener listener)
     {
         super(listener, 8, 15);
         shotsRemaining = maxShots;
     }
 
-    public GrenadeLauncherModule(MeatgunComponent.Listener listener, NbtCompound nbt)
+    public GrenadeLauncherModule(RootModuleHolder.Listener listener, NbtCompound nbt)
     {
         this(listener);
         readNbt(nbt);

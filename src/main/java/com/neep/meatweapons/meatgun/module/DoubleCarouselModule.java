@@ -1,6 +1,6 @@
 package com.neep.meatweapons.meatgun.module;
 
-import com.neep.meatweapons.component.MeatgunComponent;
+import com.neep.meatweapons.meatgun.RootModuleHolder;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.math.MathHelper;
 import org.joml.Matrix4f;
@@ -39,7 +39,7 @@ public class DoubleCarouselModule extends AbstractMeatgunModule
     private final ModuleSlot downSlot;
     private final ModuleSlot auxSlot;
 
-    public DoubleCarouselModule(MeatgunComponent.Listener listener)
+    public DoubleCarouselModule(RootModuleHolder.Listener listener)
     {
         super(listener);
         auxSlot = new SimpleModuleSlot(this.listener, new Matrix4f().rotateY(MathHelper.PI).translate(0, 5 / 16f, 0 / 16f));
@@ -48,7 +48,7 @@ public class DoubleCarouselModule extends AbstractMeatgunModule
         setSlots(List.of(upSlot, downSlot, auxSlot));
     }
 
-    public DoubleCarouselModule(MeatgunComponent.Listener listener, NbtCompound nbt)
+    public DoubleCarouselModule(RootModuleHolder.Listener listener, NbtCompound nbt)
     {
         this(listener);
     }
