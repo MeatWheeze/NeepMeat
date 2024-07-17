@@ -1,6 +1,7 @@
 package com.neep.meatweapons.meatgun;
 
 import com.neep.meatweapons.item.meatgun.Meatgun;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import org.apache.commons.collections4.map.AbstractReferenceMap;
 import org.apache.commons.collections4.map.ReferenceMap;
 
@@ -18,5 +19,10 @@ public class RootModuleCache
         return isServer ?
                 SERVER_MAP.computeIfAbsent(uuid, u -> new RootModuleHolder(uuid, meatgun))
                 : CLIENT_MAP.computeIfAbsent(uuid, u -> new RootModuleHolder(uuid, meatgun));
+    }
+
+    public static void init()
+    {
+        ServerLifecycleEvents.SERVER_STOPPED.register(server -> SERVER_MAP.clear());
     }
 }

@@ -20,7 +20,7 @@ public class BaseStaffModule extends AbstractMeatgunModule
                 .rotateX((float) Math.toRadians(90))
                 .rotateY((float) Math.toRadians(-90))
                 .rotateZ((float) Math.toRadians(90))
-                .translate(-3 / 16f, 0, -1 / 16f));
+                .translate(0, 4 / 16f, -1 / 16f));
 
         setSlots(List.of(mainSlot, auxSlot));
     }
