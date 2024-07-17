@@ -263,6 +263,7 @@
     "neepmeat:merge_item_pipe",
     "neepmeat:item_pump",
     "neepmeat:ejector",
-    "neepmeat:router"
+    "neepmeat:router",
+    "neepmeat:advanced_router"
   ]
 }
