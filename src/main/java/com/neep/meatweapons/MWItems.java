@@ -5,7 +5,6 @@ import com.neep.meatlib.item.MeatlibItemSettings;
 import com.neep.meatlib.item.TooltipSupplier;
 import com.neep.meatlib.registry.ItemRegistry;
 import com.neep.meatweapons.item.*;
-import com.neep.meatweapons.item.meatgun.MeatgunItem;
 import com.neep.meatweapons.item.meatgun.MeatgunModuleItem;
 import com.neep.meatweapons.item.meatgun.MeatgunPistolItem;
 import com.neep.meatweapons.item.meatgun.MeatgunStaffItem;
@@ -43,6 +42,7 @@ public class MWItems
     public static MeatgunModuleItem TRIPLE_CAROUSEL = ItemRegistry.queue("triple_carousel", new MeatgunModuleItem(MeatgunModules.TRIPLE_CAROUSEL, new MeatlibItemSettings().group(MeatWeapons.WEAPONS)));
 
     public static MeatgunModuleItem BATTERY = ItemRegistry.queue("battery", new MeatgunModuleItem(MeatgunModules.BATTERY, new MeatlibItemSettings().group(MeatWeapons.WEAPONS)));
+    public static MeatgunModuleItem HOMING_BRAIN = ItemRegistry.queue("homing_brain", new MeatgunModuleItem(MeatgunModules.HOMING_BRAIN, new MeatlibItemSettings().group(MeatWeapons.WEAPONS)));
 
     public static MeatgunModuleItem HALBERD = ItemRegistry.queue("halberd", new MeatgunModuleItem(MeatgunModules.HALBERD, new MeatlibItemSettings().group(MeatWeapons.WEAPONS)));
     public static MeatgunModuleItem SHOCK_STAFF = ItemRegistry.queue("shock_staff", new MeatgunModuleItem(MeatgunModules.SHOCK_STAFF, new MeatlibItemSettings().group(MeatWeapons.WEAPONS)));

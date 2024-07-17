@@ -25,6 +25,7 @@ public class MeatgunModules
     public static final MeatgunModule.Type<UnderbarrelModule> UNDERBARREL = register(new Identifier(MeatWeapons.NAMESPACE, "underbarrel"), (l, p) -> new UnderbarrelModule(l), UnderbarrelModule::new);
 
     public static final MeatgunModule.Type<BatteryModule> BATTERY = register(new Identifier(MeatWeapons.NAMESPACE, "battery"), (l, p) -> new BatteryModule(l), BatteryModule::new);
+    public static final MeatgunModule.Type<HomingModule> HOMING_BRAIN = register(new Identifier(MeatWeapons.NAMESPACE, "homing_brain"), (l, p) -> new HomingModule(l), HomingModule::new);
 
     public static final MeatgunModule.Type<HalberdModule> HALBERD = register(new Identifier(MeatWeapons.NAMESPACE, "halberd"), (l, p) -> new HalberdModule(l), HalberdModule::new);
     public static final MeatgunModule.Type<ShockStaffModule> SHOCK_STAFF = register(new Identifier(MeatWeapons.NAMESPACE, "shock_staff"), (l, p) -> new ShockStaffModule(l), ShockStaffModule::new);

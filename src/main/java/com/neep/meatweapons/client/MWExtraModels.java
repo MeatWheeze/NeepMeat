@@ -24,6 +24,7 @@ public class MWExtraModels implements ExtraModelProvider
     public static Identifier DOUBLE_CAROUSEL = new Identifier(MeatWeapons.NAMESPACE, "item/meatgun/double_carousel");
     public static Identifier UNDERBARREL = new Identifier(MeatWeapons.NAMESPACE, "item/meatgun/underbarrel");
     public static Identifier BATTERY = new Identifier(MeatWeapons.NAMESPACE, "item/meatgun/battery");
+    public static Identifier HOMING_BRAIN = new Identifier(MeatWeapons.NAMESPACE, "item/meatgun/homing_brain");
     public static Identifier HALBERD = new Identifier(MeatWeapons.NAMESPACE, "item/meatgun/halberd");
     public static Identifier SHOCK_STAFF = new Identifier(MeatWeapons.NAMESPACE, "item/meatgun/shock_staff");
 
@@ -43,6 +44,7 @@ public class MWExtraModels implements ExtraModelProvider
         out.accept(DOUBLE_CAROUSEL);
         out.accept(UNDERBARREL);
         out.accept(BATTERY);
+        out.accept(HOMING_BRAIN);
         out.accept(HALBERD);
     }
 }
