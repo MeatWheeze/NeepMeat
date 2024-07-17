@@ -7,6 +7,7 @@ import com.neep.meatweapons.network.MeatgunNetwork;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
@@ -20,20 +21,23 @@ public abstract class MeleeModule extends AbstractMeatgunModule
         super(listener, slots);
     }
 
-    protected void fireBeam(World world, PlayerEntity player, double pitch, double yaw, double range)
+    protected boolean fireBeam(World world, PlayerEntity player, double pitch, double yaw, double range)
     {
         Vec3d pos = player.getEyePos();
 
         Vec3d end = pos.add(GunItem.getRotationVector(pitch, yaw).multiply(range + 1));
-        @Nullable Entity target = BaseGunItem.hitScan(player, pos, end, range, e -> e != player.getVehicle(),
+        @Nullable EntityHitResult target = BaseGunItem.hitScan(player, pos, end, range, e -> e != player.getVehicle(),
                 (world1, pos1, end1, width, maxTime, showRadius) -> {}, 0.4f).orElse(null);
-        if (target != null && !target.hasPassenger(player))
-        {
-            target.damage(world.getDamageSources().playerAttack(player), 7);
-//            target.timeUntilRegen = 0; // For bullets
-        }
 
         MeatgunNetwork.sendRecoil((ServerPlayerEntity) player, MeatgunNetwork.RecoilDirection.UP, 7, 0.2f, 0.7f, 0.03f);
+
+        if (target != null && !target.getEntity().hasPassenger(player))
+        {
+            target.getEntity().damage(world.getDamageSources().playerAttack(player), 7);
+//            target.timeUntilRegen = 0; // For bullets
+            return true;
+        }
+        return false;
 //        if (world instanceof ServerWorld serverWorld)
 //        {
 //            Vector4d v = new Vector4d(0, 0, -13 / 16f, 1);

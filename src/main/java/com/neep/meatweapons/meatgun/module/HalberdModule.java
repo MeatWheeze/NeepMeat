@@ -21,6 +21,7 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
+import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
@@ -146,9 +147,9 @@ public class HalberdModule extends MeleeModule
         world.playSoundFromEntity(null, player, SoundEvents.ENTITY_PLAYER_ATTACK_SWEEP, SoundCategory.PLAYERS, 0.5f, 1);
         Vec3d pos = player.getEyePos();
         Vec3d end = pos.add(GunItem.getRotationVector(pitch, yaw).multiply(4));
-        Entity target = BaseGunItem.hitScan(player, pos, end, 4, e -> e != vehicle, (world1, pos1, end1, width, maxTime, showRadius) -> {}, 0.1f).orElse(null);
+        EntityHitResult target = BaseGunItem.hitScan(player, pos, end, 4, e -> e != vehicle, (world1, pos1, end1, width, maxTime, showRadius) -> {}, 0.1f).orElse(null);
 
-        if (target instanceof LivingEntity livingEntity)
+        if (target.getEntity() instanceof LivingEntity livingEntity)
         {
             if (player instanceof ServerPlayerEntity serverPlayer)
             {
@@ -161,9 +162,9 @@ public class HalberdModule extends MeleeModule
                 PacketBufUtil.writeVec3d(buf, offset);
                 MeatgunNetwork.SEND_ANIMATION.emitter(player).apply("hook_grab", buf);
 
-                if (target.hasVehicle() && player.getRandom().nextBoolean())
+                if (livingEntity.hasVehicle() && player.getRandom().nextBoolean())
                 {
-                    target.dismountVehicle();
+                    livingEntity.dismountVehicle();
                 }
 
 //                target.addVelocity(
@@ -179,6 +180,10 @@ public class HalberdModule extends MeleeModule
                 ((HookableEntity) livingEntity).meatweapons$setHookTicks(20);
                 livingEntity.damage(world.getDamageSources().playerAttack(player), 2);
             }
+        }
+        else
+        {
+            MeatgunNetwork.sendRecoil((ServerPlayerEntity) player, MeatgunNetwork.RecoilDirection.UP, 7, 0.2f,0.7f, 0.03f);
         }
     }
 

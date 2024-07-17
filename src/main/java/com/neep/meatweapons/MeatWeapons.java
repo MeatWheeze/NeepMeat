@@ -6,7 +6,6 @@ import com.neep.meatweapons.enchantment.MWEnchantments;
 import com.neep.meatweapons.entity.*;
 import com.neep.meatweapons.init.MWBlockEntities;
 import com.neep.meatweapons.init.MWBlocks;
-import com.neep.meatweapons.init.MWComponents;
 import com.neep.meatweapons.init.MWScreenHandlers;
 import com.neep.meatweapons.item.AssaultDrillItem;
 import com.neep.meatweapons.item.GunItem;
@@ -45,6 +44,7 @@ public class MeatWeapons implements ModInitializer
     public static EntityType<ExplodingShellEntity> EXPLODING_SHELL;
     public static EntityType<AirtruckEntity> AIRTRUCK;
     public static EntityType<BounceGrenadeEntity> BOUNCE_GRENADE;
+    public static EntityType<ShockStaffProjectileEntity> SHOCK_STAFF_PROJECTILE;
 
     public static <T extends Entity> EntityType<T> registerEntity(String id, FabricEntityTypeBuilder<T> builder)
     {
@@ -72,6 +72,11 @@ public class MeatWeapons implements ModInitializer
             FUSION_BLAST = registerEntity("fusion_blast", FabricEntityTypeBuilder.create(SpawnGroup.MISC, FusionBlastEntity::new));
             EXPLODING_SHELL = registerEntity("exploding_shell", FabricEntityTypeBuilder.create(SpawnGroup.MISC, ExplodingShellEntity::new));
             BOUNCE_GRENADE = registerEntity("bounce_grenade", FabricEntityTypeBuilder.<BounceGrenadeEntity>create(SpawnGroup.MISC, BounceGrenadeEntity::new)
+                    .trackRangeBlocks(200)
+                    .build()
+            );
+            SHOCK_STAFF_PROJECTILE = registerEntity("shock_staff_projectile", FabricEntityTypeBuilder.<ShockStaffProjectileEntity>create(SpawnGroup.MISC, ShockStaffProjectileEntity::new)
+                    .dimensions(EntityDimensions.fixed(0.25f, 0.25f))
                     .trackRangeBlocks(200)
                     .build()
             );

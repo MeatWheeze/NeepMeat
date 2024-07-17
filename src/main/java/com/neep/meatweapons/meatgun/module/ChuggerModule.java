@@ -18,6 +18,7 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
+import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
@@ -110,11 +111,11 @@ public class ChuggerModule extends ShooterModule
 
         Vec3d end = pos.add(GunItem.getRotationVector(pitch, yaw).multiply(40));
 //        System.out.println();
-        Optional<Entity> target = hitScan(player, pos, end, 40, this::syncBeamEffect);
+        Optional<EntityHitResult> target = hitScan(player, pos, end, 40, this::syncBeamEffect);
         if (target.isPresent())
         {
-            Entity entity = target.get();
-            target.get().damage(BulletDamageSource.create(world, player, 0.1f), 7);
+            Entity entity = target.get().getEntity();
+            entity.damage(BulletDamageSource.create(world, player, 0.1f), 7);
             entity.timeUntilRegen = 0;
         }
 

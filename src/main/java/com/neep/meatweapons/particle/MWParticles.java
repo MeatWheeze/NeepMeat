@@ -16,6 +16,7 @@ import net.minecraft.particle.ParticleType;
 public class MWParticles
 {
     public static DefaultParticleType PLASMA_PARTICLE = FabricParticleTypes.simple();
+    public static DefaultParticleType SHOCK_STAFF = FabricParticleTypes.simple();
     public static DefaultParticleType BLOODTHROWER_SPLASH = FabricParticleTypes.simple();
 //    public static BloodthrowerParticleType BLOODTHROWER_SPLASH = new BloodthrowerParticleType(true,
 //            BloodthrowerParticleType.createCodec(MWParticles.BLOODTHROWER_SPLASH));
@@ -33,6 +34,7 @@ public class MWParticles
     public static void init()
     {
         PLASMA_PARTICLE = ParticleRegistry.register(MeatWeapons.NAMESPACE, "plasma", PLASMA_PARTICLE);
+        SHOCK_STAFF = ParticleRegistry.register(MeatWeapons.NAMESPACE, "shock_staff", SHOCK_STAFF);
         BLOODTHROWER_SPLASH = ParticleRegistry.register(MeatWeapons.NAMESPACE, "bloodthrower_splash", BLOODTHROWER_SPLASH);
         NORMAL_MUZZLE_FLASH = ParticleRegistry.register(MeatWeapons.NAMESPACE, "normal_muzzle_flash", NORMAL_MUZZLE_FLASH);
         LONG_BOI_MUZZLE_FLASH = ParticleRegistry.register(MeatWeapons.NAMESPACE, "long_boi_muzzle_flash", LONG_BOI_MUZZLE_FLASH);
@@ -50,6 +52,7 @@ public class MWParticles
 //        }));
 
         ParticleFactoryRegistry.getInstance().register(PLASMA_PARTICLE, FlameParticle.Factory::new);
+        ParticleFactoryRegistry.getInstance().register(SHOCK_STAFF, FlameParticle.Factory::new);
         ParticleFactoryRegistry.getInstance().register(BLOODTHROWER_SPLASH, BloodthrowerParticle.Factory::new);
         ParticleFactoryRegistry.getInstance().register(NORMAL_MUZZLE_FLASH, MuzzleFlashParticleFactory::new);
         ParticleFactoryRegistry.getInstance().register(LONG_BOI_MUZZLE_FLASH, MuzzleFlashParticleFactory::new);

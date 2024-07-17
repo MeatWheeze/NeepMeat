@@ -61,6 +61,8 @@ public class MWClient implements ClientModInitializer
 
         EntityRendererRegistry.register(MeatWeapons.BOUNCE_GRENADE, GrenadeEntityRenderer::new);
         EntityModelLayerRegistry.registerModelLayer(BOUNCE_GRENADE_LAYER, PlasmaEntityModel::getTexturedModelData);
+
+        EntityRendererRegistry.register(MeatWeapons.SHOCK_STAFF_PROJECTILE, ShockStaffProjectileEntityRenderer::new);
     }
 
     public static void registerAnimations()
