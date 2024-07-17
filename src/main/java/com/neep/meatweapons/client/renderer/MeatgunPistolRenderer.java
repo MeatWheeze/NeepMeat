@@ -91,7 +91,7 @@ public class MeatgunPistolRenderer extends BuiltinModelItemRenderer implements B
         if (mode.isFirstPerson())
             matrices.multiplyPositionMatrix(firstPersonModelTransform);
 
-        var root = component.getRoot();
+        MeatgunModule root = component.getRoot().root;
         renderRecursive(matrices, root, stack, component, mode, vcp,
                 MinecraftClient.getInstance().world.getTime(),
                 MinecraftClient.getInstance().getTickDelta(), light, overlay);

@@ -65,7 +65,10 @@ public class ShockStaffModule extends MeleeModule
             entity.setDamage(1);
             entity.setPos(entityPos.x, entityPos.y, entityPos.z);
             entity.setPosition(entityPos.x, entityPos.y, entityPos.z);
-            entity.setHomingRadius(5);
+//            if (listener.get().getCapabilities())
+//            {
+//                entity.setHomingRadius(5);
+//            }
             entity.setVelocity(player, (float) Math.toDegrees(pitch), (float) Math.toDegrees(yaw), 0, 0.9f, 0);
             world.spawnEntity(entity);
             projectileCooldown = 20;

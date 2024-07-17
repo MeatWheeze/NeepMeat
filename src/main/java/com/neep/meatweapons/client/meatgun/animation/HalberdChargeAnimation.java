@@ -26,7 +26,7 @@ public class HalberdChargeAnimation extends AnimatedAction<MeatgunComponent, Hal
             if (!MinecraftClient.getInstance().player.isSprinting())
                 markFinished();
 
-            @Nullable MeatgunModule module = MeatgunComponentImpl.findRecursive(component.getRoot(), MeatgunModules.HALBERD);
+            @Nullable MeatgunModule module = MeatgunComponentImpl.findRecursive(component.getRoot().root, MeatgunModules.HALBERD);
             if (module instanceof HalberdModule halberd && halberd.triggerHeld())
             {
                 started = true;

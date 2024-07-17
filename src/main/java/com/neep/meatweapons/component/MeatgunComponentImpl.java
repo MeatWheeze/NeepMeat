@@ -5,19 +5,15 @@ import com.neep.meatweapons.client.meatgun.RecoilManager;
 import com.neep.meatweapons.item.meatgun.Meatgun;
 import com.neep.meatweapons.item.meatgun.MeatgunAnimationManager;
 import com.neep.meatweapons.meatgun.RootModuleCache;
-import com.neep.meatweapons.meatgun.module.BasePistolModule;
+import com.neep.meatweapons.meatgun.RootModuleHolder;
 import com.neep.meatweapons.meatgun.module.MeatgunModule;
 import com.neep.meatweapons.network.MWAttackC2SPacket;
-import com.neep.meatweapons.network.MeatgunModuleNetwork;
 import dev.onyxstudios.cca.api.v3.component.ComponentKey;
 import dev.onyxstudios.cca.api.v3.item.ItemComponent;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.network.PacketByteBuf;
-import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
@@ -26,7 +22,8 @@ import java.util.UUID;
 public class MeatgunComponentImpl extends ItemComponent implements MeatgunComponent
 {
     @Nullable private RecoilManager recoil;
-    private final MeatgunModule root;
+//    private final MeatgunModule root;
+    private final RootModuleHolder holder;
 
     private boolean dirty = true;
     private boolean invalidated = false;
@@ -43,20 +40,16 @@ public class MeatgunComponentImpl extends ItemComponent implements MeatgunCompon
         super(stack, key);
         getUuid();
 
-        if (stack.getItem() instanceof Meatgun meatgun)
-            root = RootModuleCache.getOrCreate(getUuid(), meatgun, listener);
-        else
-            // Fail silently in case someone is doing something weird that I can't control.
-            // I have no examples.
-            root = new BasePistolModule(listener);
+        holder = RootModuleCache.getOrCreate(getUuid(), (Meatgun) stack.getItem());
+        holder.setComponent(this);
 
-        root.readNbt(getOrCreateRootTag());
+        holder.readNbt(getOrCreateRootTag());
     }
 
     @Override
-    public MeatgunModule getRoot()
+    public RootModuleHolder getRoot()
     {
-        return root;
+        return holder;
     }
 
     @Override
@@ -74,7 +67,7 @@ public class MeatgunComponentImpl extends ItemComponent implements MeatgunCompon
     @Override
     public void trigger(World world, PlayerEntity player, ItemStack stack, int id, double pitch, double yaw, MWAttackC2SPacket.HandType handType)
     {
-        root.trigger(world, player, stack, id, pitch, yaw, handType);
+        holder.root.trigger(world, player, stack, id, pitch, yaw, handType);
 //        var module = root.getChildren().get(0).get();
 //        if (module instanceof BosherModule)
 //        {
@@ -91,7 +84,7 @@ public class MeatgunComponentImpl extends ItemComponent implements MeatgunCompon
     @Override
     public void release(World world, PlayerEntity player, ItemStack stack, int id, double pitch, double yaw, MWAttackC2SPacket.HandType handType)
     {
-        root.release(world, player, stack, id, pitch, yaw, handType);
+        holder.root.release(world, player, stack, id, pitch, yaw, handType);
 //        var module = root.getChildren().get(0).get();
 //        if (module instanceof BosherModule)
 //        {
@@ -108,7 +101,7 @@ public class MeatgunComponentImpl extends ItemComponent implements MeatgunCompon
     @Override
     public void tickTrigger(World world, PlayerEntity player, ItemStack stack, int id, double pitch, double yaw, MWAttackC2SPacket.HandType handType)
     {
-        root.tickTrigger(world, player, stack, id, pitch, yaw, handType);
+        holder.root.tickTrigger(world, player, stack, id, pitch, yaw, handType);
     }
 
     @Override
@@ -129,19 +122,19 @@ public class MeatgunComponentImpl extends ItemComponent implements MeatgunCompon
     @Override
     public void commonTick(PlayerEntity player)
     {
-        root.tick(player);
+        holder.root.tick(player);
 
         if (!player.getWorld().isClient())
         {
             if (dirty)
             {
-                root.writeNbt(getOrCreateRootTag());
+                holder.root.writeNbt(getOrCreateRootTag());
                 dirty = false;
             }
 
             if (invalidated)
             {
-                root.readNbt(getOrCreateRootTag());
+                holder.root.readNbt(getOrCreateRootTag());
                 invalidated = false;
             }
         }
@@ -159,16 +152,14 @@ public class MeatgunComponentImpl extends ItemComponent implements MeatgunCompon
     @Override
     public void markDirty()
     {
-//        dirty = true;
-        if (root != null)
-            root.writeNbt(getOrCreateRootTag());
+        holder.root.writeNbt(getOrCreateRootTag());
     }
 
     @Override
     @Nullable
     public MeatgunModule find(UUID uuid)
     {
-        return findRecursive(root, uuid);
+        return findRecursive(holder.root, uuid);
     }
 
     @Override
@@ -241,27 +232,21 @@ public class MeatgunComponentImpl extends ItemComponent implements MeatgunCompon
 
     private class Listener implements MeatgunComponent.Listener
     {
-        @Override
-        public MeatgunComponent get()
-        {
-            return MeatgunComponentImpl.this;
-        }
+//        @Override
+//        public PacketByteBuf getBuf(MeatgunModule module)
+//        {
+//            PacketByteBuf buf = PacketByteBufs.create();
+//            buf.writeUuid(get().getUuid());
+//            buf.writeUuid(module.getUuid());
+//            return buf;
+//        }
 
-        @Override
-        public PacketByteBuf getBuf(MeatgunModule module)
-        {
-            PacketByteBuf buf = PacketByteBufs.create();
-            buf.writeUuid(get().getUuid());
-            buf.writeUuid(module.getUuid());
-            return buf;
-        }
-
-        @Override
-        public void send(PlayerEntity player, PacketByteBuf buf)
-        {
-            if (player instanceof ServerPlayerEntity serverPlayerEntity)
-                MeatgunModuleNetwork.send(serverPlayerEntity, buf);
-        }
+//        @Override
+//        public void send(PlayerEntity player, PacketByteBuf buf)
+//        {
+//            if (player instanceof ServerPlayerEntity serverPlayerEntity)
+//                MeatgunModuleNetwork.send(serverPlayerEntity, buf);
+//        }
 
         @Override
         public void markDirty()
