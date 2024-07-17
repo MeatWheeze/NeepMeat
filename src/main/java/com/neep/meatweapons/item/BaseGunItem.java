@@ -177,11 +177,11 @@ public abstract class BaseGunItem extends Item implements MeatlibItem, GunItem, 
         Vec3d end = pos.add(player.getRotationVec(1)
                 .add(perturb)
                 .multiply(40));
-        Optional<Entity> target = hitScan(player, pos, end, 40, this);
+        Optional<EntityHitResult> target = hitScan(player, pos, end, 40, this);
         if (target.isPresent())
         {
-            Entity entity = target.get();
-            target.get().damage(BulletDamageSource.create(world, player, 0.1f), 2);
+            Entity entity = target.get().getEntity();
+            entity.damage(BulletDamageSource.create(world, player, 0.1f), 2);
             entity.timeUntilRegen = 0;
         }
 
@@ -215,12 +215,12 @@ public abstract class BaseGunItem extends Item implements MeatlibItem, GunItem, 
         syncAnimation(world, player, stack, "fire", true);
     }
 
-    public static Optional<Entity> hitScan(@NotNull LivingEntity caster, Vec3d start, Vec3d end, double distance, BeamEffectProvider gunItem)
+    public static Optional<EntityHitResult> hitScan(@NotNull LivingEntity caster, Vec3d start, Vec3d end, double distance, BeamEffectProvider gunItem)
     {
         return hitScan(caster, start, end, distance, e -> true, gunItem, 0.1f);
     }
 
-    public static Optional<Entity> hitScan(@NotNull LivingEntity caster, Vec3d start, Vec3d end, double distance, Predicate<Entity> predicate, BeamEffectProvider gunItem, float margin)
+    public static Optional<EntityHitResult> hitScan(@NotNull LivingEntity caster, Vec3d start, Vec3d end, double distance, Predicate<Entity> predicate, BeamEffectProvider gunItem, float margin)
     {
         World world = caster.getWorld();
         if (!world.isClient)
@@ -232,14 +232,12 @@ public abstract class BaseGunItem extends Item implements MeatlibItem, GunItem, 
             Predicate<Entity> entityFilter = entity -> !entity.isSpectator() && entity.canHit() && predicate.test(entity);
 
             double minDistance = distance;
-            Entity entity = null;
             EntityHitResult entityResult = null;
             for (EntityHitResult result : Util.getRayTargets(caster, start, blockResult.getPos(), entityFilter, margin))
             {
                 if (result.getPos().distanceTo(start) < minDistance)
                 {
                     minDistance = result.getPos().distanceTo(start);
-                    entity = result.getEntity();
                     entityResult = result;
                 }
             }
@@ -247,7 +245,7 @@ public abstract class BaseGunItem extends Item implements MeatlibItem, GunItem, 
             Vec3d hitPos = Objects.requireNonNullElse(entityResult, blockResult).getPos();
             gunItem.syncBeamEffect((ServerWorld) world, start, hitPos, 0.2f, 9, 100);
 
-            return Optional.ofNullable(entity);
+            return Optional.ofNullable(entityResult);
         }
         return Optional.empty();
     }

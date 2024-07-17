@@ -23,6 +23,7 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.util.Arm;
 import net.minecraft.util.UseAction;
+import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import org.joml.Vector3f;
@@ -236,10 +237,10 @@ public class FusionCannonItem extends BaseGunItem implements WeakTwoHanded, Aima
         pos = pos.add(transform);
 
         Vec3d end = pos.add(Util.getRotationVector((float) pitch, (float) yaw).multiply(20));
-        Optional<Entity> target = hitScan(entity, pos, end, 20, this);
+        Optional<EntityHitResult> target = hitScan(entity, pos, end, 20, this);
         DamageSource damage = entity instanceof PlayerEntity player ?
                 world.getDamageSources().playerAttack(player) : world.getDamageSources().mobAttack(entity);
-        target.ifPresent(livingEntity -> livingEntity.damage(damage, 4));
+        target.ifPresent(livingEntity -> livingEntity.getEntity().damage(damage, 4));
 
         // Play fire sound
         playSound(world, entity, GunSounds.FIRE_PRIMARY);
@@ -253,10 +254,10 @@ public class FusionCannonItem extends BaseGunItem implements WeakTwoHanded, Aima
         Vec3d pos = entity.getEyePos();
         Vec3d end = target.getPos().add(0, target.getHeight() / 2, 0);
 
-        Optional<Entity> foundTarget = hitScan(entity, pos, end, 20, this);
+        Optional<EntityHitResult> foundTarget = hitScan(entity, pos, end, 20, this);
         DamageSource damage = entity instanceof PlayerEntity player ?
                 world.getDamageSources().playerAttack(player) : world.getDamageSources().mobAttack(entity);
-        foundTarget.ifPresent(livingEntity -> livingEntity.damage(damage, 4));
+        foundTarget.ifPresent(livingEntity -> livingEntity.getEntity().damage(damage, 4));
 
         // Play fire sound
         playSound(world, entity, GunSounds.FIRE_PRIMARY);
