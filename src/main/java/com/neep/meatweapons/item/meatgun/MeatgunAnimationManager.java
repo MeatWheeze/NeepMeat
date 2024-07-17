@@ -16,7 +16,7 @@ import java.util.UUID;
 @Environment(EnvType.CLIENT)
 public class MeatgunAnimationManager
 {
-    private static final Map<UUID, MeatgunAnimationManager> INSTANCES = new ReferenceMap<>(AbstractReferenceMap.ReferenceStrength.HARD, AbstractReferenceMap.ReferenceStrength.SOFT);
+    private static final Map<UUID, MeatgunAnimationManager> INSTANCES = new ReferenceMap<>(AbstractReferenceMap.ReferenceStrength.HARD, AbstractReferenceMap.ReferenceStrength.SOFT, true);
 
     public static MeatgunAnimationManager getOrCreate(UUID uuid, Meatgun meatgun)
     {

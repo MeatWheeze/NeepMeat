@@ -4,6 +4,7 @@ import com.neep.meatlib.MeatLib;
 import com.neep.meatweapons.client.meatgun.RecoilManager;
 import com.neep.meatweapons.item.meatgun.Meatgun;
 import com.neep.meatweapons.item.meatgun.MeatgunAnimationManager;
+import com.neep.meatweapons.meatgun.RootModuleCache;
 import com.neep.meatweapons.meatgun.module.BasePistolModule;
 import com.neep.meatweapons.meatgun.module.MeatgunModule;
 import com.neep.meatweapons.network.MWAttackC2SPacket;
@@ -40,16 +41,16 @@ public class MeatgunComponentImpl extends ItemComponent implements MeatgunCompon
     public MeatgunComponentImpl(ItemStack stack, ComponentKey<MeatgunComponent> key)
     {
         super(stack, key);
+        getUuid();
 
         if (stack.getItem() instanceof Meatgun meatgun)
-            root = meatgun.createBase(listener);
+            root = RootModuleCache.getOrCreate(getUuid(), meatgun, listener);
         else
             // Fail silently in case someone is doing something weird that I can't control.
             // I have no examples.
             root = new BasePistolModule(listener);
 
         root.readNbt(getOrCreateRootTag());
-        getUuid();
     }
 
     @Override
