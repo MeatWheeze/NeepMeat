@@ -53,7 +53,12 @@ public class EncasedFluidPipeBlockEntity<T extends PipeVertex & NbtSerialisable>
     public void readNbt(NbtCompound nbt)
     {
         super.readNbt(nbt);
-        this.camoState = NbtHelper.toBlockState(Registries.BLOCK.getReadOnlyWrapper(), nbt.getCompound("camo_state"));
+        BlockState camoState = NbtHelper.toBlockState(Registries.BLOCK.getReadOnlyWrapper(), nbt.getCompound("camo_state"));
+        if (camoState != this.camoState)
+        {
+            this.camoState = camoState;
+            this.cachedShape = null;
+        }
     }
 
     @Override

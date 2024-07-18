@@ -24,7 +24,7 @@ public class EncasedItemPipeBlock extends ItemPipeBlock implements EncasedBlock
 {
     public EncasedItemPipeBlock(String itemName, ItemSettings itemSettings, Settings settings)
     {
-        super(itemName, itemSettings, settings);
+        super(itemName, itemSettings, settings.nonOpaque());
     }
 
     public VoxelShape getPipeOutlineShape(BlockState state, BlockView world, BlockPos pos)
