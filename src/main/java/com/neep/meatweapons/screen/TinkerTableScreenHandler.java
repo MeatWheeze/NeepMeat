@@ -9,6 +9,7 @@ import com.neep.meatweapons.init.MWScreenHandlers;
 import com.neep.meatweapons.item.meatgun.Meatgun;
 import com.neep.meatweapons.component.MeatgunComponent;
 import com.neep.meatweapons.item.meatgun.MeatgunModuleItem;
+import com.neep.meatweapons.meatgun.RootModuleHolder;
 import com.neep.meatweapons.meatgun.module.MeatgunModule;
 import com.neep.meatweapons.meatgun.module.ModuleSlot;
 import com.neep.neepmeat.screen_handler.BasicScreenHandler;
@@ -104,40 +105,58 @@ public class TinkerTableScreenHandler extends BasicScreenHandler
 
                 boolean cursorEmpty = getCursorStack().isEmpty();
 
-                if (!slotEmpty && canChange)
+                if (canChange)
                 {
-                    if (cursorEmpty)
+                    RootModuleHolder holder = meatgun.getRootHolder();
+                    if (!slotEmpty)
                     {
-                        ItemStack moduleStack = MeatgunModuleItem.get(slot1.get().getType());
+                        if (cursorEmpty)
+                        {
+                            // Take
+                            ItemStack moduleStack = MeatgunModuleItem.get(slot1.get().getType());
 
-                        if (moduleStack.isEmpty())
-                            return;
+                            if (moduleStack.isEmpty())
+                                return;
 
-                        setCursorStack(moduleStack);
-                        slot1.set(MeatgunModule.DEFAULT);
-                        syncState();
+                            setCursorStack(moduleStack);
+                            slot1.set(MeatgunModule.DEFAULT);
+                            syncState();
+                        }
+                        else if (getCursorStack().getCount() == 1)
+                        {
+                            // Swap
+                            MeatgunModule.Type<?> cursorType = MeatgunModuleItem.get(getCursorStack());
+                            if (cursorType != MeatgunModule.DEFAULT_TYPE)
+                            {
+                                MeatgunModule previous = slot1.get();
+                                slot1.set(MeatgunModule.DEFAULT);
+                                if (holder.canSupport(cursorType))
+                                {
+                                    setCursorStack(MeatgunModuleItem.get(previous.getType()));
+
+                                    slot1.set(cursorType.create(holder.getListener(), parent));
+                                    syncState();
+                                }
+                                else
+                                {
+                                    slot1.set(previous);
+                                }
+                            }
+                        }
                     }
-                    else if (getCursorStack().getCount() == 1)
+                    else if (!cursorEmpty)
                     {
-                        // Swap
+                        // Set
                         MeatgunModule.Type<?> cursorType = MeatgunModuleItem.get(getCursorStack());
                         if (cursorType != MeatgunModule.DEFAULT_TYPE)
                         {
-                            setCursorStack(MeatgunModuleItem.get(slot1.get().getType()));
-
-                            slot1.set(cursorType.create(meatgun.getRootHolder().getListener(), parent));
-                            syncState();
+                            if (holder.canSupport(cursorType))
+                            {
+                                slot1.set(cursorType.create(holder.getListener(), parent));
+                                getCursorStack().decrement(1);
+                                syncState();
+                            }
                         }
-                    }
-                }
-                else if (slotEmpty && canChange)
-                {
-                    MeatgunModule.Type<?> cursorType = MeatgunModuleItem.get(getCursorStack());
-                    if (cursorType != MeatgunModule.DEFAULT_TYPE)
-                    {
-                        slot1.set(cursorType.create(meatgun.getRootHolder().getListener(), parent));
-                        getCursorStack().decrement(1);
-                        syncState();
                     }
                 }
             }

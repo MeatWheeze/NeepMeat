@@ -47,4 +47,10 @@ public class MeatgunStaffItem extends MeatgunItem
             }
         };
     }
+
+    @Override
+    public int getMaxComplexity(ItemStack stack)
+    {
+        return 16;
+    }
 }

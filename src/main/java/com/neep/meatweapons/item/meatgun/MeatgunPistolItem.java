@@ -5,6 +5,7 @@ import com.neep.meatweapons.client.meatgun.animation.MeatgunAnimation;
 import com.neep.meatweapons.meatgun.RootModuleHolder;
 import com.neep.meatweapons.meatgun.module.BasePistolModule;
 import com.neep.meatweapons.meatgun.module.MeatgunModule;
+import net.minecraft.item.ItemStack;
 
 import java.util.function.Supplier;
 
@@ -32,5 +33,11 @@ public class MeatgunPistolItem extends MeatgunItem
                 return new MeatgunAnimationManager(MeatgunAnimation.EMPTY);
             }
         };
+    }
+
+    @Override
+    public int getMaxComplexity(ItemStack stack)
+    {
+        return 16;
     }
 }

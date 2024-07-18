@@ -110,7 +110,7 @@ public interface MeatgunModule
 //        }
     };
 
-    Type<?> DEFAULT_TYPE = new MeatgunModule.Type<>(new Identifier(MeatWeapons.NAMESPACE, "default"), (l, p) -> DEFAULT, (l, n) -> DEFAULT);
+    Type<?> DEFAULT_TYPE = new MeatgunModule.Type<>(new Identifier(MeatWeapons.NAMESPACE, "default"), 0, (l, p) -> DEFAULT, (l, n) -> DEFAULT);
 
 
 
@@ -133,9 +133,12 @@ public interface MeatgunModule
 
         private final NbtFactory<T> nbtFactory;
 
-        public Type(Identifier id, Factory<T> factory, NbtFactory<T> nbtFactory)
+        private int complexity;
+
+        public Type(Identifier id, int complexity, Factory<T> factory, NbtFactory<T> nbtFactory)
         {
             this.id = id;
+            this.complexity = complexity;
             this.factory = factory;
             this.nbtFactory = nbtFactory;
         }
@@ -153,6 +156,11 @@ public interface MeatgunModule
         public T create(RootModuleHolder.Listener listener, NbtCompound nbt)
         {
             return nbtFactory.create(listener, nbt);
+        }
+
+        public int complexity()
+        {
+            return complexity;
         }
     }
 

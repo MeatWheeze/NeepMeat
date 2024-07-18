@@ -106,6 +106,12 @@ public class MeatgunComponentImpl extends ItemComponent implements MeatgunCompon
     }
 
     @Override
+    public ItemStack getStack()
+    {
+        return stack;
+    }
+
+    @Override
     public void commonTick(PlayerEntity player)
     {
         holder.root.tick(player);

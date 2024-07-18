@@ -1,6 +1,11 @@
 package com.neep.meatweapons.client.screen.meatgun;
 
 import com.neep.meatweapons.MWItems;
+import com.neep.meatweapons.component.MeatgunComponent;
+import com.neep.meatweapons.init.MWComponents;
+import com.neep.meatweapons.meatgun.RootModuleHolder;
+import com.neep.neepmeat.api.plc.PLCCols;
+import com.neep.neepmeat.client.screen.util.GUIUtil;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
@@ -10,6 +15,7 @@ import net.minecraft.client.render.model.json.ModelTransformationMode;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
 import net.minecraft.screen.slot.Slot;
+import net.minecraft.text.Text;
 import net.minecraft.util.math.MathHelper;
 import org.joml.Matrix4f;
 import org.lwjgl.glfw.GLFW;
@@ -63,6 +69,19 @@ class DisplayPane extends TinkerTableScreen.PaneWidget
         context.draw(); // Draw now so that the scissor works consistently (?)
         context.disableScissor();
         matrices.pop();
+
+        MeatgunComponent component = MWComponents.MEATGUN.getNullable(stack);
+        if (component != null)
+        {
+            RootModuleHolder holder = component.getRootHolder();
+            int maxComplexity = holder.getMaxComplexity(stack);
+            int remaining = holder.getRemainingComplexity();
+            matrices.push();
+            GUIUtil.drawText(context, textRenderer,
+                    Text.translatable("tooltip.meatweapons.meatgun_module.remaining_complexity", maxComplexity - remaining, maxComplexity),
+                    bounds.x() + 3, bounds.y2() - textRenderer.fontHeight - 1, PLCCols.TEXT.col, true);
+            matrices.pop();
+        }
     }
 
     @Override

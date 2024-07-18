@@ -22,6 +22,7 @@ public class MeatgunModuleItem extends Item
 {
     private static final Map<MeatgunModuleItem, MeatgunModule.Type<?>> ITEM_TO_TYPE = new HashMap<>();
     private static final Map<MeatgunModule.Type<?>, MeatgunModuleItem> TYPE_TO_ITEM = new HashMap<>();
+    private final MeatgunModule.Type<?> type;
     @Nullable
     private final TooltipSupplier tooltipSupplier;
     private String translationKey;
@@ -29,6 +30,7 @@ public class MeatgunModuleItem extends Item
     public MeatgunModuleItem(MeatgunModule.Type<?> type, @Nullable TooltipSupplier tooltipSupplier, Settings settings)
     {
         super(settings);
+        this.type = type;
         this.tooltipSupplier = tooltipSupplier;
         register(this, type);
     }
@@ -91,9 +93,12 @@ public class MeatgunModuleItem extends Item
     public void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context)
     {
         tooltip.add(Text.translatable("tooltip.meatweapons.meatgun_module_1").formatted(Formatting.GOLD).formatted(Formatting.BOLD));
+        if (type.complexity() != 0)
+            tooltip.add(Text.translatable("tooltip.meatweapons.meatgun_module.complexity", type.complexity()).formatted(Formatting.GRAY));
         super.appendTooltip(stack, world, tooltip, context);
     }
 
+    // TODO: Why is this necessary? This item should do nothing.
     @Override
     public boolean allowNbtUpdateAnimation(PlayerEntity player, Hand hand, ItemStack oldStack, ItemStack newStack)
     {

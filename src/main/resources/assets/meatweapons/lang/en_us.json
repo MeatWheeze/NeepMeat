@@ -52,5 +52,7 @@
   "meatgun_module.meatweapons.shock_staff": "Shock Staff",
 
   "text.meatweapons.tinker_table.item_here": "Place Meatgun here",
-  "tooltip.meatweapons.meatgun_module_1": "Meatgun Module - install in a Tinker Table"
+  "tooltip.meatweapons.meatgun_module_1": "Meatgun Module - install in a Tinker Table",
+  "tooltip.meatweapons.meatgun_module.complexity": "Complexity: %s",
+  "tooltip.meatweapons.meatgun_module.remaining_complexity": "C: %s / %s"
 }

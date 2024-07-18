@@ -37,4 +37,6 @@ public interface MeatgunComponent extends Component
     RecoilManager getRecoil();
 
     @Nullable MeatgunAnimationManager getAnimationManager();
+
+    ItemStack getStack();
 }

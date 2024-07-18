@@ -3,20 +3,24 @@ package com.neep.meatweapons.meatgun;
 import com.neep.meatweapons.component.MeatgunComponent;
 import com.neep.meatweapons.item.meatgun.Meatgun;
 import com.neep.meatweapons.meatgun.module.MeatgunModule;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.HashSet;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 // Instances of this persist when the parent ItemStack is refreshed.
 // Newly created MeatgunComponents take ownership of the RootModuleHolder that corresponds to the UUID stored in NBT.
 public class RootModuleHolder
 {
     public final MeatgunModule root;
+    private final Meatgun meatgun;
     @Nullable private MeatgunComponent component;
+
     @Nullable private Set<MeatgunModule.Type<?>> moduleTypes;
+    @Nullable private List<MeatgunModule> modules;
+
+    private int remainingCapacity = -1;
 
     private final Listener listener = new ListenerImpl();
 
@@ -25,6 +29,7 @@ public class RootModuleHolder
     public RootModuleHolder(UUID uuid, Meatgun meatgun)
     {
         this.root = meatgun.createBase(listener);
+        this.meatgun = meatgun;
     }
 
     @Nullable
@@ -62,27 +67,43 @@ public class RootModuleHolder
         if (reason == Reason.MODULE_SWAPPED)
         {
             moduleTypes = null;
+            modules = null;
         }
     }
 
     public boolean containsType(MeatgunModule.Type<?> type)
     {
-        if (moduleTypes == null)
-        {
-            moduleTypes = new HashSet<>();
-            collectTypes(root, moduleTypes);
-        }
-
+        cacheModules();
         return moduleTypes.contains(type);
     }
 
-    private static void collectTypes(MeatgunModule root, Set<MeatgunModule.Type<?>> set)
+    private void cacheModules()
+    {
+        if (moduleTypes == null || modules == null)
+        {
+            moduleTypes = new HashSet<>();
+            modules = new ArrayList<>();
+            collectTypes(root, moduleTypes, modules);
+
+            if (component != null)
+            {
+                remainingCapacity = meatgun.getMaxComplexity(component.getStack());
+                for (var module : modules)
+                {
+                    remainingCapacity -= module.getType().complexity();
+                }
+            }
+        }
+    }
+
+    private static void collectTypes(MeatgunModule root, Set<MeatgunModule.Type<?>> set, List<MeatgunModule> list)
     {
         set.add(root.getType());
+        list.add(root);
 
         for (var slot : root.getChildren())
         {
-            collectTypes(slot.get(), set);
+            collectTypes(slot.get(), set, list);
         }
     }
 
@@ -94,6 +115,23 @@ public class RootModuleHolder
     public Listener getListener()
     {
         return listener;
+    }
+
+    public int getRemainingComplexity()
+    {
+        cacheModules();
+        return remainingCapacity;
+    }
+
+    public int getMaxComplexity(ItemStack stack)
+    {
+        return meatgun.getMaxComplexity(stack);
+    }
+
+    public boolean canSupport(MeatgunModule.Type<?> type)
+    {
+        cacheModules();
+        return remainingCapacity >= type.complexity();
     }
 
     private class ListenerImpl implements Listener
