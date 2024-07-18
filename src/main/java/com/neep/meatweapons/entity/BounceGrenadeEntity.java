@@ -5,7 +5,6 @@ import com.neep.meatweapons.MeatWeapons;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.projectile.PersistentProjectileEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.listener.ClientPlayPacketListener;
@@ -21,12 +20,11 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
-import net.minecraft.world.event.GameEvent;
 import net.minecraft.world.explosion.Explosion;
 import net.minecraft.world.explosion.ExplosionBehavior;
 import org.joml.Vector3d;
 
-public class BounceGrenadeEntity extends PersistentProjectileEntity
+public class BounceGrenadeEntity extends MeatgunProjectileEntity
 {
     public static final ExplosionBehavior DESTROY_BEHAVIOUR = new ExplosionBehavior();
     public static final ExplosionBehavior KEEP_BEHAVIOUR = new ExplosionBehavior()
@@ -47,10 +45,9 @@ public class BounceGrenadeEntity extends PersistentProjectileEntity
         super(entityType, world);
     }
 
-    public BounceGrenadeEntity(World world, float explosionPower, int fuse, boolean destructive, double x, double y, double z, double vx, double vy, double vz)
+    public BounceGrenadeEntity(World world, float explosionPower, int fuse, boolean destructive)
     {
-        super(MeatWeapons.BOUNCE_GRENADE, x, y, z, world);
-        this.setVelocity(vx, vy, vz);
+        super(MeatWeapons.BOUNCE_GRENADE, world);
         this.setNoGravity(false);
         this.fuse = fuse;
         this.explosionPower = explosionPower;
@@ -64,20 +61,13 @@ public class BounceGrenadeEntity extends PersistentProjectileEntity
     }
 
     @Override
-    public void setVelocity(double x, double y, double z, float speed, float divergence)
-    {
-        super.setVelocity(x, y, z, speed, divergence);
-    }
-
-    @Override
-    public void setPosition(double x, double y, double z)
-    {
-        super.setPosition(x, y, z);
-    }
-
-    @Override
     public void tick()
     {
+        if (collisions > 4)
+        {
+            inGround = true;
+        }
+
         super.tick();
         if (this.getWorld().isClient)
         {
@@ -86,8 +76,6 @@ public class BounceGrenadeEntity extends PersistentProjectileEntity
         else if (this.age > fuse)
         {
             explode();
-//            this.getWorld().sendEntityStatus(this, (byte) 0);
-//            this.remove(RemovalReason.DISCARDED);
         }
     }
 
@@ -126,10 +114,12 @@ public class BounceGrenadeEntity extends PersistentProjectileEntity
     @Override
     protected void onBlockHit(BlockHitResult blockHitResult)
     {
+        super.onBlockHit(blockHitResult);
+
         Vec3d vel = getVelocity();
         Vector3d normal = new Vector3d(blockHitResult.getSide().getUnitVector().absolute())
                 .mul(vel.x, vel.y, vel.z)
-                .mul(-1.4);
+                .mul(-1.5);
 
         setVelocity(vel.x + normal.x, vel.y + normal.y, vel.z + normal.z);
     }

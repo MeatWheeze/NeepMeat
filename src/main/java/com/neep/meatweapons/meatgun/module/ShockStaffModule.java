@@ -67,9 +67,10 @@ public class ShockStaffModule extends MeleeModule
             entity.setPosition(entityPos.x, entityPos.y, entityPos.z);
             if (listener.getHolder().containsType(MeatgunModules.HOMING_BRAIN))
             {
-                entity.setHomingRadius(5);
+                entity.setHomingRadius(3);
             }
             entity.setVelocity(player, (float) Math.toDegrees(pitch), (float) Math.toDegrees(yaw), 0, 0.9f, 0);
+            entity.setHomingSpeed(0.45f, true);
             world.spawnEntity(entity);
             projectileCooldown = 20;
         }

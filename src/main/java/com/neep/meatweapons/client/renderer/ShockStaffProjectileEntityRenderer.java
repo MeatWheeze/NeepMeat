@@ -1,5 +1,6 @@
 package com.neep.meatweapons.client.renderer;
 
+import com.jozufozu.flywheel.util.AnimationTickHolder;
 import com.neep.meatweapons.MeatWeapons;
 import com.neep.meatweapons.entity.ShockStaffProjectileEntity;
 import net.fabricmc.api.EnvType;
@@ -59,6 +60,7 @@ public class ShockStaffProjectileEntityRenderer extends EntityRenderer<ShockStaf
             matrices.scale(this.scale, this.scale, this.scale);
             matrices.multiply(this.dispatcher.getRotation());
             matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(180.0F));
+            matrices.multiply(RotationAxis.POSITIVE_Z.rotation(AnimationTickHolder.getRenderTime() / 2));
 
             VertexConsumer consumer = vertexConsumers.getBuffer(RenderLayer.getEntityTranslucent(getTexture(entity)));
             float f = 0;

@@ -1,15 +1,12 @@
 package com.neep.meatweapons.meatgun.module;
 
 import com.neep.meatweapons.entity.BounceGrenadeEntity;
-import com.neep.meatweapons.item.GunItem;
 import com.neep.meatweapons.meatgun.RootModuleHolder;
 import com.neep.meatweapons.network.MWAttackC2SPacket;
 import com.neep.meatweapons.network.MeatgunNetwork;
-import com.neep.meatweapons.particle.MWGraphicsEffects;
 import com.neep.meatweapons.particle.MWParticles;
 import com.neep.meatweapons.particle.MuzzleFlashParticleType;
 import com.neep.neepmeat.init.NMSounds;
-import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -103,10 +100,18 @@ public class GrenadeLauncherModule extends ShooterModule
         Vec3d transform = getMuzzleOffset(player, stack).rotateX((float) -pitchd).rotateY((float) -yawd);
         pos = pos.add(transform);
 
-        double speed = 0.8;
-        Vec3d vel = GunItem.getRotationVector(pitch, yaw).multiply(speed);
+        float speed = 0.8f;
 
-        BounceGrenadeEntity entity = new BounceGrenadeEntity(world, 1.7f, 40, false, pos.x, pos.y, pos.z, vel.x, vel.y, vel.z);
+        BounceGrenadeEntity entity = new BounceGrenadeEntity(world, 1.7f, 40, false);
+        entity.setPos(pos.x, pos.y, pos.z);
+        entity.setPosition(pos.x, pos.y, pos.z);
+        entity.setVelocity(player, (float) Math.toDegrees(pitch), (float) Math.toDegrees(yaw), 0, speed, 0.1f);
+        entity.setOwner(player);
+        if (listener.getHolder().containsType(MeatgunModules.HOMING_BRAIN))
+        {
+            entity.setHomingRadius(4);
+        }
+        entity.setHomingSpeed(0.05f, false);
         world.spawnEntity(entity);
 
         MeatgunNetwork.sendRecoil((ServerPlayerEntity) player, MeatgunNetwork.RecoilDirection.UP, 7, 0.2f,0.7f, 0.03f);
@@ -119,15 +124,6 @@ public class GrenadeLauncherModule extends ShooterModule
                     new MuzzleFlashParticleType.MuzzleFlashParticleEffect(MWParticles.BLOB_MUZZLE_FLASH, player, v.x, v.y, v.z, 2.2f, 1)
                     , pos.getX(), pos.getY(), pos.getZ(),
                     1, 0, 0, 0, 0.1);
-        }
-    }
-
-    public void syncBeamEffect(ServerWorld world, Vec3d pos, Vec3d end, float width, int maxTime, double showRadius)
-    {
-        Vec3d col = new Vec3d(214, 175, 32);
-        for (ServerPlayerEntity player : PlayerLookup.around(world, pos, showRadius))
-        {
-            MWGraphicsEffects.syncBeamEffect(player, MWGraphicsEffects.BULLET_TRAIL, world, pos, end, col, 0.1f, 1);
         }
     }
 }

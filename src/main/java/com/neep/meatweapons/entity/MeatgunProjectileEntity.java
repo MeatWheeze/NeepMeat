@@ -1,6 +1,5 @@
 package com.neep.meatweapons.entity;
 
-import com.neep.meatweapons.particle.MWParticles;
 import com.neep.neepmeat.init.NMSounds;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -27,8 +26,8 @@ public class MeatgunProjectileEntity extends PersistentProjectileEntity
 {
     protected float homingRadius;
     protected float homingSpeed;
-    @Nullable
-    protected Entity homingTarget;
+    @Nullable protected Entity homingTarget;
+    protected boolean prioritiseHoming;
 
     protected int collisions = 0;
     protected int collidedTicks = 0;
@@ -55,13 +54,6 @@ public class MeatgunProjectileEntity extends PersistentProjectileEntity
 
         if (collisions > 0)
             collidedTicks++;
-
-        if (collisions == 0 && random.nextFloat() < 0.7)
-            getWorld().addParticle(
-                    MWParticles.SHOCK_STAFF, getX(), getY(), getZ(),
-                    random.nextTriangular(0, 0.3),
-                    random.nextTriangular(0, 0.3),
-                    random.nextTriangular(0, 0.3));
     }
 
     protected void tickHoming()
@@ -98,7 +90,9 @@ public class MeatgunProjectileEntity extends PersistentProjectileEntity
 
         if (homingTarget != null)
         {
-            Vec3d vel = getVelocity().multiply(0.8);
+            Vec3d vel = getVelocity();
+            if (prioritiseHoming)
+                vel = vel.multiply(0.8f);
 
             Vec3d toTarget = new Vec3d(
                     homingTarget.getX() - getX(),
@@ -122,7 +116,7 @@ public class MeatgunProjectileEntity extends PersistentProjectileEntity
         super.setVelocity(shooter, pitch, yaw, roll, speed, divergence);
 
         if (homingSpeed <= 0)
-            setHomingSpeed(speed / 2);
+            setHomingSpeed(speed / 2, prioritiseHoming);
     }
 
     @Override
@@ -187,9 +181,10 @@ public class MeatgunProjectileEntity extends PersistentProjectileEntity
         this.homingTarget = target;
     }
 
-    public void setHomingSpeed(float homingSpeed)
+    public void setHomingSpeed(float homingSpeed, boolean prioritiseHoming)
     {
         this.homingSpeed = homingSpeed;
+        this.prioritiseHoming = prioritiseHoming;
     }
 
     @Override
@@ -197,6 +192,8 @@ public class MeatgunProjectileEntity extends PersistentProjectileEntity
     {
         super.writeNbt(nbt);
         nbt.putFloat("homing_range", homingRadius);
+        nbt.putBoolean("prioritise_homing", prioritiseHoming);
+        nbt.putFloat("homing_speed", homingSpeed);
         return nbt;
     }
 
@@ -205,5 +202,7 @@ public class MeatgunProjectileEntity extends PersistentProjectileEntity
     {
         super.readNbt(nbt);
         this.homingRadius = nbt.getFloat("homing_range");
+        this.prioritiseHoming = nbt.getBoolean("prioritise_homing");
+        this.homingSpeed = nbt.getFloat("homing_speed");
     }
 }

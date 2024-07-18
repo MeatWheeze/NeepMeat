@@ -32,6 +32,13 @@ public class ShockStaffProjectileEntity extends MeatgunProjectileEntity
     {
         super.tick();
 
+        if (collisions == 0 && random.nextFloat() < 0.7)
+            getWorld().addParticle(
+                    MWParticles.SHOCK_STAFF, getX(), getY(), getZ(),
+                    random.nextTriangular(0, 0.3),
+                    random.nextTriangular(0, 0.3),
+                    random.nextTriangular(0, 0.3));
+
         if (age > 500 || collidedTicks > 2 || distanceMoved > 60)
             discard();
     }
