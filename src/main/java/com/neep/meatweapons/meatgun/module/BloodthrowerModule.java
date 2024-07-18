@@ -2,6 +2,7 @@ package com.neep.meatweapons.meatgun.module;
 
 import com.neep.meatweapons.entity.BulletDamageSource;
 import com.neep.meatweapons.item.GunItem;
+import com.neep.meatweapons.meatgun.AmmunitionType;
 import com.neep.meatweapons.meatgun.RootModuleHolder;
 import com.neep.meatweapons.network.MWAttackC2SPacket;
 import com.neep.meatweapons.particle.MWGraphicsEffects;
@@ -39,8 +40,7 @@ public class BloodthrowerModule extends ShooterModule
 
     public BloodthrowerModule(RootModuleHolder.Listener listener)
     {
-        super(listener, 1, 3);
-        shotsRemaining = maxShots;
+        super(listener, 64, 1, 3, AmmunitionType.BLOOD);
     }
 
     public BloodthrowerModule(RootModuleHolder.Listener listener, NbtCompound nbt)
@@ -64,10 +64,13 @@ public class BloodthrowerModule extends ShooterModule
     @Override
     public void trigger(World world, PlayerEntity player, ItemStack stack, int id, double pitch, double yaw, MWAttackC2SPacket.HandType handType)
     {
-        if (shotsRemaining >= 0 && cooldown == 0)
+        if (cooldown == 0)
         {
-            cooldown = maxCooldown;
-            fireBeam(world, player, stack, pitch, yaw);
+            if (consume(player.getInventory(), player))
+            {
+                cooldown = maxCooldown;
+                fireBeam(world, player, stack, pitch, yaw);
+            }
         }
     }
 

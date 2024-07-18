@@ -3,6 +3,7 @@ package com.neep.meatweapons.meatgun.module;
 import com.neep.meatweapons.entity.BulletDamageSource;
 import com.neep.meatweapons.item.BeamEffectProvider;
 import com.neep.meatweapons.item.GunItem;
+import com.neep.meatweapons.meatgun.AmmunitionType;
 import com.neep.meatweapons.meatgun.RootModuleHolder;
 import com.neep.meatweapons.network.MWAttackC2SPacket;
 import com.neep.meatweapons.network.MeatgunNetwork;
@@ -41,8 +42,7 @@ public class BosherModule extends ShooterModule
 
     public BosherModule(RootModuleHolder.Listener listener)
     {
-        super(listener, 1, 20);
-        shotsRemaining = maxShots;
+        super(listener, 2, 8, 20, AmmunitionType.BALLISTIC);
     }
 
     public BosherModule(RootModuleHolder.Listener listener, NbtCompound nbt)
@@ -73,27 +73,13 @@ public class BosherModule extends ShooterModule
     {
         if (id == 1)
         {
-            if (shotsRemaining >= 0 && cooldown == 0)
+            if (cooldown == 0)
             {
-                cooldown = maxCooldown;
+                if (consume(player.getInventory(), player))
+                {
+                    cooldown = maxCooldown;
 
-                if (!world.isClient)
-                {
                     fireBeam(world, player, stack, pitch, yaw);
-//                    if (!player.isCreative())
-//                        stack.setDamage(stack.getDamage() + 1);
-                }
-            }
-            else // Weapon is out of ammunition.
-            {
-                if (world.isClient)
-                {
-                    // Play empty sound.
-                }
-                else
-                {
-                    // Try to reload
-//                    this.reload(player, stack, null);
                 }
             }
         }

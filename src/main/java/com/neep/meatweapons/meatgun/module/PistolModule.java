@@ -2,6 +2,7 @@ package com.neep.meatweapons.meatgun.module;
 
 import com.neep.meatweapons.entity.BulletDamageSource;
 import com.neep.meatweapons.item.GunItem;
+import com.neep.meatweapons.meatgun.AmmunitionType;
 import com.neep.meatweapons.meatgun.RootModuleHolder;
 import com.neep.meatweapons.network.MWAttackC2SPacket;
 import com.neep.meatweapons.network.MeatgunNetwork;
@@ -32,15 +33,9 @@ public class PistolModule extends ShooterModule
 {
     private final Random shotRandom = Random.create();
 
-    private final int maxShots = 8;
-    private final int maxCooldown = 10;
-
-    private int shotsRemaining = maxShots;
-    private int cooldown = 0;
-
     public PistolModule(RootModuleHolder.Listener listener)
     {
-        super(listener, 8, 10);
+        super(listener, 8, 1, 10, AmmunitionType.BALLISTIC);
     }
 
     public PistolModule(RootModuleHolder.Listener listener, NbtCompound nbt)
@@ -63,27 +58,13 @@ public class PistolModule extends ShooterModule
     @Override
     public void trigger(World world, PlayerEntity player, ItemStack stack, int id, double pitch, double yaw, MWAttackC2SPacket.HandType handType)
     {
-        if (shotsRemaining >= 0 && cooldown == 0)
+        if (cooldown == 0)
         {
-            cooldown = maxCooldown;
+            if (consume(player.getInventory(), player))
+            {
+                cooldown = maxCooldown;
 
-            if (!world.isClient)
-            {
                 fireBeam(world, player, stack, pitch, yaw);
-//                    if (!player.isCreative())
-//                        stack.setDamage(stack.getDamage() + 1);
-            }
-        }
-        else // Weapon is out of ammunition.
-        {
-            if (world.isClient)
-            {
-                // Play empty sound.
-            }
-            else
-            {
-                // Try to reload
-//                    this.reload(player, stack, null);
             }
         }
     }

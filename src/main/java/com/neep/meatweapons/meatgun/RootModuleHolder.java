@@ -2,7 +2,10 @@ package com.neep.meatweapons.meatgun;
 
 import com.neep.meatweapons.component.MeatgunComponent;
 import com.neep.meatweapons.item.meatgun.Meatgun;
+import com.neep.meatweapons.meatgun.module.AmmunitionRequiringModule;
 import com.neep.meatweapons.meatgun.module.MeatgunModule;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import org.jetbrains.annotations.Nullable;
@@ -132,6 +135,21 @@ public class RootModuleHolder
     {
         cacheModules();
         return remainingCapacity >= type.complexity();
+    }
+
+    public boolean getAmmoOrReload(AmmunitionRequiringModule module, int amount, Inventory inventory, PlayerEntity player)
+    {
+        // TODO: Check other buffers and return true if found
+
+        for (int i = 0; i < inventory.size(); ++i)
+        {
+            ItemStack stack = inventory.getStack(i);
+            @Nullable AmmunitionProvider provider = AmmunitionProvider.LOOKUP.find(stack, new AmmunitionProvider.Context(inventory, i));
+            if (provider != null && module.reloadFrom(provider, player))
+                return false;
+        }
+
+        return false;
     }
 
     private class ListenerImpl implements Listener

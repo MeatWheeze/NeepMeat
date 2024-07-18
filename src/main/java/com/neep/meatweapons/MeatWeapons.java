@@ -9,7 +9,9 @@ import com.neep.meatweapons.init.MWBlocks;
 import com.neep.meatweapons.init.MWScreenHandlers;
 import com.neep.meatweapons.item.AssaultDrillItem;
 import com.neep.meatweapons.item.GunItem;
+import com.neep.meatweapons.meatgun.AmmunitionProvider;
 import com.neep.meatweapons.meatgun.RootModuleCache;
+import com.neep.meatweapons.meatgun.SimpleItemAmmunitionProvider;
 import com.neep.meatweapons.network.MWAttackC2SPacket;
 import com.neep.meatweapons.particle.MWGraphicsEffects;
 import com.neep.meatweapons.particle.MWParticles;
@@ -107,6 +109,7 @@ public class MeatWeapons implements ModInitializer
             PlayerAttachmentManager.registerAttachment(WeaponCooldownAttachment.ID, WeaponCooldownAttachment::new);
 
             FluidStorage.ITEM.registerForItems(AssaultDrillItem::getStorage, MWItems.ASSAULT_DRILL);
+            AmmunitionProvider.LOOKUP.registerForItems((itemStack, context) -> new SimpleItemAmmunitionProvider(itemStack, context, 16), MWItems.BALLISTIC_CARTRIDGE);
         }
     }
 
