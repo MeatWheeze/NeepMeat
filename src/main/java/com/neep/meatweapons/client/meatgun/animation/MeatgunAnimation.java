@@ -18,7 +18,7 @@ public interface MeatgunAnimation
 
     void tick(MeatgunComponent component);
 
-    boolean applyRender(MatrixStack matrices, float tickDelta);
+    boolean applyRender(MatrixStack matrices, float tickDelta, boolean leftHand);
 
     MeatgunAnimation EMPTY = new MeatgunAnimation()
     {
@@ -44,7 +44,7 @@ public interface MeatgunAnimation
         }
 
         @Override
-        public boolean applyRender(MatrixStack matrices, float tickDelta)
+        public boolean applyRender(MatrixStack matrices, float tickDelta, boolean leftHand)
         {
             return true;
         }

@@ -19,21 +19,26 @@ public class StaffIdleMeatgunAnimation extends AnimatedAction<MeatgunComponent, 
         }
 
         @Override
-        public boolean applyRender(MatrixStack matrices, int counter, float tickDelta)
+        public boolean applyRender(MatrixStack matrices, int counter, float tickDelta, boolean leftHand)
         {
-            apply(matrices, 0, 0, 0);
+            apply(matrices, 0, 0, 0, leftHand);
             return true;
         }
     };
 
-    public static void apply(MatrixStack matrices, float xRot, float yRot, float zRot)
+    public static void apply(MatrixStack matrices, float xRot, float yRot, float zRot, boolean leftHand)
     {
+        float i = leftHand ? -1 : 1;
+        float d = leftHand ? 16 / 16f : 0;
         matrices.translate(0, -4 / 16f, 0 / 16f);
-        matrices.translate(0, 0, 1.5);
-        matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(5 + yRot));
+        matrices.translate(d, 0, 1.5);
+        matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(i * (5 + yRot)));
         matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(xRot));
-        matrices.translate(0, 0, -1.5);
-        matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(-20 + zRot));
+        matrices.translate(-d, 0, -1.5);
+
+        matrices.translate(d, 0, d);
+        matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(i * (-20 + zRot)));
+        matrices.translate(-d, 0, -d);
     }
 
     @Override

@@ -16,6 +16,6 @@ public interface RenderAction<E>
     {
         void tick(T parent, MeatgunComponent component, int counter);
 
-        boolean applyRender(MatrixStack matrices, int counter, float tickDelta);
+        boolean applyRender(MatrixStack matrices, int counter, float tickDelta, boolean leftHand);
     }
 }

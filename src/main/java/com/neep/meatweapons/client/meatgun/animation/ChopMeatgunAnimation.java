@@ -21,7 +21,7 @@ public class ChopMeatgunAnimation extends AnimatedAction<MeatgunComponent, ChopM
         }
 
         @Override
-        public boolean applyRender(MatrixStack matrices, int counter, float tickDelta)
+        public boolean applyRender(MatrixStack matrices, int counter, float tickDelta, boolean leftHand)
         {
             float time = counter + tickDelta;
             float delta = time / 4;
@@ -29,7 +29,7 @@ public class ChopMeatgunAnimation extends AnimatedAction<MeatgunComponent, ChopM
             float rx = -40 * ease;
             float ry = 50 * ease;
 
-            StaffIdleMeatgunAnimation.apply(matrices, rx, ry, 0);
+            StaffIdleMeatgunAnimation.apply(matrices, rx, ry, 0, leftHand);
             return true;
         }
     };
@@ -44,14 +44,14 @@ public class ChopMeatgunAnimation extends AnimatedAction<MeatgunComponent, ChopM
         }
 
         @Override
-        public boolean applyRender(MatrixStack matrices, int counter, float tickDelta)
+        public boolean applyRender(MatrixStack matrices, int counter, float tickDelta, boolean leftHand)
         {
             float time = counter + tickDelta;
             float delta = time / 11;
             float ease = (float) (1 - Easing.easeInBack(delta));
             float rx = -40 * ease;
             float ry = 50 * ease;
-            StaffIdleMeatgunAnimation.apply(matrices, rx, ry, 0);
+            StaffIdleMeatgunAnimation.apply(matrices, rx, ry, 0, leftHand);
             return true;
         }
     };

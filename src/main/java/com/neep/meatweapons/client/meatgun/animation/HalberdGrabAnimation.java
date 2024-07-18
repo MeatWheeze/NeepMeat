@@ -28,7 +28,7 @@ public class HalberdGrabAnimation extends AnimatedAction<MeatgunComponent, Halbe
         }
 
         @Override
-        public boolean applyRender(MatrixStack matrices, int counter, float tickDelta)
+        public boolean applyRender(MatrixStack matrices, int counter, float tickDelta, boolean leftHand)
         {
             float playerYawDeg = MathHelper.wrapDegrees(MinecraftClient.getInstance().player.getYaw(tickDelta));
             float targetYawDeg = NMMaths.rectToPol(offset).y;

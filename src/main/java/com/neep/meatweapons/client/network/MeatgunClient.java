@@ -39,10 +39,17 @@ public class MeatgunClient
     private static void receiveAnimation(String name, PacketByteBuf buf)
     {
         MinecraftClient client = MinecraftClient.getInstance();
-        MeatgunComponent component = MWComponents.MEATGUN.getNullable(client.player.getMainHandStack());
-        if (component != null)
+        MeatgunComponent component1 = MWComponents.MEATGUN.getNullable(client.player.getMainHandStack());
+        MeatgunComponent component2 = MWComponents.MEATGUN.getNullable(client.player.getOffHandStack());
+        if (component1 != null)
         {
-            MeatgunAnimationManager animationManager = component.getAnimationManager();
+            MeatgunAnimationManager animationManager = component1.getAnimationManager();
+            if (animationManager != null)
+                animationManager.queue(name, buf);
+        }
+        if (component2 != null)
+        {
+            MeatgunAnimationManager animationManager = component2.getAnimationManager();
             if (animationManager != null)
                 animationManager.queue(name, buf);
         }

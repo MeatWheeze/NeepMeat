@@ -21,7 +21,7 @@ public class SwingAcrossMeatgunAnimation extends AnimatedAction<MeatgunComponent
         }
 
         @Override
-        public boolean applyRender(MatrixStack matrices, int counter, float tickDelta)
+        public boolean applyRender(MatrixStack matrices, int counter, float tickDelta, boolean leftHand)
         {
             float time = counter + tickDelta;
             float delta = time / 10;
@@ -29,7 +29,7 @@ public class SwingAcrossMeatgunAnimation extends AnimatedAction<MeatgunComponent
             float rx = -40 * ease;
             float ry = 120 * ease;
 
-            StaffIdleMeatgunAnimation.apply(matrices, rx, ry, 0);
+            StaffIdleMeatgunAnimation.apply(matrices, rx, ry, 0, leftHand);
             return false;
         }
     };

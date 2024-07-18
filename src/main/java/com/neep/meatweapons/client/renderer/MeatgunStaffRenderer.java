@@ -23,7 +23,7 @@ public class MeatgunStaffRenderer extends MeatgunPistolRenderer
             if (component != null)
             {
                 MeatgunAnimation animation = component.getAnimationManager().getActive();
-                showArm = animation.applyRender(matrices, tickDelta);
+                showArm = animation.applyRender(matrices, tickDelta, leftHanded);
             }
 
         }

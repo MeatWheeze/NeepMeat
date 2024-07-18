@@ -31,10 +31,10 @@ public abstract class AnimatedAction<E, T extends RenderAction<E>> implements Re
             sequence.tick(clazz.cast(this), component, counter);
     }
 
-    public boolean applyRender(MatrixStack matrices, float tickDelta)
+    public boolean applyRender(MatrixStack matrices, float tickDelta, boolean leftHand)
     {
         if (sequence != null)
-            return sequence.applyRender(matrices, counter, tickDelta);
+            return sequence.applyRender(matrices, counter, tickDelta, leftHand);
 
         return true;
     }

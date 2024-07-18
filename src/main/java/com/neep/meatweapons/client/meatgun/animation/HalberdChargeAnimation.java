@@ -38,7 +38,7 @@ public class HalberdChargeAnimation extends AnimatedAction<MeatgunComponent, Hal
         }
 
         @Override
-        public boolean applyRender(MatrixStack matrices, int counter, float tickDelta)
+        public boolean applyRender(MatrixStack matrices, int counter, float tickDelta, boolean leftHand)
         {
             // Let's use trial and error to find the shoulder!
             matrices.translate(9 / 16f, -2 / 16f, 1.5);
@@ -49,7 +49,7 @@ public class HalberdChargeAnimation extends AnimatedAction<MeatgunComponent, Hal
 
             float zOff = delta * 4 / 16f;
             float yOff = delta * 6 / 16f;
-            matrices.translate(0, -4 / 16f + yOff, zOff);
+            matrices.translate(leftHand ? -3 / 16f : 0, -4 / 16f + yOff, zOff);
             matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(180));
             matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(-90));
 //            matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(-90));
