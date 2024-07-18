@@ -1,22 +1,17 @@
 package com.neep.meatweapons.meatgun.module;
 
-import com.neep.meatweapons.meatgun.AmmunitionProvider;
 import com.neep.meatweapons.meatgun.AmmunitionType;
 import com.neep.meatweapons.meatgun.RootModuleHolder;
-import com.neep.meatweapons.network.MeatgunNetwork;
-import com.neep.neepmeat.init.NMSounds;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.sound.SoundCategory;
 
-public abstract class ShooterModule extends AbstractMeatgunModule implements AmmunitionRequiringModule
+public abstract class ShooterModule extends AbstractMeatgunModule implements AmmunitionRequiringModule, AmmunitionStoringModule
 {
     private final int amountPerShot;
     protected final int maxCooldown;
 
-    protected int stored;
+    protected int ammoAmount;
     private final AmmunitionType type;
     protected int cooldown;
 
@@ -26,7 +21,7 @@ public abstract class ShooterModule extends AbstractMeatgunModule implements Amm
         this.amountPerShot = amountPerShot;
         this.maxCooldown = maxCooldown;
 
-        this.stored = 0;
+        this.ammoAmount = 0;
         this.type = type;
         this.cooldown = 0;
     }
@@ -35,7 +30,7 @@ public abstract class ShooterModule extends AbstractMeatgunModule implements Amm
     public NbtCompound writeNbt(NbtCompound nbt)
     {
         super.writeNbt(nbt);
-        nbt.putInt("stored", stored);
+        nbt.putInt("stored", ammoAmount);
         return nbt;
     }
 
@@ -43,7 +38,7 @@ public abstract class ShooterModule extends AbstractMeatgunModule implements Amm
     public void readNbt(NbtCompound nbt)
     {
         super.readNbt(nbt);
-        this.stored = nbt.getInt("stored");
+        this.ammoAmount = nbt.getInt("stored");
     }
 
     @Override
@@ -55,15 +50,7 @@ public abstract class ShooterModule extends AbstractMeatgunModule implements Amm
     @Override
     public boolean consume(int amount, Inventory inventory, PlayerEntity player)
     {
-        if (stored >= amount)
-        {
-            stored -= amount;
-            return true;
-        }
-        else
-        {
-            return listener.getHolder().getAmmoOrReload(this, amount, inventory, player);
-        }
+        return listener.getHolder().getAmmoOrReload(this, amount, inventory, player);
     }
 
     protected boolean consume(Inventory inventory, PlayerEntity player)
@@ -73,17 +60,52 @@ public abstract class ShooterModule extends AbstractMeatgunModule implements Amm
     }
 
     @Override
-    public boolean reloadFrom(AmmunitionProvider provider, PlayerEntity player)
+    public int capacity()
     {
-        if (ammoType() != provider.ammoType())
-            return false;
-
-        int available = provider.getAmount();
-
-        stored = available; // TODO: eject old item
-        provider.consume();
-        player.playSound(NMSounds.RELOAD, SoundCategory.PLAYERS, 1, 1);
-        MeatgunNetwork.sendRecoil((ServerPlayerEntity) player, MeatgunNetwork.RecoilDirection.DOWN, 30, 1.0f, 30 / 10f, 0.1f);
-        return true;
+        return 16;
     }
+
+    @Override
+    public int amount()
+    {
+        return ammoAmount;
+    }
+
+    @Override
+    public int insert(int maxAmount)
+    {
+        int inserted = Math.min(maxAmount, capacity() - ammoAmount);
+        if (inserted > 0)
+        {
+            ammoAmount += inserted;
+        }
+        return inserted;
+    }
+
+    @Override
+    public int extract(int maxAmount)
+    {
+        int extracted = Math.min(ammoAmount, maxAmount);
+        if (extracted > 0)
+        {
+            ammoAmount -= extracted;
+            return extracted;
+        }
+        return 0;
+    }
+
+    //    @Override
+//    public boolean reloadFrom(AmmunitionProvider provider, PlayerEntity player)
+//    {
+//        if (ammoType() != provider.ammoType())
+//            return false;
+//
+//        int available = provider.getAmount();
+//
+//        stored = available; // TODO: eject old item
+//        provider.consume();
+//        player.playSound(NMSounds.RELOAD, SoundCategory.PLAYERS, 1, 1);
+//        MeatgunNetwork.sendRecoil((ServerPlayerEntity) player, MeatgunNetwork.RecoilDirection.DOWN, 30, 1.0f, 30 / 10f, 0.1f);
+//        return true;
+//    }
 }

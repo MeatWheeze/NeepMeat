@@ -3,11 +3,16 @@ package com.neep.meatweapons.meatgun;
 import com.neep.meatweapons.component.MeatgunComponent;
 import com.neep.meatweapons.item.meatgun.Meatgun;
 import com.neep.meatweapons.meatgun.module.AmmunitionRequiringModule;
+import com.neep.meatweapons.meatgun.module.AmmunitionStoringModule;
 import com.neep.meatweapons.meatgun.module.MeatgunModule;
+import com.neep.meatweapons.network.MeatgunNetwork;
+import com.neep.neepmeat.init.NMSounds;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.sound.SoundCategory;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
@@ -139,14 +144,60 @@ public class RootModuleHolder
 
     public boolean getAmmoOrReload(AmmunitionRequiringModule module, int amount, Inventory inventory, PlayerEntity player)
     {
-        // TODO: Check other buffers and return true if found
+//        if (player.isCreative())
+//            return true;
 
+        cacheModules();
+        int available = modules.stream()
+                .filter(m -> m instanceof AmmunitionStoringModule)
+                .mapToInt(m -> ((AmmunitionStoringModule) m).amount())
+                .sum();
+
+        if (available >= amount)
+        {
+            int required = amount;
+            for (var otherModule : modules)
+            {
+                if (otherModule instanceof AmmunitionStoringModule storage
+                        && storage.ammoType() == module.ammoType()
+                        && storage.amount() >= amount)
+                {
+                    required -= storage.extract(required);
+                    if (required == 0)
+                        return true;
+                }
+            }
+        }
+
+
+        boolean reloaded = false;
         for (int i = 0; i < inventory.size(); ++i)
         {
             ItemStack stack = inventory.getStack(i);
             @Nullable AmmunitionProvider provider = AmmunitionProvider.LOOKUP.find(stack, new AmmunitionProvider.Context(inventory, i));
-            if (provider != null && module.reloadFrom(provider, player))
-                return false;
+//            if (provider != null && module.reloadFrom(provider, player))
+//                return false;
+            if (provider != null)
+            {
+                int supplied = provider.getAmount();
+                for (var otherModule : modules)
+                {
+                    if (otherModule instanceof AmmunitionStoringModule storage
+                        && storage.ammoType() == module.ammoType())
+                    {
+                        supplied -= storage.insert(supplied);
+                        reloaded = true;
+                        provider.consume();
+                        break;
+                    }
+                }
+            }
+        }
+
+        if (reloaded)
+        {
+            player.playSound(NMSounds.RELOAD, SoundCategory.PLAYERS, 1, 1);
+            MeatgunNetwork.sendRecoil((ServerPlayerEntity) player, MeatgunNetwork.RecoilDirection.DOWN, 30, 1.0f, 30 / 10f, 0.1f);
         }
 
         return false;
