@@ -3,10 +3,12 @@ package com.neep.meatweapons.meatgun.module;
 import com.neep.meatweapons.meatgun.AmmunitionProvider;
 import com.neep.meatweapons.meatgun.AmmunitionType;
 import com.neep.meatweapons.meatgun.RootModuleHolder;
+import com.neep.meatweapons.network.MeatgunNetwork;
 import com.neep.neepmeat.init.NMSounds;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundCategory;
 
 public abstract class ShooterModule extends AbstractMeatgunModule implements AmmunitionRequiringModule
@@ -88,6 +90,7 @@ public abstract class ShooterModule extends AbstractMeatgunModule implements Amm
             stored += available;
             provider.consume();
             player.playSound(NMSounds.RELOAD, SoundCategory.PLAYERS, 1, 1);
+            MeatgunNetwork.sendRecoil((ServerPlayerEntity) player, MeatgunNetwork.RecoilDirection.DOWN, 30, 1.0f, 30 / 10f, 0.1f);
             return true;
         }
 

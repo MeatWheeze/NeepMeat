@@ -9,6 +9,7 @@ import com.neep.meatweapons.component.MeatgunComponent;
 import com.neep.meatweapons.init.MWComponents;
 import com.neep.meatweapons.meatgun.module.MeatgunModule;
 import com.neep.meatweapons.mixin.HeldItemRendererAccessor;
+import com.neep.meatweapons.network.MeatgunNetwork;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.rendering.v1.BuiltinItemRendererRegistry;
@@ -77,7 +78,10 @@ public class MeatgunPistolRenderer implements BuiltinItemRendererRegistry.Dynami
             float prevAmount = recoil.amount;
             recoil.amount = recoil.amount - Math.signum(recoil.amount) * recoil.returnSpeed * lastFrame;
             if (Math.signum(prevAmount) != Math.signum(recoil.amount))
+            {
+                recoil.direction = MeatgunNetwork.RecoilDirection.UP;
                 recoil.returnSpeed = 0;
+            }
 
             transformRecoil(matrices, recoil);
         }
@@ -105,7 +109,8 @@ public class MeatgunPistolRenderer implements BuiltinItemRendererRegistry.Dynami
     {
         matrices.translate(0, 0, recoil.horAmount);
         matrices.translate(0, 0, 1.4);
-        matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(recoil.amount));
+        matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(
+                recoil.direction == MeatgunNetwork.RecoilDirection.DOWN ? -recoil.amount : recoil.amount));
         matrices.translate(0, 0, -1.4);
     }
 
