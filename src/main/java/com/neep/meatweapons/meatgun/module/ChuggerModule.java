@@ -35,7 +35,7 @@ public class ChuggerModule extends ShooterModule
 
     public ChuggerModule(RootModuleHolder.Listener listener)
     {
-        super(listener, 8, 2, 15, AmmunitionType.BALLISTIC);
+        super(listener, 2, 15, AmmunitionType.BALLISTIC);
     }
 
     public ChuggerModule(RootModuleHolder.Listener listener, NbtCompound nbt)

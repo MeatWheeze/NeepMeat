@@ -11,6 +11,8 @@ public interface AmmunitionProvider
     ItemApiLookup<AmmunitionProvider, Context> LOOKUP = ItemApiLookup.get(
             new Identifier(MeatWeapons.NAMESPACE, "ammunition"), AmmunitionProvider.class, Context.class);
 
+    AmmunitionType ammoType();
+
     int getAmount();
 
     // Currently, only consuming the entire item is supported.

@@ -40,7 +40,7 @@ public class BloodthrowerModule extends ShooterModule
 
     public BloodthrowerModule(RootModuleHolder.Listener listener)
     {
-        super(listener, 64, 1, 3, AmmunitionType.BLOOD);
+        super(listener, 1, 1, AmmunitionType.BLOOD);
     }
 
     public BloodthrowerModule(RootModuleHolder.Listener listener, NbtCompound nbt)

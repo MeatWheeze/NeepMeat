@@ -9,7 +9,8 @@ public interface AmmunitionRequiringModule extends MeatgunModule
 {
     AmmunitionType ammoType();
 
-    int capacity();
+    // Not really necessary anymore
+    default int capacity() { return Integer.MAX_VALUE; }
 
     boolean consume(int amount, Inventory inventory, PlayerEntity player);
 

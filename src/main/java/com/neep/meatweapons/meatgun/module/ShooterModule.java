@@ -13,7 +13,6 @@ import net.minecraft.sound.SoundCategory;
 
 public abstract class ShooterModule extends AbstractMeatgunModule implements AmmunitionRequiringModule
 {
-    protected final int capacity;
     private final int amountPerShot;
     protected final int maxCooldown;
 
@@ -21,10 +20,9 @@ public abstract class ShooterModule extends AbstractMeatgunModule implements Amm
     private final AmmunitionType type;
     protected int cooldown;
 
-    public ShooterModule(RootModuleHolder.Listener listener, int maxShots, int amountPerShot, int maxCooldown, AmmunitionType type)
+    public ShooterModule(RootModuleHolder.Listener listener, int amountPerShot, int maxCooldown, AmmunitionType type)
     {
         super(listener);
-        this.capacity = maxShots * amountPerShot;
         this.amountPerShot = amountPerShot;
         this.maxCooldown = maxCooldown;
 
@@ -55,12 +53,6 @@ public abstract class ShooterModule extends AbstractMeatgunModule implements Amm
     }
 
     @Override
-    public int capacity()
-    {
-        return capacity;
-    }
-
-    @Override
     public boolean consume(int amount, Inventory inventory, PlayerEntity player)
     {
         if (stored >= amount)
@@ -83,17 +75,15 @@ public abstract class ShooterModule extends AbstractMeatgunModule implements Amm
     @Override
     public boolean reloadFrom(AmmunitionProvider provider, PlayerEntity player)
     {
+        if (ammoType() != provider.ammoType())
+            return false;
+
         int available = provider.getAmount();
 
-        if (stored + available <= capacity)
-        {
-            stored += available;
-            provider.consume();
-            player.playSound(NMSounds.RELOAD, SoundCategory.PLAYERS, 1, 1);
-            MeatgunNetwork.sendRecoil((ServerPlayerEntity) player, MeatgunNetwork.RecoilDirection.DOWN, 30, 1.0f, 30 / 10f, 0.1f);
-            return true;
-        }
-
-        return false;
+        stored = available; // TODO: eject old item
+        provider.consume();
+        player.playSound(NMSounds.RELOAD, SoundCategory.PLAYERS, 1, 1);
+        MeatgunNetwork.sendRecoil((ServerPlayerEntity) player, MeatgunNetwork.RecoilDirection.DOWN, 30, 1.0f, 30 / 10f, 0.1f);
+        return true;
     }
 }

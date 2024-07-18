@@ -35,7 +35,7 @@ public class PistolModule extends ShooterModule
 
     public PistolModule(RootModuleHolder.Listener listener)
     {
-        super(listener, 8, 1, 10, AmmunitionType.BALLISTIC);
+        super(listener, 1, 10, AmmunitionType.BALLISTIC);
     }
 
     public PistolModule(RootModuleHolder.Listener listener, NbtCompound nbt)
