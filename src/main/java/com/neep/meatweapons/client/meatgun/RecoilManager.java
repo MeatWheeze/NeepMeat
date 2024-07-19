@@ -1,14 +1,15 @@
 package com.neep.meatweapons.client.meatgun;
 
 import com.neep.meatweapons.network.MeatgunNetwork;
+import org.apache.commons.collections4.map.AbstractReferenceMap;
+import org.apache.commons.collections4.map.ReferenceMap;
 
 import java.util.Map;
 import java.util.UUID;
-import java.util.WeakHashMap;
 
 public class RecoilManager
 {
-    private static final Map<UUID, RecoilManager> INSTANCES = new WeakHashMap<>();
+    private static final Map<UUID, RecoilManager> INSTANCES = new ReferenceMap<>(AbstractReferenceMap.ReferenceStrength.HARD, AbstractReferenceMap.ReferenceStrength.SOFT, true);
 
     public MeatgunNetwork.RecoilDirection direction;
 
