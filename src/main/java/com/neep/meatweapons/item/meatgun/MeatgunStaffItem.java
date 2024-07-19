@@ -39,6 +39,7 @@ public class MeatgunStaffItem extends MeatgunItem
             public Object get()
             {
                 return new MeatgunAnimationManager(new StaffIdleMeatgunAnimation())
+                        .add("reload", new PistolReloadMeatgunAnimation())
                         .add("blade_swing_down", new ChopMeatgunAnimation())
                         .add("upper_thrust", new HalberdChargeAnimation())
                         .add("hook_grab", new HalberdGrabAnimation())

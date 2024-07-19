@@ -150,7 +150,7 @@ public class RootModuleHolder
     public int getAmmo(AmmunitionType type)
     {
         cacheModules();
-        return ammunition.get(type).stream().mapToInt(AmmunitionStoringModule::amount).sum();
+        return ammunition.getOrDefault(type, List.of()).stream().mapToInt(AmmunitionStoringModule::amount).sum();
     }
 
     public Map<AmmunitionType, List<AmmunitionStoringModule>> getAmmo()
@@ -191,7 +191,7 @@ public class RootModuleHolder
             @Nullable AmmunitionProvider provider = AmmunitionProvider.LOOKUP.find(stack, new AmmunitionProvider.Context(inventory, i));
 //            if (provider != null && module.reloadFrom(provider, player))
 //                return false;
-            if (provider != null)
+            if (provider != null && provider.ammoType() == module.ammoType())
             {
                 int supplied = provider.getAmount();
                 for (var otherModule : modules)

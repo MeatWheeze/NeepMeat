@@ -4,12 +4,14 @@ import com.neep.meatweapons.MeatWeapons;
 import com.neep.meatweapons.entity.ShockStaffProjectileEntity;
 import com.neep.meatweapons.item.BaseGunItem;
 import com.neep.meatweapons.item.GunItem;
+import com.neep.meatweapons.meatgun.AmmunitionType;
 import com.neep.meatweapons.meatgun.RootModuleHolder;
 import com.neep.meatweapons.network.MWAttackC2SPacket;
 import com.neep.meatweapons.network.MeatgunNetwork;
 import com.neep.meatweapons.particle.MWParticles;
 import com.neep.neepmeat.init.NMSounds;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -22,10 +24,10 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public class ShockStaffModule extends MeleeModule
+public class ShockStaffModule extends MeleeModule implements AmmunitionRequiringModule, AmmunitionStoringModule
 {
     private int swingDownCooldown;
-    private int projectileCooldown;
+    private int ammoAmount;
 
     public ShockStaffModule(RootModuleHolder.Listener listener)
     {
@@ -46,15 +48,15 @@ public class ShockStaffModule extends MeleeModule
     @Override
     public void trigger(World world, PlayerEntity player, ItemStack stack, int id, double pitch, double yaw, MWAttackC2SPacket.HandType handType)
     {
-        if (id == 2 && swingDownCooldown == 0)
+        if (id == 2 && swingDownCooldown == 0 && consume(2, player.getInventory(), player))
         {
             MeatgunNetwork.SEND_ANIMATION.emitter(player).apply("swing_across", null);
             world.playSoundFromEntity(null, player, NMSounds.SHOCK_STAFF_ATTACK, SoundCategory.PLAYERS, 1, 1);
             MeatgunNetwork.sendRecoil((ServerPlayerEntity) player, MeatgunNetwork.RecoilDirection.UP, 7, 0.3f,0.7f, 0.02f);
             fireBeam(world, player, pitch, yaw, 3);
-            swingDownCooldown = 20;
+            swingDownCooldown = 15;
         }
-        if (id == 1 && projectileCooldown == 0)
+        if (id == 1 && swingDownCooldown == 0 && consume(1, player.getInventory(), player))
         {
             MeatgunNetwork.SEND_ANIMATION.emitter(player).apply("swing_across", null);
             world.playSoundFromEntity(null, player, NMSounds.SHOCK_STAFF_ATTACK, SoundCategory.PLAYERS, 1, 1);
@@ -62,7 +64,7 @@ public class ShockStaffModule extends MeleeModule
             ShockStaffProjectileEntity entity = MeatWeapons.SHOCK_STAFF_PROJECTILE.create(world);
             Vec3d entityPos = player.getEyePos();
             entity.setOwner(player);
-            entity.setDamage(1);
+            entity.setDamage(1.5);
             entity.setPos(entityPos.x, entityPos.y, entityPos.z);
             entity.setPosition(entityPos.x, entityPos.y, entityPos.z);
             if (listener.getHolder().containsType(MeatgunModules.HOMING_BRAIN))
@@ -72,7 +74,7 @@ public class ShockStaffModule extends MeleeModule
             entity.setVelocity(player, (float) Math.toDegrees(pitch), (float) Math.toDegrees(yaw), 0, 0.9f, 0);
             entity.setHomingSpeed(0.45f, true);
             world.spawnEntity(entity);
-            projectileCooldown = 20;
+            swingDownCooldown = 15;
         }
     }
 
@@ -91,7 +93,7 @@ public class ShockStaffModule extends MeleeModule
     public void tick(PlayerEntity player)
     {
         swingDownCooldown = Math.max(0, swingDownCooldown - 1);
-        projectileCooldown = Math.max(0, projectileCooldown - 1);
+//        projectileCooldown = Math.max(0, projectileCooldown - 1);
     }
 
     @Override
@@ -121,8 +123,7 @@ public class ShockStaffModule extends MeleeModule
     public NbtCompound writeNbt(NbtCompound nbt)
     {
         super.writeNbt(nbt);
-        nbt.putInt("down_cooldown", swingDownCooldown);
-        nbt.putInt("projectile_cooldown", projectileCooldown);
+        nbt.putInt("ammo_amount", ammoAmount);
         return nbt;
     }
 
@@ -130,7 +131,59 @@ public class ShockStaffModule extends MeleeModule
     public void readNbt(NbtCompound nbt)
     {
         super.readNbt(nbt);
-        this.swingDownCooldown = nbt.getInt("down_cooldown");
-        this.projectileCooldown = nbt.getInt("projectile_cooldown");
+        this.ammoAmount = nbt.getInt("ammo_amount");
+    }
+
+    @Override
+    public int capacity()
+    {
+        return 16;
+    }
+
+    @Override
+    public AmmunitionType ammoType()
+    {
+        return AmmunitionType.ENERGY;
+    }
+
+    @Override
+    public int amount()
+    {
+        return ammoAmount;
+    }
+
+    @Override
+    public int insert(int maxAmount)
+    {
+        int inserted = Math.min(maxAmount, capacity() - ammoAmount);
+        if (inserted > 0)
+        {
+            ammoAmount += inserted;
+        }
+        return inserted;
+    }
+
+    @Override
+    public int extract(int maxAmount)
+    {
+        int extracted = Math.min(ammoAmount, maxAmount);
+        if (extracted > 0)
+        {
+            ammoAmount -= extracted;
+            return extracted;
+        }
+        return 0;
+    }
+
+    @Override
+    public boolean consume(int amount, Inventory inventory, PlayerEntity player)
+    {
+        swingDownCooldown = 10;
+        if (listener.getHolder().getAmmoOrReload(this, amount, inventory, player))
+        {
+            listener.markDirty(RootModuleHolder.Reason.SAVE_DATA);
+            return true;
+        }
+        return false;
     }
 }

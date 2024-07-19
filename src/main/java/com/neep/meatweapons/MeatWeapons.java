@@ -111,6 +111,7 @@ public class MeatWeapons implements ModInitializer
 
             FluidStorage.ITEM.registerForItems(AssaultDrillItem::getStorage, MWItems.ASSAULT_DRILL);
             AmmunitionProvider.LOOKUP.registerForItems((itemStack, context) -> new SimpleItemAmmunitionProvider(itemStack, context, AmmunitionType.BALLISTIC, 16), MWItems.BALLISTIC_CARTRIDGE);
+            AmmunitionProvider.LOOKUP.registerForItems((itemStack, context) -> new SimpleItemAmmunitionProvider(itemStack, context, AmmunitionType.ENERGY, 16), NMItems.PINKDRINK);
         }
     }
 
