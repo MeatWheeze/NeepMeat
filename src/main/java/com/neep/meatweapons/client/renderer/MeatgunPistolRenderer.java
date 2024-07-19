@@ -8,12 +8,16 @@ import com.neep.meatweapons.client.renderer.meatgun.MeatgunParticleManager;
 import com.neep.meatweapons.component.MeatgunComponent;
 import com.neep.meatweapons.init.MWComponents;
 import com.neep.meatweapons.meatgun.module.MeatgunModule;
+import com.neep.meatweapons.mixin.DrawContextAccessor;
 import com.neep.meatweapons.mixin.HeldItemRendererAccessor;
 import com.neep.meatweapons.network.MeatgunNetwork;
+import com.neep.neepmeat.api.plc.PLCCols;
+import com.neep.neepmeat.client.screen.util.GUIUtil;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.rendering.v1.BuiltinItemRendererRegistry;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.model.ModelPart;
 import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.minecraft.client.render.*;
@@ -25,6 +29,7 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Arm;
 import net.minecraft.util.Hand;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RotationAxis;
 import org.joml.Matrix4f;
 
@@ -103,6 +108,8 @@ public class MeatgunPistolRenderer implements BuiltinItemRendererRegistry.Dynami
 
         if (showArm)
             renderArms(matrices, mode, player, playerEntityRenderer, vcp, light, mainHand, leftHanded);
+
+        renderScreen(matrices, mode, vcp);
     }
 
     protected void transformRecoil(MatrixStack matrices, RecoilManager recoil)
@@ -143,6 +150,7 @@ public class MeatgunPistolRenderer implements BuiltinItemRendererRegistry.Dynami
 
     protected void renderArms(MatrixStack matrices, ModelTransformationMode mode, AbstractClientPlayerEntity player, PlayerEntityRenderer playerEntityRenderer, VertexConsumerProvider vcp, int light, boolean mainHand, boolean leftHanded)
     {
+        matrices.push();
         Hand hand = mainHand ? Hand.MAIN_HAND : Hand.OFF_HAND;
         Hand otherHand = mainHand ? Hand.OFF_HAND : Hand.MAIN_HAND;
 
@@ -175,6 +183,7 @@ public class MeatgunPistolRenderer implements BuiltinItemRendererRegistry.Dynami
                 renderArm(playerEntityRenderer.getModel().rightSleeve, false, matrices, player, vcp, light);
             }
         }
+        matrices.pop();
     }
 
     private void renderArm(ModelPart armPart, boolean leftHanded, MatrixStack matrices, AbstractClientPlayerEntity player, VertexConsumerProvider vcp, int light)
@@ -186,6 +195,26 @@ public class MeatgunPistolRenderer implements BuiltinItemRendererRegistry.Dynami
         armPart.roll = (float) Math.PI;
         armPart.render(matrices, vcp.getBuffer(RenderLayer.getEntityCutout(player.getSkinTexture())),
                 light, OverlayTexture.DEFAULT_UV);
+    }
+
+    protected void renderScreen(MatrixStack matrices, ModelTransformationMode mode, VertexConsumerProvider vcp)
+    {
+//        if (!mode.isFirstPerson())
+//            return;
+
+//        matrices.push();
+//        float sf1 = MathHelper.sin(AnimationTickHolder.getRenderTime() / 10);
+//        float sf1 = 1;
+//        matrices.translate(0, -1, 0);
+//        matrices.scale(0.01f, 0.01f, 0.01f);
+//        matrices.translate(0, 1 / (0.01 * sf1), 0);
+//        matrices.translate(0.5 / 0.01, 1 / 0.01, 0);
+//        matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(180));
+//        DrawContext drawContext = DrawContextAccessor.init(client, matrices, client.getBufferBuilders().getEntityVertexConsumers());
+//        GUIUtil.renderBorderInner(drawContext, 10, 10, 100, 100, PLCCols.BORDER.col, 0);
+//        GUIUtil.drawText(drawContext, client.textRenderer, "Ooer", 2, 2, PLCCols.TEXT.col, true);
+//        drawContext.draw();
+//        matrices.pop();
     }
 
     private <T extends MeatgunModule> void renderRecursive(MatrixStack matrices, T module, ItemStack stack, MeatgunComponent component,

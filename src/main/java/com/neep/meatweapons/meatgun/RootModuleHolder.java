@@ -16,6 +16,7 @@ import net.minecraft.sound.SoundCategory;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 // Instances of this persist when the parent ItemStack is refreshed.
 // Newly created MeatgunComponents take ownership of the RootModuleHolder that corresponds to the UUID stored in NBT.
@@ -27,6 +28,7 @@ public class RootModuleHolder
 
     @Nullable private Set<MeatgunModule.Type<?>> moduleTypes;
     @Nullable private List<MeatgunModule> modules;
+    @Nullable private Map<AmmunitionType, List<AmmunitionStoringModule>> ammunition;
 
     private int remainingCapacity = -1;
 
@@ -87,11 +89,15 @@ public class RootModuleHolder
 
     private void cacheModules()
     {
-        if (moduleTypes == null || modules == null)
+        if (moduleTypes == null || modules == null || ammunition == null)
         {
             moduleTypes = new HashSet<>();
             modules = new ArrayList<>();
             collectTypes(root, moduleTypes, modules);
+
+            // Sort each module by the type it provides for quick(er than the alternative) access via an EnumMap
+            ammunition = modules.stream().filter(m -> m instanceof AmmunitionStoringModule).map(m -> (AmmunitionStoringModule) m)
+                    .collect(Collectors.groupingBy(AmmunitionStoringModule::ammoType, () -> new EnumMap<>(AmmunitionType.class), Collectors.toList()));
 
             if (component != null)
             {
@@ -142,16 +148,25 @@ public class RootModuleHolder
         return remainingCapacity >= type.complexity();
     }
 
+    public int getAmmo(AmmunitionType type)
+    {
+        cacheModules();
+        return ammunition.get(type).stream().mapToInt(AmmunitionStoringModule::amount).sum();
+    }
+
+    public Map<AmmunitionType, List<AmmunitionStoringModule>> getAmmo()
+    {
+        cacheModules();
+        return ammunition;
+    }
+
     public boolean getAmmoOrReload(AmmunitionRequiringModule module, int amount, Inventory inventory, PlayerEntity player)
     {
 //        if (player.isCreative())
 //            return true;
 
         cacheModules();
-        int available = modules.stream()
-                .filter(m -> m instanceof AmmunitionStoringModule)
-                .mapToInt(m -> ((AmmunitionStoringModule) m).amount())
-                .sum();
+        int available = getAmmo(module.ammoType());
 
         if (available >= amount)
         {
@@ -188,6 +203,7 @@ public class RootModuleHolder
                         supplied -= storage.insert(supplied);
                         reloaded = true;
                         provider.consume();
+                        listener.markDirty(Reason.SAVE_DATA);
                         break;
                     }
                 }

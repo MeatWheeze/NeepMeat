@@ -50,7 +50,12 @@ public abstract class ShooterModule extends AbstractMeatgunModule implements Amm
     @Override
     public boolean consume(int amount, Inventory inventory, PlayerEntity player)
     {
-        return listener.getHolder().getAmmoOrReload(this, amount, inventory, player);
+        if (listener.getHolder().getAmmoOrReload(this, amount, inventory, player))
+        {
+            listener.markDirty(RootModuleHolder.Reason.SAVE_DATA);
+            return true;
+        }
+        return false;
     }
 
     protected boolean consume(Inventory inventory, PlayerEntity player)
