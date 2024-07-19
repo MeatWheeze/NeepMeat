@@ -13,8 +13,6 @@ import com.neep.meatweapons.meatgun.module.MeatgunModule;
 import com.neep.meatweapons.mixin.DrawContextAccessor;
 import com.neep.meatweapons.mixin.HeldItemRendererAccessor;
 import com.neep.meatweapons.network.MeatgunNetwork;
-import com.neep.neepmeat.api.plc.PLCCols;
-import com.neep.neepmeat.client.screen.util.GUIUtil;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.rendering.v1.BuiltinItemRendererRegistry;
@@ -202,8 +200,8 @@ public class MeatgunPistolRenderer implements BuiltinItemRendererRegistry.Dynami
 
     protected void renderScreen(MatrixStack matrices, ModelTransformationMode mode, VertexConsumerProvider vcp, RootModuleHolder holder, float tickDelta)
     {
-        if (!mode.isFirstPerson())
-            return;
+//        if (!mode.isFirstPerson())
+//            return;
 
         matrices.push();
 //        float sf1 = MathHelper.sin(AnimationTickHolder.getRenderTime() / 10);
