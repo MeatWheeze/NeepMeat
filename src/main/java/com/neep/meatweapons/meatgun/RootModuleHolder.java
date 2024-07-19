@@ -189,34 +189,41 @@ public class RootModuleHolder
         for (int i = 0; i < inventory.size(); ++i)
         {
             ItemStack stack = inventory.getStack(i);
-            @Nullable AmmunitionProvider provider = AmmunitionProvider.LOOKUP.find(stack, new AmmunitionProvider.Context(inventory, i));
+            @Nullable AmmunitionProvider provider = AmmunitionProvider.LOOKUP.find(stack, new AmmunitionProvider.ContextImpl(inventory, i));
 //            if (provider != null && module.reloadFrom(provider, player))
 //                return false;
             if (provider != null && provider.ammoType() == module.ammoType())
             {
-                int supplied = provider.getAmount();
-                for (var otherModule : modules)
-                {
-                    if (otherModule instanceof AmmunitionStoringModule storage
-                        && storage.ammoType() == module.ammoType())
-                    {
-                        supplied -= storage.insert(supplied);
-                        reloaded = true;
-                        provider.consume();
-                        listener.markDirty(Reason.SAVE_DATA);
-                        break;
-                    }
-                }
+                reload(provider, player);
             }
         }
 
-        if (reloaded)
+
+        return false;
+    }
+
+    public boolean reload(AmmunitionProvider provider, PlayerEntity player)
+    {
+        cacheModules();
+
+        int remaining = provider.getAmount();
+        for (var otherModule : modules)
         {
-            player.playSound(NMSounds.RELOAD_MECHANICAL_HISS, SoundCategory.PLAYERS, 1, 1);
-//            MeatgunNetwork.sendRecoil((ServerPlayerEntity) player, MeatgunNetwork.RecoilDirection.DOWN, 30, 1.0f, 30 / 10f, 0.1f);
-            MeatgunNetwork.SEND_ANIMATION.emitter(player).apply("reload", PacketByteBufs.create().writeVarInt(10));
+            if (otherModule instanceof AmmunitionStoringModule storage
+                    && storage.ammoType() == provider.ammoType())
+            {
+                remaining -= storage.insert(remaining);
+            }
         }
 
+        if (remaining < provider.getAmount())
+        {
+            provider.consume();
+            listener.markDirty(Reason.SAVE_DATA);
+            player.playSound(NMSounds.RELOAD_MECHANICAL_HISS, SoundCategory.PLAYERS, 1, 1);
+            MeatgunNetwork.SEND_ANIMATION.emitter(player).apply("reload", PacketByteBufs.create().writeVarInt(10));
+            return true;
+        }
         return false;
     }
 

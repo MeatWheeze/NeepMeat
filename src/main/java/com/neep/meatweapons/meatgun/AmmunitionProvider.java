@@ -18,7 +18,12 @@ public interface AmmunitionProvider
     // Currently, only consuming the entire item is supported.
     void consume();
 
-    record Context(Inventory inventory, int slot)
+    interface Context
+    {
+        void setStack(ItemStack stack);
+    }
+
+    record ContextImpl(Inventory inventory, int slot) implements Context
     {
         public void setStack(ItemStack stack)
         {

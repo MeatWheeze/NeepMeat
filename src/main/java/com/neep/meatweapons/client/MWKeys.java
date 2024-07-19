@@ -3,10 +3,13 @@ package com.neep.meatweapons.client;
 import com.neep.meatlib.api.event.KeyboardEvents;
 import com.neep.meatlib.client.api.event.UseAttackCallback;
 import com.neep.meatweapons.MeatWeapons;
+import com.neep.meatweapons.client.network.MeatgunClient;
 import com.neep.meatweapons.item.GunItem;
 import com.neep.meatweapons.network.MWAttackC2SPacket;
+import com.neep.meatweapons.network.MeatgunNetwork;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.client.MinecraftClient;
@@ -23,11 +26,7 @@ import org.lwjgl.glfw.GLFW;
 public class MWKeys
 {
     public static KeyBinding AIRTRUCK_DOWN;
-    public static KeyBinding WEAPON_SECONDARY;
-    public static KeyBinding WEAPON_PRIMARY;
-
-    public static float playerPitch;
-    public static float playerYaw;
+//    public static KeyBinding RELOAD;
 
     public static KeyBinding registerKeyBinding(String namespace, String id, String category, int def)
     {
@@ -43,8 +42,7 @@ public class MWKeys
     public static void registerKeybinds()
     {
         AIRTRUCK_DOWN = registerKeyBinding(MeatWeapons.NAMESPACE, "down", "general", GLFW.GLFW_KEY_BACKSLASH);
-//        WEAPON_SECONDARY = registerKeyBinding(MeatWeapons.NAMESPACE, "fire_secondary", "general", GLFW.GLFW_KEY_M);
-//        WEAPON_PRIMARY = registerKeyBinding(MeatWeapons.NAMESPACE, "fire_primary", "general", GLFW.GLFW_MOUSE_BUTTON_1);
+//        RELOAD = registerKeyBinding(MeatWeapons.NAMESPACE, "reload", "general", GLFW.GLFW_KEY_R);
 
         KeyboardEvents.POST_INPUT.register(MWKeys::onKey);
 
@@ -52,10 +50,12 @@ public class MWKeys
         UseAttackCallback.DO_USE.register(client -> !primaryHeld);
         UseAttackCallback.DO_ATTACK.register(client -> !secondaryHeld);
 
-//        EntityLookEvents.CHANGE_LOOK.register((pitch, yaw) ->
+//        ClientTickEvents.END_CLIENT_TICK.register(client ->
 //        {
-//            playerPitch = pitch;
-//            playerYaw = yaw;
+//            if (RELOAD.isPressed())
+//            {
+//                MeatgunClient.sendReload();
+//            }
 //        });
     }
 
