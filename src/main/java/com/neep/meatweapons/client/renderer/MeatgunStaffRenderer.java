@@ -1,9 +1,6 @@
 package com.neep.meatweapons.client.renderer;
 
 import com.neep.meatweapons.client.meatgun.RecoilManager;
-import com.neep.meatweapons.client.meatgun.animation.MeatgunAnimation;
-import com.neep.meatweapons.init.MWComponents;
-import com.neep.meatweapons.component.MeatgunComponent;
 import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.entity.PlayerEntityRenderer;
@@ -17,16 +14,6 @@ public class MeatgunStaffRenderer extends MeatgunPistolRenderer
     @Override
     protected void renderInner(ItemStack stack, AbstractClientPlayerEntity player, PlayerEntityRenderer playerEntityRenderer, ModelTransformationMode mode, MatrixStack matrices, VertexConsumerProvider vcp, boolean showArm, boolean mainHand, boolean leftHanded, float tickDelta, int light, int overlay)
     {
-        if (mode.isFirstPerson())
-        {
-            MeatgunComponent component = MWComponents.MEATGUN.getNullable(stack);
-            if (component != null)
-            {
-                MeatgunAnimation animation = component.getAnimationManager().getActive();
-                showArm = animation.applyRender(matrices, tickDelta, leftHanded);
-            }
-
-        }
         super.renderInner(stack, player, playerEntityRenderer, mode, matrices, vcp, showArm, mainHand, leftHanded, tickDelta, light, overlay);
     }
 

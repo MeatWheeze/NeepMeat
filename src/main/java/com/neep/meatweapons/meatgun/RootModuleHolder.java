@@ -11,7 +11,6 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundCategory;
 import org.jetbrains.annotations.Nullable;
 
@@ -213,7 +212,8 @@ public class RootModuleHolder
         if (reloaded)
         {
             player.playSound(NMSounds.RELOAD, SoundCategory.PLAYERS, 1, 1);
-            MeatgunNetwork.sendRecoil((ServerPlayerEntity) player, MeatgunNetwork.RecoilDirection.DOWN, 30, 1.0f, 30 / 10f, 0.1f);
+//            MeatgunNetwork.sendRecoil((ServerPlayerEntity) player, MeatgunNetwork.RecoilDirection.DOWN, 30, 1.0f, 30 / 10f, 0.1f);
+            MeatgunNetwork.SEND_ANIMATION.emitter(player).apply("reload", null);
         }
 
         return false;

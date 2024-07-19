@@ -2,6 +2,7 @@ package com.neep.meatweapons.item.meatgun;
 
 import com.neep.meatlib.item.TooltipSupplier;
 import com.neep.meatweapons.client.meatgun.animation.MeatgunAnimation;
+import com.neep.meatweapons.client.meatgun.animation.PistolReloadMeatgunAnimation;
 import com.neep.meatweapons.meatgun.RootModuleHolder;
 import com.neep.meatweapons.meatgun.module.BasePistolModule;
 import com.neep.meatweapons.meatgun.module.MeatgunModule;
@@ -30,7 +31,8 @@ public class MeatgunPistolItem extends MeatgunItem
             @Override
             public Object get()
             {
-                return new MeatgunAnimationManager(MeatgunAnimation.EMPTY);
+                return new MeatgunAnimationManager(MeatgunAnimation.EMPTY)
+                        .add("reload", new PistolReloadMeatgunAnimation());
             }
         };
     }

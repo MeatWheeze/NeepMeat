@@ -2,6 +2,7 @@ package com.neep.meatweapons.client.renderer;
 
 import com.jozufozu.flywheel.util.AnimationTickHolder;
 import com.neep.meatweapons.client.meatgun.RecoilManager;
+import com.neep.meatweapons.client.meatgun.animation.MeatgunAnimation;
 import com.neep.meatweapons.client.network.MeatgunClient;
 import com.neep.meatweapons.client.renderer.meatgun.MeatgunModuleRenderer;
 import com.neep.meatweapons.client.renderer.meatgun.MeatgunModuleRenderers;
@@ -67,8 +68,12 @@ public class MeatgunPistolRenderer implements BuiltinItemRendererRegistry.Dynami
     // It's easier to override this one
     protected void renderInner(ItemStack stack, AbstractClientPlayerEntity player, PlayerEntityRenderer playerEntityRenderer, ModelTransformationMode mode, MatrixStack matrices, VertexConsumerProvider vcp, boolean showArm, boolean mainHand, boolean leftHanded, float tickDelta, int light, int overlay)
     {
-        // Step recoil
         MeatgunComponent component = MWComponents.MEATGUN.get(stack);
+
+        // Apply animations
+        showArm = applyAnimations(matrices, mode, component, tickDelta, leftHanded);
+
+        // Step recoil
         RecoilManager recoil = component.getRecoil();
         if (mode.isFirstPerson())
         {
@@ -111,6 +116,20 @@ public class MeatgunPistolRenderer implements BuiltinItemRendererRegistry.Dynami
         if (showArm)
             renderArms(matrices, mode, player, playerEntityRenderer, vcp, light, mainHand, leftHanded);
 
+    }
+
+    protected boolean applyAnimations(MatrixStack matrices, ModelTransformationMode mode, MeatgunComponent component, float tickDelta, boolean leftHanded)
+    {
+        if (mode.isFirstPerson())
+        {
+            var animationManager = component.getAnimationManager();
+            if (animationManager != null)
+            {
+                MeatgunAnimation animation = animationManager.getActive();
+                return animation.applyRender(matrices, tickDelta, leftHanded);
+            }
+        }
+        return true;
     }
 
     protected void transformRecoil(MatrixStack matrices, RecoilManager recoil)
