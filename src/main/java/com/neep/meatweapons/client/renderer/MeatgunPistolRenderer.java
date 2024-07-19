@@ -92,7 +92,7 @@ public class MeatgunPistolRenderer implements BuiltinItemRendererRegistry.Dynami
                 recoil.returnSpeed = 0;
             }
 
-            transformRecoil(matrices, recoil);
+            transformRecoil(matrices, recoil, leftHanded);
         }
 
         Matrix4f firstPersonModelTransform = getFirstPersonModelTransform();
@@ -107,7 +107,7 @@ public class MeatgunPistolRenderer implements BuiltinItemRendererRegistry.Dynami
                 MinecraftClient.getInstance().world.getTime(),
                 MinecraftClient.getInstance().getTickDelta(), light, overlay);
 
-        renderScreen(matrices, mode, vcp, component.getRootHolder(), tickDelta);
+        renderScreen(matrices, mode, vcp, component.getRootHolder(), tickDelta, leftHanded);
 
         matrices.pop();
 
@@ -132,7 +132,7 @@ public class MeatgunPistolRenderer implements BuiltinItemRendererRegistry.Dynami
         return true;
     }
 
-    protected void transformRecoil(MatrixStack matrices, RecoilManager recoil)
+    protected void transformRecoil(MatrixStack matrices, RecoilManager recoil, boolean leftHand)
     {
         matrices.translate(0, 0, recoil.horAmount);
         matrices.translate(0, 0, 1.4);
@@ -217,7 +217,7 @@ public class MeatgunPistolRenderer implements BuiltinItemRendererRegistry.Dynami
                 light, OverlayTexture.DEFAULT_UV);
     }
 
-    protected void renderScreen(MatrixStack matrices, ModelTransformationMode mode, VertexConsumerProvider vcp, RootModuleHolder holder, float tickDelta)
+    protected void renderScreen(MatrixStack matrices, ModelTransformationMode mode, VertexConsumerProvider vcp, RootModuleHolder holder, float tickDelta, boolean leftHanded)
     {
 //        if (!mode.isFirstPerson())
 //            return;
@@ -225,7 +225,7 @@ public class MeatgunPistolRenderer implements BuiltinItemRendererRegistry.Dynami
         matrices.push();
 //        float sf1 = MathHelper.sin(AnimationTickHolder.getRenderTime() / 10);
         float sf1 = 0.004f;
-        matrices.translate(2 / 16f, 2 / 16f, 18 / 16f);
+        matrices.translate((leftHanded ? 10 : 2) / 16f, 2 / 16f, 18 / 16f);
         matrices.scale(sf1, -sf1, 1);
         DrawContext drawContext = DrawContextAccessor.init(client, matrices, client.getBufferBuilders().getEntityVertexConsumers());
         MeatgunClient.renderHud(drawContext, tickDelta, holder);

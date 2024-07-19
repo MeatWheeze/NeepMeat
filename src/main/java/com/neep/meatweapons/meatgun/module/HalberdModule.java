@@ -21,6 +21,7 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
+import net.minecraft.util.Hand;
 import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
@@ -52,13 +53,13 @@ public class HalberdModule extends MeleeModule
     }
 
     @Override
-    public void trigger(World world, PlayerEntity player, ItemStack stack, int id, double pitch, double yaw, MWAttackC2SPacket.HandType handType)
+    public void trigger(World world, PlayerEntity player, ItemStack stack, int id, double pitch, double yaw, MWAttackC2SPacket.HandType handType, Hand hand)
     {
-        super.trigger(world, player, stack, id, pitch, yaw, handType);
+        super.trigger(world, player, stack, id, pitch, yaw, handType, hand);
 
         if (id == 2 && swingDownCooldown == 0)
         {
-            fireBeam(world, player, pitch, yaw, 3);
+            fireBeam(world, player, pitch, yaw, 3, hand);
             world.playSoundFromEntity(null, player, SoundEvents.ENTITY_PLAYER_ATTACK_SWEEP, SoundCategory.PLAYERS, 1, 1);
             MeatgunNetwork.SEND_ANIMATION.emitter(player).apply("blade_swing_down", null); // Sword attack
             swingDownCooldown = 15;
@@ -68,7 +69,7 @@ public class HalberdModule extends MeleeModule
         {
             if (player.getVehicle() != null)
             {
-                hookWhenMounted(world, player, player.getVehicle(), pitch, yaw);
+                hookWhenMounted(world, player, player.getVehicle(), pitch, yaw, hand);
 
             }
             else if (player.isSprinting())
@@ -81,15 +82,15 @@ public class HalberdModule extends MeleeModule
     }
 
     @Override
-    public void release(World world, PlayerEntity player, ItemStack stack, int id, double pitch, double yaw, MWAttackC2SPacket.HandType handType)
+    public void release(World world, PlayerEntity player, ItemStack stack, int id, double pitch, double yaw, MWAttackC2SPacket.HandType handType, Hand hand)
     {
-        super.release(world, player, stack, id, pitch, yaw, handType);
+        super.release(world, player, stack, id, pitch, yaw, handType, hand);
 
         if (id == 1)
         {
             if (triggerTicks >= 10)
             {
-                thrustForwards(world, player, pitch, yaw);
+                thrustForwards(world, player, pitch, yaw, hand);
             }
 
             triggerHeld = false;
@@ -99,9 +100,9 @@ public class HalberdModule extends MeleeModule
     }
 
     @Override
-    public void tickTrigger(World world, PlayerEntity player, ItemStack stack, int id, double pitch, double yaw, MWAttackC2SPacket.HandType handType)
+    public void tickTrigger(World world, PlayerEntity player, ItemStack stack, int id, double pitch, double yaw, MWAttackC2SPacket.HandType handType, Hand hand)
     {
-        super.tickTrigger(world, player, stack, id, pitch, yaw, handType);
+        super.tickTrigger(world, player, stack, id, pitch, yaw, handType, hand);
 
         if (id == 1)
         {
@@ -138,7 +139,7 @@ public class HalberdModule extends MeleeModule
         }
     }
 
-    protected void hookWhenMounted(World world, PlayerEntity player, Entity vehicle, double pitch, double yaw)
+    protected void hookWhenMounted(World world, PlayerEntity player, Entity vehicle, double pitch, double yaw, Hand hand)
     {
         if (hookGrabCooldown > 0)
             return;
@@ -183,11 +184,11 @@ public class HalberdModule extends MeleeModule
         }
         else
         {
-            MeatgunNetwork.sendRecoil((ServerPlayerEntity) player, MeatgunNetwork.RecoilDirection.UP, 7, 0.2f,0.7f, 0.03f);
+            MeatgunNetwork.sendRecoil((ServerPlayerEntity) player, MeatgunNetwork.RecoilDirection.UP, 7, 0.2f,0.7f, 0.03f, hand);
         }
     }
 
-    protected void thrustForwards(World world, PlayerEntity player, double pitch, double yaw)
+    protected void thrustForwards(World world, PlayerEntity player, double pitch, double yaw, Hand hand)
     {
         double f = 0.7;
 //        player.addVelocity(f * Math.sin(pitch), 1.05, f * Math.cos(pitch));
@@ -201,7 +202,7 @@ public class HalberdModule extends MeleeModule
         ((HitOnCollideEntity) player).meatweapons$setActiveTicks(20);
         ((HitOnCollideEntity) player).meatweapons$setDamage(6);
 
-        MeatgunNetwork.sendRecoil((ServerPlayerEntity) player, MeatgunNetwork.RecoilDirection.UP, 7, 0.2f,0.7f, 0.03f);
+        MeatgunNetwork.sendRecoil((ServerPlayerEntity) player, MeatgunNetwork.RecoilDirection.UP, 7, 0.2f,0.7f, 0.03f, hand);
     }
 
     // I can't think of a better place to put this. It needs to be outside the mixin so that it can be hot-swapped.

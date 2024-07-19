@@ -14,6 +14,7 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.Hand;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
@@ -26,7 +27,6 @@ public class MeatgunComponentImpl extends ItemComponent implements MeatgunCompon
 
     private boolean dirty = true;
     private boolean invalidated = false;
-//    private final Listener listener = new Listener();
 
     // Eeek! A bit unsafe, but normally fine.
     @Environment(EnvType.CLIENT)
@@ -62,32 +62,21 @@ public class MeatgunComponentImpl extends ItemComponent implements MeatgunCompon
     }
 
     @Override
-    public void trigger(World world, PlayerEntity player, ItemStack stack, int id, double pitch, double yaw, MWAttackC2SPacket.HandType handType)
+    public void trigger(World world, PlayerEntity player, ItemStack stack, int id, double pitch, double yaw, MWAttackC2SPacket.HandType handType, Hand hand)
     {
-        holder.root.trigger(world, player, stack, id, pitch, yaw, handType);
-//        var module = root.getChildren().get(0).get();
-//        if (module instanceof BosherModule)
-//        {
-//            root.getChildren().get(0).set(new UnderbarrelModule());
-//            markDirty();
-//        }
-//        else
-//        {
-//            root.getChildren().get(0).set(new BosherModule());
-//            markDirty();
-//        }
+        holder.root.trigger(world, player, stack, id, pitch, yaw, handType, hand);
     }
 
     @Override
-    public void release(World world, PlayerEntity player, ItemStack stack, int id, double pitch, double yaw, MWAttackC2SPacket.HandType handType)
+    public void release(World world, PlayerEntity player, ItemStack stack, int id, double pitch, double yaw, MWAttackC2SPacket.HandType handType, Hand hand)
     {
-        holder.root.release(world, player, stack, id, pitch, yaw, handType);
+        holder.root.release(world, player, stack, id, pitch, yaw, handType, hand);
     }
 
     @Override
-    public void tickTrigger(World world, PlayerEntity player, ItemStack stack, int id, double pitch, double yaw, MWAttackC2SPacket.HandType handType)
+    public void tickTrigger(World world, PlayerEntity player, ItemStack stack, int id, double pitch, double yaw, MWAttackC2SPacket.HandType handType, Hand hand)
     {
-        holder.root.tickTrigger(world, player, stack, id, pitch, yaw, handType);
+        holder.root.tickTrigger(world, player, stack, id, pitch, yaw, handType, hand);
     }
 
     @Override

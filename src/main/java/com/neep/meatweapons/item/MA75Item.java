@@ -59,7 +59,7 @@ public class MA75Item extends BaseGunItem implements WeakTwoHanded
     }
 
     @Override
-    public void trigger(World world, PlayerEntity player, ItemStack stack, int id, double pitch, double yaw, MWAttackC2SPacket.HandType handType)
+    public void trigger(World world, PlayerEntity player, ItemStack stack, int id, double pitch, double yaw, MWAttackC2SPacket.HandType handType, Hand hand)
     {
         WeaponCooldownAttachment manager = WeaponCooldownAttachment.get(player);
 
@@ -91,9 +91,9 @@ public class MA75Item extends BaseGunItem implements WeakTwoHanded
     }
 
     @Override
-    public void tickTrigger(World world, PlayerEntity player, ItemStack stack, int id, double pitch, double yaw, MWAttackC2SPacket.HandType handType)
+    public void tickTrigger(World world, PlayerEntity player, ItemStack stack, int id, double pitch, double yaw, MWAttackC2SPacket.HandType handType, Hand hand)
     {
-        trigger(world, player, stack, id, pitch, yaw, handType);
+        trigger(world, player, stack, id, pitch, yaw, handType, hand);
     }
 
     public void fire(World world, PlayerEntity player, ItemStack stack, double pitch, double yaw)

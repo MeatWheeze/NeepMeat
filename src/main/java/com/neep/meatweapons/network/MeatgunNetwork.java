@@ -8,6 +8,7 @@ import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 
 public class MeatgunNetwork
@@ -17,7 +18,7 @@ public class MeatgunNetwork
     public static final GlobalChannelManager<SendAnimation> SEND_ANIMATION = GlobalChannelManager.create(new Identifier(MeatWeapons.NAMESPACE, "meatgun_animation"),
             ChannelFormat.builder(SendAnimation.class).param(ParamCodec.STRING).param(ParamCodec.BUF).build());
 
-    public static void sendRecoil(ServerPlayerEntity player, RecoilDirection direction, float amount, float horAmount, float returnSpeed, float horReturnSpeed)
+    public static void sendRecoil(ServerPlayerEntity player, RecoilDirection direction, float amount, float horAmount, float returnSpeed, float horReturnSpeed, Hand hand)
     {
         PacketByteBuf buf = PacketByteBufs.create();
 
@@ -26,6 +27,7 @@ public class MeatgunNetwork
         buf.writeFloat(horAmount);
         buf.writeFloat(returnSpeed);
         buf.writeFloat(horReturnSpeed);
+        buf.writeVarInt(hand.ordinal());
 
         ServerPlayNetworking.send(player, CHANNEL, buf);
     }

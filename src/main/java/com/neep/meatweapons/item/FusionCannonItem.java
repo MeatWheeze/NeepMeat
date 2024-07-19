@@ -22,6 +22,7 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.util.Arm;
+import net.minecraft.util.Hand;
 import net.minecraft.util.UseAction;
 import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.math.Vec3d;
@@ -57,7 +58,7 @@ public class FusionCannonItem extends BaseGunItem implements WeakTwoHanded, Aima
     protected static final String KEY_CHARGE = "charge";
 
     @Override
-    public void trigger(World world, PlayerEntity player, ItemStack stack, int id, double pitch, double yaw, MWAttackC2SPacket.HandType handType)
+    public void trigger(World world, PlayerEntity player, ItemStack stack, int id, double pitch, double yaw, MWAttackC2SPacket.HandType handType, Hand hand)
     {
         WeaponCooldownAttachment manager = WeaponCooldownAttachment.get(player);
         if (id == MWAttackC2SPacket.TRIGGER_PRIMARY)
@@ -114,12 +115,12 @@ public class FusionCannonItem extends BaseGunItem implements WeakTwoHanded, Aima
     }
 
     @Override
-    public void tickTrigger(World world, PlayerEntity player, ItemStack stack, int id, double pitch, double yaw, MWAttackC2SPacket.HandType handType)
+    public void tickTrigger(World world, PlayerEntity player, ItemStack stack, int id, double pitch, double yaw, MWAttackC2SPacket.HandType handType, Hand hand)
     {
         // Continuously try to use the primary attack
         if (id == MWAttackC2SPacket.TRIGGER_PRIMARY)
         {
-            trigger(world, player, stack, id, pitch, yaw, handType);
+            trigger(world, player, stack, id, pitch, yaw, handType, hand);
         }
 
         // Increase charge in the secondary attack
@@ -148,7 +149,7 @@ public class FusionCannonItem extends BaseGunItem implements WeakTwoHanded, Aima
     }
 
     @Override
-    public void release(World world, PlayerEntity player, ItemStack stack, int id, double pitch, double yaw, MWAttackC2SPacket.HandType handType)
+    public void release(World world, PlayerEntity player, ItemStack stack, int id, double pitch, double yaw, MWAttackC2SPacket.HandType handType, Hand hand)
     {
         // Check that the charge exceeds a threshold. If so, shoot the projectile.
         WeaponCooldownAttachment manager = WeaponCooldownAttachment.get(player);

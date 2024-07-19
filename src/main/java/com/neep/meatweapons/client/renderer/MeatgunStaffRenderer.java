@@ -24,7 +24,7 @@ public class MeatgunStaffRenderer extends MeatgunPistolRenderer
     }
 
     @Override
-    protected void transformRecoil(MatrixStack matrices, RecoilManager recoil)
+    protected void transformRecoil(MatrixStack matrices, RecoilManager recoil, boolean leftHand)
     {
         matrices.translate(0, 0, recoil.horAmount);
         if (recoil.amount != 0)

@@ -36,21 +36,21 @@ public abstract class MeatgunItem extends BaseItem implements Meatgun, WeakTwoHa
     }
 
     @Override
-    public void trigger(World world, PlayerEntity player, ItemStack stack, int id, double pitch, double yaw, MWAttackC2SPacket.HandType handType)
+    public void trigger(World world, PlayerEntity player, ItemStack stack, int id, double pitch, double yaw, MWAttackC2SPacket.HandType handType, Hand hand)
     {
-        MWComponents.MEATGUN.get(stack).trigger(world, player, stack, id, pitch, yaw, handType);
+        MWComponents.MEATGUN.get(stack).trigger(world, player, stack, id, pitch, yaw, handType, hand);
     }
 
     @Override
-    public void release(World world, PlayerEntity player, ItemStack stack, int id, double pitch, double yaw, MWAttackC2SPacket.HandType handType)
+    public void release(World world, PlayerEntity player, ItemStack stack, int id, double pitch, double yaw, MWAttackC2SPacket.HandType handType, Hand hand)
     {
-        MWComponents.MEATGUN.get(stack).release(world, player, stack, id, pitch, yaw, handType);
+        MWComponents.MEATGUN.get(stack).release(world, player, stack, id, pitch, yaw, handType, hand);
     }
 
     @Override
-    public void tickTrigger(World world, PlayerEntity player, ItemStack stack, int id, double pitch, double yaw, MWAttackC2SPacket.HandType handType)
+    public void tickTrigger(World world, PlayerEntity player, ItemStack stack, int id, double pitch, double yaw, MWAttackC2SPacket.HandType handType, Hand hand)
     {
-        MWComponents.MEATGUN.get(stack).tickTrigger(world, player, stack, id, pitch, yaw, handType);
+        MWComponents.MEATGUN.get(stack).tickTrigger(world, player, stack, id, pitch, yaw, handType, hand);
     }
 
     @Override

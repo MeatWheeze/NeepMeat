@@ -6,6 +6,7 @@ import com.neep.meatweapons.meatgun.RootModuleHolder;
 import com.neep.meatweapons.network.MeatgunNetwork;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.util.Hand;
 import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
@@ -20,7 +21,7 @@ public abstract class MeleeModule extends AbstractMeatgunModule
         super(listener, slots);
     }
 
-    protected boolean fireBeam(World world, PlayerEntity player, double pitch, double yaw, double range)
+    protected boolean fireBeam(World world, PlayerEntity player, double pitch, double yaw, double range, Hand hand)
     {
         Vec3d pos = player.getEyePos();
 
@@ -28,7 +29,7 @@ public abstract class MeleeModule extends AbstractMeatgunModule
         @Nullable EntityHitResult target = BaseGunItem.hitScan(player, pos, end, range, e -> e != player.getVehicle(),
                 (world1, pos1, end1, width, maxTime, showRadius) -> {}, 0.4f).orElse(null);
 
-        MeatgunNetwork.sendRecoil((ServerPlayerEntity) player, MeatgunNetwork.RecoilDirection.UP, 7, 0.2f, 0.7f, 0.03f);
+        MeatgunNetwork.sendRecoil((ServerPlayerEntity) player, MeatgunNetwork.RecoilDirection.UP, 7, 0.2f, 0.7f, 0.03f, hand);
 
         if (target != null && !target.getEntity().hasPassenger(player))
         {

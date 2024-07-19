@@ -15,6 +15,7 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
@@ -48,7 +49,7 @@ public class GrenadeLauncherModule extends ShooterModule
     }
 
     @Override
-    public void trigger(World world, PlayerEntity player, ItemStack stack, int id, double pitch, double yaw, MWAttackC2SPacket.HandType handType)
+    public void trigger(World world, PlayerEntity player, ItemStack stack, int id, double pitch, double yaw, MWAttackC2SPacket.HandType handType, Hand hand)
     {
         if (cooldown == 0)
         {
@@ -56,15 +57,15 @@ public class GrenadeLauncherModule extends ShooterModule
             {
                 cooldown = maxCooldown;
 
-                fireBeam(world, player, stack, pitch, yaw);
+                fireBeam(world, player, stack, pitch, yaw, hand);
             }
         }
     }
 
     @Override
-    public void tickTrigger(World world, PlayerEntity player, ItemStack stack, int id, double pitch, double yaw, MWAttackC2SPacket.HandType handType)
+    public void tickTrigger(World world, PlayerEntity player, ItemStack stack, int id, double pitch, double yaw, MWAttackC2SPacket.HandType handType, Hand hand)
     {
-        trigger(world, player, stack, id, pitch, yaw, handType);
+        trigger(world, player, stack, id, pitch, yaw, handType, hand);
     }
 
     public Vec3d getMuzzleOffset(LivingEntity entity, ItemStack stack)
@@ -76,7 +77,7 @@ public class GrenadeLauncherModule extends ShooterModule
                 .25);
     }
 
-    protected void fireBeam(World world, PlayerEntity player, ItemStack stack, double pitchd, double yawd)
+    protected void fireBeam(World world, PlayerEntity player, ItemStack stack, double pitchd, double yawd, Hand hand)
     {
         double d = 0.5;
         double yaw = yawd + d * 0.1 * (shotRandom.nextFloat() - 0.5);
@@ -100,7 +101,7 @@ public class GrenadeLauncherModule extends ShooterModule
         entity.setHomingSpeed(0.05f, false);
         world.spawnEntity(entity);
 
-        MeatgunNetwork.sendRecoil((ServerPlayerEntity) player, MeatgunNetwork.RecoilDirection.UP, 7, 0.2f,0.7f, 0.03f);
+        MeatgunNetwork.sendRecoil((ServerPlayerEntity) player, MeatgunNetwork.RecoilDirection.UP, 7, 0.2f,0.7f, 0.03f, hand);
         world.playSoundFromEntity(null, player, NMSounds.GRENADE_LAUNCHER_FIRE, SoundCategory.PLAYERS, 1f, 1f);
         if (world instanceof ServerWorld serverWorld)
         {

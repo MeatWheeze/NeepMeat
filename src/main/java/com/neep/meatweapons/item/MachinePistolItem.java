@@ -8,17 +8,12 @@ import com.neep.neepmeat.init.NMSounds;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.Hand;
 import net.minecraft.util.UseAction;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import org.joml.Vector3f;
-import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
-import software.bernie.geckolib.core.animation.AnimatableManager;
-import software.bernie.geckolib.core.animation.AnimationController;
 import software.bernie.geckolib.model.GeoModel;
-
-import java.util.function.Consumer;
-import java.util.function.Supplier;
 
 public class MachinePistolItem extends BaseGunItem implements Aimable
 {
@@ -54,7 +49,7 @@ public class MachinePistolItem extends BaseGunItem implements Aimable
     }
 
     @Override
-    public void trigger(World world, PlayerEntity player, ItemStack stack, int id, double pitch, double yaw, MWAttackC2SPacket.HandType handType)
+    public void trigger(World world, PlayerEntity player, ItemStack stack, int id, double pitch, double yaw, MWAttackC2SPacket.HandType handType, Hand hand)
     {
         if (!player.getItemCooldownManager().isCoolingDown(this))
         {

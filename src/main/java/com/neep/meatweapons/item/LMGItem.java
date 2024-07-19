@@ -45,7 +45,7 @@ public class LMGItem extends BaseGunItem
     public void usageTick(World world, LivingEntity user, ItemStack stack, int remainingUseTicks)
     {
         ItemStack itemStack = user.getStackInHand(Hand.MAIN_HAND);
-        trigger(world, (PlayerEntity) user, itemStack, 0, user.getPitch(), user.getYaw(), MWAttackC2SPacket.HandType.MAIN);
+        trigger(world, (PlayerEntity) user, itemStack, 0, user.getPitch(), user.getYaw(), MWAttackC2SPacket.HandType.MAIN, Hand.MAIN_HAND);
     }
 
     @Override
@@ -59,7 +59,7 @@ public class LMGItem extends BaseGunItem
     }
 
     @Override
-    public void trigger(World world, PlayerEntity player, ItemStack stack, int id, double pitch, double yaw, MWAttackC2SPacket.HandType handType)
+    public void trigger(World world, PlayerEntity player, ItemStack stack, int id, double pitch, double yaw, MWAttackC2SPacket.HandType handType, Hand hand)
     {
         if (!player.getItemCooldownManager().isCoolingDown(this))
         {
@@ -90,9 +90,9 @@ public class LMGItem extends BaseGunItem
     }
 
     @Override
-    public void tickTrigger(World world, PlayerEntity player, ItemStack stack, int id, double pitch, double yaw, MWAttackC2SPacket.HandType handType)
+    public void tickTrigger(World world, PlayerEntity player, ItemStack stack, int id, double pitch, double yaw, MWAttackC2SPacket.HandType handType, Hand hand)
     {
-        trigger(world, player, stack, id, pitch, yaw, handType);
+        trigger(world, player, stack, id, pitch, yaw, handType, hand);
     }
 
     @Override

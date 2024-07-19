@@ -20,6 +20,7 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
+import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.hit.HitResult;
@@ -69,7 +70,7 @@ public class BosherModule extends ShooterModule
     }
 
     @Override
-    public void trigger(World world, PlayerEntity player, ItemStack stack, int id, double pitch, double yaw, MWAttackC2SPacket.HandType handType)
+    public void trigger(World world, PlayerEntity player, ItemStack stack, int id, double pitch, double yaw, MWAttackC2SPacket.HandType handType, Hand hand)
     {
         if (id == 1)
         {
@@ -79,16 +80,16 @@ public class BosherModule extends ShooterModule
                 {
                     cooldown = maxCooldown;
 
-                    fireBeam(world, player, stack, pitch, yaw);
+                    fireBeam(world, player, stack, pitch, yaw, hand);
                 }
             }
         }
     }
 
     @Override
-    public void tickTrigger(World world, PlayerEntity player, ItemStack stack, int id, double pitch, double yaw, MWAttackC2SPacket.HandType handType)
+    public void tickTrigger(World world, PlayerEntity player, ItemStack stack, int id, double pitch, double yaw, MWAttackC2SPacket.HandType handType, Hand hand)
     {
-        trigger(world, player, stack, id, pitch, yaw, handType);
+        trigger(world, player, stack, id, pitch, yaw, handType, hand);
     }
 
     public Vec3d getMuzzleOffset(LivingEntity entity, ItemStack stack)
@@ -100,7 +101,7 @@ public class BosherModule extends ShooterModule
                 .25);
     }
 
-    protected void fireBeam(World world, PlayerEntity player, ItemStack stack, double pitchd, double yawd)
+    protected void fireBeam(World world, PlayerEntity player, ItemStack stack, double pitchd, double yawd, Hand hand)
     {
         Vec3d pos = player.getEyePos();
         Vec3d transform = getMuzzleOffset(player, stack).rotateX((float) -pitchd).rotateY((float) -yawd);
@@ -117,7 +118,7 @@ public class BosherModule extends ShooterModule
             }
         }
 
-        MeatgunNetwork.sendRecoil((ServerPlayerEntity) player, MeatgunNetwork.RecoilDirection.UP, 7, 0.4f,0.3f, 0.01f);
+        MeatgunNetwork.sendRecoil((ServerPlayerEntity) player, MeatgunNetwork.RecoilDirection.UP, 7, 0.4f,0.3f, 0.01f, hand);
         world.playSoundFromEntity(null, player, NMSounds.BOSHER_FIRE, SoundCategory.PLAYERS, 1f, 1f);
         if (world instanceof ServerWorld serverWorld)
         {

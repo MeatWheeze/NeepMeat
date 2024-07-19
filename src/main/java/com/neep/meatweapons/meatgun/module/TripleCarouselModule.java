@@ -6,6 +6,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.PacketByteBuf;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import org.joml.Matrix4f;
@@ -36,7 +37,7 @@ public class TripleCarouselModule extends AbstractMeatgunModule
     }
 
     @Override
-    public void trigger(World world, PlayerEntity player, ItemStack stack, int id, double pitch, double yaw, MWAttackC2SPacket.HandType handType)
+    public void trigger(World world, PlayerEntity player, ItemStack stack, int id, double pitch, double yaw, MWAttackC2SPacket.HandType handType, Hand hand)
     {
         if (!isRotating(world.getTime()))
         {
@@ -46,14 +47,14 @@ public class TripleCarouselModule extends AbstractMeatgunModule
             }
             else
             {
-                slots.get(selected).get().trigger(world, player, stack, id, pitch, yaw, handType);
+                slots.get(selected).get().trigger(world, player, stack, id, pitch, yaw, handType, hand);
                 rotate(player);
             }
         }
     }
 
     @Override
-    public void tickTrigger(World world, PlayerEntity player, ItemStack stack, int id, double pitch, double yaw, MWAttackC2SPacket.HandType handType)
+    public void tickTrigger(World world, PlayerEntity player, ItemStack stack, int id, double pitch, double yaw, MWAttackC2SPacket.HandType handType, Hand hand)
     {
         if (!isRotating(world.getTime()))
         {
@@ -63,7 +64,7 @@ public class TripleCarouselModule extends AbstractMeatgunModule
             }
             else
             {
-                slots.get(selected).get().tickTrigger(world, player, stack, id, pitch, yaw, handType);
+                slots.get(selected).get().tickTrigger(world, player, stack, id, pitch, yaw, handType, hand);
                 rotate(player);
             }
         }

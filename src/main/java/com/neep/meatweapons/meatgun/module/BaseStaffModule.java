@@ -5,6 +5,7 @@ import com.neep.meatweapons.network.MWAttackC2SPacket;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.util.Hand;
 import net.minecraft.world.World;
 import org.joml.Matrix4f;
 
@@ -32,21 +33,21 @@ public class BaseStaffModule extends AbstractMeatgunModule
     }
 
     @Override
-    public void trigger(World world, PlayerEntity player, ItemStack stack, int id, double pitch, double yaw, MWAttackC2SPacket.HandType handType)
+    public void trigger(World world, PlayerEntity player, ItemStack stack, int id, double pitch, double yaw, MWAttackC2SPacket.HandType handType, Hand hand)
     {
-        mainSlot.get().trigger(world, player, stack, id, pitch, yaw, handType);
+        mainSlot.get().trigger(world, player, stack, id, pitch, yaw, handType, hand);
     }
 
     @Override
-    public void release(World world, PlayerEntity player, ItemStack stack, int id, double pitch, double yaw, MWAttackC2SPacket.HandType handType)
+    public void release(World world, PlayerEntity player, ItemStack stack, int id, double pitch, double yaw, MWAttackC2SPacket.HandType handType, Hand hand)
     {
-        mainSlot.get().release(world, player, stack, id, pitch, yaw, handType);
+        mainSlot.get().release(world, player, stack, id, pitch, yaw, handType, hand);
     }
 
     @Override
-    public void tickTrigger(World world, PlayerEntity player, ItemStack stack, int id, double pitch, double yaw, MWAttackC2SPacket.HandType handType)
+    public void tickTrigger(World world, PlayerEntity player, ItemStack stack, int id, double pitch, double yaw, MWAttackC2SPacket.HandType handType, Hand hand)
     {
-        mainSlot.get().tickTrigger(world, player, stack, id, pitch, yaw, handType);
+        mainSlot.get().tickTrigger(world, player, stack, id, pitch, yaw, handType, hand);
     }
 
     @Override

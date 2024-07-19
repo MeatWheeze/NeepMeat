@@ -4,6 +4,7 @@ import com.neep.meatweapons.item.GunItem;
 import com.neep.meatweapons.network.MWAttackC2SPacket;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.Hand;
 
 public class PlayerWeaponManager
 {
@@ -29,15 +30,15 @@ public class PlayerWeaponManager
         if (mainItem != null)
         {
             stack = player.getMainHandStack();
-            if (mainStatus[0]) mainItem.tickTrigger(player.getWorld(), player, stack, MWAttackC2SPacket.TRIGGER_PRIMARY, pitch, yaw, MWAttackC2SPacket.HandType.MAIN);
-            if (mainStatus[1]) mainItem.tickTrigger(player.getWorld(), player, stack, MWAttackC2SPacket.TRIGGER_SECONDARY, pitch, yaw, MWAttackC2SPacket.HandType.MAIN);
+            if (mainStatus[0]) mainItem.tickTrigger(player.getWorld(), player, stack, MWAttackC2SPacket.TRIGGER_PRIMARY, pitch, yaw, MWAttackC2SPacket.HandType.MAIN, Hand.MAIN_HAND);
+            if (mainStatus[1]) mainItem.tickTrigger(player.getWorld(), player, stack, MWAttackC2SPacket.TRIGGER_SECONDARY, pitch, yaw, MWAttackC2SPacket.HandType.MAIN, Hand.MAIN_HAND);
         }
 
         if (offItem != null)
         {
             stack = player.getOffHandStack();
-            if (offStatus[0]) offItem.tickTrigger(player.getWorld(), player, stack, MWAttackC2SPacket.TRIGGER_PRIMARY, pitch, yaw, MWAttackC2SPacket.HandType.OFF);
-            if (offStatus[1]) offItem.tickTrigger(player.getWorld(), player, stack, MWAttackC2SPacket.TRIGGER_SECONDARY, pitch, yaw, MWAttackC2SPacket.HandType.OFF);
+            if (offStatus[0]) offItem.tickTrigger(player.getWorld(), player, stack, MWAttackC2SPacket.TRIGGER_PRIMARY, pitch, yaw, MWAttackC2SPacket.HandType.OFF, Hand.OFF_HAND);
+            if (offStatus[1]) offItem.tickTrigger(player.getWorld(), player, stack, MWAttackC2SPacket.TRIGGER_SECONDARY, pitch, yaw, MWAttackC2SPacket.HandType.OFF, Hand.OFF_HAND);
         }
     }
 

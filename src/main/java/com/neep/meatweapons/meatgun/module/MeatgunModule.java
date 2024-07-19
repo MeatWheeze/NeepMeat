@@ -1,12 +1,14 @@
 package com.neep.meatweapons.meatgun.module;
 
 import com.neep.meatweapons.MeatWeapons;
+import com.neep.meatweapons.item.TriggerReceiver;
 import com.neep.meatweapons.meatgun.RootModuleHolder;
 import com.neep.meatweapons.network.MWAttackC2SPacket;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.PacketByteBuf;
+import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
 import org.joml.Matrix4f;
@@ -14,7 +16,7 @@ import org.joml.Matrix4f;
 import java.util.List;
 import java.util.UUID;
 
-public interface MeatgunModule
+public interface MeatgunModule extends TriggerReceiver
 {
     UUID getUuid();
 
@@ -29,19 +31,19 @@ public interface MeatgunModule
         getChildren().forEach(s -> s.get().tick(player));
     }
 
-    default void trigger(World world, PlayerEntity player, ItemStack stack, int id, double pitch, double yaw, MWAttackC2SPacket.HandType handType)
+    default void trigger(World world, PlayerEntity player, ItemStack stack, int id, double pitch, double yaw, MWAttackC2SPacket.HandType handType, Hand hand)
     {
-        getChildren().forEach(c -> c.get().trigger(world, player, stack, id, pitch, yaw, handType));
+        getChildren().forEach(c -> c.get().trigger(world, player, stack, id, pitch, yaw, handType, hand));
     }
 
-    default void release(World world, PlayerEntity player, ItemStack stack, int id, double pitch, double yaw, MWAttackC2SPacket.HandType handType)
+    default void tickTrigger(World world, PlayerEntity player, ItemStack stack, int id, double pitch, double yaw, MWAttackC2SPacket.HandType handType, Hand hand)
     {
-        getChildren().forEach(c -> c.get().release(world, player, stack, id, pitch, yaw, handType));
+        getChildren().forEach(c -> c.get().tickTrigger(world, player, stack, id, pitch, yaw, handType, hand));
     }
 
-    default void tickTrigger(World world, PlayerEntity player, ItemStack stack, int id, double pitch, double yaw, MWAttackC2SPacket.HandType handType)
+    default void release(World world, PlayerEntity player, ItemStack stack, int id, double pitch, double yaw, MWAttackC2SPacket.HandType handType, Hand hand)
     {
-        getChildren().forEach(c -> c.get().tickTrigger(world, player, stack, id, pitch, yaw, handType));
+        getChildren().forEach(c -> c.get().release(world, player, stack, id, pitch, yaw, handType, hand));
     }
 
     void setTransform(Matrix4f transform);

@@ -2,7 +2,6 @@ package com.neep.meatweapons.client.network;
 
 import com.neep.meatweapons.component.MeatgunComponent;
 import com.neep.meatweapons.init.MWComponents;
-import com.neep.meatweapons.item.meatgun.Meatgun;
 import com.neep.meatweapons.item.meatgun.MeatgunAnimationManager;
 import com.neep.meatweapons.meatgun.AmmunitionType;
 import com.neep.meatweapons.meatgun.RootModuleHolder;
@@ -17,9 +16,9 @@ import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.network.PacketByteBuf;
+import net.minecraft.util.Hand;
 
 import java.util.List;
 import java.util.Map;
@@ -36,10 +35,16 @@ public class MeatgunClient
             float horAmount = buf.readFloat();
             float returnSpeed = buf.readFloat();
             float horReturnSpeed = buf.readFloat();
+            Hand hand = Hand.values()[buf.readVarInt()];
 
             client.execute(() ->
             {
-                MeatgunComponent component = MWComponents.MEATGUN.getNullable(client.player.getMainHandStack());
+                MeatgunComponent component;
+                if (hand == Hand.MAIN_HAND)
+                    component = MWComponents.MEATGUN.getNullable(client.player.getMainHandStack());
+                else
+                    component = MWComponents.MEATGUN.getNullable(client.player.getOffHandStack());
+
                 if (component != null)
                 {
                     component.getRecoil().set(direction, amount, horAmount, returnSpeed, horReturnSpeed);
@@ -51,23 +56,23 @@ public class MeatgunClient
 
         HudRenderCallback.EVENT.register((drawContext, tickDelta) ->
         {
-            MinecraftClient client = MinecraftClient.getInstance();
-            ClientPlayerEntity player = client.player;
-            if (player.getMainHandStack().getItem() instanceof Meatgun)
-            {
-                MeatgunComponent component1 = MWComponents.MEATGUN.getNullable(player.getMainHandStack());
+//            MinecraftClient client = MinecraftClient.getInstance();
+//            ClientPlayerEntity player = client.player;
+//            if (player.getMainHandStack().getItem() instanceof Meatgun)
+//            {
+//                MeatgunComponent component1 = MWComponents.MEATGUN.getNullable(player.getMainHandStack());
 //                MeatgunComponent component2 = MWComponents.MEATGUN.getNullable(player.getOffHandStack());
-                if (component1 != null)
-                {
+//                if (component1 != null)
+//                {
 //                    renderHud(drawContext, tickDelta, component1.getRootHolder());
-                }
+//                }
 //                if (component2 != null)
 //                {
 //                    MeatgunAnimationManager animationManager = component2.getAnimationManager();
 //                    if (animationManager != null)
 //                        animationManager.queue(name, buf);
 //                }
-            }
+//            }
         });
     }
 
@@ -100,7 +105,7 @@ public class MeatgunClient
 
         int textY = 2;
         matrices.push();
-        matrices.scale(1, 1, 0.3f); // Squish down the text and shadow layers in Z
+        matrices.scale(1, 1, 0.1f); // Squish down the text and shadow layers in Z
         for (var entry : map.entrySet())
         {
             if (entry.getValue().isEmpty())

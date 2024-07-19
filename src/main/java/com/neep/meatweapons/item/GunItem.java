@@ -12,9 +12,8 @@ import net.minecraft.world.World;
 
 import java.util.Random;
 
-public interface GunItem extends BeamEffectProvider
+public interface GunItem extends BeamEffectProvider, TriggerReceiver
 {
-
     static GunItem getGun(ItemStack stack)
     {
         return stack.getItem() instanceof GunItem gun ? gun : null;
@@ -22,13 +21,8 @@ public interface GunItem extends BeamEffectProvider
 
     Vec3d getMuzzleOffset(LivingEntity entity, ItemStack stack);
 
-    default void trigger(World world, PlayerEntity player, ItemStack stack, int id, double pitch, double yaw, MWAttackC2SPacket.HandType handType) {}
-    default void release(World world, PlayerEntity player, ItemStack stack, int id, double pitch, double yaw, MWAttackC2SPacket.HandType handType) {}
-
     default void triggerClient(World world, PlayerEntity player, ItemStack stack, int id, double pitch, double yaw, MWAttackC2SPacket.HandType handType) {}
     default void releaseClient(World world, PlayerEntity player, ItemStack stack, int id, double pitch, double yaw, MWAttackC2SPacket.HandType handType) {}
-
-    default void tickTrigger(World world, PlayerEntity player, ItemStack stack, int id, double pitch, double yaw, MWAttackC2SPacket.HandType handType) {}
 
     void playSound(World world, LivingEntity entity, GunSounds sound);
 

@@ -17,6 +17,7 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
+import net.minecraft.util.Hand;
 import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
@@ -46,14 +47,14 @@ public class ShockStaffModule extends MeleeModule implements AmmunitionRequiring
     }
 
     @Override
-    public void trigger(World world, PlayerEntity player, ItemStack stack, int id, double pitch, double yaw, MWAttackC2SPacket.HandType handType)
+    public void trigger(World world, PlayerEntity player, ItemStack stack, int id, double pitch, double yaw, MWAttackC2SPacket.HandType handType, Hand hand)
     {
         if (id == 2 && swingDownCooldown == 0 && consume(2, player.getInventory(), player))
         {
             MeatgunNetwork.SEND_ANIMATION.emitter(player).apply("swing_across", null);
             world.playSoundFromEntity(null, player, NMSounds.SHOCK_STAFF_ATTACK, SoundCategory.PLAYERS, 1, 1);
-            MeatgunNetwork.sendRecoil((ServerPlayerEntity) player, MeatgunNetwork.RecoilDirection.UP, 7, 0.3f,0.7f, 0.02f);
-            fireBeam(world, player, pitch, yaw, 3);
+            MeatgunNetwork.sendRecoil((ServerPlayerEntity) player, MeatgunNetwork.RecoilDirection.UP, 7, 0.3f,0.7f, 0.02f, hand);
+            fireBeam(world, player, pitch, yaw, 3, hand);
             swingDownCooldown = 15;
         }
         if (id == 1 && swingDownCooldown == 0 && consume(1, player.getInventory(), player))
@@ -79,14 +80,14 @@ public class ShockStaffModule extends MeleeModule implements AmmunitionRequiring
     }
 
     @Override
-    public void release(World world, PlayerEntity player, ItemStack stack, int id, double pitch, double yaw, MWAttackC2SPacket.HandType handType)
+    public void release(World world, PlayerEntity player, ItemStack stack, int id, double pitch, double yaw, MWAttackC2SPacket.HandType handType, Hand hand)
     {
     }
 
     @Override
-    public void tickTrigger(World world, PlayerEntity player, ItemStack stack, int id, double pitch, double yaw, MWAttackC2SPacket.HandType handType)
+    public void tickTrigger(World world, PlayerEntity player, ItemStack stack, int id, double pitch, double yaw, MWAttackC2SPacket.HandType handType, Hand hand)
     {
-        super.tickTrigger(world, player, stack, id, pitch, yaw, handType);
+        super.tickTrigger(world, player, stack, id, pitch, yaw, handType, hand);
     }
 
     @Override
@@ -97,7 +98,7 @@ public class ShockStaffModule extends MeleeModule implements AmmunitionRequiring
     }
 
     @Override
-    protected boolean fireBeam(World world, PlayerEntity player, double pitch, double yaw, double range)
+    protected boolean fireBeam(World world, PlayerEntity player, double pitch, double yaw, double range, Hand hand)
     {
         Vec3d pos = player.getEyePos();
 
@@ -105,7 +106,7 @@ public class ShockStaffModule extends MeleeModule implements AmmunitionRequiring
         @Nullable EntityHitResult target = BaseGunItem.hitScan(player, pos, end, range, e -> e != player.getVehicle(),
                 (world1, pos1, end1, width, maxTime, showRadius) -> {}, 0.4f).orElse(null);
 
-        MeatgunNetwork.sendRecoil((ServerPlayerEntity) player, MeatgunNetwork.RecoilDirection.UP, 4, 0.2f, 0.7f, 0.03f);
+        MeatgunNetwork.sendRecoil((ServerPlayerEntity) player, MeatgunNetwork.RecoilDirection.UP, 4, 0.2f, 0.7f, 0.03f, hand);
 
         if (target != null && !target.getEntity().hasPassenger(player))
         {
