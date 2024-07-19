@@ -59,7 +59,7 @@ public class MeatgunClient
 //                MeatgunComponent component2 = MWComponents.MEATGUN.getNullable(player.getOffHandStack());
                 if (component1 != null)
                 {
-                    renderHud(drawContext, tickDelta, component1.getRootHolder());
+//                    renderHud(drawContext, tickDelta, component1.getRootHolder());
                 }
 //                if (component2 != null)
 //                {
@@ -71,7 +71,7 @@ public class MeatgunClient
         });
     }
 
-    private static void renderHud(DrawContext drawContext, float tickDelta, RootModuleHolder holder)
+    public static void renderHud(DrawContext drawContext, float tickDelta, RootModuleHolder holder)
     {
         MinecraftClient client = MinecraftClient.getInstance();
         TextRenderer textRenderer = client.textRenderer;
@@ -88,18 +88,19 @@ public class MeatgunClient
         if (lines == 0)
             return;
 
-        int height = lines * stride + 2;
-        int yStart = client.getWindow().getScaledHeight() - height;
+        int col = PLCCols.BORDER.col & 0x88FFFFFF;
 
+        int width = 60;
+        int height = lines * stride + 2;
         MatrixStack matrices = drawContext.getMatrices();
-        matrices.push();
-        float sf = 0.8f;
-        matrices.translate(0, client.getWindow().getScaledHeight() - height * sf, 0);
-        matrices.scale(sf, sf, 1);
-        drawContext.fill(0, 0, 100, height, 0x90000000);
-        GUIUtil.renderBorderInner(drawContext, 0, 0, 100, height, PLCCols.BORDER.col, 0);
+        matrices.translate(0, 0, -0.01);
+        drawContext.fill(-1, -1, width + 1, height + 1, 0x30000000);
+        matrices.translate(0, 0, 0.01);
+        GUIUtil.renderBorderInner(drawContext, 0, 0, width, height, col, 0);
 
         int textY = 2;
+        matrices.push();
+        matrices.scale(1, 1, 0.3f); // Squish down the text and shadow layers in Z
         for (var entry : map.entrySet())
         {
             if (entry.getValue().isEmpty())
@@ -107,7 +108,7 @@ public class MeatgunClient
 
             int amount = entry.getValue().stream().mapToInt(AmmunitionStoringModule::amount).sum();
 
-            GUIUtil.drawText(drawContext, textRenderer, entry.getKey().name() + " " + amount, 2, textY, PLCCols.TEXT.col, true);
+            GUIUtil.drawText(drawContext, textRenderer, entry.getKey().stortName() + " " + amount, 2, textY, col, true);
             textY += stride;
         }
         matrices.pop();

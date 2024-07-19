@@ -2,11 +2,13 @@ package com.neep.meatweapons.client.renderer;
 
 import com.jozufozu.flywheel.util.AnimationTickHolder;
 import com.neep.meatweapons.client.meatgun.RecoilManager;
+import com.neep.meatweapons.client.network.MeatgunClient;
 import com.neep.meatweapons.client.renderer.meatgun.MeatgunModuleRenderer;
 import com.neep.meatweapons.client.renderer.meatgun.MeatgunModuleRenderers;
 import com.neep.meatweapons.client.renderer.meatgun.MeatgunParticleManager;
 import com.neep.meatweapons.component.MeatgunComponent;
 import com.neep.meatweapons.init.MWComponents;
+import com.neep.meatweapons.meatgun.RootModuleHolder;
 import com.neep.meatweapons.meatgun.module.MeatgunModule;
 import com.neep.meatweapons.mixin.DrawContextAccessor;
 import com.neep.meatweapons.mixin.HeldItemRendererAccessor;
@@ -29,7 +31,6 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Arm;
 import net.minecraft.util.Hand;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RotationAxis;
 import org.joml.Matrix4f;
 
@@ -102,6 +103,9 @@ public class MeatgunPistolRenderer implements BuiltinItemRendererRegistry.Dynami
         renderRecursive(matrices, root, stack, component, mode, vcp,
                 MinecraftClient.getInstance().world.getTime(),
                 MinecraftClient.getInstance().getTickDelta(), light, overlay);
+
+        renderScreen(matrices, mode, vcp, component.getRootHolder(), tickDelta);
+
         matrices.pop();
 
         renderParticles(matrices, mode, firstPersonModelTransform, vcp, light, overlay);
@@ -109,7 +113,6 @@ public class MeatgunPistolRenderer implements BuiltinItemRendererRegistry.Dynami
         if (showArm)
             renderArms(matrices, mode, player, playerEntityRenderer, vcp, light, mainHand, leftHanded);
 
-        renderScreen(matrices, mode, vcp);
     }
 
     protected void transformRecoil(MatrixStack matrices, RecoilManager recoil)
@@ -197,24 +200,20 @@ public class MeatgunPistolRenderer implements BuiltinItemRendererRegistry.Dynami
                 light, OverlayTexture.DEFAULT_UV);
     }
 
-    protected void renderScreen(MatrixStack matrices, ModelTransformationMode mode, VertexConsumerProvider vcp)
+    protected void renderScreen(MatrixStack matrices, ModelTransformationMode mode, VertexConsumerProvider vcp, RootModuleHolder holder, float tickDelta)
     {
-//        if (!mode.isFirstPerson())
-//            return;
+        if (!mode.isFirstPerson())
+            return;
 
-//        matrices.push();
+        matrices.push();
 //        float sf1 = MathHelper.sin(AnimationTickHolder.getRenderTime() / 10);
-//        float sf1 = 1;
-//        matrices.translate(0, -1, 0);
-//        matrices.scale(0.01f, 0.01f, 0.01f);
-//        matrices.translate(0, 1 / (0.01 * sf1), 0);
-//        matrices.translate(0.5 / 0.01, 1 / 0.01, 0);
-//        matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(180));
-//        DrawContext drawContext = DrawContextAccessor.init(client, matrices, client.getBufferBuilders().getEntityVertexConsumers());
-//        GUIUtil.renderBorderInner(drawContext, 10, 10, 100, 100, PLCCols.BORDER.col, 0);
-//        GUIUtil.drawText(drawContext, client.textRenderer, "Ooer", 2, 2, PLCCols.TEXT.col, true);
-//        drawContext.draw();
-//        matrices.pop();
+        float sf1 = 0.004f;
+        matrices.translate(2 / 16f, 2 / 16f, 18 / 16f);
+        matrices.scale(sf1, -sf1, 1);
+        DrawContext drawContext = DrawContextAccessor.init(client, matrices, client.getBufferBuilders().getEntityVertexConsumers());
+        MeatgunClient.renderHud(drawContext, tickDelta, holder);
+        drawContext.draw();
+        matrices.pop();
     }
 
     private <T extends MeatgunModule> void renderRecursive(MatrixStack matrices, T module, ItemStack stack, MeatgunComponent component,
