@@ -1,6 +1,7 @@
 package com.neep.neepmeat.datagen;
 
 import com.neep.meatlib.datagen.MeatLibDataGen;
+import com.neep.meatweapons.MWItems;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.init.NMBlocks;
 import com.neep.neepmeat.init.NMFluids;
@@ -116,6 +117,11 @@ public class NMAdvancements extends FabricAdvancementProvider
         Advancement place_item_pipe = placeBlock(
                 consumer, "main", "place_item_pipe", obtain_whisper_brass,
                 ItemTransport.ITEM_PIPE
+        );
+
+        Advancement obtain_staff = getItem(
+                consumer, "main", "obtain_staff", obtain_whisper_brass,
+                MWItems.MEATGUN_STAFF
         );
     }
 

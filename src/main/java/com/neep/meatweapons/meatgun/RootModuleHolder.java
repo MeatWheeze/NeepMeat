@@ -7,6 +7,7 @@ import com.neep.meatweapons.meatgun.module.AmmunitionStoringModule;
 import com.neep.meatweapons.meatgun.module.MeatgunModule;
 import com.neep.meatweapons.network.MeatgunNetwork;
 import com.neep.neepmeat.init.NMSounds;
+import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
@@ -213,7 +214,7 @@ public class RootModuleHolder
         {
             player.playSound(NMSounds.RELOAD_MECHANICAL_HISS, SoundCategory.PLAYERS, 1, 1);
 //            MeatgunNetwork.sendRecoil((ServerPlayerEntity) player, MeatgunNetwork.RecoilDirection.DOWN, 30, 1.0f, 30 / 10f, 0.1f);
-            MeatgunNetwork.SEND_ANIMATION.emitter(player).apply("reload", null);
+            MeatgunNetwork.SEND_ANIMATION.emitter(player).apply("reload", PacketByteBufs.create().writeVarInt(10));
         }
 
         return false;

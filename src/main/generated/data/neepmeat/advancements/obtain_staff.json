@@ -1,0 +1,38 @@
+{
+  "parent": "neepmeat:obtain_whisper_brass",
+  "criteria": {
+    "get_item": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "meatweapons:meatgun_staff"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": {
+      "translate": "advancements.neepmeat.main.obtain_staff.desc"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "meatweapons:meatgun_staff"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "advancements.neepmeat.main.obtain_staff.title"
+    }
+  },
+  "requirements": [
+    [
+      "get_item"
+    ]
+  ],
+  "sends_telemetry_event": true
+}
