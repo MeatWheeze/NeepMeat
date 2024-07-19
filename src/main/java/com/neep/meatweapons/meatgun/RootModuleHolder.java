@@ -211,7 +211,7 @@ public class RootModuleHolder
 
         if (reloaded)
         {
-            player.playSound(NMSounds.RELOAD, SoundCategory.PLAYERS, 1, 1);
+            player.playSound(NMSounds.RELOAD_MECHANICAL_HISS, SoundCategory.PLAYERS, 1, 1);
 //            MeatgunNetwork.sendRecoil((ServerPlayerEntity) player, MeatgunNetwork.RecoilDirection.DOWN, 30, 1.0f, 30 / 10f, 0.1f);
             MeatgunNetwork.SEND_ANIMATION.emitter(player).apply("reload", null);
         }

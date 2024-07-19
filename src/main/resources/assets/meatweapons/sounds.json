@@ -145,6 +145,9 @@
   },
   "shock_staff_hit": { "subtitle": "subtitles.meatweapons.shock_staff.hit",
     "sounds": [ "meatweapons:shock_staff_hit" ]
+  },
+  "reload_mechanical_hiss": { "subtitle": "subtitles.meatweapons.reload_hiss",
+    "sounds": [ "meatweapons:reload_mechanical_hiss" ]
   }
 
 }
