@@ -205,14 +205,19 @@ public class RootModuleHolder
     public boolean reload(AmmunitionProvider provider, PlayerEntity player)
     {
         cacheModules();
+        int current = getAmmo(provider.ammoType());
+        if (current >= provider.getAmount())
+            return false;
 
-        int remaining = provider.getAmount();
+        int remaining = provider.getAmount() - current;
         for (var otherModule : modules)
         {
             if (otherModule instanceof AmmunitionStoringModule storage
                     && storage.ammoType() == provider.ammoType())
             {
                 remaining -= storage.insert(remaining);
+                if (remaining <= 0)
+                    break;
             }
         }
 

@@ -113,7 +113,11 @@ public class MeatgunClient
 
             int amount = entry.getValue().stream().mapToInt(AmmunitionStoringModule::amount).sum();
 
-            GUIUtil.drawText(drawContext, textRenderer, entry.getKey().stortName() + " " + amount, 2, textY, col, true);
+            int col2 = col;
+            if (amount == 0)
+                col2 = 0x88FF0000;
+
+            GUIUtil.drawText(drawContext, textRenderer, entry.getKey().stortName() + " " + amount, 2, textY, col2, true);
             textY += stride;
         }
         matrices.pop();
