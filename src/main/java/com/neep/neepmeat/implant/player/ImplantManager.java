@@ -11,4 +11,8 @@ public interface ImplantManager extends Component
     void removeImplant(Identifier id);
 
     Set<Identifier> getInstalled();
+    default boolean isInstalled(Identifier id)
+    {
+        return getInstalled().contains(id);
+    }
 }

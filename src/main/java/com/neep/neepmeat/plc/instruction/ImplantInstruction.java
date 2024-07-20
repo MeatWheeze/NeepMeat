@@ -139,7 +139,7 @@ public class ImplantInstruction implements Instruction
                     workpiece.clearSteps();
                 }
 
-                stored = null;
+               stored = null;
             }
         }
 

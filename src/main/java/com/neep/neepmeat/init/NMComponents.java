@@ -48,7 +48,7 @@ public class NMComponents implements EntityComponentInitializer, ItemComponentIn
     @Override
     public void registerEntityComponentFactories(EntityComponentFactoryRegistry registry)
     {
-        registry.beginRegistration(PlayerEntity.class, IMPLANT_MANAGER).impl(PlayerImplantManager.class).respawnStrategy(RespawnCopyStrategy.LOSSLESS_ONLY).end(PlayerImplantManager::new);
+        registry.beginRegistration(PlayerEntity.class, IMPLANT_MANAGER).impl(PlayerImplantManager.class).respawnStrategy(RespawnCopyStrategy.CHARACTER).end(PlayerImplantManager::new);
         registry.beginRegistration(PlayerEntity.class, ENLIGHTENMENT_MANAGER).impl(PlayerEnlightenmentManager.class).respawnStrategy(RespawnCopyStrategy.ALWAYS_COPY).end(PlayerEnlightenmentManager::new);
 //        registry.registerFor(CowEntity.class, WORKPIECE, MobWorkpiece::new);
 //        registry.registerFor(ZombieEntity.class, WORKPIECE, MobWorkpiece::new);
