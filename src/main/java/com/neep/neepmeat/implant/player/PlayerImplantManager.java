@@ -55,7 +55,7 @@ public class PlayerImplantManager implements ImplantManager, Component, ServerTi
         }
         else
         {
-            throw new IllegalArgumentException("Tried to add an unregistered implant to player " + player.getEntityName());
+            NeepMeat.LOGGER.error("Tried to add an unregistered implant to player {}", player.getEntityName());
         }
     }
 
@@ -63,7 +63,11 @@ public class PlayerImplantManager implements ImplantManager, Component, ServerTi
     {
         ImplantRegistry.Constructor constructor = ImplantRegistry.REGISTRY.get(id);;
 
-        if (constructor == null) throw new IllegalArgumentException("Tried to add an unregistered implant to player " + player.getEntityName());
+        if (constructor == null)
+        {
+            NeepMeat.LOGGER.info("Tried to add an unregistered implant to player {}", player.getEntityName());
+            return EntityImplant.DEFAULT;
+        }
 
         EntityImplant implant = constructor.create(player);
         implants.put(id, implant);
