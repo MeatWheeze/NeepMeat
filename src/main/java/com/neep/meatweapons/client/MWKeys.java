@@ -3,18 +3,14 @@ package com.neep.meatweapons.client;
 import com.neep.meatlib.api.event.KeyboardEvents;
 import com.neep.meatlib.client.api.event.UseAttackCallback;
 import com.neep.meatweapons.MeatWeapons;
-import com.neep.meatweapons.client.network.MeatgunClient;
 import com.neep.meatweapons.item.GunItem;
 import com.neep.meatweapons.network.MWAttackC2SPacket;
-import com.neep.meatweapons.network.MeatgunNetwork;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.option.KeyBinding;
-import net.minecraft.client.render.Camera;
 import net.minecraft.client.util.InputUtil;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.PacketByteBuf;
@@ -89,7 +85,6 @@ public class MWKeys
         {
             int handType = (mainHand != null ? 1 : 0) + (offHand != null ? 1 << 1 : 0);
 
-            Camera camera = client.gameRenderer.getCamera();
             double pitch = Math.toRadians(client.player.getPitch());
             double yaw = Math.toRadians(client.player.getYaw());
 //            double pitch = Math.toRadians(camera.getPitch());
@@ -135,8 +130,25 @@ public class MWKeys
         {
             // Release held keys when the special item is no longer held.
             // This should fix switching to a new item without releasing the key.
-            primaryHeld = false;
-            secondaryHeld = false;
+            if (primaryHeld)
+            {
+                double pitch = Math.toRadians(client.player.getPitch());
+                double yaw = Math.toRadians(client.player.getYaw());
+                sendTrigger(world, client.player, mainHand, offHand,
+                        MWAttackC2SPacket.TRIGGER_PRIMARY, pitch, yaw, 0b11, MWAttackC2SPacket.ActionType.RELEASE);
+
+                primaryHeld = false;
+            }
+
+            if (secondaryHeld)
+            {
+                double pitch = Math.toRadians(client.player.getPitch());
+                double yaw = Math.toRadians(client.player.getYaw());
+                sendTrigger(world, client.player, mainHand, offHand,
+                        MWAttackC2SPacket.TRIGGER_SECONDARY, pitch, yaw, 0b11, MWAttackC2SPacket.ActionType.RELEASE);
+
+                secondaryHeld = false;
+            }
         }
     }
 }
