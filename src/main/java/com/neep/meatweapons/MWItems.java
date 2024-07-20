@@ -16,7 +16,10 @@ import net.minecraft.item.Item;
 
 public class MWItems
 {
-    public static Item BALLISTIC_CARTRIDGE = new BaseCraftingItem("ballistic_cartridge", 1, new MeatlibItemSettings().group(MeatWeapons.WEAPONS));
+    public static Item SMALL_BALLISTIC_MAGAZINE = new BaseCraftingItem("small_ballistic_cartridge", 1, new MeatlibItemSettings().group(MeatWeapons.WEAPONS));
+    public static Item MEDIUM_BALLISTIC_MAGAZINE = new BaseCraftingItem("medium_ballistic_cartridge", 1, new MeatlibItemSettings().group(MeatWeapons.WEAPONS));
+    public static Item LARGE_BALLISTIC_MAGAZINE = new BaseCraftingItem("large_ballistic_cartridge", 1, new MeatlibItemSettings().group(MeatWeapons.WEAPONS));
+
     public static Item ENGINE = new BaseCraftingItem("engine", 0, new MeatlibItemSettings().group(MeatWeapons.WEAPONS));
     public static Item FUSION_CANNON = new FusionCannonItem();
     public static Item HAND_CANNON = new HandCannonItem();

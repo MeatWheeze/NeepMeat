@@ -2,6 +2,7 @@ package com.neep.neepmeat.implant.player;
 
 import com.neep.meatlib.util.NbtSerialisable;
 import net.minecraft.entity.damage.DamageSource;
+import net.minecraft.nbt.NbtCompound;
 
 public interface EntityImplant extends NbtSerialisable
 {
@@ -18,4 +19,25 @@ public interface EntityImplant extends NbtSerialisable
     default void onUninstall() {}
 
     default float getProtectionAmount(DamageSource source, float amount) { return 0; }
+
+    EntityImplant DEFAULT = new EntityImplant()
+    {
+        @Override
+        public void tick()
+        {
+
+        }
+
+        @Override
+        public NbtCompound writeNbt(NbtCompound nbt)
+        {
+            return nbt;
+        }
+
+        @Override
+        public void readNbt(NbtCompound nbt)
+        {
+
+        }
+    };
 }

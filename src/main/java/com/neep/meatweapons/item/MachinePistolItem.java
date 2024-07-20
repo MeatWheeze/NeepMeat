@@ -21,7 +21,7 @@ public class MachinePistolItem extends BaseGunItem implements Aimable
 
     public MachinePistolItem()
     {
-        super("machine_pistol", MWItems.BALLISTIC_CARTRIDGE, 24, 10, false, new MeatlibItemSettings());
+        super("machine_pistol", MWItems.SMALL_BALLISTIC_MAGAZINE, 24, 10, false, new MeatlibItemSettings());
         this.sounds.put(GunSounds.FIRE_PRIMARY, NMSounds.HAND_CANNON_FIRE);
         this.sounds.put(GunSounds.RELOAD, NMSounds.HAND_CANNON_RELOAD);
     }

@@ -113,7 +113,9 @@ public class MeatWeapons implements ModInitializer
             PlayerAttachmentManager.registerAttachment(WeaponCooldownAttachment.ID, WeaponCooldownAttachment::new);
 
             FluidStorage.ITEM.registerForItems(AssaultDrillItem::getStorage, MWItems.ASSAULT_DRILL);
-            AmmunitionProvider.LOOKUP.registerForItems((itemStack, context) -> new SimpleItemAmmunitionProvider(itemStack, context, AmmunitionType.BALLISTIC, 16), MWItems.BALLISTIC_CARTRIDGE);
+            AmmunitionProvider.LOOKUP.registerForItems((itemStack, context) -> new SimpleItemAmmunitionProvider(itemStack, context, AmmunitionType.BALLISTIC, 16), MWItems.SMALL_BALLISTIC_MAGAZINE);
+            AmmunitionProvider.LOOKUP.registerForItems((itemStack, context) -> new SimpleItemAmmunitionProvider(itemStack, context, AmmunitionType.BALLISTIC, 32), MWItems.MEDIUM_BALLISTIC_MAGAZINE);
+            AmmunitionProvider.LOOKUP.registerForItems((itemStack, context) -> new SimpleItemAmmunitionProvider(itemStack, context, AmmunitionType.BALLISTIC, 64), MWItems.LARGE_BALLISTIC_MAGAZINE);
             AmmunitionProvider.LOOKUP.registerForItems((itemStack, context) -> new SimpleItemAmmunitionProvider(itemStack, context, AmmunitionType.ENERGY, 16), NMItems.PINKDRINK);
 
             Registry.register(ImplantRegistry.REGISTRY, BloodBulletProviderImplant.ID, BloodBulletProviderImplant::new);

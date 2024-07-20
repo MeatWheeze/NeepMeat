@@ -24,7 +24,7 @@ public class LMGItem extends BaseGunItem
 {
     public LMGItem()
     {
-        super("light_machine_gun", MWItems.BALLISTIC_CARTRIDGE, 50, 1, false, new MeatlibItemSettings());
+        super("light_machine_gun", MWItems.SMALL_BALLISTIC_MAGAZINE, 50, 1, false, new MeatlibItemSettings());
         this.sounds.put(GunSounds.FIRE_PRIMARY, NMSounds.LMG_FIRE);
         this.sounds.put(GunSounds.RELOAD, NMSounds.HAND_CANNON_RELOAD);
     }
