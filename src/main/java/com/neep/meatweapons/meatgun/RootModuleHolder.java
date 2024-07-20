@@ -172,18 +172,40 @@ public class RootModuleHolder
 //        if (player.isCreative())
 //            return true;
 
+        ImplantManager manager = NMComponents.IMPLANT_MANAGER.get(player);
+        boolean hasBloodBullets = manager.isInstalled(BloodBulletProviderImplant.ID);
+
         cacheModules();
         int available = getAmmo(module.ammoType());
 
-        // Provide ammunition from storage
-        if (available >= amount)
+        boolean satisfied = available >= amount;
+
+        // Reload from player
+        if (!satisfied)
         {
-            int required = amount;
+            boolean reloaded = false;
+            for (int i = 0; i < inventory.size(); ++i)
+            {
+                ItemStack stack = inventory.getStack(i);
+                @Nullable AmmunitionProvider provider = AmmunitionProvider.LOOKUP.find(stack, new AmmunitionProvider.ContextImpl(inventory, i));
+                if (provider != null && provider.ammoType() == module.ammoType())
+                {
+                    reloaded = reload(provider, player);
+
+                    if (reloaded)
+                        return false;
+                }
+            }
+        }
+
+        // Provide ammunition from storage
+        int required = amount;
+        if (satisfied || hasBloodBullets)
+        {
             for (var otherModule : modules)
             {
                 if (otherModule instanceof AmmunitionStoringModule storage
-                        && storage.ammoType() == module.ammoType()
-                        && storage.amount() >= amount)
+                        && storage.ammoType() == module.ammoType())
                 {
                     required -= storage.extract(required);
                     if (required == 0)
@@ -192,27 +214,11 @@ public class RootModuleHolder
             }
         }
 
-        // Reload from player
-        boolean reloaded = false;
-        for (int i = 0; i < inventory.size(); ++i)
-        {
-            ItemStack stack = inventory.getStack(i);
-            @Nullable AmmunitionProvider provider = AmmunitionProvider.LOOKUP.find(stack, new AmmunitionProvider.ContextImpl(inventory, i));
-            if (provider != null && provider.ammoType() == module.ammoType())
-            {
-                reloaded = reload(provider, player);
-
-                if (reloaded)
-                    return false;
-            }
-        }
-
         // Use blood!
-        ImplantManager manager = NMComponents.IMPLANT_MANAGER.get(player);
-        if (manager.isInstalled(BloodBulletProviderImplant.ID))
+        if (required > 0 && hasBloodBullets)
         {
             float healthPerUnit = module.ammoType().healthPerUnit;
-            float fractionalHearts = healthPerUnit * amount;
+            float fractionalHearts = healthPerUnit * required;
             player.damage(player.getWorld().getDamageSources().generic(), fractionalHearts);
             return true;
         }

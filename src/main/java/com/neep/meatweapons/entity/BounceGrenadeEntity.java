@@ -193,6 +193,6 @@ public class BounceGrenadeEntity extends MeatgunProjectileEntity
 
     protected ItemStack asItemStack()
     {
-        return new ItemStack(MWItems.BALLISTIC_CARTRIDGE);
+        return new ItemStack(MWItems.SMALL_BALLISTIC_MAGAZINE);
     }
 }
