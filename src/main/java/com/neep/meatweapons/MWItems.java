@@ -4,11 +4,14 @@ import com.neep.meatlib.item.BaseCraftingItem;
 import com.neep.meatlib.item.MeatlibItemSettings;
 import com.neep.meatlib.item.TooltipSupplier;
 import com.neep.meatlib.registry.ItemRegistry;
+import com.neep.meatweapons.implant.BloodBulletProviderImplant;
 import com.neep.meatweapons.item.*;
 import com.neep.meatweapons.item.meatgun.MeatgunModuleItem;
 import com.neep.meatweapons.item.meatgun.MeatgunPistolItem;
 import com.neep.meatweapons.item.meatgun.MeatgunStaffItem;
 import com.neep.meatweapons.meatgun.module.MeatgunModules;
+import com.neep.neepmeat.NMItemGroups;
+import com.neep.neepmeat.item.PlayerImplantItem;
 import net.minecraft.item.Item;
 
 public class MWItems
@@ -46,6 +49,8 @@ public class MWItems
 
     public static MeatgunModuleItem HALBERD = ItemRegistry.queue("halberd", new MeatgunModuleItem(MeatgunModules.HALBERD, new MeatlibItemSettings().group(MeatWeapons.WEAPONS)));
     public static MeatgunModuleItem SHOCK_STAFF = ItemRegistry.queue("shock_staff", new MeatgunModuleItem(MeatgunModules.SHOCK_STAFF, new MeatlibItemSettings().group(MeatWeapons.WEAPONS)));
+
+    public static final PlayerImplantItem BLOOD_BULLET_PROVIDER = new PlayerImplantItem("blood_bullet_provider", 1, BloodBulletProviderImplant.ID, new MeatlibItemSettings().group(NMItemGroups.GENERAL));
 
     public static void init()
     {

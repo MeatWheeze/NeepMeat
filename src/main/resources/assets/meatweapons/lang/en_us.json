@@ -51,6 +51,10 @@
   "meatgun_module.meatweapons.halberd": "Halberd",
   "meatgun_module.meatweapons.shock_staff": "Shock Staff",
 
+  "item.meatweapons.blood_bullet_provider": "Blood Bullet Converter",
+  "implant.meatweapons.blood_bullet_provider": "Blood Bullet Converter",
+  "implant.meatweapons.blood_bullet_provider.desc_0": "Converts blood into bullets when out of Meatgun ammunition.",
+
   "text.meatweapons.tinker_table.item_here": "Place Meatgun here",
   "tooltip.meatweapons.meatgun_module_1": "Meatgun Module - install in a Tinker Table",
   "tooltip.meatweapons.meatgun_module.complexity": "Complexity: %s",

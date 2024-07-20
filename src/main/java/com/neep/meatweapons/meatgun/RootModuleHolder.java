@@ -1,11 +1,14 @@
 package com.neep.meatweapons.meatgun;
 
 import com.neep.meatweapons.component.MeatgunComponent;
+import com.neep.meatweapons.implant.BloodBulletProviderImplant;
 import com.neep.meatweapons.item.meatgun.Meatgun;
 import com.neep.meatweapons.meatgun.module.AmmunitionRequiringModule;
 import com.neep.meatweapons.meatgun.module.AmmunitionStoringModule;
 import com.neep.meatweapons.meatgun.module.MeatgunModule;
 import com.neep.meatweapons.network.MeatgunNetwork;
+import com.neep.neepmeat.implant.player.ImplantManager;
+import com.neep.neepmeat.init.NMComponents;
 import com.neep.neepmeat.init.NMSounds;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.minecraft.entity.player.PlayerEntity;
@@ -160,14 +163,19 @@ public class RootModuleHolder
         return ammunition;
     }
 
+    /**
+     * @return true if the module can fire and false if it cannot. Return value is independent of reloading.
+     */
     public boolean getAmmoOrReload(AmmunitionRequiringModule module, int amount, Inventory inventory, PlayerEntity player)
     {
+        // Switched off for debug porpoises
 //        if (player.isCreative())
 //            return true;
 
         cacheModules();
         int available = getAmmo(module.ammoType());
 
+        // Provide ammunition from storage
         if (available >= amount)
         {
             int required = amount;
@@ -184,20 +192,30 @@ public class RootModuleHolder
             }
         }
 
-
+        // Reload from player
         boolean reloaded = false;
         for (int i = 0; i < inventory.size(); ++i)
         {
             ItemStack stack = inventory.getStack(i);
             @Nullable AmmunitionProvider provider = AmmunitionProvider.LOOKUP.find(stack, new AmmunitionProvider.ContextImpl(inventory, i));
-//            if (provider != null && module.reloadFrom(provider, player))
-//                return false;
             if (provider != null && provider.ammoType() == module.ammoType())
             {
-                reload(provider, player);
+                reloaded = reload(provider, player);
+
+                if (reloaded)
+                    return false;
             }
         }
 
+        // Use blood!
+        ImplantManager manager = NMComponents.IMPLANT_MANAGER.get(player);
+        if (manager.isInstalled(BloodBulletProviderImplant.ID))
+        {
+            float healthPerUnit = module.ammoType().healthPerUnit;
+            float fractionalHearts = healthPerUnit * amount;
+            player.damage(player.getWorld().getDamageSources().generic(), fractionalHearts);
+            return true;
+        }
 
         return false;
     }
@@ -231,6 +249,11 @@ public class RootModuleHolder
         }
         return false;
     }
+
+//    private boolean reloadFromBlood(PlayerEntity player)
+//    {
+//
+//    }
 
     private class ListenerImpl implements Listener
     {

@@ -90,6 +90,12 @@ public class BloodthrowerModule extends ShooterModule
                 .25);
     }
 
+    @Override
+    public int capacity()
+    {
+        return 64;
+    }
+
     protected void fireBeam(World world, PlayerEntity player, ItemStack stack, double pitchd, double yawd)
     {
         Vec3d pos = player.getEyePos();

@@ -14,6 +14,7 @@ import org.jetbrains.annotations.Nullable;
 public class MWDamageSources
 {
     public static final RegistryKey<DamageType> BULLET = RegistryKey.of(RegistryKeys.DAMAGE_TYPE, new Identifier(MeatWeapons.NAMESPACE, "bullet"));
+    public static final RegistryKey<DamageType> BLOOD_BULLET = RegistryKey.of(RegistryKeys.DAMAGE_TYPE, new Identifier(MeatWeapons.NAMESPACE, "blood_bullet"));
 
     public static RegistryEntry<DamageType> get(World world, RegistryKey<DamageType> key)
     {

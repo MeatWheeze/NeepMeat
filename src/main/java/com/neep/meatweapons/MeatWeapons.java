@@ -4,6 +4,7 @@ import com.neep.meatlib.MeatLib;
 import com.neep.meatlib.attachment.player.PlayerAttachmentManager;
 import com.neep.meatweapons.enchantment.MWEnchantments;
 import com.neep.meatweapons.entity.*;
+import com.neep.meatweapons.implant.BloodBulletProviderImplant;
 import com.neep.meatweapons.init.MWBlockEntities;
 import com.neep.meatweapons.init.MWBlocks;
 import com.neep.meatweapons.init.MWScreenHandlers;
@@ -16,6 +17,8 @@ import com.neep.meatweapons.meatgun.SimpleItemAmmunitionProvider;
 import com.neep.meatweapons.network.MWAttackC2SPacket;
 import com.neep.meatweapons.particle.MWGraphicsEffects;
 import com.neep.meatweapons.particle.MWParticles;
+import com.neep.neepmeat.implant.player.EntityImplantInstaller;
+import com.neep.neepmeat.implant.player.ImplantRegistry;
 import com.neep.neepmeat.init.NMItems;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
@@ -112,6 +115,9 @@ public class MeatWeapons implements ModInitializer
             FluidStorage.ITEM.registerForItems(AssaultDrillItem::getStorage, MWItems.ASSAULT_DRILL);
             AmmunitionProvider.LOOKUP.registerForItems((itemStack, context) -> new SimpleItemAmmunitionProvider(itemStack, context, AmmunitionType.BALLISTIC, 16), MWItems.BALLISTIC_CARTRIDGE);
             AmmunitionProvider.LOOKUP.registerForItems((itemStack, context) -> new SimpleItemAmmunitionProvider(itemStack, context, AmmunitionType.ENERGY, 16), NMItems.PINKDRINK);
+
+            Registry.register(ImplantRegistry.REGISTRY, BloodBulletProviderImplant.ID, BloodBulletProviderImplant::new);
+            Registry.register(EntityImplantInstaller.REGISTRY, BloodBulletProviderImplant.ID, MWItems.BLOOD_BULLET_PROVIDER);
         }
     }
 
