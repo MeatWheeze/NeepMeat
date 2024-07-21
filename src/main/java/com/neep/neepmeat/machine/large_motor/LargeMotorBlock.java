@@ -56,7 +56,7 @@ public class LargeMotorBlock extends BigBlock<LargeMotorStructureBlock> implemen
     public LargeMotorBlock(RegistrationContext ctx, ItemSettings itemSettings, Settings settings)
     {
         super(ctx, settings);
-        ItemRegistry.queue(new BaseBlockItem(this, ctx, itemSettings));
+        ctx.append(this, new BaseBlockItem(this, ctx, itemSettings));
         this.setDefaultState(getStateManager().getDefaultState().with(FACING, Direction.NORTH));
 
         volume = BigBlockPattern.makeRange( -1, 0, 0, 1, 2, -1, getStructure().getDefaultState());

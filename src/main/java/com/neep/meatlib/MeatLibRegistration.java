@@ -23,8 +23,11 @@ public class MeatLibRegistration
 
     public static void flush()
     {
-        for (var pair : LIST)
+        var it = LIST.iterator();
+        while (it.hasNext())
         {
+            var pair = it.next();
+
             Class<?> clazz = pair.key();
             @Nullable RegisterMe annotation = clazz.getAnnotation(RegisterMe.class);
             if (annotation == null)
@@ -40,6 +43,8 @@ public class MeatLibRegistration
                     .forEach(f -> processField(namespace, ctx, f));
 
             ctx.registerAll();
+
+            it.remove();
         }
     }
 

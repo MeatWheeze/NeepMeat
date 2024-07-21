@@ -56,7 +56,7 @@ public class LargeCompressorBlock extends BigBlock<LargeCompressorBlock.Structur
     {
         super(ctx, settings);
 
-        ItemRegistry.queue(new BaseBlockItem(this, ctx, itemSettings));
+        ctx.append(this, new BaseBlockItem(this, ctx, itemSettings));
 
         BigBlockPattern pattern = new BigBlockPattern().oddCylinder(1, 0, 2, () -> getStructure().getDefaultState())
                 .enableApi(-1, 2, -1, FluidStorage.SIDED)

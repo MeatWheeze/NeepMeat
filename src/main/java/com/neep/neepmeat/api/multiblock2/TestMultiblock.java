@@ -42,7 +42,7 @@ public class TestMultiblock extends Multiblock2ControllerBlock<TestMultiblock.TM
                 1, 1, 2, () -> NMBlocks.MEAT_STEEL_BLOCK.getDefaultState()
         );
 
-        ItemRegistry.queue(new BaseBlockItem(this, ctx, ItemSettings.block(), new MeatlibItemSettings()));
+        ctx.append(this, new BaseBlockItem(this, ctx, ItemSettings.block(), new MeatlibItemSettings()));
     }
 
     @Override

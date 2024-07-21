@@ -2,7 +2,7 @@ package com.neep.meatlib.block;
 
 import com.neep.meatlib.item.ItemSettings;
 import com.neep.meatlib.registry.RegistrationContext;
-import com.neep.meatlib.registry.SelfRegisterable;
+import com.neep.meatlib.registry.SelfRegistrable;
 import net.minecraft.block.Block;
 import net.minecraft.data.server.loottable.BlockLootTableGenerator;
 import net.minecraft.item.BlockItem;
@@ -13,7 +13,7 @@ import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.Nullable;
 
-public interface MeatlibBlock extends ItemConvertible, SelfRegisterable
+public interface MeatlibBlock extends ItemConvertible, SelfRegistrable
 {
     @Override
     default void register(Identifier id)

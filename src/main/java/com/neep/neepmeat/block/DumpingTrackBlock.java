@@ -43,7 +43,7 @@ public class DumpingTrackBlock extends BaseRailBlock implements SpecialRail
         this.setDefaultState(this.stateManager.getDefaultState().with(SHAPE, RailShape.NORTH_SOUTH)
                 .with(POWERED, false)
                 .with(WATERLOGGED, false));
-        ItemRegistry.queue(new BaseBlockItem(this, ctx, itemSettings));
+        ctx.append(this, new BaseBlockItem(this, ctx, itemSettings));
     }
 
     @Override

@@ -8,16 +8,16 @@ import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
 
 @FunctionalInterface
-public interface SelfRegisterable
+public interface SelfRegistrable
 {
     void register(Identifier id);
 
-    static SelfRegisterable ofItem(Item item)
+    static SelfRegistrable ofItem(Item item)
     {
         return id -> Registry.register(Registries.ITEM, id, item);
     }
 
-    static SelfRegisterable ofBlock(Block block)
+    static SelfRegistrable ofBlock(Block block)
     {
         return id -> Registry.register(Registries.BLOCK, id, block);
     }

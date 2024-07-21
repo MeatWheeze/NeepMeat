@@ -30,7 +30,7 @@ import java.util.Map;
 @RegisterMe(NeepMeat.NAMESPACE)
 public class FluidTransport
 {
-    private static final RegistrationContext C = NeepMeat.C;
+    public static final RegistrationContext C = new RegistrationContext(NeepMeat.NAMESPACE);
 
     public static long MAX_TRANSFER = FluidConstants.BUCKET / 8;
 

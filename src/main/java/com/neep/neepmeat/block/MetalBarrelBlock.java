@@ -34,7 +34,7 @@ public class MetalBarrelBlock extends BarrelBlock implements MeatlibBlock
     public MetalBarrelBlock(RegistrationContext ctx, Settings settings)
     {
         super(settings);
-        ItemRegistry.queue(new BaseBlockItem(this, ctx, ItemSettings.block()));
+        ctx.append(this, new BaseBlockItem(this, ctx, ItemSettings.block()));
         setDefaultState(getStateManager().getDefaultState().with(TYPE, Type.SINGLE).with(OPEN, false));
     }
 

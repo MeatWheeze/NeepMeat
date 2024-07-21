@@ -43,7 +43,7 @@ public class HoldingTrackBlock extends BaseRailBlock implements BlockEntityProvi
     {
         super(true, settings);
         this.setDefaultState(this.stateManager.getDefaultState().with(SHAPE, RailShape.NORTH_SOUTH).with(POWERED, false).with(WATERLOGGED, false).with(FACING, AxialDirection.POSITIVE));
-        ItemRegistry.queue(new BaseBlockItem(this, ctx, itemSettings));
+        ctx.append(this, new BaseBlockItem(this, ctx, itemSettings));
     }
 
     @Override

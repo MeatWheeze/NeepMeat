@@ -42,7 +42,7 @@ public class CharnelPumpBlock extends BigBlock<CharnelPumpStructure> implements 
     public CharnelPumpBlock(RegistrationContext ctx, ItemSettings itemSettings, Settings settings)
     {
         super(ctx, settings);
-        ItemRegistry.queue(new BaseBlockItem(this, ctx, itemSettings));
+        ctx.append(this, new BaseBlockItem(this, ctx, itemSettings));
         BigBlockPattern volume = BigBlockPattern.makeOddCylinder(1, 0, 7, getStructure().getDefaultState());
 //                .set(-2, 0, 0, getStructure().getDefaultState())
 //                .set(-2, 1, 0, getStructure().getDefaultState());

@@ -52,7 +52,7 @@ public class LargeTrommelBlock extends BigBlock<LargeTrommelBlock.StructureBlock
     public LargeTrommelBlock(RegistrationContext ctx, Settings settings, ItemSettings itemSettings)
     {
         super(ctx, settings.nonOpaque());
-        ItemRegistry.queue(new BaseBlockItem(this, ctx, itemSettings));
+        ctx.append(this, new BaseBlockItem(this, ctx, itemSettings));
         this.setDefaultState(getStateManager().getDefaultState().with(FACING, Direction.NORTH));
 
         BigBlockPattern volume = BigBlockPattern.makeRange(0, 0, 0, 1, 1, -3, getStructure().getDefaultState());

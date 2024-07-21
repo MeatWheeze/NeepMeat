@@ -35,7 +35,7 @@ public class AdvancedIntegratorBlock extends BigBlock<AdvancedIntegratorStructur
     public AdvancedIntegratorBlock(RegistrationContext ctx, Settings settings)
     {
         super(ctx, settings);
-        ItemRegistry.queue(NeepMeat.NAMESPACE, (MeatlibItem) new BaseBlockItem(this, ctx, ItemSettings.block()));
+        ctx.append(this, new BaseBlockItem(this, ctx, ItemSettings.block()));
         volume = BigBlockPattern.makeOddCylinder(1, 0, 0, getStructure().getDefaultState());
     }
 

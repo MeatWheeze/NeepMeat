@@ -33,7 +33,7 @@ import static com.neep.neepmeat.machine.live_machine.LivingMachineComponents.too
 @RegisterMe(NeepMeat.NAMESPACE)
 public class LivingMachines
 {
-    private static final RegistrationContext C = NeepMeat.C;
+    public static final RegistrationContext C = new RegistrationContext(NeepMeat.NAMESPACE);
 
     @WithItem
     public static Block LIVING_MACHINE_CONTROLLER = new TestLivingMachineBlock("living_machine_controller", MeatlibBlockSettings.copyOf(MACHINE_SETTINGS));

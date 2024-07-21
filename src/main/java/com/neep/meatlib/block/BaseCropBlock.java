@@ -38,11 +38,11 @@ public class BaseCropBlock extends CropBlock implements MeatlibBlock, MeatlibBlo
         this(ctx, "_seeds", itemMaxStack, lore, settings);
     }
 
-    public BaseCropBlock(RegistrationContext ctx, int itemMaxStack, int lore, ItemFactory factory, Settings settings)
-    {
-        super(settings);
-        this.seedsItem = new BaseSeedsItem(this, ctx, itemMaxStack, lore);
-    }
+//    public BaseCropBlock(RegistrationContext ctx, int itemMaxStack, int lore, ItemFactory factory, Settings settings)
+//    {
+//        super(settings);
+//        this.seedsItem = new BaseSeedsItem(this, ctx, itemMaxStack, lore);
+//    }
 
     @Override
     public ItemConvertible dropsLike()

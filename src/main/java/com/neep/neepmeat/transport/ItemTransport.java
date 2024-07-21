@@ -33,7 +33,7 @@ import static net.minecraft.registry.tag.BlockTags.AXE_MINEABLE;
 @RegisterMe(NeepMeat.NAMESPACE)
 public class ItemTransport
 {
-    private static final RegistrationContext C = NeepMeat.C;
+    public static final RegistrationContext C = new RegistrationContext(NeepMeat.NAMESPACE);
 
     public static final int BFS_MAX_DEPTH = 800;
 

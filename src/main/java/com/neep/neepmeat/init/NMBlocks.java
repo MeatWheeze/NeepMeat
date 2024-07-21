@@ -100,7 +100,7 @@ import static net.minecraft.registry.tag.BlockTags.*;
 @RegisterMe(value = NeepMeat.NAMESPACE)
 public class NMBlocks
 {
-    private static final RegistrationContext C = NeepMeat.C;
+    public static final RegistrationContext C = NeepMeat.C;
 
     // --- Building Blocks ---
     public static final AbstractBlock.Settings METAL = MeatlibBlockSettings.create(BlockTags.PICKAXE_MINEABLE).solid().hardness(3.0f).sounds(BlockSoundGroup.NETHERITE);
@@ -121,7 +121,7 @@ public class NMBlocks
 
 //    public static Block TEST_MULTIBLOCK = new TestMultiblock("test_multiblock", MeatlibBlockSettings.create()));
 
-    public static PaintedBlockManager<?> SMOOTH_TILE = new PaintedBlockManager<>(C, SmoothTileBlock::new, MeatlibBlockSettings.create().hardness(3.0f));
+    public static PaintedBlockManager<?> SMOOTH_TILE = new PaintedBlockManager<>(C, "smooth_tile", SmoothTileBlock::new, MeatlibBlockSettings.create().hardness(3.0f));
 
     @Path("polished_metal_bricks") public static Block POLISHED_IRON_BRICKS = new BaseBuildingBlock(C, true, MeatlibBlockSettings.create().strength(3.0f).sounds(NMSoundGroups.METAL));
     @Path("polished_metal_small_bricks") public static Block POLISHED_MERAL_SMALL_BRICKS = new BaseBuildingBlock(C, true, MeatlibBlockSettings.create().strength(3.0f).sounds(NMSoundGroups.METAL));
@@ -144,7 +144,7 @@ public class NMBlocks
     public static Block ASBESTOS = new BaseBuildingBlock(C, false, MeatlibBlockSettings.copyOf(Blocks.STONE));
     public static Block ASBESTOS_TILE = new BaseBuildingBlock(C, false, MeatlibBlockSettings.copyOf(ASBESTOS));
     public static Block CORRUGATED_ASBESTOS = new BaseBuildingBlock(C, true, MeatlibBlockSettings.copyOf(ASBESTOS));
-    public static PaintedBlockManager<?> PAINTED_CORRUGATED_ASBESTOS = new PaintedBlockManager<>(C, PaintedCorrugatedAsbestosBlock::new, MeatlibBlockSettings.copyOf(CORRUGATED_ASBESTOS));
+    public static PaintedBlockManager<?> PAINTED_CORRUGATED_ASBESTOS = new PaintedBlockManager<>(C, "painted_corrugated_asbestos", PaintedCorrugatedAsbestosBlock::new, MeatlibBlockSettings.copyOf(CORRUGATED_ASBESTOS));
     public static Block ASBESTOS_SHINGLE = new BaseBuildingBlock(C, false, MeatlibBlockSettings.copyOf(ASBESTOS));
 
     public static Block BLOODY_BRICKS = new BaseBuildingBlock(C, true, MeatlibBlockSettings.copyOf(Blocks.BRICKS));

@@ -21,7 +21,6 @@ public class BaseSeedsItem extends AliasedBlockItem implements MeatlibItem
     {
         super(block, new MeatlibItemSettings().maxCount(maxCount).group(NMItemGroups.GENERAL));
         this.lore = loreLines;
-        ItemRegistry.queue(this);
     }
 
     @Override

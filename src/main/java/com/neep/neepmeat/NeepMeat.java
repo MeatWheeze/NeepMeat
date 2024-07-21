@@ -6,11 +6,11 @@ import com.neep.meatlib.registry.RegistrationContext;
 import com.neep.neepmeat.api.Burner;
 import com.neep.neepmeat.api.DataType;
 import com.neep.neepmeat.api.enlightenment.EnlightenmentEvent;
-import com.neep.neepmeat.enlightenment.EnlightenmentEventManager;
 import com.neep.neepmeat.api.enlightenment.EnlightenmentUtil;
 import com.neep.neepmeat.api.machine.MotorisedBlock;
 import com.neep.neepmeat.api.processing.BlockCrushingRegistry;
 import com.neep.neepmeat.api.processing.OreFatRegistry;
+import com.neep.neepmeat.api.processing.random_ores.RandomOres;
 import com.neep.neepmeat.block.entity.FurnaceBurnerImpl;
 import com.neep.neepmeat.client.datagen.NMModelProvider;
 import com.neep.neepmeat.datagen.NMAdvancements;
@@ -18,6 +18,7 @@ import com.neep.neepmeat.datagen.NMBlockTagProvider;
 import com.neep.neepmeat.datagen.NMItemTagProvider;
 import com.neep.neepmeat.datagen.NMRecipeGenerator;
 import com.neep.neepmeat.datagen.tag.NMTags;
+import com.neep.neepmeat.enlightenment.EnlightenmentEventManager;
 import com.neep.neepmeat.enlightenment.LimbEnlightenmentEvent;
 import com.neep.neepmeat.entity.effect.NMStatusEffects;
 import com.neep.neepmeat.entity.worm.WormActions;
@@ -31,7 +32,6 @@ import com.neep.neepmeat.machine.integrator.IntegratorBlockEntity;
 import com.neep.neepmeat.machine.live_machine.LivingMachineComponents;
 import com.neep.neepmeat.machine.live_machine.LivingMachines;
 import com.neep.neepmeat.machine.synthesiser.MobSynthesisRegistry;
-import com.neep.neepmeat.api.processing.random_ores.RandomOres;
 import com.neep.neepmeat.network.MachineDiagnosticsRequest;
 import com.neep.neepmeat.network.NMTrackedData;
 import com.neep.neepmeat.network.ToolTransformPacket;
@@ -97,7 +97,11 @@ public class NeepMeat implements ModInitializer
 	@Override
 	public void onInitialize()
 	{
-		MeatLibRegistration.forContext(NMBlocks.class, C);
+		MeatLibRegistration.forContext(NMBlocks.class, NMBlocks.C);
+		MeatLibRegistration.forContext(ItemTransport.class, ItemTransport.C);
+		MeatLibRegistration.forContext(FluidTransport.class, FluidTransport.C);
+		MeatLibRegistration.forContext(LivingMachines.class, LivingMachines.C);
+		MeatLibRegistration.forContext(PLCBlocks.class, PLCBlocks.C);
 
 		try (var mcontext = MeatLib.getContext(NAMESPACE))
 		{

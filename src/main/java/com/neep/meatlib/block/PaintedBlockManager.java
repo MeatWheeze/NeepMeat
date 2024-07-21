@@ -7,6 +7,7 @@ import net.minecraft.block.Block;
 import net.minecraft.data.server.recipe.RecipeJsonProvider;
 import net.minecraft.item.BlockItem;
 import net.minecraft.util.DyeColor;
+import net.minecraft.util.Identifier;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,11 +18,11 @@ public class PaintedBlockManager<T extends PaintedBlockManager.PaintedBlock>
     public static final List<PaintedBlock> COLOURED_BLOCKS = new ArrayList<>();
     public final List<T> entries = Lists.newArrayList();
 
-    public PaintedBlockManager(RegistrationContext ctx, Constructor<T> constructor, AbstractBlock.Settings settings)
+    public PaintedBlockManager(RegistrationContext ctx, String name, Constructor<T> constructor, AbstractBlock.Settings settings)
     {
         for (DyeColor col : DyeColor.values())
         {
-            T block = ctx.append(this, constructor.create(ctx, col, settings), s -> s + "_" + col.getName());
+            T block = ctx.addParent(new Identifier(ctx.namespace(), name + "_" + col.getName()), constructor.create(ctx, col, settings));
 //            T block = BlockRegistry.queue(constructor.create(registryName + "_" + col.getName(), col, settings));
             COLOURED_BLOCKS.add(block);
             entries.add(block);

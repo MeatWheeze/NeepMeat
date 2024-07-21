@@ -13,7 +13,7 @@ import net.minecraft.block.Block;
 @RegisterMe(value = MeatWeapons.NAMESPACE)
 public class MWBlocks
 {
-    private static final RegistrationContext C = NeepMeat.C;
+    public static final RegistrationContext C = new RegistrationContext(MeatWeapons.NAMESPACE);
 
     public static final Block TINKER_TABLE = new TinkerTableBlock(C ,ItemSettings.block(), FabricBlockSettings.copyOf(NMBlocks.RUSTY_METAL_BLOCK));
 

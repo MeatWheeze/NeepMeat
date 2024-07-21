@@ -55,8 +55,6 @@ public class MeatWeapons implements ModInitializer
     public static EntityType<BounceGrenadeEntity> BOUNCE_GRENADE;
     public static EntityType<ShockStaffProjectileEntity> SHOCK_STAFF_PROJECTILE;
 
-    public static final RegistrationContext CTX = new RegistrationContext(MeatWeapons.NAMESPACE);
-
     public static <T extends Entity> EntityType<T> registerEntity(String id, FabricEntityTypeBuilder<T> builder)
     {
         return Registry.register(
@@ -75,7 +73,7 @@ public class MeatWeapons implements ModInitializer
     @Override
     public void onInitialize()
     {
-        MeatLibRegistration.forContext(MWBlocks.class, CTX);
+        MeatLibRegistration.forContext(MWBlocks.class, MWBlocks.C);
 
         try (var mcontext = MeatLib.getContext(NAMESPACE))
         {

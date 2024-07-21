@@ -25,7 +25,7 @@ import net.minecraft.block.entity.BlockEntityType;
 @RegisterMe(NeepMeat.NAMESPACE)
 public class PLCBlocks
 {
-    private static final RegistrationContext C = NeepMeat.C;
+    public static final RegistrationContext C = new RegistrationContext(NeepMeat.NAMESPACE);
 
     public static BlockEntityType<PLCRedstoneInterfaceBlockEntity> REDSTONE_INTERFACE_ENTITY;
     public static BlockEntityType<RoboticArmBlockEntity> ROBOTIC_ARM_ENTITY;
