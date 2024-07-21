@@ -41,7 +41,7 @@ public abstract class TallerBlock extends BaseBlock
         this.heightProperty = heightProperty;
         this.maxHeight = heightProperty.getValues().stream().max(Integer::compare).get() + 1;
 
-        this.structureBlock = createStructure();
+        this.structureBlock = createStructure(ctx);
     }
 
     @Override
@@ -60,7 +60,7 @@ public abstract class TallerBlock extends BaseBlock
         return heightProperty;
     }
 
-    protected abstract Structure createStructure();
+    protected abstract Structure createStructure(RegistrationContext ctx);
 
     @Override
     public boolean canPlaceAt(BlockState state, WorldView world, BlockPos pos)

@@ -28,7 +28,7 @@ public class PowerFlowerSeedsBlock extends BaseBlock
 {
     private final VoxelShape shape = Block.createCuboidShape(0, 0, 0, 16, 5, 16);
 
-    public PowerFlowerSeedsBlock(RegistrationContext registryName, ItemSettings itemSettings, Settings settings)
+    public PowerFlowerSeedsBlock(RegistrationContext ctx, ItemSettings itemSettings, Settings settings)
     {
         super(ctx, itemSettings, settings.nonOpaque());
     }

@@ -3,6 +3,7 @@ package com.neep.neepmeat.transport.block.fluid_transport;
 import com.google.common.collect.ImmutableMap;
 import com.neep.meatlib.block.BaseFacingBlock;
 import com.neep.meatlib.item.ItemSettings;
+import com.neep.meatlib.registry.RegistrationContext;
 import com.neep.neepmeat.transport.block.fluid_transport.entity.FluidGaugeBlockEntity;
 import com.neep.neepmeat.util.MiscUtil;
 import net.minecraft.block.Block;
@@ -41,7 +42,7 @@ public class FluidGaugeBlock<T> extends BaseFacingBlock implements BlockEntityPr
 
     private final Supplier<BlockEntityType<FluidGaugeBlockEntity<T>>> typeSupplier;
 
-    public FluidGaugeBlock(String itemName, Supplier<BlockEntityType<FluidGaugeBlockEntity<T>>> type, ItemSettings itemSettings, Settings settings)
+    public FluidGaugeBlock(RegistrationContext ctx, Supplier<BlockEntityType<FluidGaugeBlockEntity<T>>> type, ItemSettings itemSettings, Settings settings)
     {
         super(ctx, itemSettings, settings);
         this.typeSupplier = type;

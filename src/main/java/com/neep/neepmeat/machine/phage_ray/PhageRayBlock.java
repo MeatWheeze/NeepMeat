@@ -45,24 +45,22 @@ import java.util.EnumMap;
 
 public class PhageRayBlock extends BigBlock<PhageRayBlock.PhageRayStructureBlock> implements MeatlibBlock, BlockEntityProvider
 {
-    private final String name;
     private final BigBlockPattern volume;
     private final VoxelShape shape = VoxelShapes.cuboid(-1, 0, -1, 2, 0.5, 2);
 
-    public PhageRayBlock(RegistrationContext name, Settings settings)
+    public PhageRayBlock(RegistrationContext ctx, Settings settings)
     {
-        super(settings);
-        this.name = name;
-        ItemRegistry.queue(NeepMeat.NAMESPACE, (MeatlibItem) new BaseBlockItem(this, name,
+        super(ctx, settings);
+        ctx.appendItem(this, new BaseBlockItem(this, ctx,
                 ItemSettings.block().requiresVascular()
                         .tooltip(LivingMachineComponents.tooltip(LivingMachineComponents.PHAGE_RAY).append(TooltipSupplier.hidden(1)))));
         volume = BigBlockPattern.makeOddCylinder(1, 0, 0, getStructure().getDefaultState());
     }
 
     @Override
-    protected PhageRayStructureBlock registerStructureBlock()
+    protected PhageRayStructureBlock registerStructureBlock(RegistrationContext ctx)
     {
-        return BlockRegistry.queue(new PhageRayStructureBlock(this, MeatlibBlockSettings.copyOf(this)), "phage_ray_structure");
+        return ctx.append(this, new PhageRayStructureBlock(this, MeatlibBlockSettings.copyOf(this)), "phage_ray_structure");
     }
 
     @Override
@@ -89,12 +87,6 @@ public class PhageRayBlock extends BigBlock<PhageRayBlock.PhageRayStructureBlock
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type)
     {
         return MiscUtil.checkType(type, NMBlockEntities.PHAGE_RAY, (world1, pos, state1, blockEntity) -> blockEntity.serverTick(), null, world);
-    }
-
-    @Override
-    public String getRegistryName()
-    {
-        return name;
     }
 
     public static class PhageRayStructureBlock extends BigBlockStructure<PhageRayStructureBlockEntity> implements LivingMachineStructure

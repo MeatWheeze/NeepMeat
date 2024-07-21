@@ -1,9 +1,9 @@
 package com.neep.neepmeat.machine.mixer;
 
+import com.neep.meatlib.block.MeatlibBlock;
 import com.neep.meatlib.block.MeatlibBlockSettings;
 import com.neep.meatlib.block.multi.TallBlock;
 import com.neep.meatlib.item.ItemSettings;
-import com.neep.meatlib.registry.BlockRegistry;
 import com.neep.meatlib.registry.RegistrationContext;
 import com.neep.neepmeat.util.ItemUtil;
 import net.minecraft.block.BlockEntityProvider;
@@ -27,9 +27,9 @@ public class MixerBlock extends TallBlock implements BlockEntityProvider
     }
 
     @Override
-    protected Structure createStructure()
+    protected Structure createStructure(RegistrationContext ctx)
     {
-        return BlockRegistry.queue(new Structure(getRegistryName() + "_structure", MeatlibBlockSettings.copyOf(settings))
+        return ctx.append(this, new Structure(MeatlibBlockSettings.copyOf(settings))
         {
             @Override
             public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit)
@@ -42,7 +42,7 @@ public class MixerBlock extends TallBlock implements BlockEntityProvider
 
                 return super.onUse(state, world, pos, player, hand, hit);
             }
-        });
+        }, MeatlibBlock::structure);
     }
 
     @Override

@@ -19,7 +19,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class WorkstationBlock extends BaseBlock implements BlockEntityProvider
 {
-    public WorkstationBlock(RegistrationContext registryName, ItemSettings itemSettings, Settings settings)
+    public WorkstationBlock(RegistrationContext ctx, ItemSettings itemSettings, Settings settings)
     {
         super(ctx, itemSettings, settings.nonOpaque());
     }

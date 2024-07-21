@@ -1,6 +1,7 @@
 package com.neep.neepmeat.transport.block.item_transport;
 
 import com.neep.meatlib.item.ItemSettings;
+import com.neep.meatlib.registry.RegistrationContext;
 import com.neep.neepmeat.transport.ItemTransport;
 import com.neep.neepmeat.transport.api.pipe.ItemPipe;
 import com.neep.neepmeat.transport.block.item_transport.entity.ItemRequesterBlockEntity;
@@ -25,9 +26,9 @@ import org.jetbrains.annotations.Nullable;
 @SuppressWarnings("UnstableApiUsage")
 public class ItemRequesterBlock extends MergePipeBlock implements BlockEntityProvider, ItemPipe
 {
-    public ItemRequesterBlock(String registryName, ItemSettings itemSettings, Settings settings)
+    public ItemRequesterBlock(RegistrationContext ctx, ItemSettings itemSettings, Settings settings)
     {
-        super(registryName, itemSettings, settings);
+        super(ctx, itemSettings, settings);
         this.setDefaultState(super.getDefaultState().with(FACING, Direction.NORTH));
     }
 

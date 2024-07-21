@@ -2,6 +2,7 @@ package com.neep.meatweapons.block;
 
 import com.neep.meatlib.block.BaseBlock;
 import com.neep.meatlib.item.ItemSettings;
+import com.neep.meatlib.registry.RegistrationContext;
 import com.neep.meatweapons.block.entity.TinkerTableBlockEntity;
 import com.neep.meatweapons.init.MWBlockEntities;
 import net.minecraft.block.BlockEntityProvider;
@@ -17,7 +18,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class TinkerTableBlock extends BaseBlock implements BlockEntityProvider
 {
-    public TinkerTableBlock(String registryName, ItemSettings itemSettings, Settings settings)
+    public TinkerTableBlock(RegistrationContext ctx, ItemSettings itemSettings, Settings settings)
     {
         super(ctx, itemSettings, settings);
     }

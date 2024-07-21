@@ -3,6 +3,7 @@ package com.neep.meatlib.registry;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Multimaps;
 import com.neep.meatlib.registry.annotation.Path;
+import com.neep.neepmeat.block.entity.BaseDoorBlock;
 import it.unimi.dsi.fastutil.Pair;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.block.Block;
@@ -19,6 +20,7 @@ public class RegistrationContext
 {
     private final String namespace;
     private final Set<Class<?>> validClasses;
+
     private final Multimap<Object, SelfRegisterable> subEntries = Multimaps.newListMultimap(new IdentityHashMap<>(), ObjectArrayList::new);
     private final Multimap<Object, Pair<SelfRegisterable.PathProcessor, SelfRegisterable>> processedSubEntries = Multimaps.newListMultimap(new IdentityHashMap<>(), ObjectArrayList::new);
     private final List<Pair<Identifier, SelfRegisterable>> entries = new ObjectArrayList<>();
@@ -36,9 +38,6 @@ public class RegistrationContext
 
     public void collectField(String namespace, Object object, Field field)
     {
-        if (!validClasses.contains(object.getClass()))
-            return;
-
         String path = field.getName().toLowerCase();
         @Nullable Path customPath = field.getAnnotation(Path.class);
         if (customPath != null)
@@ -46,9 +45,7 @@ public class RegistrationContext
 
         Identifier id = new Identifier(namespace, path);
 
-        SelfRegisterable selfRegisterable = toRegistrable(object);
-        if (selfRegisterable != null)
-            entries.add(Pair.of(id, selfRegisterable));
+        addParent(id, object);
 
         for (var entry : processedSubEntries.get(object))
         {
@@ -59,6 +56,21 @@ public class RegistrationContext
         {
             entries.add(Pair.of(new Identifier(namespace, path), entry));
         }
+    }
+
+    public <T> T addParent(Identifier id, T object)
+    {
+        if (object instanceof BaseDoorBlock bdb)
+        {
+            System.out.println(id);
+        }
+
+        SelfRegisterable registrable = toRegistrable(object);
+        if (registrable != null)
+        {
+            entries.add(Pair.of(id, registrable));
+        }
+        return object;
     }
 
     private static @Nullable SelfRegisterable toRegistrable(Object object)
@@ -81,6 +93,12 @@ public class RegistrationContext
         return entry;
     }
 
+    public <T extends SelfRegisterable> T appendItem(Object object, T entry)
+    {
+        subEntries.put(object, entry);
+        return entry;
+    }
+
     public <T> T append(Object object, T entry)
     {
         @Nullable SelfRegisterable registrable = toRegistrable(entry);
@@ -90,7 +108,7 @@ public class RegistrationContext
         return entry;
     }
 
-    public <T extends SelfRegisterable> T append(Object object, SelfRegisterable.PathProcessor processor, T entry)
+    public <T extends SelfRegisterable> T append(Object object, T entry, SelfRegisterable.PathProcessor processor)
     {
         processedSubEntries.put(object, Pair.of(processor, entry));
         return entry;
@@ -100,5 +118,27 @@ public class RegistrationContext
     {
         processedSubEntries.put(object, Pair.of(s -> path, registerable));
         return registerable;
+    }
+
+    public boolean isValidClass(Class<?> f)
+    {
+        for (var clazz : validClasses)
+        {
+            if (clazz.isAssignableFrom(f))
+                return true;
+        }
+        return false;
+    }
+
+    public void registerAll()
+    {
+        entries.forEach(e ->
+        {
+            e.value().register(e.key());
+        });
+
+        entries.clear();
+        subEntries.clear();
+        processedSubEntries.clear();
     }
 }

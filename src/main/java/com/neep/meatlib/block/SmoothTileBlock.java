@@ -4,6 +4,7 @@ import com.neep.meatlib.datagen.MeatRecipeProvider;
 import com.neep.meatlib.item.BaseBlockItem;
 import com.neep.meatlib.item.ItemSettings;
 import com.neep.meatlib.item.MeatlibItemSettings;
+import com.neep.meatlib.registry.RegistrationContext;
 import com.neep.neepmeat.NMItemGroups;
 import com.neep.neepmeat.datagen.tag.NMTags;
 import net.minecraft.block.Block;
@@ -17,15 +18,15 @@ import java.util.function.Consumer;
 
 public class SmoothTileBlock extends PaintedBlockManager.PaintedBlock implements MeatlibBlock
 {
-    public SmoothTileBlock(String registryName, DyeColor col, Settings settings)
+    public SmoothTileBlock(RegistrationContext ctx, DyeColor col, Settings settings)
     {
-        super(registryName, col, settings);
+        super(ctx, col, settings);
     }
 
     @Override
-    protected BlockItem makeItem()
+    protected BlockItem makeItem(RegistrationContext ctx)
     {
-        return new Item(this, registryName, ItemSettings.block());
+        return new Item(this, ctx, ItemSettings.block());
     }
 
     public void generateRecipe(Consumer<RecipeJsonProvider> exporter)
@@ -36,7 +37,7 @@ public class SmoothTileBlock extends PaintedBlockManager.PaintedBlock implements
 
     private static class Item extends BaseBlockItem
     {
-        public Item(Block block, String registryName, ItemSettings itemSettings)
+        public Item(Block block, RegistrationContext ctx, ItemSettings itemSettings)
         {
             super(block, ctx, itemSettings, new MeatlibItemSettings().tags(NMTags.SMOOTH_TILE).group(NMItemGroups.BUILDING));
         }

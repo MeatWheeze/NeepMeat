@@ -3,7 +3,6 @@ package com.neep.neepmeat.machine.fluid_exciter;
 import com.neep.meatlib.block.MeatlibBlockSettings;
 import com.neep.meatlib.block.multi.TallBlock;
 import com.neep.meatlib.item.ItemSettings;
-import com.neep.meatlib.registry.BlockRegistry;
 import com.neep.meatlib.registry.RegistrationContext;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.item.FluidComponentItem;
@@ -23,9 +22,9 @@ import org.jetbrains.annotations.Nullable;
 
 public class FluidExciterBlock extends TallBlock implements BlockEntityProvider
 {
-    public FluidExciterBlock(RegistrationContext registryName, ItemSettings itemSettings, Settings settings)
+    public FluidExciterBlock(RegistrationContext ctx, ItemSettings itemSettings, Settings settings)
     {
-        super(registryName, itemSettings.factory((block, ctx, itemSettings1) -> new FluidComponentItem(block, registryName1, itemSettings1)), settings.nonOpaque());
+        super(ctx, itemSettings.factory(FluidComponentItem::new), settings.nonOpaque());
     }
 
     @Override
@@ -36,9 +35,9 @@ public class FluidExciterBlock extends TallBlock implements BlockEntityProvider
     }
 
     @Override
-    protected Structure createStructure()
+    protected Structure createStructure(RegistrationContext ctx)
     {
-        return BlockRegistry.queue(new FluidExciterStructure(getRegistryName() + "_structure", MeatlibBlockSettings.copyOf(this.settings)));
+        return ctx.append(this, new FluidExciterStructure(ctx, MeatlibBlockSettings.copyOf(this.settings)), s -> s + "_structure");
     }
 
     @Nullable
@@ -59,9 +58,9 @@ public class FluidExciterBlock extends TallBlock implements BlockEntityProvider
 
     private class FluidExciterStructure extends Structure implements VascularConduit
     {
-        public FluidExciterStructure(String registryName, Settings settings)
+        public FluidExciterStructure(RegistrationContext ctx, Settings settings)
         {
-            super(registryName, settings);
+            super(settings);
         }
 
         @Override

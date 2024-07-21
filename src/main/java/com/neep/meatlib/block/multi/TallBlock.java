@@ -38,7 +38,7 @@ public abstract class TallBlock extends BaseBlock
     public TallBlock(RegistrationContext ctx, ItemSettings itemSettings, Settings settings)
     {
         super(ctx, itemSettings, settings.pistonBehavior(PistonBehavior.IGNORE));
-        this.structureBlock = createStructure();
+        this.structureBlock = createStructure(ctx);
     }
 
     @Override
@@ -52,7 +52,7 @@ public abstract class TallBlock extends BaseBlock
         return structureBlock;
     }
 
-    protected abstract Structure createStructure();
+    protected abstract Structure createStructure(RegistrationContext ctx);
 
     @Override
     public boolean canPlaceAt(BlockState state, WorldView world, BlockPos pos)
@@ -89,7 +89,7 @@ public abstract class TallBlock extends BaseBlock
     
     public class Structure extends BaseDummyBlock implements MeatlibBlockExtension
     {
-        public Structure(RegistrationContext ctx, Settings settings)
+        public Structure(Settings settings)
         {
             super(settings.pistonBehavior(PistonBehavior.IGNORE));
         }

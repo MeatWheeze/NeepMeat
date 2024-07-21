@@ -3,6 +3,7 @@ package com.neep.neepmeat.block.machine;
 import com.neep.meatlib.block.BaseHorFacingBlock;
 import com.neep.meatlib.block.MeatlibBlock;
 import com.neep.meatlib.item.ItemSettings;
+import com.neep.meatlib.registry.RegistrationContext;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.machine.trommel.TrommelBlockEntity;
 import com.neep.neepmeat.machine.trommel.TrommelStructureBlockEntity;
@@ -30,9 +31,9 @@ public class TrommelBlock extends BaseHorFacingBlock implements BlockEntityProvi
             VoxelShapes.cuboid(0f, 0d, 0d, 1d, 1d, 1d)
     };
 
-    public TrommelBlock(String itemName, ItemSettings itemSettings, Settings settings)
+    public TrommelBlock(RegistrationContext ctx, ItemSettings itemSettings, Settings settings)
     {
-        super(itemName, itemSettings, settings.nonOpaque());
+        super(ctx, itemSettings, settings.nonOpaque());
 //        this.setDefaultState(getDefaultState().with(CENTRE, false).with(FACING, Direction.NORTH));
     }
 
@@ -152,12 +153,6 @@ public class TrommelBlock extends BaseHorFacingBlock implements BlockEntityProvi
         {
             return Blocks.AIR;
 //            return NMBlocks.TROMMEL;
-        }
-
-        @Override
-        public String getRegistryName()
-        {
-            return registryName;
         }
 
         @Override

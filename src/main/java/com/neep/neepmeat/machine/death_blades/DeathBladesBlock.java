@@ -33,7 +33,7 @@ public class DeathBladesBlock extends BaseFacingBlock implements BlockEntityProv
             Direction.DOWN, Block.createCuboidShape(4, 4, 4, 12, 16, 12)
     );
 
-    public DeathBladesBlock(RegistrationContext itemName, ItemSettings itemSettings, Settings settings)
+    public DeathBladesBlock(RegistrationContext ctx, ItemSettings itemSettings, Settings settings)
     {
         super(ctx, itemSettings, settings.nonOpaque());
     }

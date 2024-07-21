@@ -3,7 +3,6 @@ package com.neep.neepmeat.machine.large_crusher;
 import com.google.common.collect.ImmutableMap;
 import com.neep.meatlib.block.MeatlibBlock;
 import com.neep.meatlib.item.ItemSettings;
-import com.neep.meatlib.registry.BlockRegistry;
 import com.neep.meatlib.registry.RegistrationContext;
 import com.neep.meatlib.storage.MeatlibStorageUtil;
 import com.neep.neepmeat.api.big_block.BigBlockPattern;
@@ -56,7 +55,7 @@ public class LargeCrusherBlock extends Multiblock2ControllerBlock<LargeCrusherSt
 
     public LargeCrusherBlock(RegistrationContext ctx, ItemSettings itemSettings, Settings settings)
     {
-        super(settings);
+        super(ctx, settings);
         this.blockItem = itemSettings.getFactory().create(this, ctx, itemSettings);
         BigBlockPattern northAssembledPattern = BigBlockPattern.makeOddCylinder(new Vec3i(0, 0, -1), 1, 0, 1, getStructure().getDefaultState())
                 .set(-1, 2, -1, getStructure().getDefaultState())
@@ -138,9 +137,9 @@ public class LargeCrusherBlock extends Multiblock2ControllerBlock<LargeCrusherSt
     }
 
     @Override
-    protected LargeCrusherStructureBlock registerStructureBlock()
+    protected LargeCrusherStructureBlock registerStructureBlock(RegistrationContext ctx)
     {
-        return BlockRegistry.queue(new LargeCrusherStructureBlock("large_crusher_structure", this, settings));
+        return ctx.append(this, new LargeCrusherStructureBlock(this, settings), "large_crusher_structure");
     }
 
 

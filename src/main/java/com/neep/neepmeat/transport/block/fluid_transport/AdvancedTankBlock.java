@@ -1,6 +1,7 @@
 package com.neep.neepmeat.transport.block.fluid_transport;
 
 import com.neep.meatlib.item.ItemSettings;
+import com.neep.meatlib.registry.RegistrationContext;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.transport.machine.fluid.TankBlockEntity;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
@@ -13,7 +14,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class AdvancedTankBlock extends TankBlock
 {
-    public AdvancedTankBlock(String itemName, ItemSettings itemSettings, Settings settings)
+    public AdvancedTankBlock(RegistrationContext itemName, ItemSettings itemSettings, Settings settings)
     {
         super(itemName, itemSettings, settings);
     }

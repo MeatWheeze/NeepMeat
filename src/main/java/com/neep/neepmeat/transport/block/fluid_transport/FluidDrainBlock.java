@@ -2,6 +2,7 @@ package com.neep.neepmeat.transport.block.fluid_transport;
 
 import com.neep.meatlib.block.BaseBlock;
 import com.neep.meatlib.item.ItemSettings;
+import com.neep.meatlib.registry.RegistrationContext;
 import com.neep.neepmeat.api.storage.WritableSingleFluidStorage;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.transport.block.fluid_transport.entity.FluidDrainBlockEntity;
@@ -24,7 +25,7 @@ import java.util.Objects;
 
 public class FluidDrainBlock extends BaseBlock implements BlockEntityProvider
 {
-    public FluidDrainBlock(String itemName, ItemSettings itemSettings, Settings settings)
+    public FluidDrainBlock(RegistrationContext ctx, ItemSettings itemSettings, Settings settings)
     {
         super(ctx, itemSettings, settings.nonOpaque());
     }

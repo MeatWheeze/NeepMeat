@@ -1,6 +1,7 @@
 package com.neep.neepmeat.transport.block.item_transport;
 
 import com.neep.meatlib.block.BaseBlock;
+import com.neep.meatlib.registry.RegistrationContext;
 import com.neep.neepmeat.transport.interfaces.IServerWorld;
 import com.neep.neepmeat.transport.item_network.ItemInPipe;
 import com.neep.neepmeat.transport.util.ItemPipeUtil;
@@ -21,7 +22,7 @@ import java.util.Stack;
 
 public class RouteTestBlock extends BaseBlock
 {
-    public RouteTestBlock(String registryName, Settings settings)
+    public RouteTestBlock(RegistrationContext ctx, Settings settings)
     {
         super(ctx, settings);
     }

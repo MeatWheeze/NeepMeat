@@ -1,9 +1,9 @@
 package com.neep.neepmeat.machine.mincer;
 
+import com.neep.meatlib.block.MeatlibBlock;
 import com.neep.meatlib.block.MeatlibBlockSettings;
 import com.neep.meatlib.block.multi.TallBlock;
 import com.neep.meatlib.item.ItemSettings;
-import com.neep.meatlib.registry.BlockRegistry;
 import com.neep.meatlib.registry.RegistrationContext;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.util.MiscUtil;
@@ -40,9 +40,9 @@ public class MincerBlock extends TallBlock implements BlockEntityProvider
     }
 
     @Override
-    protected Structure createStructure()
+    protected Structure createStructure(RegistrationContext ctx)
     {
-        return BlockRegistry.queue(new Structure(getRegistryName() + "_structure", MeatlibBlockSettings.copyOf(this.settings)));
+        return ctx.append(this, new Structure(MeatlibBlockSettings.copyOf(this.settings)), MeatlibBlock::structure);
     }
 
     @Nullable

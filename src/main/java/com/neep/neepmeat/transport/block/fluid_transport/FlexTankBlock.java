@@ -3,6 +3,7 @@ package com.neep.neepmeat.transport.block.fluid_transport;
 import com.google.common.collect.Sets;
 import com.neep.meatlib.block.BaseBlock;
 import com.neep.meatlib.item.ItemSettings;
+import com.neep.meatlib.registry.RegistrationContext;
 import com.neep.neepmeat.network.TankMessagePacket;
 import com.neep.neepmeat.transport.block.fluid_transport.entity.FlexTankBlockEntity;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
@@ -35,7 +36,7 @@ public class FlexTankBlock extends BaseBlock implements BlockEntityProvider
     public final long capacity;
     private final Supplier<BlockEntityType<FlexTankBlockEntity>> typeSupplier;
 
-    public FlexTankBlock(String registryName, long capacity, Supplier<BlockEntityType<FlexTankBlockEntity>> type, ItemSettings itemSettings, Settings settings)
+    public FlexTankBlock(RegistrationContext ctx, long capacity, Supplier<BlockEntityType<FlexTankBlockEntity>> type, ItemSettings itemSettings, Settings settings)
     {
         super(ctx, itemSettings, settings);
         this.capacity = capacity;

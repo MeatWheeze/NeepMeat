@@ -22,7 +22,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class FluidRationerBlock extends BaseFacingBlock implements BlockEntityProvider
 {
-    public FluidRationerBlock(RegistrationContext itemName, ItemSettings itemSettings, Settings settings)
+    public FluidRationerBlock(RegistrationContext ctx, ItemSettings itemSettings, Settings settings)
     {
         super(ctx, itemSettings, settings);
     }

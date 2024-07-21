@@ -25,7 +25,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class PowerFlowerFluidPortBlock extends BaseBlock implements BlockEntityProvider, PowerFlower
 {
-    public PowerFlowerFluidPortBlock(RegistrationContext registryName, ItemSettings block, Settings settings)
+    public PowerFlowerFluidPortBlock(RegistrationContext ctx, ItemSettings block, Settings settings)
     {
         super(ctx, block, settings.nonOpaque());
     }

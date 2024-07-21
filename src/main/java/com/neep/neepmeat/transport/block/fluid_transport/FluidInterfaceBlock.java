@@ -3,6 +3,7 @@ package com.neep.neepmeat.transport.block.fluid_transport;
 import com.google.common.collect.Maps;
 import com.neep.meatlib.block.BaseFacingBlock;
 import com.neep.meatlib.item.ItemSettings;
+import com.neep.meatlib.registry.RegistrationContext;
 import com.neep.neepmeat.transport.block.item_transport.entity.ItemDuctBlockEntity;
 import com.neep.neepmeat.transport.machine.fluid.FluidInterfaceBlockEntity;
 import net.minecraft.block.Block;
@@ -23,7 +24,7 @@ public class FluidInterfaceBlock extends BaseFacingBlock implements BlockEntityP
 {
     private static final Map<BlockState, VoxelShape> SHAPES = Maps.newHashMap();
 
-    public FluidInterfaceBlock(String itemName, ItemSettings itemSettings, Settings settings)
+    public FluidInterfaceBlock(RegistrationContext ctx, ItemSettings itemSettings, Settings settings)
     {
         super(ctx, itemSettings, settings.nonOpaque());
     }

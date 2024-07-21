@@ -5,7 +5,6 @@ import com.neep.meatlib.block.MeatlibBlock;
 import com.neep.meatlib.block.MeatlibBlockSettings;
 import com.neep.meatlib.item.BaseBlockItem;
 import com.neep.meatlib.item.ItemSettings;
-import com.neep.meatlib.registry.BlockRegistry;
 import com.neep.meatlib.registry.ItemRegistry;
 import com.neep.meatlib.registry.RegistrationContext;
 import com.neep.neepmeat.api.big_block.BigBlock;
@@ -38,7 +37,6 @@ import java.util.concurrent.atomic.AtomicReference;
 public class LargeMotorBlock extends BigBlock<LargeMotorStructureBlock> implements MeatlibBlock, BlockEntityProvider
 {
     private final BigBlockPattern volume;
-    private final RegistrationContext ctx;
     public final VoxelShape normalShape;
 
     private static VoxelShape cuboid(double minX, double minY, double minZ, double sizeX, double sizeY, double sizeZ)
@@ -57,8 +55,7 @@ public class LargeMotorBlock extends BigBlock<LargeMotorStructureBlock> implemen
 
     public LargeMotorBlock(RegistrationContext ctx, ItemSettings itemSettings, Settings settings)
     {
-        super(settings);
-        this.ctx = ctx;
+        super(ctx, settings);
         ItemRegistry.queue(new BaseBlockItem(this, ctx, itemSettings));
         this.setDefaultState(getStateManager().getDefaultState().with(FACING, Direction.NORTH));
 
@@ -67,7 +64,7 @@ public class LargeMotorBlock extends BigBlock<LargeMotorStructureBlock> implemen
     }
 
     @Override
-    protected LargeMotorStructureBlock registerStructureBlock()
+    protected LargeMotorStructureBlock registerStructureBlock(RegistrationContext ctx)
     {
         return ctx.append(this, new LargeMotorStructureBlock(this, MeatlibBlockSettings.copyOf(this)), "large_motor_structure");
     }

@@ -6,7 +6,6 @@ import com.neep.meatlib.block.BaseStairsBlock;
 import com.neep.meatlib.block.MeatlibBlock;
 import com.neep.meatlib.datagen.MeatRecipeProvider;
 import com.neep.meatlib.item.ItemSettings;
-import com.neep.meatlib.registry.BlockRegistry;
 import com.neep.meatlib.registry.RegistrationContext;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -40,13 +39,12 @@ public class MetalScaffoldingBlock extends BaseBlock implements MeatlibBlock, Wa
         super(ctx, itemSettings, settings.nonOpaque());
 
         stairs = new BaseStairsBlock(ctx, this.getDefaultState(), itemSettings, settings);
-        BlockRegistry.queue(stairs);
+        ctx.append(this, stairs, s -> s + "_stairs");
 
         slab = new BaseSlabBlock(ctx, this.getDefaultState(), itemSettings, settings);
-        BlockRegistry.queue(slab);
+        ctx.append(this, slab, s -> s + "_slab");
 
         this.setDefaultState((this.stateManager.getDefaultState()).with(WATERLOGGED, false).with(BOTTOM, false));
-        BlockRegistry.queue(this);
     }
 
     public BlockItem getBlockItem()

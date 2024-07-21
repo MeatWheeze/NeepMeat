@@ -36,7 +36,7 @@ public class PowerFlowerGrowthBlock extends BaseBlock implements PowerFlower
     private final VoxelShape fullShape = Block.createCuboidShape(0, 0, 0, 16, 16, 16);
     private final VoxelShape topShape = Block.createCuboidShape(0, 0, 0, 16, 14, 16);
 
-    public PowerFlowerGrowthBlock(RegistrationContext registryName, ItemSettings itemSettings, Settings settings)
+    public PowerFlowerGrowthBlock(RegistrationContext ctx, ItemSettings itemSettings, Settings settings)
     {
         super(ctx, itemSettings, settings.nonOpaque());
         this.setDefaultState(getDefaultState().with(GROWTH, 0));

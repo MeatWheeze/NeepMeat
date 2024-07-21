@@ -1,6 +1,7 @@
 package com.neep.neepmeat.machine.multitank;
 
 import com.neep.meatlib.item.ItemSettings;
+import com.neep.meatlib.registry.RegistrationContext;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.transport.block.fluid_transport.GlassTankBlock;
 import com.neep.neepmeat.util.ItemUtil;
@@ -19,7 +20,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class MultiTankBlock extends GlassTankBlock
 {
-    public MultiTankBlock(String itemName, ItemSettings itemSettings, Settings settings)
+    public MultiTankBlock(RegistrationContext itemName, ItemSettings itemSettings, Settings settings)
     {
         super(itemName, itemSettings, settings);
     }

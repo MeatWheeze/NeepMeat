@@ -36,15 +36,13 @@ import java.util.Map;
 public class CharnelPumpBlock extends BigBlock<CharnelPumpStructure> implements MeatlibBlock, BlockEntityProvider
 {
     public static final DirectionProperty FACING = Properties.HORIZONTAL_FACING;
-    private final String name;
 
     private final Map<Direction, BigBlockPattern> patternMap;
 
-    public CharnelPumpBlock(RegistrationContext name, ItemSettings itemSettings, Settings settings)
+    public CharnelPumpBlock(RegistrationContext ctx, ItemSettings itemSettings, Settings settings)
     {
-        super(settings);
-        ItemRegistry.queue(new BaseBlockItem(this, name, itemSettings));
-        this.name = name;
+        super(ctx, settings);
+        ItemRegistry.queue(new BaseBlockItem(this, ctx, itemSettings));
         BigBlockPattern volume = BigBlockPattern.makeOddCylinder(1, 0, 7, getStructure().getDefaultState());
 //                .set(-2, 0, 0, getStructure().getDefaultState())
 //                .set(-2, 1, 0, getStructure().getDefaultState());
@@ -60,9 +58,9 @@ public class CharnelPumpBlock extends BigBlock<CharnelPumpStructure> implements 
     }
 
     @Override
-    protected CharnelPumpStructure registerStructureBlock()
+    protected CharnelPumpStructure registerStructureBlock(RegistrationContext ctx)
     {
-        return BlockRegistry.queue(new CharnelPumpStructure(this, MeatlibBlockSettings.copyOf(this)), "charnel_pump_structure_1");
+        return ctx.append(this, new CharnelPumpStructure(this, MeatlibBlockSettings.copyOf(this)), "charnel_pump_structure_1");
     }
 
     @Override
@@ -76,12 +74,6 @@ public class CharnelPumpBlock extends BigBlock<CharnelPumpStructure> implements 
     public BlockState getPlacementState(ItemPlacementContext ctx)
     {
         return this.getDefaultState().with(FACING, ctx.getHorizontalPlayerFacing());
-    }
-
-    @Override
-    public String getRegistryName()
-    {
-        return name;
     }
 
     @Override

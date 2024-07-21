@@ -15,7 +15,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class SurgeryPlatformBlock extends BaseBlock implements DataCable, BlockEntityProvider
 {
-    public SurgeryPlatformBlock(RegistrationContext registryName, ItemSettings itemSettings, Settings settings)
+    public SurgeryPlatformBlock(RegistrationContext ctx, ItemSettings itemSettings, Settings settings)
     {
         super(ctx, itemSettings, settings);
     }

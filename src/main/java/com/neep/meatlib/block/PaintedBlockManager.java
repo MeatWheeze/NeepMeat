@@ -21,7 +21,7 @@ public class PaintedBlockManager<T extends PaintedBlockManager.PaintedBlock>
     {
         for (DyeColor col : DyeColor.values())
         {
-            T block = ctx.append(this, s -> s + "_" + col.getName(), constructor.create(ctx, col, settings));
+            T block = ctx.append(this, constructor.create(ctx, col, settings), s -> s + "_" + col.getName());
 //            T block = BlockRegistry.queue(constructor.create(registryName + "_" + col.getName(), col, settings));
             COLOURED_BLOCKS.add(block);
             entries.add(block);
@@ -42,11 +42,11 @@ public class PaintedBlockManager<T extends PaintedBlockManager.PaintedBlock>
         public PaintedBlock(RegistrationContext ctx, DyeColor col, Settings settings)
         {
             super(settings);
-            this.blockItem = makeItem();
+            this.blockItem = makeItem(ctx);
             this.col = col;
         }
 
-        protected abstract BlockItem makeItem();
+        protected abstract BlockItem makeItem(RegistrationContext ctx);
 
         public DyeColor getCol()
         {

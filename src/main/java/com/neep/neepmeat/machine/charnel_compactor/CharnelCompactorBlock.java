@@ -41,7 +41,7 @@ public class CharnelCompactorBlock extends BaseBlock implements DataCable
     protected static final VoxelShape OUTLINE_SHAPE;
     private static final VoxelShape RAYCAST_SHAPE = createCuboidShape(2.0, 4.0, 2.0, 14.0, 16.0, 14.0);
 
-    public CharnelCompactorBlock(RegistrationContext registryName, ItemSettings itemSettings, Settings settings)
+    public CharnelCompactorBlock(RegistrationContext ctx, ItemSettings itemSettings, Settings settings)
     {
         super(ctx, itemSettings, settings);
         this.setDefaultState((this.stateManager.getDefaultState()).with(LEVEL, 0));

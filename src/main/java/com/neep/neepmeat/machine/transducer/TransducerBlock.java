@@ -17,7 +17,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class TransducerBlock extends BaseBlock implements BlockEntityProvider
 {
-    public TransducerBlock(RegistrationContext registryName, ItemSettings itemSettings, Settings settings)
+    public TransducerBlock(RegistrationContext ctx, ItemSettings itemSettings, Settings settings)
     {
         super(ctx, itemSettings, settings);
     }

@@ -3,7 +3,7 @@ package com.neep.neepmeat.machine.live_machine.block;
 import com.neep.meatlib.block.MeatlibBlockSettings;
 import com.neep.meatlib.block.multi.TallerBlock;
 import com.neep.meatlib.item.ItemSettings;
-import com.neep.meatlib.registry.BlockRegistry;
+import com.neep.meatlib.registry.RegistrationContext;
 import com.neep.neepmeat.machine.live_machine.LivingMachines;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockEntityProvider;
@@ -26,9 +26,9 @@ public class LuckyOneBlock extends TallerBlock implements BlockEntityProvider
     public static final IntProperty HEIGHT_3 = IntProperty.of("height", 1, 2);
     public static final DirectionProperty FACING = Properties.HORIZONTAL_FACING;
 
-    public LuckyOneBlock(String registryName, ItemSettings itemSettings, Settings settings)
+    public LuckyOneBlock(RegistrationContext ctx, ItemSettings itemSettings, Settings settings)
     {
-        super(registryName, HEIGHT_3, itemSettings, settings);
+        super(ctx, HEIGHT_3, itemSettings, settings);
     }
 
     @Nullable
@@ -45,9 +45,9 @@ public class LuckyOneBlock extends TallerBlock implements BlockEntityProvider
     }
 
     @Override
-    protected Structure createStructure()
+    protected Structure createStructure(RegistrationContext ctx)
     {
-        return BlockRegistry.queue(new Structure(getRegistryName() + "_structure", MeatlibBlockSettings.copyOf(settings))
+        return ctx.append(this, new Structure(MeatlibBlockSettings.copyOf(settings))
         {
             @Override
             protected void appendProperties(StateManager.Builder<Block, BlockState> builder)
@@ -67,7 +67,7 @@ public class LuckyOneBlock extends TallerBlock implements BlockEntityProvider
             {
                 return VoxelShapes.fullCube();
             }
-        });
+        }, s -> s + "_structure");
     }
 
     @Override

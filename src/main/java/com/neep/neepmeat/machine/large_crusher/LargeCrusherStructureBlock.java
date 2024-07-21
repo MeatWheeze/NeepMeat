@@ -1,8 +1,7 @@
 package com.neep.neepmeat.machine.large_crusher;
 
+import com.neep.meatlib.registry.RegistrationContext;
 import com.neep.neepmeat.NeepMeat;
-import com.neep.neepmeat.api.big_block.BigBlock;
-import com.neep.neepmeat.api.big_block.BigBlockStructure;
 import com.neep.neepmeat.api.big_block.BigBlockStructureEntity;
 import com.neep.neepmeat.api.multiblock2.MultiBlockStructure;
 import com.neep.neepmeat.api.multiblock2.Multiblock2ControllerBlock;
@@ -20,12 +19,9 @@ import net.minecraft.world.BlockView;
 
 public class LargeCrusherStructureBlock extends MultiBlockStructure<LargeCrusherStructureBlockEntity>
 {
-    private final String name;
-
-    public LargeCrusherStructureBlock(String name, Multiblock2ControllerBlock<?> parent, Settings settings)
+    public LargeCrusherStructureBlock(Multiblock2ControllerBlock<?> parent, Settings settings)
     {
         super(parent, settings);
-        this.name = name;
     }
 
     @Override
@@ -52,11 +48,5 @@ public class LargeCrusherStructureBlock extends MultiBlockStructure<LargeCrusher
                 return be.translateChopShape(parent.getAssembledShape(parentState, world, pos, context));
         }
         return VoxelShapes.empty();
-    }
-
-    @Override
-    public String getRegistryName()
-    {
-        return name;
     }
 }

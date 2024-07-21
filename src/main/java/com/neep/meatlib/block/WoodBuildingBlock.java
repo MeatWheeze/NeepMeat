@@ -1,9 +1,11 @@
 package com.neep.meatlib.block;
 
+import com.neep.meatlib.registry.RegistrationContext;
+
 public class WoodBuildingBlock extends BaseBuildingBlock
 {
-    public WoodBuildingBlock(String blockName, boolean makeWall, Settings settings)
+    public WoodBuildingBlock(RegistrationContext ctx, boolean makeWall, Settings settings)
     {
-        super(blockName, makeWall, settings);
+        super(ctx, makeWall, settings);
     }
 }

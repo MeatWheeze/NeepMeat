@@ -32,8 +32,7 @@ public class DisplayPlateBlock extends BaseBlock implements BlockEntityProvider
 {
     protected static final VoxelShape DEFAULT_SHAPE = Block.createCuboidShape(0.0, 0.0, 0.0, 16.0, 1.0, 16.0);
 
-
-    public DisplayPlateBlock(RegistrationContext itemName, ItemSettings itemSettings, Settings settings)
+    public DisplayPlateBlock(RegistrationContext ctx, ItemSettings itemSettings, Settings settings)
     {
         super(ctx, itemSettings, settings);
     }

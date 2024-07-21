@@ -100,7 +100,7 @@ import static net.minecraft.registry.tag.BlockTags.*;
 @RegisterMe(value = NeepMeat.NAMESPACE)
 public class NMBlocks
 {
-    public static final RegistrationContext C = new RegistrationContext(NeepMeat.NAMESPACE);
+    private static final RegistrationContext C = NeepMeat.C;
 
     // --- Building Blocks ---
     public static final AbstractBlock.Settings METAL = MeatlibBlockSettings.create(BlockTags.PICKAXE_MINEABLE).solid().hardness(3.0f).sounds(BlockSoundGroup.NETHERITE);
@@ -121,7 +121,7 @@ public class NMBlocks
 
 //    public static Block TEST_MULTIBLOCK = new TestMultiblock("test_multiblock", MeatlibBlockSettings.create()));
 
-    public static PaintedBlockManager<?> SMOOTH_TILE = new PaintedBlockManager<>(ctx, (ctx, col, settings) -> new SmoothTileBlock(registryName, col, settings), MeatlibBlockSettings.create().hardness(3.0f));
+    public static PaintedBlockManager<?> SMOOTH_TILE = new PaintedBlockManager<>(C, SmoothTileBlock::new, MeatlibBlockSettings.create().hardness(3.0f));
 
     @Path("polished_metal_bricks") public static Block POLISHED_IRON_BRICKS = new BaseBuildingBlock(C, true, MeatlibBlockSettings.create().strength(3.0f).sounds(NMSoundGroups.METAL));
     @Path("polished_metal_small_bricks") public static Block POLISHED_MERAL_SMALL_BRICKS = new BaseBuildingBlock(C, true, MeatlibBlockSettings.create().strength(3.0f).sounds(NMSoundGroups.METAL));
@@ -144,7 +144,7 @@ public class NMBlocks
     public static Block ASBESTOS = new BaseBuildingBlock(C, false, MeatlibBlockSettings.copyOf(Blocks.STONE));
     public static Block ASBESTOS_TILE = new BaseBuildingBlock(C, false, MeatlibBlockSettings.copyOf(ASBESTOS));
     public static Block CORRUGATED_ASBESTOS = new BaseBuildingBlock(C, true, MeatlibBlockSettings.copyOf(ASBESTOS));
-    public static PaintedBlockManager<?> PAINTED_CORRUGATED_ASBESTOS = new PaintedBlockManager<>(ctx, (RegistrationContext ctx, DyeColor col, AbstractBlock.Settings settings) -> new PaintedCorrugatedAsbestosBlock(ctx, col, settings), MeatlibBlockSettings.copyOf(CORRUGATED_ASBESTOS));
+    public static PaintedBlockManager<?> PAINTED_CORRUGATED_ASBESTOS = new PaintedBlockManager<>(C, PaintedCorrugatedAsbestosBlock::new, MeatlibBlockSettings.copyOf(CORRUGATED_ASBESTOS));
     public static Block ASBESTOS_SHINGLE = new BaseBuildingBlock(C, false, MeatlibBlockSettings.copyOf(ASBESTOS));
 
     public static Block BLOODY_BRICKS = new BaseBuildingBlock(C, true, MeatlibBlockSettings.copyOf(Blocks.BRICKS));
@@ -196,7 +196,7 @@ public class NMBlocks
 
     // Decorations
     public static Block DIRTY_SINK = new BaseBlock(C, block(), MeatlibBlockSettings.copyOf(RUSTY_METAL_BLOCK).solid().nonOpaque());
-    public static Block SMALL_SINK = new SinkBlock("small_sink", block(), MeatlibBlockSettings.copyOf(Blocks.STONE).nonOpaque());
+    public static Block SMALL_SINK = new SinkBlock(C, block(), MeatlibBlockSettings.copyOf(Blocks.STONE).nonOpaque());
     public static Block TELEVISION_OFF = new TelevisionBlock(C, block(), MeatlibBlockSettings.copyOf(Blocks.STONE).nonOpaque());
     public static Block TELEVISION_STATIC = new TelevisionBlock(C, block(), MeatlibBlockSettings.copyOf(Blocks.STONE).nonOpaque());
     @Path("large_fan") public static BigBlock<?> LARGE_FAN = new LargeFanBlock(C, block().tooltip(TooltipSupplier.simple(1)), MeatlibBlockSettings.copyOf(RUSTY_METAL_BLOCK).nonOpaque());
@@ -321,7 +321,7 @@ public class NMBlocks
     @Path("blood_bubble_log") public static Block BLOOD_BUBBLE_LOG = BlockRegistry.createLogBlock(C, TooltipSupplier.blank());
     @Path("blood_bubble_wood") public static Block BLOOD_BUBBLE_WOOD = BlockRegistry.createLogBlock(C, TooltipSupplier.blank());
     @Path("blood_bubble_leaves") public static Block BLOOD_BUBBLE_LEAVES = new BloodBubbleLeavesBlock(C, MeatlibBlockSettings.copyOf(Blocks.AZALEA_LEAVES).tags(Set.of(FabricMineableTags.SHEARS_MINEABLE, LEAVES)).sounds(BlockSoundGroup.AZALEA_LEAVES));
-    @Path("blood_bubble_leaves_flowering") public static Block BLOOD_BUBBLE_LEAVES_FLOWERING = new BloodBubbleLeavesBlock.FruitingBloodBubbleLeavesBlock("blood_bubble_leaves_flowering", MeatlibBlockSettings.copyOf(BLOOD_BUBBLE_LEAVES).sounds(BlockSoundGroup.SLIME));
+    @Path("blood_bubble_leaves_flowering") public static Block BLOOD_BUBBLE_LEAVES_FLOWERING = new BloodBubbleLeavesBlock.FruitingBloodBubbleLeavesBlock(C, MeatlibBlockSettings.copyOf(BLOOD_BUBBLE_LEAVES).sounds(BlockSoundGroup.SLIME));
     @Path("blood_bubble_planks") public static Block BLOOD_BUBBLE_PLANKS = new BaseBuildingBlock(C, true, MeatlibBlockSettings.create(AXE_MINEABLE).strength(2.0f).sounds(BlockSoundGroup.WOOD));
     @Path("blood_bubble_planks_trapdoor") @WithItem public static Block BLOOD_BUBBLE_TRAPDOOR = new TrapdoorBlock(MeatlibBlockSettings.create(AXE_MINEABLE).simpleDrop(ItemRegistry::getMatchingItem).strength(2.0f).sounds(BlockSoundGroup.WOOD), BlockSetType.WARPED);
     @Path("blood_bubble_planks_door") public static Block BLOOD_BUBBLE_DOOR = new BaseDoorBlock(C, MeatlibBlockSettings.create(AXE_MINEABLE).simpleDrop(ItemRegistry::getMatchingItem).strength(2.0f).sounds(BlockSoundGroup.WOOD).nonOpaque(), block(), BlockSetType.WARPED);

@@ -42,4 +42,9 @@ public interface MeatlibBlock extends ItemConvertible, SelfRegisterable
     {
         BlockItem create(Block block, RegistrationContext ctx, ItemSettings settings);
     }
+
+    static String structure(String s)
+    {
+        return s + "_structure";
+    }
 }

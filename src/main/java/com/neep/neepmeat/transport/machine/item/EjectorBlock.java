@@ -2,6 +2,7 @@ package com.neep.neepmeat.transport.machine.item;
 
 import com.neep.meatlib.block.BaseFacingBlock;
 import com.neep.meatlib.item.ItemSettings;
+import com.neep.meatlib.registry.RegistrationContext;
 import com.neep.meatlib.storage.MeatlibStorageUtil;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.init.NMSounds;
@@ -39,7 +40,7 @@ public class EjectorBlock extends BaseFacingBlock implements BlockEntityProvider
 {
     public static final BooleanProperty ACTIVE = BooleanProperty.of("active");
 
-    public EjectorBlock(String registryName, ItemSettings itemSettings, FabricBlockSettings settings)
+    public EjectorBlock(RegistrationContext ctx, ItemSettings itemSettings, FabricBlockSettings settings)
     {
         super(ctx, itemSettings, settings.nonOpaque().solidBlock(InventoryDetectorBlock::never));
         setDefaultState(getDefaultState().with(ACTIVE, false));

@@ -2,6 +2,7 @@ package com.neep.neepmeat.machine.live_machine.block;
 
 import com.neep.meatlib.block.BaseFacingBlock;
 import com.neep.meatlib.item.ItemSettings;
+import com.neep.meatlib.registry.RegistrationContext;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
@@ -22,7 +23,7 @@ public class ServicePortBlock<T extends BlockEntity> extends BaseFacingBlock imp
 {
     private final Supplier<BlockEntityType<T>> factory;
 
-    public ServicePortBlock(String registryName, ItemSettings itemSettings, Supplier<BlockEntityType<T>> factory, Settings settings)
+    public ServicePortBlock(RegistrationContext ctx, ItemSettings itemSettings, Supplier<BlockEntityType<T>> factory, Settings settings)
     {
         super(ctx, itemSettings, settings);
         this.factory = factory;

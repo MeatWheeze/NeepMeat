@@ -2,6 +2,7 @@ package com.neep.neepmeat;
 
 import com.neep.meatlib.MeatLib;
 import com.neep.meatlib.MeatLibRegistration;
+import com.neep.meatlib.registry.RegistrationContext;
 import com.neep.neepmeat.api.Burner;
 import com.neep.neepmeat.api.DataType;
 import com.neep.neepmeat.api.enlightenment.EnlightenmentEvent;
@@ -70,6 +71,7 @@ import software.bernie.geckolib.GeckoLib;
 public class NeepMeat implements ModInitializer
 {
 	public static final String NAMESPACE = "neepmeat";
+	public static final RegistrationContext C = new RegistrationContext(NAMESPACE);
 	public static final Logger LOGGER = LogManager.getLogger(NAMESPACE);
 
 //	public static final String disableGeckoExamples = System.setProperty(GeckoLibMod.DISABLE_EXAMPLES_PROPERTY_KEY, "true");
@@ -95,7 +97,7 @@ public class NeepMeat implements ModInitializer
 	@Override
 	public void onInitialize()
 	{
-		MeatLibRegistration.forContext(NMBlocks.class, NMBlocks.C);
+		MeatLibRegistration.forContext(NMBlocks.class, C);
 
 		try (var mcontext = MeatLib.getContext(NAMESPACE))
 		{

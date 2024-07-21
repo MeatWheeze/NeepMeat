@@ -1,6 +1,7 @@
 package com.neep.neepmeat.transport.machine.item;
 
 import com.neep.meatlib.item.ItemSettings;
+import com.neep.meatlib.registry.RegistrationContext;
 import com.neep.neepmeat.init.NMSounds;
 import com.neep.neepmeat.transport.ItemTransport;
 import com.neep.neepmeat.util.MiscUtil;
@@ -20,9 +21,9 @@ import org.jetbrains.annotations.Nullable;
 
 public class FilteredEjectorBlock extends EjectorBlock
 {
-    public FilteredEjectorBlock(String registryName, ItemSettings itemSettings, FabricBlockSettings settings)
+    public FilteredEjectorBlock(RegistrationContext ctx, ItemSettings itemSettings, FabricBlockSettings settings)
     {
-        super(registryName, itemSettings, settings);
+        super(ctx, itemSettings, settings);
     }
 
     @Override

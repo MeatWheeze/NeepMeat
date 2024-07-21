@@ -2,6 +2,9 @@ package com.neep.neepmeat.transport;
 
 import com.google.common.collect.Maps;
 import com.neep.meatlib.item.TooltipSupplier;
+import com.neep.meatlib.registry.RegistrationContext;
+import com.neep.meatlib.registry.annotation.Ignore;
+import com.neep.meatlib.registry.annotation.Path;
 import com.neep.meatlib.registry.annotation.RegisterMe;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.init.NMBlockEntities;
@@ -17,6 +20,7 @@ import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
@@ -26,56 +30,58 @@ import java.util.Map;
 @RegisterMe(NeepMeat.NAMESPACE)
 public class FluidTransport
 {
+    private static final RegistrationContext C = NeepMeat.C;
+
     public static long MAX_TRANSFER = FluidConstants.BUCKET / 8;
 
     public static final Map<FluidPipe.PipeCol, FluidPipeBlock> COLOURED_FLUID_PIPES = Maps.newEnumMap(FluidPipe.PipeCol.class);
 
     // --- Fluid Pipes ---
-    public static Block FLUID_PIPE = new FluidPipeBlock("fluid_pipe", FluidPipe.PipeCol.ANY, NMBlocks.block().factory(FluidComponentItem::new), NMBlocks.FLUID_PIPE_SETTINGS);
-    public static Block ENCASED_FLUID_PIPE = new EncasedFluidPipeBlock("encased_fluid_pipe", FluidPipe.PipeCol.ANY, NMBlocks.block().factory(FluidComponentItem::new).tooltip(TooltipSupplier.simple(1)), NMBlocks.FLUID_PIPE_SETTINGS);
+    public static Block FLUID_PIPE = new FluidPipeBlock(C, FluidPipe.PipeCol.ANY, NMBlocks.block().factory(FluidComponentItem::new), NMBlocks.FLUID_PIPE_SETTINGS);
+    public static Block ENCASED_FLUID_PIPE = new EncasedFluidPipeBlock(C, FluidPipe.PipeCol.ANY, NMBlocks.block().factory(FluidComponentItem::new).tooltip(TooltipSupplier.simple(1)), NMBlocks.FLUID_PIPE_SETTINGS);
 
-    public static Block WHITE_FLUID_PIPE = makePipe(FluidPipe.PipeCol.WHITE);
-    public static Block ORANGE_FLUID_PIPE = makePipe(FluidPipe.PipeCol.ORANGE);
-    public static Block MAGENTA_FLUID_PIPE = makePipe(FluidPipe.PipeCol.MAGENTA);
-    public static Block LIGHT_BLUE_FLUID_PIPE = makePipe(FluidPipe.PipeCol.LIGHT_BLUE);
-    public static Block YELLOW_FLUID_PIPE = makePipe(FluidPipe.PipeCol.YELLOW);
-    public static Block LIME_FLUID_PIPE = makePipe(FluidPipe.PipeCol.LIME);
-    public static Block PINK_FLUID_PIPE = makePipe(FluidPipe.PipeCol.PINK);
-    public static Block GRAY_FLUID_PIPE = makePipe(FluidPipe.PipeCol.GRAY);
-    public static Block LIGHT_GRAY_FLUID_PIPE = makePipe(FluidPipe.PipeCol.LIGHT_GRAY);
-    public static Block CYAN_FLUID_PIPE = makePipe(FluidPipe.PipeCol.CYAN);
-    public static Block PURPLE_FLUID_PIPE = makePipe(FluidPipe.PipeCol.PURPLE);
-    public static Block BLUE_FLUID_PIPE = makePipe(FluidPipe.PipeCol.BLUE);
-    public static Block BROWN_FLUID_PIPE = makePipe(FluidPipe.PipeCol.BROWN);
-    public static Block GREEN_FLUID_PIPE = makePipe(FluidPipe.PipeCol.GREEN);
-    public static Block RED_FLUID_PIPE = makePipe(FluidPipe.PipeCol.RED);
-    public static Block BLACK_FLUID_PIPE = makePipe(FluidPipe.PipeCol.BLACK);
+    @Ignore public static Block WHITE_FLUID_PIPE = makePipe(FluidPipe.PipeCol.WHITE);
+    @Ignore public static Block ORANGE_FLUID_PIPE = makePipe(FluidPipe.PipeCol.ORANGE);
+    @Ignore public static Block MAGENTA_FLUID_PIPE = makePipe(FluidPipe.PipeCol.MAGENTA);
+    @Ignore public static Block LIGHT_BLUE_FLUID_PIPE = makePipe(FluidPipe.PipeCol.LIGHT_BLUE);
+    @Ignore public static Block YELLOW_FLUID_PIPE = makePipe(FluidPipe.PipeCol.YELLOW);
+    @Ignore public static Block LIME_FLUID_PIPE = makePipe(FluidPipe.PipeCol.LIME);
+    @Ignore public static Block PINK_FLUID_PIPE = makePipe(FluidPipe.PipeCol.PINK);
+    @Ignore public static Block GRAY_FLUID_PIPE = makePipe(FluidPipe.PipeCol.GRAY);
+    @Ignore public static Block LIGHT_GRAY_FLUID_PIPE = makePipe(FluidPipe.PipeCol.LIGHT_GRAY);
+    @Ignore public static Block CYAN_FLUID_PIPE = makePipe(FluidPipe.PipeCol.CYAN);
+    @Ignore public static Block PURPLE_FLUID_PIPE = makePipe(FluidPipe.PipeCol.PURPLE);
+    @Ignore public static Block BLUE_FLUID_PIPE = makePipe(FluidPipe.PipeCol.BLUE);
+    @Ignore public static Block BROWN_FLUID_PIPE = makePipe(FluidPipe.PipeCol.BROWN);
+    @Ignore public static Block GREEN_FLUID_PIPE = makePipe(FluidPipe.PipeCol.GREEN);
+    @Ignore public static Block RED_FLUID_PIPE = makePipe(FluidPipe.PipeCol.RED);
+    @Ignore public static Block BLACK_FLUID_PIPE = makePipe(FluidPipe.PipeCol.BLACK);
 
-    public static Block FILTER_PIPE = new FilterPipeBlock("filter_pipe", NMBlocks.block().tooltip(TooltipSupplier.simple(2)), NMBlocks.FLUID_PIPE_SETTINGS);
-    public static Block STOP_VALVE = new StopValveBlock("stop_valve", NMBlocks.block().tooltip(TooltipSupplier.simple(1)), NMBlocks.FLUID_PIPE_SETTINGS);
-    public static Block CHECK_VALVE = new CheckValveBlock("check_valve", NMBlocks.block().tooltip(TooltipSupplier.simple(1)), NMBlocks.FLUID_PIPE_SETTINGS);
-    public static Block LIMITER_VALVE = new LimiterValveBlock("limiter_valve", NMBlocks.block().tooltip(TooltipSupplier.simple(1)), NMBlocks.FLUID_PIPE_SETTINGS);
-    public static Block WINDOW_PIPE = new WindowPipeBlock("window_fluid_pipe", NMBlocks.block().tooltip(TooltipSupplier.blank()), NMBlocks.FLUID_PIPE_SETTINGS);
-    public static Block COPPER_PIPE = new CapillaryFluidPipeBlock("copper_pipe", NMBlocks.block().tooltip(TooltipSupplier.simple(1)), NMBlocks.FLUID_PIPE_SETTINGS);
-    public static Block PUMP = new PumpBlock("pump", NMBlocks.block().tooltip(TooltipSupplier.simple(1)), NMBlocks.FLUID_MACHINE_SETTINGS);
+    public static Block FILTER_PIPE = new FilterPipeBlock(C, NMBlocks.block().tooltip(TooltipSupplier.simple(2)), NMBlocks.FLUID_PIPE_SETTINGS);
+    public static Block STOP_VALVE = new StopValveBlock(C, NMBlocks.block().tooltip(TooltipSupplier.simple(1)), NMBlocks.FLUID_PIPE_SETTINGS);
+    public static Block CHECK_VALVE = new CheckValveBlock(C, NMBlocks.block().tooltip(TooltipSupplier.simple(1)), NMBlocks.FLUID_PIPE_SETTINGS);
+    public static Block LIMITER_VALVE = new LimiterValveBlock(C, NMBlocks.block().tooltip(TooltipSupplier.simple(1)), NMBlocks.FLUID_PIPE_SETTINGS);
+    @Path("window_fluid_pipe") public static Block WINDOW_PIPE = new WindowPipeBlock(C, NMBlocks.block().tooltip(TooltipSupplier.blank()), NMBlocks.FLUID_PIPE_SETTINGS);
+    public static Block COPPER_PIPE = new CapillaryFluidPipeBlock(C, NMBlocks.block().tooltip(TooltipSupplier.simple(1)), NMBlocks.FLUID_PIPE_SETTINGS);
+    @Path("pump") public static Block PUMP = new PumpBlock(C, NMBlocks.block().tooltip(TooltipSupplier.simple(1)), NMBlocks.FLUID_MACHINE_SETTINGS);
 
-    public static Block BASIC_TANK = new TankBlock("basic_tank", NMBlocks.block().factory(TankItem::new).tooltip(TooltipSupplier.hidden(2)), NMBlocks.FLUID_MACHINE_SETTINGS);
-    public static Block BASIC_GLASS_TANK = new GlassTankBlock("basic_glass_tank", NMBlocks.block().factory(TankItem::new).tooltip(TooltipSupplier.hidden(2)), NMBlocks.FLUID_MACHINE_SETTINGS);
-    public static Block ADVANCED_TANK = new AdvancedTankBlock("advanced_tank", NMBlocks.block().factory(TankItem::new).tooltip(TooltipSupplier.hidden(2)), NMBlocks.FLUID_MACHINE_SETTINGS);
+    public static Block BASIC_TANK = new TankBlock(C, NMBlocks.block().factory(TankItem::new).tooltip(TooltipSupplier.hidden(2)), NMBlocks.FLUID_MACHINE_SETTINGS);
+    public static Block BASIC_GLASS_TANK = new GlassTankBlock(C, NMBlocks.block().factory(TankItem::new).tooltip(TooltipSupplier.hidden(2)), NMBlocks.FLUID_MACHINE_SETTINGS);
+    public static Block ADVANCED_TANK = new AdvancedTankBlock(C, NMBlocks.block().factory(TankItem::new).tooltip(TooltipSupplier.hidden(2)), NMBlocks.FLUID_MACHINE_SETTINGS);
 
-    public static Block MULTI_TANK = new MultiTankBlock("multi_tank", NMBlocks.block(), NMBlocks.FLUID_MACHINE_SETTINGS);
-    public static Block FLUID_BUFFER = new FluidBufferBlock("fluid_buffer", NMBlocks.block().tooltip(TooltipSupplier.simple(1)), NMBlocks.FLUID_MACHINE_SETTINGS);
-    public static Block FLUID_INTERFACE = new FluidInterfaceBlock("fluid_interface", NMBlocks.block().tooltip((TooltipSupplier.simple(1))).factory(FluidComponentItem::new), NMBlocks.FLUID_MACHINE_SETTINGS);
-    public static Block FLUID_DRAIN = new FluidDrainBlock("fluid_drain", NMBlocks.block().tooltip(TooltipSupplier.simple(1)), NMBlocks.FLUID_MACHINE_SETTINGS);
+    public static Block MULTI_TANK = new MultiTankBlock(C, NMBlocks.block(), NMBlocks.FLUID_MACHINE_SETTINGS);
+    public static Block FLUID_BUFFER = new FluidBufferBlock(C, NMBlocks.block().tooltip(TooltipSupplier.simple(1)), NMBlocks.FLUID_MACHINE_SETTINGS);
+    public static Block FLUID_INTERFACE = new FluidInterfaceBlock(C, NMBlocks.block().tooltip((TooltipSupplier.simple(1))).factory(FluidComponentItem::new), NMBlocks.FLUID_MACHINE_SETTINGS);
+    public static Block FLUID_DRAIN = new FluidDrainBlock(C, NMBlocks.block().tooltip(TooltipSupplier.simple(1)), NMBlocks.FLUID_MACHINE_SETTINGS);
 
-    public static FlexTankBlock FLEX_TANK = new FlexTankBlock("flex_tank", 8 * FluidConstants.BUCKET, () -> NMBlockEntities.FLEX_TANK,
+    public static FlexTankBlock FLEX_TANK = new FlexTankBlock(C, 8 * FluidConstants.BUCKET, () -> NMBlockEntities.FLEX_TANK,
             NMBlocks.block().tooltip(TooltipSupplier.simple(2)), NMBlocks.FLUID_MACHINE_SETTINGS);
-    public static FlexTankBlock ADVANCED_FLEX_TANK = new FlexTankBlock("advanced_flex_tank", 16 * FluidConstants.BUCKET, () -> NMBlockEntities.ADVANCED_FLEX_TANK,
+    public static FlexTankBlock ADVANCED_FLEX_TANK = new FlexTankBlock(C, 16 * FluidConstants.BUCKET, () -> NMBlockEntities.ADVANCED_FLEX_TANK,
             NMBlocks.block().tooltip(TooltipSupplier.simple(2)), NMBlocks.FLUID_MACHINE_SETTINGS);
 
-    public static Block FLUID_GAUGE = new FluidGaugeBlock<>("fluid_gauge", () -> NMBlockEntities.FLUID_GAUGE,
+    public static Block FLUID_GAUGE = new FluidGaugeBlock<>(C, () -> NMBlockEntities.FLUID_GAUGE,
             NMBlocks.block().tooltip(TooltipSupplier.simple(1)), NMBlocks.FLUID_MACHINE_SETTINGS);
-    public static Block ITEM_GAUGE = new FluidGaugeBlock<>("item_gauge", () -> NMBlockEntities.ITEM_GAUGE,
+    public static Block ITEM_GAUGE = new FluidGaugeBlock<>(C, () -> NMBlockEntities.ITEM_GAUGE,
             NMBlocks.block().tooltip(TooltipSupplier.simple(1)), NMBlocks.FLUID_MACHINE_SETTINGS);
 
     public static void init()
@@ -94,7 +100,7 @@ public class FluidTransport
 
     private static FluidPipeBlock makePipe(FluidPipe.PipeCol col)
     {
-        var pipe = new FluidPipeBlock("fluid_pipe_" + col.name().toLowerCase(), col, NMBlocks.block().factory(FluidComponentItem::new), NMBlocks.FLUID_PIPE_SETTINGS);
+        var pipe = C.addParent(new Identifier(NeepMeat.NAMESPACE, "fluid_pipe_" + col.name().toLowerCase()), new FluidPipeBlock(C, col, NMBlocks.block().factory(FluidComponentItem::new), NMBlocks.FLUID_PIPE_SETTINGS));
         COLOURED_FLUID_PIPES.put(col, pipe);
         return pipe;
     }

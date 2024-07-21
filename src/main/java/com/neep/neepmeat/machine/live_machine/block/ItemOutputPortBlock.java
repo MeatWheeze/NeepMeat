@@ -1,6 +1,7 @@
 package com.neep.neepmeat.machine.live_machine.block;
 
 import com.neep.meatlib.item.ItemSettings;
+import com.neep.meatlib.registry.RegistrationContext;
 import com.neep.neepmeat.machine.live_machine.block.entity.ItemOutputPortBlockEntity;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -14,9 +15,9 @@ public class ItemOutputPortBlock extends PortBlock<ItemOutputPortBlockEntity>
 {
     public static final BooleanProperty AUTO_EJECT = BooleanProperty.of("auto_eject");
 
-    public ItemOutputPortBlock(String registryName, ItemSettings itemSettings, Supplier<BlockEntityType<ItemOutputPortBlockEntity>> factory, Settings settings)
+    public ItemOutputPortBlock(RegistrationContext ctx, ItemSettings itemSettings, Supplier<BlockEntityType<ItemOutputPortBlockEntity>> factory, Settings settings)
     {
-        super(registryName, itemSettings, factory, settings);
+        super(ctx, itemSettings, factory, settings);
         setDefaultState(getDefaultState().with(AUTO_EJECT, false));
     }
 

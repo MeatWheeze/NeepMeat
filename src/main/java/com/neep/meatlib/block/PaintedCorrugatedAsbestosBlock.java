@@ -23,7 +23,7 @@ public class PaintedCorrugatedAsbestosBlock extends PaintedBlockManager.PaintedB
     }
 
     @Override
-    protected BlockItem makeItem()
+    protected BlockItem makeItem(RegistrationContext ctx)
     {
         return new BaseBlockItem(this, ctx, ItemSettings.block(), new MeatlibItemSettings().tags(NMTags.PAINTED_CORRUGATED_ASBESTOS).group(NMItemGroups.GENERAL));
     }

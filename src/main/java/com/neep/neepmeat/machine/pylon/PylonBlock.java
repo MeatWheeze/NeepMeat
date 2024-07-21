@@ -1,8 +1,8 @@
 package com.neep.neepmeat.machine.pylon;
 
+import com.neep.meatlib.block.MeatlibBlock;
 import com.neep.meatlib.block.MeatlibBlockSettings;
 import com.neep.meatlib.block.multi.TallBlock;
-import com.neep.meatlib.registry.BlockRegistry;
 import com.neep.meatlib.registry.RegistrationContext;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.transport.api.pipe.DataCable;
@@ -24,7 +24,7 @@ public class PylonBlock extends TallBlock implements BlockEntityProvider, DataCa
 {
     public static final VoxelShape OUTLINE = Block.createCuboidShape(0, 0, 0, 16, 32 + 16, 16);
 
-    public PylonBlock(RegistrationContext registryName, Settings settings)
+    public PylonBlock(RegistrationContext ctx, Settings settings)
     {
         super(ctx, settings);
     }
@@ -36,9 +36,9 @@ public class PylonBlock extends TallBlock implements BlockEntityProvider, DataCa
     }
 
     @Override
-    protected Structure createStructure()
+    protected Structure createStructure(RegistrationContext ctx)
     {
-        return BlockRegistry.queue(new PylonStructure(getRegistryName() + "_structure", MeatlibBlockSettings.copyOf(this.settings)));
+        return ctx.append(this, new PylonStructure(ctx, MeatlibBlockSettings.copyOf(this.settings)), MeatlibBlock::structure);
     }
 
     @Nullable
@@ -57,9 +57,9 @@ public class PylonBlock extends TallBlock implements BlockEntityProvider, DataCa
 
     public class PylonStructure extends Structure
     {
-        public PylonStructure(String registryName, Settings settings)
+        public PylonStructure(RegistrationContext ctx, Settings settings)
         {
-            super(registryName, settings);
+            super(settings);
         }
     }
 }

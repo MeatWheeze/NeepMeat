@@ -1,9 +1,9 @@
 package com.neep.neepmeat.transport.block.item_transport;
 
 import com.neep.meatlib.item.ItemSettings;
+import com.neep.meatlib.registry.RegistrationContext;
 import com.neep.neepmeat.transport.ItemTransport;
 import com.neep.neepmeat.transport.api.pipe.ItemPipe;
-import com.neep.neepmeat.transport.block.item_transport.entity.StorageBusBlockEntity;
 import com.neep.neepmeat.util.MiscUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -22,9 +22,9 @@ import org.jetbrains.annotations.Nullable;
 
 public class StorageBusBlock extends ItemPipeBlock implements ItemPipe
 {
-    public StorageBusBlock(String registryName, ItemSettings itemSettings, Settings settings)
+    public StorageBusBlock(RegistrationContext ctx, ItemSettings itemSettings, Settings settings)
     {
-        super(registryName, itemSettings, settings);
+        super(ctx, itemSettings, settings);
     }
 
     @Override

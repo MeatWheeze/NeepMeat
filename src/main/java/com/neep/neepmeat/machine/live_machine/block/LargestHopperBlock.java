@@ -2,7 +2,7 @@ package com.neep.neepmeat.machine.live_machine.block;
 
 import com.neep.meatlib.block.MeatlibBlock;
 import com.neep.meatlib.item.ItemSettings;
-import com.neep.meatlib.registry.BlockRegistry;
+import com.neep.meatlib.registry.RegistrationContext;
 import com.neep.meatlib.storage.MeatlibStorageUtil;
 import com.neep.neepmeat.api.big_block.BigBlock;
 import com.neep.neepmeat.api.big_block.BigBlockPattern;
@@ -30,16 +30,14 @@ import org.jetbrains.annotations.Nullable;
 
 public class LargestHopperBlock extends BigBlock<LargestHopperBlock.StructureBlock> implements MeatlibBlock, BlockEntityProvider
 {
-    private final String registryName;
     private final BigBlockPattern pattern = new BigBlockPattern().oddCylinder(1, 0, 0, () -> getStructure().getDefaultState());
     private final VoxelShape shape = VoxelShapes.combine(VoxelShapes.cuboid(-1, 0, -1, 2, 1, 2),
             Block.createCuboidShape(-16 + 6, 2, -16 + 6, 32 - 6, 16, 32 - 6), BooleanBiFunction.ONLY_FIRST);
 
-    public LargestHopperBlock(String registryName, Settings settings, ItemSettings itemSettings)
+    public LargestHopperBlock(RegistrationContext ctx, Settings settings, ItemSettings itemSettings)
     {
-        super(settings);
+        super(ctx, settings);
         itemSettings.create(this, ctx, itemSettings);
-        this.registryName = registryName;
     }
 
     @Nullable
@@ -56,21 +54,15 @@ public class LargestHopperBlock extends BigBlock<LargestHopperBlock.StructureBlo
     }
 
     @Override
-    protected StructureBlock registerStructureBlock()
+    protected StructureBlock registerStructureBlock(RegistrationContext ctx)
     {
-        return BlockRegistry.queue(new StructureBlock(this, FabricBlockSettings.copyOf(settings)), "largest_hopper_structure");
+        return ctx.append(this, new StructureBlock(this, FabricBlockSettings.copyOf(settings)), "largest_hopper_structure");
     }
 
     @Override
     public BigBlockPattern getVolume(BlockState blockState)
     {
         return pattern;
-    }
-
-    @Override
-    public String getRegistryName()
-    {
-        return registryName;
     }
 
     @Override

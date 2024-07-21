@@ -1,6 +1,7 @@
 package com.neep.neepmeat.block.vat;
 
 import com.neep.meatlib.item.ItemSettings;
+import com.neep.meatlib.registry.RegistrationContext;
 import com.neep.neepmeat.api.multiblock.IPortBlock;
 import com.neep.neepmeat.api.multiblock.PortBlockEntity;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
@@ -18,9 +19,9 @@ import org.jetbrains.annotations.Nullable;
 @SuppressWarnings("UnstableApiUsage")
 public class ItemPortBlock extends VatCasingBlock implements IPortBlock<ItemVariant>, VatComponent, BlockEntityProvider
 {
-    public ItemPortBlock(String registryName, ItemSettings itemSettings, Settings settings)
+    public ItemPortBlock(RegistrationContext ctx, ItemSettings itemSettings, Settings settings)
     {
-        super(registryName, itemSettings, settings);
+        super(ctx, itemSettings, settings);
     }
 
     @Override

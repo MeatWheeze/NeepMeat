@@ -22,7 +22,7 @@ import java.util.List;
 
 public class WrithingEarthSpoutBlock extends BaseBlock implements BlockEntityProvider
 {
-    public WrithingEarthSpoutBlock(RegistrationContext registryName, ItemSettings itemSettings, Settings settings)
+    public WrithingEarthSpoutBlock(RegistrationContext ctx, ItemSettings itemSettings, Settings settings)
     {
         super(ctx, itemSettings, settings);
     }

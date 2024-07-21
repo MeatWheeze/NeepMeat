@@ -1,6 +1,7 @@
 package com.neep.neepmeat.block.vat;
 
 import com.neep.meatlib.item.ItemSettings;
+import com.neep.meatlib.registry.RegistrationContext;
 import com.neep.neepmeat.api.multiblock.IPortBlock;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.minecraft.block.BlockEntityProvider;
@@ -17,9 +18,9 @@ import org.jetbrains.annotations.Nullable;
 @SuppressWarnings("UnstableApiUsage")
 public class FluidPortBlock extends VatCasingBlock implements IPortBlock<FluidVariant>, VatComponent, BlockEntityProvider
 {
-    public FluidPortBlock(String registryName, ItemSettings itemSettings, Settings settings)
+    public FluidPortBlock(RegistrationContext ctx, ItemSettings itemSettings, Settings settings)
     {
-        super(registryName, itemSettings, settings);
+        super(ctx, itemSettings, settings);
     }
 
     @Override

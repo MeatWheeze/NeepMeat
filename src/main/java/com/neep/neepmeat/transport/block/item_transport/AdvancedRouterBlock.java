@@ -1,6 +1,7 @@
 package com.neep.neepmeat.transport.block.item_transport;
 
 import com.neep.meatlib.item.ItemSettings;
+import com.neep.meatlib.registry.RegistrationContext;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.transport.block.item_transport.entity.RouterBlockEntity;
 import com.neep.neepmeat.transport.item_network.ItemInPipe;
@@ -17,9 +18,9 @@ import org.jetbrains.annotations.Nullable;
 
 public class AdvancedRouterBlock extends RouterBlock
 {
-    public AdvancedRouterBlock(String registryName, ItemSettings itemSettings, Settings settings)
+    public AdvancedRouterBlock(RegistrationContext ctx, ItemSettings itemSettings, Settings settings)
     {
-        super(registryName, itemSettings, settings);
+        super(ctx, itemSettings, settings);
     }
 
     @Override

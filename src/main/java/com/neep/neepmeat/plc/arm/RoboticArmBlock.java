@@ -17,7 +17,7 @@ import org.jetbrains.annotations.Nullable;
 public class RoboticArmBlock extends BaseBlock implements BlockEntityProvider
 {
 
-    public RoboticArmBlock(RegistrationContext registryName, ItemSettings itemSettings, Settings settings)
+    public RoboticArmBlock(RegistrationContext ctx, ItemSettings itemSettings, Settings settings)
     {
         super(ctx, itemSettings, settings.nonOpaque());
     }

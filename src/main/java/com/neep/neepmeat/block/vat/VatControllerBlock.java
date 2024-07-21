@@ -2,6 +2,7 @@ package com.neep.neepmeat.block.vat;
 
 import com.neep.meatlib.block.BaseHorFacingBlock;
 import com.neep.meatlib.item.ItemSettings;
+import com.neep.meatlib.registry.RegistrationContext;
 import com.neep.neepmeat.api.multiblock.MultiBlock;
 import com.neep.neepmeat.block.entity.machine.VatControllerBlockEntity;
 import net.minecraft.block.Block;
@@ -24,9 +25,9 @@ public class VatControllerBlock extends BaseHorFacingBlock implements MultiBlock
 {
     public static final BooleanProperty ASSEMBLED = BooleanProperty.of("assembled");
 
-    public VatControllerBlock(String registryName, ItemSettings itemSettings, Settings settings)
+    public VatControllerBlock(RegistrationContext ctx, ItemSettings itemSettings, Settings settings)
     {
-        super(registryName, itemSettings, settings);
+        super(ctx, itemSettings, settings);
     }
 
     @Override

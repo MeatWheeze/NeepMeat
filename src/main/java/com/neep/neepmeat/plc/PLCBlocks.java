@@ -3,7 +3,6 @@ package com.neep.neepmeat.plc;
 import com.neep.meatlib.block.MeatlibBlockSettings;
 import com.neep.meatlib.item.ItemSettings;
 import com.neep.meatlib.item.TooltipSupplier;
-import com.neep.meatlib.registry.BlockRegistry;
 import com.neep.meatlib.registry.RegistrationContext;
 import com.neep.meatlib.registry.annotation.Path;
 import com.neep.meatlib.registry.annotation.RegisterMe;
@@ -26,7 +25,7 @@ import net.minecraft.block.entity.BlockEntityType;
 @RegisterMe(NeepMeat.NAMESPACE)
 public class PLCBlocks
 {
-    private static final RegistrationContext C = NMBlocks.C;
+    private static final RegistrationContext C = NeepMeat.C;
 
     public static BlockEntityType<PLCRedstoneInterfaceBlockEntity> REDSTONE_INTERFACE_ENTITY;
     public static BlockEntityType<RoboticArmBlockEntity> ROBOTIC_ARM_ENTITY;

@@ -5,7 +5,6 @@ import com.neep.meatlib.block.MeatlibBlockSettings;
 import com.neep.meatlib.item.BaseBlockItem;
 import com.neep.meatlib.item.ItemSettings;
 import com.neep.meatlib.item.MeatlibItemSettings;
-import com.neep.meatlib.registry.BlockRegistry;
 import com.neep.meatlib.registry.ItemRegistry;
 import com.neep.meatlib.registry.RegistrationContext;
 import com.neep.neepmeat.NMItemGroups;
@@ -38,13 +37,11 @@ import java.util.Map;
 public class LargeFanBlock extends BigBlock<LargeFanBlock.LargeFanStructureBlock> implements MeatlibBlock, BlockEntityProvider
 {
     public static final EnumProperty<Direction.Axis> AXIS = Properties.AXIS;
-    private final RegistrationContext ctx;
     private final Map<Direction.Axis, BigBlockPattern> patternMap;
 
     public LargeFanBlock(RegistrationContext ctx, ItemSettings itemSettings, Settings settings)
     {
-        super(settings);
-        this.ctx = ctx;
+        super(ctx, settings);
         BigBlockPattern upPattern = BigBlockPattern.makeOddCylinder(1, 0, 0, getStructure().getDefaultState());
         BigBlockPattern northPattern = BigBlockPattern.makeRange(-1, -1, 0, 1, 1, 0, getStructure().getDefaultState());
         ItemRegistry.queue(new BaseBlockItem(this, ctx, itemSettings, new MeatlibItemSettings().group(NMItemGroups.GENERAL)));
@@ -64,7 +61,7 @@ public class LargeFanBlock extends BigBlock<LargeFanBlock.LargeFanStructureBlock
     }
 
     @Override
-    protected LargeFanStructureBlock registerStructureBlock()
+    protected LargeFanStructureBlock registerStructureBlock(RegistrationContext ctx)
     {
         return ctx.append(this, new LargeFanStructureBlock(this, MeatlibBlockSettings.copyOf(this)), "large_fan_structure");
     }

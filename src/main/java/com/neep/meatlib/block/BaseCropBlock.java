@@ -30,7 +30,7 @@ public class BaseCropBlock extends CropBlock implements MeatlibBlock, MeatlibBlo
     {
         super(settings);
         this.seedsItem = new BaseSeedsItem(this, ctx, itemMaxStack, lore);
-        ctx.append(this, s -> s + seedsAppend, seedsItem);
+        ctx.append(this, seedsItem, s -> s + seedsAppend);
     }
 
     public BaseCropBlock(RegistrationContext ctx, int itemMaxStack, int lore, Settings settings)

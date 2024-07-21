@@ -30,7 +30,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class PedestalBlock extends BaseBlock implements BlockEntityProvider, DataCable
 {
-    public PedestalBlock(RegistrationContext registryName, ItemSettings itemSettings, Settings settings)
+    public PedestalBlock(RegistrationContext ctx, ItemSettings itemSettings, Settings settings)
     {
         super(ctx, itemSettings, settings);
     }

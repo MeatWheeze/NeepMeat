@@ -1,5 +1,6 @@
 package com.neep.neepmeat.api.multiblock2;
 
+import com.neep.meatlib.registry.RegistrationContext;
 import com.neep.neepmeat.api.big_block.BigBlockPattern;
 import com.neep.neepmeat.init.NMSounds;
 import net.minecraft.block.Block;
@@ -22,17 +23,17 @@ public abstract class Multiblock2ControllerBlock<T extends MultiBlockStructure<?
     private final T structureBlock;
     public static final BooleanProperty ASSEMBLED = BooleanProperty.of("assembled");
 
-    public Multiblock2ControllerBlock(Settings settings)
+    public Multiblock2ControllerBlock(RegistrationContext ctx, Settings settings)
     {
         super(settings);
-        this.structureBlock = registerStructureBlock();
+        this.structureBlock = registerStructureBlock(ctx);
         setDefaultState(getDefaultState().with(ASSEMBLED, false));
     }
 
     protected abstract BigBlockPattern getAssembledPattern(BlockState blockState);
     protected abstract MultiblockUnassembledPattern getUnassembledPattern(BlockState blockState);
 
-    protected abstract T registerStructureBlock();
+    protected abstract T registerStructureBlock(RegistrationContext ctx);
 
     public T getStructure()
     {

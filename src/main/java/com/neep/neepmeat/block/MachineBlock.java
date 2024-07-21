@@ -3,6 +3,7 @@ package com.neep.neepmeat.block;
 import com.neep.meatlib.block.BaseBlock;
 import com.neep.meatlib.item.BaseBlockItem;
 import com.neep.meatlib.item.ItemSettings;
+import com.neep.meatlib.registry.RegistrationContext;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.api.live_machine.LivingMachineStructure;
 import com.neep.neepmeat.api.live_machine.StructureProperty;
@@ -25,9 +26,9 @@ public class MachineBlock extends BaseBlock implements LivingMachineStructure
 {
     private final EnumMap<StructureProperty, StructureProperty.Entry> properties;
 
-    public MachineBlock(String registryName, ItemSettings itemSettings, Map<StructureProperty, StructureProperty.Entry> properties, Settings settings)
+    public MachineBlock(RegistrationContext ctx, ItemSettings itemSettings, Map<StructureProperty, StructureProperty.Entry> properties, Settings settings)
     {
-        super(ctx, itemSettings.factory((block, ctx, itemSettings1) -> new MachineBlockItem(block, registryName1, itemSettings1)), settings);
+        super(ctx, itemSettings.factory(MachineBlockItem::new), settings);
         this.properties = new EnumMap<>(properties);
 //        properties.put(Property.MAX_POWER, 10f);
     }
@@ -66,9 +67,9 @@ public class MachineBlock extends BaseBlock implements LivingMachineStructure
 
     public static class MachineBlockItem extends BaseBlockItem
     {
-        public MachineBlockItem(Block block, String registryName, ItemSettings itemSettings)
+        public MachineBlockItem(Block block, RegistrationContext ctx, ItemSettings itemSettings)
         {
-            super(block, registryName, itemSettings);
+            super(block, ctx, itemSettings);
         }
 
         @Override

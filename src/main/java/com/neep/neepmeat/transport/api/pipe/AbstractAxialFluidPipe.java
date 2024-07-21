@@ -2,6 +2,7 @@ package com.neep.neepmeat.transport.api.pipe;
 
 import com.neep.meatlib.block.BaseFacingBlock;
 import com.neep.meatlib.item.ItemSettings;
+import com.neep.meatlib.registry.RegistrationContext;
 import com.neep.neepmeat.transport.block.fluid_transport.FluidPipeBlock;
 import com.neep.neepmeat.transport.fluid_network.node.AcceptorModes;
 import com.neep.neepmeat.transport.fluid_network.node.BlockPipeVertex;
@@ -31,7 +32,7 @@ public abstract class AbstractAxialFluidPipe extends BaseFacingBlock implements 
     public static final VoxelShape Y_SHAPE = Block.createCuboidShape(4, 0, 4, 12, 16, 12);
     public static final VoxelShape Z_SHAPE = Block.createCuboidShape(4, 4, 0, 12, 12, 16);
 
-    public AbstractAxialFluidPipe(String itemName, ItemSettings itemSettings, Settings settings)
+    public AbstractAxialFluidPipe(RegistrationContext ctx, ItemSettings itemSettings, Settings settings)
     {
         super(ctx, itemSettings, settings);
     }

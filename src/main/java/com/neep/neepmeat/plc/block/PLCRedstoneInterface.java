@@ -18,7 +18,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class PLCRedstoneInterface extends BaseBlock implements BlockEntityProvider, DataCable
 {
-    public PLCRedstoneInterface(RegistrationContext registryName, Settings settings)
+    public PLCRedstoneInterface(RegistrationContext ctx, Settings settings)
     {
         super(ctx, settings);
     }

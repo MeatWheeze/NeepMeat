@@ -22,7 +22,7 @@ public class PowerFlowerControllerBlock extends BaseBlock implements BlockEntity
 {
     public static final BooleanProperty VALID = BooleanProperty.of("valid");
 
-    public PowerFlowerControllerBlock(RegistrationContext registryName, ItemSettings block, Settings settings)
+    public PowerFlowerControllerBlock(RegistrationContext ctx, ItemSettings block, Settings settings)
     {
         super(ctx, block, settings.nonOpaque());
         setDefaultState(getDefaultState().with(VALID, true));

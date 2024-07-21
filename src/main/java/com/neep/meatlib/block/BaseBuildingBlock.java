@@ -29,15 +29,15 @@ public class BaseBuildingBlock extends Block implements MeatlibBlock
         super(settings);
 
         this.stairs = new BaseStairsBlock(ctx, this.getDefaultState(), ItemSettings.block(), settings);
-        ctx.append(this, s -> s + "_stairs", stairs);
+        ctx.append(this, stairs, s -> s + "_stairs");
 
         this.slab = new BaseSlabBlock(ctx, this.getDefaultState(), ItemSettings.block(), settings);
-        ctx.append(this, s -> s + "_slab", slab);
+        ctx.append(this, slab, s -> s + "_slab");
 
         if (makeWall)
         {
             wall = new BaseWallBlock(ctx, ItemSettings.block(), settings);
-            ctx.append(this, s -> s + "_wall", wall);
+            ctx.append(this, wall, s -> s + "_wall");
         }
 
         this.blockItem = itemSettings.create(this, ctx, ItemSettings.block());

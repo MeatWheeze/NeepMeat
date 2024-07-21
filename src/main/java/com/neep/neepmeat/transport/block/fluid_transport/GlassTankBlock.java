@@ -1,6 +1,7 @@
 package com.neep.neepmeat.transport.block.fluid_transport;
 
 import com.neep.meatlib.item.ItemSettings;
+import com.neep.meatlib.registry.RegistrationContext;
 import com.neep.neepmeat.init.NMBlockEntities;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockRenderType;
@@ -16,9 +17,9 @@ import org.jetbrains.annotations.Nullable;
 
 public class GlassTankBlock extends TankBlock implements BlockEntityProvider
 {
-    public GlassTankBlock(String itemName, ItemSettings itemSettings, Settings settings)
+    public GlassTankBlock(RegistrationContext ctx, ItemSettings itemSettings, Settings settings)
     {
-        super(itemName, itemSettings, settings.nonOpaque());
+        super(ctx, itemSettings, settings.nonOpaque());
     }
 
     @Nullable

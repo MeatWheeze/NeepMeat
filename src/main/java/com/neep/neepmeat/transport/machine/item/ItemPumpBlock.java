@@ -1,6 +1,7 @@
 package com.neep.neepmeat.transport.machine.item;
 
 import com.neep.meatlib.item.ItemSettings;
+import com.neep.meatlib.registry.RegistrationContext;
 import com.neep.meatlib.storage.MeatlibStorageUtil;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.machine.content_detector.InventoryDetectorBlock;
@@ -25,9 +26,9 @@ import java.util.function.Predicate;
 
 public class ItemPumpBlock extends EjectorBlock
 {
-    public ItemPumpBlock(String registryName, ItemSettings itemSettings, FabricBlockSettings settings)
+    public ItemPumpBlock(RegistrationContext ctx, ItemSettings itemSettings, FabricBlockSettings settings)
     {
-        super(registryName, itemSettings, settings.nonOpaque().solidBlock(InventoryDetectorBlock::never));
+        super(ctx, itemSettings, settings.nonOpaque().solidBlock(InventoryDetectorBlock::never));
     }
 
     @Override

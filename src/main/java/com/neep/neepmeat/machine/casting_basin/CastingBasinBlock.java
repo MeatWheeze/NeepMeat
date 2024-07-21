@@ -26,7 +26,7 @@ public class CastingBasinBlock extends BaseBlock implements BlockEntityProvider
 {
     protected static final VoxelShape SHAPE = Block.createCuboidShape(0, 0, 0, 16, 14, 16);
 
-    public CastingBasinBlock(RegistrationContext registryName, ItemSettings itemSettings, Settings settings)
+    public CastingBasinBlock(RegistrationContext ctx, ItemSettings itemSettings, Settings settings)
     {
         super(ctx, itemSettings, settings);
     }

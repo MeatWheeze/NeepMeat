@@ -1,6 +1,7 @@
 package com.neep.neepmeat.transport.block.fluid_transport;
 
 import com.neep.meatlib.item.ItemSettings;
+import com.neep.meatlib.registry.RegistrationContext;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.transport.FluidTransport;
 import com.neep.neepmeat.transport.api.pipe.AbstractPipeBlock;
@@ -47,7 +48,7 @@ public class FluidPipeBlock extends AbstractPipeBlock implements BlockEntityProv
 {
     public final PipeCol col;
 
-    public FluidPipeBlock(String itemName, FluidPipe.PipeCol col, ItemSettings itemSettings, Settings settings)
+    public FluidPipeBlock(RegistrationContext ctx, FluidPipe.PipeCol col, ItemSettings itemSettings, Settings settings)
     {
         super(ctx, itemSettings, settings);
         this.col = col;

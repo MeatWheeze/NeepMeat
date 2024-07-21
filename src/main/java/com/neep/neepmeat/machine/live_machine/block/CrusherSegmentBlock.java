@@ -2,7 +2,7 @@ package com.neep.neepmeat.machine.live_machine.block;
 
 import com.neep.meatlib.block.MeatlibBlock;
 import com.neep.meatlib.item.ItemSettings;
-import com.neep.meatlib.registry.BlockRegistry;
+import com.neep.meatlib.registry.RegistrationContext;
 import com.neep.neepmeat.api.big_block.BigBlock;
 import com.neep.neepmeat.api.big_block.BigBlockPattern;
 import com.neep.neepmeat.api.big_block.BigBlockStructure;
@@ -22,14 +22,12 @@ import org.jetbrains.annotations.Nullable;
 
 public class CrusherSegmentBlock extends BigBlock<CrusherSegmentBlock.CrusherSegmentStructureBlock> implements MeatlibBlock, BlockEntityProvider
 {
-    private final String registryName;
     private final BigBlockPattern pattern = new BigBlockPattern().oddCylinder(1, 0, 0, () -> getStructure().getDefaultState());
 
-    public CrusherSegmentBlock(String registryName, Settings settings, ItemSettings itemSettings)
+    public CrusherSegmentBlock(RegistrationContext ctx, Settings settings, ItemSettings itemSettings)
     {
-        super(settings);
+        super(ctx, settings);
         itemSettings.create(this, ctx, itemSettings);
-        this.registryName = registryName;
     }
 
     @Nullable
@@ -40,21 +38,15 @@ public class CrusherSegmentBlock extends BigBlock<CrusherSegmentBlock.CrusherSeg
     }
 
     @Override
-    protected CrusherSegmentStructureBlock registerStructureBlock()
+    protected CrusherSegmentStructureBlock registerStructureBlock(RegistrationContext ctx)
     {
-        return BlockRegistry.queue(new CrusherSegmentStructureBlock(this, FabricBlockSettings.copyOf(settings)), "crusher_segment_structure");
+        return ctx.append(this, new CrusherSegmentStructureBlock(this, FabricBlockSettings.copyOf(settings)), "crusher_segment_structure");
     }
 
     @Override
     public BigBlockPattern getVolume(BlockState blockState)
     {
         return pattern;
-    }
-
-    @Override
-    public String getRegistryName()
-    {
-        return registryName;
     }
 
     @Nullable

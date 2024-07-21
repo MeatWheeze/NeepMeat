@@ -4,7 +4,6 @@ import com.neep.meatlib.block.MeatlibBlock;
 import com.neep.meatlib.item.BaseBlockItem;
 import com.neep.meatlib.item.ItemSettings;
 import com.neep.meatlib.item.MeatlibItem;
-import com.neep.meatlib.registry.BlockRegistry;
 import com.neep.meatlib.registry.ItemRegistry;
 import com.neep.meatlib.registry.RegistrationContext;
 import com.neep.neepmeat.NeepMeat;
@@ -32,18 +31,16 @@ import org.jetbrains.annotations.Nullable;
 public class AdvancedIntegratorBlock extends BigBlock<AdvancedIntegratorStructure> implements MeatlibBlock, BlockEntityProvider, DataCable
 {
     private final BigBlockPattern volume;
-    private final RegistrationContext ctx;
 
     public AdvancedIntegratorBlock(RegistrationContext ctx, Settings settings)
     {
-        super(settings);
-        this.ctx = ctx;
+        super(ctx, settings);
         ItemRegistry.queue(NeepMeat.NAMESPACE, (MeatlibItem) new BaseBlockItem(this, ctx, ItemSettings.block()));
         volume = BigBlockPattern.makeOddCylinder(1, 0, 0, getStructure().getDefaultState());
     }
 
     @Override
-    protected AdvancedIntegratorStructure registerStructureBlock()
+    protected AdvancedIntegratorStructure registerStructureBlock(RegistrationContext ctx)
     {
         var block =  new AdvancedIntegratorStructure(this, settings);
         return ctx.append(this, block, "advanced_integrator_structure");

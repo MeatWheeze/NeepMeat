@@ -1,10 +1,10 @@
 package com.neep.neepmeat.transport.block.item_transport;
 
 import com.neep.meatlib.item.ItemSettings;
+import com.neep.meatlib.registry.RegistrationContext;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.transport.api.pipe.AbstractPipeBlock;
 import com.neep.neepmeat.transport.api.pipe.ItemPipe;
-import com.neep.neepmeat.transport.block.item_transport.entity.ItemPipeBlockEntity;
 import com.neep.neepmeat.transport.block.item_transport.entity.MergePipeBlockEntity;
 import com.neep.neepmeat.transport.fluid_network.PipeConnectionType;
 import com.neep.neepmeat.transport.item_network.ItemInPipe;
@@ -40,9 +40,9 @@ public class MergePipeBlock extends ItemPipeBlock
 {
     public static final DirectionProperty FACING = DirectionProperty.of("facing");
 
-    public MergePipeBlock(String itemName, ItemSettings itemSettings, Settings settings)
+    public MergePipeBlock(RegistrationContext ctx, ItemSettings itemSettings, Settings settings)
     {
-        super(itemName, itemSettings, settings);
+        super(ctx, itemSettings, settings);
         this.setDefaultState(super.getDefaultState().with(FACING, Direction.NORTH));
     }
 

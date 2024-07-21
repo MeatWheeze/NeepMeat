@@ -2,6 +2,7 @@ package com.neep.neepmeat.block.machine;
 
 import com.neep.meatlib.block.BaseVertFacingBlock;
 import com.neep.meatlib.item.ItemSettings;
+import com.neep.meatlib.registry.RegistrationContext;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
@@ -10,9 +11,9 @@ import org.jetbrains.annotations.Nullable;
 
 public class AgitatorBlock extends BaseVertFacingBlock implements BlockEntityProvider
 {
-    public AgitatorBlock(String registryName, ItemSettings itemSettings, Settings settings)
+    public AgitatorBlock(RegistrationContext ctx, ItemSettings itemSettings, Settings settings)
     {
-        super(registryName, itemSettings, settings);
+        super(ctx, itemSettings, settings);
     }
 
     @Nullable

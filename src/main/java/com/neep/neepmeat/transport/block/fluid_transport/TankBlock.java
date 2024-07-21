@@ -3,6 +3,7 @@ package com.neep.neepmeat.transport.block.fluid_transport;
 import com.google.common.collect.Lists;
 import com.neep.meatlib.block.BaseColumnBlock;
 import com.neep.meatlib.item.ItemSettings;
+import com.neep.meatlib.registry.RegistrationContext;
 import com.neep.neepmeat.api.storage.WritableSingleFluidStorage;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.transport.machine.fluid.TankBlockEntity;
@@ -36,9 +37,9 @@ import java.util.List;
 
 public class TankBlock extends BaseColumnBlock implements BlockEntityProvider, BlockPickInteractionAware
 {
-    public TankBlock(String itemName, ItemSettings itemSettings, Settings settings)
+    public TankBlock(RegistrationContext ctx, ItemSettings itemSettings, Settings settings)
     {
-        super(itemName, itemSettings.maxCount(1), settings);
+        super(ctx, itemSettings.maxCount(1), settings);
     }
 
     @Override

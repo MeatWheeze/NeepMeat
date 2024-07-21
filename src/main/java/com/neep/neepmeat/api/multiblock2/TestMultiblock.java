@@ -5,8 +5,8 @@ import com.neep.meatlib.block.MeatlibBlockSettings;
 import com.neep.meatlib.item.BaseBlockItem;
 import com.neep.meatlib.item.ItemSettings;
 import com.neep.meatlib.item.MeatlibItemSettings;
-import com.neep.meatlib.registry.BlockRegistry;
 import com.neep.meatlib.registry.ItemRegistry;
+import com.neep.meatlib.registry.RegistrationContext;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.api.big_block.BigBlockPattern;
 import com.neep.neepmeat.api.big_block.BigBlockStructureEntity;
@@ -27,14 +27,12 @@ public class TestMultiblock extends Multiblock2ControllerBlock<TestMultiblock.TM
 {
     private final BigBlockPattern assembledPattern;
     private final MultiblockUnassembledPattern unassembledPattern;
-    private final String name;
 
     private final VoxelShape shape = VoxelShapes.cuboid(-1, 0, -1, 2, 3, 2);
 
-    public TestMultiblock(String name, Settings settings)
+    public TestMultiblock(RegistrationContext ctx, Settings settings)
     {
-        super(settings);
-        this.name = name;
+        super(ctx, settings);
 
         assembledPattern = new BigBlockPattern().oddCylinder(
                 1, 1, 2, () -> getStructure().getDefaultState()
@@ -48,9 +46,9 @@ public class TestMultiblock extends Multiblock2ControllerBlock<TestMultiblock.TM
     }
 
     @Override
-    protected TMStructureBlock registerStructureBlock()
+    protected TMStructureBlock registerStructureBlock(RegistrationContext ctx)
     {
-        return BlockRegistry.queue(new TMStructureBlock(this, MeatlibBlockSettings.copyOf(settings)), "test_multiblock_structure");
+        return ctx.append(this, new TMStructureBlock(this, MeatlibBlockSettings.copyOf(settings)), "test_multiblock_structure");
     }
 
     @Override
@@ -63,12 +61,6 @@ public class TestMultiblock extends Multiblock2ControllerBlock<TestMultiblock.TM
     protected MultiblockUnassembledPattern getUnassembledPattern(BlockState blockState)
     {
         return unassembledPattern;
-    }
-
-    @Override
-    public String getRegistryName()
-    {
-        return name;
     }
 
     @Override

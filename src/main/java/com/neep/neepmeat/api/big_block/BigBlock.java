@@ -1,5 +1,6 @@
 package com.neep.neepmeat.api.big_block;
 
+import com.neep.meatlib.registry.RegistrationContext;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -22,13 +23,13 @@ public abstract class BigBlock<T extends BigBlockStructure<?>> extends Block
 
     private final T structureBlock;
 
-    public BigBlock(Settings settings)
+    public BigBlock(RegistrationContext ctx, Settings settings)
     {
         super(settings.pistonBehavior(PistonBehavior.IGNORE));
-        this.structureBlock = registerStructureBlock();
+        this.structureBlock = registerStructureBlock(ctx);
     }
 
-    protected abstract T registerStructureBlock();
+    protected abstract T registerStructureBlock(RegistrationContext ctx);
 
     public abstract BigBlockPattern getVolume(BlockState blockState);
 

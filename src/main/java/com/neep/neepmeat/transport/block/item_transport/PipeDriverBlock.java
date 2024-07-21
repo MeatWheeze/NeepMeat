@@ -3,6 +3,7 @@ package com.neep.neepmeat.transport.block.item_transport;
 import com.neep.meatlib.block.BaseBlock;
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
 import com.neep.meatlib.item.ItemSettings;
+import com.neep.meatlib.registry.RegistrationContext;
 import com.neep.neepmeat.plc.robot.PLCActuator;
 import com.neep.neepmeat.transport.ItemTransport;
 import com.neep.neepmeat.transport.api.item_network.RoutingNetwork;
@@ -35,7 +36,7 @@ public class PipeDriverBlock extends BaseBlock implements BlockEntityProvider, I
 {
     public static final BooleanProperty VALID = BooleanProperty.of("valid");
 
-    public PipeDriverBlock(String registryName, ItemSettings itemSettings, Settings settings)
+    public PipeDriverBlock(RegistrationContext ctx, ItemSettings itemSettings, Settings settings)
     {
         super(ctx, itemSettings, settings);
         this.setDefaultState(getDefaultState().with(VALID, false));

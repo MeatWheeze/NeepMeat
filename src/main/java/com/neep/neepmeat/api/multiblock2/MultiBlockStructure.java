@@ -92,12 +92,6 @@ public abstract class MultiBlockStructure<T extends BigBlockStructureEntity> ext
     }
 
     @Override
-    public String getRegistryName()
-    {
-        throw new NotImplementedException();
-    }
-
-    @Override
     public ItemConvertible dropsLike()
     {
         return null;

@@ -12,7 +12,7 @@ import net.minecraft.util.math.random.Random;
 
 public class WrithingStoneBlock extends BaseBlock
 {
-    public WrithingStoneBlock(RegistrationContext registryName, ItemSettings itemSettings, Settings settings)
+    public WrithingStoneBlock(RegistrationContext ctx, ItemSettings itemSettings, Settings settings)
     {
         super(ctx, itemSettings, settings);
     }

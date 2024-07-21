@@ -2,6 +2,7 @@ package com.neep.neepmeat.transport.block.fluid_transport;
 
 import com.neep.meatlib.block.BaseFacingBlock;
 import com.neep.meatlib.item.ItemSettings;
+import com.neep.meatlib.registry.RegistrationContext;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.init.NMSounds;
 import com.neep.neepmeat.item.FluidComponentItem;
@@ -35,9 +36,9 @@ public class PumpBlock extends BaseFacingBlock implements BlockEntityProvider
 {
     public static final BooleanProperty ACTIVE = BooleanProperty.of("active");
 
-    public PumpBlock(String itemName, ItemSettings itemSettings, Settings settings)
+    public PumpBlock(RegistrationContext ctx, ItemSettings itemSettings, Settings settings)
     {
-        super(ctx, itemSettings.factory((block, ctx, itemSettings1) -> new FluidComponentItem(block, registryName, itemSettings1)), settings.nonOpaque());
+        super(ctx, itemSettings.factory(FluidComponentItem::new), settings.nonOpaque());
     }
 
     @Override

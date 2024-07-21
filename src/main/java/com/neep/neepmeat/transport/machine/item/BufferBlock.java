@@ -2,6 +2,7 @@ package com.neep.neepmeat.transport.machine.item;
 
 import com.neep.meatlib.block.BaseBlock;
 import com.neep.meatlib.item.ItemSettings;
+import com.neep.meatlib.registry.RegistrationContext;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
@@ -29,7 +30,7 @@ public class BufferBlock extends BaseBlock implements BlockEntityProvider
 {
     public static final BooleanProperty POWERED = Properties.POWERED;
 
-    public BufferBlock(String itemName, ItemSettings itemSettings, Settings settings)
+    public BufferBlock(RegistrationContext ctx, ItemSettings itemSettings, Settings settings)
     {
         super(ctx, itemSettings, settings);
         this.setDefaultState(getDefaultState().with(POWERED, false));

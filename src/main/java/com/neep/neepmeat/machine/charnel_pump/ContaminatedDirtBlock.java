@@ -12,7 +12,7 @@ import net.minecraft.util.math.random.Random;
 
 public class ContaminatedDirtBlock extends BaseBlock
 {
-    public ContaminatedDirtBlock(RegistrationContext registryName, ItemSettings itemSettings, Settings settings)
+    public ContaminatedDirtBlock(RegistrationContext ctx, ItemSettings itemSettings, Settings settings)
     {
         super(ctx, itemSettings, settings);
     }

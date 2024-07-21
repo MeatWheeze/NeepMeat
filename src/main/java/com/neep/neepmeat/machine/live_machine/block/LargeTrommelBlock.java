@@ -4,8 +4,8 @@ import com.google.common.collect.ImmutableMap;
 import com.neep.meatlib.block.MeatlibBlock;
 import com.neep.meatlib.item.BaseBlockItem;
 import com.neep.meatlib.item.ItemSettings;
-import com.neep.meatlib.registry.BlockRegistry;
 import com.neep.meatlib.registry.ItemRegistry;
+import com.neep.meatlib.registry.RegistrationContext;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.api.big_block.BigBlock;
 import com.neep.neepmeat.api.big_block.BigBlockPattern;
@@ -44,18 +44,15 @@ import java.util.Map;
 
 public class LargeTrommelBlock extends BigBlock<LargeTrommelBlock.StructureBlock> implements MeatlibBlock, BlockEntityProvider
 {
-    private final String registryName;
-
     private final Map<Direction, BigBlockPattern> patternMap;
     private final Map<Direction, VoxelShape> shapeMap;
 
     public static final DirectionProperty FACING = Properties.HORIZONTAL_FACING;
 
-    public LargeTrommelBlock(String registryName, Settings settings, ItemSettings itemSettings)
+    public LargeTrommelBlock(RegistrationContext ctx, Settings settings, ItemSettings itemSettings)
     {
-        super(settings.nonOpaque());
-        this.registryName = registryName;
-        ItemRegistry.queue(new BaseBlockItem(this, registryName, itemSettings));
+        super(ctx, settings.nonOpaque());
+        ItemRegistry.queue(new BaseBlockItem(this, ctx, itemSettings));
         this.setDefaultState(getStateManager().getDefaultState().with(FACING, Direction.NORTH));
 
         BigBlockPattern volume = BigBlockPattern.makeRange(0, 0, 0, 1, 1, -3, getStructure().getDefaultState());
@@ -78,7 +75,7 @@ public class LargeTrommelBlock extends BigBlock<LargeTrommelBlock.StructureBlock
     }
 
     @Override
-    protected StructureBlock registerStructureBlock()
+    protected StructureBlock registerStructureBlock(RegistrationContext ctx)
     {
         // Oh, crumbs
         BigBlockStructure.BlockEntityRegisterererer<LargeTrommelStructureBlockEntity> registerererer = b -> Registry.register(
@@ -86,7 +83,7 @@ public class LargeTrommelBlock extends BigBlock<LargeTrommelBlock.StructureBlock
                 FabricBlockEntityTypeBuilder.create(
                         (p, s) -> new LargeTrommelStructureBlockEntity(b.getBlockEntityType(), p, s), b).build());
 
-        return BlockRegistry.queue(new StructureBlock(this, FabricBlockSettings.copyOf(this), registerererer), "large_trommel_structure");
+        return ctx.append(this, new StructureBlock(this, FabricBlockSettings.copyOf(this), registerererer), "large_trommel_structure");
     }
 
     @Override
@@ -123,12 +120,6 @@ public class LargeTrommelBlock extends BigBlock<LargeTrommelBlock.StructureBlock
     {
         super.appendProperties(builder);
         builder.add(FACING);
-    }
-
-    @Override
-    public String getRegistryName()
-    {
-        return registryName;
     }
 
     @Nullable

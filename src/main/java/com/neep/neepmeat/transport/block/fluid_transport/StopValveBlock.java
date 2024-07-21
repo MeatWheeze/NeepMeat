@@ -1,6 +1,7 @@
 package com.neep.neepmeat.transport.block.fluid_transport;
 
 import com.neep.meatlib.item.ItemSettings;
+import com.neep.meatlib.registry.RegistrationContext;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.item.FluidComponentItem;
 import com.neep.neepmeat.transport.api.pipe.AbstractAxialFluidPipe;
@@ -28,9 +29,9 @@ public class StopValveBlock extends AbstractAxialFluidPipe implements BlockEntit
     public static final BooleanProperty OPEN = BooleanProperty.of("open");
     public static final BooleanProperty POWERED = Properties.POWERED;
 
-    public StopValveBlock(String itemName, ItemSettings itemSettings, Settings settings)
+    public StopValveBlock(RegistrationContext ctx, ItemSettings itemSettings, Settings settings)
     {
-        super(itemName, itemSettings.factory((block, ctx, itemSettings1) -> new FluidComponentItem(block, registryName, itemSettings1)), settings.nonOpaque());
+        super(ctx, itemSettings.factory(FluidComponentItem::new), settings.nonOpaque());
         this.setDefaultState(this.getStateManager().getDefaultState()
                 .with(OPEN, true)
                 .with(POWERED, false));

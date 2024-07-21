@@ -1,5 +1,6 @@
 package com.neep.neepmeat.machine.well_head;
 
+import com.neep.meatlib.block.MeatlibBlock;
 import com.neep.meatlib.block.MeatlibBlockSettings;
 import com.neep.meatlib.block.multi.TallBlock;
 import com.neep.meatlib.item.ItemSettings;
@@ -27,22 +28,22 @@ public class WellHeadBlock extends TallBlock implements BlockEntityProvider
 {
     public static final DirectionProperty FACING = Properties.HORIZONTAL_FACING;
 
-    public WellHeadBlock(RegistrationContext registryName, ItemSettings itemSettings, Settings settings)
+    public WellHeadBlock(RegistrationContext ctx, ItemSettings itemSettings, Settings settings)
     {
-        super(registryName, itemSettings, settings.nonOpaque());
+        super(ctx, itemSettings, settings.nonOpaque());
     }
 
     @Override
-    protected Structure createStructure()
+    protected Structure createStructure(RegistrationContext ctx)
     {
-        return BlockRegistry.queue(new Structure(getRegistryName() + "_structure", MeatlibBlockSettings.copyOf(this.settings))
+        return ctx.append(this, new Structure(MeatlibBlockSettings.copyOf(this.settings))
         {
             @Override
             public BlockRenderType getRenderType(BlockState state)
             {
                 return BlockRenderType.INVISIBLE;
             }
-        });
+        }, MeatlibBlock::structure);
     }
 
     @Override

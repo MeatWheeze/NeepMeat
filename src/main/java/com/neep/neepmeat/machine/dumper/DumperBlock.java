@@ -2,6 +2,7 @@ package com.neep.neepmeat.machine.dumper;
 
 import com.neep.meatlib.block.BaseBlock;
 import com.neep.meatlib.item.ItemSettings;
+import com.neep.meatlib.registry.RegistrationContext;
 import com.neep.meatlib.storage.MeatlibStorageUtil;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.util.ItemUtil;
@@ -34,7 +35,7 @@ public class DumperBlock extends BaseBlock implements BlockEntityProvider
             Block.createCuboidShape(2, 0, 2, 14, 7, 14),
             BooleanBiFunction.ONLY_FIRST);
 
-    public DumperBlock(String registryName, ItemSettings itemSettings, Settings settings)
+    public DumperBlock(RegistrationContext ctx, ItemSettings itemSettings, Settings settings)
     {
         super(ctx, itemSettings, settings.nonOpaque());
     }

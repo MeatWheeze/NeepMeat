@@ -1,6 +1,7 @@
 package com.neep.neepmeat.transport.block.item_transport;
 
 import com.neep.meatlib.item.ItemSettings;
+import com.neep.meatlib.registry.RegistrationContext;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.transport.block.EncasedBlock;
 import com.neep.neepmeat.transport.block.item_transport.entity.EncasedItemPipeBlockEntity;
@@ -22,9 +23,9 @@ import org.jetbrains.annotations.Nullable;
 
 public class EncasedItemPipeBlock extends ItemPipeBlock implements EncasedBlock
 {
-    public EncasedItemPipeBlock(String itemName, ItemSettings itemSettings, Settings settings)
+    public EncasedItemPipeBlock(RegistrationContext ctx, ItemSettings itemSettings, Settings settings)
     {
-        super(itemName, itemSettings, settings.nonOpaque());
+        super(ctx, itemSettings, settings.nonOpaque());
     }
 
     public VoxelShape getPipeOutlineShape(BlockState state, BlockView world, BlockPos pos)

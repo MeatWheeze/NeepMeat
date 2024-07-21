@@ -1,6 +1,7 @@
 package com.neep.meatlib;
 
 import com.neep.meatlib.registry.RegistrationContext;
+import com.neep.meatlib.registry.annotation.Ignore;
 import com.neep.meatlib.registry.annotation.RegisterMe;
 import it.unimi.dsi.fastutil.Pair;
 import org.jetbrains.annotations.Nullable;
@@ -29,11 +30,16 @@ public class MeatLibRegistration
             if (annotation == null)
                 throw new IllegalStateException(String.format("Class %s is not annotated with %s", clazz, RegisterMe.class.getSimpleName()));
 
+            RegistrationContext ctx = pair.value();
             String namespace = annotation.value();
 
             Arrays.stream(clazz.getDeclaredFields())
                     .filter(f -> Modifier.isStatic(f.getModifiers()))
-                    .forEach(f -> processField(namespace, pair.value(), f));
+                    .filter(f -> !f.isAnnotationPresent(Ignore.class))
+                    .filter(f -> ctx.isValidClass(f.getType()))
+                    .forEach(f -> processField(namespace, ctx, f));
+
+            ctx.registerAll();
         }
     }
 

@@ -3,7 +3,6 @@ package com.neep.neepmeat.machine.assembler;
 import com.neep.meatlib.block.MeatlibBlockSettings;
 import com.neep.meatlib.block.multi.TallBlock;
 import com.neep.meatlib.item.ItemSettings;
-import com.neep.meatlib.registry.BlockRegistry;
 import com.neep.meatlib.registry.RegistrationContext;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.transport.api.pipe.FluidPipe;
@@ -47,9 +46,9 @@ public class AssemblerBlock extends TallBlock implements BlockEntityProvider
     }
 
     @Override
-    protected Structure createStructure()
+    protected Structure createStructure(RegistrationContext ctx)
     {
-        return BlockRegistry.queue(new Top(getRegistryName() + "_structure", MeatlibBlockSettings.copyOf(this.settings)));
+        return ctx.append(this, new Top(ctx, MeatlibBlockSettings.copyOf(this.settings)), s -> s + "_structure");
     }
 
     @Override
@@ -132,9 +131,9 @@ public class AssemblerBlock extends TallBlock implements BlockEntityProvider
 
     public class Top extends TallBlock.Structure
     {
-        public Top(String registryName, Settings settings)
+        public Top(RegistrationContext ctx, Settings settings)
         {
-            super(registryName, settings);
+            super(settings);
         }
 
         @Override

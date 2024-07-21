@@ -2,6 +2,7 @@ package com.neep.neepmeat.machine.sifter;
 
 import com.neep.meatlib.block.BaseBlock;
 import com.neep.meatlib.item.ItemSettings;
+import com.neep.meatlib.registry.RegistrationContext;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
@@ -14,7 +15,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class SifterHopperBlock extends BaseBlock implements BlockEntityProvider
 {
-    public SifterHopperBlock(String itemName, ItemSettings itemSettings, Settings settings)
+    public SifterHopperBlock(RegistrationContext ctx, ItemSettings itemSettings, Settings settings)
     {
         super(ctx, itemSettings, settings);
     }

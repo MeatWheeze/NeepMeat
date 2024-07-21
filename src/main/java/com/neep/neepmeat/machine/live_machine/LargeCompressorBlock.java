@@ -3,8 +3,8 @@ package com.neep.neepmeat.machine.live_machine;
 import com.neep.meatlib.block.MeatlibBlock;
 import com.neep.meatlib.item.BaseBlockItem;
 import com.neep.meatlib.item.ItemSettings;
-import com.neep.meatlib.registry.BlockRegistry;
 import com.neep.meatlib.registry.ItemRegistry;
+import com.neep.meatlib.registry.RegistrationContext;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.api.FluidPump;
 import com.neep.neepmeat.api.big_block.BigBlock;
@@ -49,16 +49,14 @@ public class LargeCompressorBlock extends BigBlock<LargeCompressorBlock.Structur
 {
     public static final DirectionProperty FACING = Properties.HORIZONTAL_FACING;
 
-    private final String registryName;
     private final Map<Direction, BigBlockPattern> patternMap;
     private final Map<Direction, VoxelShape> shapeMap;
 
-    public LargeCompressorBlock(String registryName, ItemSettings itemSettings, Settings settings)
+    public LargeCompressorBlock(RegistrationContext ctx, ItemSettings itemSettings, Settings settings)
     {
-        super(settings);
-        this.registryName = registryName;
+        super(ctx, settings);
 
-        ItemRegistry.queue(new BaseBlockItem(this, registryName, itemSettings));
+        ItemRegistry.queue(new BaseBlockItem(this, ctx, itemSettings));
 
         BigBlockPattern pattern = new BigBlockPattern().oddCylinder(1, 0, 2, () -> getStructure().getDefaultState())
                 .enableApi(-1, 2, -1, FluidStorage.SIDED)
@@ -93,7 +91,7 @@ public class LargeCompressorBlock extends BigBlock<LargeCompressorBlock.Structur
     }
 
     @Override
-    protected Structure registerStructureBlock()
+    protected Structure registerStructureBlock(RegistrationContext ctx)
     {
         // Oh, crumbs
         BigBlockStructure.BlockEntityRegisterererer<StructureBlockEntity> registerererer = b -> Registry.register(
@@ -101,7 +99,7 @@ public class LargeCompressorBlock extends BigBlock<LargeCompressorBlock.Structur
                 FabricBlockEntityTypeBuilder.create(
                         (p, s) -> new StructureBlockEntity(b.getBlockEntityType(), p, s), b).build());
 
-        return BlockRegistry.queue(new Structure(this, FabricBlockSettings.copyOf(this), registerererer), "large_compressor_structure");
+        return ctx.append(this, new Structure(this, FabricBlockSettings.copyOf(this), registerererer), "large_compressor_structure");
     }
 
     @Override
@@ -114,12 +112,6 @@ public class LargeCompressorBlock extends BigBlock<LargeCompressorBlock.Structur
     public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context)
     {
         return shapeMap.get(state.get(FACING));
-    }
-
-    @Override
-    public String getRegistryName()
-    {
-        return registryName;
     }
 
     @Override

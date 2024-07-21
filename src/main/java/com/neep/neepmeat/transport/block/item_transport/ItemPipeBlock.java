@@ -2,6 +2,7 @@ package com.neep.neepmeat.transport.block.item_transport;
 
 import com.google.common.collect.Iterables;
 import com.neep.meatlib.item.ItemSettings;
+import com.neep.meatlib.registry.RegistrationContext;
 import com.neep.meatlib.storage.MeatlibStorageUtil;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.transport.api.pipe.AbstractPipeBlock;
@@ -40,7 +41,7 @@ import java.util.EnumSet;
 
 public class ItemPipeBlock extends AbstractPipeBlock implements BlockEntityProvider, ItemPipe
 {
-    public ItemPipeBlock(String itemName, ItemSettings itemSettings, Settings settings)
+    public ItemPipeBlock(RegistrationContext ctx, ItemSettings itemSettings, Settings settings)
     {
         super(ctx, itemSettings, settings);
     }

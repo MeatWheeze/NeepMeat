@@ -25,5 +25,13 @@ public interface SelfRegisterable
     @FunctionalInterface
     interface PathProcessor extends Object2ObjectFunction<String, String>
     {
+        @Override
+        default String get(Object o)
+        {
+            return apply((String) o);
+        }
+
+        @Override
+        String apply(String key);
     }
 }
