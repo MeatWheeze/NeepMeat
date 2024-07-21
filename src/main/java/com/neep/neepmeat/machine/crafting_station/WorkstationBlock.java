@@ -2,6 +2,7 @@ package com.neep.neepmeat.machine.crafting_station;
 
 import com.neep.meatlib.block.BaseBlock;
 import com.neep.meatlib.item.ItemSettings;
+import com.neep.meatlib.registry.RegistrationContext;
 import com.neep.neepmeat.init.NMBlockEntities;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
@@ -18,7 +19,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class WorkstationBlock extends BaseBlock implements BlockEntityProvider
 {
-    public WorkstationBlock(String registryName, ItemSettings itemSettings, Settings settings)
+    public WorkstationBlock(RegistrationContext registryName, ItemSettings itemSettings, Settings settings)
     {
         super(ctx, itemSettings, settings.nonOpaque());
     }

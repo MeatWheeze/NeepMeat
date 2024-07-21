@@ -1,6 +1,7 @@
 package com.neep.neepmeat.block;
 
 import com.neep.meatlib.item.ItemSettings;
+import com.neep.meatlib.registry.RegistrationContext;
 import com.neep.neepmeat.transport.api.pipe.AbstractPipeBlock;
 import com.neep.neepmeat.transport.api.pipe.DataCable;
 import com.neep.neepmeat.transport.fluid_network.PipeConnectionType;
@@ -14,9 +15,9 @@ import net.minecraft.world.WorldAccess;
 
 public class DataCableBlock extends AbstractPipeBlock implements DataCable
 {
-    public DataCableBlock(String itemName, ItemSettings itemSettings, Settings settings)
+    public DataCableBlock(RegistrationContext ctx, ItemSettings itemSettings, Settings settings)
     {
-        super(itemName, itemSettings, settings);
+        super(ctx, itemSettings, settings);
     }
 
     @Override

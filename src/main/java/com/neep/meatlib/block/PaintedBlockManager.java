@@ -1,7 +1,7 @@
 package com.neep.meatlib.block;
 
 import com.google.common.collect.Lists;
-import com.neep.meatlib.registry.BlockRegistry;
+import com.neep.meatlib.registry.RegistrationContext;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 import net.minecraft.data.server.recipe.RecipeJsonProvider;
@@ -17,11 +17,12 @@ public class PaintedBlockManager<T extends PaintedBlockManager.PaintedBlock>
     public static final List<PaintedBlock> COLOURED_BLOCKS = new ArrayList<>();
     public final List<T> entries = Lists.newArrayList();
 
-    public PaintedBlockManager(String registryName, Constructor<T> constructor, AbstractBlock.Settings settings)
+    public PaintedBlockManager(RegistrationContext ctx, Constructor<T> constructor, AbstractBlock.Settings settings)
     {
         for (DyeColor col : DyeColor.values())
         {
-            T block = BlockRegistry.queue(constructor.create(registryName + "_" + col.getName(), col, settings));
+            T block = ctx.append(this, s -> s + "_" + col.getName(), constructor.create(ctx, col, settings));
+//            T block = BlockRegistry.queue(constructor.create(registryName + "_" + col.getName(), col, settings));
             COLOURED_BLOCKS.add(block);
             entries.add(block);
         }
@@ -30,30 +31,22 @@ public class PaintedBlockManager<T extends PaintedBlockManager.PaintedBlock>
     @FunctionalInterface
     public interface Constructor<T extends PaintedBlock>
     {
-        T create(String registryName, DyeColor col, AbstractBlock.Settings settings);
+        T create(RegistrationContext ctx, DyeColor col, AbstractBlock.Settings settings);
     }
 
     public abstract static class PaintedBlock extends Block implements MeatlibBlock
     {
-        protected final String registryName;
         public final BlockItem blockItem;
         public final DyeColor col;
 
-        public PaintedBlock(String registryName, DyeColor col, Settings settings)
+        public PaintedBlock(RegistrationContext ctx, DyeColor col, Settings settings)
         {
             super(settings);
-            this.registryName = registryName;
             this.blockItem = makeItem();
             this.col = col;
         }
 
         protected abstract BlockItem makeItem();
-
-        @Override
-        public String getRegistryName()
-        {
-            return registryName;
-        }
 
         public DyeColor getCol()
         {

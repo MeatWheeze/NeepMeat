@@ -366,7 +366,7 @@ public class NeepMeatClient implements ClientModInitializer
         BlockRenderLayerMap.INSTANCE.putBlocks(RenderLayer.getTranslucent(), NMBlocks.SCAFFOLD_TRAPDOOR);
         BlockRenderLayerMap.INSTANCE.putBlocks(RenderLayer.getCutout(), NMBlocks.ENCASED_VASCULAR_CONDUIT);
         BlockRenderLayerMap.INSTANCE.putBlocks(RenderLayer.getCutout(), FluidTransport.ENCASED_FLUID_PIPE);
-        BlockRenderLayerMap.INSTANCE.putBlocks(RenderLayer.getCutout(), ItemTransport.ENCASED_PNEUMATIC_PIPE);
+        BlockRenderLayerMap.INSTANCE.putBlocks(RenderLayer.getCutout(), ItemTransport.ENCASED_ITEM_PIPE);
         BlockRenderLayerMap.INSTANCE.putBlocks(RenderLayer.getCutout(), NMBlocks.CHUTE);
 
         BlockRenderLayerMap.INSTANCE.putBlocks(RenderLayer.getCutout(), FluidTransport.FLUID_DRAIN);

@@ -2,6 +2,7 @@ package com.neep.neepmeat.machine.death_blades;
 
 import com.neep.meatlib.block.BaseFacingBlock;
 import com.neep.meatlib.item.ItemSettings;
+import com.neep.meatlib.registry.RegistrationContext;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.util.MiscUtil;
 import net.minecraft.block.Block;
@@ -32,9 +33,9 @@ public class DeathBladesBlock extends BaseFacingBlock implements BlockEntityProv
             Direction.DOWN, Block.createCuboidShape(4, 4, 4, 12, 16, 12)
     );
 
-    public DeathBladesBlock(String itemName, ItemSettings itemSettings, Settings settings)
+    public DeathBladesBlock(RegistrationContext itemName, ItemSettings itemSettings, Settings settings)
     {
-        super(itemName, itemSettings, settings.nonOpaque());
+        super(ctx, itemSettings, settings.nonOpaque());
     }
 
     @Override

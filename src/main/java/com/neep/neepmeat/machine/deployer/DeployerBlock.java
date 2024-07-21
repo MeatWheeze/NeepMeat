@@ -2,6 +2,7 @@ package com.neep.neepmeat.machine.deployer;
 
 import com.neep.meatlib.block.BaseFacingBlock;
 import com.neep.meatlib.item.ItemSettings;
+import com.neep.meatlib.registry.RegistrationContext;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.machine.motor.MotorBlock;
 import net.fabricmc.fabric.api.transfer.v1.storage.StorageUtil;
@@ -20,9 +21,9 @@ import org.jetbrains.annotations.Nullable;
 
 public class DeployerBlock extends BaseFacingBlock implements BlockEntityProvider
 {
-    public DeployerBlock(String itemName, ItemSettings itemSettings, Settings settings)
+    public DeployerBlock(RegistrationContext ctx, ItemSettings itemSettings, Settings settings)
     {
-        super(itemName, itemSettings, settings.nonOpaque());
+        super(ctx, itemSettings, settings.nonOpaque());
     }
 
     @Override

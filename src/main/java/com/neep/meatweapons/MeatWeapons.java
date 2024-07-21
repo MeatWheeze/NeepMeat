@@ -1,7 +1,9 @@
 package com.neep.meatweapons;
 
 import com.neep.meatlib.MeatLib;
+import com.neep.meatlib.MeatLibRegistration;
 import com.neep.meatlib.attachment.player.PlayerAttachmentManager;
+import com.neep.meatlib.registry.RegistrationContext;
 import com.neep.meatweapons.enchantment.MWEnchantments;
 import com.neep.meatweapons.entity.*;
 import com.neep.meatweapons.implant.BloodBulletProviderImplant;
@@ -53,6 +55,8 @@ public class MeatWeapons implements ModInitializer
     public static EntityType<BounceGrenadeEntity> BOUNCE_GRENADE;
     public static EntityType<ShockStaffProjectileEntity> SHOCK_STAFF_PROJECTILE;
 
+    public static final RegistrationContext CTX = new RegistrationContext(MeatWeapons.NAMESPACE);
+
     public static <T extends Entity> EntityType<T> registerEntity(String id, FabricEntityTypeBuilder<T> builder)
     {
         return Registry.register(
@@ -71,6 +75,8 @@ public class MeatWeapons implements ModInitializer
     @Override
     public void onInitialize()
     {
+        MeatLibRegistration.forContext(MWBlocks.class, CTX);
+
         try (var mcontext = MeatLib.getContext(NAMESPACE))
         {
             BULLET = registerEntity("bullet", FabricEntityTypeBuilder.create(SpawnGroup.MISC, BulletEntity::new));
@@ -95,7 +101,6 @@ public class MeatWeapons implements ModInitializer
                     .trackRangeBlocks(100)
                     .build());
 
-            MWBlocks.init();
             MWItems.init();
             MWBlockEntities.init();
             MWParticles.init();
@@ -121,6 +126,8 @@ public class MeatWeapons implements ModInitializer
             Registry.register(ImplantRegistry.REGISTRY, BloodBulletProviderImplant.ID, BloodBulletProviderImplant::new);
             Registry.register(EntityImplantInstaller.REGISTRY, BloodBulletProviderImplant.ID, MWItems.BLOOD_BULLET_PROVIDER);
         }
+
+        MeatLibRegistration.flush();
     }
 
     @Nullable

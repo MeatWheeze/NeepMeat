@@ -81,6 +81,8 @@ public class MeatLib implements ModInitializer
         if (FabricLoader.getInstance().isModLoaded("valkyrienskies")) {
             vsUtil = new ValkyrienSkiesUtil();
         }
+
+        MeatLibRegistration.flush();
     }
 
     public static class Context implements AutoCloseable

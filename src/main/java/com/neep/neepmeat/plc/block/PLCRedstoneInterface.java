@@ -1,6 +1,7 @@
 package com.neep.neepmeat.plc.block;
 
 import com.neep.meatlib.block.BaseBlock;
+import com.neep.meatlib.registry.RegistrationContext;
 import com.neep.neepmeat.plc.PLCBlocks;
 import com.neep.neepmeat.transport.api.pipe.DataCable;
 import net.minecraft.block.Block;
@@ -17,7 +18,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class PLCRedstoneInterface extends BaseBlock implements BlockEntityProvider, DataCable
 {
-    public PLCRedstoneInterface(String registryName, Settings settings)
+    public PLCRedstoneInterface(RegistrationContext registryName, Settings settings)
     {
         super(ctx, settings);
     }

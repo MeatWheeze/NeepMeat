@@ -11,8 +11,6 @@ import net.minecraft.block.Blocks;
 import net.minecraft.data.server.recipe.RecipeJsonProvider;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.DyeItem;
-import net.minecraft.item.Item;
-import net.minecraft.registry.tag.TagKey;
 import net.minecraft.util.DyeColor;
 
 import java.util.function.Consumer;
@@ -40,7 +38,7 @@ public class SmoothTileBlock extends PaintedBlockManager.PaintedBlock implements
     {
         public Item(Block block, String registryName, ItemSettings itemSettings)
         {
-            super(block, registryName, itemSettings, new MeatlibItemSettings().tags(NMTags.SMOOTH_TILE).group(NMItemGroups.BUILDING));
+            super(block, ctx, itemSettings, new MeatlibItemSettings().tags(NMTags.SMOOTH_TILE).group(NMItemGroups.BUILDING));
         }
     }
 }

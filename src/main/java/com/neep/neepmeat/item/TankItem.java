@@ -1,6 +1,7 @@
 package com.neep.neepmeat.item;
 
 import com.neep.meatlib.item.ItemSettings;
+import com.neep.meatlib.registry.RegistrationContext;
 import com.neep.neepmeat.api.storage.WritableSingleFluidStorage;
 import net.fabricmc.fabric.api.transfer.v1.client.fluid.FluidVariantRendering;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
@@ -19,9 +20,9 @@ import java.util.List;
 @SuppressWarnings("UnstableApiUsage")
 public class TankItem extends FluidComponentItem
 {
-    public TankItem(Block block, String registryName, ItemSettings itemSettings)
+    public TankItem(Block block, RegistrationContext ctx, ItemSettings itemSettings)
     {
-        super(block, registryName, itemSettings);
+        super(block, ctx, itemSettings);
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.neep.meatlib.block;
 
 import com.neep.meatlib.item.BaseSeedsItem;
+import com.neep.meatlib.registry.RegistrationContext;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.CropBlock;
@@ -13,8 +14,7 @@ import net.minecraft.world.BlockView;
 
 public class BaseCropBlock extends CropBlock implements MeatlibBlock, MeatlibBlockExtension
 {
-    protected final String registryName;
-    protected final Item seedsItem;
+    protected final BaseSeedsItem seedsItem;
 
     private static final VoxelShape[] AGE_TO_SHAPE = new VoxelShape[]{Block.createCuboidShape(0.0D, 0.0D, 0.0D, 16.0D, 2.0D, 16.0D),
             Block.createCuboidShape(0.0D, 0.0D, 0.0D, 16.0D, 3.0D, 16.0D),
@@ -26,23 +26,22 @@ public class BaseCropBlock extends CropBlock implements MeatlibBlock, MeatlibBlo
             Block.createCuboidShape(0.0D, 0.0D, 0.0D, 16.0D, 9.0D, 16.0D)
     };
 
-    public BaseCropBlock(String registryName, String seedsName, int itemMaxStack, int lore, Settings settings)
+    public BaseCropBlock(RegistrationContext ctx, String seedsAppend, int itemMaxStack, int lore, Settings settings)
     {
         super(settings);
-        this.seedsItem = new BaseSeedsItem(this, seedsName, itemMaxStack, lore);
-        this.registryName = registryName;
+        this.seedsItem = new BaseSeedsItem(this, ctx, itemMaxStack, lore);
+        ctx.append(this, s -> s + seedsAppend, seedsItem);
     }
 
-    public BaseCropBlock(String registryName, int itemMaxStack, int lore, Settings settings)
+    public BaseCropBlock(RegistrationContext ctx, int itemMaxStack, int lore, Settings settings)
     {
-        this(registryName, registryName + "_seeds", itemMaxStack, lore, settings);
+        this(ctx, "_seeds", itemMaxStack, lore, settings);
     }
 
-    public BaseCropBlock(String registryName, int itemMaxStack, int lore, ItemFactory factory, Settings settings)
+    public BaseCropBlock(RegistrationContext ctx, int itemMaxStack, int lore, ItemFactory factory, Settings settings)
     {
         super(settings);
-        this.seedsItem = new BaseSeedsItem(this, registryName, itemMaxStack, lore);
-        this.registryName = registryName;
+        this.seedsItem = new BaseSeedsItem(this, ctx, itemMaxStack, lore);
     }
 
     @Override
@@ -66,12 +65,6 @@ public class BaseCropBlock extends CropBlock implements MeatlibBlock, MeatlibBlo
     public Item getSeedsItemItem()
     {
         return seedsItem;
-    }
-
-    @Override
-    public String getRegistryName()
-    {
-        return registryName;
     }
 
     @Override

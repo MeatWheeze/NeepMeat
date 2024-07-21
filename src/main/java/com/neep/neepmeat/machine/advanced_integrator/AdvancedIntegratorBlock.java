@@ -6,6 +6,7 @@ import com.neep.meatlib.item.ItemSettings;
 import com.neep.meatlib.item.MeatlibItem;
 import com.neep.meatlib.registry.BlockRegistry;
 import com.neep.meatlib.registry.ItemRegistry;
+import com.neep.meatlib.registry.RegistrationContext;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.api.big_block.BigBlock;
 import com.neep.neepmeat.api.big_block.BigBlockPattern;
@@ -31,21 +32,21 @@ import org.jetbrains.annotations.Nullable;
 public class AdvancedIntegratorBlock extends BigBlock<AdvancedIntegratorStructure> implements MeatlibBlock, BlockEntityProvider, DataCable
 {
     private final BigBlockPattern volume;
+    private final RegistrationContext ctx;
 
-    private final String registryName;
-
-    public AdvancedIntegratorBlock(String registryName, Settings settings)
+    public AdvancedIntegratorBlock(RegistrationContext ctx, Settings settings)
     {
         super(settings);
-        this.registryName = registryName;
-        ItemRegistry.queue(NeepMeat.NAMESPACE, (MeatlibItem) new BaseBlockItem(this, registryName, ItemSettings.block()));
+        this.ctx = ctx;
+        ItemRegistry.queue(NeepMeat.NAMESPACE, (MeatlibItem) new BaseBlockItem(this, ctx, ItemSettings.block()));
         volume = BigBlockPattern.makeOddCylinder(1, 0, 0, getStructure().getDefaultState());
     }
 
     @Override
     protected AdvancedIntegratorStructure registerStructureBlock()
     {
-        return BlockRegistry.queue(new AdvancedIntegratorStructure(this, settings), "advanced_integrator_structure");
+        var block =  new AdvancedIntegratorStructure(this, settings);
+        return ctx.append(this, block, "advanced_integrator_structure");
     }
 
     @Override
@@ -91,11 +92,5 @@ public class AdvancedIntegratorBlock extends BigBlock<AdvancedIntegratorStructur
                 (w, pos, state1, be) -> be.serverTick(),
                 (w, pos, state1, be) -> be.clientTick(),
                 world);
-    }
-
-    @Override
-    public String getRegistryName()
-    {
-        return registryName;
     }
 }

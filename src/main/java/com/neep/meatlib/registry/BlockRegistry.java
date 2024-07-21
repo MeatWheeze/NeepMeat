@@ -1,11 +1,8 @@
 package com.neep.meatlib.registry;
 
-import com.neep.meatlib.MeatLib;
 import com.neep.meatlib.block.BaseColumnBlock;
 import com.neep.meatlib.block.BaseLeavesBlock;
-import com.neep.meatlib.block.MeatlibBlock;
 import com.neep.meatlib.block.MeatlibBlockSettings;
-import com.neep.meatlib.item.BaseBlockItem;
 import com.neep.meatlib.item.ItemSettings;
 import com.neep.meatlib.item.TooltipSupplier;
 import net.fabricmc.fabric.api.mininglevel.v1.FabricMineableTags;
@@ -24,60 +21,60 @@ public class BlockRegistry
     private static final Map<Identifier, Block> BLOCKS = new LinkedHashMap<>(); // Preserve order
     public static final List<Block> REGISTERED_BLOCKS = new ArrayList<>();
 
-    public static <T extends Block & MeatlibBlock> T queue(T block)
-    {
-        MeatLib.assertActive(block);
-        if (block == null)
-        {
-            throw new IllegalArgumentException("tried to queue something that wasn't a block.");
-        }
+//    public static <T extends Block & MeatlibBlock> T queue(T block)
+//    {
+//        MeatLib.assertActive(block);
+//        if (block == null)
+//        {
+//            throw new IllegalArgumentException("tried to queue something that wasn't a block.");
+//        }
+//
+//        BLOCKS.put(new Identifier(MeatLib.CURRENT_NAMESPACE, block.getRegistryName()), block);
+//        return block;
+//    }
 
-        BLOCKS.put(new Identifier(MeatLib.CURRENT_NAMESPACE, block.getRegistryName()), block);
-        return block;
-    }
+//    public static Block queue(MeatlibBlock block)
+//    {
+//        MeatLib.assertActive(block);
+//        if (!(block instanceof Block))
+//        {
+//            throw new IllegalArgumentException("tried to queue something that wasn't a block.");
+//        }
+//
+//        BLOCKS.put(new Identifier(MeatLib.CURRENT_NAMESPACE, block.getRegistryName()), (Block) block);
+//        return (Block) block;
+//    }
 
-    public static Block queue(MeatlibBlock block)
-    {
-        MeatLib.assertActive(block);
-        if (!(block instanceof Block))
-        {
-            throw new IllegalArgumentException("tried to queue something that wasn't a block.");
-        }
+//    public static <T extends Block> T queue(T block, String registryName)
+//    {
+//        MeatLib.assertActive(block);
+//        BLOCKS.put(new Identifier(MeatLib.CURRENT_NAMESPACE, registryName), block);
+//        return block;
+//    }
 
-        BLOCKS.put(new Identifier(MeatLib.CURRENT_NAMESPACE, block.getRegistryName()), (Block) block);
-        return (Block) block;
-    }
+//    public static <T extends Block> T queueWithItem(T block, String registryName, ItemSettings itemSettings)
+//    {
+//        MeatLib.assertActive(block);
+//        BLOCKS.put(new Identifier(MeatLib.CURRENT_NAMESPACE, registryName), block);
+//        itemSettings.getFactory().create(block, ctx, itemSettings);
+//        return block;
+//    }
 
-    public static <T extends Block> T queue(T block, String registryName)
-    {
-        MeatLib.assertActive(block);
-        BLOCKS.put(new Identifier(MeatLib.CURRENT_NAMESPACE, registryName), block);
-        return block;
-    }
+//    public static <T extends Block & MeatlibBlock> T queueWithItem(T block, ItemSettings itemSettings)
+//    {
+//        MeatLib.assertActive(block);
+//        BLOCKS.put(new Identifier(MeatLib.CURRENT_NAMESPACE, block.getRegistryName()), block);
+//        itemSettings.getFactory().create(block, ctx, itemSettings);
+//        return block;
+//    }
 
-    public static <T extends Block> T queueWithItem(T block, String registryName, ItemSettings itemSettings)
-    {
-        MeatLib.assertActive(block);
-        BLOCKS.put(new Identifier(MeatLib.CURRENT_NAMESPACE, registryName), block);
-        itemSettings.getFactory().create(block, ctx, itemSettings);
-        return block;
-    }
-
-    public static <T extends Block & MeatlibBlock> T queueWithItem(T block, ItemSettings itemSettings)
-    {
-        MeatLib.assertActive(block);
-        BLOCKS.put(new Identifier(MeatLib.CURRENT_NAMESPACE, block.getRegistryName()), block);
-        itemSettings.getFactory().create(block, ctx, itemSettings);
-        return block;
-    }
-
-    public static <T extends Block> T queueWithItem(T block, String registryName)
-    {
-        MeatLib.assertActive(block);
-        BLOCKS.put(new Identifier(MeatLib.CURRENT_NAMESPACE, registryName), block);
-        ItemRegistry.queue(new BaseBlockItem(block, registryName, ItemSettings.block()));
-        return block;
-    }
+//    public static <T extends Block> T queueWithItem(T block, String registryName)
+//    {
+//        MeatLib.assertActive(block);
+//        BLOCKS.put(new Identifier(MeatLib.CURRENT_NAMESPACE, registryName), block);
+//        ItemRegistry.queue(new BaseBlockItem(block, registryName, ItemSettings.block()));
+//        return block;
+//    }
 
     public static void flush()
     {
@@ -90,14 +87,14 @@ public class BlockRegistry
         BLOCKS.clear();
     }
 
-    public static BaseColumnBlock createLogBlock(String name, TooltipSupplier tooltipSupplier)
+    public static BaseColumnBlock createLogBlock(RegistrationContext ctx, TooltipSupplier tooltipSupplier)
     {
-        return new BaseColumnBlock(name, ItemSettings.block(), MeatlibBlockSettings.create().tags(Set.of(BlockTags.AXE_MINEABLE, BlockTags.LOGS)).strength(2.0f).sounds(BlockSoundGroup.WOOD));
+        return new BaseColumnBlock(ctx, ItemSettings.block(), MeatlibBlockSettings.create().tags(Set.of(BlockTags.AXE_MINEABLE, BlockTags.LOGS)).strength(2.0f).sounds(BlockSoundGroup.WOOD));
     }
 
-    public static BaseLeavesBlock createLeavesBlock(String name, BlockSoundGroup soundGroup)
+    public static BaseLeavesBlock createLeavesBlock(RegistrationContext ctx, BlockSoundGroup soundGroup)
     {
-        return new BaseLeavesBlock(name, MeatlibBlockSettings.create()
+        return new BaseLeavesBlock(ctx, MeatlibBlockSettings.create()
                 .tags(Set.of(FabricMineableTags.SHEARS_MINEABLE, BlockTags.LEAVES))
                 .strength(0.2f)
                 .ticksRandomly()

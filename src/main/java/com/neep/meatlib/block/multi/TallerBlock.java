@@ -4,6 +4,7 @@ import com.neep.meatlib.block.BaseBlock;
 import com.neep.meatlib.block.BaseDummyBlock;
 import com.neep.meatlib.block.MeatlibBlockExtension;
 import com.neep.meatlib.item.ItemSettings;
+import com.neep.meatlib.registry.RegistrationContext;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -33,7 +34,7 @@ public abstract class TallerBlock extends BaseBlock
     private final IntProperty heightProperty;
     private final int maxHeight;
 
-    public TallerBlock(String registryName, IntProperty heightProperty, ItemSettings itemSettings, Settings settings)
+    public TallerBlock(RegistrationContext ctx, IntProperty heightProperty, ItemSettings itemSettings, Settings settings)
     {
         super(ctx, itemSettings, settings.pistonBehavior(PistonBehavior.IGNORE));
 
@@ -120,9 +121,9 @@ public abstract class TallerBlock extends BaseBlock
     public class Structure extends BaseDummyBlock implements MeatlibBlockExtension
     {
 
-        public Structure(String registryName, Settings settings)
+        public Structure(Settings settings)
         {
-            super(registryName, settings.pistonBehavior(PistonBehavior.IGNORE));
+            super(settings.pistonBehavior(PistonBehavior.IGNORE));
         }
 
         protected int getHeight(BlockState state)

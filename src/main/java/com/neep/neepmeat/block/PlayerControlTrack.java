@@ -3,6 +3,7 @@ package com.neep.neepmeat.block;
 import com.neep.meatlib.item.BaseBlockItem;
 import com.neep.meatlib.item.ItemSettings;
 import com.neep.meatlib.registry.ItemRegistry;
+import com.neep.meatlib.registry.RegistrationContext;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.interfaces.AbstractMinecartEntityAccess;
 import com.neep.neepmeat.util.MiscUtil;
@@ -44,13 +45,13 @@ public class PlayerControlTrack extends BaseRailBlock implements BlockEntityProv
     public static final EnumProperty<RailShape> SHAPE = RAIL_SHAPE_NO_SLOPE;
     public static final BooleanProperty POWERED = Properties.POWERED;
 
-    public PlayerControlTrack(String registryName, ItemSettings itemSettings, Settings settings)
+    public PlayerControlTrack(RegistrationContext ctx, ItemSettings itemSettings, Settings settings)
     {
-        super(true, settings, registryName);
+        super(true, settings);
         this.setDefaultState(this.stateManager.getDefaultState().with(SHAPE, RailShape.NORTH_SOUTH)
                 .with(POWERED, false)
                 .with(WATERLOGGED, false));
-        ItemRegistry.queue(new BaseBlockItem(this, registryName, itemSettings));
+        ItemRegistry.queue(new BaseBlockItem(this, ctx, itemSettings));
     }
 
     @Override

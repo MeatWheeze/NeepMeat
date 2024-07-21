@@ -4,6 +4,7 @@ import com.neep.meatlib.MeatLib;
 import com.neep.meatlib.block.BaseBlock;
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
 import com.neep.meatlib.item.ItemSettings;
+import com.neep.meatlib.registry.RegistrationContext;
 import com.neep.neepmeat.api.FluidPump;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.transport.fluid_network.node.AcceptorModes;
@@ -24,7 +25,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class PowerFlowerFluidPortBlock extends BaseBlock implements BlockEntityProvider, PowerFlower
 {
-    public PowerFlowerFluidPortBlock(String registryName, ItemSettings block, Settings settings)
+    public PowerFlowerFluidPortBlock(RegistrationContext registryName, ItemSettings block, Settings settings)
     {
         super(ctx, block, settings.nonOpaque());
     }

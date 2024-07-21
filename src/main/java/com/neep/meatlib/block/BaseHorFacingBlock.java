@@ -1,6 +1,7 @@
 package com.neep.meatlib.block;
 
 import com.neep.meatlib.item.ItemSettings;
+import com.neep.meatlib.registry.RegistrationContext;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.HorizontalFacingBlock;
@@ -14,14 +15,12 @@ import net.minecraft.world.WorldView;
 public class BaseHorFacingBlock extends HorizontalFacingBlock implements MeatlibBlock
 {
     BlockItem blockItem;
-    private final String registryName;
 
-    public BaseHorFacingBlock(String itemName, ItemSettings itemSettings, Settings settings)
+    public BaseHorFacingBlock(RegistrationContext ctx, ItemSettings itemSettings, Settings settings)
     {
         super(settings);
         this.blockItem = itemSettings.create(this, ctx, itemSettings);
         this.setDefaultState(this.getStateManager().getDefaultState().with(FACING, Direction.NORTH));
-        this.registryName = itemName;
     }
 
     @Override
@@ -42,17 +41,6 @@ public class BaseHorFacingBlock extends HorizontalFacingBlock implements Meatlib
     @Override
     public boolean canPlaceAt(BlockState state, WorldView world, BlockPos pos)
     {
-//        Direction direction = state.get(FACING);
-//        BlockPos blockPos = pos.offset(direction.getOpposite());
-//        BlockState blockState = world.getBlockState(blockPos);
-//        return blockState.isSideSolidFullSquare(world, blockPos, direction);
         return true;
-//        return state.hasBlockEntity();
-    }
-
-    @Override
-    public String getRegistryName()
-    {
-        return registryName;
     }
 }

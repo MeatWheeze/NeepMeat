@@ -3,10 +3,10 @@ package com.neep.neepmeat.machine.pylon;
 import com.neep.meatlib.block.MeatlibBlockSettings;
 import com.neep.meatlib.block.multi.TallBlock;
 import com.neep.meatlib.registry.BlockRegistry;
+import com.neep.meatlib.registry.RegistrationContext;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.transport.api.pipe.DataCable;
 import com.neep.neepmeat.util.MiscUtil;
-import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
@@ -24,9 +24,9 @@ public class PylonBlock extends TallBlock implements BlockEntityProvider, DataCa
 {
     public static final VoxelShape OUTLINE = Block.createCuboidShape(0, 0, 0, 16, 32 + 16, 16);
 
-    public PylonBlock(String registryName, Settings settings)
+    public PylonBlock(RegistrationContext registryName, Settings settings)
     {
-        super(registryName, settings);
+        super(ctx, settings);
     }
 
     @Override

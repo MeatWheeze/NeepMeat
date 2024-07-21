@@ -3,6 +3,7 @@ package com.neep.neepmeat.block.redstone;
 import com.neep.meatlib.block.MeatlibBlock;
 import com.neep.meatlib.item.BaseBlockItem;
 import com.neep.meatlib.item.ItemSettings;
+import com.neep.meatlib.registry.RegistrationContext;
 import com.neep.neepmeat.block.entity.BigLeverBlockEntity;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.init.NMSounds;
@@ -34,14 +35,12 @@ public class BigLeverBlock extends LeverBlock implements MeatlibBlock, BlockEnti
     protected static final VoxelShape CEILING_Z_AXIS_SHAPE = Block.createCuboidShape(4.0, 8.0, 1.0, 12.0, 16.0, 12.0);
     protected static final VoxelShape CEILING_X_AXIS_SHAPE = Block.createCuboidShape(1.0, 8.0, 4.0, 15.0, 16.0, 12.0);
 
-    protected String registryName;
     protected BlockItem blockItem;
 
-    public BigLeverBlock(String registryName, Settings settings)
+    public BigLeverBlock(RegistrationContext c, Settings settings)
     {
         super(settings);
-        this.registryName = registryName;
-        this.blockItem = new BaseBlockItem(this, registryName, ItemSettings.block());
+        this.blockItem = new BaseBlockItem(this, c, ItemSettings.block());
 
     }
 
@@ -94,12 +93,6 @@ public class BigLeverBlock extends LeverBlock implements MeatlibBlock, BlockEnti
     public BlockItem getBlockItem()
     {
         return blockItem;
-    }
-
-    @Override
-    public String getRegistryName()
-    {
-        return registryName;
     }
 
     @Nullable

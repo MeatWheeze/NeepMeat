@@ -4,9 +4,9 @@ import com.neep.meatlib.block.MeatlibBlockSettings;
 import com.neep.meatlib.block.multi.TallBlock;
 import com.neep.meatlib.item.ItemSettings;
 import com.neep.meatlib.registry.BlockRegistry;
+import com.neep.meatlib.registry.RegistrationContext;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.util.MiscUtil;
-import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
@@ -27,7 +27,7 @@ public class MincerBlock extends TallBlock implements BlockEntityProvider
     public static final BooleanProperty RUNNING = BooleanProperty.of("running");
     public static final VoxelShape OUTLINE = Block.createCuboidShape(0, 0, 0, 16, 29, 16);
 
-    public MincerBlock(String registryName, ItemSettings itemSettings, Settings settings)
+    public MincerBlock(RegistrationContext registryName, ItemSettings itemSettings, Settings settings)
     {
         super(registryName, itemSettings, settings);
         this.setDefaultState(getStateManager().getDefaultState().with(RUNNING, false));

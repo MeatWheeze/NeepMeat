@@ -2,6 +2,7 @@ package com.neep.neepmeat.machine.stirling_engine;
 
 import com.neep.meatlib.block.BaseFacingBlock;
 import com.neep.meatlib.item.ItemSettings;
+import com.neep.meatlib.registry.RegistrationContext;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.machine.advanced_motor.AdvancedMotorBlock;
 import com.neep.neepmeat.util.MiscUtil;
@@ -28,9 +29,9 @@ public class StirlingEngineBlock extends BaseFacingBlock implements BlockEntityP
 {
     public static final BooleanProperty LIT = Properties.LIT;
 
-    public StirlingEngineBlock(String itemName, ItemSettings itemSettings, Settings settings)
+    public StirlingEngineBlock(RegistrationContext ctx, ItemSettings itemSettings, Settings settings)
     {
-        super(itemName, itemSettings, settings.nonOpaque());
+        super(ctx, itemSettings, settings.nonOpaque());
         this.setDefaultState(this.getStateManager().getDefaultState().with(LIT, false));
     }
 

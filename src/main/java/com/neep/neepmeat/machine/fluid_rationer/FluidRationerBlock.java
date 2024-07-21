@@ -2,6 +2,7 @@ package com.neep.neepmeat.machine.fluid_rationer;
 
 import com.neep.meatlib.block.BaseFacingBlock;
 import com.neep.meatlib.item.ItemSettings;
+import com.neep.meatlib.registry.RegistrationContext;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.util.ItemUtil;
 import com.neep.neepmeat.util.MiscUtil;
@@ -21,9 +22,9 @@ import org.jetbrains.annotations.Nullable;
 
 public class FluidRationerBlock extends BaseFacingBlock implements BlockEntityProvider
 {
-    public FluidRationerBlock(String itemName, ItemSettings itemSettings, Settings settings)
+    public FluidRationerBlock(RegistrationContext itemName, ItemSettings itemSettings, Settings settings)
     {
-        super(itemName, itemSettings, settings);
+        super(ctx, itemSettings, settings);
     }
 
     @Override

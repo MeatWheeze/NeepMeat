@@ -2,6 +2,7 @@ package com.neep.neepmeat.plc.block;
 
 import com.neep.meatlib.block.BaseHorFacingBlock;
 import com.neep.meatlib.item.ItemSettings;
+import com.neep.meatlib.registry.RegistrationContext;
 import com.neep.neepmeat.plc.PLCBlocks;
 import com.neep.neepmeat.plc.block.entity.ExecutorBlockEntity;
 import com.neep.neepmeat.util.MiscUtil;
@@ -25,7 +26,7 @@ public class ExecutorBlock extends BaseHorFacingBlock implements BlockEntityProv
 {
     public static final BooleanProperty ON = BooleanProperty.of("on");
 
-    public ExecutorBlock(String itemName, ItemSettings itemSettings, Settings settings)
+    public ExecutorBlock(RegistrationContext itemName, ItemSettings itemSettings, Settings settings)
     {
         super(itemName, itemSettings, settings);
         setDefaultState(getDefaultState().with(ON, false));

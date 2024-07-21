@@ -1,12 +1,10 @@
 package com.neep.neepmeat.block;
 
 import com.neep.meatlib.block.BaseLeavesBlock;
+import com.neep.meatlib.registry.RegistrationContext;
 import com.neep.neepmeat.init.NMParticles;
-import net.fabricmc.fabric.api.mininglevel.v1.FabricMineableTags;
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.item.ItemConvertible;
-import net.minecraft.registry.tag.TagKey;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.random.Random;
@@ -14,9 +12,9 @@ import net.minecraft.world.World;
 
 public class BloodBubbleLeavesBlock extends BaseLeavesBlock
 {
-    public BloodBubbleLeavesBlock(String name, Settings settings)
+    public BloodBubbleLeavesBlock(RegistrationContext ctx, Settings settings)
     {
-        super(name, settings
+        super(ctx, settings
             .strength(0.2f)
             .ticksRandomly()
             .nonOpaque()
@@ -55,9 +53,9 @@ public class BloodBubbleLeavesBlock extends BaseLeavesBlock
 
     public static class FruitingBloodBubbleLeavesBlock extends BloodBubbleLeavesBlock
     {
-        public FruitingBloodBubbleLeavesBlock(String name, Settings settings)
+        public FruitingBloodBubbleLeavesBlock(RegistrationContext ctx, Settings settings)
         {
-            super(name, settings);
+            super(ctx, settings);
         }
 
         @Override

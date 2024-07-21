@@ -4,6 +4,7 @@ import com.neep.meatlib.datagen.MeatRecipeProvider;
 import com.neep.meatlib.item.BaseBlockItem;
 import com.neep.meatlib.item.ItemSettings;
 import com.neep.meatlib.item.MeatlibItemSettings;
+import com.neep.meatlib.registry.RegistrationContext;
 import com.neep.neepmeat.NMItemGroups;
 import com.neep.neepmeat.datagen.tag.NMTags;
 import com.neep.neepmeat.init.NMBlocks;
@@ -16,15 +17,15 @@ import java.util.function.Consumer;
 
 public class PaintedCorrugatedAsbestosBlock extends PaintedBlockManager.PaintedBlock implements MeatlibBlock
 {
-    public PaintedCorrugatedAsbestosBlock(String registryName, DyeColor col, Settings settings)
+    public PaintedCorrugatedAsbestosBlock(RegistrationContext ctx, DyeColor col, Settings settings)
     {
-        super(registryName, col, settings);
+        super(ctx, col, settings);
     }
 
     @Override
     protected BlockItem makeItem()
     {
-        return new BaseBlockItem(this, registryName, ItemSettings.block(), new MeatlibItemSettings().tags(NMTags.PAINTED_CORRUGATED_ASBESTOS).group(NMItemGroups.GENERAL));
+        return new BaseBlockItem(this, ctx, ItemSettings.block(), new MeatlibItemSettings().tags(NMTags.PAINTED_CORRUGATED_ASBESTOS).group(NMItemGroups.GENERAL));
     }
 
     @Override

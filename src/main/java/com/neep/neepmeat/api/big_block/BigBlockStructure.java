@@ -93,12 +93,6 @@ public abstract class BigBlockStructure<T extends BigBlockStructureEntity> exten
     }
 
     @Override
-    public String getRegistryName()
-    {
-        throw new NotImplementedException();
-    }
-
-    @Override
     public ItemConvertible dropsLike()
     {
         return parent;

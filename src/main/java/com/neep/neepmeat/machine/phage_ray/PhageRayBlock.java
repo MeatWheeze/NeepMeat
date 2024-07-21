@@ -1,6 +1,5 @@
 package com.neep.neepmeat.machine.phage_ray;
 
-import com.neep.meatlib.MeatLib;
 import com.neep.meatlib.block.MeatlibBlock;
 import com.neep.meatlib.block.MeatlibBlockSettings;
 import com.neep.meatlib.item.BaseBlockItem;
@@ -9,6 +8,7 @@ import com.neep.meatlib.item.MeatlibItem;
 import com.neep.meatlib.item.TooltipSupplier;
 import com.neep.meatlib.registry.BlockRegistry;
 import com.neep.meatlib.registry.ItemRegistry;
+import com.neep.meatlib.registry.RegistrationContext;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.api.big_block.BigBlock;
 import com.neep.neepmeat.api.big_block.BigBlockPattern;
@@ -32,7 +32,6 @@ import net.minecraft.block.entity.BlockEntityTicker;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
-import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
@@ -50,7 +49,7 @@ public class PhageRayBlock extends BigBlock<PhageRayBlock.PhageRayStructureBlock
     private final BigBlockPattern volume;
     private final VoxelShape shape = VoxelShapes.cuboid(-1, 0, -1, 2, 0.5, 2);
 
-    public PhageRayBlock(String name, Settings settings)
+    public PhageRayBlock(RegistrationContext name, Settings settings)
     {
         super(settings);
         this.name = name;

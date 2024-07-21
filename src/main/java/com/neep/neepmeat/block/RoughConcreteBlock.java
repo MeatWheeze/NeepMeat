@@ -21,7 +21,7 @@ public class RoughConcreteBlock extends BaseBuildingBlock
 
     public RoughConcreteBlock(RegistrationContext ctx, boolean makeWall, DyeColor col, Settings settings)
     {
-        super(ctx, makeWall, ItemSettings.block().factory((block, ctx1, itemSettings) -> new Item(block, ctx1, itemSettings)), settings);
+        super(ctx, makeWall, ItemSettings.block().factory(Item::new), settings);
         this.col = col;
     }
 
@@ -34,9 +34,9 @@ public class RoughConcreteBlock extends BaseBuildingBlock
 
     private static class Item extends BaseBlockItem
     {
-        public Item(Block block, String registryName, ItemSettings itemSettings)
+        public Item(Block block, RegistrationContext ctx, ItemSettings itemSettings)
         {
-            super(block, registryName, itemSettings, new MeatlibItemSettings().tags(NMTags.ROUGH_CONCRETE).group(NMItemGroups.BUILDING));
+            super(block, ctx, itemSettings, new MeatlibItemSettings().tags(NMTags.ROUGH_CONCRETE).group(NMItemGroups.BUILDING));
         }
     }
 }

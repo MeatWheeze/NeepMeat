@@ -2,6 +2,7 @@ package com.neep.neepmeat.machine.alloy_kiln;
 
 import com.neep.meatlib.block.BaseHorFacingBlock;
 import com.neep.meatlib.item.ItemSettings;
+import com.neep.meatlib.registry.RegistrationContext;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.util.MiscUtil;
 import net.fabricmc.fabric.api.transfer.v1.storage.StorageUtil;
@@ -42,9 +43,9 @@ public class AlloyKilnBlock extends BaseHorFacingBlock implements BlockEntityPro
             Block.createCuboidShape(3, 20, 3, 13, 22, 13)
             );
 
-    public AlloyKilnBlock(String itemName, ItemSettings itemSettings, Settings settings)
+    public AlloyKilnBlock(RegistrationContext ctx, ItemSettings itemSettings, Settings settings)
     {
-        super(itemName, itemSettings, settings);
+        super(ctx, itemSettings, settings);
         this.setDefaultState(getStateManager().getDefaultState().with(LIT, false));
     }
 

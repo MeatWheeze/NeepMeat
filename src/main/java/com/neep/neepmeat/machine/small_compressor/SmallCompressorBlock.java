@@ -2,6 +2,7 @@ package com.neep.neepmeat.machine.small_compressor;
 
 import com.neep.meatlib.block.BaseHorFacingBlock;
 import com.neep.meatlib.item.ItemSettings;
+import com.neep.meatlib.registry.RegistrationContext;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.util.MiscUtil;
 import net.minecraft.block.Block;
@@ -24,7 +25,7 @@ public class SmallCompressorBlock extends BaseHorFacingBlock implements BlockEnt
 {
     public static final BooleanProperty LIT = BooleanProperty.of("lit");
 
-    public SmallCompressorBlock(String itemName, ItemSettings itemSettings, Settings settings)
+    public SmallCompressorBlock(RegistrationContext itemName, ItemSettings itemSettings, Settings settings)
     {
         super(itemName, itemSettings, settings);
         setDefaultState(getStateManager().getDefaultState().with(LIT, false));

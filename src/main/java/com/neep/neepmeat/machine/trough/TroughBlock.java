@@ -2,6 +2,7 @@ package com.neep.neepmeat.machine.trough;
 
 import com.neep.meatlib.block.BaseHorFacingBlock;
 import com.neep.meatlib.item.ItemSettings;
+import com.neep.meatlib.registry.RegistrationContext;
 import com.neep.neepmeat.api.storage.WritableSingleFluidStorage;
 import com.neep.neepmeat.init.NMBlockEntities;
 import net.minecraft.block.Block;
@@ -26,7 +27,7 @@ import org.jetbrains.annotations.Nullable;
 @SuppressWarnings("UnstableApiUsage")
 public class TroughBlock extends BaseHorFacingBlock implements BlockEntityProvider
 {
-    public TroughBlock(String itemName, ItemSettings itemSettings, Settings settings)
+    public TroughBlock(RegistrationContext itemName, ItemSettings itemSettings, Settings settings)
     {
         super(itemName, itemSettings, settings.nonOpaque().ticksRandomly());
     }

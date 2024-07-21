@@ -2,6 +2,7 @@ package com.neep.neepmeat.machine.heater;
 
 import com.neep.meatlib.block.BaseFacingBlock;
 import com.neep.meatlib.item.ItemSettings;
+import com.neep.meatlib.registry.RegistrationContext;
 import com.neep.neepmeat.api.processing.PowerUtils;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.machine.Heatable;
@@ -23,9 +24,9 @@ import org.jetbrains.annotations.Nullable;
 
 public class HeaterBlock extends BaseFacingBlock implements BlockEntityProvider
 {
-    public HeaterBlock(String registryName, ItemSettings itemSettings, FabricBlockSettings settings)
+    public HeaterBlock(RegistrationContext ctx, ItemSettings itemSettings, FabricBlockSettings settings)
     {
-        super(registryName, itemSettings, settings.nonOpaque());
+        super(ctx, itemSettings, settings.nonOpaque());
     }
 
     @Nullable

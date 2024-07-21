@@ -2,6 +2,7 @@ package com.neep.neepmeat.machine.power_flower;
 
 import com.neep.meatlib.block.BaseBlock;
 import com.neep.meatlib.item.ItemSettings;
+import com.neep.meatlib.registry.RegistrationContext;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.util.MiscUtil;
 import net.minecraft.block.Block;
@@ -21,7 +22,7 @@ public class PowerFlowerControllerBlock extends BaseBlock implements BlockEntity
 {
     public static final BooleanProperty VALID = BooleanProperty.of("valid");
 
-    public PowerFlowerControllerBlock(String registryName, ItemSettings block, Settings settings)
+    public PowerFlowerControllerBlock(RegistrationContext registryName, ItemSettings block, Settings settings)
     {
         super(ctx, block, settings.nonOpaque());
         setDefaultState(getDefaultState().with(VALID, true));

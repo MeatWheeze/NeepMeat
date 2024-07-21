@@ -4,6 +4,7 @@ import com.neep.meatlib.block.MeatlibBlockSettings;
 import com.neep.meatlib.block.multi.TallBlock;
 import com.neep.meatlib.item.ItemSettings;
 import com.neep.meatlib.registry.BlockRegistry;
+import com.neep.meatlib.registry.RegistrationContext;
 import com.neep.neepmeat.init.NMBlockEntities;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockEntityProvider;
@@ -26,7 +27,7 @@ public class FabricatorBlock extends TallBlock implements BlockEntityProvider
 {
     public static final DirectionProperty FACING = Properties.HORIZONTAL_FACING;
 
-    public FabricatorBlock(String itemName, ItemSettings itemSettings, Settings settings)
+    public FabricatorBlock(RegistrationContext itemName, ItemSettings itemSettings, Settings settings)
     {
         super(itemName, itemSettings, settings);
     }

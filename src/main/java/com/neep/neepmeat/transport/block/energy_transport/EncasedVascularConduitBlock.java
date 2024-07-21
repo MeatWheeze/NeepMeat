@@ -1,6 +1,7 @@
 package com.neep.neepmeat.transport.block.energy_transport;
 
 import com.neep.meatlib.item.ItemSettings;
+import com.neep.meatlib.registry.RegistrationContext;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.transport.block.EncasedBlock;
 import com.neep.neepmeat.transport.block.energy_transport.entity.EncasedConduitBlockEntity;
@@ -22,9 +23,9 @@ import org.jetbrains.annotations.Nullable;
 
 public class EncasedVascularConduitBlock extends VascularConduitBlock implements EncasedBlock
 {
-    public EncasedVascularConduitBlock(String itemName, ItemSettings itemSettings, Settings settings)
+    public EncasedVascularConduitBlock(RegistrationContext ctx, ItemSettings itemSettings, Settings settings)
     {
-        super(itemName, itemSettings, settings.nonOpaque());
+        super(ctx, itemSettings, settings.nonOpaque());
     }
 
     public VoxelShape getPipeOutlineShape(BlockState state, BlockView world, BlockPos pos)

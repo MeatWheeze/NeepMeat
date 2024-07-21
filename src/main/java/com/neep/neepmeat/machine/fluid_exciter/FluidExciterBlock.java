@@ -4,6 +4,7 @@ import com.neep.meatlib.block.MeatlibBlockSettings;
 import com.neep.meatlib.block.multi.TallBlock;
 import com.neep.meatlib.item.ItemSettings;
 import com.neep.meatlib.registry.BlockRegistry;
+import com.neep.meatlib.registry.RegistrationContext;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.item.FluidComponentItem;
 import com.neep.neepmeat.transport.api.pipe.VascularConduit;
@@ -22,7 +23,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class FluidExciterBlock extends TallBlock implements BlockEntityProvider
 {
-    public FluidExciterBlock(String registryName, ItemSettings itemSettings, Settings settings)
+    public FluidExciterBlock(RegistrationContext registryName, ItemSettings itemSettings, Settings settings)
     {
         super(registryName, itemSettings.factory((block, ctx, itemSettings1) -> new FluidComponentItem(block, registryName1, itemSettings1)), settings.nonOpaque());
     }

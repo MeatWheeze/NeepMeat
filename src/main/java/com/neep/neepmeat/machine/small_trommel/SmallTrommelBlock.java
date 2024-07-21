@@ -3,6 +3,7 @@ package com.neep.neepmeat.machine.small_trommel;
 import com.neep.meatlib.block.BaseDummyBlock;
 import com.neep.meatlib.block.BaseHorFacingBlock;
 import com.neep.meatlib.item.ItemSettings;
+import com.neep.meatlib.registry.RegistrationContext;
 import com.neep.neepmeat.api.FluidPump;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.init.NMBlocks;
@@ -27,9 +28,9 @@ import org.jetbrains.annotations.Nullable;
 
 public class SmallTrommelBlock extends BaseHorFacingBlock implements BlockEntityProvider
 {
-    public SmallTrommelBlock(String itemName, ItemSettings itemSettings, Settings settings)
+    public SmallTrommelBlock(RegistrationContext ctx, ItemSettings itemSettings, Settings settings)
     {
-        super(itemName, itemSettings, settings.pistonBehavior(PistonBehavior.IGNORE));
+        super(ctx, itemSettings, settings.pistonBehavior(PistonBehavior.IGNORE));
     }
 
     @Nullable
@@ -83,9 +84,9 @@ public class SmallTrommelBlock extends BaseHorFacingBlock implements BlockEntity
 
     public static class Structure extends BaseDummyBlock
     {
-        public Structure(String registryName, Settings settings)
+        public Structure(Settings settings)
         {
-            super(registryName, settings.nonOpaque().pistonBehavior(PistonBehavior.IGNORE));
+            super(settings.nonOpaque().pistonBehavior(PistonBehavior.IGNORE));
             this.setDefaultState(this.getStateManager().getDefaultState().with(FACING, Direction.NORTH));
         }
 

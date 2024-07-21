@@ -3,6 +3,7 @@ package com.neep.neepmeat.machine.breaker;
 import com.google.common.collect.ImmutableMap;
 import com.neep.meatlib.block.BaseFacingBlock;
 import com.neep.meatlib.item.ItemSettings;
+import com.neep.meatlib.registry.RegistrationContext;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
@@ -39,9 +40,9 @@ public class LinearOscillatorBlock extends BaseFacingBlock implements BlockEntit
             .put(Direction.DOWN, DOWN_SHAPE)
             .build();
 
-    public LinearOscillatorBlock(String itemName, ItemSettings itemSettings, Settings settings)
+    public LinearOscillatorBlock(RegistrationContext ctx, ItemSettings itemSettings, Settings settings)
     {
-        super(itemName, itemSettings, settings.nonOpaque());
+        super(ctx, itemSettings, settings.nonOpaque());
 //        List<VoxelShape> shapes = List.of(NORTH_SHAPE, EAST_SHAPE, SOUTH_SHAPE, WEST_SHAPE, UP_SHAPE, DOWN_SHAPE);
 //        SHAPES = Arrays.stream(Direction.values()).map((direction -> shapes.get(direction.getId()))).;
     }

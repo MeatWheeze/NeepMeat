@@ -4,6 +4,7 @@ import com.neep.meatlib.block.MeatlibBlock;
 import com.neep.meatlib.item.BaseBlockItem;
 import com.neep.meatlib.item.ItemSettings;
 import com.neep.meatlib.registry.ItemRegistry;
+import com.neep.meatlib.registry.RegistrationContext;
 import com.neep.neepmeat.block.entity.MetalBarrelBlockEntity;
 import com.neep.neepmeat.init.NMBlockEntities;
 import net.minecraft.block.BarrelBlock;
@@ -30,13 +31,10 @@ public class MetalBarrelBlock extends BarrelBlock implements MeatlibBlock
 {
     public static final EnumProperty<Type> TYPE = EnumProperty.of("type", Type.class);
 
-    private final String name;
-
-    public MetalBarrelBlock(String name, Settings settings)
+    public MetalBarrelBlock(RegistrationContext ctx, Settings settings)
     {
         super(settings);
-        this.name = name;
-        ItemRegistry.queue(new BaseBlockItem(this, name, ItemSettings.block()));
+        ItemRegistry.queue(new BaseBlockItem(this, ctx, ItemSettings.block()));
         setDefaultState(getStateManager().getDefaultState().with(TYPE, Type.SINGLE).with(OPEN, false));
     }
 
@@ -154,12 +152,6 @@ public class MetalBarrelBlock extends BarrelBlock implements MeatlibBlock
     {
         super.appendProperties(builder);
         builder.add(TYPE);
-    }
-
-    @Override
-    public String getRegistryName()
-    {
-        return name;
     }
 
     public enum Type implements StringIdentifiable

@@ -2,6 +2,7 @@ package com.neep.neepmeat.block;
 
 import com.neep.meatlib.block.BaseHorFacingBlock;
 import com.neep.meatlib.item.ItemSettings;
+import com.neep.meatlib.registry.RegistrationContext;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.ShapeContext;
@@ -23,9 +24,9 @@ public class StatueBlock extends BaseHorFacingBlock implements Waterloggable
     public static final BooleanProperty WATERLOGGED = Properties.WATERLOGGED;
     public static final VoxelShape SHAPE = Block.createCuboidShape(4, 0, 4, 12, 20, 12);
 
-    public StatueBlock(String itemName, ItemSettings itemSettings, Settings settings)
+    public StatueBlock(RegistrationContext ctx, ItemSettings itemSettings, Settings settings)
     {
-        super(itemName, itemSettings, settings);
+        super(ctx, itemSettings, settings);
         setDefaultState(getDefaultState().with(WATERLOGGED, false));
     }
 

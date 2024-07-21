@@ -5,6 +5,7 @@ import com.neep.meatlib.item.BaseBlockItem;
 import com.neep.meatlib.item.ItemSettings;
 import com.neep.meatlib.item.MeatlibItemSettings;
 import com.neep.meatlib.item.TooltipSupplier;
+import com.neep.meatlib.registry.RegistrationContext;
 import com.neep.neepmeat.NMItemGroups;
 import com.neep.neepmeat.init.NMBlocks;
 import com.neep.neepmeat.init.NMSounds;
@@ -30,20 +31,12 @@ import net.minecraft.world.event.GameEvent;
 
 public class CronenCakeBlock extends CakeBlock implements MeatlibBlock
 {
-    private final String registryName;
     private final BlockItem blockItem;
 
-    public CronenCakeBlock(String registryName, Settings settings)
+    public CronenCakeBlock(RegistrationContext ctx, Settings settings)
     {
         super(settings);
-        this.registryName = registryName;
-        this.blockItem = new BaseBlockItem(this, registryName, ItemSettings.block().tooltip(TooltipSupplier.simple(1)), new MeatlibItemSettings().group(NMItemGroups.FOOD));
-    }
-
-    @Override
-    public String getRegistryName()
-    {
-        return registryName;
+        this.blockItem = new BaseBlockItem(this, ctx, ItemSettings.block().tooltip(TooltipSupplier.simple(1)), new MeatlibItemSettings().group(NMItemGroups.FOOD));
     }
 
     @Override

@@ -11,7 +11,6 @@ import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.api.big_block.BigBlockPattern;
 import com.neep.neepmeat.api.big_block.BigBlockStructureEntity;
 import com.neep.neepmeat.init.NMBlocks;
-import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.ShapeContext;
@@ -45,7 +44,7 @@ public class TestMultiblock extends Multiblock2ControllerBlock<TestMultiblock.TM
                 1, 1, 2, () -> NMBlocks.MEAT_STEEL_BLOCK.getDefaultState()
         );
 
-        ItemRegistry.queue(new BaseBlockItem(this, name, ItemSettings.block(), new MeatlibItemSettings()));
+        ItemRegistry.queue(new BaseBlockItem(this, ctx, ItemSettings.block(), new MeatlibItemSettings()));
     }
 
     @Override

@@ -2,6 +2,7 @@ package com.neep.neepmeat.machine.separator;
 
 import com.neep.meatlib.block.BaseHorFacingBlock;
 import com.neep.meatlib.item.ItemSettings;
+import com.neep.meatlib.registry.RegistrationContext;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.init.NMBlocks;
 import net.minecraft.block.BlockEntityProvider;
@@ -17,7 +18,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class SeparatorBlock extends BaseHorFacingBlock implements BlockEntityProvider
 {
-    public SeparatorBlock(String itemName, ItemSettings itemSettings, Settings settings)
+    public SeparatorBlock(RegistrationContext itemName, ItemSettings itemSettings, Settings settings)
     {
         super(itemName, itemSettings, settings);
     }

@@ -17,6 +17,7 @@ public class MeatLibRegistration
 
     public static <T> void forContext(Class<T> tClass, RegistrationContext context)
     {
+        LIST.add(Pair.of(tClass, context));
     }
 
     public static void flush()
@@ -28,7 +29,7 @@ public class MeatLibRegistration
             if (annotation == null)
                 throw new IllegalStateException(String.format("Class %s is not annotated with %s", clazz, RegisterMe.class.getSimpleName()));
 
-            String namespace = annotation.namespace();
+            String namespace = annotation.value();
 
             Arrays.stream(clazz.getDeclaredFields())
                     .filter(f -> Modifier.isStatic(f.getModifiers()))

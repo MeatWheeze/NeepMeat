@@ -43,7 +43,7 @@ public class FluidGaugeBlock<T> extends BaseFacingBlock implements BlockEntityPr
 
     public FluidGaugeBlock(String itemName, Supplier<BlockEntityType<FluidGaugeBlockEntity<T>>> type, ItemSettings itemSettings, Settings settings)
     {
-        super(itemName, itemSettings, settings);
+        super(ctx, itemSettings, settings);
         this.typeSupplier = type;
     }
 

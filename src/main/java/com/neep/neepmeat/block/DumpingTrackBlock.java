@@ -3,6 +3,7 @@ package com.neep.neepmeat.block;
 import com.neep.meatlib.item.BaseBlockItem;
 import com.neep.meatlib.item.ItemSettings;
 import com.neep.meatlib.registry.ItemRegistry;
+import com.neep.meatlib.registry.RegistrationContext;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.enums.RailShape;
@@ -36,13 +37,13 @@ public class DumpingTrackBlock extends BaseRailBlock implements SpecialRail
     public static final EnumProperty<RailShape> SHAPE = RAIL_SHAPE_NO_SLOPE;
     public static final BooleanProperty POWERED = Properties.POWERED;
 
-    public DumpingTrackBlock(String registryName, ItemSettings itemSettings, Settings settings)
+    public DumpingTrackBlock(RegistrationContext ctx, ItemSettings itemSettings, Settings settings)
     {
-        super(true, settings, registryName);
+        super(true, settings);
         this.setDefaultState(this.stateManager.getDefaultState().with(SHAPE, RailShape.NORTH_SOUTH)
                 .with(POWERED, false)
                 .with(WATERLOGGED, false));
-        ItemRegistry.queue(new BaseBlockItem(this, registryName, itemSettings));
+        ItemRegistry.queue(new BaseBlockItem(this, ctx, itemSettings));
     }
 
     @Override

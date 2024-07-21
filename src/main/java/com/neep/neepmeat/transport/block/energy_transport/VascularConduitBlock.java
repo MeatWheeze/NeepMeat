@@ -1,6 +1,7 @@
 package com.neep.neepmeat.transport.block.energy_transport;
 
 import com.neep.meatlib.item.ItemSettings;
+import com.neep.meatlib.registry.RegistrationContext;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.transport.api.pipe.AbstractPipeBlock;
 import com.neep.neepmeat.transport.api.pipe.BloodAcceptor;
@@ -29,9 +30,9 @@ import org.jetbrains.annotations.Nullable;
 
 public class VascularConduitBlock extends AbstractPipeBlock implements BlockEntityProvider, VascularConduit
 {
-    public VascularConduitBlock(String itemName, ItemSettings itemSettings, Settings settings)
+    public VascularConduitBlock(RegistrationContext ctx, ItemSettings itemSettings, Settings settings)
     {
-        super(itemName, itemSettings, settings);
+        super(ctx, itemSettings, settings);
     }
 
     public static boolean matches(ItemStack stackInHand)

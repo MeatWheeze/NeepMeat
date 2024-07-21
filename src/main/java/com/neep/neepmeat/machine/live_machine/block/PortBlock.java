@@ -24,7 +24,7 @@ public class PortBlock<T extends BlockEntity> extends BaseFacingBlock implements
 
     public PortBlock(String registryName, ItemSettings itemSettings, Supplier<BlockEntityType<T>> factory, Settings settings)
     {
-        super(registryName, itemSettings, settings);
+        super(ctx, itemSettings, settings);
         this.factory = factory;
     }
 

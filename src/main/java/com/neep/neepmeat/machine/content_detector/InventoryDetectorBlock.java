@@ -2,6 +2,7 @@ package com.neep.neepmeat.machine.content_detector;
 
 import com.neep.meatlib.block.BaseFacingBlock;
 import com.neep.meatlib.item.ItemSettings;
+import com.neep.meatlib.registry.RegistrationContext;
 import com.neep.meatlib.storage.MeatlibStorageUtil;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.util.MiscUtil;
@@ -33,17 +34,11 @@ public class InventoryDetectorBlock extends BaseFacingBlock implements BlockEnti
 {
     public static final BooleanProperty POWERED = Properties.POWERED;
 
-    public InventoryDetectorBlock(String itemName, ItemSettings itemSettings, Settings settings)
+    public InventoryDetectorBlock(RegistrationContext ctx, ItemSettings itemSettings, Settings settings)
     {
-        super(itemName, itemSettings, settings.nonOpaque().solidBlock(InventoryDetectorBlock::never));
+        super(ctx, itemSettings, settings.nonOpaque().solidBlock(InventoryDetectorBlock::never));
         this.setDefaultState(getDefaultState().with(POWERED, false));
     }
-
-    public BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos)
-    {
-        return super.getStateForNeighborUpdate(state, direction, neighborState, world, pos, neighborPos);
-    }
-
 
     @Override
     protected void appendProperties(StateManager.Builder<Block, BlockState> builder)
@@ -145,12 +140,6 @@ public class InventoryDetectorBlock extends BaseFacingBlock implements BlockEnti
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type)
     {
         return MiscUtil.checkType(type, NMBlockEntities.INVENTORY_DETECTOR, InventoryDetectorBlockEntity::serverTick, null, world);
-    }
-
-    @Override
-    public String getRegistryName()
-    {
-        return super.getRegistryName();
     }
 
     public static boolean never(BlockState state, BlockView world, BlockPos pos)

@@ -2,6 +2,7 @@ package com.neep.neepmeat.block;
 
 import com.neep.meatlib.block.BaseTrapdoorBlock;
 import com.neep.meatlib.item.ItemSettings;
+import com.neep.meatlib.registry.RegistrationContext;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockSetType;
 import net.minecraft.block.BlockState;
@@ -26,9 +27,9 @@ public class ScaffoldTrapdoorBlock extends BaseTrapdoorBlock
     protected static final VoxelShape OPEN_BOTTOM_SHAPE = Block.createCuboidShape(0.0, 0.0, 0.0, 16.0, 2.0, 16.0);
     protected static final VoxelShape OPEN_TOP_SHAPE = Block.createCuboidShape(0.0, 14.0, 0.0, 16.0, 16.0, 16.0);
 
-    public ScaffoldTrapdoorBlock(String itemName, ItemSettings itemSettings, Settings settings)
+    public ScaffoldTrapdoorBlock(RegistrationContext ctx, ItemSettings itemSettings, Settings settings)
     {
-        super(itemName, itemSettings, settings.nonOpaque(), BlockSetType.IRON);
+        super(ctx, itemSettings, settings.nonOpaque(), BlockSetType.IRON);
     }
 
     @Override

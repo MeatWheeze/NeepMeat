@@ -2,6 +2,7 @@ package com.neep.neepmeat.transport.block.item_transport;
 
 import com.neep.meatlib.block.BaseBlock;
 import com.neep.meatlib.item.ItemSettings;
+import com.neep.meatlib.registry.RegistrationContext;
 import com.neep.meatlib.storage.MeatlibStorageUtil;
 import com.neep.neepmeat.api.storage.WritableStackStorage;
 import com.neep.neepmeat.block.entity.DisplayPlateBlockEntity;
@@ -32,7 +33,7 @@ public class DisplayPlateBlock extends BaseBlock implements BlockEntityProvider
     protected static final VoxelShape DEFAULT_SHAPE = Block.createCuboidShape(0.0, 0.0, 0.0, 16.0, 1.0, 16.0);
 
 
-    public DisplayPlateBlock(String itemName, ItemSettings itemSettings, Settings settings)
+    public DisplayPlateBlock(RegistrationContext itemName, ItemSettings itemSettings, Settings settings)
     {
         super(ctx, itemSettings, settings);
     }

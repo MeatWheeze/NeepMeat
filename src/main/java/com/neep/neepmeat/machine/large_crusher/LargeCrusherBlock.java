@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableMap;
 import com.neep.meatlib.block.MeatlibBlock;
 import com.neep.meatlib.item.ItemSettings;
 import com.neep.meatlib.registry.BlockRegistry;
+import com.neep.meatlib.registry.RegistrationContext;
 import com.neep.meatlib.storage.MeatlibStorageUtil;
 import com.neep.neepmeat.api.big_block.BigBlockPattern;
 import com.neep.neepmeat.api.machine.MotorisedBlock;
@@ -46,7 +47,6 @@ public class LargeCrusherBlock extends Multiblock2ControllerBlock<LargeCrusherSt
 {
     public static final DirectionProperty FACING = Properties.HORIZONTAL_FACING;
 
-    private final String name;
     public final BlockItem blockItem;
 
     private final Map<Direction, BigBlockPattern> assembledMap;
@@ -54,10 +54,9 @@ public class LargeCrusherBlock extends Multiblock2ControllerBlock<LargeCrusherSt
 
     private final Map<Direction, VoxelShape> shapeMap;
 
-    public LargeCrusherBlock(String name, ItemSettings itemSettings, Settings settings)
+    public LargeCrusherBlock(RegistrationContext ctx, ItemSettings itemSettings, Settings settings)
     {
         super(settings);
-        this.name = name;
         this.blockItem = itemSettings.getFactory().create(this, ctx, itemSettings);
         BigBlockPattern northAssembledPattern = BigBlockPattern.makeOddCylinder(new Vec3i(0, 0, -1), 1, 0, 1, getStructure().getDefaultState())
                 .set(-1, 2, -1, getStructure().getDefaultState())
@@ -184,12 +183,6 @@ public class LargeCrusherBlock extends Multiblock2ControllerBlock<LargeCrusherSt
             }
         }
         return ActionResult.SUCCESS;
-    }
-
-    @Override
-    public String getRegistryName()
-    {
-        return name;
     }
 
     @Override

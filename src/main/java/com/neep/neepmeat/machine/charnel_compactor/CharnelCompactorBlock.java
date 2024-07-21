@@ -2,6 +2,7 @@ package com.neep.neepmeat.machine.charnel_compactor;
 
 import com.neep.meatlib.block.BaseBlock;
 import com.neep.meatlib.item.ItemSettings;
+import com.neep.meatlib.registry.RegistrationContext;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.datagen.tag.NMTags;
 import com.neep.neepmeat.machine.integrator.Integrator;
@@ -40,7 +41,7 @@ public class CharnelCompactorBlock extends BaseBlock implements DataCable
     protected static final VoxelShape OUTLINE_SHAPE;
     private static final VoxelShape RAYCAST_SHAPE = createCuboidShape(2.0, 4.0, 2.0, 14.0, 16.0, 14.0);
 
-    public CharnelCompactorBlock(String registryName, ItemSettings itemSettings, Settings settings)
+    public CharnelCompactorBlock(RegistrationContext registryName, ItemSettings itemSettings, Settings settings)
     {
         super(ctx, itemSettings, settings);
         this.setDefaultState((this.stateManager.getDefaultState()).with(LEVEL, 0));

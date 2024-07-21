@@ -30,7 +30,7 @@ public class ItemSettings implements MeatlibBlock.ItemFactory
 
     public static ItemSettings block()
     {
-        return new ItemSettings().factory((block, ctx, itemSettings) -> new BaseBlockItem(block, registryName, itemSettings));
+        return new ItemSettings().factory(BaseBlockItem::new);
     }
 
     public static ItemSettings item()

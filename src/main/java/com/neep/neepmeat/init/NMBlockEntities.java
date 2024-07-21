@@ -315,7 +315,7 @@ public class NMBlockEntities
         // --- Item Transfer ---
         ITEM_DUCT_BLOCK_ENTITY = register("item_duct", ItemDuctBlockEntity::new, NMBlocks.ITEM_DUCT);
         PNEUMATIC_PIPE = register("pneumatic_pipe", ItemPipeBlockEntity::new, ItemTransport.ITEM_PIPE, ItemTransport.OPAQUE_ITEM_PIPE);
-        ENCASED_PNEUMATIC_PIPE = register("encased_item_pipe", (p, s) -> new EncasedItemPipeBlockEntity(ENCASED_PNEUMATIC_PIPE, p, s), ItemTransport.ENCASED_PNEUMATIC_PIPE);
+        ENCASED_PNEUMATIC_PIPE = register("encased_item_pipe", (p, s) -> new EncasedItemPipeBlockEntity(ENCASED_PNEUMATIC_PIPE, p, s), ItemTransport.ENCASED_ITEM_PIPE);
         MERGE_ITEM_PIPE = register("merge_item_pipe", MergePipeBlockEntity::new, ItemTransport.MERGE_ITEM_PIPE);
         BUFFER = register("buffer", BufferBlockEntity::new, ItemTransport.BUFFER);
         CHUTE = register("chute", (p, s) -> new ChuteBlock.ChuteBlockEntity(CHUTE, p, s), NMBlocks.CHUTE);

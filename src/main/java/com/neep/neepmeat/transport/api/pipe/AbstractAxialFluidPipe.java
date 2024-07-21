@@ -33,7 +33,7 @@ public abstract class AbstractAxialFluidPipe extends BaseFacingBlock implements 
 
     public AbstractAxialFluidPipe(String itemName, ItemSettings itemSettings, Settings settings)
     {
-        super(itemName, itemSettings, settings);
+        super(ctx, itemSettings, settings);
     }
 
     public VoxelShape getShape(BlockState state)

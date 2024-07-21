@@ -49,7 +49,7 @@ public class FluidPipeBlock extends AbstractPipeBlock implements BlockEntityProv
 
     public FluidPipeBlock(String itemName, FluidPipe.PipeCol col, ItemSettings itemSettings, Settings settings)
     {
-        super(itemName, itemSettings, settings);
+        super(ctx, itemSettings, settings);
         this.col = col;
     }
 

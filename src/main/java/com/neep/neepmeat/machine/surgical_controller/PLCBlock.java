@@ -2,6 +2,7 @@ package com.neep.neepmeat.machine.surgical_controller;
 
 import com.neep.meatlib.block.BaseHorFacingBlock;
 import com.neep.meatlib.item.ItemSettings;
+import com.neep.meatlib.registry.RegistrationContext;
 import com.neep.neepmeat.plc.PLCBlocks;
 import com.neep.neepmeat.plc.block.entity.PLCBlockEntity;
 import com.neep.neepmeat.transport.api.pipe.DataCable;
@@ -22,9 +23,9 @@ import org.jetbrains.annotations.Nullable;
 
 public class PLCBlock extends BaseHorFacingBlock implements BlockEntityProvider, DataCable
 {
-    public PLCBlock(String itemName, ItemSettings itemSettings, Settings settings)
+    public PLCBlock(RegistrationContext ctx, ItemSettings itemSettings, Settings settings)
     {
-        super(itemName, itemSettings, settings);
+        super(ctx, itemSettings, settings);
     }
 
     @Override

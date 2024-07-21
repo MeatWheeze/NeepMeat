@@ -3,10 +3,10 @@ package com.neep.neepmeat.block;
 import com.neep.meatlib.item.BaseBlockItem;
 import com.neep.meatlib.item.ItemSettings;
 import com.neep.meatlib.registry.ItemRegistry;
+import com.neep.meatlib.registry.RegistrationContext;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.util.AxialDirection;
 import com.neep.neepmeat.util.MiscUtil;
-import net.minecraft.block.AbstractRailBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
@@ -39,11 +39,11 @@ public class HoldingTrackBlock extends BaseRailBlock implements BlockEntityProvi
     public static final EnumProperty<RailShape> SHAPE = Properties.STRAIGHT_RAIL_SHAPE;
     public static final BooleanProperty POWERED = Properties.POWERED;
 
-    public HoldingTrackBlock(String registryName, ItemSettings itemSettings, Settings settings)
+    public HoldingTrackBlock(RegistrationContext ctx, ItemSettings itemSettings, Settings settings)
     {
-        super(true, settings, registryName);
+        super(true, settings);
         this.setDefaultState(this.stateManager.getDefaultState().with(SHAPE, RailShape.NORTH_SOUTH).with(POWERED, false).with(WATERLOGGED, false).with(FACING, AxialDirection.POSITIVE));
-        ItemRegistry.queue(new BaseBlockItem(this, registryName, itemSettings));
+        ItemRegistry.queue(new BaseBlockItem(this, ctx, itemSettings));
     }
 
     @Override

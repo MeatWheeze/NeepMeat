@@ -16,8 +16,7 @@ public class BaseDoorBlock extends DoorBlock implements MeatlibBlock
     public BaseDoorBlock(RegistrationContext ctx, Settings settings, ItemSettings itemSettings, BlockSetType blockSetType)
     {
         super(settings, blockSetType);
-
-        ItemRegistry.queue(ctx, itemSettings.create(this, ctx, itemSettings));
+        ctx.append(this, itemSettings.create(this, ctx, itemSettings));
     }
 
     @Override

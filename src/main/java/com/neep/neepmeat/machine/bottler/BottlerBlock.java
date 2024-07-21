@@ -2,6 +2,7 @@ package com.neep.neepmeat.machine.bottler;
 
 import com.neep.meatlib.block.BaseHorFacingBlock;
 import com.neep.meatlib.item.ItemSettings;
+import com.neep.meatlib.registry.RegistrationContext;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.util.ItemUtil;
 import net.minecraft.block.BlockEntityProvider;
@@ -17,7 +18,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class BottlerBlock extends BaseHorFacingBlock implements BlockEntityProvider
 {
-    public BottlerBlock(String itemName, ItemSettings itemSettings, Settings settings)
+    public BottlerBlock(RegistrationContext itemName, ItemSettings itemSettings, Settings settings)
     {
         super(itemName, itemSettings, settings.nonOpaque());
     }

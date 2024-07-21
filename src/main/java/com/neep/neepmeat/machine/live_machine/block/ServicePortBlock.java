@@ -24,7 +24,7 @@ public class ServicePortBlock<T extends BlockEntity> extends BaseFacingBlock imp
 
     public ServicePortBlock(String registryName, ItemSettings itemSettings, Supplier<BlockEntityType<T>> factory, Settings settings)
     {
-        super(registryName, itemSettings, settings);
+        super(ctx, itemSettings, settings);
         this.factory = factory;
     }
 

@@ -2,6 +2,7 @@ package com.neep.neepmeat.machine.crucible;
 
 import com.neep.meatlib.block.BaseBlock;
 import com.neep.meatlib.item.ItemSettings;
+import com.neep.meatlib.registry.RegistrationContext;
 import com.neep.neepmeat.api.storage.WritableSingleFluidStorage;
 import com.neep.neepmeat.init.NMBlockEntities;
 import net.fabricmc.fabric.api.transfer.v1.context.ContainerItemContext;
@@ -30,7 +31,7 @@ public class CrucibleBlock extends BaseBlock implements BlockEntityProvider
     protected static final VoxelShape OUTLINE_SHAPE;
     private static final VoxelShape RAYCAST_SHAPE = createCuboidShape(2.0, 4.0, 2.0, 14.0, 16.0, 14.0);
 
-    public CrucibleBlock(String registryName, ItemSettings itemSettings, Settings settings)
+    public CrucibleBlock(RegistrationContext ctx, ItemSettings itemSettings, Settings settings)
     {
         super(ctx, itemSettings, settings.nonOpaque());
     }

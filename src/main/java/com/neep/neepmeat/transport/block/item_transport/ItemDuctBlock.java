@@ -1,6 +1,7 @@
 package com.neep.neepmeat.transport.block.item_transport;
 
 import com.neep.meatlib.item.ItemSettings;
+import com.neep.meatlib.registry.RegistrationContext;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.transport.api.pipe.AbstractPipeBlock;
 import com.neep.neepmeat.transport.block.item_transport.entity.ItemDuctBlockEntity;
@@ -35,9 +36,9 @@ public class ItemDuctBlock extends AbstractPipeBlock implements BlockEntityProvi
 {
     public static final DirectionProperty FACING = Properties.FACING;
 
-    public ItemDuctBlock(String itemName, ItemSettings itemSettings, Settings settings)
+    public ItemDuctBlock(RegistrationContext ctx, ItemSettings itemSettings, Settings settings)
     {
-        super(itemName, itemSettings, settings);
+        super(ctx, itemSettings, settings);
 
         this.setDefaultState(super.getDefaultState().with(FACING, Direction.NORTH));
     }

@@ -2,6 +2,7 @@ package com.neep.neepmeat.machine.surgery_platform;
 
 import com.neep.meatlib.block.BaseBlock;
 import com.neep.meatlib.item.ItemSettings;
+import com.neep.meatlib.registry.RegistrationContext;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.transport.api.pipe.DataCable;
 import net.minecraft.block.BlockEntityProvider;
@@ -14,7 +15,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class SurgeryPlatformBlock extends BaseBlock implements DataCable, BlockEntityProvider
 {
-    public SurgeryPlatformBlock(String registryName, ItemSettings itemSettings, Settings settings)
+    public SurgeryPlatformBlock(RegistrationContext registryName, ItemSettings itemSettings, Settings settings)
     {
         super(ctx, itemSettings, settings);
     }

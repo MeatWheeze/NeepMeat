@@ -2,6 +2,7 @@ package com.neep.neepmeat.block;
 
 import com.neep.meatlib.block.BaseHorFacingBlock;
 import com.neep.meatlib.item.ItemSettings;
+import com.neep.meatlib.registry.RegistrationContext;
 import com.neep.neepmeat.api.storage.LazyBlockApiCache;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.util.MiscUtil;
@@ -58,7 +59,7 @@ public class ChuteBlock extends BaseHorFacingBlock implements BlockEntityProvide
             Direction.WEST, MiscUtil.rotateShapeY(NORTH_OPEN, 270)
     );
 
-    public ChuteBlock(String itemName, ItemSettings itemSettings, Settings settings)
+    public ChuteBlock(RegistrationContext itemName, ItemSettings itemSettings, Settings settings)
     {
         super(itemName, itemSettings, settings);
         setDefaultState(getDefaultState().with(OPEN, false));

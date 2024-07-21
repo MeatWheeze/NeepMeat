@@ -95,7 +95,7 @@ public class NeepMeat implements ModInitializer
 	@Override
 	public void onInitialize()
 	{
-		MeatLibRegistration.forContext(NMBlocks.class, NMBlocks.CTX);
+		MeatLibRegistration.forContext(NMBlocks.class, NMBlocks.C);
 
 		try (var mcontext = MeatLib.getContext(NAMESPACE))
 		{
@@ -210,6 +210,8 @@ public class NeepMeat implements ModInitializer
 			EnlightenmentUtil.init();
 
 		}
+
+		MeatLibRegistration.flush();
 
 		FluidStorage.ITEM.registerForItems(TankBlock.createStorageProvider(8 * FluidConstants.BUCKET), FluidTransport.BASIC_GLASS_TANK.asItem());
 		FluidStorage.ITEM.registerForItems(TankBlock.createStorageProvider(8 * FluidConstants.BUCKET), FluidTransport.BASIC_TANK.asItem());

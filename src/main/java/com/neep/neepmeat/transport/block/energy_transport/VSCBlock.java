@@ -2,6 +2,7 @@ package com.neep.neepmeat.transport.block.energy_transport;
 
 import com.neep.meatlib.block.BaseFacingBlock;
 import com.neep.meatlib.item.ItemSettings;
+import com.neep.meatlib.registry.RegistrationContext;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.init.NMSounds;
 import com.neep.neepmeat.transport.block.energy_transport.entity.VSCBlockEntity;
@@ -25,9 +26,9 @@ public class VSCBlock extends BaseFacingBlock implements BlockEntityProvider
     public static final BooleanProperty ACTIVE = BooleanProperty.of("active");
 
     // Vascular Source Converter!
-    public VSCBlock(String itemName, ItemSettings itemSettings, Settings settings)
+    public VSCBlock(RegistrationContext ctx, ItemSettings itemSettings, Settings settings)
     {
-        super(itemName, itemSettings, settings);
+        super(ctx, itemSettings, settings);
     }
 
     @Override

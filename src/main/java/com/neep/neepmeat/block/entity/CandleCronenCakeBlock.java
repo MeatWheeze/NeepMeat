@@ -1,6 +1,7 @@
 package com.neep.neepmeat.block.entity;
 
 import com.neep.meatlib.block.MeatlibBlock;
+import com.neep.meatlib.registry.RegistrationContext;
 import com.neep.neepmeat.init.NMBlocks;
 import com.neep.neepmeat.init.NMSounds;
 import net.minecraft.block.BlockState;
@@ -19,18 +20,9 @@ import net.minecraft.world.World;
 
 public class CandleCronenCakeBlock extends CandleCakeBlock implements MeatlibBlock
 {
-    private final String registryName;
-
-    public CandleCronenCakeBlock(String registryName, Settings settings)
+    public CandleCronenCakeBlock(RegistrationContext ctx, Settings settings)
     {
         super(Blocks.WHITE_CANDLE, settings);
-        this.registryName = registryName;
-    }
-
-    @Override
-    public String getRegistryName()
-    {
-        return registryName;
     }
 
     @Override

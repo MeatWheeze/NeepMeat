@@ -2,6 +2,7 @@ package com.neep.neepmeat.machine.charnel_pump;
 
 import com.neep.meatlib.block.BaseBlock;
 import com.neep.meatlib.item.ItemSettings;
+import com.neep.meatlib.registry.RegistrationContext;
 import com.neep.neepmeat.datagen.tag.NMTags;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.init.NMBlocks;
@@ -21,7 +22,7 @@ import java.util.List;
 
 public class WrithingEarthSpoutBlock extends BaseBlock implements BlockEntityProvider
 {
-    public WrithingEarthSpoutBlock(String registryName, ItemSettings itemSettings, Settings settings)
+    public WrithingEarthSpoutBlock(RegistrationContext registryName, ItemSettings itemSettings, Settings settings)
     {
         super(ctx, itemSettings, settings);
     }

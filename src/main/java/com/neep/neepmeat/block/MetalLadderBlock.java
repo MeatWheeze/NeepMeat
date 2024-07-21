@@ -3,6 +3,7 @@ package com.neep.neepmeat.block;
 import com.neep.meatlib.block.MeatlibBlock;
 import com.neep.meatlib.item.ItemSettings;
 import com.neep.meatlib.registry.ItemRegistry;
+import com.neep.meatlib.registry.RegistrationContext;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.LadderBlock;
@@ -20,13 +21,11 @@ import org.jetbrains.annotations.Nullable;
 public class MetalLadderBlock extends LadderBlock implements MeatlibBlock
 {
     public static final BooleanProperty TOP = BooleanProperty.of("top");
-    private final String name;
 
-    public MetalLadderBlock(String name, ItemSettings itemSettings, Settings settings)
+    public MetalLadderBlock(RegistrationContext ctx, ItemSettings itemSettings, Settings settings)
     {
         super(settings);
-        this.name = name;
-        ItemRegistry.queue(name, itemSettings.create(this, ctx, itemSettings));
+        ctx.append(this, itemSettings.create(this, ctx, itemSettings));
         setDefaultState(getStateManager().getDefaultState().with(TOP, false));
     }
 
@@ -78,11 +77,5 @@ public class MetalLadderBlock extends LadderBlock implements MeatlibBlock
     {
         super.appendProperties(builder);
         builder.add(TOP);
-    }
-
-    @Override
-    public String getRegistryName()
-    {
-        return name;
     }
 }

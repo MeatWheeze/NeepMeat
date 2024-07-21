@@ -7,6 +7,7 @@ import com.neep.meatlib.item.BaseBlockItem;
 import com.neep.meatlib.item.ItemSettings;
 import com.neep.meatlib.registry.BlockRegistry;
 import com.neep.meatlib.registry.ItemRegistry;
+import com.neep.meatlib.registry.RegistrationContext;
 import com.neep.neepmeat.api.big_block.BigBlock;
 import com.neep.neepmeat.api.big_block.BigBlockPattern;
 import com.neep.neepmeat.machine.live_machine.LivingMachines;
@@ -39,7 +40,7 @@ public class CharnelPumpBlock extends BigBlock<CharnelPumpStructure> implements 
 
     private final Map<Direction, BigBlockPattern> patternMap;
 
-    public CharnelPumpBlock(String name, ItemSettings itemSettings, Settings settings)
+    public CharnelPumpBlock(RegistrationContext name, ItemSettings itemSettings, Settings settings)
     {
         super(settings);
         ItemRegistry.queue(new BaseBlockItem(this, name, itemSettings));

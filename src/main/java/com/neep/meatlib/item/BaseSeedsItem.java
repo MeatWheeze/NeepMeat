@@ -1,6 +1,7 @@
 package com.neep.meatlib.item;
 
 import com.neep.meatlib.registry.ItemRegistry;
+import com.neep.meatlib.registry.RegistrationContext;
 import com.neep.neepmeat.NMItemGroups;
 import net.minecraft.block.Block;
 import net.minecraft.client.item.TooltipContext;
@@ -14,13 +15,11 @@ import java.util.List;
 
 public class BaseSeedsItem extends AliasedBlockItem implements MeatlibItem
 {
-    protected final String registryName;
     protected int lore;
 
-    public BaseSeedsItem(Block block, String registryName, int maxCount, int loreLines)
+    public BaseSeedsItem(Block block, RegistrationContext ctx, int maxCount, int loreLines)
     {
         super(block, new MeatlibItemSettings().maxCount(maxCount).group(NMItemGroups.GENERAL));
-        this.registryName = registryName;
         this.lore = loreLines;
         ItemRegistry.queue(this);
     }
@@ -28,7 +27,7 @@ public class BaseSeedsItem extends AliasedBlockItem implements MeatlibItem
     @Override
     public String getRegistryName()
     {
-        return registryName;
+        return "";
     }
 
     @Override

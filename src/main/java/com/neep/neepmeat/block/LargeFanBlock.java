@@ -7,6 +7,7 @@ import com.neep.meatlib.item.ItemSettings;
 import com.neep.meatlib.item.MeatlibItemSettings;
 import com.neep.meatlib.registry.BlockRegistry;
 import com.neep.meatlib.registry.ItemRegistry;
+import com.neep.meatlib.registry.RegistrationContext;
 import com.neep.neepmeat.NMItemGroups;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.api.big_block.BigBlock;
@@ -37,18 +38,16 @@ import java.util.Map;
 public class LargeFanBlock extends BigBlock<LargeFanBlock.LargeFanStructureBlock> implements MeatlibBlock, BlockEntityProvider
 {
     public static final EnumProperty<Direction.Axis> AXIS = Properties.AXIS;
-
-    private final String name;
-
+    private final RegistrationContext ctx;
     private final Map<Direction.Axis, BigBlockPattern> patternMap;
 
-    public LargeFanBlock(String name, ItemSettings itemSettings, Settings settings)
+    public LargeFanBlock(RegistrationContext ctx, ItemSettings itemSettings, Settings settings)
     {
         super(settings);
+        this.ctx = ctx;
         BigBlockPattern upPattern = BigBlockPattern.makeOddCylinder(1, 0, 0, getStructure().getDefaultState());
         BigBlockPattern northPattern = BigBlockPattern.makeRange(-1, -1, 0, 1, 1, 0, getStructure().getDefaultState());
-        ItemRegistry.queue(new BaseBlockItem(this, name, itemSettings, new MeatlibItemSettings().group(NMItemGroups.GENERAL)));
-        this.name = name;
+        ItemRegistry.queue(new BaseBlockItem(this, ctx, itemSettings, new MeatlibItemSettings().group(NMItemGroups.GENERAL)));
 
         patternMap = new EnumMap<>(Map.of(
                 Direction.Axis.X, northPattern.rotateY(90),
@@ -67,19 +66,13 @@ public class LargeFanBlock extends BigBlock<LargeFanBlock.LargeFanStructureBlock
     @Override
     protected LargeFanStructureBlock registerStructureBlock()
     {
-        return BlockRegistry.queue(new LargeFanStructureBlock(this, MeatlibBlockSettings.copyOf(this)), "large_fan_structure");
+        return ctx.append(this, new LargeFanStructureBlock(this, MeatlibBlockSettings.copyOf(this)), "large_fan_structure");
     }
 
     @Override
     public BigBlockPattern getVolume(BlockState blockState)
     {
         return patternMap.get(blockState.get(AXIS));
-    }
-
-    @Override
-    public String getRegistryName()
-    {
-        return name;
     }
 
     @Override

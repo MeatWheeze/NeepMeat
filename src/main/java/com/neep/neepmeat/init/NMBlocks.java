@@ -9,6 +9,7 @@ import com.neep.meatlib.registry.ItemRegistry;
 import com.neep.meatlib.registry.RegistrationContext;
 import com.neep.meatlib.registry.annotation.Path;
 import com.neep.meatlib.registry.annotation.RegisterMe;
+import com.neep.meatlib.registry.annotation.WithItem;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.api.NMSoundGroups;
 import com.neep.neepmeat.api.big_block.BigBlock;
@@ -96,10 +97,10 @@ import java.util.Set;
 import static net.minecraft.registry.tag.BlockTags.*;
 
 @SuppressWarnings("unused")
-@RegisterMe(namespace = NeepMeat.NAMESPACE)
+@RegisterMe(value = NeepMeat.NAMESPACE)
 public class NMBlocks
 {
-    public static final RegistrationContext CTX = new RegistrationContext(NeepMeat.NAMESPACE, Set.of(Block.class));
+    public static final RegistrationContext C = new RegistrationContext(NeepMeat.NAMESPACE);
 
     // --- Building Blocks ---
     public static final AbstractBlock.Settings METAL = MeatlibBlockSettings.create(BlockTags.PICKAXE_MINEABLE).solid().hardness(3.0f).sounds(BlockSoundGroup.NETHERITE);
@@ -114,42 +115,42 @@ public class NMBlocks
 
 //    public static Block DUAT_STONE = new BaseBuildingBlock("duat_stone", true, MeatlibBlockSettings.of(Material.STONE).strength(2.5f).sounds(BlockSoundGroup.STONE));
 //    public static Block DUAT_COBBLESTONE = new BaseBuildingBlock("duat_cobblestone", true, MeatlibBlockSettings.of(Material.STONE).strength(2.5f).sounds(BlockSoundGroup.STONE));
-//    public static Block DUAT_GRAVEL = BlockRegistry.queue(new BaseBlock("duat_gravel", block(), MeatlibBlockSettings.of(Material.STONE).strength(1.0f).sounds(BlockSoundGroup.GRAVEL)));
+//    public static Block DUAT_GRAVEL = new BaseBlock("duat_gravel", block(), MeatlibBlockSettings.of(Material.STONE).strength(1.0f).sounds(BlockSoundGroup.GRAVEL)));
 
-//    public static Block OBJ_TEST = BlockRegistry.queue(new BigBlock("obj_test", MeatlibBlockSettings.copyOf(Blocks.STONE)));
+//    public static Block OBJ_TEST = new BigBlock("obj_test", MeatlibBlockSettings.copyOf(Blocks.STONE)));
 
-//    public static Block TEST_MULTIBLOCK = BlockRegistry.queue(new TestMultiblock("test_multiblock", MeatlibBlockSettings.create()));
+//    public static Block TEST_MULTIBLOCK = new TestMultiblock("test_multiblock", MeatlibBlockSettings.create()));
 
-    public static PaintedBlockManager<?> SMOOTH_TILE = new PaintedBlockManager<>("smooth_tile", SmoothTileBlock::new, MeatlibBlockSettings.create().hardness(3.0f));
+    public static PaintedBlockManager<?> SMOOTH_TILE = new PaintedBlockManager<>(ctx, (ctx, col, settings) -> new SmoothTileBlock(registryName, col, settings), MeatlibBlockSettings.create().hardness(3.0f));
 
-    @Path("polished_metal_bricks") public static Block POLISHED_IRON_BRICKS = new BaseBuildingBlock(CTX, true, MeatlibBlockSettings.create().strength(3.0f).sounds(NMSoundGroups.METAL));
-    @Path("polished_metal_small_bricks") public static Block POLISHED_MERAL_SMALL_BRICKS = new BaseBuildingBlock(CTX, true, MeatlibBlockSettings.create().strength(3.0f).sounds(NMSoundGroups.METAL));
-    @Path("polished_metal") public static BaseBuildingBlock POLISHED_METAL = new BaseBuildingBlock(CTX, true, MeatlibBlockSettings.create().strength(3.0f).sounds(NMSoundGroups.METAL));
-    @Path("blue_polished_metal") public static Block BLUE_IRON_BLOCK = new BaseBuildingBlock(CTX, true, MeatlibBlockSettings.create().strength(3.0f).sounds(NMSoundGroups.METAL));
-    @Path("rusty_metal") public static Block RUSTY_METAL_BLOCK = new BaseBuildingBlock(CTX, false, MeatlibBlockSettings.create().strength(3.0f).sounds(NMSoundGroups.METAL));
-    public static Block RUSTY_METAL_DOOR = new BaseDoorBlock(CTX, MeatlibBlockSettings.copyOf(RUSTY_METAL_BLOCK).nonOpaque(), block(), NMBlockSets.RUSTY_METAL);
-    public static Block WHITE_ROUGH_CONCRETE = new RoughConcreteBlock(CTX, false, DyeColor.WHITE, MeatlibBlockSettings.create().strength(1.8f).sounds(BlockSoundGroup.STONE));
-    public static Block GREY_ROUGH_CONCRETE = new RoughConcreteBlock(CTX, false, DyeColor.GRAY, MeatlibBlockSettings.create().strength(1.8f).sounds(BlockSoundGroup.STONE));
-    public static Block YELLOW_ROUGH_CONCRETE = new RoughConcreteBlock(CTX, false, DyeColor.YELLOW, MeatlibBlockSettings.create().strength(1.8f).sounds(BlockSoundGroup.STONE));
-    public static Block RED_ROUGH_CONCRETE = new RoughConcreteBlock(CTX, false, DyeColor.RED, MeatlibBlockSettings.create().strength(1.8f).sounds(BlockSoundGroup.STONE));
-    public static Block BLUE_ROUGH_CONCRETE = new RoughConcreteBlock(CTX, false, DyeColor.BLUE, MeatlibBlockSettings.create().strength(1.8f).sounds(BlockSoundGroup.STONE));
-    public static Block YELLOW_TILES = new BaseBuildingBlock(CTX, false, MeatlibBlockSettings.create().strength(1.8f).sounds(BlockSoundGroup.STONE));
-    public static Block CAUTION_BLOCK = new BaseBuildingBlock(CTX, false, MeatlibBlockSettings.create().strength(1.8f).sounds(BlockSoundGroup.STONE));
-    public static Block CAUTION_BLOCK_DOOR = new BaseDoorBlock(CTX, MeatlibBlockSettings.copyOf(CAUTION_BLOCK).nonOpaque(), block(), NMBlockSets.RUSTY_METAL);
-    public static Block DIRTY_RED_TILES = new BaseBuildingBlock(CTX, false, MeatlibBlockSettings.create().strength(1.8f).sounds(BlockSoundGroup.STONE));
-    public static Block DIRTY_WHITE_TILES = new BaseBuildingBlock(CTX, true, MeatlibBlockSettings.create().strength(1.8f).sounds(BlockSoundGroup.STONE));
-    public static Block SAND_BRICKS = new BaseBuildingBlock(CTX, true, MeatlibBlockSettings.copyOf(Blocks.BRICKS));
-    public static Block MEAT_STEEL_BLOCK = new BaseBuildingBlock(CTX, true, MeatlibBlockSettings.copyOf(Blocks.NETHERITE_BLOCK));
-    public static Block ASBESTOS = new BaseBuildingBlock(CTX, false, MeatlibBlockSettings.copyOf(Blocks.STONE));
-    public static Block ASBESTOS_TILE = new BaseBuildingBlock(CTX, false, MeatlibBlockSettings.copyOf(ASBESTOS));
-    public static Block CORRUGATED_ASBESTOS = new BaseBuildingBlock(CTX, true, MeatlibBlockSettings.copyOf(ASBESTOS));
-    public static PaintedBlockManager<?> PAINTED_CORRUGATED_ASBESTOS = new PaintedBlockManager<>("painted_corrugated_asbestos", PaintedCorrugatedAsbestosBlock::new, MeatlibBlockSettings.copyOf(CORRUGATED_ASBESTOS));
-    public static Block ASBESTOS_SHINGLE = new BaseBuildingBlock(CTX, false, MeatlibBlockSettings.copyOf(ASBESTOS));
+    @Path("polished_metal_bricks") public static Block POLISHED_IRON_BRICKS = new BaseBuildingBlock(C, true, MeatlibBlockSettings.create().strength(3.0f).sounds(NMSoundGroups.METAL));
+    @Path("polished_metal_small_bricks") public static Block POLISHED_MERAL_SMALL_BRICKS = new BaseBuildingBlock(C, true, MeatlibBlockSettings.create().strength(3.0f).sounds(NMSoundGroups.METAL));
+    @Path("polished_metal") public static BaseBuildingBlock POLISHED_METAL = new BaseBuildingBlock(C, true, MeatlibBlockSettings.create().strength(3.0f).sounds(NMSoundGroups.METAL));
+    @Path("blue_polished_metal") public static Block BLUE_IRON_BLOCK = new BaseBuildingBlock(C, true, MeatlibBlockSettings.create().strength(3.0f).sounds(NMSoundGroups.METAL));
+    @Path("rusty_metal") public static Block RUSTY_METAL_BLOCK = new BaseBuildingBlock(C, false, MeatlibBlockSettings.create().strength(3.0f).sounds(NMSoundGroups.METAL));
+    public static Block RUSTY_METAL_DOOR = new BaseDoorBlock(C, MeatlibBlockSettings.copyOf(RUSTY_METAL_BLOCK).nonOpaque(), block(), NMBlockSets.RUSTY_METAL);
+    public static Block WHITE_ROUGH_CONCRETE = new RoughConcreteBlock(C, false, DyeColor.WHITE, MeatlibBlockSettings.create().strength(1.8f).sounds(BlockSoundGroup.STONE));
+    public static Block GREY_ROUGH_CONCRETE = new RoughConcreteBlock(C, false, DyeColor.GRAY, MeatlibBlockSettings.create().strength(1.8f).sounds(BlockSoundGroup.STONE));
+    public static Block YELLOW_ROUGH_CONCRETE = new RoughConcreteBlock(C, false, DyeColor.YELLOW, MeatlibBlockSettings.create().strength(1.8f).sounds(BlockSoundGroup.STONE));
+    public static Block RED_ROUGH_CONCRETE = new RoughConcreteBlock(C, false, DyeColor.RED, MeatlibBlockSettings.create().strength(1.8f).sounds(BlockSoundGroup.STONE));
+    public static Block BLUE_ROUGH_CONCRETE = new RoughConcreteBlock(C, false, DyeColor.BLUE, MeatlibBlockSettings.create().strength(1.8f).sounds(BlockSoundGroup.STONE));
+    public static Block YELLOW_TILES = new BaseBuildingBlock(C, false, MeatlibBlockSettings.create().strength(1.8f).sounds(BlockSoundGroup.STONE));
+    public static Block CAUTION_BLOCK = new BaseBuildingBlock(C, false, MeatlibBlockSettings.create().strength(1.8f).sounds(BlockSoundGroup.STONE));
+    public static Block CAUTION_BLOCK_DOOR = new BaseDoorBlock(C, MeatlibBlockSettings.copyOf(CAUTION_BLOCK).nonOpaque(), block(), NMBlockSets.RUSTY_METAL);
+    public static Block DIRTY_RED_TILES = new BaseBuildingBlock(C, false, MeatlibBlockSettings.create().strength(1.8f).sounds(BlockSoundGroup.STONE));
+    public static Block DIRTY_WHITE_TILES = new BaseBuildingBlock(C, true, MeatlibBlockSettings.create().strength(1.8f).sounds(BlockSoundGroup.STONE));
+    public static Block SAND_BRICKS = new BaseBuildingBlock(C, true, MeatlibBlockSettings.copyOf(Blocks.BRICKS));
+    public static Block MEAT_STEEL_BLOCK = new BaseBuildingBlock(C, true, MeatlibBlockSettings.copyOf(Blocks.NETHERITE_BLOCK));
+    public static Block ASBESTOS = new BaseBuildingBlock(C, false, MeatlibBlockSettings.copyOf(Blocks.STONE));
+    public static Block ASBESTOS_TILE = new BaseBuildingBlock(C, false, MeatlibBlockSettings.copyOf(ASBESTOS));
+    public static Block CORRUGATED_ASBESTOS = new BaseBuildingBlock(C, true, MeatlibBlockSettings.copyOf(ASBESTOS));
+    public static PaintedBlockManager<?> PAINTED_CORRUGATED_ASBESTOS = new PaintedBlockManager<>(ctx, (RegistrationContext ctx, DyeColor col, AbstractBlock.Settings settings) -> new PaintedCorrugatedAsbestosBlock(ctx, col, settings), MeatlibBlockSettings.copyOf(CORRUGATED_ASBESTOS));
+    public static Block ASBESTOS_SHINGLE = new BaseBuildingBlock(C, false, MeatlibBlockSettings.copyOf(ASBESTOS));
 
-    public static Block BLOODY_BRICKS = new BaseBuildingBlock(CTX, true, MeatlibBlockSettings.copyOf(Blocks.BRICKS));
-    public static Block BLOODY_TILES = new BaseBuildingBlock(CTX, false, MeatlibBlockSettings.copyOf(BLOODY_BRICKS));
+    public static Block BLOODY_BRICKS = new BaseBuildingBlock(C, true, MeatlibBlockSettings.copyOf(Blocks.BRICKS));
+    public static Block BLOODY_TILES = new BaseBuildingBlock(C, false, MeatlibBlockSettings.copyOf(BLOODY_BRICKS));
 
-    public static Block REINFORCED_GLASS = new BaseBuildingBlock(CTX, false, MeatlibBlockSettings.create().strength(1f).sounds(BlockSoundGroup.GLASS).nonOpaque().allowsSpawning(VatWindowBlock::never).solidBlock(VatWindowBlock::never).suffocates(VatWindowBlock::never).blockVision(VatWindowBlock::never))
+    public static Block REINFORCED_GLASS = new BaseBuildingBlock(C, false, MeatlibBlockSettings.create().strength(1f).sounds(BlockSoundGroup.GLASS).nonOpaque().allowsSpawning(VatWindowBlock::never).solidBlock(VatWindowBlock::never).suffocates(VatWindowBlock::never).blockVision(VatWindowBlock::never))
     {
         @Override
         public boolean isSideInvisible(BlockState state, BlockState stateFrom, Direction direction)
@@ -183,176 +184,176 @@ public class NMBlocks
 
 //    public static Block FILLED_SCAFFOLD = new BaseBuildingBlock("filled_scaffold", 64, false, MeatlibBlockSettings.of(Material.METAL).strength(5.0f).sounds(NMSoundGroups.MECHANICAL_MACHINE));
 
-    @Path("rusted_metal_scaffold") public static MetalScaffoldingBlock SCAFFOLD_PLATFORM = new MetalScaffoldingBlock(CTX, block(), MeatlibBlockSettings.create().strength(1.5f).sounds(NMSoundGroups.METAL));
-    @Path("blue_metal_scaffold") public static MetalScaffoldingBlock BLUE_SCAFFOLD = new MetalScaffoldingBlock(CTX, block(), MeatlibBlockSettings.create().strength(1.5f).sounds(NMSoundGroups.METAL));
-    @Path("yellow_metal_scaffold") public static MetalScaffoldingBlock YELLOW_SCAFFOLD = new MetalScaffoldingBlock(CTX, block(), MeatlibBlockSettings.create().strength(1.5f).sounds(NMSoundGroups.METAL));
+    @Path("rusted_metal_scaffold") public static MetalScaffoldingBlock SCAFFOLD_PLATFORM = new MetalScaffoldingBlock(C, block(), MeatlibBlockSettings.create().strength(1.5f).sounds(NMSoundGroups.METAL));
+    @Path("blue_metal_scaffold") public static MetalScaffoldingBlock BLUE_SCAFFOLD = new MetalScaffoldingBlock(C, block(), MeatlibBlockSettings.create().strength(1.5f).sounds(NMSoundGroups.METAL));
+    @Path("yellow_metal_scaffold") public static MetalScaffoldingBlock YELLOW_SCAFFOLD = new MetalScaffoldingBlock(C, block(), MeatlibBlockSettings.create().strength(1.5f).sounds(NMSoundGroups.METAL));
 
-    @Path("rusty_column") public static Block RUSTY_VENT = BlockRegistry.queue(new BaseColumnBlock(CTX, block(), MeatlibBlockSettings.copyOf(RUSTY_METAL_BLOCK).nonOpaque()));
-    public static Block MESH_PANE = BlockRegistry.queue(new BasePaneBlock(CTX, block(), MeatlibBlockSettings.create().strength(3.5f).sounds(BlockSoundGroup.LANTERN)));
-    public static Block RUSTED_BARS = BlockRegistry.queue(new BasePaneBlock(CTX, block(), MeatlibBlockSettings.create().strength(3.5f).sounds(NMSoundGroups.METAL)));
-    public static Block RUSTY_PANEL = BlockRegistry.queue(new BaseBlock(CTX, MeatlibBlockSettings.copyOf(RUSTY_METAL_BLOCK)));
-    @Path("rusty_vent") public static Block RUSTY_GRATE = BlockRegistry.queue(new BaseBlock(CTX, MeatlibBlockSettings.copyOf(RUSTY_METAL_BLOCK)));
+    @Path("rusty_column") public static Block RUSTY_VENT = new BaseColumnBlock(C, block(), MeatlibBlockSettings.copyOf(RUSTY_METAL_BLOCK).nonOpaque());
+    public static Block MESH_PANE = new BasePaneBlock(C, block(), MeatlibBlockSettings.create().strength(3.5f).sounds(BlockSoundGroup.LANTERN));
+    public static Block RUSTED_BARS = new BasePaneBlock(C, block(), MeatlibBlockSettings.create().strength(3.5f).sounds(NMSoundGroups.METAL));
+    public static Block RUSTY_PANEL = new BaseBlock(C, MeatlibBlockSettings.copyOf(RUSTY_METAL_BLOCK));
+    @Path("rusty_vent") public static Block RUSTY_GRATE = new BaseBlock(C, MeatlibBlockSettings.copyOf(RUSTY_METAL_BLOCK));
 
     // Decorations
-    public static Block DIRTY_SINK = BlockRegistry.queue(new BaseBlock(CTX, block(), MeatlibBlockSettings.copyOf(RUSTY_METAL_BLOCK).solid().nonOpaque()));
-    public static Block SMALL_SINK = BlockRegistry.queue(new SinkBlock("small_sink", block(), MeatlibBlockSettings.copyOf(Blocks.STONE).nonOpaque()));
-    public static Block TELEVISION_OFF = BlockRegistry.queue(new TelevisionBlock(CTX, block(), MeatlibBlockSettings.copyOf(Blocks.STONE).nonOpaque()));
-    public static Block TELEVISION_STATIC = BlockRegistry.queue(new TelevisionBlock(CTX, block(), MeatlibBlockSettings.copyOf(Blocks.STONE).nonOpaque()));
-    public static BigBlock<?> LARGE_FAN = BlockRegistry.queue(new LargeFanBlock("large_fan", block().tooltip(TooltipSupplier.simple(1)), MeatlibBlockSettings.copyOf(RUSTY_METAL_BLOCK).nonOpaque()));
+    public static Block DIRTY_SINK = new BaseBlock(C, block(), MeatlibBlockSettings.copyOf(RUSTY_METAL_BLOCK).solid().nonOpaque());
+    public static Block SMALL_SINK = new SinkBlock("small_sink", block(), MeatlibBlockSettings.copyOf(Blocks.STONE).nonOpaque());
+    public static Block TELEVISION_OFF = new TelevisionBlock(C, block(), MeatlibBlockSettings.copyOf(Blocks.STONE).nonOpaque());
+    public static Block TELEVISION_STATIC = new TelevisionBlock(C, block(), MeatlibBlockSettings.copyOf(Blocks.STONE).nonOpaque());
+    @Path("large_fan") public static BigBlock<?> LARGE_FAN = new LargeFanBlock(C, block().tooltip(TooltipSupplier.simple(1)), MeatlibBlockSettings.copyOf(RUSTY_METAL_BLOCK).nonOpaque());
 
-//    public static Block SLOPE_TEST = BlockRegistry.queue(new BaseStairsBlock(CAUTION_BLOCK.getDefaultState(), "slope_test", 64, MeatlibBlockSettings.of(Material.METAL).nonOpaque()));
+//    public static Block SLOPE_TEST = new BaseStairsBlock(CAUTION_BLOCK.getDefaultState(), "slope_test", 64, MeatlibBlockSettings.of(Material.METAL).nonOpaque()));
 
-    public static Block SCAFFOLD_TRAPDOOR = BlockRegistry.queue(new ScaffoldTrapdoorBlock("rusted_metal_scaffold_trapdoor", block(), MeatlibBlockSettings.create().strength(2.0f).sounds(NMSoundGroups.METAL).nonOpaque()));
+    @Path("rusted_metal_scaffold_trapdoor") public static Block SCAFFOLD_TRAPDOOR = new ScaffoldTrapdoorBlock(C, block(), MeatlibBlockSettings.create().strength(2.0f).sounds(NMSoundGroups.METAL).nonOpaque());
 
-    public static Block RUSTY_METAL_LADDER = BlockRegistry.queue(new MetalLadderBlock("rusty_metal_ladder", block(), MeatlibBlockSettings.create().strength(2.0f).sounds(NMSoundGroups.METAL).nonOpaque()));
-    public static Block RUSTY_METAL_RUNGS = BlockRegistry.queue(new MetalRungsBlock("rusty_metal_rungs", block(), MeatlibBlockSettings.create().strength(2.0f).sounds(NMSoundGroups.METAL).nonOpaque()));
+    public static Block RUSTY_METAL_LADDER = new MetalLadderBlock(C, block(), MeatlibBlockSettings.create().strength(2.0f).sounds(NMSoundGroups.METAL).nonOpaque());
+    public static Block RUSTY_METAL_RUNGS = new MetalRungsBlock(C, block(), MeatlibBlockSettings.create().strength(2.0f).sounds(NMSoundGroups.METAL).nonOpaque());
 
-//    public static Block CAUTION_TAPE = BlockRegistry.queue(new CautionTapeBlock("caution_tape", 64, false, MeatlibBlockSettings.of(Material.CARPET).strength(1.0f).sounds(BlockSoundGroup.STONE).nonOpaque()));
+//    public static Block CAUTION_TAPE = new CautionTapeBlock("caution_tape", 64, false, MeatlibBlockSettings.of(Material.CARPET).strength(1.0f).sounds(BlockSoundGroup.STONE).nonOpaque()));
 
 
     // --- Machines
-//    public static Block TROMMEL = BlockRegistry.queue(new TrommelBlock("trommel", block(), MeatlibBlockSettings.copyOf(MACHINE_SETTINGS)));
-//    public static Block TROMMEL_STRUCTURE = BlockRegistry.queue(new TrommelBlock.Structure("trommel_top", MeatlibBlockSettings.copyOf(MACHINE_SETTINGS)));
-    public static Block SMALL_TROMMEL = BlockRegistry.queue(new SmallTrommelBlock("small_trommel", block().requiresMotor(), MeatlibBlockSettings.copyOf(MACHINE_SETTINGS)));
-    public static Block SMALL_TROMMEL_STRUCTURE = BlockRegistry.queue(new SmallTrommelBlock.Structure("small_trommel_structure", MeatlibBlockSettings.copyOf(SMALL_TROMMEL)));
+//    public static Block TROMMEL = new TrommelBlock("trommel", block(), MeatlibBlockSettings.copyOf(MACHINE_SETTINGS)));
+//    public static Block TROMMEL_STRUCTURE = new TrommelBlock.Structure("trommel_top", MeatlibBlockSettings.copyOf(MACHINE_SETTINGS)));
+    public static Block SMALL_TROMMEL = new SmallTrommelBlock(C, block().requiresMotor(), MeatlibBlockSettings.copyOf(MACHINE_SETTINGS));
+    public static Block SMALL_TROMMEL_STRUCTURE = new SmallTrommelBlock.Structure(MeatlibBlockSettings.copyOf(SMALL_TROMMEL));
 
-//    public static Block CENTRIFUGE = BlockRegistry.queue(new CentrifugeBlock("centrifuge", MeatlibBlockSettings.copyOf(MACHINE_SETTINGS)));
+//    public static Block CENTRIFUGE = new CentrifugeBlock("centrifuge", MeatlibBlockSettings.copyOf(MACHINE_SETTINGS)));
 
-    public static Block HEATER = BlockRegistry.queue(new HeaterBlock("heater", block().requiresVascular().tooltip(TooltipSupplier.hidden(1)), MeatlibBlockSettings.copyOf(MACHINE_SETTINGS)));
-    public static Block LINEAR_OSCILLATOR = BlockRegistry.queue(new LinearOscillatorBlock("breaker", block().requiresMotor(), MeatlibBlockSettings.copyOf(MACHINE_SETTINGS)));
-    public static Block MOTOR = BlockRegistry.queue(new MotorBlock("motor_unit", block().tooltip(TooltipSupplier.hidden(1)), MeatlibBlockSettings.copyOf(MACHINE_SETTINGS)));
-    public static Block ADVANCED_MOTOR = BlockRegistry.queue(new AdvancedMotorBlock("advanced_motor", block().tooltip(TooltipSupplier.hidden(2)).requiresVascular(), MeatlibBlockSettings.copyOf(MACHINE_SETTINGS)));
-    public static LargeMotorBlock LARGE_MOTOR = BlockRegistry.queue(new LargeMotorBlock("large_motor", block().requiresVascular().tooltip(TooltipSupplier.hidden(1)), MeatlibBlockSettings.copyOf(MACHINE_SETTINGS)));
-    public static Block FLYWHEEL = BlockRegistry.queue(new FlywheelBlock("large_flywheel", block().tooltip(TooltipSupplier.simple(0)), MeatlibBlockSettings.copyOf(MACHINE_SETTINGS)));
-    public static Block STIRLING_ENGINE = BlockRegistry.queue(new StirlingEngineBlock("stirling_engine", block(), MeatlibBlockSettings.copyOf(MACHINE_SETTINGS)));
-    public static Block DEPLOYER = BlockRegistry.queue(new DeployerBlock("deployer", block().requiresMotor(), MeatlibBlockSettings.copyOf(MACHINE_SETTINGS)));
-//    public static Block AGITATOR = BlockRegistry.queue(new AgitatorBlock("agitator", block().requiresMotor(), MeatlibBlockSettings.copyOf(MACHINE_SETTINGS)));
-    public static Block CRUSHER = BlockRegistry.queue(new GrinderBlock("grinder", block().requiresMotor().tooltip(TooltipSupplier.simple(1)), MeatlibBlockSettings.copyOf(MACHINE_SETTINGS)));
-    public static Multiblock2ControllerBlock<LargeCrusherStructureBlock> LARGE_CRUSHER = BlockRegistry.queue(new LargeCrusherBlock("large_crusher", block().requiresMotor(), MeatlibBlockSettings.copyOf(MACHINE_SETTINGS)));
-    public static Block ALLOY_KILN = BlockRegistry.queue(new AlloyKilnBlock("alloy_kiln", block(), MeatlibBlockSettings.copyOf(NMBlocks.SAND_BRICKS)));
-    public static Block CRUCIBLE = BlockRegistry.queue(new CrucibleBlock("crucible", block(), FLUID_PIPE_SETTINGS));
-    public static Block COLLECTOR = BlockRegistry.queue(new FatCollectorBlock("collector", block(), FLUID_PIPE_SETTINGS));
-    public static AssemblerBlock ASSEMBLER = BlockRegistry.queue(new AssemblerBlock("assembler", block().tooltip(TooltipSupplier.hidden(1)).requiresVascular(), MACHINE_SETTINGS));
-    public static Block FABRICATOR = BlockRegistry.queue(new FabricatorBlock("fabricator", block().tooltip(TooltipSupplier.hidden(1)), MACHINE_SETTINGS));
+    public static Block HEATER = new HeaterBlock(C, block().requiresVascular().tooltip(TooltipSupplier.hidden(1)), MeatlibBlockSettings.copyOf(MACHINE_SETTINGS));
+    @Path("breaker") public static Block LINEAR_OSCILLATOR = new LinearOscillatorBlock(C, block().requiresMotor(), MeatlibBlockSettings.copyOf(MACHINE_SETTINGS));
+    @Path("motor_unit") public static Block MOTOR = new MotorBlock(C, block().tooltip(TooltipSupplier.hidden(1)), MeatlibBlockSettings.copyOf(MACHINE_SETTINGS));
+    public static Block ADVANCED_MOTOR = new AdvancedMotorBlock(C, block().tooltip(TooltipSupplier.hidden(2)).requiresVascular(), MeatlibBlockSettings.copyOf(MACHINE_SETTINGS));
+    @Path("large_motor") public static LargeMotorBlock LARGE_MOTOR = new LargeMotorBlock(C, block().requiresVascular().tooltip(TooltipSupplier.hidden(1)), MeatlibBlockSettings.copyOf(MACHINE_SETTINGS));
+    @Path("large_flywheel") public static Block FLYWHEEL = new FlywheelBlock(C, block().tooltip(TooltipSupplier.simple(0)), MeatlibBlockSettings.copyOf(MACHINE_SETTINGS));
+    @Path("stirling_engine") public static Block STIRLING_ENGINE = new StirlingEngineBlock(C, block(), MeatlibBlockSettings.copyOf(MACHINE_SETTINGS));
+    @Path("deployer") public static Block DEPLOYER = new DeployerBlock(C, block().requiresMotor(), MeatlibBlockSettings.copyOf(MACHINE_SETTINGS));
+//    public static Block AGITATOR = new AgitatorBlock("agitator", block().requiresMotor(), MeatlibBlockSettings.copyOf(MACHINE_SETTINGS)));
+    @Path("grinder") public static Block CRUSHER = new GrinderBlock(C, block().requiresMotor().tooltip(TooltipSupplier.simple(1)), MeatlibBlockSettings.copyOf(MACHINE_SETTINGS));
+    @Path("large_crusher") public static Multiblock2ControllerBlock<LargeCrusherStructureBlock> LARGE_CRUSHER = new LargeCrusherBlock(C, block().requiresMotor(), MeatlibBlockSettings.copyOf(MACHINE_SETTINGS));
+    @Path("alloy_kiln") public static Block ALLOY_KILN = new AlloyKilnBlock(C, block(), MeatlibBlockSettings.copyOf(NMBlocks.SAND_BRICKS));
+    @Path("crucible") public static Block CRUCIBLE = new CrucibleBlock(C, block(), FLUID_PIPE_SETTINGS);
+    @Path("collector") public static Block COLLECTOR = new FatCollectorBlock(C, block(), FLUID_PIPE_SETTINGS);
+    @Path("assembler") public static AssemblerBlock ASSEMBLER = new AssemblerBlock(C, block().tooltip(TooltipSupplier.hidden(1)).requiresVascular(), MACHINE_SETTINGS);
+    @Path("fabricator") public static Block FABRICATOR = new FabricatorBlock(C, block().tooltip(TooltipSupplier.hidden(1)), MACHINE_SETTINGS);
 
-    public static TallBlock FLUID_EXCITER = BlockRegistry.queue(new FluidExciterBlock("fluid_exciter", block().tooltip(TooltipSupplier.hidden(1)), MeatlibBlockSettings.create().sounds(NMSoundGroups.MECHANICAL_MACHINE).hardness(4.0f)));
+    @Path("fluid_exciter") public static TallBlock FLUID_EXCITER = new FluidExciterBlock(C, block().tooltip(TooltipSupplier.hidden(1)), MeatlibBlockSettings.create().sounds(NMSoundGroups.MECHANICAL_MACHINE).hardness(4.0f));
 
-    public static Block TRANSDUCER = BlockRegistry.queue(new TransducerBlock("transducer", block(), MACHINE_SETTINGS));
+    @Path("transducer") public static Block TRANSDUCER = new TransducerBlock(C, block(), MACHINE_SETTINGS);
     public static final MeatlibBlockSettings POWER_FLOWER_SETTINGS = (MeatlibBlockSettings) MeatlibBlockSettings.create(AXE_MINEABLE).sounds(BlockSoundGroup.MUDDY_MANGROVE_ROOTS).strength(2.0f);
-    public static Block POWER_FLOWER_SEEDS = BlockRegistry.queue(new PowerFlowerSeedsBlock("power_flower_seeds", block().tooltip(TooltipSupplier.simple(1)), POWER_FLOWER_SETTINGS.copy().tags(HOE_MINEABLE).hardness(0.01f)));
-    public static PowerFlowerGrowthBlock POWER_FLOWER_GROWTH = BlockRegistry.queue(new PowerFlowerGrowthBlock("power_flower_growth", block().tooltip(TooltipSupplier.hidden(1)), POWER_FLOWER_SETTINGS.copy()));
-    public static Block POWER_FLOWER_CONTROLLER = BlockRegistry.queue(new PowerFlowerControllerBlock("power_flower_controller", block().tooltip(TooltipSupplier.hidden(1)), POWER_FLOWER_SETTINGS.copy()));
-    public static Block POWER_FLOWER_FLUID_PORT = BlockRegistry.queue(new PowerFlowerFluidPortBlock("power_flower_fluid_port", block().tooltip(TooltipSupplier.simple(1)), POWER_FLOWER_SETTINGS.copy()));
+    @Path("power_flower_seeds") public static Block POWER_FLOWER_SEEDS = new PowerFlowerSeedsBlock(C, block().tooltip(TooltipSupplier.simple(1)), POWER_FLOWER_SETTINGS.copy().tags(HOE_MINEABLE).hardness(0.01f));
+    @Path("power_flower_growth") public static PowerFlowerGrowthBlock POWER_FLOWER_GROWTH = new PowerFlowerGrowthBlock(C, block().tooltip(TooltipSupplier.hidden(1)), POWER_FLOWER_SETTINGS.copy());
+    @Path("power_flower_controller") public static Block POWER_FLOWER_CONTROLLER = new PowerFlowerControllerBlock(C, block().tooltip(TooltipSupplier.hidden(1)), POWER_FLOWER_SETTINGS.copy());
+    @Path("power_flower_fluid_port") public static Block POWER_FLOWER_FLUID_PORT = new PowerFlowerFluidPortBlock(C, block().tooltip(TooltipSupplier.simple(1)), POWER_FLOWER_SETTINGS.copy());
 
-    public static Block PEDESTAL = BlockRegistry.queue(new PedestalBlock("pedestal", block().plc(), MeatlibBlockSettings.copyOf(MACHINE_SETTINGS)));
+    @Path("pedestal") public static Block PEDESTAL = new PedestalBlock(C, block().plc(), MeatlibBlockSettings.copyOf(MACHINE_SETTINGS));
 
-    public static Block CHARNEL_COMPACTOR = BlockRegistry.queue(new CharnelCompactorBlock("charnel_compactor", block().tooltip(TooltipSupplier.simple(1)), MeatlibBlockSettings.copyOf(RUSTY_METAL_BLOCK)));
-    public static CharnelPumpBlock CHARNEL_PUMP = BlockRegistry.queue(new CharnelPumpBlock("charnel_pump", block(), MeatlibBlockSettings.copy(RUSTY_METAL_BLOCK)));
-    public static WellHeadBlock WELL_HEAD = BlockRegistry.queue(new WellHeadBlock("well_head", block().tooltip(TooltipSupplier.hidden(1)), MeatlibBlockSettings.copyOf(RUSTY_METAL_BLOCK)));
-    public static Block CONTAMINATED_DIRT = BlockRegistry.queue(new ContaminatedDirtBlock("contaminated_dirt", block(), MeatlibBlockSettings.copyOf(Blocks.DIRT).tags(SHOVEL_MINEABLE).strength(3).sounds(BlockSoundGroup.MUDDY_MANGROVE_ROOTS)));
-    public static Block WRITHING_EARTH_SPOUT = BlockRegistry.queue(new WrithingEarthSpoutBlock("writhing_earth_spout", block(), MeatlibBlockSettings.copyOf(Blocks.DIRT).tags(SHOVEL_MINEABLE).strength(8).sounds(BlockSoundGroup.MUDDY_MANGROVE_ROOTS)));
-    public static Block WRITHING_STONE = BlockRegistry.queue(new WrithingStoneBlock("writhing_stone", block(), MeatlibBlockSettings.copyOf(Blocks.STONE).tags(PICKAXE_MINEABLE).strength(4).sounds(BlockSoundGroup.MUDDY_MANGROVE_ROOTS)));
+    @Path("charnel_compactor") public static Block CHARNEL_COMPACTOR = new CharnelCompactorBlock(C, block().tooltip(TooltipSupplier.simple(1)), MeatlibBlockSettings.copyOf(RUSTY_METAL_BLOCK));
+    @Path("charnel_pump") public static CharnelPumpBlock CHARNEL_PUMP = new CharnelPumpBlock(C, block(), MeatlibBlockSettings.copy(RUSTY_METAL_BLOCK));
+    @Path("well_head") public static WellHeadBlock WELL_HEAD = new WellHeadBlock(C, block().tooltip(TooltipSupplier.hidden(1)), MeatlibBlockSettings.copyOf(RUSTY_METAL_BLOCK));
+    @Path("contaminated_dirt") public static Block CONTAMINATED_DIRT = new ContaminatedDirtBlock(C, block(), MeatlibBlockSettings.copyOf(Blocks.DIRT).tags(SHOVEL_MINEABLE).strength(3).sounds(BlockSoundGroup.MUDDY_MANGROVE_ROOTS));
+    @Path("writhing_earth_spout") public static Block WRITHING_EARTH_SPOUT = new WrithingEarthSpoutBlock(C, block(), MeatlibBlockSettings.copyOf(Blocks.DIRT).tags(SHOVEL_MINEABLE).strength(8).sounds(BlockSoundGroup.MUDDY_MANGROVE_ROOTS));
+    @Path("writhing_stone") public static Block WRITHING_STONE = new WrithingStoneBlock(C, block(), MeatlibBlockSettings.copyOf(Blocks.STONE).tags(PICKAXE_MINEABLE).strength(4).sounds(BlockSoundGroup.MUDDY_MANGROVE_ROOTS));
 
-    public static PhageRayBlock PHAGE_RAY = BlockRegistry.queue(new PhageRayBlock("phage_ray", MeatlibBlockSettings.copyOf(MACHINE_SETTINGS)));
+    @Path("phage_ray") public static PhageRayBlock PHAGE_RAY = new PhageRayBlock(C, MeatlibBlockSettings.copyOf(MACHINE_SETTINGS));
 
-    public static MixerBlock MIXER = BlockRegistry.queue(new MixerBlock("mixer", block().tooltip(TooltipSupplier.hidden(4)).requiresMotor(), MeatlibBlockSettings.copyOf(BRASS_BLOCKS)));
+    @Path("mixer") public static MixerBlock MIXER = new MixerBlock(C, block().tooltip(TooltipSupplier.hidden(4)).requiresMotor(), MeatlibBlockSettings.copyOf(BRASS_BLOCKS));
 
-    public static Block CASTING_BASIN = BlockRegistry.queue(new CastingBasinBlock("casting_basin", block(), MeatlibBlockSettings.copyOf(MIXER)));
-    public static TallBlock HYDRAULIC_PRESS = BlockRegistry.queue(new HydraulicPressBlock("hydraulic_press", block(), MeatlibBlockSettings.copyOf(MIXER)));
+    @Path("casting_basin") public static Block CASTING_BASIN = new CastingBasinBlock(C, block(), MeatlibBlockSettings.copyOf(MIXER));
+    @Path("hydraulic_press") public static TallBlock HYDRAULIC_PRESS = new HydraulicPressBlock(C, block(), MeatlibBlockSettings.copyOf(MIXER));
 
-    public static Block WORKSTATION = BlockRegistry.queue(new WorkstationBlock("workstation", ItemSettings.block().tooltip(TooltipSupplier.hidden(2)), MeatlibBlockSettings.copyOf(MACHINE_SETTINGS)));
+    @Path("workstation") public static Block WORKSTATION = new WorkstationBlock(C, ItemSettings.block().tooltip(TooltipSupplier.hidden(2)), MeatlibBlockSettings.copyOf(MACHINE_SETTINGS));
 
-    public static Block DEATH_BLADES = BlockRegistry.queue(new DeathBladesBlock("death_blades", block().tooltip(TooltipSupplier.simple(1)).requiresMotor(), MeatlibBlockSettings.copyOf(MACHINE_SETTINGS)));
+    public static Block DEATH_BLADES = new DeathBladesBlock(C, block().tooltip(TooltipSupplier.simple(1)).requiresMotor(), MeatlibBlockSettings.copyOf(MACHINE_SETTINGS));
 
-    public static Block FEEDING_TROUGH = BlockRegistry.queue(new TroughBlock("feeding_trough", block().tooltip(TooltipSupplier.simple(1)), MeatlibBlockSettings.copyOf(FLUID_MACHINE_SETTINGS)));
-    public static Block SEPARATOR = BlockRegistry.queue(new SeparatorBlock("separator", block().tooltip(TooltipSupplier.hidden(2)).requiresMotor(), MeatlibBlockSettings.copyOf(MACHINE_SETTINGS)));
+    public static Block FEEDING_TROUGH = new TroughBlock(C, block().tooltip(TooltipSupplier.simple(1)), MeatlibBlockSettings.copyOf(FLUID_MACHINE_SETTINGS));
+    @Path("separator") public static Block SEPARATOR = new SeparatorBlock(C, block().tooltip(TooltipSupplier.hidden(2)).requiresMotor(), MeatlibBlockSettings.copyOf(MACHINE_SETTINGS));
 
-//    public static Block SIFTER = BlockRegistry.queue(new SifterBlock("sifter", block(), MeatlibBlockSettings.copyOf(MACHINE_SETTINGS)));
-//    public static Block SIFTER_HOPPER = BlockRegistry.queue(new SifterHopperBlock("hopper", 64, true, MeatlibBlockSettings.copyOf(MACHINE_SETTINGS)));
+//    public static Block SIFTER = new SifterBlock("sifter", block(), MeatlibBlockSettings.copyOf(MACHINE_SETTINGS)));
+//    public static Block SIFTER_HOPPER = new SifterHopperBlock("hopper", 64, true, MeatlibBlockSettings.copyOf(MACHINE_SETTINGS)));
 
-    public static Block PYLON = BlockRegistry.queue(new PylonBlock("pylon", MeatlibBlockSettings.copyOf(MACHINE_SETTINGS)));
-    public static Block SYNTHESISER = BlockRegistry.queue(new SynthesiserBlock("synthesiser", MeatlibBlockSettings.copyOf(MACHINE_SETTINGS)));
-    public static Block MINCER = BlockRegistry.queue(new MincerBlock("mincer", block().requiresMotor(), MeatlibBlockSettings.copyOf(MACHINE_SETTINGS)));
-    public static Block ITEM_MINCER = BlockRegistry.queue(new ItemMincerBlock("item_mincer", block().tooltip(TooltipSupplier.hidden(1)).requiresMotor(), MeatlibBlockSettings.copyOf(MACHINE_SETTINGS)));
-    public static Block HOMOGENISER = BlockRegistry.queue(new HomogeniserBlock("homogeniser", block().requiresMotor(), MeatlibBlockSettings.copyOf(MACHINE_SETTINGS)));
+    @Path("pylon") public static Block PYLON = new PylonBlock(C, MeatlibBlockSettings.copyOf(MACHINE_SETTINGS));
+    @Path("synthesiser") public static Block SYNTHESISER = new SynthesiserBlock(C, MeatlibBlockSettings.copyOf(MACHINE_SETTINGS));
+    @Path("mincer") public static Block MINCER = new MincerBlock(C, block().requiresMotor(), MeatlibBlockSettings.copyOf(MACHINE_SETTINGS));
+    @Path("item_mincer") public static Block ITEM_MINCER = new ItemMincerBlock(C, block().tooltip(TooltipSupplier.hidden(1)).requiresMotor(), MeatlibBlockSettings.copyOf(MACHINE_SETTINGS));
+    @Path("homogeniser") public static Block HOMOGENISER = new HomogeniserBlock(C, block().requiresMotor(), MeatlibBlockSettings.copyOf(MACHINE_SETTINGS));
 
-    public static Block SURGERY_PLATFORM = BlockRegistry.queue(new SurgeryPlatformBlock("surgery_platform", block().plc(), MeatlibBlockSettings.copyOf(MACHINE_SETTINGS)));
-    public static Block UPGRADE_MANAGER = BlockRegistry.queue(new UpgradeManagerBlock("upgrade_manager", block(), MeatlibBlockSettings.copyOf(MACHINE_SETTINGS)));
+    public static Block SURGERY_PLATFORM = new SurgeryPlatformBlock(C, block().plc(), MeatlibBlockSettings.copyOf(MACHINE_SETTINGS));
+    public static Block UPGRADE_MANAGER = new UpgradeManagerBlock(C, block(), MeatlibBlockSettings.copyOf(MACHINE_SETTINGS));
 
-//    public static Block VAT_CASING = BlockRegistry.queue(new VatCasingBlock("vat_casing", block().tooltip(TooltipSupplier.simple(1)), VAT_SETTINGS));
-//    public static Block VAT_CONTROLLER = BlockRegistry.queue(new VatControllerBlock("vat_controller", block(), VAT_SETTINGS));
-//    public static Block VAT_ITEM_PORT = BlockRegistry.queue(new ItemPortBlock("vat_item_port", block(), VAT_SETTINGS));
-//    public static Block VAT_FLUID_PORT = BlockRegistry.queue(new FluidPortBlock("vat_fluid_port", block(), VAT_SETTINGS));
-//    public static Block VAT_WINDOW = BlockRegistry.queue(new VatWindowBlock("clear_tank_wall", block(), AbstractBlock.Settings.of(Material.GLASS).strength(0.3f).sounds(BlockSoundGroup.GLASS).nonOpaque().allowsSpawning(VatWindowBlock::never).solidBlock(VatWindowBlock::never).suffocates(VatWindowBlock::never).blockVision(VatWindowBlock::never)));
+//    public static Block VAT_CASING = new VatCasingBlock("vat_casing", block().tooltip(TooltipSupplier.simple(1)), VAT_SETTINGS));
+//    public static Block VAT_CONTROLLER = new VatControllerBlock("vat_controller", block(), VAT_SETTINGS));
+//    public static Block VAT_ITEM_PORT = new ItemPortBlock("vat_item_port", block(), VAT_SETTINGS));
+//    public static Block VAT_FLUID_PORT = new FluidPortBlock("vat_fluid_port", block(), VAT_SETTINGS));
+//    public static Block VAT_WINDOW = new VatWindowBlock("clear_tank_wall", block(), AbstractBlock.Settings.of(Material.GLASS).strength(0.3f).sounds(BlockSoundGroup.GLASS).nonOpaque().allowsSpawning(VatWindowBlock::never).solidBlock(VatWindowBlock::never).suffocates(VatWindowBlock::never).blockVision(VatWindowBlock::never)));
 
-    public static Block FLAME_JET = BlockRegistry.queue(new FlameJetBlock("flame_jet", block().factory((block, ctx, itemSettings) -> new FluidComponentItem(block, ctx, itemSettings)), MACHINE_SETTINGS));
+    public static Block FLAME_JET = new FlameJetBlock(C, block().factory(FluidComponentItem::new), MACHINE_SETTINGS);
 
-    public static Block ITEM_BUFFER = BlockRegistry.queue(new DisplayPlateBlock("item_buffer", block().tooltip(TooltipSupplier.simple(1)).plc(), MACHINE_SETTINGS.sounds(BlockSoundGroup.METAL)));
-    //    public static Block SPIGOT = BlockRegistry.queue(new SpigotBlock("spigot", 64, false, FLUID_MACHINE_SETTINGS));
+    public static Block ITEM_BUFFER = new DisplayPlateBlock(C, block().tooltip(TooltipSupplier.simple(1)).plc(), MACHINE_SETTINGS.sounds(BlockSoundGroup.METAL));
+    //    public static Block SPIGOT = new SpigotBlock("spigot", 64, false, FLUID_MACHINE_SETTINGS));
 
-    public static Block BOTTLER = BlockRegistry.queue(new BottlerBlock("bottler", block().tooltip(TooltipSupplier.simple(1)).requiresMotor(), FLUID_MACHINE_SETTINGS));
+    public static Block BOTTLER = new BottlerBlock(C, block().tooltip(TooltipSupplier.simple(1)).requiresMotor(), FLUID_MACHINE_SETTINGS);
 
-    public static Block FLUID_RATIONER = BlockRegistry.queue(new FluidRationerBlock("fluid_rationer", block().tooltip(TooltipSupplier.hidden(2)), MeatlibBlockSettings.copyOf(FLUID_MACHINE_SETTINGS).nonOpaque()));
+    public static Block FLUID_RATIONER = new FluidRationerBlock(C, block().tooltip(TooltipSupplier.hidden(2)), MeatlibBlockSettings.copyOf(FLUID_MACHINE_SETTINGS).nonOpaque());
 
-    public static Block SMALL_COMPRESSOR = BlockRegistry.queue(new SmallCompressorBlock("small_compressor", block().tooltip(TooltipSupplier.hidden(1)), MeatlibBlockSettings.copyOf(FLUID_MACHINE_SETTINGS).nonOpaque()));
+    public static Block SMALL_COMPRESSOR = new SmallCompressorBlock(C, block().tooltip(TooltipSupplier.hidden(1)), MeatlibBlockSettings.copyOf(FLUID_MACHINE_SETTINGS).nonOpaque());
 
     // --- Item Transfer ---
-    public static Block ITEM_DUCT = BlockRegistry.queue(new ItemDuctBlock("item_duct", block(), MeatlibBlockSettings.copyOf(Blocks.HOPPER)));
-    public static Block CHUTE = BlockRegistry.queue(new ChuteBlock("chute", block().tooltip(TooltipSupplier.simple(1)), MeatlibBlockSettings.copyOf(Blocks.HOPPER)));
-    public static Block METAL_BARREL = BlockRegistry.queue(new MetalBarrelBlock("metal_barrel", MeatlibBlockSettings.copyOf(RUSTY_METAL_BLOCK)));
-    public static Block CONTENT_DETECTOR = BlockRegistry.queue(new InventoryDetectorBlock("content_detector", block().tooltip(TooltipSupplier.simple(1)), MeatlibBlockSettings.copyOf(Blocks.OBSERVER)));
-    public static Block SOLIDITY_DETECTOR = BlockRegistry.queue(new SolidityDetectorBlock("solidity_detector", block().tooltip(TooltipSupplier.simple(1)), MeatlibBlockSettings.copyOf(Blocks.OBSERVER)));
+    @Path("item_duct") public static Block ITEM_DUCT = new ItemDuctBlock(C, block(), MeatlibBlockSettings.copyOf(Blocks.HOPPER));
+    @Path("chute") public static Block CHUTE = new ChuteBlock(C, block().tooltip(TooltipSupplier.simple(1)), MeatlibBlockSettings.copyOf(Blocks.HOPPER));
+    public static Block METAL_BARREL = new MetalBarrelBlock(C, MeatlibBlockSettings.copyOf(RUSTY_METAL_BLOCK));
+    @Path("content_detector") public static Block CONTENT_DETECTOR = new InventoryDetectorBlock(C, block().tooltip(TooltipSupplier.simple(1)), MeatlibBlockSettings.copyOf(Blocks.OBSERVER));
+    @Path("solidity_detector") public static Block SOLIDITY_DETECTOR = new SolidityDetectorBlock(C, block().tooltip(TooltipSupplier.simple(1)), MeatlibBlockSettings.copyOf(Blocks.OBSERVER));
 
     // --- Data ---
-    public static Block DATA_CABLE = BlockRegistry.queue(new DataCableBlock("data_cable", block(), VASCULAR_CONDUIT_SETTINGS));
-    public static Block VASCULAR_CONDUIT = BlockRegistry.queue(new VascularConduitBlock("vascular_conduit", block().tooltip(TooltipSupplier.hidden(1)), VASCULAR_CONDUIT_SETTINGS));
-    public static Block ENCASED_VASCULAR_CONDUIT = BlockRegistry.queue(new EncasedVascularConduitBlock("encased_vascular_conduit", block().tooltip(TooltipSupplier.simple(1)), VASCULAR_CONDUIT_SETTINGS));
-    public static Block POWER_EMITTER = BlockRegistry.queue(new BaseBlock(CTX, block().tooltip(TooltipSupplier.simple(1)), VASCULAR_CONDUIT_SETTINGS));
-    public static Block VSC = BlockRegistry.queue(new VSCBlock("vsc", block().tooltip(TooltipSupplier.hidden(1)), VASCULAR_CONDUIT_SETTINGS));
+    public static Block DATA_CABLE = new DataCableBlock(C, block(), VASCULAR_CONDUIT_SETTINGS);
+    public static Block VASCULAR_CONDUIT = new VascularConduitBlock(C, block().tooltip(TooltipSupplier.hidden(1)), VASCULAR_CONDUIT_SETTINGS);
+    public static Block ENCASED_VASCULAR_CONDUIT = new EncasedVascularConduitBlock(C, block().tooltip(TooltipSupplier.simple(1)), VASCULAR_CONDUIT_SETTINGS);
+    public static Block POWER_EMITTER = new BaseBlock(C, block().tooltip(TooltipSupplier.simple(1)), VASCULAR_CONDUIT_SETTINGS);
+    public static Block VSC = new VSCBlock(C, block().tooltip(TooltipSupplier.hidden(1)), VASCULAR_CONDUIT_SETTINGS);
 
     // --- Crops ---
-    public static BaseCropBlock WHISPER_WHEAT = BlockRegistry.queue(new BaseCropBlock("whisper_wheat", 64, 0, MeatlibBlockSettings.copyOf(Blocks.WHEAT).tags()));
-    public static BaseCropBlock FLESH_POTATO = BlockRegistry.queue(new BaseCropBlock("flesh_potato", "flesh_potato", 64, 2, MeatlibBlockSettings.copyOf(Blocks.POTATOES).tags()));
-//    public static Block ROCKWART = BlockRegistry.queue(new BaseCropBlock("rockwart", 64, true, AbstractBlock.Settings.copy(Blocks.WHEAT)));
-    public static Block BLOOD_BUBBLE_SAPLING = BlockRegistry.queue(new BaseSaplingBlock("blood_bubble_sapling", new BloodBubbleTreeGenerator(), block(), MeatlibBlockSettings.copyOf(Blocks.WARPED_FUNGUS).tags().ticksRandomly()));
+    public static BaseCropBlock WHISPER_WHEAT = new BaseCropBlock(C, 64, 0, MeatlibBlockSettings.copyOf(Blocks.WHEAT).tags());
+    @Path("flesh_potato") public static BaseCropBlock FLESH_POTATO = new BaseCropBlock(C, "", 64, 2, MeatlibBlockSettings.copyOf(Blocks.POTATOES).tags());
+//    public static Block ROCKWART = new BaseCropBlock("rockwart", 64, true, AbstractBlock.Settings.copy(Blocks.WHEAT)));
+    @Path("blood_bubble_sapling") public static Block BLOOD_BUBBLE_SAPLING = new BaseSaplingBlock(C, new BloodBubbleTreeGenerator(), block(), MeatlibBlockSettings.copyOf(Blocks.WARPED_FUNGUS).tags().ticksRandomly());
 
 //    public static final AbstractBlock.Settings BB_SETTINGS = MeatlibBlockSettings.create().strength(1.1f).sounds(BlockSoundGroup.METAL);
-    public static Block BLOOD_BUBBLE_LOG = BlockRegistry.queue(BlockRegistry.createLogBlock("blood_bubble_log", TooltipSupplier.blank()));
-    public static Block BLOOD_BUBBLE_WOOD = BlockRegistry.queue(BlockRegistry.createLogBlock("blood_bubble_wood", TooltipSupplier.blank()));
-    public static Block BLOOD_BUBBLE_LEAVES = BlockRegistry.queue(new BloodBubbleLeavesBlock("blood_bubble_leaves", MeatlibBlockSettings.copyOf(Blocks.AZALEA_LEAVES).tags(Set.of(FabricMineableTags.SHEARS_MINEABLE, LEAVES)).sounds(BlockSoundGroup.AZALEA_LEAVES)));
-    public static Block BLOOD_BUBBLE_LEAVES_FLOWERING = BlockRegistry.queue(new BloodBubbleLeavesBlock.FruitingBloodBubbleLeavesBlock("blood_bubble_leaves_flowering", MeatlibBlockSettings.copyOf(BLOOD_BUBBLE_LEAVES).sounds(BlockSoundGroup.SLIME)));
-    public static Block BLOOD_BUBBLE_PLANKS = new BaseBuildingBlock(CTX, true, MeatlibBlockSettings.create(AXE_MINEABLE).strength(2.0f).sounds(BlockSoundGroup.WOOD));
-    public static Block BLOOD_BUBBLE_TRAPDOOR = BlockRegistry.queueWithItem(new TrapdoorBlock(MeatlibBlockSettings.create(AXE_MINEABLE).simpleDrop(ItemRegistry::getMatchingItem).strength(2.0f).sounds(BlockSoundGroup.WOOD), BlockSetType.WARPED), "blood_bubble_planks_trapdoor");
-    public static Block BLOOD_BUBBLE_DOOR = BlockRegistry.queue(new BaseDoorBlock("blood_bubble_planks_door", MeatlibBlockSettings.create(AXE_MINEABLE).simpleDrop(ItemRegistry::getMatchingItem).strength(2.0f).sounds(BlockSoundGroup.WOOD).nonOpaque(), block(), BlockSetType.WARPED));
-    public static Block BLOOD_BUBBLE_BUTTON = BlockRegistry.queueWithItem(new ButtonBlock(MeatlibBlockSettings.create(AXE_MINEABLE).simpleDrop(ItemRegistry::getMatchingItem).strength(1.0f).sounds(BlockSoundGroup.WOOD), BlockSetType.WARPED, 20, true), "blood_bubble_planks_button");
-    public static Block BLOOD_BUBBLE_FENCE_GATE = BlockRegistry.queueWithItem(new FenceGateBlock(MeatlibBlockSettings.create(AXE_MINEABLE).simpleDrop(ItemRegistry::getMatchingItem).strength(2.0f).sounds(BlockSoundGroup.WOOD), WoodType.WARPED), "blood_bubble_planks_fence_gate");
-    public static Block BLOOD_BUBBLE_PRESSURE_PLATE = BlockRegistry.queueWithItem(new BloodBubblePressurePlate(PressurePlateBlock.ActivationRule.EVERYTHING, MeatlibBlockSettings.create(AXE_MINEABLE).simpleDrop(ItemRegistry::getMatchingItem).solid().strength(1.0f).sounds(BlockSoundGroup.WOOD)), "blood_bubble_planks_pressure_plate", block().tooltip(TooltipSupplier.simple(1)));
+    @Path("blood_bubble_log") public static Block BLOOD_BUBBLE_LOG = BlockRegistry.createLogBlock(C, TooltipSupplier.blank());
+    @Path("blood_bubble_wood") public static Block BLOOD_BUBBLE_WOOD = BlockRegistry.createLogBlock(C, TooltipSupplier.blank());
+    @Path("blood_bubble_leaves") public static Block BLOOD_BUBBLE_LEAVES = new BloodBubbleLeavesBlock(C, MeatlibBlockSettings.copyOf(Blocks.AZALEA_LEAVES).tags(Set.of(FabricMineableTags.SHEARS_MINEABLE, LEAVES)).sounds(BlockSoundGroup.AZALEA_LEAVES));
+    @Path("blood_bubble_leaves_flowering") public static Block BLOOD_BUBBLE_LEAVES_FLOWERING = new BloodBubbleLeavesBlock.FruitingBloodBubbleLeavesBlock("blood_bubble_leaves_flowering", MeatlibBlockSettings.copyOf(BLOOD_BUBBLE_LEAVES).sounds(BlockSoundGroup.SLIME));
+    @Path("blood_bubble_planks") public static Block BLOOD_BUBBLE_PLANKS = new BaseBuildingBlock(C, true, MeatlibBlockSettings.create(AXE_MINEABLE).strength(2.0f).sounds(BlockSoundGroup.WOOD));
+    @Path("blood_bubble_planks_trapdoor") @WithItem public static Block BLOOD_BUBBLE_TRAPDOOR = new TrapdoorBlock(MeatlibBlockSettings.create(AXE_MINEABLE).simpleDrop(ItemRegistry::getMatchingItem).strength(2.0f).sounds(BlockSoundGroup.WOOD), BlockSetType.WARPED);
+    @Path("blood_bubble_planks_door") public static Block BLOOD_BUBBLE_DOOR = new BaseDoorBlock(C, MeatlibBlockSettings.create(AXE_MINEABLE).simpleDrop(ItemRegistry::getMatchingItem).strength(2.0f).sounds(BlockSoundGroup.WOOD).nonOpaque(), block(), BlockSetType.WARPED);
+    @Path("blood_bubble_planks_button") @WithItem public static Block BLOOD_BUBBLE_BUTTON = new ButtonBlock(MeatlibBlockSettings.create(AXE_MINEABLE).simpleDrop(ItemRegistry::getMatchingItem).strength(1.0f).sounds(BlockSoundGroup.WOOD), BlockSetType.WARPED, 20, true);
+    @Path("blood_bubble_planks_fence_gate") @WithItem public static Block BLOOD_BUBBLE_FENCE_GATE = new FenceGateBlock(MeatlibBlockSettings.create(AXE_MINEABLE).simpleDrop(ItemRegistry::getMatchingItem).strength(2.0f).sounds(BlockSoundGroup.WOOD), WoodType.WARPED);
+    @Path("blood_bubble_planks_pressure_plate") @WithItem public static Block BLOOD_BUBBLE_PRESSURE_PLATE = new BloodBubblePressurePlate(PressurePlateBlock.ActivationRule.EVERYTHING, MeatlibBlockSettings.create(AXE_MINEABLE).simpleDrop(ItemRegistry::getMatchingItem).solid().strength(1.0f).sounds(BlockSoundGroup.WOOD));
 
     // --- Assembly ---
-//    public static Block LINEAR_RAIL = BlockRegistry.queue(new LinearRailBlock("linear_rail", 64, false, MeatlibBlockSettings.of(Material.METAL).strength(4.0f)));
+//    public static Block LINEAR_RAIL = new LinearRailBlock("linear_rail", 64, false, MeatlibBlockSettings.of(Material.METAL).strength(4.0f)));
 
-    public static Block BIG_LEVER = BlockRegistry.queue(new BigLeverBlock("big_lever", MeatlibBlockSettings.create().strength(4.0f)));
+    public static Block BIG_LEVER = new BigLeverBlock(C, MeatlibBlockSettings.create().strength(4.0f));
 
     // --- Integrator ---
-    public static Block INTEGRATOR_EGG = BlockRegistry.queue(new IntegratorBlock("integrator_egg", block().tooltip(TooltipSupplier.simple(1)), MeatlibBlockSettings.create().strength(2.0f).sounds(BlockSoundGroup.SLIME)));
+    @Path("integrator_egg") public static Block INTEGRATOR_EGG = new IntegratorBlock(C, block().tooltip(TooltipSupplier.simple(1)), MeatlibBlockSettings.create().strength(2.0f).sounds(BlockSoundGroup.SLIME));
 
-//    public static Block ADVANCED_INTEGRATOR_EGG = BlockRegistry.queue(new AdvancedIntegratorEggBlock("advanced_integrator_egg", block(), MeatlibBlockSettings.copyOf(INTEGRATOR_EGG)));
-    public static BigBlock<AdvancedIntegratorStructure> ADVANCED_INTEGRATOR = BlockRegistry.queue(new AdvancedIntegratorBlock("advanced_integrator", MeatlibBlockSettings.create().strength(3.0f).sounds(NMSoundGroups.METAL)));
+//    public static Block ADVANCED_INTEGRATOR_EGG = new AdvancedIntegratorEggBlock("advanced_integrator_egg", block(), MeatlibBlockSettings.copyOf(INTEGRATOR_EGG)));
+    @Path("advanced_integrator") public static BigBlock<AdvancedIntegratorStructure> ADVANCED_INTEGRATOR = new AdvancedIntegratorBlock(C, MeatlibBlockSettings.create().strength(3.0f).sounds(NMSoundGroups.METAL));
 //    public static BigBlockStructure ADVANCED_INTEGRATOR_STRUCTURE = ADVANCED_INTEGRATOR.getStructure();
-//    public static BigBlockStructure ADVANCED_INTEGRATOR_STRUCTURE = BlockRegistry.queue(new BigBlockStructure(ADVANCED_INTEGRATOR, "advanced_integrator_structure", MeatlibBlockSettings.of(Material.METAL).strength(3.0f).sounds(NMSoundGroups.METAL)));
+//    public static BigBlockStructure ADVANCED_INTEGRATOR_STRUCTURE = new BigBlockStructure(ADVANCED_INTEGRATOR, "advanced_integrator_structure", MeatlibBlockSettings.of(Material.METAL).strength(3.0f).sounds(NMSoundGroups.METAL)));
 
-    public static Block STATUE = BlockRegistry.queue(new StatueBlock("statue", block(), MeatlibBlockSettings.copyOf(Blocks.PRISMARINE)));
+    @Path("statue") public static Block STATUE = new StatueBlock(C, block(), MeatlibBlockSettings.copyOf(Blocks.PRISMARINE));
 
-    public static Block DIRTY_TOILET = BlockRegistry.queue(new ToiletBlock("dirty_toilet", block(), MeatlibBlockSettings.copyOf(Blocks.STONE)));
+    public static Block DIRTY_TOILET = new ToiletBlock(C, block(), MeatlibBlockSettings.copyOf(Blocks.STONE));
 
-    public static Block CRONENCAKE = BlockRegistry.queue(new CronenCakeBlock("cronencake", MeatlibBlockSettings.copyOf(Blocks.CAKE).tags().sounds(BlockSoundGroup.SLIME)));
-    public static Block CANDLE_CRONENCAKE = BlockRegistry.queue(new CandleCronenCakeBlock("candle_cronencake", MeatlibBlockSettings.copyOf(Blocks.CANDLE_CAKE).tags().sounds(BlockSoundGroup.SLIME)));
+    public static Block CRONENCAKE = new CronenCakeBlock(C, MeatlibBlockSettings.copyOf(Blocks.CAKE).tags().sounds(BlockSoundGroup.SLIME));
+    public static Block CANDLE_CRONENCAKE = new CandleCronenCakeBlock(C, MeatlibBlockSettings.copyOf(Blocks.CANDLE_CAKE).tags().sounds(BlockSoundGroup.SLIME));
 
-//    public static Block ROUTE_TEST = BlockRegistry.queue(new RouteTestBlock("routing_test", MeatlibBlockSettings.of(Material.METAL)));
+//    public static Block ROUTE_TEST = new RouteTestBlock("routing_test", MeatlibBlockSettings.of(Material.METAL)));
 
-    public static Block HOLDING_TRACK = BlockRegistry.queue(new HoldingTrackBlock("holding_track", block().tooltip(TooltipSupplier.simple(1)), MeatlibBlockSettings.copyOf(Blocks.RAIL)));
-    public static Block DUMPING_TRACK = BlockRegistry.queue(new DumpingTrackBlock("dumping_track", block().tooltip(TooltipSupplier.simple(1)), MeatlibBlockSettings.copyOf(Blocks.RAIL)));
-    public static Block CONTROL_TRACK = BlockRegistry.queue(new PlayerControlTrack("control_track", block().tooltip(TooltipSupplier.simple(1)), MeatlibBlockSettings.copyOf(Blocks.RAIL)));
+    public static Block HOLDING_TRACK = new HoldingTrackBlock(C, block().tooltip(TooltipSupplier.simple(1)), MeatlibBlockSettings.copyOf(Blocks.RAIL));
+    public static Block DUMPING_TRACK = new DumpingTrackBlock(C, block().tooltip(TooltipSupplier.simple(1)), MeatlibBlockSettings.copyOf(Blocks.RAIL));
+    public static Block CONTROL_TRACK = new PlayerControlTrack(C, block().tooltip(TooltipSupplier.simple(1)), MeatlibBlockSettings.copyOf(Blocks.RAIL));
 
     public static boolean never(BlockState state, BlockView world, BlockPos pos)
     {

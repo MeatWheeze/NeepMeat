@@ -23,10 +23,10 @@ public class RegistrationContext
     private final Multimap<Object, Pair<SelfRegisterable.PathProcessor, SelfRegisterable>> processedSubEntries = Multimaps.newListMultimap(new IdentityHashMap<>(), ObjectArrayList::new);
     private final List<Pair<Identifier, SelfRegisterable>> entries = new ObjectArrayList<>();
 
-    public RegistrationContext(String namespace, Set<Class<?>> validClasses)
+    public RegistrationContext(String namespace)
     {
         this.namespace = namespace;
-        this.validClasses = validClasses;
+        this.validClasses = Set.of(Item.class, Block.class);
     }
 
     public String namespace()
@@ -46,7 +46,7 @@ public class RegistrationContext
 
         Identifier id = new Identifier(namespace, path);
 
-        SelfRegisterable selfRegisterable = toRegisterable(object);
+        SelfRegisterable selfRegisterable = toRegistrable(object);
         if (selfRegisterable != null)
             entries.add(Pair.of(id, selfRegisterable));
 
@@ -61,7 +61,7 @@ public class RegistrationContext
         }
     }
 
-    private @Nullable SelfRegisterable toRegisterable(Object object)
+    private static @Nullable SelfRegisterable toRegistrable(Object object)
     {
         if (object instanceof SelfRegisterable selfRegisterable)
             return selfRegisterable;
@@ -75,19 +75,30 @@ public class RegistrationContext
         return null;
     }
 
-    public void append(Object object, @Nullable SelfRegisterable entry)
+    public <T extends SelfRegisterable> T append(Object object, T entry)
     {
-        if (entry == null)
-            return;
-
         subEntries.put(object, entry);
+        return entry;
     }
 
-    public void append(Object object, SelfRegisterable.PathProcessor processor, @Nullable SelfRegisterable entry)
+    public <T> T append(Object object, T entry)
     {
-        if (entry == null)
-            return;
+        @Nullable SelfRegisterable registrable = toRegistrable(entry);
+        if (registrable != null)
+            subEntries.put(object, registrable);
 
+        return entry;
+    }
+
+    public <T extends SelfRegisterable> T append(Object object, SelfRegisterable.PathProcessor processor, T entry)
+    {
         processedSubEntries.put(object, Pair.of(processor, entry));
+        return entry;
+    }
+
+    public <T extends SelfRegisterable> T append(Object object, T registerable, String path)
+    {
+        processedSubEntries.put(object, Pair.of(s -> path, registerable));
+        return registerable;
     }
 }

@@ -2,6 +2,7 @@ package com.neep.neepmeat.machine.integrator;
 
 import com.neep.meatlib.block.BaseBlock;
 import com.neep.meatlib.item.ItemSettings;
+import com.neep.meatlib.registry.RegistrationContext;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.init.NMItems;
 import com.neep.neepmeat.transport.api.pipe.DataCable;
@@ -22,7 +23,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class IntegratorBlock extends BaseBlock implements BlockEntityProvider, DataCable
 {
-    public IntegratorBlock(String itemName, ItemSettings itemSettings, Settings settings)
+    public IntegratorBlock(RegistrationContext ctx, ItemSettings itemSettings, Settings settings)
     {
         super(ctx, itemSettings, settings.nonOpaque());
     }

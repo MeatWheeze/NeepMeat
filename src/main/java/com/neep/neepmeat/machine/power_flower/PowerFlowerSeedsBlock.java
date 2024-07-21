@@ -2,6 +2,7 @@ package com.neep.neepmeat.machine.power_flower;
 
 import com.neep.meatlib.block.BaseBlock;
 import com.neep.meatlib.item.ItemSettings;
+import com.neep.meatlib.registry.RegistrationContext;
 import com.neep.neepmeat.init.NMBlocks;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -27,7 +28,7 @@ public class PowerFlowerSeedsBlock extends BaseBlock
 {
     private final VoxelShape shape = Block.createCuboidShape(0, 0, 0, 16, 5, 16);
 
-    public PowerFlowerSeedsBlock(String registryName, ItemSettings itemSettings, Settings settings)
+    public PowerFlowerSeedsBlock(RegistrationContext registryName, ItemSettings itemSettings, Settings settings)
     {
         super(ctx, itemSettings, settings.nonOpaque());
     }

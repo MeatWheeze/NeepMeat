@@ -25,7 +25,7 @@ public class FluidInterfaceBlock extends BaseFacingBlock implements BlockEntityP
 
     public FluidInterfaceBlock(String itemName, ItemSettings itemSettings, Settings settings)
     {
-        super(itemName, itemSettings, settings.nonOpaque());
+        super(ctx, itemSettings, settings.nonOpaque());
     }
 
     @Override

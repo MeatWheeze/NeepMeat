@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
 import com.neep.meatlib.block.BaseBlock;
 import com.neep.meatlib.item.ItemSettings;
+import com.neep.meatlib.registry.RegistrationContext;
 import com.neep.neepmeat.init.NMSounds;
 import com.neep.neepmeat.transport.fluid_network.PipeConnectionType;
 import com.neep.neepmeat.transport.fluid_network.PipeProperties;
@@ -66,7 +67,7 @@ public abstract class AbstractPipeBlock extends BaseBlock implements Waterloggab
             .put(Direction.DOWN, Block.createCuboidShape(4, 0, 4, 12, 5, 12))
     ).build();
 
-    public AbstractPipeBlock(String itemName, ItemSettings itemSettings, Settings settings)
+    public AbstractPipeBlock(RegistrationContext ctx, ItemSettings itemSettings, Settings settings)
     {
         super(ctx, itemSettings, settings.solid());
         this.setDefaultState(this.stateManager.getDefaultState()

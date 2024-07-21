@@ -2,6 +2,7 @@ package com.neep.neepmeat.block;
 
 import com.neep.meatlib.block.BaseHorFacingBlock;
 import com.neep.meatlib.item.ItemSettings;
+import com.neep.meatlib.registry.RegistrationContext;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.ShapeContext;
@@ -35,7 +36,7 @@ public class ToiletBlock extends BaseHorFacingBlock
     public static final VoxelShape OPEN_SHAPE = Block.createCuboidShape(0, 0, 0, 16, 14, 16);
 //    public static final VoxelShape CLOSED_SHAPE = makeClosedShape();
 
-    public ToiletBlock(String itemName, ItemSettings itemSettings, Settings settings)
+    public ToiletBlock(RegistrationContext itemName, ItemSettings itemSettings, Settings settings)
     {
         super(itemName, itemSettings, settings.nonOpaque());
         setDefaultState(getDefaultState().with(OPEN, false));

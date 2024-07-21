@@ -7,6 +7,7 @@ import com.neep.meatlib.item.BaseBlockItem;
 import com.neep.meatlib.item.ItemSettings;
 import com.neep.meatlib.registry.BlockRegistry;
 import com.neep.meatlib.registry.ItemRegistry;
+import com.neep.meatlib.registry.RegistrationContext;
 import com.neep.neepmeat.api.big_block.BigBlock;
 import com.neep.neepmeat.api.big_block.BigBlockPattern;
 import com.neep.neepmeat.init.NMBlockEntities;
@@ -36,9 +37,8 @@ import java.util.concurrent.atomic.AtomicReference;
 
 public class LargeMotorBlock extends BigBlock<LargeMotorStructureBlock> implements MeatlibBlock, BlockEntityProvider
 {
-    private final String registryName;
     private final BigBlockPattern volume;
-
+    private final RegistrationContext ctx;
     public final VoxelShape normalShape;
 
     private static VoxelShape cuboid(double minX, double minY, double minZ, double sizeX, double sizeY, double sizeZ)
@@ -55,11 +55,11 @@ public class LargeMotorBlock extends BigBlock<LargeMotorStructureBlock> implemen
 
     public static final DirectionProperty FACING = Properties.HORIZONTAL_FACING;
 
-    public LargeMotorBlock(String registryName, ItemSettings itemSettings, Settings settings)
+    public LargeMotorBlock(RegistrationContext ctx, ItemSettings itemSettings, Settings settings)
     {
         super(settings);
-        this.registryName = registryName;
-        ItemRegistry.queue(new BaseBlockItem(this, registryName, itemSettings));
+        this.ctx = ctx;
+        ItemRegistry.queue(new BaseBlockItem(this, ctx, itemSettings));
         this.setDefaultState(getStateManager().getDefaultState().with(FACING, Direction.NORTH));
 
         volume = BigBlockPattern.makeRange( -1, 0, 0, 1, 2, -1, getStructure().getDefaultState());
@@ -69,7 +69,7 @@ public class LargeMotorBlock extends BigBlock<LargeMotorStructureBlock> implemen
     @Override
     protected LargeMotorStructureBlock registerStructureBlock()
     {
-        return BlockRegistry.queue(new LargeMotorStructureBlock(this, MeatlibBlockSettings.copyOf(this)), "large_motor_structure");
+        return ctx.append(this, new LargeMotorStructureBlock(this, MeatlibBlockSettings.copyOf(this)), "large_motor_structure");
     }
 
     @Override
@@ -109,12 +109,6 @@ public class LargeMotorBlock extends BigBlock<LargeMotorStructureBlock> implemen
     {
         super.appendProperties(builder);
         builder.add(FACING);
-    }
-
-    @Override
-    public String getRegistryName()
-    {
-        return registryName;
     }
 
     public static VoxelShape rotateShape(VoxelShape shape, Direction direction)

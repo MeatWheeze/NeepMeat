@@ -4,10 +4,10 @@ import com.neep.meatlib.block.MeatlibBlockSettings;
 import com.neep.meatlib.block.multi.TallBlock;
 import com.neep.meatlib.item.ItemSettings;
 import com.neep.meatlib.registry.BlockRegistry;
+import com.neep.meatlib.registry.RegistrationContext;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.machine.content_detector.InventoryDetectorBlock;
 import com.neep.neepmeat.util.MiscUtil;
-import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
@@ -25,7 +25,7 @@ public class HydraulicPressBlock extends TallBlock implements BlockEntityProvide
 {
     public static final VoxelShape OUTLINE = Block.createCuboidShape(0, 10, 0, 16, 32 + 8, 16);
 
-    public HydraulicPressBlock(String itemName, ItemSettings itemSettings, Settings settings)
+    public HydraulicPressBlock(RegistrationContext itemName, ItemSettings itemSettings, Settings settings)
     {
         super(itemName, itemSettings, settings.nonOpaque().solidBlock(InventoryDetectorBlock::never));
     }

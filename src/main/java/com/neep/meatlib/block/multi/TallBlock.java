@@ -4,6 +4,7 @@ import com.neep.meatlib.block.BaseBlock;
 import com.neep.meatlib.block.BaseDummyBlock;
 import com.neep.meatlib.block.MeatlibBlockExtension;
 import com.neep.meatlib.item.ItemSettings;
+import com.neep.meatlib.registry.RegistrationContext;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -29,12 +30,12 @@ public abstract class TallBlock extends BaseBlock
 
     private final Block structureBlock;
 
-    public TallBlock(String registryName, Settings settings)
+    public TallBlock(RegistrationContext ctx, Settings settings)
     {
-        this(registryName, ItemSettings.block(), settings);
+        this(ctx, ItemSettings.block(), settings);
     }
 
-    public TallBlock(String registryName, ItemSettings itemSettings, Settings settings)
+    public TallBlock(RegistrationContext ctx, ItemSettings itemSettings, Settings settings)
     {
         super(ctx, itemSettings, settings.pistonBehavior(PistonBehavior.IGNORE));
         this.structureBlock = createStructure();
@@ -88,9 +89,9 @@ public abstract class TallBlock extends BaseBlock
     
     public class Structure extends BaseDummyBlock implements MeatlibBlockExtension
     {
-        public Structure(String registryName, Settings settings)
+        public Structure(RegistrationContext ctx, Settings settings)
         {
-            super(registryName, settings.pistonBehavior(PistonBehavior.IGNORE));
+            super(settings.pistonBehavior(PistonBehavior.IGNORE));
         }
 
         @Override

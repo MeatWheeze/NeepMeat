@@ -4,7 +4,7 @@ import com.neep.meatlib.block.MeatlibBlockSettings;
 import com.neep.meatlib.block.multi.TallBlock;
 import com.neep.meatlib.item.ItemSettings;
 import com.neep.meatlib.registry.BlockRegistry;
-import com.neep.neepmeat.item.FluidComponentItem;
+import com.neep.meatlib.registry.RegistrationContext;
 import com.neep.neepmeat.util.ItemUtil;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
@@ -21,7 +21,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class MixerBlock extends TallBlock implements BlockEntityProvider
 {
-    public MixerBlock(String registryName, ItemSettings itemSettings, Settings settings)
+    public MixerBlock(RegistrationContext registryName, ItemSettings itemSettings, Settings settings)
     {
         super(registryName, itemSettings, settings.nonOpaque());
     }

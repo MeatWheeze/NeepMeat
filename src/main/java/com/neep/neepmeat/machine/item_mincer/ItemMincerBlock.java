@@ -2,6 +2,7 @@ package com.neep.neepmeat.machine.item_mincer;
 
 import com.neep.meatlib.block.BaseHorFacingBlock;
 import com.neep.meatlib.item.ItemSettings;
+import com.neep.meatlib.registry.RegistrationContext;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.machine.grinder.GrinderBlock;
 import com.neep.neepmeat.util.ItemUtil;
@@ -29,7 +30,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class ItemMincerBlock extends BaseHorFacingBlock implements BlockEntityProvider
 {
-    public ItemMincerBlock(String itemName, ItemSettings itemSettings, Settings settings)
+    public ItemMincerBlock(RegistrationContext itemName, ItemSettings itemSettings, Settings settings)
     {
         super(itemName, itemSettings, settings);
     }

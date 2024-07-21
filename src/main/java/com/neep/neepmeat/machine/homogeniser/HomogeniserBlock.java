@@ -2,6 +2,7 @@ package com.neep.neepmeat.machine.homogeniser;
 
 import com.neep.meatlib.block.BaseHorFacingBlock;
 import com.neep.meatlib.item.ItemSettings;
+import com.neep.meatlib.registry.RegistrationContext;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.util.ItemUtil;
 import com.neep.neepmeat.util.MiscUtil;
@@ -26,7 +27,7 @@ public class HomogeniserBlock extends BaseHorFacingBlock implements BlockEntityP
 {
     private static final VoxelShape SHAPE = Block.createCuboidShape(0, 0, 0, 16, 24, 16);
 
-    public HomogeniserBlock(String itemName, ItemSettings itemSettings, Settings settings)
+    public HomogeniserBlock(RegistrationContext itemName, ItemSettings itemSettings, Settings settings)
     {
         super(itemName, itemSettings, settings);
     }

@@ -4,11 +4,11 @@ import com.neep.meatlib.block.MeatlibBlockSettings;
 import com.neep.meatlib.block.multi.TallBlock;
 import com.neep.meatlib.item.ItemSettings;
 import com.neep.meatlib.registry.BlockRegistry;
+import com.neep.meatlib.registry.RegistrationContext;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.transport.api.pipe.FluidPipe;
 import com.neep.neepmeat.transport.api.pipe.ItemPipe;
 import com.neep.neepmeat.util.MiscUtil;
-import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;
@@ -35,7 +35,7 @@ public class AssemblerBlock extends TallBlock implements BlockEntityProvider
 {
     public static final DirectionProperty FACING = Properties.HORIZONTAL_FACING;
 
-    public AssemblerBlock(String itemName, ItemSettings itemSettings, Settings settings)
+    public AssemblerBlock(RegistrationContext itemName, ItemSettings itemSettings, Settings settings)
     {
         super(itemName, itemSettings, settings.nonOpaque());
     }

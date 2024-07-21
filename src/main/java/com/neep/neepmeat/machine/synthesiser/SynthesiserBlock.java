@@ -3,10 +3,10 @@ package com.neep.neepmeat.machine.synthesiser;
 import com.neep.meatlib.block.MeatlibBlockSettings;
 import com.neep.meatlib.block.multi.TallBlock;
 import com.neep.meatlib.registry.BlockRegistry;
+import com.neep.meatlib.registry.RegistrationContext;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.util.ItemUtil;
 import com.neep.neepmeat.util.MiscUtil;
-import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
@@ -32,9 +32,9 @@ public class SynthesiserBlock extends TallBlock implements BlockEntityProvider
 {
     public static final BooleanProperty FULL = BooleanProperty.of("full");
 
-    public SynthesiserBlock(String registryName, Settings settings)
+    public SynthesiserBlock(RegistrationContext registryName, Settings settings)
     {
-        super(registryName, settings.nonOpaque());
+        super(ctx, settings.nonOpaque());
         this.setDefaultState(getStateManager().getDefaultState().with(FULL, false));
     }
 

@@ -2,6 +2,7 @@ package com.neep.neepmeat.machine.casting_basin;
 
 import com.neep.meatlib.block.BaseBlock;
 import com.neep.meatlib.item.ItemSettings;
+import com.neep.meatlib.registry.RegistrationContext;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.util.ItemUtil;
 import net.fabricmc.fabric.api.transfer.v1.storage.StorageUtil;
@@ -25,7 +26,7 @@ public class CastingBasinBlock extends BaseBlock implements BlockEntityProvider
 {
     protected static final VoxelShape SHAPE = Block.createCuboidShape(0, 0, 0, 16, 14, 16);
 
-    public CastingBasinBlock(String registryName, ItemSettings itemSettings, Settings settings)
+    public CastingBasinBlock(RegistrationContext registryName, ItemSettings itemSettings, Settings settings)
     {
         super(ctx, itemSettings, settings);
     }

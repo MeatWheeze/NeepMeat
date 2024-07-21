@@ -2,6 +2,7 @@ package com.neep.neepmeat.plc.arm;
 
 import com.neep.meatlib.block.BaseBlock;
 import com.neep.meatlib.item.ItemSettings;
+import com.neep.meatlib.registry.RegistrationContext;
 import com.neep.neepmeat.plc.PLCBlocks;
 import com.neep.neepmeat.util.MiscUtil;
 import net.minecraft.block.BlockEntityProvider;
@@ -16,7 +17,7 @@ import org.jetbrains.annotations.Nullable;
 public class RoboticArmBlock extends BaseBlock implements BlockEntityProvider
 {
 
-    public RoboticArmBlock(String registryName, ItemSettings itemSettings, Settings settings)
+    public RoboticArmBlock(RegistrationContext registryName, ItemSettings itemSettings, Settings settings)
     {
         super(ctx, itemSettings, settings.nonOpaque());
     }

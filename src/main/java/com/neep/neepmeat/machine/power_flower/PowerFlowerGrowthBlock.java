@@ -2,6 +2,7 @@ package com.neep.neepmeat.machine.power_flower;
 
 import com.neep.meatlib.block.BaseBlock;
 import com.neep.meatlib.item.ItemSettings;
+import com.neep.meatlib.registry.RegistrationContext;
 import com.neep.neepmeat.datagen.tag.NMTags;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -35,7 +36,7 @@ public class PowerFlowerGrowthBlock extends BaseBlock implements PowerFlower
     private final VoxelShape fullShape = Block.createCuboidShape(0, 0, 0, 16, 16, 16);
     private final VoxelShape topShape = Block.createCuboidShape(0, 0, 0, 16, 14, 16);
 
-    public PowerFlowerGrowthBlock(String registryName, ItemSettings itemSettings, Settings settings)
+    public PowerFlowerGrowthBlock(RegistrationContext registryName, ItemSettings itemSettings, Settings settings)
     {
         super(ctx, itemSettings, settings.nonOpaque());
         this.setDefaultState(getDefaultState().with(GROWTH, 0));

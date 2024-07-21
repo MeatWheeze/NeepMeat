@@ -2,6 +2,7 @@ package com.neep.neepmeat.machine.upgrade_manager;
 
 import com.neep.meatlib.block.BaseHorFacingBlock;
 import com.neep.meatlib.item.ItemSettings;
+import com.neep.meatlib.registry.RegistrationContext;
 import com.neep.neepmeat.init.NMBlockEntities;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
@@ -16,7 +17,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class UpgradeManagerBlock extends BaseHorFacingBlock implements BlockEntityProvider
 {
-    public UpgradeManagerBlock(String itemName, ItemSettings itemSettings, Settings settings)
+    public UpgradeManagerBlock(RegistrationContext itemName, ItemSettings itemSettings, Settings settings)
     {
         super(itemName, itemSettings, settings);
     }

@@ -2,6 +2,7 @@ package com.neep.neepmeat.item;
 
 import com.neep.meatlib.item.BaseBlockItem;
 import com.neep.meatlib.item.ItemSettings;
+import com.neep.meatlib.registry.RegistrationContext;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.item.ItemUsageContext;
@@ -9,9 +10,9 @@ import net.minecraft.util.ActionResult;
 
 public class FluidComponentItem extends BaseBlockItem
 {
-    public FluidComponentItem(Block block, String registryName, ItemSettings itemSettings)
+    public FluidComponentItem(Block block, RegistrationContext ctx, ItemSettings itemSettings)
     {
-        super(block, registryName, itemSettings);
+        super(block, ctx, itemSettings);
     }
 
     @Override

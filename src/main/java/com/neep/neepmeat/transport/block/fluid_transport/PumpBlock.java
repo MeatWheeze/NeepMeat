@@ -37,7 +37,7 @@ public class PumpBlock extends BaseFacingBlock implements BlockEntityProvider
 
     public PumpBlock(String itemName, ItemSettings itemSettings, Settings settings)
     {
-        super(itemName, itemSettings.factory((block, ctx, itemSettings1) -> new FluidComponentItem(block, registryName, itemSettings1)), settings.nonOpaque());
+        super(ctx, itemSettings.factory((block, ctx, itemSettings1) -> new FluidComponentItem(block, registryName, itemSettings1)), settings.nonOpaque());
     }
 
     @Override

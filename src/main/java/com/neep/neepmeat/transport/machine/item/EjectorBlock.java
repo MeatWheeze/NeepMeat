@@ -41,7 +41,7 @@ public class EjectorBlock extends BaseFacingBlock implements BlockEntityProvider
 
     public EjectorBlock(String registryName, ItemSettings itemSettings, FabricBlockSettings settings)
     {
-        super(registryName, itemSettings, settings.nonOpaque().solidBlock(InventoryDetectorBlock::never));
+        super(ctx, itemSettings, settings.nonOpaque().solidBlock(InventoryDetectorBlock::never));
         setDefaultState(getDefaultState().with(ACTIVE, false));
     }
 

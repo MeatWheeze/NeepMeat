@@ -2,6 +2,7 @@ package com.neep.neepmeat.machine.grinder;
 
 import com.neep.meatlib.block.BaseHorFacingBlock;
 import com.neep.meatlib.item.ItemSettings;
+import com.neep.meatlib.registry.RegistrationContext;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.machine.content_detector.InventoryDetectorBlock;
 import com.neep.neepmeat.util.ItemUtil;
@@ -29,9 +30,9 @@ import org.jetbrains.annotations.Nullable;
 
 public class GrinderBlock extends BaseHorFacingBlock implements BlockEntityProvider
 {
-    public GrinderBlock(String itemName, ItemSettings itemSettings, Settings settings)
+    public GrinderBlock(RegistrationContext ctx, ItemSettings itemSettings, Settings settings)
     {
-        super(itemName, itemSettings, settings.nonOpaque().solidBlock(InventoryDetectorBlock::never));
+        super(ctx, itemSettings, settings.nonOpaque().solidBlock(InventoryDetectorBlock::never));
     }
 
     @Override

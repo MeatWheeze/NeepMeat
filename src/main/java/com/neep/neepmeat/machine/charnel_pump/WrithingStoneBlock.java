@@ -2,6 +2,7 @@ package com.neep.neepmeat.machine.charnel_pump;
 
 import com.neep.meatlib.block.BaseBlock;
 import com.neep.meatlib.item.ItemSettings;
+import com.neep.meatlib.registry.RegistrationContext;
 import com.neep.neepmeat.init.NMBlocks;
 import net.minecraft.block.BlockState;
 import net.minecraft.registry.tag.BlockTags;
@@ -11,7 +12,7 @@ import net.minecraft.util.math.random.Random;
 
 public class WrithingStoneBlock extends BaseBlock
 {
-    public WrithingStoneBlock(String registryName, ItemSettings itemSettings, Settings settings)
+    public WrithingStoneBlock(RegistrationContext registryName, ItemSettings itemSettings, Settings settings)
     {
         super(ctx, itemSettings, settings);
     }

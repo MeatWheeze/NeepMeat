@@ -2,6 +2,7 @@ package com.neep.neepmeat.machine.advanced_motor;
 
 import com.neep.meatlib.block.BaseFacingBlock;
 import com.neep.meatlib.item.ItemSettings;
+import com.neep.meatlib.registry.RegistrationContext;
 import com.neep.neepmeat.api.machine.MotorisedBlock;
 import com.neep.neepmeat.api.processing.PowerUtils;
 import com.neep.neepmeat.init.NMBlockEntities;
@@ -27,9 +28,9 @@ import org.jetbrains.annotations.Nullable;
 @SuppressWarnings("deprecation")
 public class AdvancedMotorBlock extends BaseFacingBlock implements BlockEntityProvider
 {
-    public AdvancedMotorBlock(String itemName, ItemSettings itemSettings, Settings settings)
+    public AdvancedMotorBlock(RegistrationContext ctx, ItemSettings itemSettings, Settings settings)
     {
-        super(itemName, itemSettings, settings.nonOpaque());
+        super(ctx, itemSettings, settings.nonOpaque());
     }
 
     @Override

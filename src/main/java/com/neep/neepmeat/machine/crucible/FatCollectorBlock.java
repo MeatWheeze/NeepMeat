@@ -2,6 +2,7 @@ package com.neep.neepmeat.machine.crucible;
 
 import com.neep.meatlib.block.BaseHorFacingBlock;
 import com.neep.meatlib.item.ItemSettings;
+import com.neep.meatlib.registry.RegistrationContext;
 import com.neep.neepmeat.init.NMBlockEntities;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockEntityProvider;
@@ -21,7 +22,7 @@ public class FatCollectorBlock extends BaseHorFacingBlock implements BlockEntity
                 Block.createCuboidShape(2.0D, 0.0D, 2.0D, 14.0D, 17.0D, 14.0D),
                 Block.createCuboidShape(1, 0, 1, 15, 1, 15));
 
-    public FatCollectorBlock(String itemName, ItemSettings itemSettings, Settings settings)
+    public FatCollectorBlock(RegistrationContext itemName, ItemSettings itemSettings, Settings settings)
     {
         super(itemName, itemSettings, settings.nonOpaque());
     }
