@@ -97,8 +97,7 @@ public class BlockCrushingEmiRecipe implements EmiRecipe
             EmiIngredient outputs = EmiIngredient.of(getOutputs(), amount);
             widgets.addSlot(outputs, startX + 61, startY + 9).recipeContext(this);
 
-            widgets.addSlot(EmiIngredient.of(getExtraOutputs()), startX + 81, startY + 9).appendTooltip(
-                    Text.of("Chance: " + recipe.getChance())).recipeContext(this);
+            widgets.addSlot(EmiIngredient.of(getExtraOutputs()), startX + 81, startY + 9).recipeContext(this);
         }
     }
 }

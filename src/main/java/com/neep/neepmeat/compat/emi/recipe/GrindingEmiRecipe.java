@@ -36,7 +36,7 @@ public class GrindingEmiRecipe implements EmiRecipe {
         {
             output.add(EmiStack.of(recipe.getItemOutput().resource(), recipe.getItemOutput().minAmount()));
             if (recipe.getAuxOutput() != null) {
-                output.add(EmiStack.of(recipe.getAuxOutput().resource(), recipe.getAuxOutput().minAmount()));
+                output.add(EmiStack.of(recipe.getAuxOutput().resource(), recipe.getAuxOutput().minAmount()).setChance(recipe.getAuxOutput().chance()));
             }
         }
 
@@ -90,8 +90,7 @@ public class GrindingEmiRecipe implements EmiRecipe {
         widgets.addSlot(output.get(0), startX + 61, startY + 9).appendTooltip(Text.of("Min: " + recipe.getItemOutput().minAmount() + ", Max: " + recipe.getItemOutput().maxAmount())).recipeContext(this);
 
         if (output.size() > 1) {
-            float chance = recipe.getItemOutput().chance();
-            widgets.addSlot(output.get(1), startX + 81, startY + 9).appendTooltip(Text.of("Chance: " + recipe.getAuxOutput().chance())).recipeContext(this);
+            widgets.addSlot(output.get(1), startX + 81, startY + 9).recipeContext(this);
         }
     }
 }

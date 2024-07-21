@@ -9,7 +9,6 @@ import dev.emi.emi.api.render.EmiTexture;
 import dev.emi.emi.api.stack.EmiIngredient;
 import dev.emi.emi.api.stack.EmiStack;
 import dev.emi.emi.api.widget.WidgetHolder;
-import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.Nullable;
 
@@ -21,11 +20,7 @@ public class TrommelEmiRecipe implements EmiRecipe {
     private final List<EmiIngredient> input;
     private final List<EmiStack> output;
 
-    private final NormalTrommelRecipe recipe;
-
     public TrommelEmiRecipe(NormalTrommelRecipe recipe) {
-        this.recipe = recipe;
-
         this.id = recipe.getId();
         this.input = EmiIngredientHelper.inputToIngredient(recipe.getFluidInput());
 
@@ -84,7 +79,7 @@ public class TrommelEmiRecipe implements EmiRecipe {
 
         // Auxiliary output slot
         if (output.size() > 1) {
-            widgets.addSlot(output.get(1), startX + 87, startY + 9).appendTooltip(Text.of("Chance: " + recipe.getAuxOutput().chance())).recipeContext(this);
+            widgets.addSlot(output.get(1), startX + 87, startY + 9).recipeContext(this);
         }
     }
 }
