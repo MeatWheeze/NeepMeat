@@ -12,7 +12,6 @@ import net.minecraft.client.item.TooltipContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
-import net.minecraft.text.TextContent;
 import net.minecraft.util.Formatting;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
@@ -28,7 +27,7 @@ public class MachineBlock extends BaseBlock implements LivingMachineStructure
 
     public MachineBlock(String registryName, ItemSettings itemSettings, Map<StructureProperty, StructureProperty.Entry> properties, Settings settings)
     {
-        super(registryName, itemSettings.factory(MachineBlockItem::new), settings);
+        super(ctx, itemSettings.factory((block, ctx, itemSettings1) -> new MachineBlockItem(block, registryName1, itemSettings1)), settings);
         this.properties = new EnumMap<>(properties);
 //        properties.put(Property.MAX_POWER, 10f);
     }

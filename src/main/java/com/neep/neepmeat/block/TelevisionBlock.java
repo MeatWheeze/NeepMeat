@@ -2,6 +2,7 @@ package com.neep.neepmeat.block;
 
 import com.neep.meatlib.block.BaseBlock;
 import com.neep.meatlib.item.ItemSettings;
+import com.neep.meatlib.registry.RegistrationContext;
 import com.neep.neepmeat.init.NMBlocks;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.minecraft.block.Block;
@@ -19,9 +20,9 @@ public class TelevisionBlock extends BaseBlock
 {
     public static final IntProperty ROTATION = Properties.ROTATION;
 
-    public TelevisionBlock(String name, ItemSettings itemSettings, FabricBlockSettings settings)
+    public TelevisionBlock(RegistrationContext ctx, ItemSettings itemSettings, FabricBlockSettings settings)
     {
-        super(name, itemSettings, settings);
+        super(ctx, itemSettings, settings);
         setDefaultState(getDefaultState().with(ROTATION, 0));
     }
 

@@ -16,7 +16,7 @@ import java.util.*;
 
 public class ItemRegistry
 {
-    public static Map<Identifier, Item> ITEMS = new LinkedHashMap<>();
+    private static final Map<Identifier, Item> ITEMS = new LinkedHashMap<>();
     public static final List<Item> REGISTERED_ITEMS = new ArrayList<>();
 
     /**

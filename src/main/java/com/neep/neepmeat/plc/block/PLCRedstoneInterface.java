@@ -19,7 +19,7 @@ public class PLCRedstoneInterface extends BaseBlock implements BlockEntityProvid
 {
     public PLCRedstoneInterface(String registryName, Settings settings)
     {
-        super(registryName, settings);
+        super(ctx, settings);
     }
 
     @Nullable

@@ -35,7 +35,7 @@ public abstract class TallerBlock extends BaseBlock
 
     public TallerBlock(String registryName, IntProperty heightProperty, ItemSettings itemSettings, Settings settings)
     {
-        super(registryName, itemSettings, settings.pistonBehavior(PistonBehavior.IGNORE));
+        super(ctx, itemSettings, settings.pistonBehavior(PistonBehavior.IGNORE));
 
         this.heightProperty = heightProperty;
         this.maxHeight = heightProperty.getValues().stream().max(Integer::compare).get() + 1;

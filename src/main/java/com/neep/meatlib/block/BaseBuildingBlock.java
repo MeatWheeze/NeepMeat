@@ -2,7 +2,7 @@ package com.neep.meatlib.block;
 
 import com.neep.meatlib.datagen.MeatRecipeProvider;
 import com.neep.meatlib.item.ItemSettings;
-import com.neep.meatlib.registry.BlockRegistry;
+import com.neep.meatlib.registry.RegistrationContext;
 import net.minecraft.block.Block;
 import net.minecraft.data.server.recipe.RecipeJsonProvider;
 import net.minecraft.data.server.recipe.RecipeProvider;
@@ -14,42 +14,34 @@ import java.util.function.Consumer;
 public class BaseBuildingBlock extends Block implements MeatlibBlock
 {
     private final Item blockItem;
-    private final String registryName;
 
     public final MeatlibBlock slab;
     public final MeatlibBlock stairs;
     public MeatlibBlock wall = null;
 
-    public BaseBuildingBlock(String blockName, boolean makeWall, Settings settings)
+    public BaseBuildingBlock(RegistrationContext ctx, boolean makeWall, Settings settings)
     {
-        this(blockName, makeWall, ItemSettings.block(), settings);
+        this(ctx, makeWall, ItemSettings.block(), settings);
     }
 
-    public BaseBuildingBlock(String blockName, boolean makeWall, ItemSettings itemSettings, Settings settings)
+    public BaseBuildingBlock(RegistrationContext ctx, boolean makeWall, ItemSettings itemSettings, Settings settings)
     {
         super(settings);
 
-        this.stairs = new BaseStairsBlock(this.getDefaultState(),blockName + "_stairs", ItemSettings.block(), settings);
-        BlockRegistry.queue(stairs);
+        this.stairs = new BaseStairsBlock(ctx, this.getDefaultState(), ItemSettings.block(), settings);
 
-        this.slab = new BaseSlabBlock(this.getDefaultState(),blockName + "_slab", ItemSettings.block(), settings);
-        BlockRegistry.queue(slab);
+        this.slab = new BaseSlabBlock(ctx, this.getDefaultState(), ItemSettings.block(), settings);
 
         if (makeWall)
         {
-            wall = new BaseWallBlock(blockName + "_wall", ItemSettings.block(), settings);
-            BlockRegistry.queue(wall);
+            wall = new BaseWallBlock(ctx, ItemSettings.block(), settings);
         }
 
-        this.registryName = blockName;
-        this.blockItem = itemSettings.create(this, blockName, ItemSettings.block());
-        BlockRegistry.queue(this);
+        this.blockItem = itemSettings.create(this, ctx, ItemSettings.block());
 
-    }
-
-    public String getRegistryName()
-    {
-        return registryName;
+        ctx.append(this, s -> s + "_stairs", stairs);
+        ctx.append(this, s -> s + "_slab", slab);
+        ctx.append(this, s -> s + "_wall", wall);
     }
 
     public void generateRecipes(Consumer<RecipeJsonProvider> exporter)

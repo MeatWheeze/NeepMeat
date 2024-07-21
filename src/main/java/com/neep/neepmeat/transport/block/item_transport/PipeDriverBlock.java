@@ -37,7 +37,7 @@ public class PipeDriverBlock extends BaseBlock implements BlockEntityProvider, I
 
     public PipeDriverBlock(String registryName, ItemSettings itemSettings, Settings settings)
     {
-        super(registryName, itemSettings, settings);
+        super(ctx, itemSettings, settings);
         this.setDefaultState(getDefaultState().with(VALID, false));
     }
 

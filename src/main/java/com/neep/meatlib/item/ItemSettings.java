@@ -1,6 +1,7 @@
 package com.neep.meatlib.item;
 
 import com.neep.meatlib.block.MeatlibBlock;
+import com.neep.meatlib.registry.RegistrationContext;
 import com.neep.neepmeat.NeepMeat;
 import net.minecraft.block.Block;
 import net.minecraft.item.BlockItem;
@@ -29,7 +30,7 @@ public class ItemSettings implements MeatlibBlock.ItemFactory
 
     public static ItemSettings block()
     {
-        return new ItemSettings().factory(BaseBlockItem::new);
+        return new ItemSettings().factory((block, ctx, itemSettings) -> new BaseBlockItem(block, registryName, itemSettings));
     }
 
     public static ItemSettings item()
@@ -85,9 +86,9 @@ public class ItemSettings implements MeatlibBlock.ItemFactory
     }
 
     @Override
-    public BlockItem create(Block block, String name, ItemSettings settings)
+    public BlockItem create(Block block, RegistrationContext ctx, ItemSettings settings)
     {
-        return factory.create(block, name, settings);
+        return factory.create(block, ctx, settings);
     }
 
     public static final TooltipSupplier REQUIRES_MOTOR = (item, tooltip) -> tooltip.add(Text.translatable("message." + NeepMeat.NAMESPACE + ".requires_motor").formatted(Formatting.RED));

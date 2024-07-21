@@ -18,7 +18,7 @@ public class BaseSaplingBlock extends SaplingBlock implements MeatlibBlock
     {
         super(generator, settings);
         this.registryName = registryName;
-        this.blockItem = itemSettings.create(this, registryName, itemSettings);
+        this.blockItem = itemSettings.create(this, ctx, itemSettings);
     }
 
     @Override

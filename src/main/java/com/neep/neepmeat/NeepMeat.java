@@ -1,6 +1,7 @@
 package com.neep.neepmeat;
 
 import com.neep.meatlib.MeatLib;
+import com.neep.meatlib.MeatLibRegistration;
 import com.neep.neepmeat.api.Burner;
 import com.neep.neepmeat.api.DataType;
 import com.neep.neepmeat.api.enlightenment.EnlightenmentEvent;
@@ -94,6 +95,8 @@ public class NeepMeat implements ModInitializer
 	@Override
 	public void onInitialize()
 	{
+		MeatLibRegistration.forContext(NMBlocks.class, NMBlocks.CTX);
+
 		try (var mcontext = MeatLib.getContext(NAMESPACE))
 		{
 			LOGGER.info("Hello from NeepMeat!");

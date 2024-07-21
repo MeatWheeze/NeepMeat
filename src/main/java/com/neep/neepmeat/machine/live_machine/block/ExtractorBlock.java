@@ -13,7 +13,7 @@ public class ExtractorBlock extends BaseBlock implements BlockEntityProvider
 {
     public ExtractorBlock(String registryName, ItemSettings itemSettings, Settings settings)
     {
-        super(registryName, itemSettings, settings);
+        super(ctx, itemSettings, settings);
     }
 
     @Nullable

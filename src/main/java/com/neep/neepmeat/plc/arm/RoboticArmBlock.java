@@ -18,7 +18,7 @@ public class RoboticArmBlock extends BaseBlock implements BlockEntityProvider
 
     public RoboticArmBlock(String registryName, ItemSettings itemSettings, Settings settings)
     {
-        super(registryName, itemSettings, settings.nonOpaque());
+        super(ctx, itemSettings, settings.nonOpaque());
     }
 
     @Nullable

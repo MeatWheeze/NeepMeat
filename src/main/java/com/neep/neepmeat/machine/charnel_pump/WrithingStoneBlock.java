@@ -13,7 +13,7 @@ public class WrithingStoneBlock extends BaseBlock
 {
     public WrithingStoneBlock(String registryName, ItemSettings itemSettings, Settings settings)
     {
-        super(registryName, itemSettings, settings);
+        super(ctx, itemSettings, settings);
     }
 
     @Override

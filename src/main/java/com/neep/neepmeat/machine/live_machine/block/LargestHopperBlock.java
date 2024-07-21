@@ -38,7 +38,7 @@ public class LargestHopperBlock extends BigBlock<LargestHopperBlock.StructureBlo
     public LargestHopperBlock(String registryName, Settings settings, ItemSettings itemSettings)
     {
         super(settings);
-        itemSettings.create(this, registryName, itemSettings);
+        itemSettings.create(this, ctx, itemSettings);
         this.registryName = registryName;
     }
 

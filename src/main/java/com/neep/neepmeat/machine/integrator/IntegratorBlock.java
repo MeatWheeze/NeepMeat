@@ -24,7 +24,7 @@ public class IntegratorBlock extends BaseBlock implements BlockEntityProvider, D
 {
     public IntegratorBlock(String itemName, ItemSettings itemSettings, Settings settings)
     {
-        super(itemName, itemSettings, settings.nonOpaque());
+        super(ctx, itemSettings, settings.nonOpaque());
     }
 
     @Override

@@ -21,7 +21,7 @@ import java.util.*;
 
 public class BlockRegistry
 {
-    public static final Map<Identifier, Block> BLOCKS = new LinkedHashMap<>(); // Preserve order
+    private static final Map<Identifier, Block> BLOCKS = new LinkedHashMap<>(); // Preserve order
     public static final List<Block> REGISTERED_BLOCKS = new ArrayList<>();
 
     public static <T extends Block & MeatlibBlock> T queue(T block)
@@ -59,7 +59,7 @@ public class BlockRegistry
     {
         MeatLib.assertActive(block);
         BLOCKS.put(new Identifier(MeatLib.CURRENT_NAMESPACE, registryName), block);
-        itemSettings.getFactory().create(block, registryName, itemSettings);
+        itemSettings.getFactory().create(block, ctx, itemSettings);
         return block;
     }
 
@@ -67,7 +67,7 @@ public class BlockRegistry
     {
         MeatLib.assertActive(block);
         BLOCKS.put(new Identifier(MeatLib.CURRENT_NAMESPACE, block.getRegistryName()), block);
-        itemSettings.getFactory().create(block, block.getRegistryName(), itemSettings);
+        itemSettings.getFactory().create(block, ctx, itemSettings);
         return block;
     }
 

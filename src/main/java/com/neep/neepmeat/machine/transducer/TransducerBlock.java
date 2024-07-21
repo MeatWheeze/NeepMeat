@@ -18,7 +18,7 @@ public class TransducerBlock extends BaseBlock implements BlockEntityProvider
 {
     public TransducerBlock(String registryName, ItemSettings itemSettings, Settings settings)
     {
-        super(registryName, itemSettings, settings);
+        super(ctx, itemSettings, settings);
     }
 
     @Override

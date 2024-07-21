@@ -16,7 +16,7 @@ public class SifterHopperBlock extends BaseBlock implements BlockEntityProvider
 {
     public SifterHopperBlock(String itemName, ItemSettings itemSettings, Settings settings)
     {
-        super(itemName, itemSettings, settings);
+        super(ctx, itemSettings, settings);
     }
 
     @Nullable

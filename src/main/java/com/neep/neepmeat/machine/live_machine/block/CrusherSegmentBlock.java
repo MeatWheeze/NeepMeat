@@ -28,7 +28,7 @@ public class CrusherSegmentBlock extends BigBlock<CrusherSegmentBlock.CrusherSeg
     public CrusherSegmentBlock(String registryName, Settings settings, ItemSettings itemSettings)
     {
         super(settings);
-        itemSettings.create(this, registryName, itemSettings);
+        itemSettings.create(this, ctx, itemSettings);
         this.registryName = registryName;
     }
 

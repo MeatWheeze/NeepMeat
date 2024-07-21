@@ -58,7 +58,7 @@ public class LargeCrusherBlock extends Multiblock2ControllerBlock<LargeCrusherSt
     {
         super(settings);
         this.name = name;
-        this.blockItem = itemSettings.getFactory().create(this, name, itemSettings);
+        this.blockItem = itemSettings.getFactory().create(this, ctx, itemSettings);
         BigBlockPattern northAssembledPattern = BigBlockPattern.makeOddCylinder(new Vec3i(0, 0, -1), 1, 0, 1, getStructure().getDefaultState())
                 .set(-1, 2, -1, getStructure().getDefaultState())
                 .enableApi(-1, 2, -1, ItemStorage.SIDED)

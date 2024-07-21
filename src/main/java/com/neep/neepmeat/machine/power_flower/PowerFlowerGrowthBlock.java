@@ -11,8 +11,6 @@ import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.particle.ParticleTypes;
-import net.minecraft.registry.tag.BlockTags;
-import net.minecraft.registry.tag.TagKey;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.IntProperty;
@@ -39,7 +37,7 @@ public class PowerFlowerGrowthBlock extends BaseBlock implements PowerFlower
 
     public PowerFlowerGrowthBlock(String registryName, ItemSettings itemSettings, Settings settings)
     {
-        super(registryName, itemSettings, settings.nonOpaque());
+        super(ctx, itemSettings, settings.nonOpaque());
         this.setDefaultState(getDefaultState().with(GROWTH, 0));
     }
 

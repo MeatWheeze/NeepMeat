@@ -29,8 +29,8 @@ public class FluidTransport
     public static final Map<FluidPipe.PipeCol, FluidPipeBlock> COLOURED_FLUID_PIPES = Maps.newEnumMap(FluidPipe.PipeCol.class);
 
     // --- Fluid Pipes ---
-    public static Block FLUID_PIPE = BlockRegistry.queue(new FluidPipeBlock("fluid_pipe", FluidPipe.PipeCol.ANY, NMBlocks.block().factory(FluidComponentItem::new), NMBlocks.FLUID_PIPE_SETTINGS));
-    public static Block ENCASED_FLUID_PIPE = BlockRegistry.queue(new EncasedFluidPipeBlock("encased_fluid_pipe", FluidPipe.PipeCol.ANY, NMBlocks.block().factory(FluidComponentItem::new).tooltip(TooltipSupplier.simple(1)), NMBlocks.FLUID_PIPE_SETTINGS));
+    public static Block FLUID_PIPE = BlockRegistry.queue(new FluidPipeBlock("fluid_pipe", FluidPipe.PipeCol.ANY, NMBlocks.block().factory((block, ctx, itemSettings) -> new FluidComponentItem(block, registryName, itemSettings)), NMBlocks.FLUID_PIPE_SETTINGS));
+    public static Block ENCASED_FLUID_PIPE = BlockRegistry.queue(new EncasedFluidPipeBlock("encased_fluid_pipe", FluidPipe.PipeCol.ANY, NMBlocks.block().factory((block, ctx, itemSettings) -> new FluidComponentItem(block, registryName, itemSettings)).tooltip(TooltipSupplier.simple(1)), NMBlocks.FLUID_PIPE_SETTINGS));
 
     public static Block WHITE_FLUID_PIPE = makePipe(FluidPipe.PipeCol.WHITE);
     public static Block ORANGE_FLUID_PIPE = makePipe(FluidPipe.PipeCol.ORANGE);
@@ -57,13 +57,13 @@ public class FluidTransport
     public static Block COPPER_PIPE = BlockRegistry.queue(new CapillaryFluidPipeBlock("copper_pipe", NMBlocks.block().tooltip(TooltipSupplier.simple(1)), NMBlocks.FLUID_PIPE_SETTINGS));
     public static Block PUMP = BlockRegistry.queue(new PumpBlock("pump", NMBlocks.block().tooltip(TooltipSupplier.simple(1)), NMBlocks.FLUID_MACHINE_SETTINGS));
 
-    public static Block BASIC_TANK = BlockRegistry.queue(new TankBlock("basic_tank", NMBlocks.block().factory(TankItem::new).tooltip(TooltipSupplier.hidden(2)), NMBlocks.FLUID_MACHINE_SETTINGS));
-    public static Block BASIC_GLASS_TANK = BlockRegistry.queue(new GlassTankBlock("basic_glass_tank", NMBlocks.block().factory(TankItem::new).tooltip(TooltipSupplier.hidden(2)), NMBlocks.FLUID_MACHINE_SETTINGS));
-    public static Block ADVANCED_TANK = BlockRegistry.queue(new AdvancedTankBlock("advanced_tank", NMBlocks.block().factory(TankItem::new).tooltip(TooltipSupplier.hidden(2)), NMBlocks.FLUID_MACHINE_SETTINGS));
+    public static Block BASIC_TANK = BlockRegistry.queue(new TankBlock("basic_tank", NMBlocks.block().factory((block, ctx, itemSettings) -> new TankItem(block, registryName, itemSettings)).tooltip(TooltipSupplier.hidden(2)), NMBlocks.FLUID_MACHINE_SETTINGS));
+    public static Block BASIC_GLASS_TANK = BlockRegistry.queue(new GlassTankBlock("basic_glass_tank", NMBlocks.block().factory((block, ctx, itemSettings) -> new TankItem(block, registryName, itemSettings)).tooltip(TooltipSupplier.hidden(2)), NMBlocks.FLUID_MACHINE_SETTINGS));
+    public static Block ADVANCED_TANK = BlockRegistry.queue(new AdvancedTankBlock("advanced_tank", NMBlocks.block().factory((block, ctx, itemSettings) -> new TankItem(block, registryName, itemSettings)).tooltip(TooltipSupplier.hidden(2)), NMBlocks.FLUID_MACHINE_SETTINGS));
 
     public static Block MULTI_TANK = BlockRegistry.queue(new MultiTankBlock("multi_tank", NMBlocks.block(), NMBlocks.FLUID_MACHINE_SETTINGS));
     public static Block FLUID_BUFFER = BlockRegistry.queue(new FluidBufferBlock("fluid_buffer", NMBlocks.block().tooltip(TooltipSupplier.simple(1)), NMBlocks.FLUID_MACHINE_SETTINGS));
-    public static Block FLUID_INTERFACE = BlockRegistry.queue(new FluidInterfaceBlock("fluid_interface", NMBlocks.block().tooltip((TooltipSupplier.simple(1))).factory(FluidComponentItem::new), NMBlocks.FLUID_MACHINE_SETTINGS));
+    public static Block FLUID_INTERFACE = BlockRegistry.queue(new FluidInterfaceBlock("fluid_interface", NMBlocks.block().tooltip((TooltipSupplier.simple(1))).factory((block, ctx, itemSettings) -> new FluidComponentItem(block, registryName, itemSettings)), NMBlocks.FLUID_MACHINE_SETTINGS));
     public static Block FLUID_DRAIN = BlockRegistry.queue(new FluidDrainBlock("fluid_drain", NMBlocks.block().tooltip(TooltipSupplier.simple(1)), NMBlocks.FLUID_MACHINE_SETTINGS));
 
     public static FlexTankBlock FLEX_TANK = BlockRegistry.queue(new FlexTankBlock("flex_tank", 8 * FluidConstants.BUCKET, () -> NMBlockEntities.FLEX_TANK,
@@ -92,7 +92,7 @@ public class FluidTransport
 
     private static FluidPipeBlock makePipe(FluidPipe.PipeCol col)
     {
-        var pipe = BlockRegistry.queue(new FluidPipeBlock("fluid_pipe_" + col.name().toLowerCase(), col, NMBlocks.block().factory(FluidComponentItem::new), NMBlocks.FLUID_PIPE_SETTINGS));
+        var pipe = BlockRegistry.queue(new FluidPipeBlock("fluid_pipe_" + col.name().toLowerCase(), col, NMBlocks.block().factory((block, ctx, itemSettings) -> new FluidComponentItem(block, registryName, itemSettings)), NMBlocks.FLUID_PIPE_SETTINGS));
         COLOURED_FLUID_PIPES.put(col, pipe);
         return pipe;
     }

@@ -38,7 +38,7 @@ public class FilterPipeBlock extends AbstractAxialFluidPipe implements BlockEnti
 {
     public FilterPipeBlock(String itemName, ItemSettings itemSettings, Settings settings)
     {
-        super(itemName, itemSettings.factory(FluidComponentItem::new), settings.nonOpaque());
+        super(itemName, itemSettings.factory((block, ctx, itemSettings1) -> new FluidComponentItem(block, registryName, itemSettings1)), settings.nonOpaque());
         this.setDefaultState(this.getStateManager().getDefaultState());
     }
 

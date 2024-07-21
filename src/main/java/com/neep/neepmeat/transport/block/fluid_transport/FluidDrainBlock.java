@@ -26,7 +26,7 @@ public class FluidDrainBlock extends BaseBlock implements BlockEntityProvider
 {
     public FluidDrainBlock(String itemName, ItemSettings itemSettings, Settings settings)
     {
-        super(itemName, itemSettings, settings.nonOpaque());
+        super(ctx, itemSettings, settings.nonOpaque());
     }
 
     @Nullable

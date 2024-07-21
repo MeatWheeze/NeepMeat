@@ -29,7 +29,6 @@ import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldAccess;
 import org.jetbrains.annotations.Nullable;
 
 public class PumpBlock extends BaseFacingBlock implements BlockEntityProvider
@@ -38,7 +37,7 @@ public class PumpBlock extends BaseFacingBlock implements BlockEntityProvider
 
     public PumpBlock(String itemName, ItemSettings itemSettings, Settings settings)
     {
-        super(itemName, itemSettings.factory(FluidComponentItem::new), settings.nonOpaque());
+        super(itemName, itemSettings.factory((block, ctx, itemSettings1) -> new FluidComponentItem(block, registryName, itemSettings1)), settings.nonOpaque());
     }
 
     @Override

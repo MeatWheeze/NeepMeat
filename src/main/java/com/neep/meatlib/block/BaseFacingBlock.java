@@ -17,7 +17,7 @@ public class BaseFacingBlock extends FacingBlock implements MeatlibBlock
     public BaseFacingBlock(String itemName, ItemSettings itemSettings, Settings settings)
     {
         super(settings);
-        this.blockItem = itemSettings.getFactory().create(this, itemName, itemSettings);
+        this.blockItem = itemSettings.getFactory().create(this, ctx, itemSettings);
         this.setDefaultState(this.getStateManager().getDefaultState().with(FACING, Direction.NORTH));
         this.registryName = itemName;
     }

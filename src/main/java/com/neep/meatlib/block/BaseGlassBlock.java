@@ -12,7 +12,7 @@ public class BaseGlassBlock extends AbstractGlassBlock implements MeatlibBlock
     public BaseGlassBlock(String registryName, ItemSettings itemSettings, Settings settings)
     {
         super(settings);
-        this.blockItem = itemSettings.create(this, registryName, itemSettings);
+        this.blockItem = itemSettings.create(this, ctx, itemSettings);
         this.registryName = registryName;
     }
 

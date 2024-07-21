@@ -31,7 +31,7 @@ public class PedestalBlock extends BaseBlock implements BlockEntityProvider, Dat
 {
     public PedestalBlock(String registryName, ItemSettings itemSettings, Settings settings)
     {
-        super(registryName, itemSettings, settings);
+        super(ctx, itemSettings, settings);
     }
 
     @Override

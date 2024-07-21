@@ -19,7 +19,7 @@ public class BaseHorFacingBlock extends HorizontalFacingBlock implements Meatlib
     public BaseHorFacingBlock(String itemName, ItemSettings itemSettings, Settings settings)
     {
         super(settings);
-        this.blockItem = itemSettings.create(this, itemName, itemSettings);
+        this.blockItem = itemSettings.create(this, ctx, itemSettings);
         this.setDefaultState(this.getStateManager().getDefaultState().with(FACING, Direction.NORTH));
         this.registryName = itemName;
     }

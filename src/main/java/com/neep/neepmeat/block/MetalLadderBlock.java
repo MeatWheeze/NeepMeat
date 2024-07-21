@@ -13,7 +13,6 @@ import net.minecraft.state.StateManager;
 import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
-import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
 import net.minecraft.world.WorldView;
 import org.jetbrains.annotations.Nullable;
@@ -27,7 +26,7 @@ public class MetalLadderBlock extends LadderBlock implements MeatlibBlock
     {
         super(settings);
         this.name = name;
-        ItemRegistry.queue(name, itemSettings.create(this, name, itemSettings));
+        ItemRegistry.queue(name, itemSettings.create(this, ctx, itemSettings));
         setDefaultState(getStateManager().getDefaultState().with(TOP, false));
     }
 

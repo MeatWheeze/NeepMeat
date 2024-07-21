@@ -19,7 +19,7 @@ public class TinkerTableBlock extends BaseBlock implements BlockEntityProvider
 {
     public TinkerTableBlock(String registryName, ItemSettings itemSettings, Settings settings)
     {
-        super(registryName, itemSettings, settings);
+        super(ctx, itemSettings, settings);
     }
 
     @Override

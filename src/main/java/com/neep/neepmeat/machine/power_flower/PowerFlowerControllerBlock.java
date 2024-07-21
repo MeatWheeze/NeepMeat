@@ -11,8 +11,6 @@ import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.item.ItemPlacementContext;
-import net.minecraft.registry.tag.BlockTags;
-import net.minecraft.registry.tag.TagKey;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.util.math.BlockPos;
@@ -25,7 +23,7 @@ public class PowerFlowerControllerBlock extends BaseBlock implements BlockEntity
 
     public PowerFlowerControllerBlock(String registryName, ItemSettings block, Settings settings)
     {
-        super(registryName, block, settings.nonOpaque());
+        super(ctx, block, settings.nonOpaque());
         setDefaultState(getDefaultState().with(VALID, true));
     }
 

@@ -36,7 +36,7 @@ public class DumperBlock extends BaseBlock implements BlockEntityProvider
 
     public DumperBlock(String registryName, ItemSettings itemSettings, Settings settings)
     {
-        super(registryName, itemSettings, settings.nonOpaque());
+        super(ctx, itemSettings, settings.nonOpaque());
     }
 
     @Override

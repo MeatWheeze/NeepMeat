@@ -17,7 +17,6 @@ import net.minecraft.fluid.Fluids;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
-import net.minecraft.sound.SoundEvents;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.state.property.EnumProperty;
@@ -69,7 +68,7 @@ public abstract class AbstractPipeBlock extends BaseBlock implements Waterloggab
 
     public AbstractPipeBlock(String itemName, ItemSettings itemSettings, Settings settings)
     {
-        super(itemName, itemSettings, settings.solid());
+        super(ctx, itemSettings, settings.solid());
         this.setDefaultState(this.stateManager.getDefaultState()
                 .with(NORTH_CONNECTION, PipeConnectionType.NONE)
                 .with(EAST_CONNECTION, PipeConnectionType.NONE)

@@ -36,7 +36,7 @@ public abstract class TallBlock extends BaseBlock
 
     public TallBlock(String registryName, ItemSettings itemSettings, Settings settings)
     {
-        super(registryName, itemSettings, settings.pistonBehavior(PistonBehavior.IGNORE));
+        super(ctx, itemSettings, settings.pistonBehavior(PistonBehavior.IGNORE));
         this.structureBlock = createStructure();
     }
 

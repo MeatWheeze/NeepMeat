@@ -2,6 +2,7 @@ package com.neep.neepmeat.block;
 
 import com.neep.meatlib.block.BaseStairsBlock;
 import com.neep.meatlib.item.ItemSettings;
+import com.neep.meatlib.registry.RegistrationContext;
 import com.neep.neepmeat.init.NMBlocks;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -10,10 +11,9 @@ import net.minecraft.state.StateManager;
 
 public class MetalScaffoldingStairs extends BaseStairsBlock implements Waterloggable
 {
-    public MetalScaffoldingStairs(String itemName, ItemSettings itemSettings, Settings settings)
+    public MetalScaffoldingStairs(RegistrationContext ctx, ItemSettings itemSettings, Settings settings)
     {
-        super(NMBlocks.SCAFFOLD_PLATFORM.getDefaultState(), itemName, itemSettings, settings.nonOpaque());
-        registryName = itemName;
+        super(ctx, NMBlocks.SCAFFOLD_PLATFORM.getDefaultState(), itemSettings, settings.nonOpaque());
     }
 
 //    @Override

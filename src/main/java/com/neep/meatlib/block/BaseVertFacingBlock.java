@@ -15,7 +15,7 @@ public class BaseVertFacingBlock extends BaseBlock
 
     public BaseVertFacingBlock(String registryName, ItemSettings itemSettings, Settings settings)
     {
-        super(registryName, itemSettings, settings);
+        super(ctx, itemSettings, settings);
     }
 
     @Override

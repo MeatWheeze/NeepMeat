@@ -27,7 +27,7 @@ public class CastingBasinBlock extends BaseBlock implements BlockEntityProvider
 
     public CastingBasinBlock(String registryName, ItemSettings itemSettings, Settings settings)
     {
-        super(registryName, itemSettings, settings);
+        super(ctx, itemSettings, settings);
     }
 
     @Override

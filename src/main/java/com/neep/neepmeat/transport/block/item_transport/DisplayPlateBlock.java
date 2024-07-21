@@ -34,7 +34,7 @@ public class DisplayPlateBlock extends BaseBlock implements BlockEntityProvider
 
     public DisplayPlateBlock(String itemName, ItemSettings itemSettings, Settings settings)
     {
-        super(itemName, itemSettings, settings);
+        super(ctx, itemSettings, settings);
     }
 
     @Override

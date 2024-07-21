@@ -37,7 +37,7 @@ public class FlexTankBlock extends BaseBlock implements BlockEntityProvider
 
     public FlexTankBlock(String registryName, long capacity, Supplier<BlockEntityType<FlexTankBlockEntity>> type, ItemSettings itemSettings, Settings settings)
     {
-        super(registryName,itemSettings, settings);
+        super(ctx, itemSettings, settings);
         this.capacity = capacity;
         this.typeSupplier = type;
     }

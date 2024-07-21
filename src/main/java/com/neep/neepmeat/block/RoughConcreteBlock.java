@@ -5,14 +5,12 @@ import com.neep.meatlib.datagen.MeatRecipeProvider;
 import com.neep.meatlib.item.BaseBlockItem;
 import com.neep.meatlib.item.ItemSettings;
 import com.neep.meatlib.item.MeatlibItemSettings;
+import com.neep.meatlib.registry.RegistrationContext;
 import com.neep.neepmeat.NMItemGroups;
 import com.neep.neepmeat.datagen.tag.NMTags;
-import com.neep.neepmeat.init.NMBlocks;
-import com.neep.neepmeat.init.NMItems;
 import net.minecraft.block.Block;
 import net.minecraft.data.server.recipe.RecipeJsonProvider;
 import net.minecraft.item.DyeItem;
-import net.minecraft.registry.tag.TagKey;
 import net.minecraft.util.DyeColor;
 
 import java.util.function.Consumer;
@@ -21,9 +19,9 @@ public class RoughConcreteBlock extends BaseBuildingBlock
 {
     private final DyeColor col;
 
-    public RoughConcreteBlock(String blockName, boolean makeWall, DyeColor col, Settings settings)
+    public RoughConcreteBlock(RegistrationContext ctx, boolean makeWall, DyeColor col, Settings settings)
     {
-        super(blockName, makeWall, ItemSettings.block().factory(Item::new), settings);
+        super(ctx, makeWall, ItemSettings.block().factory((block, ctx1, itemSettings) -> new Item(block, ctx1, itemSettings)), settings);
         this.col = col;
     }
 

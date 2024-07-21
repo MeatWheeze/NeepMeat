@@ -32,7 +32,7 @@ public class CrucibleBlock extends BaseBlock implements BlockEntityProvider
 
     public CrucibleBlock(String registryName, ItemSettings itemSettings, Settings settings)
     {
-        super(registryName, itemSettings, settings.nonOpaque());
+        super(ctx, itemSettings, settings.nonOpaque());
     }
 
     @Override

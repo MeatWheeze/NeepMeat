@@ -23,7 +23,7 @@ public class RouteTestBlock extends BaseBlock
 {
     public RouteTestBlock(String registryName, Settings settings)
     {
-        super(registryName, settings);
+        super(ctx, settings);
     }
 
     @Override

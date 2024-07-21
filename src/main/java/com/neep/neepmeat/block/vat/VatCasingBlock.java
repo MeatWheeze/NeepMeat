@@ -14,7 +14,7 @@ public class VatCasingBlock extends BaseBlock implements VatComponent, BlockEnti
 {
     public VatCasingBlock(String registryName, ItemSettings itemSettings, Settings settings)
     {
-        super(registryName, itemSettings, settings);
+        super(ctx, itemSettings, settings);
     }
 
 //    public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit)

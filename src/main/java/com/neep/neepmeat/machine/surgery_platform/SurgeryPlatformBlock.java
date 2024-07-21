@@ -16,7 +16,7 @@ public class SurgeryPlatformBlock extends BaseBlock implements DataCable, BlockE
 {
     public SurgeryPlatformBlock(String registryName, ItemSettings itemSettings, Settings settings)
     {
-        super(registryName, itemSettings, settings);
+        super(ctx, itemSettings, settings);
     }
 
     @Override

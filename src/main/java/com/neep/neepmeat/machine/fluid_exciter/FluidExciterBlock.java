@@ -8,7 +8,6 @@ import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.item.FluidComponentItem;
 import com.neep.neepmeat.transport.api.pipe.VascularConduit;
 import com.neep.neepmeat.transport.api.pipe.VascularConduitEntity;
-import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
@@ -25,7 +24,7 @@ public class FluidExciterBlock extends TallBlock implements BlockEntityProvider
 {
     public FluidExciterBlock(String registryName, ItemSettings itemSettings, Settings settings)
     {
-        super(registryName, itemSettings.factory(FluidComponentItem::new), settings.nonOpaque());
+        super(registryName, itemSettings.factory((block, ctx, itemSettings1) -> new FluidComponentItem(block, registryName1, itemSettings1)), settings.nonOpaque());
     }
 
     @Override

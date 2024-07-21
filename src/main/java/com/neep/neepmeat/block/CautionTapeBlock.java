@@ -33,7 +33,7 @@ public class CautionTapeBlock extends BaseBlock
 
     public CautionTapeBlock(String registryName, ItemSettings itemSettings, Settings settings)
     {
-        super(registryName, itemSettings, settings);
+        super(ctx, itemSettings, settings);
         this.setDefaultState(this.stateManager.getDefaultState().with(CONNECTION_NORTH, WireConnection.NONE).with(CONNECTION_EAST, WireConnection.NONE).with(CONNECTION_SOUTH, WireConnection.NONE).with(CONNECTION_WEST, WireConnection.NONE));
         this.dotState = this.getDefaultState().with(CONNECTION_NORTH, WireConnection.SIDE).with(CONNECTION_EAST, WireConnection.SIDE).with(CONNECTION_SOUTH, WireConnection.SIDE).with(CONNECTION_WEST, WireConnection.SIDE);
     }

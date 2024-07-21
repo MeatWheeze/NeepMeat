@@ -7,6 +7,6 @@ public class AdvancedIntegratorEggBlock extends BaseBlock
 {
     public AdvancedIntegratorEggBlock(String registryName, ItemSettings itemSettings, Settings settings)
     {
-        super(registryName, itemSettings, settings);
+        super(ctx, itemSettings, settings);
     }
 }

@@ -31,7 +31,7 @@ public class CapillaryFluidPipeBlock extends AbstractPipeBlock implements BlockE
 {
     public CapillaryFluidPipeBlock(String itemName, ItemSettings itemSettings, Settings settings)
     {
-        super(itemName, itemSettings.factory(FluidComponentItem::new), settings);
+        super(itemName, itemSettings.factory((block, ctx, itemSettings1) -> new FluidComponentItem(block, registryName, itemSettings1)), settings);
     }
 
     public static void removeStorageNodes(World world, BlockPos pos)

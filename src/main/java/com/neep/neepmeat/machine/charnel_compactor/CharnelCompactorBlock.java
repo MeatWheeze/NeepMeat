@@ -42,7 +42,7 @@ public class CharnelCompactorBlock extends BaseBlock implements DataCable
 
     public CharnelCompactorBlock(String registryName, ItemSettings itemSettings, Settings settings)
     {
-        super(registryName, itemSettings, settings);
+        super(ctx, itemSettings, settings);
         this.setDefaultState((this.stateManager.getDefaultState()).with(LEVEL, 0));
     }
 

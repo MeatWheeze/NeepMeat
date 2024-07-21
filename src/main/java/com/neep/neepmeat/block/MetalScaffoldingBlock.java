@@ -7,6 +7,7 @@ import com.neep.meatlib.block.MeatlibBlock;
 import com.neep.meatlib.datagen.MeatRecipeProvider;
 import com.neep.meatlib.item.ItemSettings;
 import com.neep.meatlib.registry.BlockRegistry;
+import com.neep.meatlib.registry.RegistrationContext;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Waterloggable;
@@ -33,19 +34,17 @@ public class MetalScaffoldingBlock extends BaseBlock implements MeatlibBlock, Wa
     public static final BooleanProperty BOTTOM = Properties.BOTTOM;
     public final MeatlibBlock stairs;
     public final MeatlibBlock slab;
-    private final String registryName;
 
-    public MetalScaffoldingBlock(String registryName, ItemSettings itemSettings, Settings settings)
+    public MetalScaffoldingBlock(RegistrationContext ctx, ItemSettings itemSettings, Settings settings)
     {
-        super(registryName, itemSettings, settings.nonOpaque());
+        super(ctx, itemSettings, settings.nonOpaque());
 
-        stairs = new BaseStairsBlock(this.getDefaultState(), registryName + "_stairs", itemSettings, settings);
+        stairs = new BaseStairsBlock(ctx, this.getDefaultState(), itemSettings, settings);
         BlockRegistry.queue(stairs);
 
-        slab = new BaseSlabBlock(this.getDefaultState(), registryName + "_slab", itemSettings, settings);
+        slab = new BaseSlabBlock(ctx, this.getDefaultState(), itemSettings, settings);
         BlockRegistry.queue(slab);
 
-        this.registryName = registryName;
         this.setDefaultState((this.stateManager.getDefaultState()).with(WATERLOGGED, false).with(BOTTOM, false));
         BlockRegistry.queue(this);
     }
@@ -53,12 +52,6 @@ public class MetalScaffoldingBlock extends BaseBlock implements MeatlibBlock, Wa
     public BlockItem getBlockItem()
     {
         return blockItem;
-    }
-
-    @Override
-    public String getRegistryName()
-    {
-        return registryName;
     }
 
     @Override

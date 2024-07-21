@@ -24,7 +24,6 @@ import net.minecraft.util.StringIdentifiable;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
-import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
@@ -36,7 +35,7 @@ public class LargeConverterBlock extends BaseBlock implements BlockEntityProvide
 
     public LargeConverterBlock(String registryName, ItemSettings itemSettings, FabricBlockSettings settings)
     {
-        super(registryName, itemSettings, settings.nonOpaque());
+        super(ctx, itemSettings, settings.nonOpaque());
         this.setDefaultState(getDefaultState().with(TYPE, Type.UNASSEMBLED));
     }
 

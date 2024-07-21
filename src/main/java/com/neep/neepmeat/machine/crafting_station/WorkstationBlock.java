@@ -20,7 +20,7 @@ public class WorkstationBlock extends BaseBlock implements BlockEntityProvider
 {
     public WorkstationBlock(String registryName, ItemSettings itemSettings, Settings settings)
     {
-        super(registryName, itemSettings, settings.nonOpaque());
+        super(ctx, itemSettings, settings.nonOpaque());
     }
 
     @Override
