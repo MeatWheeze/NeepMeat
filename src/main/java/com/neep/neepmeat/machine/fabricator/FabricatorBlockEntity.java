@@ -324,7 +324,7 @@ public class FabricatorBlockEntity extends SyncableBlockEntity implements Motori
 
     public Storage<ItemVariant> getStorage(Direction direction)
     {
-        return direction == getCachedState().get(FabricatorBlock.FACING) ? storage : null;
+        return direction == null || direction == getCachedState().get(FabricatorBlock.FACING) ? storage : null;
     }
 
     public void sendAnimation()

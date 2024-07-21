@@ -152,7 +152,7 @@ public class FluidRationerBlockEntity extends SyncableBlockEntity implements Ext
     public Storage<FluidVariant> getStorage(Direction direction)
     {
         Direction facing = getCachedState().get(FluidRationerBlock.FACING);
-        if (direction == facing)
+        if (direction == null || direction == facing)
         {
             return outputStorage;
         }

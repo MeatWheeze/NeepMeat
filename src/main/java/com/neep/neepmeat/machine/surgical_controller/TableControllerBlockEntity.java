@@ -235,7 +235,7 @@ public class TableControllerBlockEntity extends BloodMachineBlockEntity
     public Storage<ItemVariant> getStorage(Direction direction)
     {
         Direction facing = getCachedState().get(PLCBlock.FACING);
-        return direction == facing || direction == Direction.DOWN ? context.storage : null;
+        return direction == null || direction == facing || direction == Direction.DOWN ? context.storage : null;
     }
 
     public void update(boolean receiving)
