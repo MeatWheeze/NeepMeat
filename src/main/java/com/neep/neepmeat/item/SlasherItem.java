@@ -1,5 +1,6 @@
 package com.neep.neepmeat.item;
 
+import com.neep.meatlib.registry.RegistrationContext;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.client.model.GenericModel;
 import com.neep.neepmeat.client.renderer.SwordRenderer;
@@ -30,9 +31,9 @@ public class SlasherItem extends AnimatedSword implements GeoItem
     private final AnimatableInstanceCache instanceCache = GeckoLibUtil.createInstanceCache(this);
     private final Supplier<Object> rendererProvider = GeoItem.makeRenderer(this);
 
-    public SlasherItem(String registryName, Settings settings)
+    public SlasherItem(RegistrationContext ctx, Settings settings)
     {
-        super(registryName, ToolMaterials.DIAMOND, 0, -1.2f, settings);
+        super(ctx, ToolMaterials.DIAMOND, 0, -1.2f, settings);
     }
 
     private PlayState predicate(AnimationState<SlasherItem> event)

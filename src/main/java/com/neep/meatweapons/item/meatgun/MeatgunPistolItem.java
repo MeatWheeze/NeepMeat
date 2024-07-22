@@ -12,9 +12,9 @@ import java.util.function.Supplier;
 
 public class MeatgunPistolItem extends MeatgunItem
 {
-    public MeatgunPistolItem(String registryName, TooltipSupplier tooltipSupplier, Settings settings)
+    public MeatgunPistolItem(TooltipSupplier tooltipSupplier, Settings settings)
     {
-        super(registryName, tooltipSupplier, settings);
+        super(tooltipSupplier, settings);
     }
 
     @Override

@@ -1,6 +1,5 @@
 package com.neep.neepmeat.datagen;
 
-import com.neep.meatlib.block.MeatlibBlockSettings;
 import com.neep.meatlib.datagen.MeatRecipeProvider;
 import com.neep.neepmeat.datagen.tag.NMTags;
 import com.neep.neepmeat.init.NMBlocks;
@@ -23,7 +22,7 @@ public class NMRecipeGenerator
 
     protected static void generateRecipes(Consumer<RecipeJsonProvider> exporter)
     {
-        MeatRecipeProvider.offerReversibleCompactingRecipes(exporter, RecipeCategory.BUILDING_BLOCKS, NMItems.MEAT_STEEL, RecipeCategory.BUILDING_BLOCKS, NMBlocks.MEAT_STEEL_BLOCK);
+        MeatRecipeProvider.offerReversibleCompactingRecipes(exporter, RecipeCategory.BUILDING_BLOCKS, NMItems.MEAT_STEEL_INGOT, RecipeCategory.BUILDING_BLOCKS, NMBlocks.MEAT_STEEL_BLOCK);
         MeatRecipeProvider.offerEightDyeingRecipe(exporter, NMBlocks.RUSTY_METAL_BLOCK, Items.DIRT, NMBlocks.POLISHED_METAL);
         MeatRecipeProvider.offerEightDyeingRecipe(exporter, NMBlocks.DIRTY_RED_TILES, NMItems.BLOOD_BUBBLE, Blocks.TERRACOTTA);
         MeatRecipeProvider.offerEightDyeingRecipe(exporter, NMBlocks.DIRTY_WHITE_TILES, Blocks.DIRT, Blocks.TERRACOTTA);

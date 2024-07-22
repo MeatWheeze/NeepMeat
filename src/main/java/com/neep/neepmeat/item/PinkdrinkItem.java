@@ -1,14 +1,15 @@
 package com.neep.neepmeat.item;
 
 import com.neep.meatlib.item.BaseCraftingItem;
+import com.neep.meatlib.registry.RegistrationContext;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
 
 public class PinkdrinkItem extends BaseCraftingItem
 {
-    public PinkdrinkItem(String registryName, int loreLines, Settings settings)
+    public PinkdrinkItem(RegistrationContext ctx, int loreLines, Settings settings)
     {
-        super(registryName, loreLines, settings);
+        super(ctx, loreLines, settings);
     }
 
     @Override

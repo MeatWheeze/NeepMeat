@@ -91,19 +91,15 @@ public class AssaultDrillItem extends Item implements MeatlibItem, GeoItem, Powe
     private final TagKey<Block> effectiveBlocks;
     private final float miningSpeed;
     private final EntityAttributeModifier eam = new EntityAttributeModifier("aa", 8, EntityAttributeModifier.Operation.ADDITION);
-    protected String registryName;
     protected float attackDamage;
 
-    public AssaultDrillItem(String registryName, int maxDamage, FabricItemSettings settings)
+    public AssaultDrillItem(int maxDamage, FabricItemSettings settings)
     {
         super(settings.maxCount(1).maxDamage(maxDamage));
-        this.registryName = registryName;
 
         this.attackDamage = 1;
         this.effectiveBlocks = BlockTags.PICKAXE_MINEABLE;
         this.miningSpeed = ToolMaterials.DIAMOND.getMiningSpeedMultiplier();
-
-        ItemRegistry.queue(this);
     }
 
     public static boolean using(ItemStack stack)
@@ -122,16 +118,10 @@ public class AssaultDrillItem extends Item implements MeatlibItem, GeoItem, Powe
     }
 
     @Override
-    public String getRegistryName()
-    {
-        return registryName;
-    }
-
-    @Override
     public void appendTooltip(ItemStack itemStack, World world, List<Text> tooltip, TooltipContext tooltipContext)
     {
-        TooltipSupplier.wrapLines(tooltip, Text.translatable("item." + MeatWeapons.NAMESPACE + "." + registryName + ".lore"));
-        tooltip.add(Text.translatable("item." + MeatWeapons.NAMESPACE + "." + registryName + ".damage_per_tick", getDamage(itemStack, null) / 2f).formatted(Formatting.BLUE));
+        TooltipSupplier.wrapLines(tooltip, Text.translatable("item." + MeatWeapons.NAMESPACE + "." + "assault_drill" + ".lore"));
+        tooltip.add(Text.translatable("item." + MeatWeapons.NAMESPACE + "." + "assault_drill" + ".damage_per_tick", getDamage(itemStack, null) / 2f).formatted(Formatting.BLUE));
     }
 
     @Override

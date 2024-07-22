@@ -31,9 +31,9 @@ public class PipetteItem extends BaseItem
 {
     protected static ItemApiLookup.ItemApiProvider<Storage<FluidVariant>, ContainerItemContext> API_PROVIDER = (stack, context) -> new StackStorage(stack, context, FluidConstants.BUCKET);
 
-    public PipetteItem(String registryName, TooltipSupplier tooltip, Settings settings)
+    public PipetteItem(TooltipSupplier tooltip, Settings settings)
     {
-        super(registryName, tooltip, settings);
+        super(tooltip, settings);
         FluidStorage.ITEM.registerForItems(API_PROVIDER, this);
     }
 

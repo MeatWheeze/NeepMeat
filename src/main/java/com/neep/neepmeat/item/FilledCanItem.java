@@ -4,9 +4,8 @@ import com.neep.meatlib.item.BaseItem;
 
 public class FilledCanItem extends BaseItem
 {
-    public FilledCanItem(String registryName, Settings settings)
+    public FilledCanItem(Settings settings)
     {
-        super(registryName, settings);
+        super(settings);
     }
-
 }

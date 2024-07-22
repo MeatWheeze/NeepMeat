@@ -43,7 +43,7 @@ public class BuiltFluid
             block = null;
 
         if (makeItem)
-            bucketItem = new BaseBucketItem(namespace, baseName + "_bucket", still, new MeatlibItemSettings().maxCount(1).recipeRemainder(Items.BUCKET).group(NMItemGroups.GENERAL));
+            bucketItem = Registry.register(Registries.ITEM, new Identifier(namespace, baseName + "_bucket"), new BaseBucketItem(still, new MeatlibItemSettings().maxCount(1).recipeRemainder(Items.BUCKET).group(NMItemGroups.GENERAL)));
         else
             bucketItem = null;
     }

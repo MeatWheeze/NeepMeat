@@ -2,6 +2,7 @@ package com.neep.neepmeat.item;
 
 import com.neep.meatlib.item.BaseItem;
 import com.neep.meatlib.item.TooltipSupplier;
+import com.neep.meatlib.registry.RegistrationContext;
 import com.neep.neepmeat.entity.bovine_horror.BovineHorrorEntity;
 import com.neep.neepmeat.implant.player.EntityImplantInstaller;
 import com.neep.neepmeat.init.NMEntities;
@@ -12,9 +13,9 @@ import net.minecraft.world.World;
 
 public class ChrysalisItem extends BaseItem implements EntityImplantInstaller
 {
-    public ChrysalisItem(String registryName, TooltipSupplier tooltipSupplier, Settings settings)
+    public ChrysalisItem(RegistrationContext registryName, TooltipSupplier tooltipSupplier, Settings settings)
     {
-        super(registryName, tooltipSupplier, settings.rarity(Rarity.RARE));
+        super(tooltipSupplier, settings.rarity(Rarity.RARE));
     }
 
     @Override

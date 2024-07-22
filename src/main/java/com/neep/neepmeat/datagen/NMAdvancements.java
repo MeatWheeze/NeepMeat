@@ -106,7 +106,7 @@ public class NMAdvancements extends FabricAdvancementProvider
 
         Advancement obtain_whisper_brass = getItem(
                 consumer, "main", "obtain_whisper_brass", obtain_whisper_flour,
-                NMItems.WHISPER_BRASS
+                NMItems.WHISPER_BRASS_INGOT
         );
 
         Advancement place_ejector = getItem(

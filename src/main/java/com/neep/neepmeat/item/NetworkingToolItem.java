@@ -4,7 +4,7 @@ import com.google.common.collect.Queues;
 import com.google.common.collect.Sets;
 import com.neep.meatlib.item.BaseItem;
 import com.neep.meatlib.item.TooltipSupplier;
-import com.neep.meatlib.registry.ItemRegistry;
+import com.neep.meatlib.registry.RegistrationContext;
 import com.neep.neepmeat.api.DataPort;
 import com.neep.neepmeat.init.NMBlocks;
 import com.neep.neepmeat.init.NMItems;
@@ -41,10 +41,9 @@ import static com.neep.neepmeat.client.plc.PLCHudRenderer.drawCuboidShapeOutline
 
 public class NetworkingToolItem extends BaseItem
 {
-    public NetworkingToolItem(String registryName, TooltipSupplier tooltipSupplier, Settings settings)
+    public NetworkingToolItem(RegistrationContext registryName, TooltipSupplier tooltipSupplier, Settings settings)
     {
-        super(registryName, tooltipSupplier, settings.maxCount(1));
-        ItemRegistry.queue(this);
+        super(tooltipSupplier, settings.maxCount(1));
     }
 
     @Override

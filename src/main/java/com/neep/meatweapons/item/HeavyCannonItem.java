@@ -21,7 +21,7 @@ public class HeavyCannonItem extends BaseGunItem
 
     public HeavyCannonItem()
     {
-        super("heavy_cannon", MWItems.SMALL_BALLISTIC_MAGAZINE, 1, 15,false, new MeatlibItemSettings());
+        super(MWItems.SMALL_BALLISTIC_MAGAZINE, 1, 15,false, new MeatlibItemSettings());
         this.sounds.put(GunSounds.FIRE_PRIMARY, NMSounds.HAND_CANNON_FIRE);
         this.sounds.put(GunSounds.RELOAD, NMSounds.HAND_CANNON_RELOAD);
     }

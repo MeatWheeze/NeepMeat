@@ -1,7 +1,6 @@
 package com.neep.neepmeat.item;
 
 import com.neep.meatlib.item.MeatlibItem;
-import com.neep.meatlib.registry.ItemRegistry;
 import net.minecraft.item.ArmorItem;
 import net.minecraft.item.ArmorMaterial;
 import software.bernie.geckolib.animatable.GeoItem;
@@ -29,19 +28,12 @@ public class MeatSteelArmourItem extends ArmorItem implements MeatlibItem, GeoIt
     {
         super(material, type, settings);
         this.registryName = name;
-        ItemRegistry.queue(this);
     }
 
     private PlayState predicate(AnimationState<MeatSteelArmourItem> event)
     {
         event.getController().setAnimation(RawAnimation.begin().thenLoop("animation.meat_steel_armour.idle"));
         return PlayState.CONTINUE;
-    }
-
-    @Override
-    public String getRegistryName()
-    {
-        return registryName;
     }
 
     @Override

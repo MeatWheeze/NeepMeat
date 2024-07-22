@@ -1,22 +1,12 @@
 package com.neep.meatlib.item;
 
 
-import com.neep.meatlib.registry.ItemRegistry;
+import com.neep.meatlib.registry.RegistrationContext;
 
 public class BaseCraftingItem extends BaseItem implements MeatlibItem
 {
-    private final String registryName;
-
-    public BaseCraftingItem(String registryName, int loreLines, Settings settings)
+    public BaseCraftingItem(RegistrationContext ctx, int loreLines, Settings settings)
     {
-        super(registryName, TooltipSupplier.simple(loreLines), settings);
-        this.registryName = registryName;
-        ItemRegistry.queue(this);
-    }
-
-    @Override
-    public String getRegistryName()
-    {
-        return registryName;
+        super(TooltipSupplier.simple(loreLines), settings);
     }
 }

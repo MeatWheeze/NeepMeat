@@ -19,10 +19,9 @@ import net.minecraft.world.event.GameEvent;
 public class AirtruckItem extends BaseItem
 {
 
-    public AirtruckItem(String registryName, TooltipSupplier tooltipSupplier, Settings settings)
+    public AirtruckItem(TooltipSupplier tooltipSupplier, Settings settings)
     {
-        super(registryName, tooltipSupplier, settings);
-        ItemRegistry.queue(this);
+        super(tooltipSupplier, settings);
     }
 
     @Override

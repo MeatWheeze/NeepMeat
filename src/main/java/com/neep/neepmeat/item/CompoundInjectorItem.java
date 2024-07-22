@@ -2,7 +2,7 @@ package com.neep.neepmeat.item;
 
 import com.neep.meatlib.item.BaseItem;
 import com.neep.meatlib.item.TooltipSupplier;
-import com.neep.meatlib.registry.ItemRegistry;
+import com.neep.meatlib.registry.RegistrationContext;
 import com.neep.neepmeat.init.NMItems;
 import com.neep.neepmeat.init.NMSounds;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
@@ -10,7 +10,6 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.StackReference;
 import net.minecraft.item.Item;
@@ -30,10 +29,9 @@ public class CompoundInjectorItem extends BaseItem
     public final int healsFor = 8; // Health replenished each use (discounting initial damage)
     public final int initialDamage = 1;
 
-    public CompoundInjectorItem(final String registryName, FabricItemSettings settings)
+    public CompoundInjectorItem(RegistrationContext ctx, FabricItemSettings settings)
     {
-        super(registryName, CompoundInjectorItem::applyTooltip, settings.maxDamage(3).maxDamageIfAbsent(3));
-        ItemRegistry.queue(this);
+        super(CompoundInjectorItem::applyTooltip, settings.maxDamage(3).maxDamageIfAbsent(3));
     }
 
     @Override

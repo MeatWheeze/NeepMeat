@@ -21,6 +21,4 @@ public interface MeatlibItem extends SelfRegistrable
             MeatlibItemGroups.add(group, (Item) this);
         }
     }
-
-    String getRegistryName();
 }

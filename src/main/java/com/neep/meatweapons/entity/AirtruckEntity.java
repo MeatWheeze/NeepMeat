@@ -104,7 +104,7 @@ public class AirtruckEntity extends AbstractVehicleEntity implements GeoEntity
     @Override
     public ItemStack asStack()
     {
-        return MWItems.AIRTRUCK_ITEM.getDefaultStack();
+        return MWItems.AIRTRUCK.getDefaultStack();
     }
 
     @Override

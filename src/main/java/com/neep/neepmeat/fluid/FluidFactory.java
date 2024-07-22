@@ -67,7 +67,7 @@ public class FluidFactory
         if (bucketItem != Items.AIR)
             throw new IllegalStateException("A bucket item is already registered for fluid '" + baseName + "'");
 
-        bucketItem = new BaseBucketItem(namespace, bucketName, still, new MeatlibItemSettings().maxCount(1).recipeRemainder(Items.BUCKET).group(NMItemGroups.GENERAL));
+        bucketItem = Registry.register(Registries.ITEM, new Identifier(namespace, bucketName), new BaseBucketItem(still, new MeatlibItemSettings().maxCount(1).recipeRemainder(Items.BUCKET).group(NMItemGroups.GENERAL)));
         return bucketItem;
     }
 

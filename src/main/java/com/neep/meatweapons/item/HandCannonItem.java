@@ -24,7 +24,7 @@ public class HandCannonItem extends BaseGunItem implements Aimable
 
     public HandCannonItem()
     {
-        super("hand_cannon", Items.DIRT, 8, 10, false, new MeatlibItemSettings());
+        super(Items.DIRT, 8, 10, false, new MeatlibItemSettings());
         this.sounds.put(GunSounds.FIRE_PRIMARY, NMSounds.HAND_CANNON_FIRE);
         this.sounds.put(GunSounds.RELOAD, NMSounds.HAND_CANNON_RELOAD);
     }

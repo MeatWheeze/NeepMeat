@@ -39,7 +39,7 @@ public class FusionCannonItem extends BaseGunItem implements WeakTwoHanded, Aima
 {
     public FusionCannonItem()
     {
-        super("fusion", MWItems.SMALL_BALLISTIC_MAGAZINE, 16, 10, false, new MeatlibItemSettings());
+        super(MWItems.SMALL_BALLISTIC_MAGAZINE, 16, 10, false, new MeatlibItemSettings());
         this.sounds.put(GunSounds.FIRE_PRIMARY, NMSounds.FUSION_FIRE);
         this.sounds.put(GunSounds.RELOAD, NMSounds.RELOAD);
     }

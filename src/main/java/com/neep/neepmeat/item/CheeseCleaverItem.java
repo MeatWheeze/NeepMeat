@@ -1,6 +1,7 @@
 package com.neep.neepmeat.item;
 
 import com.neep.meatlib.item.BaseSwordItem;
+import com.neep.meatlib.registry.RegistrationContext;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -16,9 +17,9 @@ public class CheeseCleaverItem extends BaseSwordItem
 //    private final AnimationFactory factory = GeckoLibUtil.createFactory(this);
     public static String CONTROLLER_NAME = "controller";
 
-    public CheeseCleaverItem(String registryName, Settings settings)
+    public CheeseCleaverItem(RegistrationContext ctx, Settings settings)
     {
-        super(registryName, ToolMaterials.DIAMOND, 4, -3f, settings);
+        super(ctx, ToolMaterials.DIAMOND, 4, -3f, settings);
     }
 
     public static void writeCharged(ItemStack stack, boolean charged)

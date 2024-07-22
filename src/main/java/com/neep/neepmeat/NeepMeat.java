@@ -102,6 +102,7 @@ public class NeepMeat implements ModInitializer
 		MeatLibRegistration.forContext(FluidTransport.class, FluidTransport.C);
 		MeatLibRegistration.forContext(LivingMachines.class, LivingMachines.C);
 		MeatLibRegistration.forContext(PLCBlocks.class, PLCBlocks.C);
+		MeatLibRegistration.forContext(NMItems.class, NMItems.C);
 
 		try (var mcontext = MeatLib.getContext(NAMESPACE))
 		{

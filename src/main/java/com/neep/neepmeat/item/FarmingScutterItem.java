@@ -1,13 +1,12 @@
 package com.neep.neepmeat.item;
 
 import com.neep.meatlib.item.TooltipSupplier;
+import com.neep.meatlib.registry.RegistrationContext;
 import com.neep.neepmeat.entity.scutter.FarmingScutter;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.EntityType;
-import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUsageContext;
-import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
@@ -18,9 +17,9 @@ import java.util.function.Supplier;
 
 public class FarmingScutterItem extends ScutterItem<FarmingScutter>
 {
-    public FarmingScutterItem(String registryName, Supplier<EntityType<FarmingScutter>> entityType, TooltipSupplier tooltipSupplier, Settings settings)
+    public FarmingScutterItem(Supplier<EntityType<FarmingScutter>> entityType, TooltipSupplier tooltipSupplier, Settings settings)
     {
-        super(registryName, entityType, tooltipSupplier, settings);
+        super(entityType, tooltipSupplier, settings);
     }
 
     @Override

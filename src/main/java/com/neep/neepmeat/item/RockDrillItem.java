@@ -1,6 +1,7 @@
 package com.neep.neepmeat.item;
 
 import com.neep.meatlib.item.ClientBlockAttackListener;
+import com.neep.meatlib.registry.RegistrationContext;
 import com.neep.neepmeat.api.item.OverrideSwingItem;
 import com.neep.neepmeat.component.CompressedAirComponent;
 import com.neep.neepmeat.datagen.tag.NMTags;

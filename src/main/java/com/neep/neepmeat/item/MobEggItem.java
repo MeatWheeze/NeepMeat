@@ -2,8 +2,7 @@ package com.neep.neepmeat.item;
 
 import com.neep.meatlib.item.MeatlibItem;
 import com.neep.meatlib.item.TooltipSupplier;
-import com.neep.meatlib.registry.ItemRegistry;
-import com.neep.neepmeat.NeepMeat;
+import com.neep.meatlib.registry.RegistrationContext;
 import com.neep.neepmeat.entity.EggEntity;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.EntityType;
@@ -24,15 +23,12 @@ import java.util.List;
 
 public class MobEggItem extends Item implements MeatlibItem
 {
-    private final String registryName;
     private final TooltipSupplier tooltip;
 
-    public MobEggItem(String registryName, TooltipSupplier tooltip, Settings settings)
+    public MobEggItem(RegistrationContext ctx, TooltipSupplier tooltip, Settings settings)
     {
         super(settings);
-        this.registryName = registryName;
         this.tooltip = tooltip;
-        ItemRegistry.queue(NeepMeat.NAMESPACE, (MeatlibItem) this);
     }
 
     @Override
@@ -71,12 +67,6 @@ public class MobEggItem extends Item implements MeatlibItem
             return Text.translatable(this.getTranslationKey(), type.getName());
         }
         else return super.getName(stack);
-    }
-
-    @Override
-    public String getRegistryName()
-    {
-        return registryName;
     }
 
     @Override

@@ -2,7 +2,7 @@ package com.neep.neepmeat.item;
 
 import com.neep.meatlib.item.BaseItem;
 import com.neep.meatlib.item.TooltipSupplier;
-import com.neep.meatlib.registry.ItemRegistry;
+import com.neep.meatlib.registry.RegistrationContext;
 import com.neep.neepmeat.init.NMItems;
 import com.neep.neepmeat.machine.synthesiser.MobSynthesisRegistry;
 import net.minecraft.client.item.TooltipContext;
@@ -26,10 +26,9 @@ import java.util.List;
 
 public class EssentialSaltesItem extends BaseItem
 {
-    public EssentialSaltesItem(String registryName, TooltipSupplier tooltip, Settings settings)
+    public EssentialSaltesItem(RegistrationContext ctx, TooltipSupplier tooltip, Settings settings)
     {
-        super(registryName, tooltip, settings);
-        ItemRegistry.queue(this);
+        super(tooltip, settings);
     }
 
     @Override

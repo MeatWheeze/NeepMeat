@@ -1,7 +1,6 @@
 package com.neep.meatlib.registry;
 
 import com.neep.meatlib.MeatLib;
-import com.neep.meatlib.item.MeatlibItem;
 import com.neep.meatlib.item.MeatlibItemExtension;
 import com.neep.meatlib.util.MeatlibItemGroups;
 import net.minecraft.block.Block;
@@ -28,23 +27,23 @@ public class ItemRegistry
         return Registries.ITEM.getOrEmpty(Registries.BLOCK.getId(block)).orElse(null);
     }
 
-    public static Item queue(String namespace, MeatlibItem item)
-    {
-        MeatLib.assertActive(item);
-        if (!(item instanceof Item))
-        {
-            throw new IllegalArgumentException("tried to queue a non-item for item registration");
-        }
-        ITEMS.put(new Identifier(namespace, item.getRegistryName()), (Item) item);
-        return (Item) item;
-    }
+//    public static Item queue(String namespace, MeatlibItem item)
+//    {
+//        MeatLib.assertActive(item);
+//        if (!(item instanceof Item))
+//        {
+//            throw new IllegalArgumentException("tried to queue a non-item for item registration");
+//        }
+//        ITEMS.put(new Identifier(namespace, item.getRegistryName()), (Item) item);
+//        return (Item) item;
+//    }
 
-    public static <T extends Item & MeatlibItem> T queue(T item)
-    {
-        MeatLib.assertActive(item);
-        ITEMS.put(new Identifier(MeatLib.CURRENT_NAMESPACE, item.getRegistryName()), item);
-        return item;
-    }
+//    public static <T extends Item & MeatlibItem> T queue(T item)
+//    {
+//        MeatLib.assertActive(item);
+//        ITEMS.put(new Identifier(MeatLib.CURRENT_NAMESPACE, item.getRegistryName()), item);
+//        return item;
+//    }
 
     public static <T extends Item> T queue(String path, T item)
     {

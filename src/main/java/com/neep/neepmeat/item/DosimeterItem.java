@@ -3,6 +3,7 @@ package com.neep.neepmeat.item;
 import com.neep.meatlib.item.BaseItem;
 import com.neep.meatlib.item.TooltipSupplier;
 import com.neep.meatlib.registry.ItemRegistry;
+import com.neep.meatlib.registry.RegistrationContext;
 import com.neep.neepmeat.enlightenment.EnlightenmentManager;
 import com.neep.neepmeat.client.screen.util.GUIUtil;
 import com.neep.neepmeat.init.NMComponents;
@@ -20,10 +21,9 @@ import java.text.DecimalFormat;
 
 public class DosimeterItem extends BaseItem
 {
-    public DosimeterItem(String registryName, TooltipSupplier tooltipSupplier, Settings settings)
+    public DosimeterItem(RegistrationContext registryName, TooltipSupplier tooltipSupplier, Settings settings)
     {
-        super(registryName, tooltipSupplier, settings);
-        ItemRegistry.queue(this);
+        super(tooltipSupplier, settings);
     }
 
     @Environment(EnvType.CLIENT)

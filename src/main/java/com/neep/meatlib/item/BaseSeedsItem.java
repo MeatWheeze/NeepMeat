@@ -1,6 +1,5 @@
 package com.neep.meatlib.item;
 
-import com.neep.meatlib.registry.ItemRegistry;
 import com.neep.meatlib.registry.RegistrationContext;
 import com.neep.neepmeat.NMItemGroups;
 import net.minecraft.block.Block;
@@ -21,12 +20,6 @@ public class BaseSeedsItem extends AliasedBlockItem implements MeatlibItem
     {
         super(block, new MeatlibItemSettings().maxCount(maxCount).group(NMItemGroups.GENERAL));
         this.lore = loreLines;
-    }
-
-    @Override
-    public String getRegistryName()
-    {
-        return "";
     }
 
     @Override

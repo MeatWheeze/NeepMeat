@@ -2,7 +2,7 @@ package com.neep.neepmeat.item;
 
 import com.neep.meatlib.item.BaseItem;
 import com.neep.meatlib.item.TooltipSupplier;
-import com.neep.neepmeat.entity.scutter.FarmingScutter;
+import com.neep.meatlib.registry.RegistrationContext;
 import com.neep.neepmeat.entity.scutter.ScutterEntity;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.EntityType;
@@ -21,9 +21,9 @@ public abstract class ScutterItem<T extends ScutterEntity> extends BaseItem
 {
     protected final Supplier<EntityType<T>> entityType;
 
-    public ScutterItem(String registryName, Supplier<EntityType<T>> entityType, TooltipSupplier tooltipSupplier, Settings settings)
+    public ScutterItem(Supplier<EntityType<T>> entityType, TooltipSupplier tooltipSupplier, Settings settings)
     {
-        super(registryName, tooltipSupplier, settings);
+        super(tooltipSupplier, settings);
         this.entityType = entityType;
     }
 

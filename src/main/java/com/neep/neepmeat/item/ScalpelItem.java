@@ -2,6 +2,7 @@ package com.neep.neepmeat.item;
 
 import com.neep.meatlib.item.BaseSwordItem;
 import com.neep.meatlib.recipe.MeatlibRecipes;
+import com.neep.meatlib.registry.RegistrationContext;
 import com.neep.meatweapons.Util;
 import com.neep.neepmeat.init.*;
 import com.neep.neepmeat.recipe.VivisectionRecipe;
@@ -39,9 +40,9 @@ import java.util.function.Predicate;
 
 public class ScalpelItem extends BaseSwordItem
 {
-    public ScalpelItem(String registryName, Settings settings)
+    public ScalpelItem(RegistrationContext ctx, Settings settings)
     {
-        super(registryName, ToolMaterials.GOLD, 4, 1f, settings.maxDamage(256));
+        super(ctx, ToolMaterials.GOLD, 4, 1f, settings.maxDamage(256));
     }
 
     @Override

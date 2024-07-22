@@ -3,6 +3,7 @@ package com.neep.neepmeat.item;
 import com.neep.meatlib.item.MeatlibItem;
 import com.neep.meatlib.item.TooltipSupplier;
 import com.neep.meatlib.registry.ItemRegistry;
+import com.neep.meatlib.registry.RegistrationContext;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.client.model.GenericModel;
 import com.neep.neepmeat.client.renderer.entity.GogglesArmourRenderer;
@@ -35,26 +36,17 @@ public class GogglesItem extends ArmorItem implements MeatlibItem, GeoItem
     private final AnimatableInstanceCache instanceCache = GeckoLibUtil.createInstanceCache(this);
     private final Supplier<Object> renderProvider = GeoItem.makeRenderer(this);
 
-    private final String registryName;
     private final TooltipSupplier tooltip = TooltipSupplier.simple(1);
 
-    public GogglesItem(String name , ArmorMaterial material, Settings settings)
+    public GogglesItem(ArmorMaterial material, Settings settings)
     {
         super(material, Type.HELMET, settings);
-        this.registryName = name;
-        ItemRegistry.queue(this);
     }
 
     private PlayState controller(AnimationState<GogglesItem> event)
     {
 //        event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.goggles.idle"));
         return PlayState.CONTINUE;
-    }
-
-    @Override
-    public String getRegistryName()
-    {
-        return registryName;
     }
 
     @Override

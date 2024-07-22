@@ -2,6 +2,7 @@ package com.neep.neepmeat.item;
 
 import com.neep.meatlib.item.MeatlibItem;
 import com.neep.meatlib.registry.ItemRegistry;
+import com.neep.meatlib.registry.RegistrationContext;
 import net.minecraft.block.AbstractRailBlock;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.DispenserBlock;
@@ -24,15 +25,12 @@ import net.minecraft.world.event.GameEvent;
 
 public class BaseMinecartItem extends MinecartItem implements MeatlibItem
 {
-    protected String registryName;
     private final MinecartFactory factory;
 
-    public BaseMinecartItem(String registryName, Settings settings, MinecartFactory factory)
+    public BaseMinecartItem(Settings settings, MinecartFactory factory)
     {
         super(AbstractMinecartEntity.Type.RIDEABLE, settings);
-        this.registryName = registryName;
         this.factory = factory;
-        ItemRegistry.queue(this);
         DispenserBlock.registerBehavior(this, vanillaDispenserBehaviour(factory));
     }
 
@@ -128,13 +126,6 @@ public class BaseMinecartItem extends MinecartItem implements MeatlibItem
     {
         return vanillaPlacement(context);
     }
-
-    @Override
-    public String getRegistryName()
-    {
-        return registryName;
-    }
-
 
     @FunctionalInterface
     public interface MinecartFactory

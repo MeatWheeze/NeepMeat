@@ -17,9 +17,9 @@ import net.minecraft.world.World;
 
 public class MilkCartonItem extends BaseItem
 {
-    public MilkCartonItem(String registryName, TooltipSupplier tooltipSupplier, Settings settings)
+    public MilkCartonItem(TooltipSupplier tooltipSupplier, Settings settings)
     {
-        super(registryName, tooltipSupplier, settings);
+        super(tooltipSupplier, settings);
     }
 
     @Override

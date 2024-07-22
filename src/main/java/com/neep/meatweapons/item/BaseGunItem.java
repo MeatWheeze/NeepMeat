@@ -2,7 +2,6 @@ package com.neep.meatweapons.item;
 
 import com.neep.meatlib.item.MeatlibItem;
 import com.neep.meatlib.item.MeatlibItemSettings;
-import com.neep.meatlib.registry.ItemRegistry;
 import com.neep.meatweapons.MeatWeapons;
 import com.neep.meatweapons.Util;
 import com.neep.meatweapons.client.renderer.BaseGunRenderer;
@@ -61,20 +60,16 @@ public abstract class BaseGunItem extends Item implements MeatlibItem, GunItem, 
     public final int maxShots;
     public final int cooldown;
     protected final Random random = new Random(0);
-    protected String registryName;
 
     protected final String controllerName = "controller";
 
-    public BaseGunItem(String registryName, Item ammunition, int maxShots, int cooldown, boolean hasLore, MeatlibItemSettings settings)
+    public BaseGunItem(Item ammunition, int maxShots, int cooldown, boolean hasLore, MeatlibItemSettings settings)
     {
         super(settings.maxCount(1).maxDamage(maxShots).maxDamageIfAbsent(maxShots).group(MeatWeapons.WEAPONS));
-//        group(MeatWeapons.WEAPONS);
-        this.registryName = registryName;
         this.ammunition = ammunition;
         this.maxShots = maxShots;
         this.hasLore = hasLore;
         this.cooldown = cooldown;
-        ItemRegistry.queue(this);
 
         SingletonGeoAnimatable.registerSyncedAnimatable(this);
     }
@@ -86,17 +81,12 @@ public abstract class BaseGunItem extends Item implements MeatlibItem, GunItem, 
     }
 
     @Override
-    public String getRegistryName()
-    {
-        return registryName;
-    }
-
-    @Override
     public void appendTooltip(ItemStack itemStack, World world, List<Text> tooltip, TooltipContext tooltipContext)
     {
         if (hasLore)
         {
-            tooltip.add(Text.translatable("item." + MeatWeapons.NAMESPACE + "." + registryName + ".lore"));
+            tooltip.add(Text.translatable(getTranslationKey() + ".lore"));
+//            tooltip.add(Text.translatable("item." + MeatWeapons.NAMESPACE + "." + registryName + ".lore"));
         }
     }
 

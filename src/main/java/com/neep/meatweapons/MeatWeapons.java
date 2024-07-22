@@ -74,6 +74,7 @@ public class MeatWeapons implements ModInitializer
     public void onInitialize()
     {
         MeatLibRegistration.forContext(MWBlocks.class, MWBlocks.C);
+        MeatLibRegistration.forContext(MWItems.class, MWItems.C);
 
         try (var mcontext = MeatLib.getContext(NAMESPACE))
         {

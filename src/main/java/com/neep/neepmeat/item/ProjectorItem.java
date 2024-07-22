@@ -4,7 +4,6 @@ import com.neep.meatlib.item.BaseItem;
 import com.neep.meatlib.item.TooltipSupplier;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.client.screen.tablet.GuideMainScreen;
-import com.neep.neepmeat.guide.GuideNode;
 import com.neep.neepmeat.guide.GuideReloadListener;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -21,14 +20,13 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.world.World;
 
-import javax.tools.Tool;
 import java.util.List;
 
 public class ProjectorItem extends BaseItem
 {
-    public ProjectorItem(String name, Settings settings)
+    public ProjectorItem(Settings settings)
     {
-        super(name, ProjectorItem::applyTooltip, settings);
+        super(ProjectorItem::applyTooltip, settings);
     }
 
     @Override

@@ -33,9 +33,9 @@ public abstract class MeatgunItem extends BaseItem implements Meatgun, WeakTwoHa
 {
     private final Random random = new Random();
 
-    public MeatgunItem(String registryName, TooltipSupplier tooltipSupplier, Settings settings)
+    public MeatgunItem(TooltipSupplier tooltipSupplier, Settings settings)
     {
-        super(registryName, tooltipSupplier, settings.maxCount(1));
+        super(tooltipSupplier, settings.maxCount(1));
     }
 
     @Override

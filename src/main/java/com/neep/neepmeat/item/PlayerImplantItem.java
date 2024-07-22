@@ -3,6 +3,7 @@ package com.neep.neepmeat.item;
 import com.neep.meatlib.item.BaseItem;
 import com.neep.meatlib.item.TooltipSupplier;
 import com.neep.meatlib.registry.ItemRegistry;
+import com.neep.meatlib.registry.RegistrationContext;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.implant.player.EntityImplantInstaller;
 import com.neep.neepmeat.init.NMComponents;
@@ -18,11 +19,10 @@ public class PlayerImplantItem extends BaseItem implements EntityImplantInstalle
 {
     protected final Identifier implantId;
 
-    public PlayerImplantItem(String registryName, int lines, Identifier implantId, Settings settings)
+    public PlayerImplantItem(RegistrationContext ctx, String registryName, int lines, Identifier implantId, Settings settings)
     {
-        super(registryName, new ImplantTooltipSupplier(registryName, lines), settings);
+        super(new ImplantTooltipSupplier(registryName, lines), settings);
         this.implantId = implantId;
-        ItemRegistry.queue(this);
     }
 
     @Override

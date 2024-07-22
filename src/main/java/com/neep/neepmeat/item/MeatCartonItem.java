@@ -26,9 +26,9 @@ import java.util.List;
 
 public class MeatCartonItem extends BaseItem
 {
-    public MeatCartonItem(String registryName, TooltipSupplier tooltip, Settings settings)
+    public MeatCartonItem(TooltipSupplier tooltip, Settings settings)
     {
-        super(registryName, tooltip, settings);
+        super(tooltip, settings);
     }
 
     @Override

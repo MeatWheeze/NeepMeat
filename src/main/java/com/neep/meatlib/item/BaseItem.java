@@ -10,26 +10,17 @@ import java.util.List;
 
 public class BaseItem extends Item implements MeatlibItem
 {
-    private final String registryName;
     private final TooltipSupplier tooltipSupplier;
 
-    public BaseItem(final String registryName, TooltipSupplier tooltipSupplier, Settings settings)
+    public BaseItem(TooltipSupplier tooltipSupplier, Settings settings)
     {
         super(settings);
-        this.registryName = registryName;
         this.tooltipSupplier = tooltipSupplier;
     }
-    public BaseItem(final String registryName, Settings settings)
+    public BaseItem(Settings settings)
     {
         super(settings);
-        this.registryName = registryName;
         this.tooltipSupplier = TooltipSupplier.blank();
-    }
-
-    @Override
-    public String getRegistryName()
-    {
-        return registryName;
     }
 
     @Override

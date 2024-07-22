@@ -1,8 +1,10 @@
 package com.neep.meatlib.registry;
 
+import com.neep.meatlib.util.MeatlibItemGroups;
 import it.unimi.dsi.fastutil.objects.Object2ObjectFunction;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemGroup;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
@@ -14,7 +16,16 @@ public interface SelfRegistrable
 
     static SelfRegistrable ofItem(Item item)
     {
-        return id -> Registry.register(Registries.ITEM, id, item);
+        return id ->
+        {
+            Registry.register(Registries.ITEM, id, item);
+
+            ItemGroup group = (item).meatlib$getItemGroup();
+            if (group != null)
+            {
+                MeatlibItemGroups.add(group, item);
+            }
+        };
     }
 
     static SelfRegistrable ofBlock(Block block)
