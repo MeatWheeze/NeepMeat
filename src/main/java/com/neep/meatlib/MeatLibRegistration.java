@@ -42,9 +42,18 @@ public class MeatLibRegistration
                     .filter(f -> ctx.isValidClass(f.getType()))
                     .forEach(f -> processField(namespace, ctx, f));
 
-            ctx.registerAll();
-
-            it.remove();
+            try
+            {
+                ctx.registerAll();
+            }
+            catch (Exception e)
+            {
+                MeatLib.LOGGER.error(e);
+            }
+            finally
+            {
+                it.remove();
+            }
         }
     }
 

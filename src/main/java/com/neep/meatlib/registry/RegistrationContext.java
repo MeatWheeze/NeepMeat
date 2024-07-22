@@ -1,7 +1,8 @@
 package com.neep.meatlib.registry;
 
+import com.google.common.base.MoreObjects;
+import com.neep.meatlib.MeatLib;
 import com.neep.meatlib.registry.annotation.Path;
-import com.neep.neepmeat.machine.live_machine.block.CrusherSegmentBlock;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
@@ -9,10 +10,7 @@ import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.Field;
-import java.util.IdentityHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * An object that holds {@link SelfRegistrable}s before they are registered.
@@ -22,6 +20,7 @@ public class RegistrationContext
 {
     private final String namespace;
     private final Set<Class<?>> validClasses;
+    private boolean registered = false;
 
 //    private final Multimap<Object, SelfRegistrable> subEntries = Multimaps.newListMultimap(new IdentityHashMap<>(), ObjectArrayList::new);
 //    private final Multimap<Object, Pair<SelfRegistrable.PathProcessor, SelfRegistrable>> processedSubEntries = Multimaps.newListMultimap(new IdentityHashMap<>(), ObjectArrayList::new);
@@ -66,17 +65,33 @@ public class RegistrationContext
 
     public <T> T addParent(Identifier id, T object)
     {
-        if (object instanceof CrusherSegmentBlock bdb)
-        {
-            System.out.println(id);
-        }
+//        if (object instanceof ItemDuctBlock bbb)
+//        {
+//            System.out.println("Adding parent: " + bbb.hashCode());
+//        }
 
         SelfRegistrable registrable = toRegistrable(object);
         if (registrable != null)
         {
-            RootNode node = new RootNode(registrable, id.getPath());
-            allNodes.put(object, node);
-            rootNodes.add(node);
+            allNodes.compute(object, (o, n) ->
+            {
+                if (n instanceof RootNode rootNode)
+                {
+                    rootNode.setPath(id.getPath());
+                    return rootNode;
+                }
+                else // If node is null or is a normal node
+                {
+                    RootNode rootNode = new RootNode(n, registrable);
+                    rootNode.setPath(id.getPath());
+                    rootNodes.add(rootNode);
+                    return rootNode;
+                }
+            });
+        }
+        else
+        {
+            MeatLib.LOGGER.error("Cannot extract a SelfRegistrable from root object {} ", object);
         }
         return object;
     }
@@ -97,26 +112,50 @@ public class RegistrationContext
 
     /**
      * For use when the key and entry may not be equal.
-     * @param key The object that the {@link SelfRegistrable} is extracted from. May not be the same as entry.
+     * @param parent
+     * @param key The object that a {@link SelfRegistrable} is extracted from. May not be the same as entry.
      */
-    private <T extends SelfRegistrable> T append(Object object, Object key, T entry, SelfRegistrable.PathProcessor processor)
+    private <T extends SelfRegistrable> T append(Object parent, Object key, T entry, SelfRegistrable.PathProcessor processor)
     {
-        Node node = allNodes.get(object).addChild(new Node(entry, processor));
-        allNodes.put(key, node);
+        // Get or create the parent node
+        Node parentNode = allNodes.get(parent);
+        if (parentNode == null)
+        {
+            @Nullable SelfRegistrable rootRegistrable = toRegistrable(parent);
+            if (rootRegistrable != null)
+            {
+                parentNode = new Node(rootRegistrable);
+                allNodes.put(parent, parentNode);
+            }
+            else
+            {
+                MeatLib.LOGGER.error("Cannot extract a SelfRegistrable from root object {} ", parent);
+                return entry;
+            }
+        }
+
+        // Get or create the entry node
+        Node node = allNodes.computeIfAbsent(key, k -> new Node(entry, processor));
+
+        // Update the path processor if the node was created without context
+        if (node.processor != processor)
+            node.setProcessor(processor);
+
+        parentNode.addChild(node);
         return entry;
     }
 
     /**
      * For use when the key and are equal.
      */
-    public <T extends SelfRegistrable> T append(Object object, T entry)
+    public <T extends SelfRegistrable> T append(Object root, T entry)
     {
-        return append(object, entry, entry, s -> s);
+        return append(root, entry, entry, s -> s);
     }
 
-    public <T extends SelfRegistrable> T appendItem(Object object, T entry)
+    public <T extends SelfRegistrable> T appendItem(Object root, T entry)
     {
-        return append(object, entry);
+        return append(root, entry);
     }
 
     /**
@@ -155,14 +194,14 @@ public class RegistrationContext
     {
 //        if (!processedSubEntries.isEmpty())
 //        {
-//            NeepMeat.LOGGER.error("Some processed sub-entries for {} were not consumed: {}",
+//            MeatLib.LOGGER.error("Some processed sub-entries for {} were not consumed: {}",
 //                    namespace,
 //                    processedSubEntries.values().stream().map(Pair::value).collect(Collectors.toList()));
 //        }
 //
 //        if (!subEntries.isEmpty())
 //        {
-//            NeepMeat.LOGGER.error("Some normal sub-entries for {} were not consumed: {}",
+//            MeatLib.LOGGER.error("Some normal sub-entries for {} were not consumed: {}",
 //                    namespace,
 //                    new ArrayList<>(subEntries.values()));
 //        }
@@ -174,14 +213,33 @@ public class RegistrationContext
 //            e.value().register(e.key());
 //        });
 
-        rootNodes.forEach(node -> node.traverse(namespace));
+        if (registered)
+            throw new IllegalStateException(this + ": registerAll called more than once!");
+
+        registered = true;
+
+//        int count = 0;
+//        for (var node : allNodes.values())
+//        {
+//            if (node.registrable instanceof SmoothTileBlock smb)
+//            {
+//                count++;
+//            }
+//        }
+//        System.out.println("Count: " + count);
+
+        rootNodes.forEach(node ->
+        {
+            node.traverse(namespace);
+        });
+
     }
 
     static class Node
     {
         protected final SelfRegistrable registrable;
-        protected final SelfRegistrable.PathProcessor processor;
-        protected final List<Node> children = new ObjectArrayList<>();
+        protected SelfRegistrable.PathProcessor processor;
+        protected final Set<Node> children = new HashSet<>();
 
         public Node(SelfRegistrable registrable, SelfRegistrable.PathProcessor processor)
         {
@@ -211,26 +269,80 @@ public class RegistrationContext
             children.add(node);
             return node;
         }
+
+        public void setProcessor(SelfRegistrable.PathProcessor processor)
+        {
+            this.processor = processor;
+        }
+
+        @Override
+        public int hashCode()
+        {
+            return registrable.hashCode();
+        }
+
+        @Override
+        public boolean equals(Object obj)
+        {
+            return obj instanceof Node node && node.registrable == registrable;
+        }
     }
 
     static class RootNode extends Node
     {
-        private final String path;
+        @Nullable private String path;
 
-        public RootNode(SelfRegistrable registrable, String path)
+        public RootNode(SelfRegistrable registrable)
         {
             super(registrable);
+        }
+
+        /**
+         * Promotes a node to a root node.
+         */
+        public RootNode(@Nullable Node previous, SelfRegistrable registrable)
+        {
+            super(registrable);
+            if (previous != null)
+            {
+                children.addAll(previous.children);
+            }
+        }
+
+        public void setPath(String path)
+        {
             this.path = path;
         }
 
         public void traverse(String namespace)
         {
+
+//            if (registrable instanceof ItemDuctBlock idb)
+//            {
+//                System.out.println("registering it");
+//            }
+
+            if (path == null)
+            {
+                MeatLib.LOGGER.error("Null root object path for " + registrable + " of class " + registrable.getClass() + " " + registrable.hashCode());
+                return;
+//                throw new IllegalStateException("Null root object path for " + registrable + " of class " + registrable.getClass() + " " + registrable.hashCode());
+            }
+
             registrable.register(new Identifier(namespace, path));
 
             for (var child : children)
             {
                 child.traverse(namespace, path);
             }
+        }
+
+        @Override
+        public String toString()
+        {
+            return MoreObjects.toStringHelper(this)
+                    .add("path", path)
+                    .toString();
         }
     }
 }

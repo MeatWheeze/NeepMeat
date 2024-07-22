@@ -139,7 +139,7 @@ public class NMBlocks
     public static Block CAUTION_BLOCK_DOOR = new BaseDoorBlock(C, MeatlibBlockSettings.copyOf(CAUTION_BLOCK).nonOpaque(), block(), NMBlockSets.RUSTY_METAL);
     public static Block DIRTY_RED_TILES = new BaseBuildingBlock(C, false, MeatlibBlockSettings.create().strength(1.8f).sounds(BlockSoundGroup.STONE));
     public static Block DIRTY_WHITE_TILES = new BaseBuildingBlock(C, true, MeatlibBlockSettings.create().strength(1.8f).sounds(BlockSoundGroup.STONE));
-    public static Block SAND_BRICKS = new BaseBuildingBlock(C, true, MeatlibBlockSettings.copyOf(Blocks.BRICKS));
+    public static Block SANDY_BRICKS = new BaseBuildingBlock(C, true, MeatlibBlockSettings.copyOf(Blocks.BRICKS));
     public static Block MEAT_STEEL_BLOCK = new BaseBuildingBlock(C, true, MeatlibBlockSettings.copyOf(Blocks.NETHERITE_BLOCK));
     public static Block ASBESTOS = new BaseBuildingBlock(C, false, MeatlibBlockSettings.copyOf(Blocks.STONE));
     public static Block ASBESTOS_TILE = new BaseBuildingBlock(C, false, MeatlibBlockSettings.copyOf(ASBESTOS));
@@ -230,7 +230,7 @@ public class NMBlocks
 //    public static Block AGITATOR = new AgitatorBlock("agitator", block().requiresMotor(), MeatlibBlockSettings.copyOf(MACHINE_SETTINGS)));
     @Path("grinder") public static Block CRUSHER = new GrinderBlock(C, block().requiresMotor().tooltip(TooltipSupplier.simple(1)), MeatlibBlockSettings.copyOf(MACHINE_SETTINGS));
     @Path("large_crusher") public static Multiblock2ControllerBlock<LargeCrusherStructureBlock> LARGE_CRUSHER = new LargeCrusherBlock(C, block().requiresMotor(), MeatlibBlockSettings.copyOf(MACHINE_SETTINGS));
-    @Path("alloy_kiln") public static Block ALLOY_KILN = new AlloyKilnBlock(C, block(), MeatlibBlockSettings.copyOf(NMBlocks.SAND_BRICKS));
+    @Path("alloy_kiln") public static Block ALLOY_KILN = new AlloyKilnBlock(C, block(), MeatlibBlockSettings.copyOf(NMBlocks.SANDY_BRICKS));
     @Path("crucible") public static Block CRUCIBLE = new CrucibleBlock(C, block(), FLUID_PIPE_SETTINGS);
     @Path("collector") public static Block COLLECTOR = new FatCollectorBlock(C, block(), FLUID_PIPE_SETTINGS);
     @Path("assembler") public static AssemblerBlock ASSEMBLER = new AssemblerBlock(C, block().tooltip(TooltipSupplier.hidden(1)).requiresVascular(), MACHINE_SETTINGS);
