@@ -31,7 +31,7 @@ public class MeatLibRegistration
             Class<?> clazz = pair.key();
             @Nullable RegisterMe annotation = clazz.getAnnotation(RegisterMe.class);
             if (annotation == null)
-                throw new IllegalStateException(String.format("Class %s is not annotated with %s", clazz, RegisterMe.class.getSimpleName()));
+                MeatLib.LOGGER.warn(String.format("Class %s is not annotated with %s", clazz, RegisterMe.class.getSimpleName()));
 
             RegistrationContext ctx = pair.value();
             String namespace = annotation.value();

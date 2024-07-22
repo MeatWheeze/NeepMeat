@@ -6,7 +6,6 @@ import com.neep.meatlib.item.ItemSettings;
 import com.neep.meatlib.item.TooltipSupplier;
 import com.neep.meatlib.registry.RegistrationContext;
 import com.neep.meatlib.registry.annotation.RegisterMe;
-import com.neep.meatlib.registry.annotation.WithItem;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.api.FluidPump;
 import com.neep.neepmeat.api.big_block.BigBlock;
@@ -35,8 +34,7 @@ public class LivingMachines
 {
     public static final RegistrationContext C = new RegistrationContext(NeepMeat.NAMESPACE);
 
-    @WithItem
-    public static Block LIVING_MACHINE_CONTROLLER = new TestLivingMachineBlock("living_machine_controller", MeatlibBlockSettings.copyOf(MACHINE_SETTINGS));
+    public static Block LIVING_MACHINE_CONTROLLER = C.withItem(new TestLivingMachineBlock("living_machine_controller", MeatlibBlockSettings.copyOf(MACHINE_SETTINGS)), ItemSettings.block());
 
     public static Block MACHINE_BLOCK = new MachineBlock(C, block(), Map.of(
             StructureProperty.MAX_POWER, new StructureProperty.Entry(300f),

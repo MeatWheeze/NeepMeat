@@ -9,7 +9,6 @@ import com.neep.meatlib.registry.ItemRegistry;
 import com.neep.meatlib.registry.RegistrationContext;
 import com.neep.meatlib.registry.annotation.Path;
 import com.neep.meatlib.registry.annotation.RegisterMe;
-import com.neep.meatlib.registry.annotation.WithItem;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.api.NMSoundGroups;
 import com.neep.neepmeat.api.big_block.BigBlock;
@@ -323,11 +322,11 @@ public class NMBlocks
     @Path("blood_bubble_leaves") public static Block BLOOD_BUBBLE_LEAVES = new BloodBubbleLeavesBlock(C, MeatlibBlockSettings.copyOf(Blocks.AZALEA_LEAVES).tags(Set.of(FabricMineableTags.SHEARS_MINEABLE, LEAVES)).sounds(BlockSoundGroup.AZALEA_LEAVES));
     @Path("blood_bubble_leaves_flowering") public static Block BLOOD_BUBBLE_LEAVES_FLOWERING = new BloodBubbleLeavesBlock.FruitingBloodBubbleLeavesBlock(C, MeatlibBlockSettings.copyOf(BLOOD_BUBBLE_LEAVES).sounds(BlockSoundGroup.SLIME));
     @Path("blood_bubble_planks") public static Block BLOOD_BUBBLE_PLANKS = new BaseBuildingBlock(C, true, MeatlibBlockSettings.create(AXE_MINEABLE).strength(2.0f).sounds(BlockSoundGroup.WOOD));
-    @Path("blood_bubble_planks_trapdoor") @WithItem public static Block BLOOD_BUBBLE_TRAPDOOR = new TrapdoorBlock(MeatlibBlockSettings.create(AXE_MINEABLE).simpleDrop(ItemRegistry::getMatchingItem).strength(2.0f).sounds(BlockSoundGroup.WOOD), BlockSetType.WARPED);
+    @Path("blood_bubble_planks_trapdoor") public static Block BLOOD_BUBBLE_TRAPDOOR = C.withItem(new TrapdoorBlock(MeatlibBlockSettings.create(AXE_MINEABLE).simpleDrop(ItemRegistry::getMatchingItem).strength(2.0f).sounds(BlockSoundGroup.WOOD), BlockSetType.WARPED), block());
     @Path("blood_bubble_planks_door") public static Block BLOOD_BUBBLE_DOOR = new BaseDoorBlock(C, MeatlibBlockSettings.create(AXE_MINEABLE).simpleDrop(ItemRegistry::getMatchingItem).strength(2.0f).sounds(BlockSoundGroup.WOOD).nonOpaque(), block(), BlockSetType.WARPED);
-    @Path("blood_bubble_planks_button") @WithItem public static Block BLOOD_BUBBLE_BUTTON = new ButtonBlock(MeatlibBlockSettings.create(AXE_MINEABLE).simpleDrop(ItemRegistry::getMatchingItem).strength(1.0f).sounds(BlockSoundGroup.WOOD), BlockSetType.WARPED, 20, true);
-    @Path("blood_bubble_planks_fence_gate") @WithItem public static Block BLOOD_BUBBLE_FENCE_GATE = new FenceGateBlock(MeatlibBlockSettings.create(AXE_MINEABLE).simpleDrop(ItemRegistry::getMatchingItem).strength(2.0f).sounds(BlockSoundGroup.WOOD), WoodType.WARPED);
-    @Path("blood_bubble_planks_pressure_plate") @WithItem public static Block BLOOD_BUBBLE_PRESSURE_PLATE = new BloodBubblePressurePlate(PressurePlateBlock.ActivationRule.EVERYTHING, MeatlibBlockSettings.create(AXE_MINEABLE).simpleDrop(ItemRegistry::getMatchingItem).solid().strength(1.0f).sounds(BlockSoundGroup.WOOD));
+    @Path("blood_bubble_planks_button") public static Block BLOOD_BUBBLE_BUTTON = C.withItem(new ButtonBlock(MeatlibBlockSettings.create(AXE_MINEABLE).simpleDrop(ItemRegistry::getMatchingItem).strength(1.0f).sounds(BlockSoundGroup.WOOD), BlockSetType.WARPED, 20, true), block());
+    @Path("blood_bubble_planks_fence_gate") public static Block BLOOD_BUBBLE_FENCE_GATE = C.withItem(new FenceGateBlock(MeatlibBlockSettings.create(AXE_MINEABLE).simpleDrop(ItemRegistry::getMatchingItem).strength(2.0f).sounds(BlockSoundGroup.WOOD), WoodType.WARPED), block());
+    @Path("blood_bubble_planks_pressure_plate") public static Block BLOOD_BUBBLE_PRESSURE_PLATE = C.withItem(new BloodBubblePressurePlate(PressurePlateBlock.ActivationRule.EVERYTHING, MeatlibBlockSettings.create(AXE_MINEABLE).simpleDrop(ItemRegistry::getMatchingItem).solid().strength(1.0f).sounds(BlockSoundGroup.WOOD)), block().tooltip(TooltipSupplier.simple(1)));
 
     // --- Assembly ---
 //    public static Block LINEAR_RAIL = new LinearRailBlock("linear_rail", 64, false, MeatlibBlockSettings.of(Material.METAL).strength(4.0f)));

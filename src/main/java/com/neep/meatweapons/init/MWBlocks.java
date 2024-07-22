@@ -10,7 +10,7 @@ import com.neep.neepmeat.init.NMBlocks;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.minecraft.block.Block;
 
-@RegisterMe(value = MeatWeapons.NAMESPACE)
+@RegisterMe(MeatWeapons.NAMESPACE)
 public class MWBlocks
 {
     public static final RegistrationContext C = new RegistrationContext(MeatWeapons.NAMESPACE);
