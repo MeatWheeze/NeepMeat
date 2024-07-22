@@ -2,6 +2,7 @@ package com.neep.neepmeat.fluid;
 
 import com.neep.meatlib.block.MeatlibBlockSettings;
 import com.neep.meatlib.item.MeatlibItemSettings;
+import com.neep.meatlib.util.MeatlibItemGroups;
 import com.neep.neepmeat.NMItemGroups;
 import com.neep.neepmeat.item.BaseBucketItem;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
@@ -11,6 +12,7 @@ import net.minecraft.block.FluidBlock;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemGroup;
 import net.minecraft.item.Items;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
@@ -43,9 +45,19 @@ public class BuiltFluid
             block = null;
 
         if (makeItem)
+        {
             bucketItem = Registry.register(Registries.ITEM, new Identifier(namespace, baseName + "_bucket"), new BaseBucketItem(still, new MeatlibItemSettings().maxCount(1).recipeRemainder(Items.BUCKET).group(NMItemGroups.GENERAL)));
+
+            ItemGroup group = bucketItem.meatlib$getItemGroup();
+            if (group != null)
+            {
+                MeatlibItemGroups.add(group, bucketItem);
+            }
+        }
         else
+        {
             bucketItem = null;
+        }
     }
 
     public Still still()

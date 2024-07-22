@@ -2,6 +2,7 @@ package com.neep.neepmeat.fluid;
 
 import com.neep.meatlib.block.MeatlibBlockSettings;
 import com.neep.meatlib.item.MeatlibItemSettings;
+import com.neep.meatlib.util.MeatlibItemGroups;
 import com.neep.neepmeat.NMItemGroups;
 import com.neep.neepmeat.item.BaseBucketItem;
 import net.minecraft.block.Block;
@@ -12,6 +13,7 @@ import net.minecraft.fluid.FlowableFluid;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemGroup;
 import net.minecraft.item.Items;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
@@ -68,6 +70,13 @@ public class FluidFactory
             throw new IllegalStateException("A bucket item is already registered for fluid '" + baseName + "'");
 
         bucketItem = Registry.register(Registries.ITEM, new Identifier(namespace, bucketName), new BaseBucketItem(still, new MeatlibItemSettings().maxCount(1).recipeRemainder(Items.BUCKET).group(NMItemGroups.GENERAL)));
+
+        ItemGroup group = bucketItem.meatlib$getItemGroup();
+        if (group != null)
+        {
+            MeatlibItemGroups.add(group, bucketItem);
+        }
+
         return bucketItem;
     }
 
