@@ -38,7 +38,7 @@ public class PedestalBlockEntity extends SyncableBlockEntity
     public static final int MAX_COOLDOWN = 10;
     protected int cooldown;
 
-    private MIP mip = new MIP();
+    private final MIP mip = new MIP();
 
     public PedestalBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
     {
@@ -156,11 +156,11 @@ public class PedestalBlockEntity extends SyncableBlockEntity
         public void finishRecipe()
         {
             load(world);
-            Integrator integrator = Integrator.findIntegrator(world, pos, 10);
             try (Transaction transaction = Transaction.openOuter())
             {
-                if (currentRecipe != null && integrator != null)
+                if (currentRecipe != null)
                     currentRecipe.craft(this, transaction);
+
                 transaction.commit();
             }
             setRecipe(null);
@@ -222,7 +222,8 @@ public class PedestalBlockEntity extends SyncableBlockEntity
 
         public Integrator getIntegrator()
         {
-            if (world.getBlockEntity(integrator) instanceof Integrator be) return be;
+            if (world.getBlockEntity(integrator) instanceof Integrator be)
+                return be;
             return null;
         }
     }

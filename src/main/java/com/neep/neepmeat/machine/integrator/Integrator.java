@@ -11,14 +11,13 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
+import java.util.*;
 
 public interface Integrator
 {
+    @Nullable
     static Integrator findIntegrator(World world, BlockPos pos, int maxDist)
     {
         Queue<BlockPos> queue = new LinkedList<>();
@@ -50,6 +49,14 @@ public interface Integrator
     BlockPos getBlockPos();
 
     boolean canEnlighten();
+
+//    static boolean canEnlighten(Set<Integrator> set)
+//    {
+//        for (var integrator : set)
+//        {
+//            if (integrator.canEnlighten())
+//        }
+//    }
 
     void setLookPos(BlockPos pos);
 
