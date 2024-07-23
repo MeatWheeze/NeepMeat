@@ -62,6 +62,8 @@ public class IntegratorBlockEntity extends SyncableBlockEntity implements Integr
     public static final long MAX_DATA = 8 * DataUtil.GIEB;
     protected long data;
 
+    public final long animationOffset = (long) (Math.random() * 20);
+
     protected SnapshotParticipant<Long> dataSnapshot = new SnapshotParticipant<>()
     {
         @Override

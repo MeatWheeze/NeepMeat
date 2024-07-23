@@ -39,13 +39,14 @@ public class IntegratorEggRenderer extends GeoBlockRenderer<IntegratorBlockEntit
 //        addRenderLayer(new IntegratorOverlayRenderLayer(this));
     }
 
-    public static void renderEgg(MatrixStack matrices, IntegratorBlockEntity blockEntity, VertexConsumerProvider vertexConsumers)
+    public static void renderEgg(MatrixStack matrices, IntegratorBlockEntity blockEntity, VertexConsumerProvider vertexConsumers, float tickDelta)
     {
         matrices.push();
         matrices.push();
         if (blockEntity.canGrow())
         {
-            float eggScale = 1 + (float) Math.sin(blockEntity.getWorld().getTime() / 50f) / 16;
+//            float eggScale = 1 + (float) Math.sin(blockEntity.getWorld().getTime() / 50f) / 16;
+            float eggScale = 1 + NMMaths.sin(blockEntity.getWorld().getTime(), tickDelta, 1 / 50f) / 16;
             matrices.translate(0.5, 0, 0.5);
             matrices.scale(eggScale, eggScale, eggScale);
             matrices.translate(-0.5, 0, -0.5);
@@ -77,7 +78,7 @@ public class IntegratorEggRenderer extends GeoBlockRenderer<IntegratorBlockEntit
     {
         if (!be.isMature)
         {
-            renderEgg(matrices, be, vertexConsumers);
+            renderEgg(matrices, be, vertexConsumers, tickDelta);
         }
         else
         {
@@ -93,7 +94,7 @@ public class IntegratorEggRenderer extends GeoBlockRenderer<IntegratorBlockEntit
             matrices.multiply(RotationAxis.POSITIVE_Y.rotation(be.facing));
             matrices.translate(-0.5d, 0d, -0.5d);
 //            matrices.translate(0, 1.8 + Math.sin((be.getWorld().getTime() + tickDelta) / 20) / 15, 0);
-            float s = NMMaths.sin(Integer.MAX_VALUE + be.getWorld().getTime(), tickDelta, 1 / 20f);
+            float s = NMMaths.sin(be.animationOffset + be.getWorld().getTime(), tickDelta, 1 / 20f);
             matrices.translate(0, 1.8 + s / 15, 0);
 
             GeoModel<IntegratorBlockEntity> modelProvider = getGeoModel();

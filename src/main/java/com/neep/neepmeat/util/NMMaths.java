@@ -3,10 +3,7 @@ package com.neep.neepmeat.util;
 import com.neep.meatweapons.mixin.BoxMixin;
 import com.neep.neepmeat.transport.fluid_network.node.FluidNode;
 import net.minecraft.util.math.*;
-import org.checkerframework.framework.qual.NoDefaultQualifierForUse;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.Optional;
 
 import static net.minecraft.util.math.Direction.*;
 
@@ -136,9 +133,22 @@ public class NMMaths
 
     public static float sin(long time, float tickDelta, float timeFactor)
     {
-        float time1 = wrapDegrees(time);
-        return MathHelper.sin((time1 + tickDelta) * timeFactor);
+        // This one is mathematically flawed
+//        float time1 = wrapDegrees(time);
+//        return MathHelper.sin((time1 + tickDelta) * timeFactor);
+
+        // This one has too many trig operations
+        // And time * timeFactor becomes a float rather than a double, causing imprecision. This could be solved by adding casts.
 //        return (float) (Math.sin(time * timeFactor) * MathHelper.cos(tickDelta * timeFactor) + Math.cos(time * timeFactor) * MathHelper.sin(tickDelta * timeFactor));
+
+        // This one works, but the argument could exceed the maximum double value if time and factor are both massive (unlikely)
+        return (float) Math.sin(((double) time + tickDelta) * timeFactor);
+
+        // Something is definitely wrong with this, but I'm not sure what.
+//        int shift = 1000000000;
+//        long upper = (long) (MathHelper.TAU * shift);
+//        float down = ((float) (time % upper)) / shift;
+//        return MathHelper.sin((down + tickDelta) * timeFactor);
     }
 
     public static long wrapDegrees(long degrees)
