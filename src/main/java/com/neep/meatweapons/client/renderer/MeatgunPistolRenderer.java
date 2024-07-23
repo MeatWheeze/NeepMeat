@@ -219,8 +219,8 @@ public class MeatgunPistolRenderer implements BuiltinItemRendererRegistry.Dynami
 
     protected void renderScreen(MatrixStack matrices, ModelTransformationMode mode, VertexConsumerProvider vcp, RootModuleHolder holder, float tickDelta, boolean leftHanded)
     {
-//        if (!mode.isFirstPerson())
-//            return;
+        if (mode == ModelTransformationMode.GROUND || mode == ModelTransformationMode.GUI || mode == ModelTransformationMode.FIXED || mode == ModelTransformationMode.HEAD || mode == ModelTransformationMode.NONE)
+            return;
 
         matrices.push();
 //        float sf1 = MathHelper.sin(AnimationTickHolder.getRenderTime() / 10);
