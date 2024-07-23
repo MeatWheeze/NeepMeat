@@ -16,6 +16,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.util.Hand;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.Nullable;
 import org.lwjgl.glfw.GLFW;
 
 @Environment(value= EnvType.CLIENT)
@@ -55,7 +56,8 @@ public class MWKeys
 //        });
     }
 
-    public static void sendTrigger(World world, PlayerEntity player, GunItem main, GunItem off, int trigger, double pitch, double yaw, int handType, MWAttackC2SPacket.ActionType actionType)
+    public static void sendTrigger(World world, PlayerEntity player, @Nullable GunItem main, @Nullable GunItem off,
+                                   int trigger, double pitch, double yaw, int handType, MWAttackC2SPacket.ActionType actionType)
     {
         if (main != null)
         {

@@ -42,9 +42,9 @@ public class ItemTransport
     public static BlockEntityType<StorageBusBlockEntity> STORAGE_BUS_BE;
     public static BlockEntityType<ItemRequesterBlockEntity> ITEM_REQUESTER_BE;
 
-    public static final Block PIPE_DRIVER = new PipeDriverBlock(C, ItemSettings.block().tooltip(TooltipSupplier.hidden(2)).plcActuator(), FabricBlockSettings.create().hardness(0.3f).sounds(BlockSoundGroup.METAL));
-    public static final Block STORAGE_BUS = new StorageBusBlock(C, ItemSettings.block().tooltip(TooltipSupplier.simple(1)), FabricBlockSettings.create().hardness(0.3f).sounds(BlockSoundGroup.METAL));
-    public static final Block ITEM_REQUESTER = new ItemRequesterBlock(C, ItemSettings.block().tooltip(TooltipSupplier.simple(1)), FabricBlockSettings.create().hardness(0.3f).sounds(BlockSoundGroup.METAL));
+    public static final Block PIPE_DRIVER = new PipeDriverBlock(C, ItemSettings.block().tooltip(TooltipSupplier.hidden(2)).plcActuator(), MeatlibBlockSettings.create().hardness(0.3f).sounds(BlockSoundGroup.METAL));
+    public static final Block STORAGE_BUS = new StorageBusBlock(C, ItemSettings.block().tooltip(TooltipSupplier.simple(1)), MeatlibBlockSettings.create().hardness(0.3f).sounds(BlockSoundGroup.METAL));
+    public static final Block ITEM_REQUESTER = new ItemRequesterBlock(C, ItemSettings.block().tooltip(TooltipSupplier.simple(1)), MeatlibBlockSettings.create().hardness(0.3f).sounds(BlockSoundGroup.METAL));
     public static final Block FILTERED_EJECTOR = new FilteredEjectorBlock(C, ItemSettings.block().tooltip(TooltipSupplier.simple(1)), MeatlibBlockSettings.create());
     public static final Block ITEM_PIPE = new ItemPipeBlock(C, NMBlocks.block().tooltip(TooltipSupplier.simple(1)), MeatlibBlockSettings.copyOf(NMBlocks.ITEM_PIPE_SETTINGS));
     public static final Block OPAQUE_ITEM_PIPE = new ItemPipeBlock(C, NMBlocks.block().tooltip(TooltipSupplier.simple(1)), MeatlibBlockSettings.copyOf(NMBlocks.ITEM_PIPE_SETTINGS));
