@@ -1,5 +1,6 @@
 package com.neep.neepmeat.client.renderer;
 
+import com.neep.neepmeat.util.NMMaths;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.block.entity.BlockEntity;
@@ -39,7 +40,7 @@ public class ItemBlockEntityRenderer<T extends BlockEntity> implements BlockEnti
 
         matrices.translate(0.5, offsetFunction.apply(entity), 0.5);
         // Wrap degrees to ensure precision for long-lived worlds
-        matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees((MathHelper.wrapDegrees(entity.getWorld().getTime())) + tickDelta));
+        matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees((NMMaths.wrapDegrees(entity.getWorld().getTime())) + tickDelta));
 
         MinecraftClient.getInstance().getItemRenderer().renderItem(stack, ModelTransformationMode.GROUND, light, overlay, matrices, vertexConsumers, null, 0);
 
