@@ -12,6 +12,7 @@ import com.neep.meatweapons.item.meatgun.MeatgunModuleItem;
 import com.neep.meatweapons.meatgun.RootModuleHolder;
 import com.neep.meatweapons.meatgun.module.MeatgunModule;
 import com.neep.meatweapons.meatgun.module.ModuleSlot;
+import com.neep.neepmeat.init.NMSounds;
 import com.neep.neepmeat.screen_handler.BasicScreenHandler;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -19,7 +20,11 @@ import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.screen.slot.Slot;
+import net.minecraft.server.world.ServerWorld;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.BlockPos;
 
 import java.util.UUID;
 
@@ -36,15 +41,18 @@ public class TinkerTableScreenHandler extends BasicScreenHandler
 
     public final ChannelManager<SlotClick> slotClick;
 
+    private final BlockPos pos;
+
     public TinkerTableScreenHandler(int syncId, PlayerInventory playerInventory)
     {
-        this(syncId, playerInventory, new SimpleInventory(1));
+        this(syncId, playerInventory, new SimpleInventory(1), BlockPos.ORIGIN);
     }
 
-    public TinkerTableScreenHandler(int syncId, PlayerInventory playerInventory, Inventory blockInv)
+    public TinkerTableScreenHandler(int syncId, PlayerInventory playerInventory, Inventory blockInv, BlockPos pos)
     {
         super(MWScreenHandlers.MEATGUN, playerInventory, blockInv, syncId, null);
         this.slotClick = ChannelManager.create(CHANNEL_ID, CHANNEL_FORMAT, playerInventory.player);
+        this.pos = pos;
 
         addSlot(new Slot(blockInv, 0, 8, BACKGROUND_HEIGHT - 2 - 21)
         {
@@ -118,6 +126,7 @@ public class TinkerTableScreenHandler extends BasicScreenHandler
                             if (moduleStack.isEmpty())
                                 return;
 
+                            playSound(NMSounds.MEATGUN_MODULE_REMOVE);
                             setCursorStack(moduleStack);
                             slot1.set(MeatgunModule.DEFAULT);
                             syncState();
@@ -132,6 +141,7 @@ public class TinkerTableScreenHandler extends BasicScreenHandler
                                 slot1.set(MeatgunModule.DEFAULT);
                                 if (holder.canSupport(cursorType))
                                 {
+                                    playSound(NMSounds.MEATGUN_MODULE_PLACE);
                                     setCursorStack(MeatgunModuleItem.get(previous.getType()));
 
                                     slot1.set(cursorType.create(holder.getListener(), parent));
@@ -152,6 +162,7 @@ public class TinkerTableScreenHandler extends BasicScreenHandler
                         {
                             if (holder.canSupport(cursorType))
                             {
+                                playSound(NMSounds.MEATGUN_MODULE_PLACE);
                                 slot1.set(cursorType.create(holder.getListener(), parent));
                                 getCursorStack().decrement(1);
                                 syncState();
@@ -162,6 +173,14 @@ public class TinkerTableScreenHandler extends BasicScreenHandler
             }
         }
         inventory.markDirty();
+    }
+
+    private void playSound(SoundEvent soundEvent)
+    {
+        if (playerInventory.player.getWorld() instanceof ServerWorld serverWorld)
+        {
+            serverWorld.playSound(null, pos, soundEvent, SoundCategory.BLOCKS, 0.4f, 1f);
+        }
     }
 
     public interface SlotClick

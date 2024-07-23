@@ -103,6 +103,12 @@
     ]
   },
 
+  "meatgun_module_place": { "subtitle": "subtitles.meatweapons.meatgun.place",
+    "sounds": [ "meatweapons:meatgun_place_module" ]
+  },
+  "meatgun_module_remove": { "subtitle": "subtitles.meatweapons.meatgun.remove",
+    "sounds": [ "meatweapons:meatgun_remove_module" ]
+  },
   "chugger_fire": {
     "subtitle": "subtitles.meatweapons.chugger_fire",
     "sounds": [

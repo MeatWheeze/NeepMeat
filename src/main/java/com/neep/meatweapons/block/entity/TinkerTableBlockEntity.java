@@ -64,6 +64,6 @@ public class TinkerTableBlockEntity extends SyncableBlockEntity implements Named
     @Override
     public ScreenHandler createMenu(int syncId, PlayerInventory playerInventory, PlayerEntity player)
     {
-        return new TinkerTableScreenHandler(syncId, playerInventory, inventory);
+        return new TinkerTableScreenHandler(syncId, playerInventory, inventory, getPos());
     }
 }

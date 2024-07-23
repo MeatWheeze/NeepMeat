@@ -62,6 +62,8 @@ public class NMSounds
     public static SoundEvent ZAP_FIRE = SoundRegistry.registerSound(MeatWeapons.NAMESPACE, "zap_fire");
     public static SoundEvent ZAP_HIT = SoundRegistry.registerSound(MeatWeapons.NAMESPACE, "zap_hit");
 
+    public static SoundEvent MEATGUN_MODULE_PLACE = SoundRegistry.registerSound(MeatWeapons.NAMESPACE, "meatgun_module_place");
+    public static SoundEvent MEATGUN_MODULE_REMOVE = SoundRegistry.registerSound(MeatWeapons.NAMESPACE, "meatgun_module_remove");
     public static SoundEvent CHUGGER_FIRE = SoundRegistry.registerSound(MeatWeapons.NAMESPACE, "chugger_fire");
     public static SoundEvent BOSHER_FIRE = SoundRegistry.registerSound(MeatWeapons.NAMESPACE, "bosher_fire");
     public static SoundEvent LONG_BOI_CHARGE = SoundRegistry.registerSound(MeatWeapons.NAMESPACE, "long_boi_charge");
