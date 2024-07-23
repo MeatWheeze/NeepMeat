@@ -9,7 +9,6 @@ import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.fabricmc.fabric.api.transfer.v1.storage.base.CombinedStorage;
 import net.fabricmc.fabric.api.transfer.v1.storage.base.SingleSlotStorage;
 import net.minecraft.inventory.Inventories;
-import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
@@ -22,16 +21,17 @@ import net.minecraft.world.World;
 import java.util.List;
 
 @SuppressWarnings("UnstableApiUsage")
-public class AlloyKilnStorage extends SimpleInventory implements NbtSerialisable
+public class AlloyKilnStorage implements NbtSerialisable
 {
     public static int FUEL = 0;
     public static int INPUT_1 = 1;
     public static int INPUT_2 = 2;
     public static int OUTPUT = 3;
 
-    protected ImplementedInventory inventory;
-    protected InventoryStorage inventoryStorage;
-    protected AlloyKilnBlockEntity parent;
+    protected final ImplementedInventory inventory;
+    private final InventoryStorage inventoryStorage;
+    private final AlloyKilnBlockEntity parent;
+    private final Storage<ItemVariant> inputStorage;
 
     public AlloyKilnStorage(AlloyKilnBlockEntity parent)
     {
@@ -49,10 +49,12 @@ public class AlloyKilnStorage extends SimpleInventory implements NbtSerialisable
             public void markDirty()
             {
                 ImplementedInventory.super.markDirty();
-                AlloyKilnStorage.this.parent.markDirty();
+                parent.markDirty();
+                parent.updateRecipe();
             }
         };
         this.inventoryStorage = InventoryStorage.of(inventory, null);
+        this.inputStorage = new CombinedStorage<>(List.of(inventoryStorage.getSlot(INPUT_1), inventoryStorage.getSlot(INPUT_2)));
         this.parent = parent;
     }
 
@@ -126,10 +128,9 @@ public class AlloyKilnStorage extends SimpleInventory implements NbtSerialisable
 
     public Storage<ItemVariant> getInputStorage()
     {
-        return new CombinedStorage<>(List.of(inventoryStorage.getSlot(INPUT_1), inventoryStorage.getSlot(INPUT_2)));
+        return inputStorage;
     }
 
-    @Override
     public void markDirty()
     {
         parent.markDirty();

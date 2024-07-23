@@ -9,6 +9,7 @@ import com.neep.neepmeat.init.NMrecipeTypes;
 import com.neep.neepmeat.machine.Heatable;
 import com.neep.neepmeat.recipe.AlloyKilnRecipe;
 import com.neep.neepmeat.screen_handler.AlloyKilnScreenHandler;
+import com.neep.neepmeat.util.MiscUtil;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -18,7 +19,6 @@ import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.recipe.Recipe;
 import net.minecraft.screen.NamedScreenHandlerFactory;
 import net.minecraft.screen.PropertyDelegate;
 import net.minecraft.screen.ScreenHandler;
@@ -29,17 +29,16 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Optional;
-
 @SuppressWarnings("UnstableApiUsage")
 public class AlloyKilnBlockEntity extends SyncableBlockEntity implements Heatable, NamedScreenHandlerFactory
 {
+    private boolean updateRecipe;
+
     protected int fuelTime;
     protected int burnTime;
     protected int cookTime;
     protected int cookTimeTotal;
 
-    protected Identifier currentRecipeId;
     protected AlloyKilnRecipe currentRecipe;
 
     protected AlloyKilnStorage storage;
@@ -108,29 +107,27 @@ public class AlloyKilnBlockEntity extends SyncableBlockEntity implements Heatabl
     {
         tryUpdateComparators();
 
-        boolean wasBurning = isBurning();
+        if (updateRecipe)
+        {
+            AlloyKilnRecipe recipe = MeatlibRecipes.getInstance().getFirstMatch(NMrecipeTypes.ALLOY_SMELTING, storage).orElse(null);
+            if (recipe != null)
+            {
+                this.currentRecipe = recipe;
+                markDirty();
+            }
+            updateRecipe = false;
+        }
 
-        if (currentRecipe == null)
-            readCurrentRecipe();
+        boolean wasBurning = isBurning();
 
         this.burnTime = Math.max(0, this.burnTime - 1);
 
-        if (isBurning())
-        {
-            if (isCooking())
-            {
-                int tickIncrement = Heatable.getFurnaceTickIncrement(heatMultiplier);
-                this.cookTime = Math.min(this.cookTimeTotal, this.cookTime + tickIncrement);
-            }
-            else
-            {
-                startCooking();
-            }
-        }
-        else
+        if (!isBurning())
         {
             int time;
-            if (detectRecipe() && (time = storage.decrementFuel()) > 0)
+            if (currentRecipe != null
+                    && canAcceptRecipeOutput(currentRecipe, storage.inventory.getItems())
+                    && (time = storage.decrementFuel()) > 0)
             {
                 this.fuelTime = time;
                 this.burnTime = time;
@@ -142,6 +139,23 @@ public class AlloyKilnBlockEntity extends SyncableBlockEntity implements Heatabl
 
                 if (wasBurning)
                     updateState(world, pos, state);
+            }
+        }
+
+        if (isBurning())
+        {
+            if (!isCooking())
+            {
+                if (currentRecipe != null && canAcceptRecipeOutput(currentRecipe, storage.inventory.getItems()))
+                {
+                    cookTimeTotal = currentRecipe.getTime();
+                }
+            }
+
+            if (isCooking())
+            {
+                int tickIncrement = Heatable.getFurnaceTickIncrement(heatMultiplier);
+                this.cookTime = Math.min(this.cookTimeTotal, this.cookTime + tickIncrement);
             }
         }
 
@@ -166,7 +180,6 @@ public class AlloyKilnBlockEntity extends SyncableBlockEntity implements Heatabl
                 if (recipe.takeInputs(storage, transaction))
                 {
                     this.currentRecipe = recipe;
-                    this.currentRecipeId = recipe.getId();
                     this.cookTimeTotal = recipe.getTime();
                     transaction.commit();
                     sync();
@@ -176,7 +189,6 @@ public class AlloyKilnBlockEntity extends SyncableBlockEntity implements Heatabl
             }
         }
         this.currentRecipe = null;
-        this.currentRecipeId = null;
         this.cookTimeTotal = -1;
         this.cookTime = 0;
     }
@@ -211,20 +223,15 @@ public class AlloyKilnBlockEntity extends SyncableBlockEntity implements Heatabl
         {
             try (Transaction transaction = Transaction.openOuter())
             {
-                if (currentRecipe.ejectOutput(storage, transaction))
-                {
+                if (currentRecipe.takeInputs(storage, transaction) && currentRecipe.ejectOutput(storage, transaction))
                     transaction.commit();
-                }
                 else
-                {
                     transaction.abort();
-                }
             }
             sync();
         }
 
         this.currentRecipe = null;
-        this.currentRecipeId = null;
         this.cookTimeTotal = -1;
         this.cookTime = 0;
     }
@@ -237,16 +244,6 @@ public class AlloyKilnBlockEntity extends SyncableBlockEntity implements Heatabl
     public boolean isBurning()
     {
         return burnTime > 0;
-    }
-
-    public void readCurrentRecipe()
-    {
-        if (world != null)
-        {
-            Optional<? extends Recipe<?>> optional = getWorld().getRecipeManager().get(currentRecipeId);
-            optional.ifPresentOrElse(recipe -> this.currentRecipe = (AlloyKilnRecipe) recipe,
-                    () -> this.currentRecipe = null);
-        }
     }
 
     @Override
@@ -311,12 +308,23 @@ public class AlloyKilnBlockEntity extends SyncableBlockEntity implements Heatabl
 
         storage.readNbt(nbt);
 
-        this.currentRecipeId = new Identifier(nbt.getString("current_recipe"));
-        readCurrentRecipe();
+        this.currentRecipe = MiscUtil.ifPresentOrNull(nbt, "current_recipe",
+                s -> (AlloyKilnRecipe) MeatlibRecipes.getInstance().get((Identifier.tryParse(s))).orElse(null));
     }
 
     public AlloyKilnStorage getStorage()
     {
         return storage;
+    }
+
+    public void updateRecipe()
+    {
+        updateRecipe = true;
+    }
+
+    @Override
+    public void markDirty()
+    {
+        super.markDirty();
     }
 }

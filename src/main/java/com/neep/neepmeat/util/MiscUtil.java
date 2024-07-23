@@ -6,6 +6,7 @@ import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.Entity;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.function.BooleanBiFunction;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.shape.VoxelShape;
@@ -14,6 +15,7 @@ import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
+import java.util.function.Function;
 
 public class MiscUtil
 {
@@ -99,5 +101,13 @@ public class MiscUtil
             newShape = VoxelShapes.combineAndSimplify(newShape, shape1, BooleanBiFunction.OR);
         }
         return newShape;
+    }
+
+    public static <T> T ifPresentOrNull(NbtCompound nbt, String key, Function<String, T> function)
+    {
+        if (nbt.contains(key))
+            return function.apply(nbt.getString(key));
+        else
+            return null;
     }
 }
