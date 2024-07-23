@@ -25,6 +25,9 @@ public class GuideReloadListener implements SimpleSynchronousResourceReloadListe
     private final Collection<GuideNode.ArticleNode> articleNodes = new ArrayList<>();
     private @Nullable GuideNode root;
 
+    private Deque<GuideNode> persistentPath = new LinkedList<>();
+    @Nullable private Article persistentArticle;
+
     public static GuideReloadListener getInstance()
     {
         return INSTANCE;
@@ -47,6 +50,8 @@ public class GuideReloadListener implements SimpleSynchronousResourceReloadListe
         root = null;
         articleNodes.clear();
         articles.clear();
+        persistentPath.clear();
+        persistentArticle = null;
 
         String language = MinecraftClient.getInstance().getLanguageManager().getLanguage();
         String suffix = language + ".json";
@@ -136,6 +141,7 @@ public class GuideReloadListener implements SimpleSynchronousResourceReloadListe
         return node;
     }
 
+    @Nullable
     public GuideNode getRootNode()
     {
         return root;
@@ -195,5 +201,20 @@ public class GuideReloadListener implements SimpleSynchronousResourceReloadListe
     public Collection<GuideNode.ArticleNode> getArticleNodes()
     {
         return articleNodes;
+    }
+
+    public Deque<GuideNode> getPersistentPath()
+    {
+        return persistentPath;
+    }
+
+    public @Nullable Article getPersistentArticle()
+    {
+        return persistentArticle;
+    }
+
+    public void setPersistentArticle(Article article)
+    {
+        this.persistentArticle = article;
     }
 }

@@ -80,7 +80,8 @@ public class ProjectorItem extends BaseItem
         {
             MinecraftClient client = MinecraftClient.getInstance();
 
-            if (!GuideReloadListener.getInstance().isValid())
+            GuideReloadListener listener = GuideReloadListener.getInstance();
+            if (!listener.isValid())
             {
                 NeepMeat.LOGGER.error("Error opening NEEPMeat guide.");
                 return null;
@@ -92,6 +93,10 @@ public class ProjectorItem extends BaseItem
                 client.player.closeHandledScreen();
 
             client.setScreen(screen);
+
+            if (listener.getPersistentArticle() != null)
+                screen.openArticle(listener.getPersistentArticle());
+
             return screen;
         }
     }

@@ -160,7 +160,8 @@ public interface GuideNode
         public void visitScreen(GuideScreen screen)
         {
             Article article = GuideReloadListener.getInstance().getArticle(getId());
-            screen.setRightPane(new GuideArticlePane(screen, article));
+            GuideReloadListener.getInstance().setPersistentArticle(article);
+            screen.openArticle(article);
         }
 
         public boolean matchesLookupTerm(String term)

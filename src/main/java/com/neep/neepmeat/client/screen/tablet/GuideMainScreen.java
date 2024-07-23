@@ -12,6 +12,7 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
+import org.jetbrains.annotations.Nullable;
 import org.lwjgl.glfw.GLFW;
 
 import java.util.Deque;
@@ -36,8 +37,8 @@ public class GuideMainScreen extends Screen implements GuideScreen
 
 //    private final GuideScreenHandler handler;
 
-    // Current location within the entry tree
-    protected final Deque<GuideNode> path = new LinkedList<>();
+    // Current menu location
+    protected final Deque<GuideNode> path;
 
 
     public GuideMainScreen()
@@ -48,12 +49,24 @@ public class GuideMainScreen extends Screen implements GuideScreen
         this.rightPane = new GuideArticlePane(this, Article.EMPTY);
         this.start = true;
 
-        GuideNode root = GuideReloadListener.getInstance().getRootNode();
+        GuideReloadListener reloadListener = GuideReloadListener.getInstance();
+        @Nullable GuideNode root = reloadListener.getRootNode();
+
         if (root != null)
         {
-            push(root);
+            path = reloadListener.getPersistentPath();
+
+            if (path.isEmpty())
+            {
+                push(root);
+            }
         }
-//        else throw new IllegalStateException("Error loading the guide contents.");
+        else
+        {
+            // This is an invalid state caused when the guide is empty.
+            // Some logic elsewhere should prevent this...
+            path = new LinkedList<>();
+        }
     }
 
     @Override
@@ -98,6 +111,12 @@ public class GuideMainScreen extends Screen implements GuideScreen
     public int getAnimationTicks()
     {
         return animationTicks;
+    }
+
+    @Override
+    public void openArticle(Article article)
+    {
+        setRightPane(new GuideArticlePane(this, article));
     }
 
     @Override

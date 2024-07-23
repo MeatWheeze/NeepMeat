@@ -1,6 +1,7 @@
 package com.neep.neepmeat.client.screen.tablet;
 
 import com.neep.neepmeat.guide.GuideNode;
+import com.neep.neepmeat.guide.article.Article;
 
 import java.util.Deque;
 
@@ -13,4 +14,6 @@ public interface GuideScreen
     Deque<GuideNode> getPath();
 
     int getAnimationTicks();
+
+    void openArticle(Article article);
 }
