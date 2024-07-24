@@ -171,7 +171,7 @@ public class PedestalBlockEntity extends SyncableBlockEntity
         public void update()
         {
             load(world);
-            if (currentRecipe == null)
+            if (currentRecipe == null && world.getTime() % 5 == 0)
             {
                 Integrator integrator = Integrator.findIntegrator(world, pos, 10);
                 if (integrator == null || !integrator.canEnlighten())
