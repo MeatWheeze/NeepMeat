@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "minecraft:iron_ingot"
+    },
+    {
+      "item": "minecraft:iron_nugget"
+    },
+    {
+      "item": "minecraft:iron_nugget"
+    },
+    {
+      "item": "minecraft:iron_nugget"
+    },
+    {
+      "item": "neepmeat:meat_scrap"
+    },
+    {
+      "item": "neepmeat:meat_scrap"
+    }
+  ],
+  "result": {
+    "item": "meatweapons:small_ballistic_magazine",
+    "count": 1
+  }
+}
