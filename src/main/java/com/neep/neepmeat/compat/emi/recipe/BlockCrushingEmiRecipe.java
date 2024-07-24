@@ -21,14 +21,26 @@ import java.util.function.Supplier;
 public class BlockCrushingEmiRecipe implements EmiRecipe
 {
     private final EmiRecipeCategory category;
-    private final BlockCrushingRecipe recipe;
-    private final Supplier<Collection<BlockCrushingRegistry.Entry>> entries;
+    private final Identifier id;
+    private final List<EmiIngredient> input;
+    private final List<EmiStack> output;
+    private final List<EmiStack> extraOutput;
 
     public BlockCrushingEmiRecipe(EmiRecipeCategory category, BlockCrushingRecipe recipe, Supplier<Collection<BlockCrushingRegistry.Entry>> entrySupplier)
     {
         this.category = category;
-        this.recipe = recipe;
-        this.entries = entrySupplier;
+        this.id = recipe.getId();
+        this.input = List.of(
+                EmiIngredient.of(
+                        entrySupplier.get().stream()
+                                .map(e -> EmiIngredientHelper.inputToIngredient(e.input()))
+                                .filter(Objects::nonNull)
+                                .flatMap(Collection::stream)
+                                .toList()
+                )
+        );
+        this.output = entrySupplier.get().stream().map(e -> EmiStack.of(e.output().resource(), e.output().minAmount())).toList();
+        this.extraOutput = entrySupplier.get().stream().map(e -> EmiStack.of(e.extra().resource(), e.extra().minAmount()).setChance(e.extra().chance())).toList();
     }
 
     @Override
@@ -40,31 +52,19 @@ public class BlockCrushingEmiRecipe implements EmiRecipe
     @Override
     public @Nullable Identifier getId()
     {
-        return recipe.getId();
+        return id;
     }
 
     @Override
     public List<EmiIngredient> getInputs()
     {
-        return List.of(
-                EmiIngredient.of(
-                        entries.get().stream()
-                                .map(e -> EmiIngredientHelper.inputToIngredient(e.input()))
-                                .filter(Objects::nonNull)
-                                .flatMap(Collection::stream)
-                                .toList())
-        );
+        return input;
     }
 
     @Override
     public List<EmiStack> getOutputs()
     {
-        return entries.get().stream().map(e -> EmiStack.of(e.output().resource(), e.output().minAmount())).toList();
-    }
-
-    public List<EmiStack> getExtraOutputs()
-    {
-        return entries.get().stream().map(e -> EmiStack.of(e.extra().resource(), e.extra().minAmount())).toList();
+        return output;
     }
 
     @Override
@@ -89,16 +89,13 @@ public class BlockCrushingEmiRecipe implements EmiRecipe
 
         widgets.addSlot(getInputs().get(0), startX + 1, startY + 9);
 
-        List<EmiStack> outputStacks = getOutputs();
-        if (!outputStacks.isEmpty())
+        if (!output.isEmpty())
         {
-            long amount = outputStacks.get(0).getAmount();
+            long amount = output.get(0).getAmount();
 
-            EmiIngredient outputs = EmiIngredient.of(getOutputs(), amount);
-            widgets.addSlot(outputs, startX + 61, startY + 9).recipeContext(this);
+            widgets.addSlot(EmiIngredient.of(output, amount), startX + 61, startY + 9).recipeContext(this);
 
-            widgets.addSlot(EmiIngredient.of(getExtraOutputs()), startX + 81, startY + 9).appendTooltip(
-                    Text.of("Chance: " + recipe.getChance())).recipeContext(this);
+            widgets.addSlot(EmiIngredient.of(extraOutput), startX + 81, startY + 9).recipeContext(this);
         }
     }
 }
