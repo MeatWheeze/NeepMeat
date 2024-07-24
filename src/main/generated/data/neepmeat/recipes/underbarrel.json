@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "b": {
+      "item": "neepmeat:internal_components"
+    },
+    "i": {
+      "item": "minecraft:iron_nugget"
+    },
+    "m": {
+      "item": "minecraft:iron_ingot"
+    }
+  },
+  "pattern": [
+    " i",
+    "bm",
+    "bm"
+  ],
+  "result": {
+    "item": "meatweapons:underbarrel"
+  },
+  "show_notification": true
+}

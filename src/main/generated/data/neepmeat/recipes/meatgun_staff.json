@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "c": {
+      "item": "neepmeat:control_unit"
+    },
+    "i": {
+      "item": "neepmeat:internal_components"
+    },
+    "m": {
+      "item": "neepmeat:meat_steel_ingot"
+    }
+  },
+  "pattern": [
+    "ic",
+    "m ",
+    "m "
+  ],
+  "result": {
+    "item": "meatweapons:meatgun_staff"
+  },
+  "show_notification": true
+}

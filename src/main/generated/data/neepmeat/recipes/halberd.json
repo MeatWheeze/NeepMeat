@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "d": {
+      "item": "minecraft:diamond"
+    },
+    "m": {
+      "item": "neepmeat:meat_steel_ingot"
+    }
+  },
+  "pattern": [
+    "dm ",
+    "dmm",
+    "dm "
+  ],
+  "result": {
+    "item": "meatweapons:halberd"
+  },
+  "show_notification": true
+}

@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "b": {
+      "item": "neepmeat:internal_components"
+    },
+    "c": {
+      "item": "neepmeat:contractile_actuator"
+    },
+    "i": {
+      "item": "minecraft:iron_ingot"
+    },
+    "m": {
+      "item": "neepmeat:meat_steel_ingot"
+    }
+  },
+  "pattern": [
+    "bic",
+    "cmb",
+    "bic"
+  ],
+  "result": {
+    "item": "meatweapons:triple_carousel"
+  },
+  "show_notification": true
+}

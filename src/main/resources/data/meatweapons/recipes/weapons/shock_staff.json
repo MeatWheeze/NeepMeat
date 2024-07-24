@@ -6,23 +6,23 @@
   "steps":[
     {
       "id": "neepmeat:combine",
-      "resource": "neepmeat:meat_scrap"
+      "resource": "neepmeat:bioelectric_organ"
     },
     {
       "id": "neepmeat:combine",
-      "resource": "neepmeat:meat_scrap"
+      "resource": "neepmeat:bioelectric_organ"
     },
     {
       "id": "neepmeat:combine",
-      "resource": "neepmeat:meat_scrap"
+      "resource": "neepmeat:bioelectric_organ"
     },
     {
-      "id": "neepmeat:combine",
-      "resource": "neepmeat:meat_steel_ingot"
+      "id": "neepmeat:inject",
+      "resource": "neepmeat:ethereal_fuel"
     }
   ],
   "result": {
-    "resource": "meatweapons:large_ballistic_magazine",
+    "resource": "meatweapons:shock_staff",
     "amount": 1
   }
 }

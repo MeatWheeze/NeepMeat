@@ -1,0 +1,30 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "b": {
+      "item": "neepmeat:bioelectric_organ"
+    },
+    "i": {
+      "item": "neepmeat:internal_components"
+    },
+    "m": {
+      "item": "neepmeat:meat_steel_ingot"
+    },
+    "n": {
+      "item": "minecraft:iron_nugget"
+    },
+    "t": {
+      "item": "minecraft:crafting_table"
+    }
+  },
+  "pattern": [
+    "nnn",
+    "ibi",
+    "mtm"
+  ],
+  "result": {
+    "item": "meatweapons:tinker_table"
+  },
+  "show_notification": true
+}

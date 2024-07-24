@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "b": {
+      "item": "meatweapons:iron_barrel"
+    },
+    "i": {
+      "item": "minecraft:iron_nugget"
+    },
+    "m": {
+      "item": "neepmeat:meat_steel_ingot"
+    }
+  },
+  "pattern": [
+    "ii",
+    "bm",
+    "mm"
+  ],
+  "result": {
+    "item": "meatweapons:chugger"
+  },
+  "show_notification": true
+}

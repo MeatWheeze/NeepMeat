@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "i": {
+      "item": "neepmeat:meat_steel_ingot"
+    },
+    "n": {
+      "item": "neepmeat:meat_scrap"
+    }
+  },
+  "pattern": [
+    " ni",
+    "nin",
+    "in "
+  ],
+  "result": {
+    "item": "meatweapons:meat_steel_barrel"
+  },
+  "show_notification": true
+}

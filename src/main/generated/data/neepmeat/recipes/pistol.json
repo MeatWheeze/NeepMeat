@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "b": {
+      "item": "meatweapons:iron_barrel"
+    },
+    "i": {
+      "item": "minecraft:iron_ingot"
+    }
+  },
+  "pattern": [
+    "  ",
+    "bi",
+    " i"
+  ],
+  "result": {
+    "item": "meatweapons:pistol"
+  },
+  "show_notification": true
+}

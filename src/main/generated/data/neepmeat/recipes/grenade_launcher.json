@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "b": {
+      "item": "meatweapons:iron_barrel"
+    },
+    "c": {
+      "item": "neepmeat:contractile_actuator"
+    },
+    "i": {
+      "item": "minecraft:iron_nugget"
+    },
+    "m": {
+      "item": "neepmeat:meat_steel_ingot"
+    }
+  },
+  "pattern": [
+    "ii ",
+    "bbc",
+    "mm "
+  ],
+  "result": {
+    "item": "meatweapons:grenade_launcher"
+  },
+  "show_notification": true
+}

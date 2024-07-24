@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "b": {
+      "item": "neepmeat:internal_components"
+    },
+    "i": {
+      "item": "minecraft:iron_ingot"
+    },
+    "m": {
+      "item": "neepmeat:meat_steel_ingot"
+    }
+  },
+  "pattern": [
+    "bi",
+    " m",
+    "bi"
+  ],
+  "result": {
+    "item": "meatweapons:double_carousel"
+  },
+  "show_notification": true
+}

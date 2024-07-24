@@ -28,6 +28,8 @@ public class MWItems
     public static Item LARGE_BALLISTIC_MAGAZINE = new AmmunitionItem(TooltipSupplier.simple(1), new MeatlibItemSettings().group(MeatWeapons.WEAPONS));
 
     public static Item ENGINE = new BaseCraftingItem(C, 0, new MeatlibItemSettings().group(MeatWeapons.WEAPONS));
+    public static Item IRON_BARREL = new BaseCraftingItem(C, 0, new MeatlibItemSettings().group(MeatWeapons.WEAPONS));
+    public static Item MEAT_STEEL_BARREL = new BaseCraftingItem(C, 0, new MeatlibItemSettings().group(MeatWeapons.WEAPONS));
 
     @Path("fusion") public static Item FUSION_CANNON = new FusionCannonItem();
     @Path("hand_cannon") public static Item HAND_CANNON = new HandCannonItem();

@@ -1,0 +1,28 @@
+{
+  "type": "neepmeat:manufacture",
+  "base": {
+    "id": "neepmeat:meat_steel_ingot"
+  },
+  "steps":[
+    {
+      "id": "neepmeat:combine",
+      "resource": "neepmeat:enlightened_brain"
+    },
+    {
+      "id": "neepmeat:combine",
+      "resource": "neepmeat:control_unit"
+    },
+    {
+      "id": "neepmeat:inject",
+      "resource": "neepmeat:blood"
+    },
+    {
+      "id": "neepmeat:inject",
+      "resource": "neepmeat:work_fluid"
+    }
+  ],
+  "result": {
+    "resource": "meatweapons:homing_brain",
+    "amount": 1
+  }
+}
