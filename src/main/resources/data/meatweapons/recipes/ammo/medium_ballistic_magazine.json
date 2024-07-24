@@ -18,10 +18,6 @@
     },
     {
       "id": "neepmeat:combine",
-      "resource": "neepmeat:meat_scrap"
-    },
-    {
-      "id": "neepmeat:combine",
       "resource": "neepmeat:meat_steel_ingot"
     }
   ],

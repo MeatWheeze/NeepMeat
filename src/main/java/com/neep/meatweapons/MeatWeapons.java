@@ -4,6 +4,7 @@ import com.neep.meatlib.MeatLib;
 import com.neep.meatlib.MeatLibRegistration;
 import com.neep.meatlib.attachment.player.PlayerAttachmentManager;
 import com.neep.meatlib.registry.RegistrationContext;
+import com.neep.meatweapons.datagen.MWRecipeGenerator;
 import com.neep.meatweapons.enchantment.MWEnchantments;
 import com.neep.meatweapons.entity.*;
 import com.neep.meatweapons.implant.BloodBulletProviderImplant;
@@ -129,6 +130,8 @@ public class MeatWeapons implements ModInitializer
             Registry.register(EntityImplantInstaller.REGISTRY, BloodBulletProviderImplant.ID, MWItems.BLOOD_BULLET_PROVIDER);
             Registry.register(EntityImplantInstaller.REGISTRY, MagazineOrganImplant.ID, MWItems.MAGAZINE_ORGAN);
         }
+
+        MWRecipeGenerator.init();
 
         MeatLibRegistration.flush();
     }
