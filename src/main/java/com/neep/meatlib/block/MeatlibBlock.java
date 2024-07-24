@@ -18,7 +18,7 @@ public interface MeatlibBlock extends ItemConvertible, SelfRegistrable
     @Override
     default void register(Identifier id)
     {
-        Registry.register(Registries.BLOCK, id, (Block) this);
+        SelfRegistrable.registerBlock(id, (Block) this);
     }
 
     default boolean autoGenDrop()

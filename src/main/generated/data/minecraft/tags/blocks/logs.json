@@ -2,7 +2,6 @@
   "replace": false,
   "values": [
     "neepmeat:blood_bubble_log",
-    "neepmeat:blood_bubble_wood",
-    "neepmeat:tree_vacuum_structure"
+    "neepmeat:blood_bubble_wood"
   ]
 }
