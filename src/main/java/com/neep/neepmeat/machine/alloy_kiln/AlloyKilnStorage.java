@@ -60,14 +60,13 @@ public class AlloyKilnStorage implements NbtSerialisable
 
     public Storage<ItemVariant> getStorage(Direction direction)
     {
-        if (!direction.getAxis().isVertical())
-        {
-            return inventoryStorage.getSlot(FUEL);
-        }
-        else if (direction == Direction.UP)
-        {
+        if (direction == null || direction == Direction.UP) {
             // Ingredient inputs
             return getInputStorage();
+        }
+        else if (!direction.getAxis().isVertical())
+        {
+            return inventoryStorage.getSlot(FUEL);
         }
         else if (direction == Direction.DOWN)
         {

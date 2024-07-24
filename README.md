@@ -1,3 +1,5 @@
+**NEEPMeat development is moving to [Codeberg](https://codeberg.org/MeatWheeze/NeepMeat). This repo will no longer be updated.**
+
 <p align=center>
   <img src="https://cdn.modrinth.com/data/cached_images/5a1559777a3a0bc39d8861afc5386cc39506e719.png" alt="NeepMeat Banner"/>
 </p>
