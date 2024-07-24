@@ -13,12 +13,6 @@ public interface MeatlibItem extends SelfRegistrable
     @Override
     default void register(Identifier id)
     {
-        Registry.register(Registries.ITEM, id, (Item) this);
-
-        ItemGroup group = ((MeatlibItemExtension) this).meatlib$getItemGroup();
-        if (group != null)
-        {
-            MeatlibItemGroups.add(group, (Item) this);
-        }
+        SelfRegistrable.registerItem(id, (Item) this);
     }
 }

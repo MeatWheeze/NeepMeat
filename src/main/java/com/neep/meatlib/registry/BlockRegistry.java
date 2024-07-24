@@ -18,7 +18,6 @@ import java.util.*;
 
 public class BlockRegistry
 {
-    private static final Map<Identifier, Block> BLOCKS = new LinkedHashMap<>(); // Preserve order
     public static final List<Block> REGISTERED_BLOCKS = new ArrayList<>();
 
 //    public static <T extends Block & MeatlibBlock> T queue(T block)
@@ -76,16 +75,16 @@ public class BlockRegistry
 //        return block;
 //    }
 
-    public static void flush()
-    {
-        for (Map.Entry<Identifier, Block> entry : BLOCKS.entrySet())
-        {
-            Registry.register(Registries.BLOCK, entry.getKey(), entry.getValue());
-
-            REGISTERED_BLOCKS.add(entry.getValue());
-        }
-        BLOCKS.clear();
-    }
+//    public static void flush()
+//    {
+//        for (Map.Entry<Identifier, Block> entry : BLOCKS.entrySet())
+//        {
+//            Registry.register(Registries.BLOCK, entry.getKey(), entry.getValue());
+//
+//            REGISTERED_BLOCKS.add(entry.getValue());
+//        }
+//        BLOCKS.clear();
+//    }
 
     public static BaseColumnBlock createLogBlock(RegistrationContext ctx, TooltipSupplier tooltipSupplier)
     {

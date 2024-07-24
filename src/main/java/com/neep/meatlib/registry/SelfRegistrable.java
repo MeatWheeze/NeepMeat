@@ -16,21 +16,34 @@ public interface SelfRegistrable
 
     static SelfRegistrable ofItem(Item item)
     {
-        return id ->
-        {
-            Registry.register(Registries.ITEM, id, item);
-
-            ItemGroup group = (item).meatlib$getItemGroup();
-            if (group != null)
-            {
-                MeatlibItemGroups.add(group, item);
-            }
-        };
+        return id -> registerItem(id, item);
     }
 
     static SelfRegistrable ofBlock(Block block)
     {
-        return id -> Registry.register(Registries.BLOCK, id, block);
+        return id -> registerBlock(id, block);
+    }
+
+    static void registerItem(Identifier id, Item item)
+    {
+        Registry.register(Registries.ITEM, id, item);
+
+        // Jank handling
+        ItemRegistry.REGISTERED_ITEMS.add(item);
+
+        ItemGroup group = (item).meatlib$getItemGroup();
+        if (group != null)
+        {
+            MeatlibItemGroups.add(group, item);
+        }
+    }
+
+    static void registerBlock(Identifier id, Block block)
+    {
+        // Jank handling
+        BlockRegistry.REGISTERED_BLOCKS.add(block);
+
+        Registry.register(Registries.BLOCK, id, block);
     }
 
     @FunctionalInterface

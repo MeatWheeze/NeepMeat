@@ -5,8 +5,6 @@ import com.neep.meatlib.api.event.InitialTicks;
 import com.neep.meatlib.graphics.GraphicsEffects;
 import com.neep.meatlib.recipe.MeatlibRecipes;
 import com.neep.meatlib.recipe.ingredient.RecipeInputs;
-import com.neep.meatlib.registry.BlockRegistry;
-import com.neep.meatlib.registry.ItemRegistry;
 import com.neep.meatlib.registry.SoundRegistry;
 import com.neep.meatlib.storage.StorageEvents;
 import com.neep.meatlib.util.MeatlibItemGroups;
@@ -39,18 +37,6 @@ public class MeatLib implements ModInitializer
         if (CURRENT_NAMESPACE == null)
             throw new IllegalStateException("MeatLib: Object '" + object + "' was queued for registration without a namespace");
     }
-
-    public static Context getContext(String namespace)
-    {
-        return new Context(namespace);
-    }
-
-//    public static void setNamespace(String string)
-//    {
-//        if (active) throw new IllegalStateException();
-//        CURRENT_NAMESPACE = string;
-//        active = true;
-//    }
 
     public static BlockApiLookup<Void, Void> VOID_LOOKUP =
             BlockApiLookup.get(new Identifier(NeepMeat.NAMESPACE, "sided_void"), Void.class, Void.class);
@@ -85,28 +71,28 @@ public class MeatLib implements ModInitializer
         MeatLibRegistration.flush();
     }
 
-    public static class Context implements AutoCloseable
-    {
-        private static boolean ACTIVE;
-
-        protected Context(String namespace)
-        {
-            if (ACTIVE) throw new IllegalStateException("Meatlib: " + namespace + " attempted to get context while it belongs to " + CURRENT_NAMESPACE);
-
-            CURRENT_NAMESPACE = namespace;
-            ACTIVE = true;
-        }
-
-        @Override
-        public void close()
-        {
-            BlockRegistry.flush();
-            ItemRegistry.flush();
-
-            CURRENT_NAMESPACE = null;
-            ACTIVE = false;
-        }
-    }
+//    public static class Context implements AutoCloseable
+//    {
+//        private static boolean ACTIVE;
+//
+//        protected Context(String namespace)
+//        {
+//            if (ACTIVE) throw new IllegalStateException("Meatlib: " + namespace + " attempted to get context while it belongs to " + CURRENT_NAMESPACE);
+//
+//            CURRENT_NAMESPACE = namespace;
+//            ACTIVE = true;
+//        }
+//
+//        @Override
+//        public void close()
+//        {
+//            BlockRegistry.flush();
+//            ItemRegistry.flush();
+//
+//            CURRENT_NAMESPACE = null;
+//            ACTIVE = false;
+//        }
+//    }
 
     /**
      * A really horrible way of checking environment. Use as a last resort or not at all.

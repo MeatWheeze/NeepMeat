@@ -104,119 +104,114 @@ public class NeepMeat implements ModInitializer
 		MeatLibRegistration.forContext(PLCBlocks.class, PLCBlocks.C);
 		MeatLibRegistration.forContext(NMItems.class, NMItems.C);
 
-		try (var mcontext = MeatLib.getContext(NAMESPACE))
-		{
-			LOGGER.info("Hello from NeepMeat!");
-			new Bezier();
+		LOGGER.info("Hello from NeepMeat!");
+		new Bezier();
 
-			GeckoLib.initialize();
+		GeckoLib.initialize();
 
 
-			new NMBlocks();
-			NMItems.init();
-			NMLootTables.init();
-			NMTags.init();
-			NMParticles.init();
-			new NMSounds();
+		NMItems.init();
+		NMLootTables.init();
+		NMTags.init();
+		NMParticles.init();
+		new NMSounds();
 
-			NMrecipeTypes.init();
+		NMrecipeTypes.init();
 
-			// Datagen things
-			// They shouldn't be here, but I can only have one datagen entry point
-			NMRecipeGenerator.init();
-			NMItemTagProvider.init();
-			NMBlockTagProvider.init();
-			NMAdvancements.init();
-			NMModelProvider.init();
+		// Datagen things
+		// They shouldn't be here, but I can only have one datagen entry point
+		NMRecipeGenerator.init();
+		NMItemTagProvider.init();
+		NMBlockTagProvider.init();
+		NMAdvancements.init();
+		NMModelProvider.init();
 
 
-			PLCBlocks.init();
-			LivingMachineComponents.init();
-			LivingMachines.init();
+		PLCBlocks.init();
+		LivingMachineComponents.init();
+		LivingMachines.init();
 
-			NMFluids.initialise();
-			NMBlockEntities.initialise();
-			NMEntities.initialise();
-			OreFatRegistry.init();
-			NMStatusEffects.init();
-			NMPotions.init();
-			NMGraphicsEffects.init();
-			Filters.init();
+		NMFluids.initialise();
+		NMBlockEntities.initialise();
+		NMEntities.initialise();
+		OreFatRegistry.init();
+		NMStatusEffects.init();
+		NMPotions.init();
+		NMGraphicsEffects.init();
+		Filters.init();
 
-			NMItemGroups.init();
-			DataType.init();
+		NMItemGroups.init();
+		DataType.init();
 
-			// --- Transport module ---
-			ItemTransport.init();
-			FluidTransport.init();
-			BloodNetworkManager.init();
+		// --- Transport module ---
+		ItemTransport.init();
+		FluidTransport.init();
+		BloodNetworkManager.init();
 
 //		EnlightenmentUtil.init();
 //		EnlightenmentEventManager.init();
 
-			// --- Other misc things ---
-			ToolTransformPacket.registerReceiver();
-			MachineDiagnosticsRequest.registerReceiver();
-			MotorisedBlock.DiagnosticsProvider.init();
+		// --- Other misc things ---
+		ToolTransformPacket.registerReceiver();
+		MachineDiagnosticsRequest.registerReceiver();
+		MotorisedBlock.DiagnosticsProvider.init();
 
-			NMTrackedData.init();
+		NMTrackedData.init();
 
-			NMFeatures.init();
+		NMFeatures.init();
 
-			TagSuggestions.init();
+		TagSuggestions.init();
 
 
-			ItemStorage.SIDED.registerForBlocks((world, pos, state, blockEntity, direction) -> CharnelCompactorStorage.getStorage(world, pos, direction), NMBlocks.CHARNEL_COMPACTOR);
-			FluidStorage.SIDED.registerForBlocks((world, pos, state, blockEntity, direction) -> blockEntity instanceof IntegratorBlockEntity be ? be.getStorage(world, pos, state, direction) : null, NMBlocks.INTEGRATOR_EGG);
+		ItemStorage.SIDED.registerForBlocks((world, pos, state, blockEntity, direction) -> CharnelCompactorStorage.getStorage(world, pos, direction), NMBlocks.CHARNEL_COMPACTOR);
+		FluidStorage.SIDED.registerForBlocks((world, pos, state, blockEntity, direction) -> blockEntity instanceof IntegratorBlockEntity be ? be.getStorage(world, pos, state, direction) : null, NMBlocks.INTEGRATOR_EGG);
 
-			Burner.LOOKUP.registerForBlockEntity(FurnaceBurnerImpl::get, BlockEntityType.FURNACE);
-			Burner.LOOKUP.registerForBlocks((world, pos, state, blockEntity, context) -> () -> 20, Blocks.LAVA, Blocks.LAVA_CAULDRON, Blocks.MAGMA_BLOCK);
+		Burner.LOOKUP.registerForBlockEntity(FurnaceBurnerImpl::get, BlockEntityType.FURNACE);
+		Burner.LOOKUP.registerForBlocks((world, pos, state, blockEntity, context) -> () -> 20, Blocks.LAVA, Blocks.LAVA_CAULDRON, Blocks.MAGMA_BLOCK);
 
-			PLCRecipes.init();
+		PLCRecipes.init();
 
-			ScreenHandlerInit.registerScreenHandlers();
+		ScreenHandlerInit.registerScreenHandlers();
 
-			// Fluid transfer things
-			FluidNodeManagerImpl.registerEvents();
+		// Fluid transfer things
+		FluidNodeManagerImpl.registerEvents();
 
-			// Meat additives
-			MeatAdditives.init();
+		// Meat additives
+		MeatAdditives.init();
 
-			// Resource reload listeners
-			ResourceManagerHelper.get(ResourceType.CLIENT_RESOURCES).registerReloadListener(GuideReloadListener.getInstance());
-			ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(MobSynthesisRegistry.getInstance());
-			ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(OreFatRegistry.INSTANCE);
-			ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(RandomOres.INSTANCE);
-			BlockCrushingRegistry.init();;
-			RandomOres.init();
+		// Resource reload listeners
+		ResourceManagerHelper.get(ResourceType.CLIENT_RESOURCES).registerReloadListener(GuideReloadListener.getInstance());
+		ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(MobSynthesisRegistry.getInstance());
+		ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(OreFatRegistry.INSTANCE);
+		ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(RandomOres.INSTANCE);
+		BlockCrushingRegistry.init();;
+		RandomOres.init();
 
-			WormActions.init();
+		WormActions.init();
 
-			PlayerImplantManager.init();
+		PlayerImplantManager.init();
 
 //			PlayerAttachmentManager.registerAttachment(PlayerImplantManager.ID, PlayerImplantManager::new);
 //			Registry.register(PlayerImplantRegistry.REGISTRY, ExtraMouthImplant.ID, ExtraMouthImplant::new);
 //			Registry.register(PlayerImplantRegistry.REGISTRY, SkeltalImplant.ID, SkeltalImplant::new);
 
-			Registry.register(ImplantRegistry.REGISTRY, ExtraKneeImplant.ID, ExtraKneeImplant::new);
-			Registry.register(ImplantRegistry.REGISTRY, PinealEyeImplant.ID, PinealEyeImplant::new);
-			Registry.register(ImplantRegistry.REGISTRY, ExtraMouthImplant.ID, ExtraMouthImplant::new);
-			Registry.register(ImplantRegistry.REGISTRY, LungExtensionsImplant.ID, LungExtensionsImplant::new);
+		Registry.register(ImplantRegistry.REGISTRY, ExtraKneeImplant.ID, ExtraKneeImplant::new);
+		Registry.register(ImplantRegistry.REGISTRY, PinealEyeImplant.ID, PinealEyeImplant::new);
+		Registry.register(ImplantRegistry.REGISTRY, ExtraMouthImplant.ID, ExtraMouthImplant::new);
+		Registry.register(ImplantRegistry.REGISTRY, LungExtensionsImplant.ID, LungExtensionsImplant::new);
 
-			Registry.register(EntityImplantInstaller.REGISTRY, PinealEyeImplant.ID, NMItems.PINEAL_EYE);
-			Registry.register(EntityImplantInstaller.REGISTRY, ExtraKneeImplant.ID, NMItems.EXTRA_KNEES);
-			Registry.register(EntityImplantInstaller.REGISTRY, ExtraMouthImplant.ID, NMItems.EXTRA_MOUTH);
-			Registry.register(EntityImplantInstaller.REGISTRY, LungExtensionsImplant.ID, NMItems.LUNG_EXTENSIONS);
-			Registry.register(EntityImplantInstaller.REGISTRY, new Identifier(NeepMeat.NAMESPACE, "chrysalis"), NMItems.CHRYSALIS);
+		Registry.register(EntityImplantInstaller.REGISTRY, PinealEyeImplant.ID, NMItems.PINEAL_EYE);
+		Registry.register(EntityImplantInstaller.REGISTRY, ExtraKneeImplant.ID, NMItems.EXTRA_KNEES);
+		Registry.register(EntityImplantInstaller.REGISTRY, ExtraMouthImplant.ID, NMItems.EXTRA_MOUTH);
+		Registry.register(EntityImplantInstaller.REGISTRY, LungExtensionsImplant.ID, NMItems.LUNG_EXTENSIONS);
+		Registry.register(EntityImplantInstaller.REGISTRY, new Identifier(NeepMeat.NAMESPACE, "chrysalis"), NMItems.CHRYSALIS);
 
-			Registry.register(EnlightenmentEventManager.EVENTS, new Identifier(NAMESPACE, "limb_spawn"), new EnlightenmentEvent.SimpleFactory(LimbEnlightenmentEvent::new));
+		Registry.register(EnlightenmentEventManager.EVENTS, new Identifier(NAMESPACE, "limb_spawn"), new EnlightenmentEvent.SimpleFactory(LimbEnlightenmentEvent::new));
 
-			NMCommonNetwork.init();
+		NMCommonNetwork.init();
 
-			EnlightenmentEventManager.init();
-			EnlightenmentUtil.init();
-
-		}
+		EnlightenmentEventManager.init();
+		EnlightenmentUtil.init();
 
 		MeatLibRegistration.flush();
 

@@ -78,58 +78,55 @@ public class MeatWeapons implements ModInitializer
         MeatLibRegistration.forContext(MWBlocks.class, MWBlocks.C);
         MeatLibRegistration.forContext(MWItems.class, MWItems.C);
 
-        try (var mcontext = MeatLib.getContext(NAMESPACE))
-        {
-            BULLET = registerEntity("bullet", FabricEntityTypeBuilder.create(SpawnGroup.MISC, BulletEntity::new));
-            CANNON_BULLET = registerEntity("cannon_bullet", FabricEntityTypeBuilder.create(SpawnGroup.MISC, CannonBulletEntity::new));
-            ZAP = registerEntity("zap", FabricEntityTypeBuilder.create(SpawnGroup.MISC, ZapProjectileEntity::new));
-            FUSION_BLAST = registerEntity("fusion_blast", FabricEntityTypeBuilder.create(SpawnGroup.MISC, FusionBlastEntity::new));
-            EXPLODING_SHELL = registerEntity("exploding_shell", FabricEntityTypeBuilder.create(SpawnGroup.MISC, ExplodingShellEntity::new));
-            BOUNCE_GRENADE = registerEntity("bounce_grenade", FabricEntityTypeBuilder.<BounceGrenadeEntity>create(SpawnGroup.MISC, BounceGrenadeEntity::new)
-                    .trackRangeBlocks(200)
-                    .build()
-            );
-            SHOCK_STAFF_PROJECTILE = registerEntity("shock_staff_projectile", FabricEntityTypeBuilder.<ShockStaffProjectileEntity>create(SpawnGroup.MISC, ShockStaffProjectileEntity::new)
-                    .dimensions(EntityDimensions.fixed(0.25f, 0.25f))
-                    .trackRangeBlocks(200)
-                    .build()
-            );
+        BULLET = registerEntity("bullet", FabricEntityTypeBuilder.create(SpawnGroup.MISC, BulletEntity::new));
+        CANNON_BULLET = registerEntity("cannon_bullet", FabricEntityTypeBuilder.create(SpawnGroup.MISC, CannonBulletEntity::new));
+        ZAP = registerEntity("zap", FabricEntityTypeBuilder.create(SpawnGroup.MISC, ZapProjectileEntity::new));
+        FUSION_BLAST = registerEntity("fusion_blast", FabricEntityTypeBuilder.create(SpawnGroup.MISC, FusionBlastEntity::new));
+        EXPLODING_SHELL = registerEntity("exploding_shell", FabricEntityTypeBuilder.create(SpawnGroup.MISC, ExplodingShellEntity::new));
+        BOUNCE_GRENADE = registerEntity("bounce_grenade", FabricEntityTypeBuilder.<BounceGrenadeEntity>create(SpawnGroup.MISC, BounceGrenadeEntity::new)
+                .trackRangeBlocks(200)
+                .build()
+        );
+        SHOCK_STAFF_PROJECTILE = registerEntity("shock_staff_projectile", FabricEntityTypeBuilder.<ShockStaffProjectileEntity>create(SpawnGroup.MISC, ShockStaffProjectileEntity::new)
+                .dimensions(EntityDimensions.fixed(0.25f, 0.25f))
+                .trackRangeBlocks(200)
+                .build()
+        );
 
-            AIRTRUCK = registerEntity("airtruck", FabricEntityTypeBuilder.create(SpawnGroup.MISC, AirtruckEntity::new)
-                    .trackedUpdateRate(1)
-                    .forceTrackedVelocityUpdates(true)
-                    .dimensions(EntityDimensions.fixed(3F, 2.2F))
-                    .trackRangeBlocks(100)
-                    .build());
+        AIRTRUCK = registerEntity("airtruck", FabricEntityTypeBuilder.create(SpawnGroup.MISC, AirtruckEntity::new)
+                .trackedUpdateRate(1)
+                .forceTrackedVelocityUpdates(true)
+                .dimensions(EntityDimensions.fixed(3F, 2.2F))
+                .trackRangeBlocks(100)
+                .build());
 
-            MWItems.init();
-            MWBlockEntities.init();
-            MWParticles.init();
-            MWGraphicsEffects.init();
-            MWAttackC2SPacket.init();
-            RootModuleCache.init();
+        MWItems.init();
+        MWBlockEntities.init();
+        MWParticles.init();
+        MWGraphicsEffects.init();
+        MWAttackC2SPacket.init();
+        RootModuleCache.init();
 
-            MWScreenHandlers.init();
+        MWScreenHandlers.init();
 
-            Registry.register(Registries.ITEM_GROUP, new Identifier(NAMESPACE, "weapons"), WEAPONS);
+        Registry.register(Registries.ITEM_GROUP, new Identifier(NAMESPACE, "weapons"), WEAPONS);
 
 //        MWEnchantmentTargets.init();
-            MWEnchantments.init();
+        MWEnchantments.init();
 
-            PlayerAttachmentManager.registerAttachment(WeaponCooldownAttachment.ID, WeaponCooldownAttachment::new);
+        PlayerAttachmentManager.registerAttachment(WeaponCooldownAttachment.ID, WeaponCooldownAttachment::new);
 
-            FluidStorage.ITEM.registerForItems(AssaultDrillItem::getStorage, MWItems.ASSAULT_DRILL);
-            AmmunitionProvider.LOOKUP.registerForItems((itemStack, context) -> new SimpleItemAmmunitionProvider(itemStack, context, AmmunitionType.BALLISTIC, 16), MWItems.SMALL_BALLISTIC_MAGAZINE);
-            AmmunitionProvider.LOOKUP.registerForItems((itemStack, context) -> new SimpleItemAmmunitionProvider(itemStack, context, AmmunitionType.BALLISTIC, 32), MWItems.MEDIUM_BALLISTIC_MAGAZINE);
-            AmmunitionProvider.LOOKUP.registerForItems((itemStack, context) -> new SimpleItemAmmunitionProvider(itemStack, context, AmmunitionType.BALLISTIC, 64), MWItems.LARGE_BALLISTIC_MAGAZINE);
-            AmmunitionProvider.LOOKUP.registerForItems((itemStack, context) -> new SimpleItemAmmunitionProvider(itemStack, context, AmmunitionType.ENERGY, 16), NMItems.PINKDRINK);
+        FluidStorage.ITEM.registerForItems(AssaultDrillItem::getStorage, MWItems.ASSAULT_DRILL);
+        AmmunitionProvider.LOOKUP.registerForItems((itemStack, context) -> new SimpleItemAmmunitionProvider(itemStack, context, AmmunitionType.BALLISTIC, 16), MWItems.SMALL_BALLISTIC_MAGAZINE);
+        AmmunitionProvider.LOOKUP.registerForItems((itemStack, context) -> new SimpleItemAmmunitionProvider(itemStack, context, AmmunitionType.BALLISTIC, 32), MWItems.MEDIUM_BALLISTIC_MAGAZINE);
+        AmmunitionProvider.LOOKUP.registerForItems((itemStack, context) -> new SimpleItemAmmunitionProvider(itemStack, context, AmmunitionType.BALLISTIC, 64), MWItems.LARGE_BALLISTIC_MAGAZINE);
+        AmmunitionProvider.LOOKUP.registerForItems((itemStack, context) -> new SimpleItemAmmunitionProvider(itemStack, context, AmmunitionType.ENERGY, 16), NMItems.PINKDRINK);
 
-            Registry.register(ImplantRegistry.REGISTRY, BloodBulletProviderImplant.ID, BloodBulletProviderImplant::new);
-            Registry.register(ImplantRegistry.REGISTRY, MagazineOrganImplant.ID, MagazineOrganImplant::new);
+        Registry.register(ImplantRegistry.REGISTRY, BloodBulletProviderImplant.ID, BloodBulletProviderImplant::new);
+        Registry.register(ImplantRegistry.REGISTRY, MagazineOrganImplant.ID, MagazineOrganImplant::new);
 
-            Registry.register(EntityImplantInstaller.REGISTRY, BloodBulletProviderImplant.ID, MWItems.BLOOD_BULLET_PROVIDER);
-            Registry.register(EntityImplantInstaller.REGISTRY, MagazineOrganImplant.ID, MWItems.MAGAZINE_ORGAN);
-        }
+        Registry.register(EntityImplantInstaller.REGISTRY, BloodBulletProviderImplant.ID, MWItems.BLOOD_BULLET_PROVIDER);
+        Registry.register(EntityImplantInstaller.REGISTRY, MagazineOrganImplant.ID, MWItems.MAGAZINE_ORGAN);
 
         MWRecipeGenerator.init();
 

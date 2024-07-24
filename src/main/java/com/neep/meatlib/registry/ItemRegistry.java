@@ -1,21 +1,15 @@
 package com.neep.meatlib.registry;
 
-import com.neep.meatlib.MeatLib;
-import com.neep.meatlib.item.MeatlibItemExtension;
-import com.neep.meatlib.util.MeatlibItemGroups;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
 import net.minecraft.registry.Registries;
-import net.minecraft.registry.Registry;
-import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ItemRegistry
 {
-    private static final Map<Identifier, Item> ITEMS = new LinkedHashMap<>();
     public static final List<Item> REGISTERED_ITEMS = new ArrayList<>();
 
     /**
@@ -45,32 +39,32 @@ public class ItemRegistry
 //        return item;
 //    }
 
-    public static <T extends Item> T queue(String path, T item)
-    {
-        MeatLib.assertActive(item);
-        ITEMS.put(new Identifier(MeatLib.CURRENT_NAMESPACE, path), item);
-        return item;
-    }
+//    public static <T extends Item> T queue(String path, T item)
+//    {
+//        MeatLib.assertActive(item);
+//        ITEMS.put(new Identifier(MeatLib.CURRENT_NAMESPACE, path), item);
+//        return item;
+//    }
 
-    public static void flush()
-    {
-        for (Iterator<Map.Entry<Identifier, Item>> it = ITEMS.entrySet().iterator(); it.hasNext();)
-        {
-            Map.Entry<Identifier, Item> entry = it.next();
-
-            // TODO: Remove the jank
-            Registry.register(Registries.ITEM, entry.getKey(), entry.getValue());
-
-            ItemGroup group = ((MeatlibItemExtension) entry.getValue()).meatlib$getItemGroup();
-            if (group != null)
-            {
-                MeatlibItemGroups.add(group, entry.getValue());
-            }
-
-            REGISTERED_ITEMS.add(entry.getValue());
-
-            it.remove();
-        }
-        ITEMS.clear();
-    }
+//    public static void flush()
+//    {
+//        for (Iterator<Map.Entry<Identifier, Item>> it = ITEMS.entrySet().iterator(); it.hasNext();)
+//        {
+//            Map.Entry<Identifier, Item> entry = it.next();
+//
+//            // TODO: Remove the jank
+//            Registry.register(Registries.ITEM, entry.getKey(), entry.getValue());
+//
+//            ItemGroup group = ((MeatlibItemExtension) entry.getValue()).meatlib$getItemGroup();
+//            if (group != null)
+//            {
+//                MeatlibItemGroups.add(group, entry.getValue());
+//            }
+//
+//            REGISTERED_ITEMS.add(entry.getValue());
+//
+//            it.remove();
+//        }
+//        ITEMS.clear();
+//    }
 }
