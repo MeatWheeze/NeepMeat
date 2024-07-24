@@ -7,6 +7,7 @@ import com.neep.meatlib.registry.RegistrationContext;
 import com.neep.meatlib.registry.annotation.Path;
 import com.neep.meatlib.registry.annotation.RegisterMe;
 import com.neep.meatweapons.implant.BloodBulletProviderImplant;
+import com.neep.meatweapons.implant.MagazineOrganImplant;
 import com.neep.meatweapons.item.*;
 import com.neep.meatweapons.item.meatgun.MeatgunModuleItem;
 import com.neep.meatweapons.item.meatgun.MeatgunPistolItem;
@@ -22,9 +23,9 @@ public class MWItems
 {
     public static final RegistrationContext C = new RegistrationContext(MeatWeapons.NAMESPACE);
 
-    public static Item SMALL_BALLISTIC_MAGAZINE = new BaseCraftingItem(C, 1, new MeatlibItemSettings().group(MeatWeapons.WEAPONS));
-    public static Item MEDIUM_BALLISTIC_MAGAZINE = new BaseCraftingItem(C, 1, new MeatlibItemSettings().group(MeatWeapons.WEAPONS));
-    public static Item LARGE_BALLISTIC_MAGAZINE = new BaseCraftingItem(C, 1, new MeatlibItemSettings().group(MeatWeapons.WEAPONS));
+    public static Item SMALL_BALLISTIC_MAGAZINE = new AmmunitionItem(TooltipSupplier.simple(1), new MeatlibItemSettings().group(MeatWeapons.WEAPONS));
+    public static Item MEDIUM_BALLISTIC_MAGAZINE = new AmmunitionItem(TooltipSupplier.simple(1), new MeatlibItemSettings().group(MeatWeapons.WEAPONS));
+    public static Item LARGE_BALLISTIC_MAGAZINE = new AmmunitionItem(TooltipSupplier.simple(1), new MeatlibItemSettings().group(MeatWeapons.WEAPONS));
 
     public static Item ENGINE = new BaseCraftingItem(C, 0, new MeatlibItemSettings().group(MeatWeapons.WEAPONS));
 
@@ -61,6 +62,7 @@ public class MWItems
     @Path("shock_staff") public static MeatgunModuleItem SHOCK_STAFF = new MeatgunModuleItem(MeatgunModules.SHOCK_STAFF, new MeatlibItemSettings().group(MeatWeapons.WEAPONS));
 
     public static final PlayerImplantItem BLOOD_BULLET_PROVIDER = new PlayerImplantItem(C, "blood_bullet_provider", 1, BloodBulletProviderImplant.ID, new MeatlibItemSettings().group(NMItemGroups.GENERAL));
+    public static final PlayerImplantItem MAGAZINE_ORGAN = new PlayerImplantItem(C, "magazine_organ", 1, MagazineOrganImplant.ID, new MeatlibItemSettings().group(NMItemGroups.GENERAL));
 
     public static void init()
     {

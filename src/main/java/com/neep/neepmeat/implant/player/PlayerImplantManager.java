@@ -113,9 +113,10 @@ public class PlayerImplantManager implements ImplantManager, Component, ServerTi
     }
 
     @Nullable
-    public EntityImplant getImplant(Identifier id)
+    public <T extends EntityImplant> T getImplant(Identifier id)
     {
-        return implants.get(id);
+        // There is no generic 'ImplantType' class, so whoever calls this will need to cast it anyway.
+        return (T) implants.get(id);
     }
 
     @Override

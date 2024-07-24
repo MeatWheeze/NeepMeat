@@ -1,0 +1,15 @@
+{
+  "type": "neepmeat:entity_manufacture",
+  "base": {
+    "id": "minecraft:player"
+  },
+  "steps": [
+    {
+      "id": "neepmeat:implant",
+      "resource": "meatweapons:magazine_organ"
+    }
+  ],
+  "implant_installer": {
+    "id": "meatweapons:magazine_organ"
+  }
+}

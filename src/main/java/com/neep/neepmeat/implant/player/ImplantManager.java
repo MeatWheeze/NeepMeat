@@ -2,6 +2,7 @@ package com.neep.neepmeat.implant.player;
 
 import dev.onyxstudios.cca.api.v3.component.Component;
 import net.minecraft.util.Identifier;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Set;
 

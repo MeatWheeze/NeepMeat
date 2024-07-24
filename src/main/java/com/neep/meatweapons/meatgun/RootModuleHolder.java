@@ -2,12 +2,13 @@ package com.neep.meatweapons.meatgun;
 
 import com.neep.meatweapons.component.MeatgunComponent;
 import com.neep.meatweapons.implant.BloodBulletProviderImplant;
+import com.neep.meatweapons.implant.MagazineOrganImplant;
 import com.neep.meatweapons.item.meatgun.Meatgun;
 import com.neep.meatweapons.meatgun.module.AmmunitionRequiringModule;
 import com.neep.meatweapons.meatgun.module.AmmunitionStoringModule;
 import com.neep.meatweapons.meatgun.module.MeatgunModule;
 import com.neep.meatweapons.network.MeatgunNetwork;
-import com.neep.neepmeat.implant.player.ImplantManager;
+import com.neep.neepmeat.implant.player.PlayerImplantManager;
 import com.neep.neepmeat.init.NMComponents;
 import com.neep.neepmeat.init.NMSounds;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
@@ -172,7 +173,7 @@ public class RootModuleHolder
 //        if (player.isCreative())
 //            return true;
 
-        ImplantManager manager = NMComponents.IMPLANT_MANAGER.get(player);
+        PlayerImplantManager manager = (PlayerImplantManager) NMComponents.IMPLANT_MANAGER.get(player);
         boolean hasBloodBullets = manager.isInstalled(BloodBulletProviderImplant.ID);
 
         cacheModules();
@@ -184,13 +185,27 @@ public class RootModuleHolder
         if (!satisfied)
         {
             boolean reloaded = false;
+
+            @Nullable MagazineOrganImplant implant = manager.getImplant(MagazineOrganImplant.ID);
+            if (implant != null)
+            {
+                @Nullable AmmunitionProvider provider = implant.provide(module.ammoType(), amount);
+                if (provider != null)
+                {
+                    reloaded = reload(provider, player, false);
+
+                    if (reloaded)
+                        return false;
+                }
+            }
+
             for (int i = 0; i < inventory.size(); ++i)
             {
                 ItemStack stack = inventory.getStack(i);
-                @Nullable AmmunitionProvider provider = AmmunitionProvider.LOOKUP.find(stack, new AmmunitionProvider.ContextImpl(inventory, i));
+                @Nullable AmmunitionProvider provider = AmmunitionProvider.LOOKUP.find(stack, new AmmunitionProvider.InventoryContext(inventory, i));
                 if (provider != null && provider.ammoType() == module.ammoType())
                 {
-                    reloaded = reload(provider, player);
+                    reloaded = reload(provider, player, true);
 
                     if (reloaded)
                         return false;
@@ -226,7 +241,7 @@ public class RootModuleHolder
         return false;
     }
 
-    public boolean reload(AmmunitionProvider provider, PlayerEntity player)
+    public boolean reload(AmmunitionProvider provider, PlayerEntity player, boolean consume)
     {
         cacheModules();
         int current = getAmmo(provider.ammoType());
@@ -247,7 +262,9 @@ public class RootModuleHolder
 
         if (remaining < provider.getAmount())
         {
-            provider.consume();
+            if (consume)
+                provider.consume();
+
             listener.markDirty(Reason.SAVE_DATA);
             player.playSound(NMSounds.RELOAD_MECHANICAL_HISS, SoundCategory.PLAYERS, 1, 1);
             MeatgunNetwork.SEND_ANIMATION.emitter(player).apply("reload", PacketByteBufs.create().writeVarInt(10));

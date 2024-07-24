@@ -7,6 +7,7 @@ import com.neep.meatlib.registry.RegistrationContext;
 import com.neep.meatweapons.enchantment.MWEnchantments;
 import com.neep.meatweapons.entity.*;
 import com.neep.meatweapons.implant.BloodBulletProviderImplant;
+import com.neep.meatweapons.implant.MagazineOrganImplant;
 import com.neep.meatweapons.init.MWBlockEntities;
 import com.neep.meatweapons.init.MWBlocks;
 import com.neep.meatweapons.init.MWScreenHandlers;
@@ -123,7 +124,10 @@ public class MeatWeapons implements ModInitializer
             AmmunitionProvider.LOOKUP.registerForItems((itemStack, context) -> new SimpleItemAmmunitionProvider(itemStack, context, AmmunitionType.ENERGY, 16), NMItems.PINKDRINK);
 
             Registry.register(ImplantRegistry.REGISTRY, BloodBulletProviderImplant.ID, BloodBulletProviderImplant::new);
+            Registry.register(ImplantRegistry.REGISTRY, MagazineOrganImplant.ID, MagazineOrganImplant::new);
+
             Registry.register(EntityImplantInstaller.REGISTRY, BloodBulletProviderImplant.ID, MWItems.BLOOD_BULLET_PROVIDER);
+            Registry.register(EntityImplantInstaller.REGISTRY, MagazineOrganImplant.ID, MWItems.MAGAZINE_ORGAN);
         }
 
         MeatLibRegistration.flush();

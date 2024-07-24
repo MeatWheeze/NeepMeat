@@ -1,6 +1,7 @@
 package com.neep.neepmeat.implant.item;
 
 import com.google.common.collect.Sets;
+import com.neep.neepmeat.implant.player.EntityImplant;
 import com.neep.neepmeat.implant.player.ImplantManager;
 import dev.onyxstudios.cca.api.v3.item.ItemComponent;
 import net.minecraft.item.ItemStack;
@@ -8,6 +9,7 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.util.Identifier;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Set;
 

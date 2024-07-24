@@ -93,7 +93,7 @@ public abstract class MeatgunItem extends BaseItem implements Meatgun, WeakTwoHa
             if (provider != null)
             {
                 MeatgunComponent component = MWComponents.MEATGUN.get(stack);
-                component.getRootHolder().reload(provider, player);
+                component.getRootHolder().reload(provider, player, true);
                 return true;
             }
         }
