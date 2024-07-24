@@ -5,6 +5,7 @@ import com.mojang.serialization.RecordBuilder;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
+import net.fabricmc.fabric.api.transfer.v1.storage.StorageUtil;
 import net.fabricmc.fabric.api.transfer.v1.storage.StorageView;
 import net.fabricmc.fabric.api.transfer.v1.storage.base.ResourceAmount;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
@@ -53,13 +54,14 @@ public class MeatlibStorageUtil
     // Storage::simulateExtract will be deprecated in 1.19.4. I should be able to use fnd and replace to correct this.
     public static <T> long simulateExtract(Storage<T> storage, T resource, long maxAmount, TransactionContext transaction)
     {
-        return storage.simulateExtract(resource, maxAmount, transaction);
+        return StorageUtil.simulateExtract(storage, resource, maxAmount, transaction); // 1.20
+//        return storage.simulateExtract(resource, maxAmount, transaction); // 1.19
     }
 
     public static <T> long simulateInsert(Storage<T> storage, T resource, long amount, TransactionContext transaction)
     {
-//        StorageUtil.simulateInsert()
-        return storage.simulateInsert(resource, amount, transaction);
+        return StorageUtil.simulateInsert(storage, resource, amount, transaction); // 1.20
+//        return storage.simulateInsert(resource, amount, transaction); // 1.19
     }
 
 //    @Nullable
