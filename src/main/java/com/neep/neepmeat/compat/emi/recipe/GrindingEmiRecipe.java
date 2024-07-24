@@ -1,5 +1,6 @@
 package com.neep.neepmeat.compat.emi.recipe;
 
+import com.neep.neepmeat.init.NMrecipeTypes;
 import com.neep.neepmeat.recipe.CrushingRecipe;
 import dev.emi.emi.api.recipe.EmiRecipe;
 import dev.emi.emi.api.recipe.EmiRecipeCategory;
@@ -87,7 +88,8 @@ public class GrindingEmiRecipe implements EmiRecipe {
 
         widgets.addSlot(input.get(0), startX + 1, startY + 9);
 
-        widgets.addSlot(output.get(0), startX + 61, startY + 9).appendTooltip(Text.of("Min: " + recipe.getItemOutput().minAmount() + ", Max: " + recipe.getItemOutput().maxAmount())).recipeContext(this);
+        widgets.addSlot(output.get(0), startX + 61, startY + 9)
+                .appendTooltip(NMrecipeTypes.ofMinMax(recipe.getItemOutput().minAmount(), recipe.getItemOutput().maxAmount())).recipeContext(this);
 
         if (output.size() > 1) {
             widgets.addSlot(output.get(1), startX + 81, startY + 9).recipeContext(this);

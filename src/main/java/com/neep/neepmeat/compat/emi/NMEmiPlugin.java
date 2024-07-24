@@ -21,6 +21,7 @@ import com.neep.neepmeat.recipe.BlockCrushingRecipe;
 import com.neep.neepmeat.transport.FluidTransport;
 import dev.emi.emi.api.EmiPlugin;
 import dev.emi.emi.api.EmiRegistry;
+import dev.emi.emi.api.recipe.EmiRecipe;
 import dev.emi.emi.api.recipe.EmiRecipeCategory;
 import dev.emi.emi.api.stack.EmiStack;
 import net.minecraft.item.Item;
@@ -28,10 +29,14 @@ import net.minecraft.recipe.RecipeManager;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.util.Identifier;
+import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
 import java.util.List;
+import java.util.function.Consumer;
 
-public class NMEmiPlugin implements EmiPlugin {
+public class NMEmiPlugin implements EmiPlugin
+{
     public static final EmiStack ALLOY_SMELTING_WORKSTATION = EmiStack.of(NMBlocks.ALLOY_KILN);
     public static final EmiStack COMPACTING_WORKSTATION = EmiStack.of(NMBlocks.CHARNEL_COMPACTOR);
     public static final EmiStack ENLIGHTENING_WORKSTATION = EmiStack.of(NMBlocks.PEDESTAL);
@@ -67,7 +72,8 @@ public class NMEmiPlugin implements EmiPlugin {
     public static final EmiRecipeCategory TROMMEL = new LazyEmiRecipeCategory(new Identifier(NeepMeat.NAMESPACE, "plugins/trommel"), TROMMEL_WORKSTATION);
 
     @Override
-    public void register(EmiRegistry registry) {
+    public void register(EmiRegistry registry)
+    {
         registry.addCategory(ALLOY_SMELTING);
         registry.addCategory(COMPACTING);
         registry.addCategory(ENLIGHTENING);
@@ -98,7 +104,6 @@ public class NMEmiPlugin implements EmiPlugin {
         registry.addWorkstation(BLOCK_CRUSHING, CRUSHER_SEGMENT_WORKSTATION);
         registry.addWorkstation(BLOCK_CRUSHING, GRINDING_WORKSTATION);
         registry.addWorkstation(ADVANCED_BLOCK_CRUSHING, CRUSHER_SEGMENT_WORKSTATION);
-        registry.addWorkstation(ADVANCED_BLOCK_CRUSHING, GRINDING_WORKSTATION);
         registry.addWorkstation(VIVISECTION, VIVISECTION_WORKSTATION);
         registry.addWorkstation(HEATING, HEATING_WORKSTATION);
         registry.addWorkstation(ITEM_MANUFACTURE, MANUFACTURE_WORKSTATION);
@@ -158,24 +163,36 @@ public class NMEmiPlugin implements EmiPlugin {
         // Charnel Compactor recipes
         int page = 0;
         UnmodifiableIterator<List<Item>> iterator = Iterators.partition(Registries.ITEM.getEntryList(NMTags.CHARNEL_COMPACTOR).orElseThrow().stream().map(RegistryEntry::value).iterator(), 35);
-        while (iterator.hasNext()) {
+        while (iterator.hasNext())
+        {
             List<Item> entries = iterator.next();
             registry.addRecipe(new CompactingEmiRecipe(entries, NMItems.CRUDE_INTEGRATION_CHARGE, page++));
         }
 
         registry.addRecipe(new VivisectionEmiRecipe(NMBlocks.INTEGRATOR_EGG.asItem(), NMItems.CHRYSALIS));
 
-        registry.addDeferredRecipes(consumer -> {
-            BlockCrushingRecipe crushingRecipe = BlockCrushingRecipe.get(registry.getRecipeManager());
+        registry.addDeferredRecipes(consumer ->
+        {
+            @Nullable BlockCrushingRecipe crushingRecipe = BlockCrushingRecipe.get(registry.getRecipeManager());
             if (crushingRecipe != null)
-                consumer.accept(new BlockCrushingEmiRecipe(BLOCK_CRUSHING, crushingRecipe, BlockCrushingRegistry.INSTANCE::getBasicEntries));
+                addBlockCrushingRecipes(crushingRecipe, BLOCK_CRUSHING, BlockCrushingRegistry.INSTANCE.getBasicEntries(), consumer);
 
-            AdvancedBlockCrushingRecipe advancedCrushingRecipe = AdvancedBlockCrushingRecipe.get(registry.getRecipeManager());
+            @Nullable AdvancedBlockCrushingRecipe advancedCrushingRecipe = AdvancedBlockCrushingRecipe.get(registry.getRecipeManager());
             if (advancedCrushingRecipe != null)
-                consumer.accept(new BlockCrushingEmiRecipe(ADVANCED_BLOCK_CRUSHING, advancedCrushingRecipe, BlockCrushingRegistry.INSTANCE::getAdvancedEntries));
+                addBlockCrushingRecipes(advancedCrushingRecipe, ADVANCED_BLOCK_CRUSHING, BlockCrushingRegistry.INSTANCE.getAdvancedEntries(), consumer);
         });
 
         // Recipe Handlers
         registry.addRecipeHandler(ScreenHandlerInit.FABRICATOR, new FabricatorRecipeHandler());
+    }
+
+    private static void addBlockCrushingRecipes(BlockCrushingRecipe recipe, EmiRecipeCategory category, Collection<BlockCrushingRegistry.Entry> entries, Consumer<? super EmiRecipe> consumer)
+    {
+        int index = 0;
+        for (var entry : entries)
+        {
+            consumer.accept(new BlockCrushingEmiRecipe(index, category, recipe, entry));
+            index++;
+        }
     }
 }

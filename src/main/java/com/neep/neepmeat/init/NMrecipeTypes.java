@@ -11,6 +11,8 @@ import com.neep.neepmeat.recipe.surgery.ImplantInstallRecipe;
 import com.neep.neepmeat.recipe.surgery.TransformingToolRecipe;
 import net.minecraft.recipe.RecipeSerializer;
 import net.minecraft.recipe.RecipeType;
+import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 
 public class NMrecipeTypes
 {
@@ -74,4 +76,9 @@ public class NMrecipeTypes
 
     public static final MeatRecipeSerialiser<VivisectionRecipe> VIVISECTION_SERIALISER = RecipeRegistry.registerMeatlibSerializer(NeepMeat.NAMESPACE, "vivisection", new VivisectionRecipe.Serializer());
     public static final MeatRecipeType<VivisectionRecipe> VIVISECTION = RecipeRegistry.registerMeatlibType(NeepMeat.NAMESPACE, "vivisection");
+
+    public static Text ofMinMax(long min, long max)
+    {
+        return Text.literal("Amount: " + min + "-" + max).formatted(Formatting.GOLD);
+    }
 }
