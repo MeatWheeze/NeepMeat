@@ -13,6 +13,6 @@ public interface DrawContextAccessor
     @Invoker("<init>")
     static DrawContext init(MinecraftClient client, MatrixStack matrices, VertexConsumerProvider.Immediate vertexConsumers)
     {
-        throw new IllegalStateException();
+        throw new IllegalStateException("DrawContext accessor failed to apply");
     }
 }
