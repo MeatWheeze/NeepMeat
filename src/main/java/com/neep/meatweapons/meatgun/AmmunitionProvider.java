@@ -23,11 +23,20 @@ public interface AmmunitionProvider
         void setStack(ItemStack stack);
     }
 
-    record ContextImpl(Inventory inventory, int slot) implements Context
+    record InventoryContext(Inventory inventory, int slot) implements Context
     {
         public void setStack(ItemStack stack)
         {
             inventory.setStack(slot, stack);
         }
     }
+
+//    record StackContext(ItemStack stack) implements Context
+//    {
+//        @Override
+//        public void setStack(ItemStack stack)
+//        {
+//            this.stack.setCount(stack.getCount());
+//        }
+//    }
 }

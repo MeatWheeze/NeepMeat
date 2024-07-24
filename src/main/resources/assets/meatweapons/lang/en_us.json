@@ -2,9 +2,12 @@
   "itemGroup.meatweapons.weapons": "NEEPMeat Weapons",
   "itemGroup.neepmeat.weapons": "NEEPMeat Weapons",
 
-  "item.meatweapons.small_ballistic_cartridge": "Small Ballistic Cartridge",
-  "item.meatweapons.medium_ballistic_cartridge": "Medium Ballistic Cartridge",
-  "item.meatweapons.large_ballistic_cartridge": "Large Ballistic Magazine",
+  "item.meatweapons.small_ballistic_magazine": "Small Ballistic Cartridge",
+  "item.meatweapons.small_ballistic_magazine.lore_0": "Holds 16 units.",
+  "item.meatweapons.medium_ballistic_magazine": "Medium Ballistic Cartridge",
+  "item.meatweapons.medium_ballistic_magazine.lore_0": "Holds 32 units.",
+  "item.meatweapons.large_ballistic_magazine": "Large Ballistic Magazine",
+  "item.meatweapons.large_ballistic_magazine.lore_0": "Holds 64 units.",
 
   "item.meatweapons.fusion": "Fusion Cannon",
   "item.meatweapons.hand_cannon": "Hand Cannon",
@@ -56,6 +59,9 @@
   "item.meatweapons.blood_bullet_provider": "Blood Bullet Converter",
   "implant.meatweapons.blood_bullet_provider": "Blood Bullet Converter",
   "implant.meatweapons.blood_bullet_provider.desc_0": "Converts blood into bullets when out of Meatgun ammunition.",
+  "item.meatweapons.magazine_organ": "Magazine Organ",
+  "implant.meatweapons.magazine_organ": "Magazine Organ",
+  "implant.meatweapons.magazine_organ.desc_0": "Allows eating of ammunition items for storage.",
 
   "text.meatweapons.tinker_table.item_here": "Place Meatgun here",
   "tooltip.meatweapons.meatgun_module_1": "Meatgun Module - install in a Tinker Table",
