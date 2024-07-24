@@ -144,7 +144,7 @@ public class ItemPumpBlockEntity extends EjectorBlockEntity
             // TODO: change max amount
             long extracted = targetStorage.extract(extractable.resource(), Math.min(transferable, 16), nested1);
             extractable = new ResourceAmount<>(extractable.resource(), extracted);
-            long forwarded = forwardRetrieval(new ResourceAmount<>(extractable.resource(), extracted), target, transaction);
+            long forwarded = forwardRetrieval(new ResourceAmount<>(extractable.resource(), extracted), target, nested1);
 
             if (forwarded < 1)
             {

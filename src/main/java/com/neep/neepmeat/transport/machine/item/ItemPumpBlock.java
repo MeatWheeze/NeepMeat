@@ -6,6 +6,7 @@ import com.neep.meatlib.storage.MeatlibStorageUtil;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.machine.content_detector.InventoryDetectorBlock;
 import com.neep.neepmeat.transport.item_network.ItemInPipe;
+import com.neep.neepmeat.transport.util.ItemPipeUtil;
 import com.neep.neepmeat.util.MiscUtil;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
@@ -58,9 +59,10 @@ public class ItemPumpBlock extends EjectorBlock
     {
         if (world.getBlockEntity(pos) instanceof ItemPumpBlockEntity be)
         {
-            if (be.getCachedState().get(ItemPumpBlock.FACING) == direction.getOpposite())
+            Direction facing = be.getCachedState().get(ItemPumpBlock.FACING);
+            if (facing == direction.getOpposite())
             {
-                return be.forwardItem(item, transaction);
+                return ItemPipeUtil.pipeToAny(item, pos, facing, world, transaction, false);
             }
         }
         return 0;
