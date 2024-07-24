@@ -87,7 +87,7 @@ public class CombineInstruction implements Instruction
         var stored = takeItem(LazyBlockApiCache.itemSided(from, worldSupplier));
         if (stored == null)
         {
-            plc.raiseError(new PLC.Error(Text.of("Oh noes!")));
+            plc.raiseError(new PLC.Error(Text.of("Combine: no item found")));
         }
         else
         {
@@ -162,7 +162,7 @@ public class CombineInstruction implements Instruction
                 ResourceAmount<ItemVariant> found = StorageUtil.findExtractableContent(storage, transaction);
                 if (found != null)
                 {
-                    long extracted = storage.extract(found.resource(), found.amount(), transaction);
+                    long extracted = storage.extract(found.resource(), 1, transaction);
                     if (extracted > 0)
                     {
                         var res = new ResourceAmount<>(found.resource(), extracted);
