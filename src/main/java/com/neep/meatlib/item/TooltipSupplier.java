@@ -75,7 +75,7 @@ public interface TooltipSupplier
         };
     }
 
-    static void applyMessage(List<Text> tooltip)
+    static void shiftForInfo(List<Text> tooltip)
     {
         tooltip.add(Text.translatable("message." + NeepMeat.NAMESPACE + ".shift_for_info").formatted(Formatting.GRAY));
     }
@@ -101,7 +101,7 @@ public interface TooltipSupplier
             }
             else
             {
-                applyMessage(tooltip);
+                shiftForInfo(tooltip);
             }
         }
     }
