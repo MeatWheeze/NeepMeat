@@ -21,9 +21,9 @@
   "item.meatweapons.meat_steel_barrel": "Meat Steel Barrel",
 
   "item.meatweapons.meatgun_pistol": "Meatgun Pistol",
-  "item.meatweapons.meatgun_pistol.lore_0": "A lightweight ",
+  "item.meatweapons.meatgun_pistol.lore_0": "A lightweight base module with a pistol grip.\nMaxumum complexity: 16",
   "item.meatweapons.meatgun_staff": "Meatgun Staff",
-  "item.meatweapons.meatgun_staff.lore_0": "!",
+  "item.meatweapons.meatgun_staff.lore_0": "A base module that is held like a staff. Works best with melee attachments.\nMaximum complexity: 16",
 
   "item.meatweapons.assault_drill": "Assault Drill",
   "item.meatweapons.assault_drill.lore": "Shred your enemies! Amuse your friends! Guaranteed to break the ice at parties!",

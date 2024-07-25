@@ -80,9 +80,11 @@ public class MWItems
             new MeatlibItemSettings().group(MeatWeapons.WEAPONS));
 
     @Path("halberd") public static MeatgunModuleItem HALBERD = new MeatgunModuleItem(MeatgunModules.HALBERD,
+            new MeatgunTooltipBuilder().desc().build(),
+            new MeatlibItemSettings().group(MeatWeapons.WEAPONS));
+    @Path("shock_staff") public static MeatgunModuleItem SHOCK_STAFF = new MeatgunModuleItem(MeatgunModules.SHOCK_STAFF,
             new MeatgunTooltipBuilder().ammoType(AmmunitionType.ENERGY).desc().build(),
             new MeatlibItemSettings().group(MeatWeapons.WEAPONS));
-    @Path("shock_staff") public static MeatgunModuleItem SHOCK_STAFF = new MeatgunModuleItem(MeatgunModules.SHOCK_STAFF, new MeatlibItemSettings().group(MeatWeapons.WEAPONS));
 
     public static final PlayerImplantItem BLOOD_BULLET_PROVIDER = new PlayerImplantItem(C, "blood_bullet_provider", 1, BloodBulletProviderImplant.ID, new MeatlibItemSettings().group(NMItemGroups.GENERAL));
     public static final PlayerImplantItem MAGAZINE_ORGAN = new PlayerImplantItem(C, "magazine_organ", 1, MagazineOrganImplant.ID, new MeatlibItemSettings().group(NMItemGroups.GENERAL));
