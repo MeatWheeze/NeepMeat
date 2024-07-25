@@ -3,6 +3,8 @@ package com.neep.neepmeat.datagen;
 import com.neep.meatlib.datagen.MeatLibDataGen;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.datagen.tag.NMTags;
+import com.neep.neepmeat.init.NMBlocks;
+import com.neep.neepmeat.init.NMItems;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider;
 import net.fabricmc.fabric.api.tag.convention.v1.ConventionalBlockTags;
@@ -63,6 +65,7 @@ public class NMBlockTagProvider extends FabricTagProvider.BlockTagProvider
                 .addOptionalTag(BlockTags.STONE_ORE_REPLACEABLES)
                 .addOptionalTag(BlockTags.NETHER_CARVER_REPLACEABLES)
                 .addOptionalTag(BlockTags.DEEPSLATE_ORE_REPLACEABLES)
+                .add(NMBlocks.ASBESTOS)
         ;
     }
 }

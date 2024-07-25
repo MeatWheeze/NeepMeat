@@ -12,6 +12,7 @@
     {
       "id": "#minecraft:deepslate_ore_replaceables",
       "required": false
-    }
+    },
+    "neepmeat:asbestos"
   ]
 }

@@ -1,7 +1,7 @@
 package com.neep.neepmeat.item;
 
 import com.neep.meatlib.item.ClientBlockAttackListener;
-import com.neep.meatlib.registry.RegistrationContext;
+import com.neep.meatlib.item.TooltipSupplier;
 import com.neep.neepmeat.api.item.OverrideSwingItem;
 import com.neep.neepmeat.component.CompressedAirComponent;
 import com.neep.neepmeat.datagen.tag.NMTags;
@@ -12,6 +12,7 @@ import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.block.BlockState;
+import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -23,9 +24,13 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayNetworkHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundCategory;
+import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.List;
 
 public class RockDrillItem extends Item implements ClientBlockAttackListener, OverrideSwingItem
 {
@@ -36,10 +41,13 @@ public class RockDrillItem extends Item implements ClientBlockAttackListener, Ov
         ServerPlayNetworking.registerGlobalReceiver(CHANNEL_ID, RockDrillItem::onAttackPacket);
     }
 
-    public RockDrillItem(Settings settings)
+    private final TooltipSupplier tooltipSupplier;
+
+    public RockDrillItem(TooltipSupplier tooltipSupplier, Settings settings)
     {
         super(settings.maxCount(1).maxDamage(2000));
 //        super(settings.maxDamage(500);
+        this.tooltipSupplier = tooltipSupplier;
     }
 
     public static boolean using(ItemStack stack)
@@ -119,6 +127,13 @@ public class RockDrillItem extends Item implements ClientBlockAttackListener, Ov
             return state.isIn(NMTags.ROCK_DRILL_MINEABLE);
         }
         return false;
+    }
+
+    @Override
+    public void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context)
+    {
+        tooltipSupplier.apply(this, tooltip);
+        super.appendTooltip(stack, world, tooltip, context);
     }
 
     @Override

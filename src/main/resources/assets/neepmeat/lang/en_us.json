@@ -563,6 +563,7 @@
   "item.neepmeat.meat_steel_shovel": "Meat Steel Shovel",
   "item.neepmeat.meat_steel_hoe": "Meat Steel Hoe",
   "item.neepmeat.rock_drill": "Rock Drill",
+  "item.neepmeat.rock_drill.lore_0": "Instantly breaks stone and similar blocks when within 16 blocks of a running Small Compressor.",
 
   "item.neepmeat.transforming_tool_base": "Transforming Tool Base",
   "item.neepmeat.transforming_tool_base.lore_0": "Can combine two items into one.",

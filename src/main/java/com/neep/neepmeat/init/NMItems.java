@@ -123,7 +123,7 @@ public class NMItems
 
     public static Item FARMING_SCUTTER = new FarmingScutterItem(() -> NMEntities.FARMING_SCUTTER, TooltipSupplier.hidden(1), new MeatlibItemSettings().group(NMItemGroups.GENERAL));
 
-    public static Item ROCK_DRILL = new RockDrillItem(new MeatlibItemSettings().group(NMItemGroups.GENERAL));
+    public static Item ROCK_DRILL = new RockDrillItem(TooltipSupplier.simple(1), new MeatlibItemSettings().group(NMItemGroups.GENERAL));
 
     @Path("debug")
     public static Item DEBUG_ITEM = new DebugItem(new MeatlibItemSettings().group(NMItemGroups.GENERAL));
