@@ -12,10 +12,15 @@ import com.neep.meatweapons.item.*;
 import com.neep.meatweapons.item.meatgun.MeatgunModuleItem;
 import com.neep.meatweapons.item.meatgun.MeatgunPistolItem;
 import com.neep.meatweapons.item.meatgun.MeatgunStaffItem;
+import com.neep.meatweapons.meatgun.AmmunitionType;
 import com.neep.meatweapons.meatgun.module.MeatgunModules;
+import com.neep.meatweapons.tooltip.MeatgunTooltipBuilder;
 import com.neep.neepmeat.NMItemGroups;
 import com.neep.neepmeat.item.PlayerImplantItem;
 import net.minecraft.item.Item;
+import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
+import org.jetbrains.annotations.Nullable;
 
 @SuppressWarnings("unused")
 @RegisterMe(MeatWeapons.NAMESPACE)
@@ -47,8 +52,12 @@ public class MWItems
     public static Item ASSAULT_DRILL = new AssaultDrillItem(1024, new MeatlibItemSettings().group(MeatWeapons.WEAPONS));
 
     // Names might change, so I'm explicitly declaring them
-    @Path("pistol") public static MeatgunModuleItem PISTOL = new MeatgunModuleItem(MeatgunModules.PISTOL, new MeatlibItemSettings().group(MeatWeapons.WEAPONS));
-    @Path("bosher") public static MeatgunModuleItem BOSHER = new MeatgunModuleItem(MeatgunModules.BOSHER, new MeatlibItemSettings().group(MeatWeapons.WEAPONS));
+    @Path("pistol") public static MeatgunModuleItem PISTOL = new MeatgunModuleItem(MeatgunModules.PISTOL,
+            new MeatgunTooltipBuilder().damage(MWConstants.PISTOL_DAMAGE).ammoType(AmmunitionType.BALLISTIC).cooldown(MWConstants.PISTOL_FIRING_COOLDOWN).perUse(1).desc().build(),
+            new MeatlibItemSettings().group(MeatWeapons.WEAPONS));
+    @Path("bosher") public static MeatgunModuleItem BOSHER = new MeatgunModuleItem(MeatgunModules.BOSHER,
+            new MeatgunTooltipBuilder().ammoType(AmmunitionType.BALLISTIC).perUse(8).desc().build(),
+            new MeatlibItemSettings().group(MeatWeapons.WEAPONS));
     @Path("chugger") public static MeatgunModuleItem CHUGGER = new MeatgunModuleItem(MeatgunModules.CHUGGER, new MeatlibItemSettings().group(MeatWeapons.WEAPONS));
     @Path("long_boi") public static MeatgunModuleItem LONG_BOI = new MeatgunModuleItem(MeatgunModules.LONG_BOI, new MeatlibItemSettings().group(MeatWeapons.WEAPONS));
     @Path("underbarrel") public static MeatgunModuleItem UNDERBARREL = new MeatgunModuleItem(MeatgunModules.UNDERBARREL, new MeatlibItemSettings().group(MeatWeapons.WEAPONS));

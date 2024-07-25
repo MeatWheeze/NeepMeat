@@ -2,6 +2,8 @@ package com.neep.meatweapons.item.meatgun;
 
 import com.neep.meatlib.item.TooltipSupplier;
 import com.neep.meatweapons.meatgun.module.MeatgunModule;
+import com.neep.neepmeat.NeepMeat;
+import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
@@ -23,8 +25,7 @@ public class MeatgunModuleItem extends Item
     private static final Map<MeatgunModuleItem, MeatgunModule.Type<?>> ITEM_TO_TYPE = new HashMap<>();
     private static final Map<MeatgunModule.Type<?>, MeatgunModuleItem> TYPE_TO_ITEM = new HashMap<>();
     private final MeatgunModule.Type<?> type;
-    @Nullable
-    private final TooltipSupplier tooltipSupplier;
+    @Nullable private final TooltipSupplier tooltipSupplier;
     private String translationKey;
 
     public MeatgunModuleItem(MeatgunModule.Type<?> type, @Nullable TooltipSupplier tooltipSupplier, Settings settings)
@@ -92,9 +93,19 @@ public class MeatgunModuleItem extends Item
     @Override
     public void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context)
     {
-        tooltip.add(Text.translatable("tooltip.meatweapons.meatgun_module_1").formatted(Formatting.GOLD).formatted(Formatting.BOLD));
-        if (type.complexity() != 0)
-            tooltip.add(Text.translatable("tooltip.meatweapons.meatgun_module.complexity", type.complexity()).formatted(Formatting.GRAY));
+//        if (Screen.hasShiftDown())
+//        {
+//            tooltip.add(Text.translatable("tooltip.meatweapons.meatgun_module_1").formatted(Formatting.GOLD).formatted(Formatting.BOLD));
+//            if (type.complexity() != 0)
+//                tooltip.add(Text.translatable("tooltip.meatweapons.meatgun_module.complexity", type.complexity()).formatted(Formatting.GRAY));
+
+            if (tooltipSupplier != null)
+                tooltipSupplier.apply(this, tooltip);
+//        }
+//        else
+//        {
+//            tooltip.add(Text.translatable("message." + NeepMeat.NAMESPACE + ".shift_for_info").formatted(Formatting.GRAY));
+//        }
         super.appendTooltip(stack, world, tooltip, context);
     }
 

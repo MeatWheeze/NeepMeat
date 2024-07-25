@@ -15,7 +15,7 @@ public enum AmmunitionType
         this.healthPerUnit = healthPerUnit;
     }
 
-    public String stortName()
+    public String shortName()
     {
         return string;
     }

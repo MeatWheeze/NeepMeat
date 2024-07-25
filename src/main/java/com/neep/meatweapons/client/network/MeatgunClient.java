@@ -117,7 +117,7 @@ public class MeatgunClient
             if (amount == 0)
                 col2 = 0x88FF0000;
 
-            GUIUtil.drawText(drawContext, textRenderer, entry.getKey().stortName() + " " + amount, 2, textY, col2, true);
+            GUIUtil.drawText(drawContext, textRenderer, entry.getKey().shortName() + " " + amount, 2, textY, col2, true);
             textY += stride;
         }
         matrices.pop();

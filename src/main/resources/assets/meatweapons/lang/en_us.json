@@ -44,6 +44,7 @@
   "meatgun_module.meatweapons.base_pistol": "Pistol Base",
   "meatgun_module.meatweapons.base_staff": "Staff Base",
   "meatgun_module.meatweapons.pistol": "Pistol",
+  "meatgun_module.meatweapons.pistol.desc": "",
   "meatgun_module.meatweapons.chugger": "Chugger",
   "meatgun_module.meatweapons.bosher": "Bøsher",
   "meatgun_module.meatweapons.long_boi": "Long Boi",
@@ -67,6 +68,10 @@
 
   "text.meatweapons.tinker_table.item_here": "Place Meatgun here",
   "tooltip.meatweapons.meatgun_module_1": "Meatgun Module - install in a Tinker Table",
+  "tooltip.meatweapons.damage": "Damage per use: %s",
+  "tooltip.meatweapons.ammunition_type": "Ammo type: %s",
+  "tooltip.meatweapons.per_use": "Units per use: %s",
+  "tooltip.meatweapons.cooldown": "Cooldown: %st",
   "tooltip.meatweapons.meatgun_module.complexity": "Complexity: %s",
   "tooltip.meatweapons.meatgun_module.remaining_complexity": "C: %s / %s"
 }
