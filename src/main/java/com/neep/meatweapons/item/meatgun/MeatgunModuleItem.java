@@ -24,7 +24,7 @@ public class MeatgunModuleItem extends Item
 {
     private static final Map<MeatgunModuleItem, MeatgunModule.Type<?>> ITEM_TO_TYPE = new HashMap<>();
     private static final Map<MeatgunModule.Type<?>, MeatgunModuleItem> TYPE_TO_ITEM = new HashMap<>();
-    private final MeatgunModule.Type<?> type;
+    public final MeatgunModule.Type<?> type;
     @Nullable private final TooltipSupplier tooltipSupplier;
     private String translationKey;
 

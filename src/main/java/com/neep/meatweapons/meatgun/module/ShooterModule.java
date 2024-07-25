@@ -15,11 +15,24 @@ public abstract class ShooterModule extends AbstractMeatgunModule implements Amm
     private final AmmunitionType type;
     protected int cooldown;
 
-    public ShooterModule(RootModuleHolder.Listener listener, int amountPerShot, int maxCooldown, AmmunitionType type)
+//    public ShooterModule(RootModuleHolder.Listener listener, int amountPerShot, int maxCooldown, AmmunitionType type)
+//    {
+//        super(listener);
+//        this.amountPerShot = amountPerShot;
+//        this.maxCooldown = maxCooldown;
+//
+//        this.ammoAmount = 0;
+//        this.type = type;
+//        this.cooldown = 0;
+//    }
+
+    public ShooterModule(RootModuleHolder.Listener listener, AmmunitionType type)
     {
         super(listener);
-        this.amountPerShot = amountPerShot;
-        this.maxCooldown = maxCooldown;
+//        this.amountPerShot = amountPerShot;
+//        this.maxCooldown = maxCooldown;
+        this.amountPerShot = (int) getType().attributes().get(Attribute.AMOUNT_PER_USE);
+        this.maxCooldown = (int) getType().attributes().get(Attribute.COOLDOWN);
 
         this.ammoAmount = 0;
         this.type = type;

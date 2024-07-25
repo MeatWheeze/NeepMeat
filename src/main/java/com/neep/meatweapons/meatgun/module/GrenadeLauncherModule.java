@@ -27,7 +27,7 @@ public class GrenadeLauncherModule extends ShooterModule
 
     public GrenadeLauncherModule(RootModuleHolder.Listener listener)
     {
-        super(listener, 4, 15, AmmunitionType.BALLISTIC);
+        super(listener, AmmunitionType.BALLISTIC);
     }
 
     public GrenadeLauncherModule(RootModuleHolder.Listener listener, NbtCompound nbt)

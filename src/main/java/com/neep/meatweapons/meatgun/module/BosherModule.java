@@ -43,7 +43,7 @@ public class BosherModule extends ShooterModule
 
     public BosherModule(RootModuleHolder.Listener listener)
     {
-        super(listener, 8,  20, AmmunitionType.BALLISTIC);
+        super(listener, AmmunitionType.BALLISTIC);
     }
 
     public BosherModule(RootModuleHolder.Listener listener, NbtCompound nbt)

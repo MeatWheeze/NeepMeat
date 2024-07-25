@@ -1,6 +1,5 @@
 package com.neep.meatweapons.meatgun.module;
 
-import com.neep.meatweapons.MWConstants;
 import com.neep.meatweapons.entity.BulletDamageSource;
 import com.neep.meatweapons.item.GunItem;
 import com.neep.meatweapons.meatgun.AmmunitionType;
@@ -37,7 +36,7 @@ public class PistolModule extends ShooterModule
 
     public PistolModule(RootModuleHolder.Listener listener)
     {
-        super(listener, 1, MWConstants.PISTOL_FIRING_COOLDOWN, AmmunitionType.BALLISTIC);
+        super(listener, AmmunitionType.BALLISTIC);
     }
 
     public PistolModule(RootModuleHolder.Listener listener, NbtCompound nbt)
@@ -101,7 +100,7 @@ public class PistolModule extends ShooterModule
         if (target.isPresent())
         {
             Entity entity = target.get().getEntity();
-            entity.damage(BulletDamageSource.create(world, player, 0.1f), MWConstants.PISTOL_DAMAGE);
+            entity.damage(BulletDamageSource.create(world, player, 0.1f), getType().attributes().attackDamage());
             entity.timeUntilRegen = 0;
         }
 

@@ -18,9 +18,6 @@ import com.neep.meatweapons.tooltip.MeatgunTooltipBuilder;
 import com.neep.neepmeat.NMItemGroups;
 import com.neep.neepmeat.item.PlayerImplantItem;
 import net.minecraft.item.Item;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
-import org.jetbrains.annotations.Nullable;
 
 @SuppressWarnings("unused")
 @RegisterMe(MeatWeapons.NAMESPACE)
@@ -53,23 +50,38 @@ public class MWItems
 
     // Names might change, so I'm explicitly declaring them
     @Path("pistol") public static MeatgunModuleItem PISTOL = new MeatgunModuleItem(MeatgunModules.PISTOL,
-            new MeatgunTooltipBuilder().damage(MWConstants.PISTOL_DAMAGE).ammoType(AmmunitionType.BALLISTIC).cooldown(MWConstants.PISTOL_FIRING_COOLDOWN).perUse(1).desc().build(),
+            new MeatgunTooltipBuilder().ammoType(AmmunitionType.BALLISTIC).build(),
             new MeatlibItemSettings().group(MeatWeapons.WEAPONS));
     @Path("bosher") public static MeatgunModuleItem BOSHER = new MeatgunModuleItem(MeatgunModules.BOSHER,
-            new MeatgunTooltipBuilder().ammoType(AmmunitionType.BALLISTIC).perUse(8).desc().build(),
+            new MeatgunTooltipBuilder().ammoType(AmmunitionType.BALLISTIC).desc().build(),
             new MeatlibItemSettings().group(MeatWeapons.WEAPONS));
-    @Path("chugger") public static MeatgunModuleItem CHUGGER = new MeatgunModuleItem(MeatgunModules.CHUGGER, new MeatlibItemSettings().group(MeatWeapons.WEAPONS));
-    @Path("long_boi") public static MeatgunModuleItem LONG_BOI = new MeatgunModuleItem(MeatgunModules.LONG_BOI, new MeatlibItemSettings().group(MeatWeapons.WEAPONS));
-    @Path("underbarrel") public static MeatgunModuleItem UNDERBARREL = new MeatgunModuleItem(MeatgunModules.UNDERBARREL, new MeatlibItemSettings().group(MeatWeapons.WEAPONS));
-    @Path("bloodthrower") public static MeatgunModuleItem BLOODTHROWER = new MeatgunModuleItem(MeatgunModules.BLOODTHROWER, new MeatlibItemSettings().group(MeatWeapons.WEAPONS));
-    @Path("grenade_launcher") public static MeatgunModuleItem GRENADE_LAUNCHER = new MeatgunModuleItem(MeatgunModules.GRENADE_LAUNCHER, new MeatlibItemSettings().group(MeatWeapons.WEAPONS));
-    @Path("double_carousel") public static MeatgunModuleItem DOUBLE_CAROUSEL = new MeatgunModuleItem(MeatgunModules.DOUBLE_CAROUSEL, new MeatlibItemSettings().group(MeatWeapons.WEAPONS));
-    @Path("triple_carousel") public static MeatgunModuleItem TRIPLE_CAROUSEL = new MeatgunModuleItem(MeatgunModules.TRIPLE_CAROUSEL, new MeatlibItemSettings().group(MeatWeapons.WEAPONS));
+    @Path("chugger") public static MeatgunModuleItem CHUGGER = new MeatgunModuleItem(MeatgunModules.CHUGGER,
+            new MeatgunTooltipBuilder().ammoType(AmmunitionType.BALLISTIC).build(),
+            new MeatlibItemSettings().group(MeatWeapons.WEAPONS));
+    @Path("long_boi") public static MeatgunModuleItem LONG_BOI = new MeatgunModuleItem(MeatgunModules.LONG_BOI,
+            new MeatgunTooltipBuilder().ammoType(AmmunitionType.BALLISTIC).build(),
+            new MeatlibItemSettings().group(MeatWeapons.WEAPONS));
+    @Path("underbarrel") public static MeatgunModuleItem UNDERBARREL = new MeatgunModuleItem(MeatgunModules.UNDERBARREL,
+            new MeatlibItemSettings().group(MeatWeapons.WEAPONS));
+    @Path("bloodthrower") public static MeatgunModuleItem BLOODTHROWER = new MeatgunModuleItem(MeatgunModules.BLOODTHROWER,
+            new MeatlibItemSettings().group(MeatWeapons.WEAPONS));
+    @Path("grenade_launcher") public static MeatgunModuleItem GRENADE_LAUNCHER = new MeatgunModuleItem(MeatgunModules.GRENADE_LAUNCHER,
+            new MeatgunTooltipBuilder().ammoType(AmmunitionType.BALLISTIC).desc().build(),
+            new MeatlibItemSettings().group(MeatWeapons.WEAPONS));
+    @Path("double_carousel") public static MeatgunModuleItem DOUBLE_CAROUSEL = new MeatgunModuleItem(MeatgunModules.DOUBLE_CAROUSEL,
+            new MeatlibItemSettings().group(MeatWeapons.WEAPONS));
+    @Path("triple_carousel") public static MeatgunModuleItem TRIPLE_CAROUSEL = new MeatgunModuleItem(MeatgunModules.TRIPLE_CAROUSEL,
+            new MeatgunTooltipBuilder().desc().build(),
+            new MeatlibItemSettings().group(MeatWeapons.WEAPONS));
 
     @Path("battery") public static MeatgunModuleItem BATTERY = new MeatgunModuleItem(MeatgunModules.BATTERY, new MeatlibItemSettings().group(MeatWeapons.WEAPONS));
-    @Path("homing_brain") public static MeatgunModuleItem HOMING_BRAIN = new MeatgunModuleItem(MeatgunModules.HOMING_BRAIN, new MeatlibItemSettings().group(MeatWeapons.WEAPONS));
+    @Path("homing_brain") public static MeatgunModuleItem HOMING_BRAIN = new MeatgunModuleItem(MeatgunModules.HOMING_BRAIN,
+            new MeatgunTooltipBuilder().desc().build(),
+            new MeatlibItemSettings().group(MeatWeapons.WEAPONS));
 
-    @Path("halberd") public static MeatgunModuleItem HALBERD = new MeatgunModuleItem(MeatgunModules.HALBERD, new MeatlibItemSettings().group(MeatWeapons.WEAPONS));
+    @Path("halberd") public static MeatgunModuleItem HALBERD = new MeatgunModuleItem(MeatgunModules.HALBERD,
+            new MeatgunTooltipBuilder().ammoType(AmmunitionType.ENERGY).desc().build(),
+            new MeatlibItemSettings().group(MeatWeapons.WEAPONS));
     @Path("shock_staff") public static MeatgunModuleItem SHOCK_STAFF = new MeatgunModuleItem(MeatgunModules.SHOCK_STAFF, new MeatlibItemSettings().group(MeatWeapons.WEAPONS));
 
     public static final PlayerImplantItem BLOOD_BULLET_PROVIDER = new PlayerImplantItem(C, "blood_bullet_provider", 1, BloodBulletProviderImplant.ID, new MeatlibItemSettings().group(NMItemGroups.GENERAL));

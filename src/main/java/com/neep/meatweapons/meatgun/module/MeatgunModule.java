@@ -112,9 +112,7 @@ public interface MeatgunModule extends TriggerReceiver
 //        }
     };
 
-    Type<?> DEFAULT_TYPE = new MeatgunModule.Type<>(new Identifier(MeatWeapons.NAMESPACE, "default"), 0, (l, p) -> DEFAULT, (l, n) -> DEFAULT);
-
-
+    Type<?> DEFAULT_TYPE = new MeatgunModule.Type<>(new Identifier(MeatWeapons.NAMESPACE, "default"), (l, p) -> DEFAULT, (l, n) -> DEFAULT);
 
     @FunctionalInterface
     interface Factory<T extends MeatgunModule>
@@ -132,15 +130,21 @@ public interface MeatgunModule extends TriggerReceiver
     {
         private final Identifier id;
         private final Factory<T> factory;
-
         private final NbtFactory<T> nbtFactory;
+        private final AttributeContainer attributes;
 
-        private int complexity;
-
-        public Type(Identifier id, int complexity, Factory<T> factory, NbtFactory<T> nbtFactory)
+        public Type(Identifier id, AttributeContainer attributes, Factory<T> factory, NbtFactory<T> nbtFactory)
         {
             this.id = id;
-            this.complexity = complexity;
+            this.attributes = attributes;
+            this.factory = factory;
+            this.nbtFactory = nbtFactory;
+        }
+
+        public Type(Identifier id, Factory<T> factory, NbtFactory<T> nbtFactory)
+        {
+            this.id = id;
+            this.attributes = new AttributeContainer();
             this.factory = factory;
             this.nbtFactory = nbtFactory;
         }
@@ -162,19 +166,33 @@ public interface MeatgunModule extends TriggerReceiver
 
         public int complexity()
         {
-            return complexity;
+            return (int) attributes.get(Attribute.COMPLEXITY);
+        }
+
+        public AttributeContainer attributes()
+        {
+            return attributes;
         }
     }
 
-    enum ChildProperties
+    enum Attribute
     {
-        AUXILIARY,
-
-
+        ATTACK_DAMAGE,
+        COOLDOWN,
+        COMPLEXITY,
+        AMOUNT_PER_USE,
     }
 
-    enum ParentProperties
-    {
+//    enum ChildProperties
+//    {
+//        AUXILIARY,
+//
+//
+//    }
+//
+//    enum ParentProperties
+//    {
+//
+//    }
 
-    }
 }

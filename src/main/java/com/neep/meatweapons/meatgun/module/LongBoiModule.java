@@ -36,7 +36,7 @@ public class LongBoiModule extends ShooterModule
 
     public LongBoiModule(RootModuleHolder.Listener listener)
     {
-        super(listener, 16, 20, AmmunitionType.BALLISTIC);
+        super(listener, AmmunitionType.BALLISTIC);
     }
 
     public LongBoiModule(RootModuleHolder.Listener listener, NbtCompound nbt)
