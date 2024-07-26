@@ -20,7 +20,7 @@ public class TinkerTableBlock extends BaseBlock implements BlockEntityProvider
 {
     public TinkerTableBlock(RegistrationContext ctx, ItemSettings itemSettings, Settings settings)
     {
-        super(ctx, itemSettings, settings);
+        super(ctx, itemSettings, settings.nonOpaque());
     }
 
     @Override
