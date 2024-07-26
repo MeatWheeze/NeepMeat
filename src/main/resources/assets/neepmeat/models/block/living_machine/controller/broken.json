@@ -1,9 +1,9 @@
 {
 	"credit": "Made with Blockbench",
 	"textures": {
-		"0": "neepmeat:block/large_crusher/unassembled_front",
-		"1": "neepmeat:block/large_crusher/unassembled",
-		"particle": "neepmeat:block/large_crusher/unassembled"
+		"0": "neepmeat:block/living_machine/controller/front_broken",
+		"1": "neepmeat:block/machine_block",
+		"particle": "neepmeat:block/machine_block"
 	},
 	"elements": [
 		{

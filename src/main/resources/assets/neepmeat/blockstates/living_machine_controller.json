@@ -1,7 +1,13 @@
 {
   "variants": {
-    "": {
-      "model": "neepmeat:block/living_machine/controller"
+    "status=invalid_structure": {
+      "model": "neepmeat:block/living_machine/controller/invalid_structure"
+    },
+    "status=broken": {
+      "model": "neepmeat:block/living_machine/controller/broken"
+    },
+    "status=active": {
+      "model": "neepmeat:block/living_machine/controller/active"
     }
   }
 }

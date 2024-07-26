@@ -8,11 +8,13 @@ import net.minecraft.util.math.random.Random;
 public class DegradationManager implements NbtSerialisable
 {
     private final RateFunction degradationRate;
+    private final Runnable zeroCross;
     private double degradation = 0f;
 
-    public DegradationManager(RateFunction degradationRate, Random random)
+    public DegradationManager(RateFunction degradationRate, Random random, Runnable zeroCross)
     {
         this.degradationRate = degradationRate;
+        this.zeroCross = zeroCross;
     }
 
     public float getDegradation()

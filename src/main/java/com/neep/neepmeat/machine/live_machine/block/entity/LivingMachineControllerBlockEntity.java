@@ -27,45 +27,6 @@ public class LivingMachineControllerBlockEntity extends LivingMachineBlockEntity
     public void serverTick()
     {
         super.serverTick();
-
-//        withComponents(LivingMachineComponents.LARGEST_HOPPER, LivingMachineComponents.CRUSHER_SEGMENT, LivingMachineComponents.ITEM_OUTPUT, LivingMachineComponents.MOTOR_PORT).ifPresent(result ->
-//        {
-//            var hoppers = result.t1();
-//            var crushers = result.t2();
-//            var itemOutputs = result.t3();
-//
-//            if (power < 0.1)
-//            {
-//                return;
-//            }
-//
-//            float progressIncrement = getProgressIncrement() / crushers.size() * 4;
-//
-//            InventoryStorage input = hoppers.iterator().next().getStorage(null);
-//            Storage<ItemVariant> output = itemOutputs.iterator().next().getStorage(null);
-//
-//            boolean hasInput = input.nonEmptyIterator().hasNext();
-//            try (Transaction transaction = Transaction.openOuter())
-//            {
-//                for (var crusher : crushers)
-//                {
-//                    try (Transaction inner = transaction.openNested())
-//                    {
-//                        CrusherSegmentBlockEntity.InputSlot slot = crusher.getStorage();
-//
-//                        if (hasInput && slot.isEmpty())
-//                            StorageUtil.move(input, slot, v -> true, 1, inner);
-//
-//                        if (!slot.isEmpty())
-//                        {
-//                            slot.tick(progressIncrement, output, inner);
-//                        }
-//                        inner.commit();
-//                    }
-//                }
-//                transaction.commit();
-//            }
-//        });
     }
 
     @Override

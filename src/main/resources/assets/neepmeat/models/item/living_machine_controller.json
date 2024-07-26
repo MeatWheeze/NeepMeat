@@ -1,5 +1,5 @@
 {
-	"parent": "neepmeat:block/living_machine/controller"
+	"parent": "neepmeat:block/living_machine/controller/active"
 }
 
 

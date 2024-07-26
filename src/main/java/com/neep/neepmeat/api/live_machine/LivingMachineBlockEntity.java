@@ -13,6 +13,7 @@ import com.neep.neepmeat.api.processing.PowerUtils;
 import com.neep.neepmeat.init.NMFluids;
 import com.neep.neepmeat.machine.live_machine.LivingMachineComponents;
 import com.neep.neepmeat.machine.live_machine.Processes;
+import com.neep.neepmeat.machine.live_machine.block.TestLivingMachineBlock;
 import com.neep.neepmeat.machine.live_machine.block.entity.MotorPortBlockEntity;
 import com.neep.neepmeat.machine.live_machine.component.PoweredComponent;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
@@ -64,7 +65,7 @@ public abstract class LivingMachineBlockEntity extends SyncableBlockEntity imple
     private final BitSet currentComponents = new BitSet(); // Active components marked in one-hot codes
     private EnumMap<StructureProperty, AtomicDouble> properties = new EnumMap<>(StructureProperty.class);
 
-    protected DegradationManager degradationManager = new DegradationManager(this::degradationRate, Random.create());
+    protected DegradationManager degradationManager = new DegradationManager(this::degradationRate, Random.create(), this::updateBlockState);
     private final float rateMultiplier = 1;
 
     private final DataLog dataLog;
@@ -191,14 +192,20 @@ public abstract class LivingMachineBlockEntity extends SyncableBlockEntity imple
             repairAmount += rateMultiplier * selfRepair;
         }
 
-//        var motors1 = getComponent(LivingMachineComponents.MOTOR_PORT);
-
-//        if (world.getTime() % 20 == 0 && !motors1.isEmpty())
-//        {
-//            NeepMeat.LOGGER.info("Age: {}, Efficiency: {}, Rate: {}", 100 * degradationManager.getDegradation(), 100 * getEfficiency(), 100 * 20 * degradationRate(degradationManager.getDegradation()));
-//        }
-
         degradationManager.tick();
+    }
+
+    private void updateBlockState()
+    {
+        TestLivingMachineBlock.Status status = TestLivingMachineBlock.Status.INVALID_STRUCTURE;
+
+        if (process != null)
+            status = TestLivingMachineBlock.Status.ACTIVE;
+
+        if (getHealth() <= 0)
+            status = TestLivingMachineBlock.Status.BROKEN;
+
+        getWorld().setBlockState(getPos(), getCachedState().with(TestLivingMachineBlock.STATUS, status));
     }
 
     public void serverTick()
@@ -215,6 +222,8 @@ public abstract class LivingMachineBlockEntity extends SyncableBlockEntity imple
 
             this.process = Processes.getInstance().getFirstMatch(currentComponents);
             updateProcess = false;
+
+            updateBlockState();
         }
 
         age++;

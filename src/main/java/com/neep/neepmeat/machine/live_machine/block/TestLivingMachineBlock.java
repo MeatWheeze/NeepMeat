@@ -6,12 +6,16 @@ import com.neep.neepmeat.api.live_machine.LivingMachineBlockEntity;
 import com.neep.neepmeat.api.processing.PowerUtils;
 import com.neep.neepmeat.machine.live_machine.LivingMachines;
 import com.neep.neepmeat.machine.live_machine.block.entity.LivingMachineControllerBlockEntity;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.state.StateManager;
+import net.minecraft.state.property.EnumProperty;
 import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
+import net.minecraft.util.StringIdentifiable;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -21,6 +25,8 @@ import java.text.DecimalFormat;
 
 public class TestLivingMachineBlock extends LivingMachineBlock implements MeatlibBlock
 {
+    public static final EnumProperty<Status> STATUS = EnumProperty.of("status", Status.class);
+
     private final String name;
 
     public TestLivingMachineBlock(String name, Settings settings)
@@ -63,10 +69,30 @@ public class TestLivingMachineBlock extends LivingMachineBlock implements Meatli
         super.onStateReplaced(state, world, pos, newState, moved);
     }
 
+    @Override
+    protected void appendProperties(StateManager.Builder<Block, BlockState> builder)
+    {
+        super.appendProperties(builder);
+        builder.add(STATUS);
+    }
+
     @Nullable
     @Override
     public BlockEntity createBlockEntity(BlockPos pos, BlockState state)
     {
         return LivingMachines.LIVING_MACHINE_CONTROLLER_BE.instantiate(pos, state);
+    }
+
+    public enum Status implements StringIdentifiable
+    {
+        INVALID_STRUCTURE,
+        BROKEN,
+        ACTIVE;
+
+        @Override
+        public String asString()
+        {
+            return name().toLowerCase();
+        }
     }
 }
