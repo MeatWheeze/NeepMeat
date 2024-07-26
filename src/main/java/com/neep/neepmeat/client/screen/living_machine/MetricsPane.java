@@ -121,14 +121,6 @@ public class MetricsPane extends LivingMachineScreen.PaneWidget
 
     private String formatRepair(float repair)
     {
-        if (!Float.isFinite(repair))
-            return "?";
-
-        var big = new BigDecimal(repair * 20 * 100);
-        big = big.round(new MathContext(2));
-//        return big.toString() + "%/s";
-//        return smallFloatFormat.format(repair * 20 * 100) + "%/s";
-
         return StructurePropertyFormatter.formatRepair(repair);
     }
 

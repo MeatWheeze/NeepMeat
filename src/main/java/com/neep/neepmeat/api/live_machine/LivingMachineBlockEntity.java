@@ -450,15 +450,20 @@ public abstract class LivingMachineBlockEntity extends SyncableBlockEntity imple
     public double degradationRate(double degradation)
     {
         double rate = -repairAmount;
-        if (power <= getRatedPower() * 0.75)
+        float rated = getRatedPower();
+
+        if (rated <= 0)
+            return Float.MAX_VALUE;
+
+        if (power <= rated * 0.75)
         {
             return rate;
         }
 
-        if (power > getRatedPower() * 2)
-            rate += (rateMultiplier * (0.00001f * power / getRatedPower()));
-        else if (power > getRatedPower())
-            rate += (rateMultiplier * (0.000007f * power / getRatedPower()));
+        if (power > rated * 2)
+            rate += (rateMultiplier * (0.00001f * power / rated));
+        else if (power > rated)
+            rate += (rateMultiplier * (0.000007f * power / rated));
         else
             rate += (rateMultiplier * (0.000003f));
 

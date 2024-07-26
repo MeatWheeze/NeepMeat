@@ -14,9 +14,11 @@ public interface StructurePropertyFormatter
 
     static String formatRepair(float repair)
     {
-        double perSecond = repair * 20 * 100;
+        float percentRepairPerTick = repair * 20 * 100;
+        if (!Float.isFinite(percentRepairPerTick))
+            return "?";
 
-        BigDecimal bigDecimal = new BigDecimal(perSecond).setScale(3, RoundingMode.HALF_UP);
+        BigDecimal bigDecimal = new BigDecimal(percentRepairPerTick).setScale(3, RoundingMode.HALF_UP);
         return bigDecimal.toEngineeringString() + "%/s";
     }
 }
