@@ -28,6 +28,8 @@ public class MWItems
     public static Item SMALL_BALLISTIC_MAGAZINE = new AmmunitionItem(TooltipSupplier.simple(1), new MeatlibItemSettings().group(MeatWeapons.WEAPONS));
     public static Item MEDIUM_BALLISTIC_MAGAZINE = new AmmunitionItem(TooltipSupplier.simple(1), new MeatlibItemSettings().group(MeatWeapons.WEAPONS));
     public static Item LARGE_BALLISTIC_MAGAZINE = new AmmunitionItem(TooltipSupplier.simple(1), new MeatlibItemSettings().group(MeatWeapons.WEAPONS));
+    public static Item SMALL_ENERGY_MAGAZINE = new AmmunitionItem(TooltipSupplier.simple(1), new MeatlibItemSettings().group(MeatWeapons.WEAPONS));
+    public static Item MEDIUM_ENERGY_MAGAZINE = new AmmunitionItem(TooltipSupplier.simple(1), new MeatlibItemSettings().group(MeatWeapons.WEAPONS));
 
     public static Item ENGINE = new BaseCraftingItem(C, 0, new MeatlibItemSettings().group(MeatWeapons.WEAPONS));
     public static Item IRON_BARREL = new BaseCraftingItem(C, 0, new MeatlibItemSettings().group(MeatWeapons.WEAPONS));
@@ -74,7 +76,9 @@ public class MWItems
             new MeatgunTooltipBuilder().desc().build(),
             new MeatlibItemSettings().group(MeatWeapons.WEAPONS));
 
-    @Path("battery") public static MeatgunModuleItem BATTERY = new MeatgunModuleItem(MeatgunModules.BATTERY, new MeatlibItemSettings().group(MeatWeapons.WEAPONS));
+    @Path("battery") public static MeatgunModuleItem BATTERY = new MeatgunModuleItem(MeatgunModules.BATTERY,
+            new MeatgunTooltipBuilder().desc().build(),
+            new MeatlibItemSettings().group(MeatWeapons.WEAPONS));
     @Path("homing_brain") public static MeatgunModuleItem HOMING_BRAIN = new MeatgunModuleItem(MeatgunModules.HOMING_BRAIN,
             new MeatgunTooltipBuilder().desc().build(),
             new MeatlibItemSettings().group(MeatWeapons.WEAPONS));

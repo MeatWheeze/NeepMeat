@@ -34,7 +34,7 @@ public class MeatgunModules
             new AttributeContainer().complexity(2), (l, p) -> new UnderbarrelModule(l), UnderbarrelModule::new);
 
     public static final MeatgunModule.Type<BatteryModule> BATTERY = register(new Identifier(MeatWeapons.NAMESPACE, "battery"),
-            new AttributeContainer().complexity(1), (l, p) -> new BatteryModule(l), BatteryModule::new);
+            new AttributeContainer().complexity(3), (l, p) -> new BatteryModule(l), BatteryModule::new);
     public static final MeatgunModule.Type<HomingModule> HOMING_BRAIN = register(new Identifier(MeatWeapons.NAMESPACE, "homing_brain"),
             new AttributeContainer().complexity(4), (l, p) -> new HomingModule(l), HomingModule::new);
 

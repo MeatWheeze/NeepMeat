@@ -1,9 +1,7 @@
 package com.neep.meatweapons;
 
-import com.neep.meatlib.MeatLib;
 import com.neep.meatlib.MeatLibRegistration;
 import com.neep.meatlib.attachment.player.PlayerAttachmentManager;
-import com.neep.meatlib.registry.RegistrationContext;
 import com.neep.meatweapons.datagen.MWRecipeGenerator;
 import com.neep.meatweapons.enchantment.MWEnchantments;
 import com.neep.meatweapons.entity.*;
@@ -120,7 +118,8 @@ public class MeatWeapons implements ModInitializer
         AmmunitionProvider.LOOKUP.registerForItems((itemStack, context) -> new SimpleItemAmmunitionProvider(itemStack, context, AmmunitionType.BALLISTIC, 16), MWItems.SMALL_BALLISTIC_MAGAZINE);
         AmmunitionProvider.LOOKUP.registerForItems((itemStack, context) -> new SimpleItemAmmunitionProvider(itemStack, context, AmmunitionType.BALLISTIC, 32), MWItems.MEDIUM_BALLISTIC_MAGAZINE);
         AmmunitionProvider.LOOKUP.registerForItems((itemStack, context) -> new SimpleItemAmmunitionProvider(itemStack, context, AmmunitionType.BALLISTIC, 64), MWItems.LARGE_BALLISTIC_MAGAZINE);
-        AmmunitionProvider.LOOKUP.registerForItems((itemStack, context) -> new SimpleItemAmmunitionProvider(itemStack, context, AmmunitionType.ENERGY, 16), NMItems.PINKDRINK);
+        AmmunitionProvider.LOOKUP.registerForItems((itemStack, context) -> new SimpleItemAmmunitionProvider(itemStack, context, AmmunitionType.ENERGY, 16), MWItems.SMALL_ENERGY_MAGAZINE);
+        AmmunitionProvider.LOOKUP.registerForItems((itemStack, context) -> new SimpleItemAmmunitionProvider(itemStack, context, AmmunitionType.ENERGY, 32), MWItems.MEDIUM_ENERGY_MAGAZINE);
 
         Registry.register(ImplantRegistry.REGISTRY, BloodBulletProviderImplant.ID, BloodBulletProviderImplant::new);
         Registry.register(ImplantRegistry.REGISTRY, MagazineOrganImplant.ID, MagazineOrganImplant::new);
