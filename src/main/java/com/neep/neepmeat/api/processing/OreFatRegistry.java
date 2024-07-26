@@ -221,7 +221,7 @@ public class OreFatRegistry implements SimpleSynchronousResourceReloadListener
         nbtToEntry.clear();
         outputToEntry.clear();
 
-        for (Identifier id : manager.findResources("ore_fat", path -> path.getPath().equals("fat.json")).keySet())
+        for (Identifier id : manager.findResources("ore_fat", path -> path.getPath().endsWith("/fat.json")).keySet())
         {
             if (manager.getResource(id).isPresent())
             {

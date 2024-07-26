@@ -461,6 +461,9 @@ public abstract class LivingMachineBlockEntity extends SyncableBlockEntity imple
         double rate = -repairAmount;
         float rated = getRatedPower();
 
+        if (power <= 0)
+            return 0;
+
         if (rated <= 0)
             return Float.MAX_VALUE;
 
