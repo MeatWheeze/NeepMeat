@@ -1,0 +1,20 @@
+{
+  "type": "neepmeat:manufacture",
+  "base": {
+    "id": "neepmeat:meat_steel_component"
+  },
+  "steps":[
+    {
+      "id": "neepmeat:combine",
+      "resource": "neepmeat:metal_barrel"
+    },
+    {
+      "id": "neepmeat:inject",
+      "resource": "neepmeat:blood"
+    }
+  ],
+  "result": {
+    "resource": "meatweapons:magazine_organ",
+    "amount": 1
+  }
+}

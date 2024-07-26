@@ -25,7 +25,7 @@ public class MagazineOrganImplant implements EntityImplant
     public static final Identifier ID = new Identifier(MeatWeapons.NAMESPACE, "magazine_organ");
 
     private final Entity entity;
-    private int maxSize = 6;
+    private int maxSize = 8;
 
 //    private final AmmunitionProvider[] inventory = new AmmunitionProvider[6];
     private final List<AmmunitionProvider> inventory = new ArrayList<>();

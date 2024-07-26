@@ -71,10 +71,10 @@
 
   "item.meatweapons.blood_bullet_provider": "Blood Bullet Converter",
   "implant.meatweapons.blood_bullet_provider": "Blood Bullet Converter",
-  "implant.meatweapons.blood_bullet_provider.desc_0": "Converts blood into bullets when out of Meatgun ammunition.",
+  "implant.meatweapons.blood_bullet_provider.desc_0": "Converts the user's blood into bullets when out of Meatgun ammunition.",
   "item.meatweapons.magazine_organ": "Magazine Organ",
   "implant.meatweapons.magazine_organ": "Magazine Organ",
-  "implant.meatweapons.magazine_organ.desc_0": "Allows eating of ammunition items for storage.",
+  "implant.meatweapons.magazine_organ.desc_0": "Allows eating of up to eight ammunition items for storage.",
 
   "text.meatweapons.tinker_table.item_here": "Place Meatgun here",
   "tooltip.meatweapons.meatgun_module_1": "Meatgun Module - install in a Tinker Table",

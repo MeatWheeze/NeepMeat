@@ -1,0 +1,24 @@
+{
+  "type": "neepmeat:manufacture",
+  "base": {
+    "id": "neepmeat:biomechanical_components"
+  },
+  "steps":[
+    {
+      "id": "neepmeat:combine",
+      "resource": "neepmeat:fluid_buffer"
+    },
+    {
+      "id": "neepmeat:inject",
+      "resource": "neepmeat:eldritch_enzymes"
+    },
+    {
+      "id": "neepmeat:inject",
+      "resource": "neepmeat:blood"
+    }
+  ],
+  "result": {
+    "resource": "meatweapons:blood_bullet_provider",
+    "amount": 1
+  }
+}
