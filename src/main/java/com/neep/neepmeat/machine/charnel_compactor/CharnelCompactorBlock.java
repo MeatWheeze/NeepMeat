@@ -9,7 +9,9 @@ import com.neep.neepmeat.machine.integrator.Integrator;
 import com.neep.neepmeat.transport.api.pipe.DataCable;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
-import net.minecraft.block.*;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.ShapeContext;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -40,6 +42,11 @@ public class CharnelCompactorBlock extends BaseBlock implements DataCable
     public static final IntProperty LEVEL = Properties.LEVEL_8;
     protected static final VoxelShape OUTLINE_SHAPE;
     private static final VoxelShape RAYCAST_SHAPE = createCuboidShape(2.0, 4.0, 2.0, 14.0, 16.0, 14.0);
+
+    static
+    {
+        OUTLINE_SHAPE = VoxelShapes.combineAndSimplify(VoxelShapes.fullCube(), RAYCAST_SHAPE, BooleanBiFunction.ONLY_FIRST);
+    }
 
     public CharnelCompactorBlock(RegistrationContext ctx, ItemSettings itemSettings, Settings settings)
     {
@@ -134,7 +141,7 @@ public class CharnelCompactorBlock extends BaseBlock implements DataCable
     {
 
         super.onEntityCollision(state, world, pos, entity);
-        if (!world.isClient() && entity instanceof ItemEntity item &&  entity.isOnGround())
+        if (!world.isClient() && entity instanceof ItemEntity item && entity.isOnGround())
         {
             try (Transaction transaction = Transaction.openOuter())
             {
@@ -146,12 +153,8 @@ public class CharnelCompactorBlock extends BaseBlock implements DataCable
         }
     }
 
-    public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
+    public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context)
+    {
         return OUTLINE_SHAPE;
     }
-
-    static {
-        OUTLINE_SHAPE = VoxelShapes.combineAndSimplify(VoxelShapes.fullCube(), VoxelShapes.union(createCuboidShape(0.0, 0.0, 4.0, 16.0, 3.0, 12.0), new VoxelShape[]{createCuboidShape(4.0, 0.0, 0.0, 12.0, 3.0, 16.0), createCuboidShape(2.0, 0.0, 2.0, 14.0, 3.0, 14.0), RAYCAST_SHAPE}), BooleanBiFunction.ONLY_FIRST);
-    }
-
 }
