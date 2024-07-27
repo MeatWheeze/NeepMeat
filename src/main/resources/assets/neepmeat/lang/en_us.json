@@ -153,6 +153,7 @@
   "block.neepmeat.tree_vacuum.lore_0": "Imbibes trees through its maw.",
   "block.neepmeat.large_compressor": "Large Compressor",
   "block.neepmeat.large_compressor.lore_0": "Compresses gasses.",
+  "block.neepmeat.stomach": "Stomach",
   "block.neepmeat.lucky_one": "Lucky One",
   "block.neepmeat.lucky_one.lore_0": "+100% chance of extra outputs (max +200%). Must be receiving ≥50eJ/t of vascular power.",
   "block.neepmeat.extractor": "Harvest Extractor",

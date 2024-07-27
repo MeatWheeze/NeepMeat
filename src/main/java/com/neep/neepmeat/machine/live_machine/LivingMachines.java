@@ -79,6 +79,7 @@ public class LivingMachines
     public static final BigBlock<LargestHopperBlock.StructureBlock> LARGEST_HOPPER = new LargestHopperBlock(C, FabricBlockSettings.copyOf(MACHINE_SETTINGS), ItemSettings.block().tooltip(tooltip(LivingMachineComponents.ITEM_INPUT)));
     public static final BigBlock<TreeVacuumBlock.Structure> TREE_VACUUM = new TreeVacuumBlock(C, ItemSettings.block().tooltip(tooltip(LivingMachineComponents.TREE_VACUUM).append(TooltipSupplier.simple(1))), FabricBlockSettings.copyOf(MACHINE_SETTINGS));
     public static final LargeCompressorBlock LARGE_COMPRESSOR = new LargeCompressorBlock(C, ItemSettings.block().tooltip(tooltip(LivingMachineComponents.LARGE_COMPRESSOR).append(TooltipSupplier.simple(1))), FabricBlockSettings.copyOf(MACHINE_SETTINGS));
+    public static final StomachBlock STOMACH = new StomachBlock(C, ItemSettings.block().tooltip(tooltip(LivingMachineComponents.STOMACH)), MeatlibBlockSettings.copyOf(MACHINE_SETTINGS));
 
     public static final TallerBlock LUCKY_ONE = new LuckyOneBlock(C,
             ItemSettings.block().tooltip(tooltip(LivingMachineComponents.LUCKY_ONE).append(TooltipSupplier.simple(1))),
@@ -95,6 +96,7 @@ public class LivingMachines
     public static BlockEntityType<LargeTrommelBlockEntity> LARGE_TROMMEL_BE;
     public static BlockEntityType<LargestHopperBlockEntity> LARGEST_HOPPER_BE;
     public static BlockEntityType<LargeCompressorBlockEntity> LARGE_COMPRESSOR_BE;
+    public static BlockEntityType<StomachBlockEntity> STOMACH_BE;
 
     public static BlockEntityType<LivingMachineControllerBlockEntity> LIVING_MACHINE_CONTROLLER_BE;
     public static BlockEntityType<ItemOutputPortBlockEntity> ITEM_OUTPUT_PORT_BE;
@@ -127,6 +129,7 @@ public class LivingMachines
         LivingMachineComponent.LOOKUP.registerSelf(LivingMachines.LARGE_COMPRESSOR_BE);
         FluidStorage.SIDED.registerForBlockEntity(LargeCompressorBlock.StructureBlockEntity::getOutputStorage, LARGE_COMPRESSOR.getStructure().getBlockEntityType());
         FluidPump.SIDED.registerForBlockEntity(LargeCompressorBlock.StructureBlockEntity::getFluidPump, LARGE_COMPRESSOR.getStructure().getBlockEntityType());
+        STOMACH_BE = register("stomach", (p, s) -> new StomachBlockEntity(STOMACH_BE, p, s), STOMACH);
 
         TREE_VACUUM_BE = register("tree_vacuum", (p, s) -> new TreeVacuumBlockEntity(TREE_VACUUM_BE, p, s), TREE_VACUUM);
         LivingMachineComponent.LOOKUP.registerSelf(LivingMachines.TREE_VACUUM_BE);
