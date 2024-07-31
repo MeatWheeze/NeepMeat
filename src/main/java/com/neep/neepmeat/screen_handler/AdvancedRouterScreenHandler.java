@@ -7,20 +7,19 @@ import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.init.ScreenHandlerInit;
 import com.neep.neepmeat.item.filter.FilterList;
 import com.neep.neepmeat.transport.screen_handler.FilterScreenHandler;
+import it.unimi.dsi.fastutil.booleans.BooleanArrayList;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.Direction;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class AdvancedRouterScreenHandler extends BasicScreenHandler
 {
     private final List<FilterList> filters;
-    private List<Boolean> notEmpty = new ArrayList<>(Arrays.asList(new Boolean[6]));
+    private List<Boolean> notEmpty = new BooleanArrayList(6);
 
     public final ChannelManager<OpenFilter> openFilterC2S;
     public final ChannelManager<UpdateFilters> updateFiltersS2C;
