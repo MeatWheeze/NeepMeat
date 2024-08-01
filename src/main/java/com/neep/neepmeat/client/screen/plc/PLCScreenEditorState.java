@@ -9,11 +9,16 @@ import com.neep.neepmeat.neepasm.compiler.Parser;
 import com.neep.neepmeat.network.plc.PLCSyncThings;
 import com.neep.neepmeat.plc.instruction.Argument;
 import com.neep.neepmeat.plc.instruction.InstructionProvider;
+import com.neep.neepmeat.plc.screen.PLCScreenHandler;
 import net.minecraft.client.gui.Drawable;
 import net.minecraft.client.gui.Element;
 import net.minecraft.client.gui.Selectable;
+import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder;
 import net.minecraft.text.Text;
+import org.lwjgl.glfw.GLFW;
+
+import javax.xml.transform.sax.SAXResult;
 
 public class PLCScreenEditorState extends ScreenSubElement implements Drawable, Element, Selectable, PLCScreenState
 {
@@ -159,7 +164,8 @@ public class PLCScreenEditorState extends ScreenSubElement implements Drawable, 
 
     public boolean isSelected()
     {
-        return editorField.isFocused();
+//        return editorField.isFocused();
+        return true;
     }
 
     public void argument(Argument argument)
@@ -176,6 +182,26 @@ public class PLCScreenEditorState extends ScreenSubElement implements Drawable, 
     @Override
     public boolean keyPressed(int keyCode, int scanCode, int modifiers)
     {
+        if (Screen.hasControlDown())
+        {
+            PLCScreenHandler handler = parent.getScreenHandler();
+            if (keyCode == GLFW.GLFW_KEY_R)
+            {
+                if (handler.isRunning())
+                    PLCSyncThings.Client.sendPause(handler.getPlc());
+                else
+                    PLCSyncThings.Client.sendRun(handler.getPlc());
+
+                return true;
+
+            }
+            else if (keyCode == GLFW.GLFW_KEY_T)
+            {
+                PLCSyncThings.Client.sendStop(handler.getPlc());
+                return true;
+            }
+        }
+
         if (keyCode == 258 && !isSelected())
         {
 //            parent.setFocused(this);
