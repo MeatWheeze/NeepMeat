@@ -1,5 +1,6 @@
 package com.neep.neepmeat.plc.instruction;
 
+import com.neep.meatlib.api.network.ParamCodec;
 import com.neep.meatlib.network.PacketBufUtil;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtHelper;
@@ -9,6 +10,8 @@ import net.minecraft.util.math.Direction;
 
 public record Argument(BlockPos pos, Direction face)
 {
+    public static final ParamCodec<Argument> PARAM_CODEC = ParamCodec.of(Argument.class, Argument::writeBuf, Argument::fromBuf);
+
     public void writeBuf(PacketByteBuf buf)
     {
         PacketBufUtil.writeBlockPos(buf, pos);

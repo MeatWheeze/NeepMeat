@@ -27,15 +27,8 @@ public class ChannelFormatFormatImpl<T> implements ChannelFormat<T>
         // Get a handy list of method parameters.
         invokeParameters = codecs.stream().<Class<?>>map(ParamCodec::clazz).toList();
 
-        // Check that the method exists in the receiver class provided.
-        try
-        {
-            this.method = clazz.getMethod(APPLY_METHOD_NAME, invokeParameters.toArray(new Class<?>[0]));
-        }
-        catch (NoSuchMethodException e)
-        {
-            throw new IllegalArgumentException("Method not found in given class. Is it called 'apply' and do its parameters match those specified in the builder?");
-        }
+        this.method = findMethod(clazz, invokeParameters.toArray(new Class[0]));
+
 
         // This implementation automatically forwards the type-erased arguments of the emitter to Sender::send without
         // the user having to implement a lambda themselves. This should be safer since it is impossible for the user
@@ -45,20 +38,56 @@ public class ChannelFormatFormatImpl<T> implements ChannelFormat<T>
         @SuppressWarnings("unchecked")
         Emitter<T> emitter = sender -> (T) Proxy.newProxyInstance(clazz.getClassLoader(), new Class[]{clazz}, (proxy, method, args) ->
         {
+            // This has to be outside the switch as the method name is not constant
             String methodName = method.getName();
+            if (methodName.equals(this.method.getName()))
+            {
+                send(sender, args);
+                return false;
+            }
+
             return switch (methodName)
             {
+                case "toString" -> "proxy of " + this.method;
                 case "equals" -> false;
                 case "hashCode" -> 0;
-                case APPLY_METHOD_NAME ->
-                {
-                    send(sender, args);
-                    yield null;
-                }
-                default -> throw new IllegalStateException("Unexpected value: " + methodName);
+                default -> throw new IllegalStateException("Unexpected method name: " + methodName);
             };
         });
         this.emitter = emitter;
+    }
+
+    private static Method findMethod(Class<?> clazz, Class<?>[] invokeParameters)
+    {
+        Method[] methods = clazz.getMethods();
+        if (methods.length == 1)
+        {
+            Method method = methods[0];
+            Class<?>[] types = method.getParameterTypes();
+            if (parametersMatch(method, invokeParameters))
+                return method;
+        }
+        else
+        {
+            for (Method method : clazz.getMethods())
+            {
+                if (parametersMatch(method, invokeParameters))
+                    return method;
+            }
+        }
+
+        throw new IllegalArgumentException("Method not found in given class. Is it called 'apply' and do its parameters match those specified in the builder?");
+    }
+
+    private static boolean parametersMatch(Method method, Class<?>[] invokeParameters)
+    {
+        Class<?>[] methodParameters = method.getParameterTypes();
+        for (int i = 0; i < methodParameters.length; i++)
+        {
+            if (!methodParameters[i].isAssignableFrom(invokeParameters[i]))
+                return false;
+        }
+        return true;
     }
 
     public static <T> Builder<T> builder(Class<T> clazz)

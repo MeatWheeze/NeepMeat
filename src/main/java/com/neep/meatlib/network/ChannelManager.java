@@ -53,6 +53,7 @@ public class ChannelManager<T>
 
     public T emitter()
     {
+        // TODO: cache emitter to minimise proxy stuff
         return format.emitter(sender);
     }
 

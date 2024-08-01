@@ -6,7 +6,7 @@ import com.neep.neepmeat.client.screen.plc.edit.InstructionBrowserWidget;
 import com.neep.neepmeat.neepasm.NeepASM;
 import com.neep.neepmeat.neepasm.compiler.ParsedSource;
 import com.neep.neepmeat.neepasm.compiler.Parser;
-import com.neep.neepmeat.network.plc.PLCSyncThings;
+import com.neep.neepmeat.network.plc.PLCSyncAction;
 import com.neep.neepmeat.plc.instruction.Argument;
 import com.neep.neepmeat.plc.instruction.InstructionProvider;
 import com.neep.neepmeat.plc.screen.PLCScreenHandler;
@@ -17,8 +17,6 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder;
 import net.minecraft.text.Text;
 import org.lwjgl.glfw.GLFW;
-
-import javax.xml.transform.sax.SAXResult;
 
 public class PLCScreenEditorState extends ScreenSubElement implements Drawable, Element, Selectable, PLCScreenState
 {
@@ -115,7 +113,8 @@ public class PLCScreenEditorState extends ScreenSubElement implements Drawable, 
                     setCompileMessage(e.getMessage(), false, e.line());
                 }
 
-                PLCSyncThings.Client.sendText(parent.getScreenHandler().getPlc(), editorField.getText());
+                parent.getScreenHandler().updateText.emitter().accept(editorField.getText());
+//                PLCSyncThings.Client.sendText(parent.getScreenHandler().getPlc(), editorField.getText());
                 changed = false;
             }
 
@@ -188,16 +187,16 @@ public class PLCScreenEditorState extends ScreenSubElement implements Drawable, 
             if (keyCode == GLFW.GLFW_KEY_R)
             {
                 if (handler.isRunning())
-                    PLCSyncThings.Client.sendPause(handler.getPlc());
+                    handler.channel.emitter().apply(PLCSyncAction.PAUSE);
                 else
-                    PLCSyncThings.Client.sendRun(handler.getPlc());
+                    handler.channel.emitter().apply(PLCSyncAction.RUN);
 
                 return true;
 
             }
             else if (keyCode == GLFW.GLFW_KEY_T)
             {
-                PLCSyncThings.Client.sendStop(handler.getPlc());
+                handler.channel.emitter().apply(PLCSyncAction.STOP);
                 return true;
             }
         }
