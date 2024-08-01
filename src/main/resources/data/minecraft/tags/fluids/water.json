@@ -13,6 +13,15 @@
     "neepmeat:flowing_ethereal_fuel",
     "neepmeat:meat",
     "neepmeat:flowing_meat",
-    "neepmeat:patina_treatment"
+    "neepmeat:patina_treatment",
+    "neepmeat:flowing_patina_treatment",
+    "neepmeat:tissue_slurry",
+    "neepmeat:flowing_tissue_slurry",
+    "neepmeat:pasteurised_milk",
+    "neepmeat:flowing_pasteurised_milk",
+    "neepmeat:animal_feed",
+    "neepmeat:flowing_animal_feed",
+    "neepmeat:pinkdrink",
+    "neepmeat:flowing_pinkdrink"
   ]
 }
