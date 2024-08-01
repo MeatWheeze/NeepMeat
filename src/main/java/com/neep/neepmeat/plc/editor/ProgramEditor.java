@@ -39,7 +39,7 @@ public class ProgramEditor implements NbtSerialisable
         return programSource;
     }
 
-    public void compile()
+    public boolean compile()
     {
         try
         {
@@ -47,11 +47,15 @@ public class ProgramEditor implements NbtSerialisable
             this.program = compiler.compile(parsed);
             if (plc.getSurgeryRobot().getController() != null)
                 PLCSyncAction.sendCompileStatus((ServerPlayerEntity) plc.getSurgeryRobot().getController(), "Compiled successfully", true, -1);
+
+            return true;
         }
         catch (NeepASM.ProgramBuildException e)
         {
             if (plc.getSurgeryRobot().getController() != null)
                 PLCSyncAction.sendCompileStatus((ServerPlayerEntity) plc.getSurgeryRobot().getController(), e.getMessage(), false, e.line());
+
+            return false;
         }
     }
 

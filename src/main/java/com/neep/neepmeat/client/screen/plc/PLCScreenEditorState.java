@@ -45,7 +45,7 @@ public class PLCScreenEditorState extends ScreenSubElement implements Drawable, 
     {
         if (editorField == null)
         {
-            editorField = new EditBoxWidget(x, y, 300, screenHeight, 0.8f, Text.of("Write your program here.\n\nClick a block in the world to insert its coordinates as a target.\n\nTo run the program, press the 'compile' button and then the 'run' button."), Text.of("gle"))
+            editorField = new EditBoxWidget(x, y, 300, screenHeight, 0.8f, Text.of("Write your program here.\n\nClick a block in the world to insert its coordinates as a target.\n\nTo run the program, press the 'compile' button and then the 'run' button\n\nShortcuts:\n CTRL+R: Run\n CTRL+T: Stop\n CTRL+E: Compile and run."), Text.of("gle"))
             {
                 @Override
                 public void setFocused(boolean focused)
@@ -193,6 +193,10 @@ public class PLCScreenEditorState extends ScreenSubElement implements Drawable, 
 
                 return true;
 
+            }
+            else if (keyCode == GLFW.GLFW_KEY_E)
+            {
+                handler.channel.emitter().apply(PLCSyncAction.COMPILE_RUN);
             }
             else if (keyCode == GLFW.GLFW_KEY_T)
             {

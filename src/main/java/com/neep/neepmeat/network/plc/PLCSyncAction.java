@@ -10,7 +10,7 @@ public enum PLCSyncAction
     RUN,
     PAUSE,
     STOP,
-    COMPILE;
+    COMPILE, COMPILE_RUN;
 
     public static void sendCompileStatus(ServerPlayerEntity controller, String message, boolean b, int line)
     {

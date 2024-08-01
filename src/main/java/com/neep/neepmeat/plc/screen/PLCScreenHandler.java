@@ -196,6 +196,11 @@ public class PLCScreenHandler extends ScreenHandler
             case STOP -> plc.hardStop();
             case PAUSE -> plc.pause();
             case COMPILE -> plc.getProgramEditor().compile();
+            case COMPILE_RUN ->
+            {
+                if (plc.getProgramEditor().compile())
+                    plc.runProgram(plc.getProgramEditor().getProgram());
+            }
         }
     }
 
