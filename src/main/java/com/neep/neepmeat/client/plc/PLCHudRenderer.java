@@ -10,13 +10,13 @@ import com.neep.neepmeat.plc.block.entity.PLCBlockEntity;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
+import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
 import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderContext;
 import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.ShapeContext;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.render.Camera;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.VertexConsumer;
@@ -31,6 +31,7 @@ import org.jetbrains.annotations.Nullable;
 import org.joml.Matrix4dc;
 import org.joml.Matrix4f;
 import org.joml.Vector3d;
+import org.lwjgl.glfw.GLFW;
 
 @Environment(value = EnvType.CLIENT)
 public class PLCHudRenderer
@@ -55,6 +56,8 @@ public class PLCHudRenderer
         this.be.getSurgeryRobot().setController(client.player);
         this.controller = new PLCMotionController(be.getSurgeryRobot());
         this.camera = client.gameRenderer.getCamera();
+
+        robotClient.resetKeys();
     }
 
     @Nullable
@@ -136,21 +139,40 @@ public class PLCHudRenderer
         KeyboardEvents.PRE_INPUT.register((window, key, scancode, action, modifiers) ->
         {
             MinecraftClient client = MinecraftClient.getInstance();
+
             PLCHudRenderer instance = getInstance();
-            if (instance != null && client.currentScreen instanceof PLCProgramScreen ps && ps.passEvents())
+            if (instance != null
+                    && client.currentScreen instanceof PLCProgramScreen ps
+                    && ps.passEvents())
             {
-                InputUtil.Key key2 = InputUtil.fromKeyCode(key, scancode);
-                if (action == 0)
-                {
-                    KeyBinding.setKeyPressed(key2, false);
-                }
-                else
-                {
-                    KeyBinding.setKeyPressed(key2, true);
-                    KeyBinding.onKeyPressed(key2);
-                }
+                // Handle repeats as presses
+                instance.handleMovementKey(client, key, action != GLFW.GLFW_RELEASE);
             }
         });
+    }
+
+    private void handleMovementKey(MinecraftClient client, int key, boolean pressed)
+    {
+        InputUtil.Key forward = KeyBindingHelper.getBoundKeyOf(client.options.forwardKey);
+        InputUtil.Key back = KeyBindingHelper.getBoundKeyOf(client.options.backKey);
+        InputUtil.Key left = KeyBindingHelper.getBoundKeyOf(client.options.leftKey);
+        InputUtil.Key right = KeyBindingHelper.getBoundKeyOf(client.options.rightKey);
+        InputUtil.Key up = KeyBindingHelper.getBoundKeyOf(client.options.jumpKey);
+        InputUtil.Key down = KeyBindingHelper.getBoundKeyOf(client.options.sneakKey);
+
+        if (key == forward.getCode())
+            robotClient.forwardKey = pressed;
+        else if (key == back.getCode())
+            robotClient.backKey = pressed;
+        else if (key == left.getCode())
+            robotClient.leftKey = pressed;
+        else if (key == right.getCode())
+            robotClient.rightKey = pressed;
+        else if (key == up.getCode())
+            robotClient.upKey = pressed;
+        else if (key == down.getCode())
+            robotClient.downKey = pressed;
+
     }
 
     public void exit()

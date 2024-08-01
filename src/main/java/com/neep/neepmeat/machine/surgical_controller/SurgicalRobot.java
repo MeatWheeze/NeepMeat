@@ -11,7 +11,6 @@ import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.base.ResourceAmount;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.option.GameOptions;
 import net.minecraft.client.render.Camera;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
@@ -397,6 +396,13 @@ public class SurgicalRobot implements PLCRobot, NbtSerialisable
         private final SurgicalRobot robot;
         private final PLCBlockEntity be;
 
+        public boolean forwardKey;
+        public boolean backKey;
+        public boolean leftKey;
+        public boolean rightKey;
+        public boolean upKey;
+        public boolean downKey;
+
         public Client(SurgicalRobot robot, PLCBlockEntity be)
         {
             this.robot = robot;
@@ -420,12 +426,12 @@ public class SurgicalRobot implements PLCRobot, NbtSerialisable
                 if (robot.controller == null)
                     return;
 
-                GameOptions options = MinecraftClient.getInstance().options;
                 Camera camera = MinecraftClient.getInstance().gameRenderer.getCamera();
 
                 boolean shouldTransformMotion = false;
 
-                if (MeatLib.vsUtil != null) {
+                if (MeatLib.vsUtil != null)
+                {
                     shouldTransformMotion = MeatLib.vsUtil.hasShipAtPosition(be.getPos(), MinecraftClient.getInstance().world);
                 }
 
@@ -440,40 +446,41 @@ public class SurgicalRobot implements PLCRobot, NbtSerialisable
                 double fvy = 0;
                 double fvz = 0;
 
-                if (options.forwardKey.isPressed())
+                if (forwardKey)
                 {
                     fvx += vx;
                     fvz += vz;
                 }
-                if (options.backKey.isPressed())
+                if (backKey)
                 {
                     fvx -= vx;
                     fvz -= vz;
                 }
 
-                if (options.leftKey.isPressed())
+                if (leftKey)
                 {
                     fvx -= normal.x;
                     fvz -= normal.z;
                 }
-                if (options.rightKey.isPressed())
+                if (rightKey)
                 {
                     fvx += normal.x;
                     fvz += normal.z;
                 }
 
-                if (options.jumpKey.isPressed())
+                if (upKey)
                 {
                     fvy += speed;
                 }
-                if (options.sneakKey.isPressed())
+                if (downKey)
                 {
                     fvy -= speed;
                 }
 
                 Quaterniondc rotation = new Quaterniond();
 
-                if (shouldTransformMotion) {
+                if (shouldTransformMotion)
+                {
                     rotation = MeatLib.vsUtil.getShipToWorldRotation(be.getPos(), MinecraftClient.getInstance().world);
                 }
 
@@ -492,7 +499,8 @@ public class SurgicalRobot implements PLCRobot, NbtSerialisable
                     robot.vy = fvy;
                 }
 
-                if (shouldTransformMotion && rotation != null) {
+                if (shouldTransformMotion && rotation != null)
+                {
                     Vector3d holder = new Vector3d(fvx, fvy, fvz);
                     holder.rotate(rotation.invert(new Quaterniond()));
                     robot.vx = holder.x;
@@ -508,6 +516,16 @@ public class SurgicalRobot implements PLCRobot, NbtSerialisable
                 robot.vy *= 0.05;
                 robot.vx *= 0.05;
             }
+        }
+
+        public void resetKeys()
+        {
+            forwardKey = false;
+            backKey = false;
+            leftKey = false;
+            rightKey = false;
+            upKey = false;
+            downKey = false;
         }
     }
 }
