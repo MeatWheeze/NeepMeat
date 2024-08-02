@@ -76,7 +76,7 @@ public class PressingRecipe extends AbstractPressingRecipe<CastingBasinStorage>
             // Ensure that storage contents still match the recipe
             if (fluid == null)
             {
-                throw new IllegalStateException("Storage contents do not conform to recipe");
+                return null;
             }
 
             storage.unlock();
