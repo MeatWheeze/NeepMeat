@@ -5,11 +5,11 @@ import com.neep.meatlib.block.MeatlibBlock;
 import com.neep.meatlib.block.MeatlibBlockSettings;
 import com.neep.meatlib.item.BaseBlockItem;
 import com.neep.meatlib.item.ItemSettings;
-import com.neep.meatlib.registry.BlockRegistry;
-import com.neep.meatlib.registry.ItemRegistry;
 import com.neep.meatlib.registry.RegistrationContext;
 import com.neep.neepmeat.api.big_block.BigBlock;
 import com.neep.neepmeat.api.big_block.BigBlockPattern;
+import com.neep.neepmeat.datagen.tag.NMTags;
+import com.neep.neepmeat.init.NMBlocks;
 import com.neep.neepmeat.machine.live_machine.LivingMachines;
 import com.neep.neepmeat.util.MiscUtil;
 import net.minecraft.block.Block;
@@ -20,14 +20,17 @@ import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.item.ItemPlacementContext;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.DirectionProperty;
 import net.minecraft.state.property.Properties;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import net.minecraft.util.math.random.Random;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.BlockView;
+import net.minecraft.world.Heightmap;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
@@ -55,6 +58,28 @@ public class CharnelPumpBlock extends BigBlock<CharnelPumpStructure> implements 
                 Direction.SOUTH, volume.rotateY(180),
                 Direction.WEST, volume.rotateY(270)
         );
+    }
+
+    @Override
+    public boolean hasRandomTicks(BlockState state)
+    {
+        return true;
+    }
+
+    @Override
+    public void randomTick(BlockState state, ServerWorld world, BlockPos pos, Random random)
+    {
+        for (BlockPos randomPos : BlockPos.iterateRandomly(random, 3, pos, 32))
+        {
+            int surface = world.getChunk(randomPos).getHeightmap(Heightmap.Type.WORLD_SURFACE).get(randomPos.getX() & 15, randomPos.getZ() & 15) - 1;
+            BlockPos surfacePos = new BlockPos(randomPos.getX(), surface, randomPos.getZ());
+            BlockState prevState = world.getBlockState(surfacePos);
+            if (prevState.isIn(NMTags.CONTAMINATED_RUBBLE_REPLACABLE))
+            {
+                world.setBlockState(surfacePos, NMBlocks.CONTAMINATED_DIRT.getDefaultState());
+            }
+        }
+        super.randomTick(state, world, pos, random);
     }
 
     @Override

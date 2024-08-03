@@ -63,7 +63,8 @@ public class PlayerEnlightenmentManager implements EnlightenmentManager, ClientT
     @Override
     public double lastDose()
     {
-        return dose;
+        // Use a moving average so that emitters can query entities every other tick.
+        return (dose + lastDose) / 2;
     }
 
     @Override

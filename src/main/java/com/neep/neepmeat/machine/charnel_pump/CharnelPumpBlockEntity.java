@@ -5,6 +5,7 @@ import com.neep.meatlib.blockentity.SyncableBlockEntity;
 import com.neep.meatlib.util.ClientComponents;
 import com.neep.meatlib.util.LazySupplier;
 import com.neep.neepmeat.BalanceConstants;
+import com.neep.neepmeat.api.enlightenment.EnlightenmentUtil;
 import com.neep.neepmeat.api.live_machine.ComponentType;
 import com.neep.neepmeat.api.live_machine.LivingMachineComponent;
 import com.neep.neepmeat.api.processing.PowerUtils;
@@ -25,12 +26,16 @@ import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntityType;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.particle.ParticleTypes;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Box;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
@@ -103,6 +108,8 @@ public class CharnelPumpBlockEntity extends SyncableBlockEntity implements Livin
         if (canRun(puPower, this))
         {
             spawnSpouts();
+
+            emitEnlightenment();
 
             // Consume work fluid and eject ores
             boolean fluidAvailable = StorageUtil.simulateExtract(inputStorage, FluidVariant.of(NMFluids.STILL_WORK_FLUID), distributeAmount, transaction) == distributeAmount;
@@ -187,6 +194,20 @@ public class CharnelPumpBlockEntity extends SyncableBlockEntity implements Livin
                 }
             }
 
+        }
+    }
+
+    private void emitEnlightenment()
+    {
+        if (world.getTime() % 2 == 0)
+        {
+            float enlightenment = 5;
+            Vec3d centre = Vec3d.ofCenter(pos);
+            getWorld().getEntitiesByClass(PlayerEntity.class, new Box(pos).expand(16, 16, 16), p -> true)
+                    .forEach(p ->
+                    {
+                        EnlightenmentUtil.applyDose((ServerPlayerEntity) p, enlightenment, p.squaredDistanceTo(centre), 1 / 50.0);
+                    });
         }
     }
 
