@@ -3,6 +3,7 @@ package com.neep.neepmeat.datagen;
 import com.neep.meatlib.datagen.MeatLibDataGen;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.datagen.tag.NMTags;
+import com.neep.neepmeat.init.NMItems;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider;
 import net.fabricmc.fabric.api.tag.convention.v1.ConventionalBlockTags;
@@ -43,6 +44,7 @@ public class NMItemTagProvider extends FabricTagProvider.ItemTagProvider
                 .addOptionalTag(TagKey.of(Registries.ITEM.getKey(), new Identifier("chestcavity", "salvageable_animal_organ_meat")))
                 .addOptionalTag(TagKey.of(Registries.ITEM.getKey(), new Identifier("chestcavity", "salvageable_rotten_flesh")))
                 .add(Items.BONE, Items.SPIDER_EYE, Items.FERMENTED_SPIDER_EYE, Items.EGG, Items.TURTLE_EGG, Items.FROGSPAWN)
+                .add(NMItems.ASSORTED_BIOMASS)
                 .add(Items.SNIFFER_EGG)
         ;
 
