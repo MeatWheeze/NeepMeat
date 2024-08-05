@@ -18,6 +18,7 @@ public class FarmingScutterInstance extends EntityInstance<FarmingScutter> imple
     {
         super(materialManager, entity);
         body = materialManager.defaultCutout().material(Materials.TRANSFORMED).getModel(NMExtraModels.FARMING_SCUTTER).createInstance();
+        body.loadIdentity().translate(entity.getPos());
     }
 
     @Override
