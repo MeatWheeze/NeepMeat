@@ -21,6 +21,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.function.BiFunction;
+import java.util.function.Function;
 import java.util.function.Predicate;
 
 /**
@@ -28,7 +29,7 @@ import java.util.function.Predicate;
  * @param <T> A resource with a corresponding registry, such as Item or Fluid
  */
 @SuppressWarnings("UnstableApiUsage")
-public class RecipeInput<T> implements Predicate<StorageView<? extends TransferVariant<T>>>
+public class RecipeInput<T> implements Predicate<StorageView<? extends TransferVariant<?>>>
 {
     protected final Serialiser<T> serialiser;
     protected final Identifier type;
@@ -45,6 +46,16 @@ public class RecipeInput<T> implements Predicate<StorageView<? extends TransferV
         this.amount = amount;
         this.serialiser = serialiser;
         this.type = type;
+    }
+
+    public <V extends TransferVariant<T>> boolean extract(Storage<V> storage, Function<T, V> function, TransactionContext transaction)
+    {
+        @Nullable T item = getFirstMatching(storage, transaction).orElse(null);
+        if (item == null)
+            return false;
+
+        long extracted = storage.extract(function.apply(item), amount(), transaction);
+        return extracted == amount();
     }
 
     public Serialiser<T> getSerialiser()
@@ -116,7 +127,7 @@ public class RecipeInput<T> implements Predicate<StorageView<? extends TransferV
     }
 
     @Override
-    public boolean test(StorageView<? extends TransferVariant<T>> storageView)
+    public boolean test(StorageView<? extends TransferVariant<?>> storageView)
     {
         cacheMatching();
         return Arrays.stream(matchingObjects).anyMatch(o -> storageView.getResource().getObject().equals(o));

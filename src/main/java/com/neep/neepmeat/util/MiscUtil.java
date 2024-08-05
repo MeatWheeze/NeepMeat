@@ -103,10 +103,10 @@ public class MiscUtil
         return newShape;
     }
 
-    public static <T> T ifPresentOrNull(NbtCompound nbt, String key, Function<String, T> function)
+    public static <T> T ifPresentOrNull(NbtCompound nbt, String key, Function<String, T> ifPresent)
     {
         if (nbt.contains(key))
-            return function.apply(nbt.getString(key));
+            return ifPresent.apply(nbt.getString(key));
         else
             return null;
     }

@@ -24,7 +24,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.EnumMap;
 
-public class StomachBlock extends BigBlock<BigBlockStructure<BigBlockStructureEntity>> implements MeatlibBlock, BlockEntityProvider, LivingMachineStructure
+public class StomachBlock extends BigBlock<BigBlockStructure<BigBlockStructureEntity>> implements MeatlibBlock, BlockEntityProvider
 {
     private final BigBlockPattern pattern = new BigBlockPattern().oddCylinder(1, 0, 1, () -> this.getStructure().getDefaultState());
 
@@ -42,7 +42,7 @@ public class StomachBlock extends BigBlock<BigBlockStructure<BigBlockStructureEn
                 FabricBlockEntityTypeBuilder.create(
                         (p, s) -> new BigBlockStructureEntity(b.getBlockEntityType(), p, s), b).build());
 
-        return ctx.append(this, new BigBlockStructure.Simple<>(this, MeatlibBlockSettings.copyOf(settings), registerererer), MeatlibBlock::structure);
+        return ctx.append(this, new StomachStructureBlock(this, MeatlibBlockSettings.copyOf(settings), registerererer), MeatlibBlock::structure);
     }
 
     @Override
@@ -58,9 +58,17 @@ public class StomachBlock extends BigBlock<BigBlockStructure<BigBlockStructureEn
         return LivingMachines.STOMACH_BE.instantiate(pos, state);
     }
 
-    @Override
-    public EnumMap<StructureProperty, StructureProperty.Entry> getProperties()
+    private static class StomachStructureBlock extends BigBlockStructure<BigBlockStructureEntity> implements LivingMachineStructure
     {
-        return StructureProperty.EMPTY;
+        public StomachStructureBlock(BigBlock<?> parent, Settings settings, BlockEntityRegisterererer<BigBlockStructureEntity> registerBlockEntity)
+        {
+            super(parent, settings, registerBlockEntity);
+        }
+
+        @Override
+        public EnumMap<StructureProperty, StructureProperty.Entry> getProperties()
+        {
+            return StructureProperty.EMPTY;
+        }
     }
 }

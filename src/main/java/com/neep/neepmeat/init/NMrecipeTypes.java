@@ -77,6 +77,9 @@ public class NMrecipeTypes
     public static final MeatRecipeSerialiser<VivisectionRecipe> VIVISECTION_SERIALISER = RecipeRegistry.registerMeatlibSerializer(NeepMeat.NAMESPACE, "vivisection", new VivisectionRecipe.Serializer());
     public static final MeatRecipeType<VivisectionRecipe> VIVISECTION = RecipeRegistry.registerMeatlibType(NeepMeat.NAMESPACE, "vivisection");
 
+    public static final MeatRecipeSerialiser<BioreactorRecipe> BIOREACTOR_SERIALISER = RecipeRegistry.registerMeatlibSerializer(NeepMeat.NAMESPACE, "bioreactor", new BioreactorRecipe.Serialiser());
+    public static final MeatRecipeType<BioreactorRecipe> BIOREACTOR = RecipeRegistry.registerMeatlibType(NeepMeat.NAMESPACE, "bioreactor");
+
     public static Text ofMinMax(long min, long max)
     {
         return Text.literal("Amount: " + min + "-" + max).formatted(Formatting.GOLD);

@@ -81,8 +81,10 @@ public abstract class LivingMachineBlockEntity extends SyncableBlockEntity imple
     @Nullable private Process process;
 
     // Convenient combined item output
+    private Storage<ItemVariant> combinedItemInput = Storage.empty();
     private Storage<ItemVariant> combinedItemOutput = Storage.empty();
     private Storage<FluidVariant> combinedFluidInput = Storage.empty();
+    private Storage<FluidVariant> combinedFluidOutput = Storage.empty();
 
     // Public, non-persistent round-robin counter
     public int inputSequence;
@@ -314,10 +316,11 @@ public abstract class LivingMachineBlockEntity extends SyncableBlockEntity imple
 
     private void updateSpecialStorage()
     {
-        List<Storage<ItemVariant>> storages = getComponent(LivingMachineComponents.ITEM_OUTPUT).stream().map(l -> l.getStorage(null)).toList();
-        combinedItemOutput = new StorageDelegate(storages);
+        combinedItemInput = new CombinedStorage<>(getComponent(LivingMachineComponents.ITEM_INPUT).stream().map(l -> l.getStorage(null)).toList());
+        combinedItemOutput = new StorageDelegate(getComponent(LivingMachineComponents.ITEM_OUTPUT).stream().map(l -> l.getStorage(null)).toList());
 
         combinedFluidInput = new CombinedStorage<>(getComponent(LivingMachineComponents.FLUID_INPUT).stream().map(l -> l.getStorage(null)).toList());
+        combinedFluidOutput = new CombinedStorage<>(getComponent(LivingMachineComponents.FLUID_OUTPUT).stream().map(l -> l.getStorage(null)).toList());
     }
 
     protected float getProperty(StructureProperty property)
@@ -595,6 +598,11 @@ public abstract class LivingMachineBlockEntity extends SyncableBlockEntity imple
         return components;
     }
 
+    public Storage<ItemVariant> getCombinedItemInput()
+    {
+        return combinedItemInput;
+    }
+
     public Storage<ItemVariant> getCombinedItemOutput()
     {
         return combinedItemOutput;
@@ -605,7 +613,12 @@ public abstract class LivingMachineBlockEntity extends SyncableBlockEntity imple
         return combinedFluidInput;
     }
 
-    private class StorageDelegate implements Storage<ItemVariant>
+    public Storage<FluidVariant> getCombinedFluidOutput()
+    {
+        return combinedFluidOutput;
+    }
+
+    private static class StorageDelegate implements Storage<ItemVariant>
     {
         private final Storage<ItemVariant> storage;
 //        private final BlockPos outPos;

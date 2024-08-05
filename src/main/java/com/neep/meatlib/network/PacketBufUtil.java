@@ -5,9 +5,11 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 
+import java.util.List;
 import java.util.Map;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
+import java.util.stream.IntStream;
 
 public final class PacketBufUtil
 {
@@ -129,5 +131,20 @@ public final class PacketBufUtil
             V val = readVal.apply(buf);
             add.accept(key, val);
         }
+    }
+
+    public static <T> void writeList(PacketByteBuf buf, List<T> list, BiConsumer<PacketByteBuf, T> writer)
+    {
+        buf.writeVarInt(list.size());
+        for (var element : list)
+        {
+            writer.accept(buf, element);
+        }
+    }
+
+    public static <T> List<T> readList(PacketByteBuf buf, Function<PacketByteBuf, T> reader)
+    {
+        int size = buf.readVarInt();
+        return IntStream.range(0, size).mapToObj(i -> reader.apply(buf)).toList();
     }
 }
