@@ -1,0 +1,13 @@
+{
+  "type": "neepmeat:advanced_crushing",
+  "input": {
+    "resource": "minecraft:prismarine_bricks",
+    "amount": 1
+  },
+  "output": {
+    "resource": "minecraft:prismarine_shard",
+    "amount": 4
+  },
+  "experience": 0,
+  "processtime": 40
+}
