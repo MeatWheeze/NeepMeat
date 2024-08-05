@@ -9,6 +9,8 @@ import com.neep.neepmeat.api.big_block.BigBlock;
 import com.neep.neepmeat.api.big_block.BigBlockPattern;
 import com.neep.neepmeat.api.big_block.BigBlockStructure;
 import com.neep.neepmeat.api.big_block.BigBlockStructureEntity;
+import com.neep.neepmeat.api.live_machine.LivingMachineStructure;
+import com.neep.neepmeat.api.live_machine.StructureProperty;
 import com.neep.neepmeat.machine.live_machine.LivingMachines;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 import net.minecraft.block.BlockEntityProvider;
@@ -20,7 +22,9 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import org.jetbrains.annotations.Nullable;
 
-public class StomachBlock extends BigBlock<BigBlockStructure<BigBlockStructureEntity>> implements MeatlibBlock, BlockEntityProvider
+import java.util.EnumMap;
+
+public class StomachBlock extends BigBlock<BigBlockStructure<BigBlockStructureEntity>> implements MeatlibBlock, BlockEntityProvider, LivingMachineStructure
 {
     private final BigBlockPattern pattern = new BigBlockPattern().oddCylinder(1, 0, 1, () -> this.getStructure().getDefaultState());
 
@@ -52,5 +56,11 @@ public class StomachBlock extends BigBlock<BigBlockStructure<BigBlockStructureEn
     public BlockEntity createBlockEntity(BlockPos pos, BlockState state)
     {
         return LivingMachines.STOMACH_BE.instantiate(pos, state);
+    }
+
+    @Override
+    public EnumMap<StructureProperty, StructureProperty.Entry> getProperties()
+    {
+        return StructureProperty.EMPTY;
     }
 }
