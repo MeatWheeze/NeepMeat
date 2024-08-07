@@ -63,6 +63,8 @@ import com.neep.neepmeat.machine.power_flower.PowerFlowerFluidPortBlock;
 import com.neep.neepmeat.machine.power_flower.PowerFlowerGrowthBlock;
 import com.neep.neepmeat.machine.power_flower.PowerFlowerSeedsBlock;
 import com.neep.neepmeat.machine.pylon.PylonBlock;
+import com.neep.neepmeat.machine.reactor.ActiveWasteBlock;
+import com.neep.neepmeat.machine.reactor.ReactionCoreBlock;
 import com.neep.neepmeat.machine.separator.SeparatorBlock;
 import com.neep.neepmeat.machine.small_compressor.SmallCompressorBlock;
 import com.neep.neepmeat.machine.small_trommel.SmallTrommelBlock;
@@ -296,6 +298,9 @@ public class NMBlocks
 
     public static Block SMALL_COMPRESSOR = new SmallCompressorBlock(C, block().tooltip(TooltipSupplier.hidden(1)), MeatlibBlockSettings.copyOf(FLUID_MACHINE_SETTINGS).nonOpaque());
 
+    // --- Reactor ---
+    public static Block REACTION_CORE = new ReactionCoreBlock(C, MeatlibBlockSettings.copyOf(Blocks.STONE));
+    public static Block ACTIVE_WASTE = new ActiveWasteBlock(C, MeatlibBlockSettings.copyOf(Blocks.STONE));
     // --- Item Transfer ---
     @Path("item_duct") public static Block ITEM_DUCT = new ItemDuctBlock(C, block(), MeatlibBlockSettings.copyOf(Blocks.HOPPER));
     @Path("chute") public static Block CHUTE = new ChuteBlock(C, block().tooltip(TooltipSupplier.simple(1)), MeatlibBlockSettings.copyOf(Blocks.HOPPER));
@@ -353,6 +358,7 @@ public class NMBlocks
     public static Block HOLDING_TRACK = new HoldingTrackBlock(C, block().tooltip(TooltipSupplier.simple(1)), MeatlibBlockSettings.copyOf(Blocks.RAIL));
     public static Block DUMPING_TRACK = new DumpingTrackBlock(C, block().tooltip(TooltipSupplier.simple(1)), MeatlibBlockSettings.copyOf(Blocks.RAIL));
     public static Block CONTROL_TRACK = new PlayerControlTrack(C, block().tooltip(TooltipSupplier.simple(1)), MeatlibBlockSettings.copyOf(Blocks.RAIL));
+
 
     public static boolean never(BlockState state, BlockView world, BlockPos pos)
     {
