@@ -7,14 +7,22 @@ import it.unimi.dsi.fastutil.longs.LongOpenHashSet;
 import it.unimi.dsi.fastutil.longs.LongSet;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntityType;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
 import java.util.*;
 
 public class ReactionCoreBlockEntity extends SyncableBlockEntity
 {
+    private final ReactionCoreParameters parameters = new ReactionCoreParameters();
+    private final Random random = Random.create();
+
     private BlockPos lastOrigin;
+
+    public double clientIncidentZoneRadius;
 
     public ReactionCoreBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
     {
@@ -24,23 +32,91 @@ public class ReactionCoreBlockEntity extends SyncableBlockEntity
 
     public void serverTick()
     {
-        if (world.getTime() % 40 == 0)
-        {
-            placeExudate();
-        }
+//        parameters.tick(0.09f);
+//
+//
+//        if (world.getTime() % 40 == 0)
+//        {
+//            double stored = parameters.getStoredExudate();
+//
+//            float factor = 1;
+//
+//            // Convert amount to blocks
+//            int toPlace = (int) Math.floor(stored * factor);
+//
+//            int placed = placeExudate(toPlace);
+//
+//            // Convert blocks to amount
+//            double toExtract = placed / factor;
+//
+//            parameters.extractStored(toExtract);
+//        }
+//
+//        parameters.tickIncidentZone();
     }
 
-    private void placeExudate()
+    private int placeExudate(int toPlace)
     {
-        List<BlockPos> potential = traverse(world, lastOrigin, 400, 5);
+        int placed = placeExudateInIncidentZone(world, toPlace);
 
-        int canPlace = Math.min(potential.size(), 5);
+        if (placed < toPlace)
+        {
+            placed = extrudeExudate(world, toPlace - placed);
+        }
+
+        return placed;
+    }
+
+    // Randomly replaces blocks in the incident zone
+    private int placeExudateInIncidentZone(World world, int toPlace)
+    {
+        int placed = 0;
+        for (int i = 0; i < toPlace; ++i)
+        {
+            BlockPos randomPos = randomPosInSphere(pos, (float) parameters.getIncidentZoneRadius());
+
+            BlockState prevState = world.getBlockState(randomPos);
+            if (prevState.isReplaceable())
+            {
+                world.setBlockState(randomPos, NMBlocks.ACTIVE_WASTE.getDefaultState());
+                ++placed;
+            }
+        }
+
+        return placed;
+    }
+
+    private BlockPos randomPosInSphere(BlockPos origin, float radius)
+    {
+        // Random vector
+        float rx = random.nextFloat() - 0.5f;
+        float ry = random.nextFloat() - 0.5f;
+        float rz = random.nextFloat() - 0.5f;
+
+        float inverse = MathHelper.inverseSqrt(rx * rx + ry * ry + rz * rz);
+
+        // Random length within incident zone
+        float rl = inverse * random.nextFloat() * radius;
+
+        // Normalise and extend to new length
+        int x = origin.getX() + Math.round(rx * rl);
+        int y = origin.getY() + Math.round(ry * rl);
+        int z = origin.getZ() + Math.round(rz * rl);
+
+        return new BlockPos(x, y, z);
+    }
+
+    // Uses a BFS to place exudate blocks in air spaces
+    private int extrudeExudate(World world, int toPlace)
+    {
+        List<BlockPos> potential = traverse(world, lastOrigin, 800, toPlace);
+
+        int canPlace = Math.min(potential.size(), toPlace);
         for (int i = 0; i < canPlace; ++i)
         {
             BlockPos pos = potential.get(potential.size() - i - 1);
 
             world.setBlockState(pos, NMBlocks.ACTIVE_WASTE.getDefaultState());
-
         }
 
         if (canPlace == 0)
@@ -54,6 +130,8 @@ public class ReactionCoreBlockEntity extends SyncableBlockEntity
             else
                 lastOrigin = potential.get(potential.size() - 1);
         }
+
+        return canPlace;
     }
 
     private List<BlockPos> traverse(World world, BlockPos origin, int maxVisit, int maxToPlace)
@@ -61,7 +139,7 @@ public class ReactionCoreBlockEntity extends SyncableBlockEntity
         // Climb down more?
         maxToPlace *= 2;
 
-        Direction[] horDirections = new Direction[]{Direction.DOWN, Direction.NORTH, Direction.SOUTH, Direction.EAST, Direction.WEST};
+        Direction[] horDirections = new Direction[]{Direction.DOWN, Direction.NORTH, Direction.SOUTH, Direction.EAST, Direction.WEST, Direction.UP};
 
         LongSet visited = new LongOpenHashSet();
         Queue<BlockPos> queue = new ArrayDeque<>();
@@ -105,6 +183,20 @@ public class ReactionCoreBlockEntity extends SyncableBlockEntity
             }
         }
         return positions;
+    }
+
+    @Override
+    public void toClientTag(NbtCompound nbt)
+    {
+        super.toClientTag(nbt);
+        nbt.putDouble("incident_zone_radius", parameters.getIncidentZoneRadius());
+    }
+
+    @Override
+    public void fromClientTag(NbtCompound nbt)
+    {
+        super.fromClientTag(nbt);
+        this.clientIncidentZoneRadius = nbt.getDouble("incident_zone_radius");
     }
 
     private boolean isValidBlock(BlockState blockState)

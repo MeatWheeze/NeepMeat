@@ -47,6 +47,7 @@ import com.neep.neepmeat.machine.live_machine.LivingMachines;
 import com.neep.neepmeat.machine.mixer.MixerRenderer;
 import com.neep.neepmeat.machine.multitank.MultiTankRenderer;
 import com.neep.neepmeat.machine.phage_ray.PhageRayClientComponent;
+import com.neep.neepmeat.machine.reactor.ReactionCoreRenderer;
 import com.neep.neepmeat.machine.separator.SeparatorScreen;
 import com.neep.neepmeat.machine.small_compressor.SmallCompressorScreen;
 import com.neep.neepmeat.machine.small_trommel.SmallTrommelRenderer;
@@ -249,6 +250,8 @@ public class NeepMeatClient implements ClientModInitializer
 //        BlockEntityRendererFactories.register(PLCBlocks.PLC_ENTITY, PLCInstance::new);
 
         BlockEntityRendererFactories.register(NMBlockEntities.ITEM_MINCER, ItemMincerRenderer::new);
+
+        BlockEntityRendererFactories.register(NMBlockEntities.REACTION_CORE, ReactionCoreRenderer::new);
 
 //        BlockEntityRendererFactories.register(PLCBlocks.ROBOTIC_ARM_ENTITY, RoboticArmRenderer::new);
 
