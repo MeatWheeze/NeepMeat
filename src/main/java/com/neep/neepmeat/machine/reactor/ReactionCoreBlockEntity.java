@@ -14,10 +14,12 @@ import java.util.*;
 
 public class ReactionCoreBlockEntity extends SyncableBlockEntity
 {
+    private BlockPos lastOrigin;
 
     public ReactionCoreBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
     {
         super(type, pos, state);
+        this.lastOrigin = pos;
     }
 
     public void serverTick()
@@ -30,19 +32,35 @@ public class ReactionCoreBlockEntity extends SyncableBlockEntity
 
     private void placeExudate()
     {
-        List<BlockPos> potential = traverse(world, pos, 400, 5);
+        List<BlockPos> potential = traverse(world, lastOrigin, 400, 5);
 
         int canPlace = Math.min(potential.size(), 5);
         for (int i = 0; i < canPlace; ++i)
         {
-            BlockPos pos = potential.get(i);
+            BlockPos pos = potential.get(potential.size() - i - 1);
 
             world.setBlockState(pos, NMBlocks.ACTIVE_WASTE.getDefaultState());
+
+        }
+
+        if (canPlace == 0)
+        {
+            lastOrigin = pos;
+        }
+        else
+        {
+            if (!lastOrigin.equals(pos))
+                lastOrigin = pos;
+            else
+                lastOrigin = potential.get(potential.size() - 1);
         }
     }
 
     private List<BlockPos> traverse(World world, BlockPos origin, int maxVisit, int maxToPlace)
     {
+        // Climb down more?
+        maxToPlace *= 2;
+
         Direction[] horDirections = new Direction[]{Direction.DOWN, Direction.NORTH, Direction.SOUTH, Direction.EAST, Direction.WEST};
 
         LongSet visited = new LongOpenHashSet();

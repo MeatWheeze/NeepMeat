@@ -69,10 +69,11 @@ public class LargestHopperBlock extends BigBlock<LargestHopperBlock.StructureBlo
     public void onEntityCollision(BlockState state, World world, BlockPos pos, Entity entity)
     {
         super.onEntityCollision(state, world, pos, entity);
-        if (!world.isClient() && world.getTime() % 2 == 0 &&
-                entity.isOnGround() &&
-                entity instanceof ItemEntity itemEntity &&
-                world.getBlockEntity(pos) instanceof LargestHopperBlockEntity be
+        if (!world.isClient()
+                && world.getTime() % 3 == 0 // This sometimes fails for items dropped by blocks. Strange.
+                && entity.isOnGround()
+                && entity instanceof ItemEntity itemEntity
+                && world.getBlockEntity(pos) instanceof LargestHopperBlockEntity be
         )
         {
             be.insertEntity(itemEntity);
@@ -112,10 +113,11 @@ public class LargestHopperBlock extends BigBlock<LargestHopperBlock.StructureBlo
         public void onEntityCollision(BlockState state, World world, BlockPos pos, Entity entity)
         {
             super.onEntityCollision(state, world, pos, entity);
-            if (!world.isClient() && world.getTime() % 2 == 0 &&
-                    entity.isOnGround() &&
-                    entity instanceof ItemEntity itemEntity &&
-                    world.getBlockEntity(pos) instanceof StructureBlockEntity be
+            if (!world.isClient()
+                && world.getTime() % 3 == 0 // This sometimes fails for items dropped by blocks. Strange.
+                    && entity.isOnGround()
+                    && entity instanceof ItemEntity itemEntity
+                    && world.getBlockEntity(pos) instanceof StructureBlockEntity be
             )
             {
                 if (world.getBlockEntity(be.getControllerPos()) instanceof LargestHopperBlockEntity cbe)

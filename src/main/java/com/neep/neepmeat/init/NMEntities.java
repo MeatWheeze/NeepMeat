@@ -2,6 +2,7 @@ package com.neep.neepmeat.init;
 
 import com.neep.meatlib.registry.EntityRegistry;
 import com.neep.neepmeat.NeepMeat;
+import com.neep.neepmeat.entity.ActiveWasteFallingBlockEntity;
 import com.neep.neepmeat.entity.EggEntity;
 import com.neep.neepmeat.entity.GlomeEntity;
 import com.neep.neepmeat.entity.LimbEntity;
@@ -18,6 +19,7 @@ import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRe
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
 import net.minecraft.entity.EntityDimensions;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.FallingBlockEntity;
 import net.minecraft.entity.SpawnGroup;
 
 public class NMEntities
@@ -39,6 +41,8 @@ public class NMEntities
     public static EntityType<SmallCompressorMinecart> SMALL_COMPRESSOR_MINECART;
 
     public static EntityType<FollowerEntity> FOLLOWER;
+
+    public static EntityType<ActiveWasteFallingBlockEntity> FALLING_ACTIVE_WASTE;
 
 
     public static void initialise()
@@ -89,6 +93,9 @@ public class NMEntities
         FARMING_SCUTTER = EntityRegistry.registerEntity(NeepMeat.NAMESPACE, "farming_scutter", FabricEntityTypeBuilder.create(SpawnGroup.MISC, FarmingScutter::new)
                 .dimensions(EntityDimensions.fixed(0.8f, 0.5f)).trackedUpdateRate(1).build());
         FabricDefaultAttributeRegistry.register(FARMING_SCUTTER, FarmingScutter.createMobAttributes());
+
+        FALLING_ACTIVE_WASTE = EntityRegistry.registerEntity(NeepMeat.NAMESPACE, "falling_active_waste", FabricEntityTypeBuilder.create(SpawnGroup.MISC, ActiveWasteFallingBlockEntity::new)
+                .dimensions(EntityDimensions.fixed(0.98f, 0.98f)).trackedUpdateRate(10).trackedUpdateRate(20).build());
 
     }
 }

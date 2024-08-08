@@ -80,6 +80,7 @@ import net.minecraft.client.model.Dilation;
 import net.minecraft.client.model.TexturedModelData;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.block.entity.BlockEntityRendererFactories;
+import net.minecraft.client.render.entity.FallingBlockEntityRenderer;
 import net.minecraft.client.render.entity.model.BipedEntityModel;
 import net.minecraft.client.render.entity.model.EntityModelLayer;
 import net.minecraft.client.render.entity.model.MinecartEntityModel;
@@ -171,6 +172,7 @@ public class NeepMeatClient implements ClientModInitializer
         EntityRendererRegistry.register(NMEntities.ACID_SPRAY, DummyEntityRenderer::new);
         EntityRendererRegistry.register(NMEntities.PHAGE_RAY, DummyEntityRenderer::new);
         EntityRendererRegistry.register(NMEntities.FOLLOWER, FollowerRenderer::new);
+        EntityRendererRegistry.register(NMEntities.FALLING_ACTIVE_WASTE, FallingBlockEntityRenderer::new);
 
         EntityRendererRegistry.register(NMEntities.FARMING_SCUTTER, DummyEntityRenderer::new);
 
