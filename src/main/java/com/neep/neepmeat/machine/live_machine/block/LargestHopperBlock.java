@@ -34,6 +34,11 @@ public class LargestHopperBlock extends BigBlock<LargestHopperBlock.StructureBlo
     private final VoxelShape shape = VoxelShapes.combine(VoxelShapes.cuboid(-1, 0, -1, 2, 1, 2),
             Block.createCuboidShape(-16 + 6, 2, -16 + 6, 32 - 6, 16, 32 - 6), BooleanBiFunction.ONLY_FIRST);
 
+    public static boolean isLargeHopper(BlockState state)
+    {
+        return state.isOf(LivingMachines.LARGEST_HOPPER) || state.isOf(LivingMachines.LARGEST_HOPPER.getStructure());
+    }
+
     public LargestHopperBlock(RegistrationContext ctx, Settings settings, ItemSettings itemSettings)
     {
         super(ctx, settings);

@@ -22,6 +22,7 @@ public class ReactionCoreBlockEntity extends SyncableBlockEntity
 
     private BlockPos lastOrigin;
 
+    public double lerpIncidentZoneRadius;
     public double clientIncidentZoneRadius;
 
     public ReactionCoreBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
@@ -32,27 +33,27 @@ public class ReactionCoreBlockEntity extends SyncableBlockEntity
 
     public void serverTick()
     {
-//        parameters.tick(0.09f);
-//
-//
-//        if (world.getTime() % 40 == 0)
-//        {
-//            double stored = parameters.getStoredExudate();
-//
-//            float factor = 1;
-//
-//            // Convert amount to blocks
-//            int toPlace = (int) Math.floor(stored * factor);
-//
-//            int placed = placeExudate(toPlace);
-//
-//            // Convert blocks to amount
-//            double toExtract = placed / factor;
-//
-//            parameters.extractStored(toExtract);
-//        }
-//
-//        parameters.tickIncidentZone();
+        parameters.tick(0.09f);
+
+        if (world.getTime() % 10 == 0)
+        {
+            double stored = parameters.getStoredExudate();
+
+            float factor = 1;
+
+            // Convert amount to blocks
+            int toPlace = (int) Math.floor(stored * factor);
+
+            int placed = placeExudate(toPlace);
+
+            // Convert blocks to amount
+            double toExtract = placed / factor;
+
+            parameters.extractStored(toExtract);
+            sync();
+        }
+
+        parameters.tickIncidentZone();
     }
 
     private int placeExudate(int toPlace)
@@ -61,7 +62,7 @@ public class ReactionCoreBlockEntity extends SyncableBlockEntity
 
         if (placed < toPlace)
         {
-            placed = extrudeExudate(world, toPlace - placed);
+            placed += extrudeExudate(world, toPlace - placed);
         }
 
         return placed;
@@ -76,7 +77,8 @@ public class ReactionCoreBlockEntity extends SyncableBlockEntity
             BlockPos randomPos = randomPosInSphere(pos, (float) parameters.getIncidentZoneRadius());
 
             BlockState prevState = world.getBlockState(randomPos);
-            if (prevState.isReplaceable())
+            // TODO: tag
+            if (!prevState.isOf(NMBlocks.REACTION_CORE) && !prevState.isOf(NMBlocks.ACTIVE_WASTE) && (prevState.isReplaceable() || random.nextBoolean()))
             {
                 world.setBlockState(randomPos, NMBlocks.ACTIVE_WASTE.getDefaultState());
                 ++placed;
@@ -170,6 +172,7 @@ public class ReactionCoreBlockEntity extends SyncableBlockEntity
                     visited.add(mutable.asLong());
 
                     BlockState offsetState = world.getBlockState(mutable);
+//                    if (direction != Direction.UP && offsetState.isAir())
                     if (offsetState.isAir())
                     {
                         positions.add(mutable.toImmutable());

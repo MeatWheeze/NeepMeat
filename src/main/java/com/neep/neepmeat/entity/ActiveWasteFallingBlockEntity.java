@@ -2,6 +2,8 @@ package com.neep.neepmeat.entity;
 
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.init.NMEntities;
+import com.neep.neepmeat.machine.live_machine.block.LargestHopperBlock;
+import com.neep.neepmeat.util.IterateRandomly;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.Entity;
@@ -153,62 +155,77 @@ public class ActiveWasteFallingBlockEntity extends FallingBlockEntity
                 if (this.isOnGround())
                 {
                     BlockState oldState = this.getWorld().getBlockState(blockPos);
-                    this.setVelocity(this.getVelocity().multiply(0.7, -0.5, 0.7));
-
-                    // Find the next viable place
-                    BlockPos placePos = blockPos;
-                    while (!canPlaceAt(getWorld(), placePos, this.block))
+                    if (LargestHopperBlock.isLargeHopper(oldState)
+                            || LargestHopperBlock.isLargeHopper(getWorld().getBlockState(blockPos.down())))
                     {
-                        placePos = placePos.up();
-                    }
-
-                    if (this.block.contains(Properties.WATERLOGGED) && this.getWorld().getFluidState(placePos).getFluid() == Fluids.WATER)
-                    {
-                        this.block = this.block.with(Properties.WATERLOGGED, Boolean.TRUE);
-                    }
-
-                    if (this.getWorld().setBlockState(placePos, this.block, Block.NOTIFY_ALL))
-                    {
-                        ((ServerWorld) this.getWorld())
-                                .getChunkManager()
-                                .threadedAnvilChunkStorage
-                                .sendToOtherNearbyPlayers(this, new BlockUpdateS2CPacket(placePos, this.getWorld().getBlockState(placePos)));
-                        this.discard();
-                        if (block instanceof LandingBlock)
-                        {
-                            ((LandingBlock) block).onLanding(this.getWorld(), placePos, this.block, oldState, this);
-                        }
-
-                        if (this.blockEntityData != null && this.block.hasBlockEntity())
-                        {
-                            BlockEntity blockEntity = this.getWorld().getBlockEntity(placePos);
-                            if (blockEntity != null)
-                            {
-                                NbtCompound nbtCompound = blockEntity.createNbt();
-
-                                for (String string : this.blockEntityData.getKeys())
-                                {
-                                    nbtCompound.put(string, this.blockEntityData.get(string).copy());
-                                }
-
-                                try
-                                {
-                                    blockEntity.readNbt(nbtCompound);
-                                }
-                                catch (Exception var15)
-                                {
-                                    NeepMeat.LOGGER.error("Failed to load block entity from falling block", var15);
-                                }
-
-                                blockEntity.markDirty();
-                            }
-                        }
-                    }
-                    else if (this.dropItem && this.getWorld().getGameRules().getBoolean(GameRules.DO_ENTITY_DROPS))
-                    {
-                        this.discard();
+                        discard();
                         this.onDestroyedOnLanding(block, blockPos);
                         this.dropItem(block);
+                        return;
+                    }
+
+                    if (random.nextBoolean() && jump(getWorld(), blockPos))
+                    {
+                    }
+                    else
+                    {
+                        this.setVelocity(this.getVelocity().multiply(0.7, -0.5, 0.7));
+
+                        // Find the next viable place
+                        BlockPos placePos = blockPos;
+                        while (!canPlaceAt(getWorld(), placePos, this.block))
+                        {
+                            placePos = placePos.up();
+                        }
+
+                        if (this.block.contains(Properties.WATERLOGGED) && this.getWorld().getFluidState(placePos).getFluid() == Fluids.WATER)
+                        {
+                            this.block = this.block.with(Properties.WATERLOGGED, Boolean.TRUE);
+                        }
+
+                        if (this.getWorld().setBlockState(placePos, this.block, Block.NOTIFY_ALL))
+                        {
+                            ((ServerWorld) this.getWorld())
+                                    .getChunkManager()
+                                    .threadedAnvilChunkStorage
+                                    .sendToOtherNearbyPlayers(this, new BlockUpdateS2CPacket(placePos, this.getWorld().getBlockState(placePos)));
+                            this.discard();
+                            if (block instanceof LandingBlock)
+                            {
+                                ((LandingBlock) block).onLanding(this.getWorld(), placePos, this.block, oldState, this);
+                            }
+
+                            if (this.blockEntityData != null && this.block.hasBlockEntity())
+                            {
+                                BlockEntity blockEntity = this.getWorld().getBlockEntity(placePos);
+                                if (blockEntity != null)
+                                {
+                                    NbtCompound nbtCompound = blockEntity.createNbt();
+
+                                    for (String string : this.blockEntityData.getKeys())
+                                    {
+                                        nbtCompound.put(string, this.blockEntityData.get(string).copy());
+                                    }
+
+                                    try
+                                    {
+                                        blockEntity.readNbt(nbtCompound);
+                                    }
+                                    catch (Exception var15)
+                                    {
+                                        NeepMeat.LOGGER.error("Failed to load block entity from falling block", var15);
+                                    }
+
+                                    blockEntity.markDirty();
+                                }
+                            }
+                        }
+                        else if (this.dropItem && this.getWorld().getGameRules().getBoolean(GameRules.DO_ENTITY_DROPS))
+                        {
+                            this.discard();
+                            this.onDestroyedOnLanding(block, blockPos);
+                            this.dropItem(block);
+                        }
                     }
                 }
                 else if (!this.getWorld().isClient
@@ -225,6 +242,28 @@ public class ActiveWasteFallingBlockEntity extends FallingBlockEntity
 
             this.setVelocity(this.getVelocity().multiply(0.98));
         }
+    }
+
+    private boolean jump(World world, BlockPos pos)
+    {
+        Direction[] directions = new Direction[]{Direction.NORTH, Direction.SOUTH, Direction.WEST, Direction.EAST};
+
+        for (int i : new IterateRandomly(4))
+        {
+            BlockPos side = pos.offset(directions[i]);
+            BlockPos sideDown = side.down();
+
+            if (world.isAir(side) && world.isAir(sideDown))
+            {
+                setPos(side.getX() + 0.5, getY(), side.getZ() + 0.5);
+                setPosition(side.getX() + 0.5, getY(), side.getZ() + 0.5);
+                setFallingBlockPos(side);
+                setOnGround(false);
+                return true;
+            }
+        }
+
+        return false;
     }
 
     @Override

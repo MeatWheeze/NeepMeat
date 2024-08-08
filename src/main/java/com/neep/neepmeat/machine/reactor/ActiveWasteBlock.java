@@ -6,6 +6,7 @@ import com.neep.meatlib.item.ItemSettings;
 import com.neep.meatlib.registry.RegistrationContext;
 import com.neep.neepmeat.entity.ActiveWasteFallingBlockEntity;
 import com.neep.neepmeat.machine.live_machine.LivingMachines;
+import com.neep.neepmeat.machine.live_machine.block.LargestHopperBlock;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.FallingBlock;
@@ -15,7 +16,6 @@ import net.minecraft.entity.ItemEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
@@ -52,7 +52,7 @@ public class ActiveWasteBlock extends FallingBlock implements MeatlibBlock
     public void scheduledTick(BlockState state, ServerWorld world, BlockPos pos, Random random)
     {
         BlockState down = world.getBlockState(pos.down());
-        if (down.isOf(LivingMachines.LARGEST_HOPPER) || down.isOf(LivingMachines.LARGEST_HOPPER.getStructure()))
+        if (LargestHopperBlock.isLargeHopper(down))
         {
             world.setBlockState(pos, Blocks.AIR.getDefaultState());
 
