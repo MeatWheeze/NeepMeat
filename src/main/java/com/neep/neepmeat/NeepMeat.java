@@ -1,6 +1,5 @@
 package com.neep.neepmeat;
 
-import com.neep.meatlib.MeatLib;
 import com.neep.meatlib.MeatLibRegistration;
 import com.neep.meatlib.registry.RegistrationContext;
 import com.neep.neepmeat.api.Burner;
@@ -31,6 +30,7 @@ import com.neep.neepmeat.machine.homogeniser.MeatAdditives;
 import com.neep.neepmeat.machine.integrator.IntegratorBlockEntity;
 import com.neep.neepmeat.machine.live_machine.LivingMachineComponents;
 import com.neep.neepmeat.machine.live_machine.LivingMachines;
+import com.neep.neepmeat.machine.reactor.IntrusionReactor;
 import com.neep.neepmeat.machine.synthesiser.MobSynthesisRegistry;
 import com.neep.neepmeat.network.MachineDiagnosticsRequest;
 import com.neep.neepmeat.network.NMTrackedData;
@@ -101,6 +101,7 @@ public class NeepMeat implements ModInitializer
 		MeatLibRegistration.forContext(ItemTransport.class, ItemTransport.C);
 		MeatLibRegistration.forContext(FluidTransport.class, FluidTransport.C);
 		MeatLibRegistration.forContext(LivingMachines.class, LivingMachines.C);
+		MeatLibRegistration.forContext(IntrusionReactor.class, IntrusionReactor.C);
 		MeatLibRegistration.forContext(PLCBlocks.class, PLCBlocks.C);
 		MeatLibRegistration.forContext(NMItems.class, NMItems.C);
 

@@ -4,5 +4,5 @@ import java.util.EnumMap;
 
 public interface LivingMachineStructure
 {
-    EnumMap<StructureProperty, StructureProperty.Entry> getProperties();
+    EnumMap<StructureProperty, PropertyValue> getProperties();
 }

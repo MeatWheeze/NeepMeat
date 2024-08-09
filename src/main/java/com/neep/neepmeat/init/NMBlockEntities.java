@@ -54,6 +54,7 @@ import com.neep.neepmeat.machine.phage_ray.PhageRayBlockEntity;
 import com.neep.neepmeat.machine.power_flower.PowerFlowerControllerBlockEntity;
 import com.neep.neepmeat.machine.power_flower.PowerFlowerFluidPortBlock;
 import com.neep.neepmeat.machine.pylon.PylonBlockEntity;
+import com.neep.neepmeat.machine.reactor.IntrusionReactor;
 import com.neep.neepmeat.machine.reactor.ReactionCoreBlockEntity;
 import com.neep.neepmeat.machine.separator.SeparatorBlockEntity;
 import com.neep.neepmeat.machine.small_compressor.SmallCompressorBlockEntity;
@@ -495,7 +496,7 @@ public class NMBlockEntities
         HOLDING_TRACK = register("holding_track", (p, s) -> new HoldingTrackBlock.HoldingTrackBlockEntity(HOLDING_TRACK, p, s), NMBlocks.HOLDING_TRACK);
         CONTROL_TRACK = register("control_track", (p, s) -> new PlayerControlTrack.TrackBlockEntity(CONTROL_TRACK, p, s), NMBlocks.CONTROL_TRACK);
 
-        REACTION_CORE = register("reaction_core", (p, s) -> new ReactionCoreBlockEntity(REACTION_CORE, p, s), NMBlocks.REACTION_CORE);
+        REACTION_CORE = register("reaction_core", (p, s) -> new ReactionCoreBlockEntity(REACTION_CORE, p, s), IntrusionReactor.REACTION_CORE);
 
         ItemStorage.SIDED.registerSelf(BUFFER);
         FluidStorage.SIDED.registerSelf(FLUID_INTERFACE);

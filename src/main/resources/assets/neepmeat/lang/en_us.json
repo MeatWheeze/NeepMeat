@@ -488,8 +488,8 @@
 
   "item.neepmeat.integration_charge_crude": "Integration Fluid Cartridge",
   "item.neepmeat.integration_charge_crude.lore_0": "The flesh is still alive.",
-  "item.neepmeat.integration_charge_adv": "Advanced Integration Charge",
-  "item.neepmeat.integration_charge_adv.lore_0": "The fluid writhes inside its shell, as if alive.",
+  "item.neepmeat.advanced_integration_charge": "Advanced Integration Charge",
+  "item.neepmeat.advanced_integration_charge.lore_0": "Capable of dragging even the most stubborn flesh back to life.",
 
   "item.neepmeat.whisper_wheat_seeds": "Whisper Wheat Seeds",
   "item.neepmeat.whisper_wheat": "Whisper Wheat",
@@ -524,6 +524,7 @@
   "block.neepmeat.flame_jet": "Flame Jet",
 
   "block.neepmeat.reaction_core": "Reaction Core",
+  "block.neepmeat.nervous_tissue": "Nervous Tissue",
   "block.neepmeat.active_waste": "Active Waste",
 
   "block.neepmeat.holding_track": "Holding Rail",
@@ -823,6 +824,11 @@
   "screen.neepmeat.content_detector.absolute": "Absolute",
   "screen.neepmeat.content_detector.regulate.desc": "Stays powered until all filter items have left",
   "screen.neepmeat.content_detector.absolute.desc": "Stays powered only while conditions are met",
+
+  "screen.neepmeat.receiver_organism.block_hold_shift": "Receiver Organism Structure §7(hold §fSHIFT§7)",
+  "screen.neepmeat.receiver_organism.block": "Receiver Organism Structure",
+
+  "screen.neepmeat.receiver_organism.organisation": "Organisation",
 
   "screen.neepmeat.living_machine.block_hold_shift": "Machine Structure §7(hold §fSHIFT§7)",
   "screen.neepmeat.living_machine.block": "Machine Structure",

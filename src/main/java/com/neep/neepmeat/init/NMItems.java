@@ -1,9 +1,6 @@
 package com.neep.neepmeat.init;
 
-import com.neep.meatlib.item.BaseCraftingItem;
-import com.neep.meatlib.item.EnlightenmentFoodItem;
-import com.neep.meatlib.item.MeatlibItemSettings;
-import com.neep.meatlib.item.TooltipSupplier;
+import com.neep.meatlib.item.*;
 import com.neep.meatlib.registry.RegistrationContext;
 import com.neep.meatlib.registry.annotation.Path;
 import com.neep.meatlib.registry.annotation.RegisterMe;
@@ -76,8 +73,8 @@ public class NMItems
 
     @Path("integration_charge_crude")
     public static Item CRUDE_INTEGRATION_CHARGE = new BaseCraftingItem(C, 1, new MeatlibItemSettings().group(NMItemGroups.INGREDIENTS));
-    @Path("integration_charge_adv")
-    public static Item ADV_INTEGRATION_CHARGE = new BaseCraftingItem(C, 1, new MeatlibItemSettings().group(NMItemGroups.INGREDIENTS));
+    @Path("advanced_integration_charge")
+    public static Item ADV_INTEGRATION_CHARGE = new AdvancedIntegrationChargeItem(TooltipSupplier.hidden(1), new MeatlibItemSettings().group(NMItemGroups.GENERAL));
 
     @Path("biomass")
     public static Item ASSORTED_BIOMASS = new BaseCraftingItem(C, 0, new MeatlibItemSettings().group(NMItemGroups.INGREDIENTS));

@@ -1,13 +1,11 @@
-package com.neep.neepmeat.block;
+package com.neep.neepmeat.machine.reactor;
 
 import com.neep.meatlib.block.BaseBlock;
 import com.neep.meatlib.item.BaseBlockItem;
 import com.neep.meatlib.item.ItemSettings;
 import com.neep.meatlib.registry.RegistrationContext;
 import com.neep.neepmeat.NeepMeat;
-import com.neep.neepmeat.api.live_machine.LivingMachineStructure;
 import com.neep.neepmeat.api.live_machine.PropertyValue;
-import com.neep.neepmeat.api.live_machine.StructureProperty;
 import net.minecraft.block.Block;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.item.TooltipContext;
@@ -23,19 +21,18 @@ import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 
-public class MachineBlock extends BaseBlock implements LivingMachineStructure
+public class ReceiverOrganismBlock extends BaseBlock implements ReceiverOrganismStructure
 {
-    private final EnumMap<StructureProperty, PropertyValue> properties;
+    private final EnumMap<Property, PropertyValue> properties;
 
-    public MachineBlock(RegistrationContext ctx, ItemSettings itemSettings, Map<StructureProperty, PropertyValue> properties, Settings settings)
+    public ReceiverOrganismBlock(RegistrationContext ctx, Map<Property, PropertyValue> properties, Settings settings)
     {
-        super(ctx, itemSettings.factory(MachineBlockItem::new), settings);
+        super(ctx, ItemSettings.block().factory(ReceiverOrganismBlockItem::new), settings);
         this.properties = new EnumMap<>(properties);
-//        properties.put(Property.MAX_POWER, 10f);
     }
 
     @Override
-    public EnumMap<StructureProperty, PropertyValue> getProperties()
+    public EnumMap<Property, PropertyValue> getProperties()
     {
         return properties;
     }
@@ -47,15 +44,15 @@ public class MachineBlock extends BaseBlock implements LivingMachineStructure
 
         if (!Screen.hasShiftDown())
         {
-            tooltip.add(NeepMeat.translationKey("screen", "living_machine.block_hold_shift").formatted(Formatting.RED));
+            tooltip.add(NeepMeat.translationKey("screen", "receiver_organism.block_hold_shift").formatted(Formatting.RED));
         }
         else
         {
-            tooltip.add(NeepMeat.translationKey("screen", "living_machine.block").formatted(Formatting.RED));
+            tooltip.add(NeepMeat.translationKey("screen", "receiver_organism.block").formatted(Formatting.RED));
             for (var entry : properties.entrySet())
             {
                 MutableText base = Text.literal("   ")
-                        .append(NeepMeat.translationKey("screen", "living_machine." + entry.getKey().name().toLowerCase())
+                        .append(NeepMeat.translationKey("screen", "receiver_organism." + entry.getKey().name().toLowerCase())
                                 .formatted(Formatting.GOLD))
                         .append(Text.literal(": ").formatted(Formatting.GOLD))
                         .append(entry.getKey().format(entry.getValue()))
@@ -66,9 +63,9 @@ public class MachineBlock extends BaseBlock implements LivingMachineStructure
         }
     }
 
-    public static class MachineBlockItem extends BaseBlockItem
+    public static class ReceiverOrganismBlockItem extends BaseBlockItem
     {
-        public MachineBlockItem(Block block, RegistrationContext ctx, ItemSettings itemSettings)
+        public ReceiverOrganismBlockItem(Block block, RegistrationContext ctx, ItemSettings itemSettings)
         {
             super(block, ctx, itemSettings);
         }

@@ -10,6 +10,7 @@ import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.api.FluidPump;
 import com.neep.neepmeat.api.big_block.BigBlock;
 import com.neep.neepmeat.api.live_machine.LivingMachineComponent;
+import com.neep.neepmeat.api.live_machine.PropertyValue;
 import com.neep.neepmeat.api.live_machine.StructureProperty;
 import com.neep.neepmeat.block.MachineBlock;
 import com.neep.neepmeat.init.NMBlocks;
@@ -37,28 +38,28 @@ public class LivingMachines
     public static Block LIVING_MACHINE_CONTROLLER = C.withItem(new TestLivingMachineBlock("living_machine_controller", MeatlibBlockSettings.copyOf(MACHINE_SETTINGS)), ItemSettings.block());
 
     public static Block MACHINE_BLOCK = new MachineBlock(C, block(), Map.of(
-            StructureProperty.MAX_POWER, new StructureProperty.Entry(300f),
-                    StructureProperty.MASS, new StructureProperty.Entry(StructureProperty.Function.ADD, 100)), FabricBlockSettings.copyOf(OPAQUE_MACHINE_SETTINGS));
+            StructureProperty.MAX_POWER, new PropertyValue(300f),
+                    StructureProperty.MASS, new PropertyValue(PropertyValue.Function.ADD, 100)), FabricBlockSettings.copyOf(OPAQUE_MACHINE_SETTINGS));
     public static Block BASE_MACHINE_BLOCK = new MachineBlock(C, block().tooltip(TooltipSupplier.simple(1)), Map.of(
-            StructureProperty.MAX_POWER, new StructureProperty.Entry(300f),
-            StructureProperty.MASS, new StructureProperty.Entry(StructureProperty.Function.ADD, 100)), FabricBlockSettings.copyOf(OPAQUE_MACHINE_SETTINGS));
+            StructureProperty.MAX_POWER, new PropertyValue(300f),
+            StructureProperty.MASS, new PropertyValue(PropertyValue.Function.ADD, 100)), FabricBlockSettings.copyOf(OPAQUE_MACHINE_SETTINGS));
     public static Block BLOOD_BUBBLE_MACHINE_BLOCK = new MachineBlock(C, block(), Map.of(
-            StructureProperty.MAX_POWER, new StructureProperty.Entry(StructureProperty.Function.ADD, -5),
-            StructureProperty.MASS, new StructureProperty.Entry(StructureProperty.Function.ADD, 100f),
-            StructureProperty.SELF_REPAIR, new StructureProperty.Entry(StructureProperty.Function.ADD, 1e-6f)), FabricBlockSettings.copyOf(OPAQUE_MACHINE_SETTINGS));
+            StructureProperty.MAX_POWER, new PropertyValue(PropertyValue.Function.ADD, -5),
+            StructureProperty.MASS, new PropertyValue(PropertyValue.Function.ADD, 100f),
+            StructureProperty.SELF_REPAIR, new PropertyValue(PropertyValue.Function.ADD, 1e-6f)), FabricBlockSettings.copyOf(OPAQUE_MACHINE_SETTINGS));
     public static Block MEAT_STEEL_MACHINE_BLOCK = new MachineBlock(C, block(), Map.of(
-            StructureProperty.MAX_POWER, new StructureProperty.Entry(500f),
-            StructureProperty.SELF_REPAIR, new StructureProperty.Entry(StructureProperty.Function.ADD, 0.5e-6f),
-            StructureProperty.MASS, new StructureProperty.Entry(StructureProperty.Function.ADD, 100f)), FabricBlockSettings.copyOf(OPAQUE_MACHINE_SETTINGS));
+            StructureProperty.MAX_POWER, new PropertyValue(500f),
+            StructureProperty.SELF_REPAIR, new PropertyValue(PropertyValue.Function.ADD, 0.5e-6f),
+            StructureProperty.MASS, new PropertyValue(PropertyValue.Function.ADD, 100f)), FabricBlockSettings.copyOf(OPAQUE_MACHINE_SETTINGS));
     public static Block MEAT_STEEL_MACHINE_BLOCK_2 = new MachineBlock(C, block().tooltip(TooltipSupplier.simple(1)), Map.of(
-            StructureProperty.MAX_POWER, new StructureProperty.Entry(500f),
-            StructureProperty.SELF_REPAIR, new StructureProperty.Entry(StructureProperty.Function.ADD, 0.5e-6f),
-            StructureProperty.MASS, new StructureProperty.Entry(StructureProperty.Function.ADD, 100f)
+            StructureProperty.MAX_POWER, new PropertyValue(500f),
+            StructureProperty.SELF_REPAIR, new PropertyValue(PropertyValue.Function.ADD, 0.5e-6f),
+            StructureProperty.MASS, new PropertyValue(PropertyValue.Function.ADD, 100f)
     ), FabricBlockSettings.copyOf(OPAQUE_MACHINE_SETTINGS));
     public static Block SKIN_MACHINE_BLOCK = new MachineBlock(C, block(), Map.of(
-            StructureProperty.MAX_POWER, new StructureProperty.Entry(500f),
-            StructureProperty.SELF_REPAIR, new StructureProperty.Entry(StructureProperty.Function.ADD, 1.5e-6f),
-            StructureProperty.MASS, new StructureProperty.Entry(StructureProperty.Function.ADD, 100f)
+            StructureProperty.MAX_POWER, new PropertyValue(500f),
+            StructureProperty.SELF_REPAIR, new PropertyValue(PropertyValue.Function.ADD, 1.5e-6f),
+            StructureProperty.MASS, new PropertyValue(PropertyValue.Function.ADD, 100f)
     ), FabricBlockSettings.copyOf(OPAQUE_MACHINE_SETTINGS));
 
     public static final Block MOTOR_PORT = new PortBlock<>(C, ItemSettings.block().tooltip(tooltip(LivingMachineComponents.MOTOR_PORT)),

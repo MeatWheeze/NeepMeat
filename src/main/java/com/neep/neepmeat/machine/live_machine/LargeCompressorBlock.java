@@ -3,7 +3,6 @@ package com.neep.neepmeat.machine.live_machine;
 import com.neep.meatlib.block.MeatlibBlock;
 import com.neep.meatlib.item.BaseBlockItem;
 import com.neep.meatlib.item.ItemSettings;
-import com.neep.meatlib.registry.ItemRegistry;
 import com.neep.meatlib.registry.RegistrationContext;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.api.FluidPump;
@@ -12,6 +11,7 @@ import com.neep.neepmeat.api.big_block.BigBlockPattern;
 import com.neep.neepmeat.api.big_block.BigBlockStructure;
 import com.neep.neepmeat.api.big_block.BigBlockStructureEntity;
 import com.neep.neepmeat.api.live_machine.LivingMachineStructure;
+import com.neep.neepmeat.api.live_machine.PropertyValue;
 import com.neep.neepmeat.api.live_machine.StructureProperty;
 import com.neep.neepmeat.machine.live_machine.block.entity.LargeCompressorBlockEntity;
 import com.neep.neepmeat.transport.fluid_network.node.AcceptorModes;
@@ -136,7 +136,7 @@ public class LargeCompressorBlock extends BigBlock<LargeCompressorBlock.Structur
         }
 
         @Override
-        public EnumMap<StructureProperty, StructureProperty.Entry> getProperties()
+        public EnumMap<StructureProperty, PropertyValue> getProperties()
         {
             return StructureProperty.EMPTY;
         }

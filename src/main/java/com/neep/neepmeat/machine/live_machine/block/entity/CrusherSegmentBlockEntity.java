@@ -7,6 +7,7 @@ import com.neep.neepmeat.api.live_machine.ComponentType;
 import com.neep.neepmeat.api.live_machine.LivingMachineComponent;
 import com.neep.neepmeat.api.storage.WritableStackStorage;
 import com.neep.neepmeat.init.NMrecipeTypes;
+import com.neep.neepmeat.machine.grinder.CrusherRecipeContext;
 import com.neep.neepmeat.machine.live_machine.LivingMachineComponents;
 import com.neep.neepmeat.machine.live_machine.component.PoweredComponent;
 import com.neep.neepmeat.recipe.CrushingRecipe;
@@ -110,7 +111,7 @@ public class CrusherSegmentBlockEntity extends SyncableBlockEntity implements Li
 
         public void tick(float progressIncrement, Storage<ItemVariant> output, float chanceMod, TransactionContext transaction)
         {
-            var storage = new LivingMachineControllerBlockEntity.SimpleCrushingStorage(this, output, chanceMod);
+            var storage = new SimpleCrushingStorage(this, output, chanceMod);
             if (recipe != null)
             {
                 progress += progressIncrement;
@@ -216,6 +217,51 @@ public class CrusherSegmentBlockEntity extends SyncableBlockEntity implements Li
 
             world.addParticle(new ItemStackParticleEffect(ParticleTypes.ITEM, slot.getAsStack()),
                     px, py, pz, vx, vy, vz);
+        }
+    }
+
+    public static class SimpleCrushingStorage implements CrusherRecipeContext
+    {
+        private final Storage<ItemVariant> input;
+        private final Storage<ItemVariant> output;
+        private final XpStorage xpStorage = new XpStorage();
+        private final float chanceMod;
+
+        public SimpleCrushingStorage(Storage<ItemVariant> input, Storage<ItemVariant> output, float chanceMod)
+        {
+            this.input = input;
+            this.output = output;
+            this.chanceMod = chanceMod;
+        }
+
+        @Override
+        public Storage<ItemVariant> getInputStorage()
+        {
+            return input;
+        }
+
+        @Override
+        public Storage<ItemVariant> getOutputStorage()
+        {
+            return output;
+        }
+
+        @Override
+        public Storage<ItemVariant> getExtraStorage()
+        {
+            return output;
+        }
+
+        @Override
+        public XpStorage getXpStorage()
+        {
+            return xpStorage;
+        }
+
+        @Override
+        public float getChanceMod()
+        {
+            return chanceMod;
         }
     }
 }

@@ -10,6 +10,7 @@ import com.neep.neepmeat.api.big_block.BigBlockPattern;
 import com.neep.neepmeat.api.big_block.BigBlockStructure;
 import com.neep.neepmeat.api.big_block.BigBlockStructureEntity;
 import com.neep.neepmeat.api.live_machine.LivingMachineStructure;
+import com.neep.neepmeat.api.live_machine.PropertyValue;
 import com.neep.neepmeat.api.live_machine.StructureProperty;
 import com.neep.neepmeat.machine.live_machine.LivingMachines;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
@@ -66,7 +67,7 @@ public class StomachBlock extends BigBlock<BigBlockStructure<BigBlockStructureEn
         }
 
         @Override
-        public EnumMap<StructureProperty, StructureProperty.Entry> getProperties()
+        public EnumMap<StructureProperty, PropertyValue> getProperties()
         {
             return StructureProperty.EMPTY;
         }

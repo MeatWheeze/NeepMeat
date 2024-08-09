@@ -5,8 +5,8 @@ import com.neep.neepmeat.api.big_block.BigBlock;
 import com.neep.neepmeat.api.big_block.BigBlockStructure;
 import com.neep.neepmeat.api.big_block.BigBlockStructureEntity;
 import com.neep.neepmeat.api.live_machine.LivingMachineStructure;
+import com.neep.neepmeat.api.live_machine.PropertyValue;
 import com.neep.neepmeat.api.live_machine.StructureProperty;
-import net.fabricmc.fabric.api.lookup.v1.block.BlockApiCache;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.ShapeContext;
@@ -18,7 +18,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.BlockView;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.EnumMap;
 
@@ -46,7 +45,7 @@ public class CharnelPumpStructure extends BigBlockStructure<CharnelPumpStructure
     }
 
     @Override
-    public EnumMap<StructureProperty, StructureProperty.Entry> getProperties()
+    public EnumMap<StructureProperty, PropertyValue> getProperties()
     {
         return StructureProperty.EMPTY;
     }

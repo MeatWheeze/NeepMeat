@@ -4,10 +4,7 @@ import com.neep.meatlib.block.MeatlibBlock;
 import com.neep.meatlib.block.MeatlibBlockSettings;
 import com.neep.meatlib.item.BaseBlockItem;
 import com.neep.meatlib.item.ItemSettings;
-import com.neep.meatlib.item.MeatlibItem;
 import com.neep.meatlib.item.TooltipSupplier;
-import com.neep.meatlib.registry.BlockRegistry;
-import com.neep.meatlib.registry.ItemRegistry;
 import com.neep.meatlib.registry.RegistrationContext;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.api.big_block.BigBlock;
@@ -15,6 +12,7 @@ import com.neep.neepmeat.api.big_block.BigBlockPattern;
 import com.neep.neepmeat.api.big_block.BigBlockStructure;
 import com.neep.neepmeat.api.big_block.BigBlockStructureEntity;
 import com.neep.neepmeat.api.live_machine.LivingMachineStructure;
+import com.neep.neepmeat.api.live_machine.PropertyValue;
 import com.neep.neepmeat.api.live_machine.StructureProperty;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.machine.live_machine.LivingMachineComponents;
@@ -113,7 +111,7 @@ public class PhageRayBlock extends BigBlock<PhageRayBlock.PhageRayStructureBlock
         }
 
         @Override
-        public EnumMap<StructureProperty, StructureProperty.Entry> getProperties()
+        public EnumMap<StructureProperty, PropertyValue> getProperties()
         {
             return StructureProperty.EMPTY;
         }

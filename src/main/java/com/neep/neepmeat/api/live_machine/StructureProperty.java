@@ -1,15 +1,13 @@
 package com.neep.neepmeat.api.live_machine;
 
-import com.google.common.util.concurrent.AtomicDouble;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.neep.neepmeat.api.processing.PowerUtils;
 
 import java.util.EnumMap;
 
-public enum StructureProperty
+public enum StructureProperty implements Formatter
 {
-
     FAULT_TOLERANCE(0, StructurePropertyFormatter.DEFAULT_FLOAT_FORMAT::format),
     SPEED(1, StructurePropertyFormatter.DEFAULT_FLOAT_FORMAT::format),
     SELF_REPAIR(0, StructurePropertyFormatter::formatRepair), // Format in % per second
@@ -21,7 +19,7 @@ public enum StructureProperty
             instance.group(Codec.INT.fieldOf("ordinal").forGetter(StructureProperty::ordinal))
                     .apply(instance, id -> StructureProperty.values()[id]));
 
-    public static final EnumMap<StructureProperty, Entry> EMPTY = new EnumMap<>(StructureProperty.class);
+    public static final EnumMap<StructureProperty, PropertyValue> EMPTY = new EnumMap<>(StructureProperty.class);
 
     private final float def;
     private final StructurePropertyFormatter formatter;
@@ -37,43 +35,8 @@ public enum StructureProperty
         return def;
     }
 
-    public String format(Entry value)
+    public String format(PropertyValue value)
     {
         return formatter.format(value.value());
-    }
-
-    public enum Function
-    {
-        ADD("added"),
-        AVERAGE("averaged");
-
-        public final String name;
-
-        Function(String name)
-        {
-            this.name = name;
-        }
-
-        public boolean average()
-        {
-            return this == AVERAGE;
-        }
-    }
-
-    public record Entry(Function function, float value)
-    {
-        public Entry(float value)
-        {
-            this(Function.AVERAGE, value);
-        }
-
-        public void apply(AtomicDouble atomicDouble, int count)
-        {
-            switch (function)
-            {
-                case ADD -> atomicDouble.addAndGet(value);
-                case AVERAGE -> atomicDouble.addAndGet(value / count);
-            }
-        }
     }
 }

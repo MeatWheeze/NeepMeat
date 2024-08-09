@@ -37,23 +37,22 @@ import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.Array;
 import java.util.*;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 
 public abstract class LivingMachineBlockEntity extends SyncableBlockEntity implements ComponentHolder
 {
     // This looks incredibly cursed
-    public static Codec<EnumMap<StructureProperty, AtomicDouble>> PROPERTIES_CODEC = RecordCodecBuilder
+    public static Codec<EnumMap<StructureProperty, Float>> PROPERTIES_CODEC = RecordCodecBuilder
             .create(instance ->
                     instance.group(
                             Codec.list(StructureProperty.CODEC).fieldOf("keys").forGetter(o -> new ArrayList<>(o.keySet())),
-                            Codec.list(Codec.DOUBLE).fieldOf("values").forGetter(o -> o.values().stream().map(AtomicDouble::get).toList())
+                            Codec.list(Codec.FLOAT).fieldOf("values").forGetter(o -> o.values().stream().toList())
                     ).apply(instance, (keys, values) ->
                     {
-                        EnumMap<StructureProperty, AtomicDouble> map = new EnumMap<>(StructureProperty.class);
+                        EnumMap<StructureProperty, Float> map = new EnumMap<>(StructureProperty.class);
                         for (int i = 0; i < keys.size(); ++i)
                         {
-                            map.put(keys.get(i), new AtomicDouble(values.get(i)));
+                            map.put(keys.get(i), values.get(i));
                         }
                         return map;
                     }));
@@ -63,7 +62,7 @@ public abstract class LivingMachineBlockEntity extends SyncableBlockEntity imple
     protected final List<LivingMachineStructure> structures = new ArrayList<>();
     private final Set<LivingMachineComponent>[] componentMap = (Set<LivingMachineComponent>[]) Array.newInstance(Set.class, ComponentType.Simple.NEXT_ID);
     private final BitSet currentComponents = new BitSet(); // Active components marked in one-hot codes
-    private EnumMap<StructureProperty, AtomicDouble> properties = new EnumMap<>(StructureProperty.class);
+    private EnumMap<StructureProperty, Float> properties = new EnumMap<>(StructureProperty.class);
 
     protected DegradationManager degradationManager = new DegradationManager(this::degradationRate, Random.create(), this::updateBlockState);
     private final float rateMultiplier = 1;
@@ -293,13 +292,14 @@ public abstract class LivingMachineBlockEntity extends SyncableBlockEntity imple
     {
         // Is this bad? Should I be using AtomicDouble and AtomicInteger in single-threaded code? Leave your answer in the comments below.
 
-        EnumMap<StructureProperty, AtomicInteger> present = new EnumMap<>(StructureProperty.class);
+        // Count the number of values to average (not add) in all structure blocks
+        EnumMap<StructureProperty, Integer> present = new EnumMap<>(StructureProperty.class);
         for (var structure : structures)
         {
-            structure.getProperties().forEach((property, entry) ->
+            structure.getProperties().forEach((property, value) ->
             {
-                if (entry.function().average())
-                    present.computeIfAbsent(property, p -> new AtomicInteger(0)).incrementAndGet();
+                if (value.function().average())
+                    present.compute(property, (p, v) -> v == null ? 1 : v + 1);
             });
         }
 
@@ -308,8 +308,14 @@ public abstract class LivingMachineBlockEntity extends SyncableBlockEntity imple
         {
             structure.getProperties().forEach((property, entry) ->
             {
-                var numberPresent = present.get(property);
-                entry.apply(properties.computeIfAbsent(property, p -> new AtomicDouble(p.defaultValue())), numberPresent != null ? numberPresent.get() : 1);
+                int numberPresent = present.getOrDefault(property, 1);
+                properties.compute(property, (p, prev) ->
+                {
+                    if (prev == null)
+                        prev = p.defaultValue();
+
+                    return entry.apply(prev, numberPresent);
+                });
             });
         }
     }
@@ -325,7 +331,7 @@ public abstract class LivingMachineBlockEntity extends SyncableBlockEntity imple
 
     protected float getProperty(StructureProperty property)
     {
-        return properties.computeIfAbsent(property, p -> new AtomicDouble(p.defaultValue())).floatValue();
+        return properties.computeIfAbsent(property, StructureProperty::defaultValue);
     }
 
     public <T extends LivingMachineComponent> Collection<T> getComponent(ComponentType<T> type)
@@ -550,6 +556,11 @@ public abstract class LivingMachineBlockEntity extends SyncableBlockEntity imple
     public long getAge()
     {
         return age;
+    }
+
+    public DegradationManager getDegradationManager()
+    {
+        return degradationManager;
     }
 
     public float getHealth()
