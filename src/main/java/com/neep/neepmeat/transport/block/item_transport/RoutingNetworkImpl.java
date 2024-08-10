@@ -87,7 +87,8 @@ public class RoutingNetworkImpl implements RoutingNetwork
             return;
         }
 
-        routablePipes.putAll(finder.getResult());
+        finder.getResult().forEach((k, v) -> routablePipes.put(k.asLong(), v));
+//        routablePipes.putAll(finder.getResult());
 
         finder.getVisited().forEach(p ->
         {

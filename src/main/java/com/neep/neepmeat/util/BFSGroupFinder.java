@@ -1,18 +1,19 @@
 package com.neep.neepmeat.util;
 
-import it.unimi.dsi.fastutil.longs.Long2ObjectArrayMap;
-import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
+import it.unimi.dsi.fastutil.longs.LongOpenHashSet;
+import it.unimi.dsi.fastutil.longs.LongSet;
 import net.minecraft.util.math.BlockPos;
 
+import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Map;
 import java.util.Queue;
-import java.util.Set;
 
 public abstract class BFSGroupFinder<T>
 {
     private final Queue<BlockPos> posQueue = new LinkedList<>();
-    protected final Set<Long> visited = new ObjectOpenHashSet<>();
-    private Long2ObjectArrayMap<T> result = new Long2ObjectArrayMap<>();
+    protected final LongSet visited = new LongOpenHashSet();
+    private final Map<BlockPos, T> result = new HashMap<>();
 
     public BFSGroupFinder()
     {
@@ -20,10 +21,10 @@ public abstract class BFSGroupFinder<T>
 
     protected void addResult(BlockPos pos, T result)
     {
-        this.result.put(pos.asLong(), result);
+        this.result.put(pos.toImmutable(), result);
     }
 
-    public Long2ObjectArrayMap<T> getResult()
+    public Map<BlockPos, T> getResult()
     {
         return result;
     }
@@ -32,7 +33,7 @@ public abstract class BFSGroupFinder<T>
     {
         posQueue.clear();
         visited.clear();
-        result = new Long2ObjectArrayMap<>();
+        result.clear();
     }
 
     public void queueBlock(BlockPos pos)

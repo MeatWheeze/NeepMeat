@@ -32,6 +32,7 @@ import com.neep.neepmeat.machine.live_machine.LivingMachineComponents;
 import com.neep.neepmeat.machine.live_machine.LivingMachines;
 import com.neep.neepmeat.machine.reactor.IntrusionReactor;
 import com.neep.neepmeat.machine.synthesiser.MobSynthesisRegistry;
+import com.neep.neepmeat.neepbus.NeepBusBlocks;
 import com.neep.neepmeat.network.MachineDiagnosticsRequest;
 import com.neep.neepmeat.network.NMTrackedData;
 import com.neep.neepmeat.network.ToolTransformPacket;
@@ -103,6 +104,7 @@ public class NeepMeat implements ModInitializer
 		MeatLibRegistration.forContext(LivingMachines.class, LivingMachines.C);
 		MeatLibRegistration.forContext(IntrusionReactor.class, IntrusionReactor.C);
 		MeatLibRegistration.forContext(PLCBlocks.class, PLCBlocks.C);
+		MeatLibRegistration.forContext(NeepBusBlocks.class, NeepBusBlocks.C);
 		MeatLibRegistration.forContext(NMItems.class, NMItems.C);
 
 		LOGGER.info("Hello from NeepMeat!");
@@ -131,6 +133,7 @@ public class NeepMeat implements ModInitializer
 		LivingMachineComponents.init();
 		LivingMachines.init();
 		IntrusionReactor.init();
+		NeepBusBlocks.init();
 
 		NMFluids.initialise();
 		NMBlockEntities.initialise();

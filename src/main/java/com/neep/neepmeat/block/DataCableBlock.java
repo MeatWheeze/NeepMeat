@@ -37,6 +37,12 @@ public class DataCableBlock extends AbstractPipeBlock implements DataCable
     }
 
     @Override
+    public boolean isConnected(World world, BlockPos pos, BlockState state, Direction direction)
+    {
+        return state.get(DIR_TO_CONNECTION.get(direction)).isConnected();
+    }
+
+    @Override
     public BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos)
     {
         if (state.get(WATERLOGGED))
