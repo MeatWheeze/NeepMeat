@@ -1,7 +1,17 @@
 {
   "variants": {
-    "": {
-      "model": "neepmeat:block/reactor/active_waste_1"
-    }
+    "": [
+        {
+          "model": "neepmeat:block/reactor/active_waste_1"
+        },
+        {
+          "model": "neepmeat:block/reactor/active_waste_1",
+          "y": 90
+        },
+        {
+          "model": "neepmeat:block/reactor/active_waste_1",
+          "y": 180
+        }
+    ]
   }
 }

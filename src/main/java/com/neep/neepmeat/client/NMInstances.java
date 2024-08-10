@@ -24,6 +24,7 @@ import com.neep.neepmeat.machine.live_machine.LivingMachines;
 import com.neep.neepmeat.machine.motor.MotorInstance;
 import com.neep.neepmeat.machine.phage_ray.PhageRayInstance;
 import com.neep.neepmeat.machine.pylon.PylonInstance;
+import com.neep.neepmeat.machine.reactor.IntrusionReactor;
 import com.neep.neepmeat.machine.stirling_engine.StirlingEngineInstance;
 import com.neep.neepmeat.machine.surgical_controller.PLCInstance;
 import com.neep.neepmeat.plc.PLCBlocks;
@@ -48,6 +49,7 @@ public class NMInstances
         BlockEntityRendererFactories.register(LivingMachines.LARGEST_HOPPER_BE, LargestHopperRenderer::new);
 
         InstancedRenderRegistry.configure(LivingMachines.LUCKY_ONE_BE).alwaysSkipRender().factory(LuckyOneInstance::new).apply();
+        InstancedRenderRegistry.configure(IntrusionReactor.DISRUPTOR_SEGMENT_BE).alwaysSkipRender().factory(DisruptorSegmentInstance::new).apply();
 
         InstancedRenderRegistry.configure(NMBlockEntities.MOTOR).alwaysSkipRender().factory(MotorInstance::new).apply();
         InstancedRenderRegistry.configure(NMBlockEntities.ADVANCED_MOTOR).alwaysSkipRender().factory(AdvancedMotorInstance::new).apply();

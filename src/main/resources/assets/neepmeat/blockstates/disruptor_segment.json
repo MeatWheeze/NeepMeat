@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "axis=y": { "model": "neepmeat:block/reactor/disruptor_segment" },
+    "axis=x": { "model": "neepmeat:block/reactor/disruptor_segment", "x": 90, "y": 90 },
+    "axis=z": { "model": "neepmeat:block/reactor/disruptor_segment", "x": 90 }
+  }
+}

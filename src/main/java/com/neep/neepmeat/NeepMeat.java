@@ -127,10 +127,10 @@ public class NeepMeat implements ModInitializer
 		NMAdvancements.init();
 		NMModelProvider.init();
 
-
 		PLCBlocks.init();
 		LivingMachineComponents.init();
 		LivingMachines.init();
+		IntrusionReactor.init();
 
 		NMFluids.initialise();
 		NMBlockEntities.initialise();

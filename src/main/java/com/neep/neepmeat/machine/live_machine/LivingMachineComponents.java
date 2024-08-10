@@ -8,6 +8,7 @@ import com.neep.neepmeat.machine.charnel_pump.CharnelPumpBlockEntity;
 import com.neep.neepmeat.machine.live_machine.block.entity.*;
 import com.neep.neepmeat.machine.live_machine.component.*;
 import com.neep.neepmeat.machine.phage_ray.PhageRayBlockEntity;
+import com.neep.neepmeat.machine.reactor.disruptor.DisruptorSegmentBlockEntity;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.entity.HopperBlockEntity;
 import net.minecraft.registry.Registry;
@@ -37,6 +38,8 @@ public class LivingMachineComponents
     public static final ComponentType<ExtractorBlockEntity> EXTRACTOR = register("extractor", new ComponentType.Simple<>());
 
     public static final ComponentType<LuckyOneBlockEntity> LUCKY_ONE = register("lucky_one", new ComponentType.Simple<>());
+
+    public static final ComponentType<DisruptorSegmentBlockEntity> DISRUPTOR_SEGMENT = register("disruptor_segment", new ComponentType.Simple<>());
 
     public static <C extends LivingMachineComponent, T extends ComponentType<C>> T register(String path, T type)
     {

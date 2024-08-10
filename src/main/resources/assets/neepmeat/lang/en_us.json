@@ -523,6 +523,9 @@
 
   "block.neepmeat.flame_jet": "Flame Jet",
 
+  "block.neepmeat.disruptor_needle": "Disruptor Needle",
+  "block.neepmeat.disruptor_segment": "Disruptor Segment",
+  "component.neepmeat.disruptor_segment": "Disruptor Segment",
   "block.neepmeat.reaction_core": "Reaction Core",
   "block.neepmeat.nervous_tissue": "Nervous Tissue",
   "block.neepmeat.active_waste": "Active Waste",
