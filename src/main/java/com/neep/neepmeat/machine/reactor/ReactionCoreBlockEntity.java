@@ -1,8 +1,6 @@
 package com.neep.neepmeat.machine.reactor;
 
-import com.google.common.util.concurrent.AtomicDouble;
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
-import com.neep.neepmeat.api.live_machine.StructureProperty;
 import com.neep.neepmeat.util.IterateRandomly;
 import it.unimi.dsi.fastutil.longs.LongOpenHashSet;
 import it.unimi.dsi.fastutil.longs.LongSet;
@@ -15,10 +13,8 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class ReactionCoreBlockEntity extends SyncableBlockEntity
 {
@@ -33,8 +29,7 @@ public class ReactionCoreBlockEntity extends SyncableBlockEntity
     public double lerpIncidentZoneRadius;
     public double clientIncidentZoneRadius;
 
-//    private EnumMap<StructureProperty, AtomicDouble> properties = new EnumMap<>(StructureProperty.class);
-    private Object2FloatMap<ReceiverOrganismStructure.Property> properties = new Object2FloatArrayMap<>();
+    private final Object2FloatMap<ReceiverOrganismStructure.Property> properties = new Object2FloatArrayMap<>();
 
 
     public ReactionCoreBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
@@ -52,7 +47,7 @@ public class ReactionCoreBlockEntity extends SyncableBlockEntity
             updateStructure(getPos());
         }
 
-        parameters.tick(0.09f);
+        parameters.tick(0.09f, properties.getOrDefault(ReceiverOrganismStructure.Property.ORGANISATION, 0));
 
         if (world.getTime() % 10 == 0)
         {
@@ -77,12 +72,7 @@ public class ReactionCoreBlockEntity extends SyncableBlockEntity
 
     private void updateStructure(BlockPos origin)
     {
-        List<ReceiverOrganismStructure> structures = findStructures(origin);
-
-//        for (var entry : structures.object2IntEntrySet())
-//        {
-//
-//        }
+        List<ReceiverOrganismStructure> structures = findStructures(world, origin);
 
         EnumMap<ReceiverOrganismStructure.Property, Integer> present = new EnumMap<>(ReceiverOrganismStructure.Property.class);
         for (var structure : structures)
@@ -111,7 +101,7 @@ public class ReactionCoreBlockEntity extends SyncableBlockEntity
         }
     }
 
-    private List<ReceiverOrganismStructure> findStructures(BlockPos origin)
+    private List<ReceiverOrganismStructure> findStructures(World world, BlockPos origin)
     {
         List< ReceiverOrganismStructure> structures = new ObjectArrayList<>();
 
@@ -138,8 +128,8 @@ public class ReactionCoreBlockEntity extends SyncableBlockEntity
 
                     if (nextState.getBlock() instanceof ReceiverOrganismStructure structure)
                     {
-//                        structures.computeInt(structure, (s, count) -> count + 1);
                         structures.add(structure);
+                        queue.add(mutable.toImmutable());
                     }
                 }
             }

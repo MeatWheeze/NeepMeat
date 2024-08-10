@@ -12,12 +12,10 @@ public class ReactionCoreParameters
     private double storedExudate = 0;
     private double cudEfficiency = 0;
 
-    public void tick(float disruption)
+    public void tick(float disruption, float maxOrganisation)
     {
         float km = 0.04f; // Organisation to mass flow
         float ke = 1;
-
-        float maxOrganisation = 10;
 
         float maxOrganisationIncrease = 0.1f;
         organisationFlow = Math.min(maxOrganisationIncrease, maxOrganisation - organisation);
@@ -27,7 +25,10 @@ public class ReactionCoreParameters
         exudateMassFlow = km * organisation;
         storedExudate += exudateMassFlow;
 
-        cudEfficiency = ke * MathHelper.clamp(organisationFlow, 0, maxOrganisation) / maxOrganisation;
+        if (maxOrganisation == 0)
+            cudEfficiency = 0;
+        else
+            cudEfficiency = ke * MathHelper.clamp(organisationFlow, 0, maxOrganisation) / maxOrganisation;
 
         NeepMeat.LOGGER.info("Organisation {}, Cud efficiency {}, Exudate mass flow {}, Stored exudate {}, Incident zone radius {}",
                 organisation, cudEfficiency, exudateMassFlow, storedExudate, incidentZoneRadius);
