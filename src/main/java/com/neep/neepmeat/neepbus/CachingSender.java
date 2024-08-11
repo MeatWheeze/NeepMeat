@@ -49,6 +49,11 @@ public class CachingSender // Not a name that describes what this is, change.
         }
     }
 
+    public void clear()
+    {
+        portCache.clear();
+    }
+
     private class Finder extends BFSGroupFinder<NeepBusPort>
     {
         private final String address;

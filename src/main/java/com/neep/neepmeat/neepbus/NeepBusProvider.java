@@ -12,8 +12,12 @@ import java.util.Map;
  */
 public interface NeepBusProvider
 {
+    Map<String, NeepBusPort> NO_PORTS = Map.of();
+
 //    BlockApiLookup<NeepBusMember, Direction> LOOO = BlockApiLookup.get(
 //            new Identifier(NeepMeat.NAMESPACE, "neepbus_member"), NeepBusMember.class, Direction.class);
 
     Map<String, NeepBusPort> getPorts(World world, BlockPos pos, BlockState state);
+
+    void networkChanged(World world, BlockPos pos, BlockPos whereChanged);
 }

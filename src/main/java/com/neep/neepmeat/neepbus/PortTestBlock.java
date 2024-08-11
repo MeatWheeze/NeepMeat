@@ -29,4 +29,10 @@ public class PortTestBlock extends BaseBlock implements NeepBusProvider, DataCab
             }
         });
     }
+
+    @Override
+    public void networkChanged(World world, BlockPos pos, BlockPos whereChanged)
+    {
+
+    }
 }

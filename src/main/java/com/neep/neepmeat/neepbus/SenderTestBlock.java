@@ -7,6 +7,7 @@ import com.neep.meatlib.util.LazySupplier;
 import com.neep.neepmeat.transport.api.pipe.DataCable;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ActionResult;
@@ -16,7 +17,9 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
-public class SenderTestBlock extends BaseBlock implements BlockEntityProvider, DataCable
+import java.util.Map;
+
+public class SenderTestBlock extends BaseBlock implements BlockEntityProvider, DataCable, NeepBusProvider
 {
     public SenderTestBlock(RegistrationContext ctx, Settings settings)
     {
@@ -38,6 +41,21 @@ public class SenderTestBlock extends BaseBlock implements BlockEntityProvider, D
     public net.minecraft.block.entity.BlockEntity createBlockEntity(BlockPos pos, BlockState state)
     {
         return NeepBusBlocks.SENDER_TEST_BE.instantiate(pos, state);
+    }
+
+    @Override
+    public Map<String, NeepBusPort> getPorts(World world, BlockPos pos, BlockState state)
+    {
+        return NO_PORTS;
+    }
+
+    @Override
+    public void networkChanged(World world, BlockPos pos, BlockPos whereChanged)
+    {
+        if (world.getBlockEntity(pos) instanceof BlockEntity be)
+        {
+            be.cache.get().clear();
+        }
     }
 
     public static class BlockEntity extends SyncableBlockEntity
