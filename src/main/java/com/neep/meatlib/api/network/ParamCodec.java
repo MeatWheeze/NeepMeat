@@ -1,6 +1,5 @@
 package com.neep.meatlib.api.network;
 
-import it.unimi.dsi.fastutil.bytes.ByteByteImmutablePair;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.PacketByteBuf;
@@ -10,6 +9,9 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.IntStream;
 
+// Ooooh, wow. Look at all the amazing things you can do with Mojang Datafixers.
+// But you can't use them to spit out stuff in the desired order.
+// So here's a shitty version that uses reflection.
 public interface ParamCodec<T>
 {
     Class<T> clazz();
