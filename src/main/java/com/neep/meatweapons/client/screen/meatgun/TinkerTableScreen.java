@@ -13,7 +13,6 @@ import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.Drawable;
 import net.minecraft.client.gui.Element;
 import net.minecraft.client.gui.Selectable;
-import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.screen.slot.Slot;
@@ -47,7 +46,7 @@ public class TinkerTableScreen extends BaseHandledScreen<TinkerTableScreenHandle
         backgroundHeight = TinkerTableScreenHandler.BACKGROUND_HEIGHT;
         super.init();
 
-        Background border = new Background(x, y, backgroundWidth, backgroundHeight, 6, () -> PLCCols.BORDER.col);
+        OldBackground border = new OldBackground(x, y, backgroundWidth, backgroundHeight, 6, () -> PLCCols.BORDER.col);
         Rectangle withoutPadding = border.withoutPadding();
         Rectangle bounds = new Rectangle.Immutable(withoutPadding.x(), withoutPadding.y(), withoutPadding.w(), withoutPadding.h() - 19);
         addDrawable(border);

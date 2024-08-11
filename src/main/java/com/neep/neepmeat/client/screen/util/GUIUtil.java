@@ -14,6 +14,7 @@ import software.bernie.geckolib.core.object.Color;
 public interface GUIUtil
 {
     Identifier INVENTORY_BACKGROUND = new Identifier(NeepMeat.NAMESPACE, "textures/gui/inventory_background.png");
+    Identifier SCREEN_BORDER = new Identifier(NeepMeat.NAMESPACE, "textures/gui/screen_border.png");
 
     static void drawTexture(Identifier texture, DrawContext context, int x, int y, int u, int v, int width, int height)
     {
@@ -138,8 +139,13 @@ public interface GUIUtil
         context.drawTexture(INVENTORY_BACKGROUND, x, y, 0, 0, 176, 90);
     }
 
+    static void drawScreenBorder(DrawContext context, int x, int y, int w, int h)
+    {
+        drawNineSlicedTexture(context, SCREEN_BORDER, x, y, w, h, 5, 255, 55, 0, 0);
+    }
+
     /**
-     * Segments and stretches the defined region to draw it as a window border. Only works with plain colours, since the texture is stretched or squashed.
+     * Segments and (sometimes) stretches the defined region to draw it as a window border. Stretching occurs when the desired size exceeds that of the image segment.
      */
     static void drawNineSlicedTexture(DrawContext matrices, Identifier texture, int x, int y, int width, int height, int sliceBorder, int regionWidth, int regionHeight, int u, int v)
     {
@@ -148,17 +154,29 @@ public interface GUIUtil
         int z = 0;
         int centerSliceWidth = regionWidth - 2 * sliceBorder;
 
+        int topAndBottomU1 = u + sliceBorder + Math.min(centerSliceWidth, width - 2 * sliceBorder);
+
         // Top
-        drawTexturedQuad(pos, x + sliceBorder, x + width - sliceBorder, y, y + sliceBorder, z, u + sliceBorder, u + sliceBorder + centerSliceWidth, v, v + sliceBorder);
+        drawTexturedQuad(pos, x + sliceBorder, x + width - sliceBorder, y, y + sliceBorder, z,
+                u + sliceBorder, topAndBottomU1,
+                v, v + sliceBorder);
 
         // Bottom
-        drawTexturedQuad(pos, x + sliceBorder, x + width - sliceBorder, y + height - sliceBorder, y + height, z, u + sliceBorder, u + sliceBorder + centerSliceWidth, v + regionHeight - sliceBorder, v + regionHeight);
+        drawTexturedQuad(pos, x + sliceBorder, x + width - sliceBorder, y + height - sliceBorder, y + height, z,
+                u + sliceBorder, topAndBottomU1,
+                v + regionHeight - sliceBorder, v + regionHeight);
+
+        int leftRightV1 = v + sliceBorder + Math.min(width - 2 * sliceBorder, regionHeight - 2 * sliceBorder);
 
         // Left
-        drawTexturedQuad(pos, x, x + sliceBorder, y + sliceBorder, y + height - sliceBorder, z, u, u + sliceBorder, v + sliceBorder, v + regionHeight - sliceBorder);
+        drawTexturedQuad(pos, x, x + sliceBorder, y + sliceBorder, y + height - sliceBorder, z,
+                u, u + sliceBorder,
+                v + sliceBorder, leftRightV1);
 
         // Right
-        drawTexturedQuad(pos, x + width - sliceBorder, x + width, y + sliceBorder, y + height - sliceBorder, z, u + regionWidth - sliceBorder, u + regionWidth, v + sliceBorder, v + regionHeight - sliceBorder);
+        drawTexturedQuad(pos, x + width - sliceBorder, x + width, y + sliceBorder, y + height - sliceBorder, z,
+                u + regionWidth - sliceBorder, u + regionWidth,
+                v + sliceBorder, leftRightV1);
 
         // Middle
         drawTexturedQuad(pos, x + sliceBorder, x + width - sliceBorder, y + sliceBorder, y + height - sliceBorder, z, u + sliceBorder, u + regionWidth - sliceBorder, v + sliceBorder, v + regionHeight - sliceBorder);

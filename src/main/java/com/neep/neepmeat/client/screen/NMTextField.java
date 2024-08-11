@@ -47,6 +47,11 @@ public class NMTextField extends TextFieldWidget implements ClickableWidget
         }
     }
 
+    protected int getTextY()
+    {
+        return y() + (this.height - 8) / 2;
+    }
+
     @Override
     public void renderButton(DrawContext context, int mouseX, int mouseY, float delta)
     {
@@ -64,7 +69,7 @@ public class NMTextField extends TextFieldWidget implements ClickableWidget
         String prefix = getPrefix();
         int prefixStart = this.getX() + 4;
         int textStart = prefixStart + textRenderer.getWidth(prefix);
-        int m = this.getY() + (this.height - 8) / 2;
+        int m = getTextY();
         int n = textStart;
 
         if (k > string.length())

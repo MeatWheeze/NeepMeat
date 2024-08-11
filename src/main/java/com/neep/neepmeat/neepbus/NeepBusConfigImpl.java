@@ -28,11 +28,13 @@ public class NeepBusConfigImpl implements NeepBusConfig
         this.onOutputChanged = onOutputsChanged;
     }
 
+    @Override
     public List<? extends Entry> getInputs()
     {
         return inputs;
     }
 
+    @Override
     public List<? extends Entry> getOutputs()
     {
         return outputs;

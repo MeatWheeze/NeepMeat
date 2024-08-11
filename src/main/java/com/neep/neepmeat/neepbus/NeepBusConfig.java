@@ -1,10 +1,14 @@
 package com.neep.neepmeat.neepbus;
 
+import java.util.List;
 import java.util.Map;
 
 public interface NeepBusConfig
 {
     Map<String, NeepBusPort> getInputPorts();
+
+    List<? extends Entry> getInputs();
+    List<? extends Entry> getOutputs();
 
     interface Entry
     {
