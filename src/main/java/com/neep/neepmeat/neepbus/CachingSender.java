@@ -13,12 +13,10 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-public class CachingSender // Not a name that describes what this is, change.
+public class CachingSender
 {
     private final World world;
     private final BlockPos pos;
-
-//    private final Multimap<String, NeepBusPort> portCache = Multimaps.newSetMultimap(new HashMap<>(), HashSet::new);
 
     // Values can be null, empty, or full. Empty indicates that the search has already been run but the
     // target address is not present in the network.
@@ -40,6 +38,7 @@ public class CachingSender // Not a name that describes what this is, change.
             finder.loop(32);
 
             cached = new HashSet<>(finder.getResult().values());
+            cached.forEach(port -> port.addInvalidateListener(this::clear));
             portCache.put(address, cached);
         }
 

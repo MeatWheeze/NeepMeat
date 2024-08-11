@@ -7,7 +7,6 @@ import com.neep.meatlib.util.LazySupplier;
 import com.neep.neepmeat.transport.api.pipe.DataCable;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ActionResult;

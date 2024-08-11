@@ -17,9 +17,11 @@ public class NeepBusBlocks
     public static final SenderTestBlock SENDER_TEST = new SenderTestBlock(C, MeatlibBlockSettings.copyOf(NMBlocks.MACHINE_SETTINGS));
 
     public static BlockEntityType<SenderTestBlock.BlockEntity> SENDER_TEST_BE;
+    public static BlockEntityType<PortTestBlock.PortTestBlockEntity> PORT_TEST_BE;
 
     public static void init()
     {
         SENDER_TEST_BE = NMBlockEntities.register("sender_test", (p, s) -> new SenderTestBlock.BlockEntity(SENDER_TEST_BE, p, s), SENDER_TEST);
+        PORT_TEST_BE = NMBlockEntities.register("port_test", (p, s) -> new PortTestBlock.PortTestBlockEntity(PORT_TEST_BE, p, s), PORT_TEST);
     }
 }
