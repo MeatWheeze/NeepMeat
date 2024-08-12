@@ -13,6 +13,20 @@ import java.util.Queue;
 
 public class NeepBus
 {
+    public static void updateImmediateNeighbours(World world, BlockPos pos, BlockState state)
+    {
+        BlockPos.Mutable mutable = pos.mutableCopy();
+        for (Direction direction : Direction.values())
+        {
+            mutable.set(pos, direction);
+
+            if (world.getBlockState(mutable).getBlock() instanceof NeepBusProvider provider)
+            {
+                provider.networkChanged(world, mutable, pos);
+            }
+        }
+    }
+
     public static void floodUpdate(World world, BlockPos pos, BlockState state)
     {
         // BFS #1381641

@@ -58,7 +58,7 @@ public class SliderScreenHandler extends BasicScreenHandler
 
     private void receiveParams(List<Integer> ints)
     {
-        slider.setValue(ints.get(0));
+//        slider.setValue(ints.get(0));
         slider.setMinValue(ints.get(1));
         slider.setMaxValue(ints.get(2));
         slider.setInterval(ints.get(3));

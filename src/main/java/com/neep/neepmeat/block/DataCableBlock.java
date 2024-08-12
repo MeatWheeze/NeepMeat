@@ -7,6 +7,7 @@ import com.neep.neepmeat.neepbus.NeepBusBlocks;
 import com.neep.neepmeat.transport.api.pipe.AbstractPipeBlock;
 import com.neep.neepmeat.transport.api.pipe.DataCable;
 import com.neep.neepmeat.transport.fluid_network.PipeConnectionType;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.Fluids;
@@ -48,9 +49,16 @@ public class DataCableBlock extends AbstractPipeBlock implements DataCable
     @Override
     public void onStateReplaced(BlockState state, World world, BlockPos pos, BlockState newState, boolean moved)
     {
+//        boolean updated = false;
+
         super.onStateReplaced(state, world, pos, newState, moved);
 
         if (!newState.isOf(state.getBlock()))
+        {
+            NeepBus.updateImmediateNeighbours(world, pos, state);
+        }
+
+        if (newState.isOf(this))
         {
             NeepBus.floodUpdate(world, pos, state);
         }
