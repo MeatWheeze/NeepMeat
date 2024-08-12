@@ -37,7 +37,8 @@ public class VSCBlockEntity extends SyncableBlockEntity implements ExtendedScree
         @Override
         public void receive(int data)
         {
-            System.out.println(data);
+//            System.out.println(data);
+            setDesiredPower(data);
         }
     };
 
