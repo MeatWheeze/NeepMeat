@@ -1,9 +1,13 @@
-package com.neep.neepmeat.neepbus;
+package com.neep.neepmeat.neepbus.block;
 
 import com.neep.meatlib.block.BaseBlock;
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
 import com.neep.meatlib.registry.RegistrationContext;
 import com.neep.meatlib.util.LazySupplier;
+import com.neep.neepmeat.neepbus.CachingSender;
+import com.neep.neepmeat.neepbus.NeepBusBlocks;
+import com.neep.neepmeat.neepbus.NeepBusPort;
+import com.neep.neepmeat.neepbus.NeepBusProvider;
 import com.neep.neepmeat.transport.api.pipe.DataCable;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;

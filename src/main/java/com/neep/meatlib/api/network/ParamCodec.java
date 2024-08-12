@@ -21,6 +21,7 @@ public interface ParamCodec<T>
     void encode(T t, PacketByteBuf buf);
 
     ParamCodec<Integer> INT = of(int.class, (o, buf) -> buf.writeInt(o), PacketByteBuf::readInt);
+    ParamCodec<Double> DOUBLE = of(double.class, (o, buf) -> buf.writeDouble(o), PacketByteBuf::readDouble);
     ParamCodec<Boolean> BOOLEAN = of(boolean.class, (o, buf) -> buf.writeBoolean(o), PacketByteBuf::readBoolean);
     ParamCodec<String> STRING = of(String.class, (o, buf) -> buf.writeString(o), PacketByteBuf::readString);
     ParamCodec<UUID> UUID = of(UUID.class, (o, buf) -> buf.writeUuid(o), PacketByteBuf::readUuid);

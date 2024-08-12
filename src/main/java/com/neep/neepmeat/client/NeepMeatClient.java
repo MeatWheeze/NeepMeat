@@ -53,6 +53,7 @@ import com.neep.neepmeat.machine.small_compressor.SmallCompressorScreen;
 import com.neep.neepmeat.machine.small_trommel.SmallTrommelRenderer;
 import com.neep.neepmeat.machine.synthesiser.SynthesiserRenderer;
 import com.neep.neepmeat.machine.trough.TroughRenderer;
+import com.neep.neepmeat.neepbus.client.screen.InteractiveControlScreen;
 import com.neep.neepmeat.neepbus.client.screen.NeepBusConfigScreen;
 import com.neep.neepmeat.network.*;
 import com.neep.neepmeat.plc.PLCBlocks;
@@ -294,7 +295,9 @@ public class NeepMeatClient implements ClientModInitializer
         HandledScreens.register(ScreenHandlerInit.FABRICATOR, FabricatorScreen::new);
         HandledScreens.register(ScreenHandlerInit.SMALL_COMPRESSOR, SmallCompressorScreen::new);
         HandledScreens.register(ScreenHandlerInit.FILTER, FilterScreen::new);
+
         HandledScreens.register(ScreenHandlerInit.NEEPBUS_CONFIG, NeepBusConfigScreen::new);
+        HandledScreens.register(ScreenHandlerInit.INTERACTIVE_CONTROL, InteractiveControlScreen::new);
 
         HandledScreens.register(ScreenHandlerInit.LIVING_MACHINE, LivingMachineScreen::new);
         HandledScreens.register(ScreenHandlerInit.ITEM_OUTPUT, ItemOutputPortScreen::new);

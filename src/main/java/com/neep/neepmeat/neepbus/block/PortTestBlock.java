@@ -1,9 +1,10 @@
-package com.neep.neepmeat.neepbus;
+package com.neep.neepmeat.neepbus.block;
 
 import com.google.common.base.Suppliers;
 import com.neep.meatlib.block.BaseBlock;
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
 import com.neep.meatlib.registry.RegistrationContext;
+import com.neep.neepmeat.neepbus.*;
 import com.neep.neepmeat.neepbus.screen.NeepBusScreenHandler;
 import com.neep.neepmeat.transport.api.pipe.DataCable;
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
