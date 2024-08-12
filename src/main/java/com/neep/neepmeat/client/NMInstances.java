@@ -27,6 +27,8 @@ import com.neep.neepmeat.machine.pylon.PylonInstance;
 import com.neep.neepmeat.machine.reactor.IntrusionReactor;
 import com.neep.neepmeat.machine.stirling_engine.StirlingEngineInstance;
 import com.neep.neepmeat.machine.surgical_controller.PLCInstance;
+import com.neep.neepmeat.neepbus.NeepBusBlocks;
+import com.neep.neepmeat.neepbus.client.instance.LinearLeverInstance;
 import com.neep.neepmeat.plc.PLCBlocks;
 import net.minecraft.client.render.block.entity.BlockEntityRendererFactories;
 
@@ -68,6 +70,8 @@ public class NMInstances
         InstancedRenderRegistry.configure(NMBlockEntities.LINEAR_OSCILLATOR).alwaysSkipRender().factory(LinearOscillatorInstance::new).apply();
 
         InstancedRenderRegistry.configure(NMBlockEntities.LARGE_FAN).alwaysSkipRender().factory(LargeFanInstance::new).apply();
+
+        InstancedRenderRegistry.configure(NeepBusBlocks.LINEAR_LEVER_BE).alwaysSkipRender().factory(LinearLeverInstance::new).apply();
 
         InstancedRenderRegistry.configure(NMEntities.PHAGE_RAY).alwaysSkipRender().factory(PhageRayInstance::new).apply();
         InstancedRenderRegistry.configure(LivingMachines.TREE_VACUUM_BE).alwaysSkipRender().factory(TreeVacuumInstance::new).apply();

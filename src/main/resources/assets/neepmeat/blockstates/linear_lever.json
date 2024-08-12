@@ -34,11 +34,6 @@
       "model": "neepmeat:block/neepbus/linear_lever",
       "y": 90
     },
-    "face=wall,facing=east": {
-      "model": "neepmeat:block/neepbus/linear_lever",
-      "x": 90,
-      "y": 90
-    },
     "face=wall,facing=north": {
       "model": "neepmeat:block/neepbus/linear_lever",
       "x": 90
@@ -47,6 +42,11 @@
       "model": "neepmeat:block/neepbus/linear_lever",
       "x": 90,
       "y": 180
+    },
+    "face=wall,facing=east": {
+      "model": "neepmeat:block/neepbus/linear_lever",
+      "x": 90,
+      "y": 90
     },
     "face=wall,facing=west": {
       "model": "neepmeat:block/neepbus/linear_lever",

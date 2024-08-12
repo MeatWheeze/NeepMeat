@@ -53,6 +53,7 @@ public class LinearLeverBlockEntity extends SyncableBlockEntity
     {
         value += Math.round(amount);
         outputPort.send(value);
+        sync();
     }
 
     @Override
@@ -67,5 +68,10 @@ public class LinearLeverBlockEntity extends SyncableBlockEntity
     {
         super.readNbt(nbt);
         this.value = nbt.getInt("value");
+    }
+
+    public int getValue()
+    {
+        return value;
     }
 }
