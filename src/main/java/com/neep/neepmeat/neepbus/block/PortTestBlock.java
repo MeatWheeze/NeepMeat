@@ -14,6 +14,7 @@ import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -127,7 +128,8 @@ public class PortTestBlock extends BaseBlock implements NeepBusProvider, DataCab
                 List.of(outputPort.entry()),
                 List.of(inputPort),
                 inputPort::invalidateAddress,
-                () -> {}
+                () -> {},
+                this::markDirty
         );
 
         public void send()
@@ -140,6 +142,20 @@ public class PortTestBlock extends BaseBlock implements NeepBusProvider, DataCab
         public PortTestBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
         {
             super(type, pos, state);
+        }
+
+        @Override
+        public void writeNbt(NbtCompound nbt)
+        {
+            super.writeNbt(nbt);
+            nbt.put("config", config.writeNbt(new NbtCompound()));
+        }
+
+        @Override
+        public void readNbt(NbtCompound nbt)
+        {
+            super.readNbt(nbt);
+            this.config.readNbt(nbt.getCompound("config"));
         }
     }
 }

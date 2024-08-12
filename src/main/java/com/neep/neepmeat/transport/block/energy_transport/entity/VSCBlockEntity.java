@@ -3,6 +3,10 @@ package com.neep.neepmeat.transport.block.energy_transport.entity;
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
 import com.neep.neepmeat.api.processing.PowerUtils;
 import com.neep.neepmeat.api.storage.LazyBlockApiCache;
+import com.neep.neepmeat.neepbus.NeepBusConfig;
+import com.neep.neepmeat.neepbus.NeepBusConfigImpl;
+import com.neep.neepmeat.neepbus.NeepBusPort;
+import com.neep.neepmeat.neepbus.SimpleInputPort;
 import com.neep.neepmeat.transport.api.pipe.AbstractBloodAcceptor;
 import com.neep.neepmeat.transport.api.pipe.BloodAcceptor;
 import com.neep.neepmeat.transport.block.energy_transport.VSCBlock;
@@ -23,10 +27,28 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
+import java.util.Map;
+
 public class VSCBlockEntity extends SyncableBlockEntity implements ExtendedScreenHandlerFactory
 {
+    private final SimpleInputPort inputPort = new SimpleInputPort()
+    {
+        @Override
+        public void receive(int data)
+        {
+            System.out.println(data);
+        }
+    };
+
+    private final NeepBusConfig config = new NeepBusConfigImpl(
+            List.of(new NeepBusConfig.SimpleEntry("Power")),
+            List.of(inputPort),
+            inputPort::invalidateAddress,
+            this::markDirty
+    );
+
     protected long influx;
-//    private final AbstractVascularConduitEntity conduitEntity;
     private final LazyBlockApiCache<BloodAcceptor, Direction> cache;
 
     protected final AbstractBloodAcceptor sinkAcceptor = new AbstractBloodAcceptor()
@@ -114,6 +136,8 @@ public class VSCBlockEntity extends SyncableBlockEntity implements ExtendedScree
         super.writeNbt(nbt);
         nbt.putInt("desired_power", desiredPower);
         nbt.putBoolean("active_with_redstone", activeWithRedstone);
+
+        nbt.put("config", config.writeNbt(new NbtCompound()));
     }
 
     @Override
@@ -122,6 +146,8 @@ public class VSCBlockEntity extends SyncableBlockEntity implements ExtendedScree
         super.readNbt(nbt);
         this.desiredPower = nbt.getInt("desired_power");
         this.activeWithRedstone = nbt.getBoolean("active_with_redstone");
+
+        this.config.readNbt(nbt.getCompound("config"));
     }
 
     @Override
@@ -197,6 +223,16 @@ public class VSCBlockEntity extends SyncableBlockEntity implements ExtendedScree
         activeWithRedstone = !activeWithRedstone;
         updateState(getWorld().getReceivedRedstonePower(pos));
         markDirty();
+    }
+
+    public NeepBusConfig getConfig()
+    {
+        return config;
+    }
+
+    public void invalidatePortCache()
+    {
+        // Nothing to do here as there is no sender
     }
 
     public class VSCDelegate implements PropertyDelegate

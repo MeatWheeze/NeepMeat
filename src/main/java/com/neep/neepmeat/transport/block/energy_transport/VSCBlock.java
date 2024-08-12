@@ -3,8 +3,12 @@ package com.neep.neepmeat.transport.block.energy_transport;
 import com.neep.meatlib.block.BaseFacingBlock;
 import com.neep.meatlib.item.ItemSettings;
 import com.neep.meatlib.registry.RegistrationContext;
+import com.neep.neepmeat.block.DataCableBlock;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.init.NMSounds;
+import com.neep.neepmeat.neepbus.NeepBusPort;
+import com.neep.neepmeat.neepbus.NeepBusProvider;
+import com.neep.neepmeat.transport.api.pipe.DataCable;
 import com.neep.neepmeat.transport.block.energy_transport.entity.VSCBlockEntity;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockEntityProvider;
@@ -21,7 +25,9 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
-public class VSCBlock extends BaseFacingBlock implements BlockEntityProvider
+import java.util.Map;
+
+public class VSCBlock extends BaseFacingBlock implements BlockEntityProvider, DataCable, NeepBusProvider
 {
     public static final BooleanProperty ACTIVE = BooleanProperty.of("active");
 
@@ -86,5 +92,24 @@ public class VSCBlock extends BaseFacingBlock implements BlockEntityProvider
     {
         super.appendProperties(builder);
         builder.add(ACTIVE);
+    }
+
+    @Override
+    public Map<String, NeepBusPort> getPorts(World world, BlockPos pos, BlockState state)
+    {
+        if (world.getBlockEntity(pos) instanceof VSCBlockEntity be)
+        {
+            return be.getConfig().getInputPorts();
+        }
+        return NO_PORTS;
+    }
+
+    @Override
+    public void networkChanged(World world, BlockPos pos, BlockPos whereChanged)
+    {
+        if (world.getBlockEntity(pos) instanceof VSCBlockEntity be)
+        {
+            be.invalidatePortCache();
+        }
     }
 }

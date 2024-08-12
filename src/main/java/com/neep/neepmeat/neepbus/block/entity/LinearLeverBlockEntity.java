@@ -20,11 +20,9 @@ public class LinearLeverBlockEntity extends SyncableBlockEntity implements Slide
             new NeepBusConfig.SimpleEntry("Output"),
             (s, value) -> sender.get().send(s, value));
     private final NeepBusConfig config = new NeepBusConfigImpl(
-            List.of(),
             List.of(outputPort.entry()),
-            List.of(),
             () -> { },
-            () -> { }
+            this::markDirty
     );
     private int value = 0;
     private int minValue = 0;
@@ -122,6 +120,8 @@ public class LinearLeverBlockEntity extends SyncableBlockEntity implements Slide
         nbt.putInt("min_value", minValue);
         nbt.putInt("max_value", maxValue);
         nbt.putInt("divisions", interval);
+
+        nbt.put("config", config.writeNbt(new NbtCompound()));
     }
 
     @Override
@@ -132,6 +132,8 @@ public class LinearLeverBlockEntity extends SyncableBlockEntity implements Slide
         this.minValue = nbt.getInt("min_value");
         this.maxValue = nbt.getInt("max_value");
         this.interval = nbt.getInt("divisions");
+
+        this.config.readNbt(nbt.getCompound("config"));
     }
 
 }

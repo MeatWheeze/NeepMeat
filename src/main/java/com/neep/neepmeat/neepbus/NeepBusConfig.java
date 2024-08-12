@@ -1,9 +1,11 @@
 package com.neep.neepmeat.neepbus;
 
+import com.neep.meatlib.util.NbtSerialisable;
+
 import java.util.List;
 import java.util.Map;
 
-public interface NeepBusConfig
+public interface NeepBusConfig extends NbtSerialisable
 {
     Map<String, NeepBusPort> getInputPorts();
 
