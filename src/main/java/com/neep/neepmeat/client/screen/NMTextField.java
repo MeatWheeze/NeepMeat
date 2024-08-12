@@ -150,6 +150,28 @@ public class NMTextField extends TextFieldWidget implements ClickableWidget
         super.setChangedListener(changedListener);
     }
 
+    // Turns out that setCursorToEnd also calls onChanged
+//    /**
+//     * Sets text while ignoring the changed listener.
+//     */
+//    public void setTextSilent(String text)
+//    {
+//        if (accessor.getTextPredicate().test(text))
+//        {
+//            if (text.length() > accessor.callGetMaxLength())
+//            {
+//                accessor.setFieldText(text.substring(0, accessor.callGetMaxLength()));
+//            }
+//            else
+//            {
+//                accessor.setFieldText(text);
+//            }
+//
+//            this.setCursorToEnd();
+//            this.setSelectionEnd(accessor.getSelectionStart());
+//        }
+//    }
+
     @Override
     public int x()
     {

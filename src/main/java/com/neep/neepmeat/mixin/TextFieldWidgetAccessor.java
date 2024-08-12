@@ -6,6 +6,8 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
 import org.spongepowered.asm.mixin.gen.Invoker;
 
+import java.util.function.Predicate;
+
 @Mixin(TextFieldWidget.class)
 public interface TextFieldWidgetAccessor
 {
@@ -27,9 +29,16 @@ public interface TextFieldWidgetAccessor
     @Accessor
     int getFocusedTicks();
 
+    @Accessor
+    Predicate<String> getTextPredicate();
+
+    @Accessor("text")
+    void setFieldText(String text);
+
     @Invoker
     int callGetMaxLength();
 
     @Invoker
     void callDrawSelectionHighlight(DrawContext context, int x1, int y1, int x2, int y2);
+
 }

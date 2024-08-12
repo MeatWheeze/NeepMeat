@@ -35,7 +35,7 @@ public class LinearLeverInstance extends BlockEntityInstance<LinearLeverBlockEnt
     @Override
     public void beginFrame()
     {
-        float f = 10 / 16f * MathHelper.clamp((float) blockEntity.getValue() / blockEntity.getMaxValue(), 0f, 1f);
+        float f = 10 / 16f * clamp((float) blockEntity.getValue() / (blockEntity.getMaxValue() - blockEntity.getMinValue()), 0f, 1f);
         lerpOffset = MathHelper.lerp(0.4f, lerpOffset, f);
 
         Quaternionf facing = rotateThing(blockState.get(WallMountedBlock.FACING), blockState.get(WallMountedBlock.FACE));
@@ -47,6 +47,7 @@ public class LinearLeverInstance extends BlockEntityInstance<LinearLeverBlockEnt
                 .unCentre()
                 ;
     }
+
 
     @Override
     public void updateLight()
@@ -89,6 +90,15 @@ public class LinearLeverInstance extends BlockEntityInstance<LinearLeverBlockEnt
                 default -> euler(180, 90);
             };
         }
+    }
+
+    // Handles NaNs, unlike MathHelper
+    private static float clamp(float value, float min, float max)
+    {
+        if (Float.isNaN(value))
+            return min; // We can assume that 0 is safe in this context.
+
+        return value < min ? min : Math.min(value, max);
     }
 
     private static Quaternionf euler(float xDeg, float yDeg)

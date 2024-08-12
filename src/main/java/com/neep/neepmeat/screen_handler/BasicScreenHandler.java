@@ -36,6 +36,11 @@ public abstract class BasicScreenHandler extends ScreenHandler
         return 0;
     }
 
+    protected boolean isClient()
+    {
+        return playerInventory.player.getWorld().isClient();
+    }
+
     public void setProperty(int i, int value)
     {
         if (propertyDelegate != null) propertyDelegate.set(i, value);

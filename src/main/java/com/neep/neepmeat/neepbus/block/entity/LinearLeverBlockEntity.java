@@ -29,7 +29,7 @@ public class LinearLeverBlockEntity extends SyncableBlockEntity implements Slide
     private int value = 0;
     private int minValue = 0;
     private int maxValue = 256;
-    private int divisions = 16;
+    private int interval = 16;
 
     public LinearLeverBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
     {
@@ -45,7 +45,8 @@ public class LinearLeverBlockEntity extends SyncableBlockEntity implements Slide
     @Override
     public void setValue(int value)
     {
-        this.value = value;
+        this.value = MathHelper.clamp(value, minValue, maxValue);
+        sync();
     }
 
     @Override
@@ -57,7 +58,8 @@ public class LinearLeverBlockEntity extends SyncableBlockEntity implements Slide
     @Override
     public void setMinValue(int minValue)
     {
-        this.minValue = minValue;
+        this.minValue = Math.min(minValue, maxValue);
+        sync();
     }
 
     @Override
@@ -69,19 +71,21 @@ public class LinearLeverBlockEntity extends SyncableBlockEntity implements Slide
     @Override
     public void setMaxValue(int maxValue)
     {
-        this.maxValue = maxValue;
+        this.maxValue = Math.max(maxValue, minValue);
+        sync();
     }
 
     @Override
-    public int getDivisions()
+    public int getInterval()
     {
-        return divisions;
+        return interval;
     }
 
     @Override
-    public void setDivisions(int divisions)
+    public void setInterval(int interval)
     {
-        this.divisions = divisions;
+        this.interval = MathHelper.clamp(interval, 1, maxValue - minValue);
+        sync();
     }
 
     public Map<String, NeepBusPort> getPorts()
@@ -100,10 +104,10 @@ public class LinearLeverBlockEntity extends SyncableBlockEntity implements Slide
     }
 
     @Override
-    public void largeIncrement(double amount, boolean large)
+    public void increment(double amount, boolean large)
     {
         int increment = (int) (Math.signum(amount) * Math.max(
-                (maxValue - minValue) / (large ? divisions : divisions * 10f),
+                (large ? interval : interval / 10f),
                 1));
         value = MathHelper.clamp(value + increment, minValue, maxValue);
         outputPort.send(value);
@@ -117,7 +121,7 @@ public class LinearLeverBlockEntity extends SyncableBlockEntity implements Slide
         nbt.putInt("value", value);
         nbt.putInt("min_value", minValue);
         nbt.putInt("max_value", maxValue);
-        nbt.putInt("divisions", divisions);
+        nbt.putInt("divisions", interval);
     }
 
     @Override
@@ -127,7 +131,7 @@ public class LinearLeverBlockEntity extends SyncableBlockEntity implements Slide
         this.value = nbt.getInt("value");
         this.minValue = nbt.getInt("min_value");
         this.maxValue = nbt.getInt("max_value");
-        this.divisions = nbt.getInt("divisions");
+        this.interval = nbt.getInt("divisions");
     }
 
 }

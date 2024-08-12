@@ -11,10 +11,10 @@ public interface Slider
     int getMaxValue();
     void setMaxValue(int maxValue);
 
-    int getDivisions();
-    void setDivisions(int divisions);
+    int getInterval();
+    void setInterval(int interval);
 
-    default void largeIncrement(double amount, boolean large)
+    default void increment(double amount, boolean large)
     {
 
     }
@@ -58,13 +58,13 @@ public interface Slider
         }
 
         @Override
-        public int getDivisions()
+        public int getInterval()
         {
             return 0;
         }
 
         @Override
-        public void setDivisions(int divisions)
+        public void setInterval(int interval)
         {
 
         }
