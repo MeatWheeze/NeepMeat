@@ -33,14 +33,14 @@ public class NeepBusConfigImpl implements NeepBusConfig
         this.markDirty = markDirty;
     }
 
-    public NeepBusConfigImpl(List<Entry> inputs, List<NeepBusPort> inputPorts, Runnable onInputsChanged, Runnable markDirty)
+    public static NeepBusConfigImpl ofInputs(List<Entry> inputs, List<NeepBusPort> inputPorts, Runnable onInputsChanged, Runnable markDirty)
     {
-        this(inputs, List.of(), inputPorts, onInputsChanged, () -> {}, markDirty);
+        return new NeepBusConfigImpl(inputs, List.of(), inputPorts, onInputsChanged, () -> {}, markDirty);
     }
 
-    public NeepBusConfigImpl(List<Entry> outputs, Runnable onOutputChanged, Runnable markDirty)
+    public static NeepBusConfigImpl ofOutputs(List<Entry> outputs, Runnable onOutputChanged, Runnable markDirty)
     {
-        this(List.of(), outputs, List.of(), () -> {}, onOutputChanged, markDirty);
+        return new NeepBusConfigImpl(List.of(), outputs, List.of(), () -> {}, onOutputChanged, markDirty);
     }
 
     @Override

@@ -93,7 +93,7 @@ public class LinearLeverInstance extends BlockEntityInstance<LinearLeverBlockEnt
     }
 
     // Handles NaNs, unlike MathHelper
-    private static float clamp(float value, float min, float max)
+    public static float clamp(float value, float min, float max)
     {
         if (Float.isNaN(value))
             return min; // We can assume that 0 is safe in this context.

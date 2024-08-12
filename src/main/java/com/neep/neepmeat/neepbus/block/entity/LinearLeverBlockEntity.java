@@ -3,6 +3,7 @@ package com.neep.neepmeat.neepbus.block.entity;
 import com.google.common.base.Suppliers;
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
 import com.neep.neepmeat.neepbus.*;
+import com.neep.neepmeat.neepbus.part.Slider;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.nbt.NbtCompound;
@@ -19,7 +20,7 @@ public class LinearLeverBlockEntity extends SyncableBlockEntity implements Slide
     private final SimpleOutputPort outputPort = new SimpleOutputPort(
             new NeepBusConfig.SimpleEntry("Output"),
             (s, value) -> sender.get().send(s, value));
-    private final NeepBusConfig config = new NeepBusConfigImpl(
+    private final NeepBusConfig config = NeepBusConfigImpl.ofOutputs(
             List.of(outputPort.entry()),
             () -> { },
             this::markDirty

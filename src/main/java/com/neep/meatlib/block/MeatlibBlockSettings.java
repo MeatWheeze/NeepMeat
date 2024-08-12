@@ -142,4 +142,11 @@ public class MeatlibBlockSettings extends FabricBlockSettings
         this.tags = Set.copyOf(tags);
         return this;
     }
+
+    @Override
+    public MeatlibBlockSettings hardness(float hardness)
+    {
+        super.hardness(hardness);
+        return this;
+    }
 }

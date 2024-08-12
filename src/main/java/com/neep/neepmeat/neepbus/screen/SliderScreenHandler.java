@@ -5,7 +5,7 @@ import com.neep.meatlib.api.network.ParamCodec;
 import com.neep.meatlib.network.ChannelManager;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.init.ScreenHandlerInit;
-import com.neep.neepmeat.neepbus.Slider;
+import com.neep.neepmeat.neepbus.part.Slider;
 import com.neep.neepmeat.screen_handler.BasicScreenHandler;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;

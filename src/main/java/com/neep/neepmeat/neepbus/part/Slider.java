@@ -1,16 +1,7 @@
-package com.neep.neepmeat.neepbus;
+package com.neep.neepmeat.neepbus.part;
 
-public interface Slider
+public interface Slider extends RangedPart
 {
-    int getValue();
-    void setValue(int value);
-
-    int getMinValue();
-    void setMinValue(int minValue);
-
-    int getMaxValue();
-    void setMaxValue(int maxValue);
-
     int getInterval();
     void setInterval(int interval);
 

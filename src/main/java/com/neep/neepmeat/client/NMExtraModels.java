@@ -40,6 +40,7 @@ public class NMExtraModels implements ExtraModelProvider
 
     public static PartialModel LARGE_FAN_VANES = new PartialModel(new Identifier(NeepMeat.NAMESPACE, "block/large_fan/vanes"));
 
+    public static final PartialModel VERTICAL_GAUGE_INDICATOR = new PartialModel(new Identifier(NeepMeat.NAMESPACE, "block/neepbus/vertical_gauge_indicator"));
     public static final PartialModel LINEAR_LEVER_HANDLE = new PartialModel(new Identifier(NeepMeat.NAMESPACE, "block/neepbus/linear_lever_handle"));
 
     public static final PartialModel COW_LIMB = new PartialModel(new Identifier(NeepMeat.NAMESPACE, "entity/parts/cow_limb"));

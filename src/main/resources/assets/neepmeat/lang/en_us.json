@@ -266,6 +266,7 @@
   "block.neepmeat.dumper": "Smart Dumper",
   "block.neepmeat.dumper.lore_0": "Drops items straight down.",
 
+  "block.neepmeat.vertical_gauge": "Vertical Gauge",
   "block.neepmeat.linear_lever": "Slider",
   "block.neepmeat.data_cable": "Data Cable",
   "block.neepmeat.encased_data_cable": "Encased Data Cable",

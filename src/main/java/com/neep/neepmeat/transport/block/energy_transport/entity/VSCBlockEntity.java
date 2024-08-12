@@ -42,7 +42,7 @@ public class VSCBlockEntity extends SyncableBlockEntity implements ExtendedScree
         }
     };
 
-    private final NeepBusConfig config = new NeepBusConfigImpl(
+    private final NeepBusConfig config = NeepBusConfigImpl.ofInputs(
             List.of(new NeepBusConfig.SimpleEntry("Power")),
             List.of(inputPort),
             inputPort::invalidateAddress,

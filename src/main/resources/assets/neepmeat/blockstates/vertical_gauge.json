@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "neepmeat:block/neepbus/vertical_gauge",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "neepmeat:block/neepbus/vertical_gauge"
+    },
+    "facing=south": {
+      "model": "neepmeat:block/neepbus/vertical_gauge",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "neepmeat:block/neepbus/vertical_gauge",
+      "y": 270
+    }
+  }
+}
