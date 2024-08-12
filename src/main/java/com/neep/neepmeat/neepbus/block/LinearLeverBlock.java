@@ -7,24 +7,20 @@ import com.neep.neepmeat.neepbus.NeepBusPort;
 import com.neep.neepmeat.neepbus.NeepBusProvider;
 import com.neep.neepmeat.neepbus.SimpleScreenHandlerFactory;
 import com.neep.neepmeat.neepbus.block.entity.LinearLeverBlockEntity;
-import com.neep.neepmeat.neepbus.screen.InteractiveControlScreenHandler;
+import com.neep.neepmeat.neepbus.screen.SliderScreenHandler;
 import com.neep.neepmeat.neepbus.screen.NeepBusScreenHandler;
 import com.neep.neepmeat.transport.api.pipe.DataCable;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.block.enums.WallMountLocation;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.state.StateManager;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldAccess;
 import net.minecraft.world.WorldView;
 import org.jetbrains.annotations.Nullable;
 
@@ -88,7 +84,7 @@ public class LinearLeverBlock extends WallMountedBlock implements BlockEntityPro
             if (!player.isSneaking())
             {
                 player.openHandledScreen((SimpleScreenHandlerFactory) (syncId, playerInventory, player1) ->
-                        new InteractiveControlScreenHandler(syncId, playerInventory, be::onScroll));
+                        new SliderScreenHandler(syncId, playerInventory, be));
             }
             else
             {

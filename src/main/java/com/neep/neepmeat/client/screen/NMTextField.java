@@ -68,7 +68,7 @@ public class NMTextField extends TextFieldWidget implements ClickableWidget
 
         String prefix = getPrefix();
         int prefixStart = this.getX() + 4;
-        int textStart = prefixStart + textRenderer.getWidth(prefix);
+        int textStart = prefixStart + Math.max(textRenderer.getWidth(prefix), getTextStart());
         int m = getTextY();
         int n = textStart;
 
@@ -129,9 +129,14 @@ public class NMTextField extends TextFieldWidget implements ClickableWidget
         return GUIUtil.drawText(context, this.textRenderer, this.renderTextProvider.apply(string2, accessor.getFirstCharacterIndex()), textStart, m, col, true);
     }
 
-    public String getPrefix()
+    protected String getPrefix()
     {
         return "";
+    }
+
+    protected int getTextStart()
+    {
+        return 0;
     }
 
     protected int prefixCol()

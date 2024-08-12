@@ -46,7 +46,7 @@ public class NeepBusConfigScreen extends HandledScreen<NeepBusScreenHandler>
 
         super.init();
 
-        var background = addDrawable(new Background(x, y, backgroundWidth, backgroundHeight, 6, () -> PLCCols.BORDER.col));
+        var background = addDrawable(new Background(x, y, backgroundWidth, backgroundHeight, 6));
         var bounds = background.withoutPadding();
         int entryWidth = bounds.w() / 2;
 

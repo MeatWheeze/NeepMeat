@@ -16,6 +16,8 @@ import org.joml.Quaternionf;
 
 public class LinearLeverInstance extends BlockEntityInstance<LinearLeverBlockEntity> implements DynamicInstance
 {
+    private float lerpOffset = 0;
+
     private final ModelData handle;
 
     public LinearLeverInstance(MaterialManager materialManager, LinearLeverBlockEntity blockEntity)
@@ -33,14 +35,15 @@ public class LinearLeverInstance extends BlockEntityInstance<LinearLeverBlockEnt
     @Override
     public void beginFrame()
     {
-        float f = 10 / 16f * MathHelper.clamp(blockEntity.getValue() / 100f, 0f, 1f);
+        float f = 10 / 16f * MathHelper.clamp((float) blockEntity.getValue() / blockEntity.getMaxValue(), 0f, 1f);
+        lerpOffset = MathHelper.lerp(0.4f, lerpOffset, f);
 
         Quaternionf facing = rotateThing(blockState.get(WallMountedBlock.FACING), blockState.get(WallMountedBlock.FACE));
         handle.loadIdentity()
                 .translate(getInstancePosition())
                 .centre()
                 .multiply(facing)
-                .translate(0, 0, f)
+                .translate(0, 0, lerpOffset)
                 .unCentre()
                 ;
     }

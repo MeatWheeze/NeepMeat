@@ -7,31 +7,81 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 
 import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
 
-public class LinearLeverBlockEntity extends SyncableBlockEntity
+public class LinearLeverBlockEntity extends SyncableBlockEntity implements Slider
 {
-    private int value;
     private final Supplier<CachingSender> sender = Suppliers.memoize(() -> new CachingSender(getWorld(), getPos()));
-
-    private final SimpleOutputPort outputPort = new SimpleOutputPort(new NeepBusConfig.SimpleEntry("Output"),
+    private final SimpleOutputPort outputPort = new SimpleOutputPort(
+            new NeepBusConfig.SimpleEntry("Output"),
             (s, value) -> sender.get().send(s, value));
-
     private final NeepBusConfig config = new NeepBusConfigImpl(
             List.of(),
             List.of(outputPort.entry()),
             List.of(),
-            () -> {},
-            () -> {}
+            () -> { },
+            () -> { }
     );
-
+    private int value = 0;
+    private int minValue = 0;
+    private int maxValue = 256;
+    private int divisions = 16;
 
     public LinearLeverBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
     {
         super(type, pos, state);
+    }
+
+    @Override
+    public int getValue()
+    {
+        return value;
+    }
+
+    @Override
+    public void setValue(int value)
+    {
+        this.value = value;
+    }
+
+    @Override
+    public int getMinValue()
+    {
+        return minValue;
+    }
+
+    @Override
+    public void setMinValue(int minValue)
+    {
+        this.minValue = minValue;
+    }
+
+    @Override
+    public int getMaxValue()
+    {
+        return maxValue;
+    }
+
+    @Override
+    public void setMaxValue(int maxValue)
+    {
+        this.maxValue = maxValue;
+    }
+
+    @Override
+    public int getDivisions()
+    {
+        return divisions;
+    }
+
+    @Override
+    public void setDivisions(int divisions)
+    {
+        this.divisions = divisions;
     }
 
     public Map<String, NeepBusPort> getPorts()
@@ -49,9 +99,13 @@ public class LinearLeverBlockEntity extends SyncableBlockEntity
         return config;
     }
 
-    public void onScroll(double amount)
+    @Override
+    public void largeIncrement(double amount, boolean large)
     {
-        value += Math.round(amount);
+        int increment = (int) (Math.signum(amount) * Math.max(
+                (maxValue - minValue) / (large ? divisions : divisions * 10f),
+                1));
+        value = MathHelper.clamp(value + increment, minValue, maxValue);
         outputPort.send(value);
         sync();
     }
@@ -61,6 +115,9 @@ public class LinearLeverBlockEntity extends SyncableBlockEntity
     {
         super.writeNbt(nbt);
         nbt.putInt("value", value);
+        nbt.putInt("min_value", minValue);
+        nbt.putInt("max_value", maxValue);
+        nbt.putInt("divisions", divisions);
     }
 
     @Override
@@ -68,10 +125,9 @@ public class LinearLeverBlockEntity extends SyncableBlockEntity
     {
         super.readNbt(nbt);
         this.value = nbt.getInt("value");
+        this.minValue = nbt.getInt("min_value");
+        this.maxValue = nbt.getInt("max_value");
+        this.divisions = nbt.getInt("divisions");
     }
 
-    public int getValue()
-    {
-        return value;
-    }
 }

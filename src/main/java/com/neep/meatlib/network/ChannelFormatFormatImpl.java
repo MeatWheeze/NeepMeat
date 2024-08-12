@@ -63,7 +63,6 @@ public class ChannelFormatFormatImpl<T> implements ChannelFormat<T>
         if (methods.length == 1)
         {
             Method method = methods[0];
-            Class<?>[] types = method.getParameterTypes();
             if (parametersMatch(method, invokeParameters))
                 return method;
         }
@@ -82,6 +81,10 @@ public class ChannelFormatFormatImpl<T> implements ChannelFormat<T>
     private static boolean parametersMatch(Method method, Class<?>[] invokeParameters)
     {
         Class<?>[] methodParameters = method.getParameterTypes();
+
+        if (methodParameters.length != invokeParameters.length)
+            return false;
+
         for (int i = 0; i < methodParameters.length; i++)
         {
             if (!methodParameters[i].isAssignableFrom(invokeParameters[i]))
