@@ -8,10 +8,14 @@ import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.init.ScreenHandlerInit;
 import com.neep.neepmeat.neepbus.NeepBusConfig;
 import com.neep.neepmeat.screen_handler.BasicScreenHandler;
+import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.network.PacketByteBuf;
+import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.ScreenHandlerType;
+import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.Nullable;
 
@@ -33,6 +37,30 @@ public class NeepBusScreenHandler extends BasicScreenHandler
     // Populated in the client constructor
     public List<SyncEntry> outputs = List.of();
     public List<SyncEntry> inputs = List.of();
+
+    public static ExtendedScreenHandlerFactory getFactory(NeepBusConfig config)
+    {
+        return new ExtendedScreenHandlerFactory()
+        {
+            @Override
+            public void writeScreenOpeningData(ServerPlayerEntity player, PacketByteBuf buf)
+            {
+                NeepBusScreenHandler.writeOpeningData(config, buf);
+            }
+
+            @Override
+            public Text getDisplayName()
+            {
+                return Text.empty();
+            }
+
+            @Override
+            public ScreenHandler createMenu(int syncId, PlayerInventory playerInventory, PlayerEntity player)
+            {
+                return new NeepBusScreenHandler(playerInventory, syncId, config);
+            }
+        };
+    }
 
     public static void writeOpeningData(NeepBusConfig config, PacketByteBuf buf)
     {

@@ -305,6 +305,7 @@ public class NMBlocks
 
     // --- Data ---
     public static Block DATA_CABLE = new DataCableBlock(C, block(), VASCULAR_CONDUIT_SETTINGS);
+    public static Block ENCASED_DATA_CABLE = new EncasedDataCableBlock(C, block(), VASCULAR_CONDUIT_SETTINGS);
     public static Block VASCULAR_CONDUIT = new VascularConduitBlock(C, block().tooltip(TooltipSupplier.hidden(1)), VASCULAR_CONDUIT_SETTINGS);
     public static Block ENCASED_VASCULAR_CONDUIT = new EncasedVascularConduitBlock(C, block().tooltip(TooltipSupplier.simple(1)), VASCULAR_CONDUIT_SETTINGS);
     public static Block POWER_EMITTER = new BaseBlock(C, block().tooltip(TooltipSupplier.simple(1)), VASCULAR_CONDUIT_SETTINGS);

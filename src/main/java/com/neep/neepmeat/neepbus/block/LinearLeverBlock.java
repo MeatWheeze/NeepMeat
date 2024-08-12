@@ -10,23 +10,22 @@ import com.neep.neepmeat.neepbus.block.entity.LinearLeverBlockEntity;
 import com.neep.neepmeat.neepbus.screen.InteractiveControlScreenHandler;
 import com.neep.neepmeat.neepbus.screen.NeepBusScreenHandler;
 import com.neep.neepmeat.transport.api.pipe.DataCable;
-import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.block.enums.WallMountLocation;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.network.PacketByteBuf;
-import net.minecraft.screen.ScreenHandler;
-import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.state.StateManager;
-import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldAccess;
+import net.minecraft.world.WorldView;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
@@ -49,6 +48,39 @@ public class LinearLeverBlock extends WallMountedBlock implements BlockEntityPro
     }
 
     @Override
+    public boolean canPlaceAt(BlockState state, WorldView world, BlockPos pos)
+    {
+        return true;
+    }
+
+//    @Nullable
+//    @Override
+//    public BlockState getPlacementState(ItemPlacementContext ctx)
+//    {
+//        for (Direction direction : ctx.getPlacementDirections())
+//        {
+//            BlockState blockState;
+//            if (direction.getAxis() == Direction.Axis.Y)
+//            {
+//                blockState = this.getDefaultState()
+//                        .with(FACE, direction == Direction.UP ? WallMountLocation.CEILING : WallMountLocation.FLOOR)
+//                        .with(FACING, ctx.getHorizontalPlayerFacing());
+//            }
+//            else
+//            {
+//                blockState = this.getDefaultState().with(FACE, WallMountLocation.WALL).with(FACING, direction.getOpposite());
+//            }
+//
+//            if (blockState.canPlaceAt(ctx.getWorld(), ctx.getBlockPos()))
+//            {
+//                return blockState;
+//            }
+//        }
+//
+//        return null;
+//    }
+
+    @Override
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit)
     {
         if (world.getBlockEntity(pos) instanceof LinearLeverBlockEntity be)
@@ -60,27 +92,7 @@ public class LinearLeverBlock extends WallMountedBlock implements BlockEntityPro
             }
             else
             {
-                player.openHandledScreen(new ExtendedScreenHandlerFactory()
-                {
-                    @Override
-                    public void writeScreenOpeningData(ServerPlayerEntity player, PacketByteBuf buf)
-                    {
-                        NeepBusScreenHandler.writeOpeningData(be.getConfig(), buf);
-                    }
-
-                    @Override
-                    public Text getDisplayName()
-                    {
-                        return Text.empty();
-                    }
-
-                    @Nullable
-                    @Override
-                    public ScreenHandler createMenu(int syncId, PlayerInventory playerInventory, PlayerEntity player)
-                    {
-                        return new NeepBusScreenHandler(playerInventory, syncId, be.getConfig());
-                    }
-                });
+                player.openHandledScreen(NeepBusScreenHandler.getFactory(be.getConfig()));
             }
             return ActionResult.SUCCESS;
         }

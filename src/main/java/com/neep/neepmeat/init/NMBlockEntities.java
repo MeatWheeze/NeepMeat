@@ -206,6 +206,7 @@ public class NMBlockEntities
 
     public static BlockEntityType<? extends HoldingTrackBlock.HoldingTrackBlockEntity> HOLDING_TRACK;
     public static BlockEntityType<? extends PlayerControlTrack.TrackBlockEntity> CONTROL_TRACK;
+    public static BlockEntityType<EncasedDataCableBlockEntity> ENCASED_DATA_CABLE;
     public static BlockEntityType<?> VASCULAR_CONDUIT;
     public static BlockEntityType<?> ENCASED_VASCULAR_CONDUIT;
     public static BlockEntityType<VSCBlockEntity> VSC;
@@ -295,6 +296,8 @@ public class NMBlockEntities
 
         HEATER = register("heater", HeaterBlockEntity::new, NMBlocks.HEATER);
         BloodAcceptor.SIDED.registerSelf(HEATER);
+
+        ENCASED_DATA_CABLE = register("encased_data_cable", (p, s) -> new EncasedDataCableBlockEntity(ENCASED_DATA_CABLE, p, s), NMBlocks.ENCASED_DATA_CABLE);
 
         VASCULAR_CONDUIT = register("vascular_conduit", (pos, state) -> new VascularConduitBlockEntity(NMBlockEntities.VASCULAR_CONDUIT, pos, state), NMBlocks.VASCULAR_CONDUIT);
         ENCASED_VASCULAR_CONDUIT = register("encased_vascular_conduit", EncasedConduitBlockEntity::new, NMBlocks.ENCASED_VASCULAR_CONDUIT);
