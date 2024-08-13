@@ -35,7 +35,7 @@ public class GlobalChannelManager<T>
         }
         else
         {
-            // This should be server-safe as this will never be called on the server, but it's a bit naughty.
+            // This should be server-safe as it will never be called on the server, but it's a bit naughty.
             return new ClientChannelSender<>(name, format);
         }
     }
@@ -47,6 +47,7 @@ public class GlobalChannelManager<T>
 
     public T emitter(PlayerEntity to)
     {
+        // TODO: Look into caching senders in a map
         return format.emitter(createSender(to));
     }
 

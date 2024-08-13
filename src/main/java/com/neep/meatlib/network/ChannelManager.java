@@ -6,6 +6,7 @@ import com.neep.meatlib.client.ClientChannelSender;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +19,8 @@ public class ChannelManager<T>
 
     private final List<Receiver<T>> receivers = new ArrayList<>();
     private final Sender<T> sender;
+
+    @Nullable private T emitter;
 
     // If sources are split in the future, I may need to instantiate this through an opaque functional interface
     // that changes depending on environment.
@@ -53,8 +56,11 @@ public class ChannelManager<T>
 
     public T emitter()
     {
-        // TODO: cache emitter to minimise proxy stuff
-        return format.emitter(sender);
+        // I assume that creating a proxy instance is slow, so the emitter is cached.
+        if (emitter == null)
+            emitter =  format.emitter(sender);
+
+        return emitter;
     }
 
     public void receiver(T listener)
