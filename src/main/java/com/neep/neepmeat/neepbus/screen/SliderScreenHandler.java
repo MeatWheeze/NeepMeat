@@ -22,8 +22,6 @@ public class SliderScreenHandler extends BasicScreenHandler
 
     private final Slider slider;
 
-    private boolean updateToClient = true;
-
     protected SliderScreenHandler(@Nullable ScreenHandlerType<?> type, PlayerInventory playerInventory, int syncId, Slider slider)
     {
         super(type, playerInventory, null, syncId, null);
@@ -52,20 +50,14 @@ public class SliderScreenHandler extends BasicScreenHandler
     private void increment(double amount, boolean large)
     {
         slider.increment(amount, large);
-
-        updateToClient = true;
+        sliderConfig.markNeedsUpdate();
     }
 
     @Override
     public void sendContentUpdates()
     {
         super.sendContentUpdates();
-        if (!isClient() && updateToClient)
-        {
-            // Send the updated (and possibly sanitised) values back to the client.
-            sliderConfig.updateParamsS2C.emitter().update(List.of(slider.getValue(), slider.getMinValue(), slider.getMaxValue(), slider.getInterval()));
-            updateToClient = false;
-        }
+        sliderConfig.sendUpdates();
     }
 
     @Override

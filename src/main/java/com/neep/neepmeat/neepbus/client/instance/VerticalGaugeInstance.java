@@ -38,7 +38,7 @@ public class VerticalGaugeInstance extends BlockEntityInstance<VerticalGaugeBloc
         float length = 12 / 16f;
 
         float f = LinearLeverInstance.clamp(
-                (float) blockEntity.getValue() / (blockEntity.getMaxValue() - blockEntity.getMinValue()),
+                (float) (blockEntity.getValue() - blockEntity.getMinValue()) / (blockEntity.getMaxValue() - blockEntity.getMinValue()),
                 0, 1);
 
         Direction facing = blockState.get(VerticalGaugeBlock.FACING);

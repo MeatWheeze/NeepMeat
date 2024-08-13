@@ -58,6 +58,13 @@ public class NeepBusRangeConfigScreenHandler extends NeepBusConfigScreenHandler
     }
 
     @Override
+    public void sendContentUpdates()
+    {
+        super.sendContentUpdates();
+        rangeConfig.sendUpdates();
+    }
+
+    @Override
     public void onClosed(PlayerEntity player)
     {
         super.onClosed(player);

@@ -23,4 +23,15 @@ public class SliderConfigHandler extends RangeConfigHandler
 //        slider.setValue(ints.get(0));
         slider.setInterval(ints.get(3));
     }
+
+    @Override
+    public void sendUpdates()
+    {
+        if (updateToClient)
+        {
+            // Send the updated (and possibly sanitised) values back to the client.
+            updateParamsS2C.emitter().update(List.of(slider.getValue(), slider.getMinValue(), slider.getMaxValue(), slider.getInterval()));
+            updateToClient = false;
+        }
+    }
 }

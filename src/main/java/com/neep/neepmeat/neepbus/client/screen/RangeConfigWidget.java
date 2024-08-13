@@ -7,6 +7,7 @@ import com.neep.neepmeat.client.screen.util.Background;
 import com.neep.neepmeat.neepbus.screen.RangeConfigHandler;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
 import it.unimi.dsi.fastutil.ints.IntList;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder;
 import net.minecraft.text.Text;
@@ -20,25 +21,24 @@ public class RangeConfigWidget extends ParentWidget
 
     private final RangeConfigHandler handler;
 
-    private final TextField valueField;
-    private final TextField minField;
-    private final TextField maxField;
-    private final TextField intervalField;
-
-    private final List<TextField> textFields;
+    private final List<TextField> textFields = new ObjectArrayList<>();
 
     public RangeConfigWidget(int x, int y, int w, int h, RangeConfigHandler handler)
     {
         super(x, y, w, h);
 
         this.handler = handler;
+        handler.updateParamsS2C.receiver(this::updateParams);
 
-        valueField = new TextField(textRenderer, x, y, w, 8, Text.of("Value: "));
-        minField = new TextField(textRenderer, x, y, w, 8, Text.of("Min: "));
-        maxField = new TextField(textRenderer, x, y, w, 8, Text.of("Max: "));
-        intervalField = new TextField(textRenderer, x, y, w, 8, Text.of("Interval: "));
+        addTextField(new TextField(textRenderer, x, y, w, 8, Text.of("Value: ")));
+        addTextField(new TextField(textRenderer, x, y, w, 8, Text.of("Min: ")));
+        addTextField(new TextField(textRenderer, x, y, w, 8, Text.of("Max: ")));
+    }
 
-        textFields = List.of(valueField, minField, maxField, intervalField);
+    protected <T extends TextField> T addTextField(T t)
+    {
+        textFields.add(t);
+        return t;
     }
 
     void updateParams(List<Integer> integers)
@@ -65,23 +65,13 @@ public class RangeConfigWidget extends ParentWidget
 
         int yOff = y;
 
-        TextField field;
-        field = addChild(valueField);
-        field.setPos(x, yOff);
-        field.drawFancyBackground(false);
-        yOff += field.h() + 1;
-        field = addChild(minField);
-        field.setPos(x, yOff);
-        field.drawFancyBackground(false);
-        yOff += field.h() + 1;
-        field = addChild(maxField);
-        field.setPos(x, yOff);
-        field.drawFancyBackground(false);
-        yOff += field.h() + 1;
-        field = addChild(intervalField);
-        field.setPos(x, yOff);
-        field.drawFancyBackground(false);
-        yOff += field.h() + 1;
+        for (var field : textFields)
+        {
+            addChild(field);
+            field.setPos(x, yOff);
+            field.drawFancyBackground(false);
+            yOff += field.h() + 1;
+        }
 
         h = yOff - y;
         background.setH(h);
@@ -142,7 +132,7 @@ public class RangeConfigWidget extends ParentWidget
         this.w = w;
     }
 
-    private class TextField extends NMTextField
+    protected class TextField extends NMTextField
     {
         private final Text prefix;
 

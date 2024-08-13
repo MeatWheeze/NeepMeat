@@ -15,7 +15,7 @@ public class RangeConfigHandler
     public final ChannelManager<SliderScreenHandler.UpdateParams> updateParamsS2C;
     public final ChannelManager<SliderScreenHandler.UpdateParams> receiveParamsC2S;
     protected final RangedPart ranged;
-    protected boolean updateToClient;
+    protected boolean updateToClient = true;
 
     public RangeConfigHandler(PlayerEntity player, RangedPart ranged)
     {
@@ -39,6 +39,20 @@ public class RangeConfigHandler
 
         ranged.setMinValue(ints.get(1));
         ranged.setMaxValue(ints.get(2));
+    }
+
+    public void markNeedsUpdate()
+    {
+        updateToClient = true;
+    }
+
+    public void sendUpdates()
+    {
+        if (updateToClient)
+        {
+            updateParamsS2C.emitter().update(List.of(ranged.getValue(), ranged.getMinValue(), ranged.getMaxValue()));
+            updateToClient = false;
+        }
     }
 
     public void close()

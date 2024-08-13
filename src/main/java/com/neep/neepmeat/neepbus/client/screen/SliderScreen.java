@@ -2,6 +2,7 @@ package com.neep.neepmeat.neepbus.client.screen;
 
 import com.neep.neepmeat.api.plc.PLCCols;
 import com.neep.neepmeat.client.screen.util.GUIUtil;
+import com.neep.neepmeat.neepbus.part.Slider;
 import com.neep.neepmeat.neepbus.screen.SliderScreenHandler;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.minecraft.client.gui.DrawContext;
@@ -20,8 +21,7 @@ public class SliderScreen extends HandledScreen<SliderScreenHandler>
     {
         super(handler, inventory, title);
 
-        rangeConfig = new RangeConfigWidget(6, 0, 100, 100, handler.sliderConfig);
-        handler.sliderConfig.updateParamsS2C.receiver(rangeConfig::updateParams);
+        rangeConfig = new SliderConfigWidget(6, 0, 100, 100, handler.sliderConfig);
     }
 
     @Override
