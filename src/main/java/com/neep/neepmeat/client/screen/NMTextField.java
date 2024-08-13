@@ -19,6 +19,7 @@ import java.util.function.Consumer;
 public class NMTextField extends TextFieldWidget implements ClickableWidget
 {
     protected final TextRenderer textRenderer;
+
     private final BiFunction<String, Integer, OrderedText> renderTextProvider = (string, firstCharacterIndex) -> OrderedText.styledForwardsVisitedString(
             string, Style.EMPTY
     );
@@ -64,7 +65,7 @@ public class NMTextField extends TextFieldWidget implements ClickableWidget
         int k = accessor.getSelectionEnd() - accessor.getFirstCharacterIndex();
         String string = this.textRenderer.trimToWidth(accessor.getText().substring(accessor.getFirstCharacterIndex()), this.getInnerWidth());
         boolean selectionWithin = j >= 0 && j <= string.length();
-        boolean bl2 = this.isFocused() && accessor.getFocusedTicks() / 6 % 2 == 0 && selectionWithin;
+        boolean drawCursor = this.isFocused() && accessor.getFocusedTicks() / 6 % 2 == 0 && selectionWithin;
 
         String prefix = getPrefix();
         int prefixStart = this.getX() + 4;
@@ -87,13 +88,13 @@ public class NMTextField extends TextFieldWidget implements ClickableWidget
             n = renderUnselectedText(context, string, selectionWithin, textStart, m, col, j);
         }
 
-        boolean bl3 = accessor.getSelectionStart() < accessor.getText().length() || accessor.getText().length() >= accessor.callGetMaxLength();
+        boolean cursorNotAtEnd = accessor.getSelectionStart() < accessor.getText().length() || accessor.getText().length() >= accessor.callGetMaxLength();
         int o = n;
         if (!selectionWithin)
         {
             o = j > 0 ? textStart + this.width : textStart;
         }
-        else if (bl3)
+        else if (cursorNotAtEnd)
         {
             o = n - 1;
             --n;
@@ -104,9 +105,9 @@ public class NMTextField extends TextFieldWidget implements ClickableWidget
             GUIUtil.drawText(context, this.textRenderer, this.renderTextProvider.apply(string.substring(j), accessor.getSelectionStart()), n, m, col, true);
         }
 
-        if (bl2)
+        if (drawCursor)
         {
-            if (bl3)
+            if (cursorNotAtEnd)
             {
                 context.fill(RenderLayer.getGuiOverlay(), o, m - 1, o + 1, m + 1 + 9, -3092272);
             }

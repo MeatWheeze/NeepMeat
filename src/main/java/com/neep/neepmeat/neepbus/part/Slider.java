@@ -1,6 +1,6 @@
 package com.neep.neepmeat.neepbus.part;
 
-public interface Slider extends RangedPart
+public interface Slider extends Ranged
 {
     int getInterval();
     void setInterval(int interval);

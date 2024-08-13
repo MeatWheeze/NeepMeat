@@ -1,6 +1,6 @@
 package com.neep.neepmeat.neepbus.part;
 
-public interface RangedPart
+public interface Ranged
 {
     int getValue();
     void setValue(int value);
@@ -11,7 +11,7 @@ public interface RangedPart
     int getMaxValue();
     void setMaxValue(int maxValue);
 
-    class Empty implements RangedPart
+    class Empty implements Ranged
     {
         @Override
         public int getValue()
@@ -50,5 +50,5 @@ public interface RangedPart
         }
     }
 
-    RangedPart EMPTY = new Empty();
+    Ranged EMPTY = new Empty();
 }

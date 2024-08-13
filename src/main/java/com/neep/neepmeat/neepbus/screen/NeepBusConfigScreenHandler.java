@@ -82,6 +82,8 @@ public class NeepBusConfigScreenHandler extends BasicScreenHandler
         super.sendContentUpdates();
 
         configHandler.sendUpdates();
+
+        configHandler.config().applyChanges();
     }
 
 

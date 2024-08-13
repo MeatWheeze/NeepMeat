@@ -4,7 +4,7 @@ import com.neep.meatlib.api.network.ChannelFormat;
 import com.neep.meatlib.api.network.ParamCodec;
 import com.neep.meatlib.network.ChannelManager;
 import com.neep.neepmeat.NeepMeat;
-import com.neep.neepmeat.neepbus.part.RangedPart;
+import com.neep.neepmeat.neepbus.part.Ranged;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.Identifier;
 
@@ -14,10 +14,10 @@ public class RangeConfigHandler
 {
     public final ChannelManager<SliderScreenHandler.UpdateParams> updateParamsS2C;
     public final ChannelManager<SliderScreenHandler.UpdateParams> receiveParamsC2S;
-    protected final RangedPart ranged;
+    protected final Ranged ranged;
     protected boolean updateToClient = true;
 
-    public RangeConfigHandler(PlayerEntity player, RangedPart ranged)
+    public RangeConfigHandler(PlayerEntity player, Ranged ranged)
     {
         updateParamsS2C = ChannelManager.create(
                 new Identifier(NeepMeat.NAMESPACE, "update_params"),

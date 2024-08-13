@@ -68,6 +68,7 @@ public class RangeConfigWidget extends ParentWidget
         for (var field : textFields)
         {
             addChild(field);
+            field.setWidth(w());
             field.setPos(x, yOff);
             field.drawFancyBackground(false);
             yOff += field.h() + 1;
@@ -154,7 +155,7 @@ public class RangeConfigWidget extends ParentWidget
         @Override
         protected int getTextStart()
         {
-            return 48;
+            return w() / 2;
         }
 
         @Override

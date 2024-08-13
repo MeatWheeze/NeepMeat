@@ -123,13 +123,19 @@ public class PortTestBlock extends BaseBlock implements NeepBusProvider, DataCab
 
         private final SimpleOutputPort outputPort = new SimpleOutputPort(new NeepBusConfig.SimpleEntry("brine"), (s, value) -> sender.get().send(s, value));
 
-        private final NeepBusConfig config = new NeepBusConfigImpl(
-                List.of(new NeepBusConfig.SimpleEntry("ooer")),
-                List.of(outputPort.entry()),
-                List.of(inputPort),
-                inputPort::invalidateAddress,
-                this::markDirty
-        );
+//        private final NeepBusConfig config = new NeepBusConfigImpl(
+//                List.of(new NeepBusConfig.SimpleEntry("ooer")),
+//                List.of(outputPort.entry()),
+//                List.of(inputPort),
+//                inputPort::invalidateAddress,
+//                this::markDirty,
+//                applyChanges);
+
+        private final NeepBusConfig config = NeepBusConfig.builder(this::markDirty)
+                .input(new NeepBusConfig.SimpleEntry("ooer"), inputPort)
+                .output(outputPort.entry())
+                .applyChanges(this)
+                .build();
 
         public void send()
         {

@@ -1,5 +1,6 @@
 package com.neep.neepmeat.neepbus;
 
+import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
@@ -18,29 +19,19 @@ public class NeepBusConfigImpl implements NeepBusConfig
     private final List<OutputEntry> outputs;
     private final List<AbstractInputPort> inputPorts;
 
-//    private final Runnable onInputsChanged;
     private final Runnable onOutputChanged;
     private final Runnable markDirty;
+    private final Runnable applyChanges;
 
     public NeepBusConfigImpl(List<Entry> inputs, List<Entry> outputs, List<AbstractInputPort> inputPorts,
-                             Runnable onOutputsChanged, Runnable markDirty)
+                             Runnable onOutputsChanged, Runnable markDirty, Runnable applyChanges)
     {
         this.inputs = inputs.stream().map(InputEntry::new).toList();
         this.outputs = outputs.stream().map(OutputEntry::new).toList();
         this.inputPorts = inputPorts;
-//        this.onInputsChanged = onInputsChanged;
         this.onOutputChanged = onOutputsChanged;
         this.markDirty = markDirty;
-    }
-
-    public static NeepBusConfigImpl ofInputs(List<Entry> inputs, List<AbstractInputPort> inputPorts, Runnable markDirty)
-    {
-        return new NeepBusConfigImpl(inputs, List.of(), inputPorts, () -> {}, markDirty);
-    }
-
-    public static NeepBusConfigImpl ofOutputs(List<Entry> outputs, Runnable onOutputChanged, Runnable markDirty)
-    {
-        return new NeepBusConfigImpl(List.of(), outputs, List.of(), onOutputChanged, markDirty);
+        this.applyChanges = applyChanges;
     }
 
     @Override
@@ -53,6 +44,12 @@ public class NeepBusConfigImpl implements NeepBusConfig
     public List<? extends Entry> getOutputs()
     {
         return outputs;
+    }
+
+    @Override
+    public void applyChanges()
+    {
+        applyChanges.run();
     }
 
     @Override
@@ -178,6 +175,64 @@ public class NeepBusConfigImpl implements NeepBusConfig
             entry.setAddress(address);
             onOutputChanged.run();
             markDirty.run();
+        }
+    }
+
+    public static class Builder
+    {
+        protected final Runnable markDirty;
+        protected List<Entry> inputs = List.of();
+        protected List<Entry> outputs = List.of();
+        protected List<AbstractInputPort> inputPorts = List.of();
+        protected Runnable onOutputsChanged = () -> {};
+        protected Runnable applyChanges = () -> {};
+
+        public Builder(Runnable markDirty)
+        {
+            this.markDirty = markDirty;
+        }
+
+        public NeepBusConfigImpl build()
+        {
+            return new NeepBusConfigImpl(inputs, outputs, inputPorts, onOutputsChanged, markDirty, applyChanges);
+        }
+
+        public Builder inputs(List<Entry> inputs, List<AbstractInputPort> inputPorts)
+        {
+            this.inputs = inputs;
+            this.inputPorts = inputPorts;
+            return this;
+        }
+
+        public Builder input(Entry input, AbstractInputPort inputPort)
+        {
+            this.inputs = List.of(input);
+            this.inputPorts = List.of(inputPort);
+            return this;
+        }
+
+        public Builder outputs(List<Entry> outputs)
+        {
+            this.outputs = outputs;
+            return this;
+        }
+
+        public Builder output(Entry output)
+        {
+            this.outputs = List.of(output);
+            return this;
+        }
+
+        public Builder onOutputsChanged(Runnable changed)
+        {
+            this.onOutputsChanged = changed;
+            return this;
+        }
+
+        public Builder applyChanges(BlockEntity be)
+        {
+            applyChanges = () -> NeepBus.floodUpdate(be.getWorld(), be.getPos());
+            return this;
         }
     }
 }

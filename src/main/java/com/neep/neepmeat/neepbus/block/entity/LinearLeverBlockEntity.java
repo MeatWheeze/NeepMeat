@@ -10,7 +10,6 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 
-import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
 
@@ -20,11 +19,11 @@ public class LinearLeverBlockEntity extends SyncableBlockEntity implements Slide
     private final SimpleOutputPort outputPort = new SimpleOutputPort(
             new NeepBusConfig.SimpleEntry("Output"),
             (s, value) -> sender.get().send(s, value));
-    private final NeepBusConfig config = NeepBusConfigImpl.ofOutputs(
-            List.of(outputPort.entry()),
-            () -> { },
-            this::markDirty
-    );
+
+    private final NeepBusConfig config = NeepBusConfig.builder(this::markDirty)
+            .output(outputPort.entry())
+            .build();
+
     private int value = 0;
     private int minValue = 0;
     private int maxValue = 256;

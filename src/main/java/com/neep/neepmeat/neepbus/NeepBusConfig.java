@@ -8,10 +8,22 @@ import java.util.Map;
 
 public interface NeepBusConfig extends NbtSerialisable
 {
+    static NeepBusConfigImpl.Builder builder(Runnable markDirty)
+    {
+        return new NeepBusConfigImpl.Builder(markDirty);
+    }
+
     Map<String, NeepBusPort> getInputPorts();
 
     List<? extends Entry> getInputs();
     List<? extends Entry> getOutputs();
+
+    /**
+     * To be called after input port changes have been made.
+     * Particularly relevant when an input address has changed to match an output address elsewhere.
+     * Override to emit a flood update through the cable network.
+     */
+    void applyChanges();
 
     interface Entry
     {
@@ -68,6 +80,12 @@ public interface NeepBusConfig extends NbtSerialisable
         public List<? extends Entry> getOutputs()
         {
             return List.of();
+        }
+
+        @Override
+        public void applyChanges()
+        {
+
         }
 
         @Override

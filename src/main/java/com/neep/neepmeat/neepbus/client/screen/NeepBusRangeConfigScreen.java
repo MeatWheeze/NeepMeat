@@ -26,7 +26,7 @@ public class NeepBusRangeConfigScreen extends NeepBusConfigScreen<NeepBusRangeCo
         rangeConfig.setW(backgroundWidth);
         rangeConfig.init();
 
-        rangeConfig.setPos(x, y + backgroundHeight + 10);
+        rangeConfig.setPos(x, y + backgroundHeight + 12);
         backgroundHeight += rangeConfig.h();
 
         this.x = (this.width - this.backgroundWidth) / 2;

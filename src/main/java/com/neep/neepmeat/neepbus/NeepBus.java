@@ -27,7 +27,7 @@ public class NeepBus
         }
     }
 
-    public static void floodUpdate(World world, BlockPos pos, BlockState state)
+    public static void floodUpdate(World world, BlockPos pos)
     {
         // BFS #1381641
 

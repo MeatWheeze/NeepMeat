@@ -40,11 +40,10 @@ public class VSCBlockEntity extends SyncableBlockEntity implements ExtendedScree
         }
     };
 
-    private final NeepBusConfig config = NeepBusConfigImpl.ofInputs(
-            List.of(new NeepBusConfig.SimpleEntry("Power")),
-            List.of(inputPort),
-            this::markDirty
-    );
+    private final NeepBusConfig config = NeepBusConfig.builder(this::markDirty)
+            .input(new NeepBusConfig.SimpleEntry("Power"), inputPort)
+            .applyChanges(this)
+            .build();
 
     protected long influx;
     private final LazyBlockApiCache<BloodAcceptor, Direction> cache;

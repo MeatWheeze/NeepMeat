@@ -44,7 +44,6 @@ public class AddressConfigWidget extends ParentWidget
         var bounds = background.withoutPadding();
         int entryWidth = bounds.w() / 2;
 
-
         for (int i = 0; i < handler.inputs.size(); ++i)
         {
             int finalI = i;
@@ -117,7 +116,8 @@ public class AddressConfigWidget extends ParentWidget
         @Override
         protected int getTextStart()
         {
-            return w() - textRenderer.getWidth(getText()) - 4;
+            return w() - textRenderer.getWidth(getText()) -
+                    (isFocused() ? 10 : 4); // Make room for _ cursor when selected
         }
 
         @Override

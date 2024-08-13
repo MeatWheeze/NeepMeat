@@ -31,11 +31,10 @@ public class VerticalGaugeBlockEntity extends SyncableBlockEntity implements Ind
         }
     };
 
-    private final NeepBusConfig config = NeepBusConfigImpl.ofInputs(
-            List.of(new NeepBusConfig.SimpleEntry("Input")),
-            List.of(inputPort),
-            this::markDirty
-    );
+    private final NeepBusConfig config = NeepBusConfig.builder(this::markDirty)
+            .input(new NeepBusConfig.SimpleEntry("Input"), inputPort)
+            .applyChanges(this)
+            .build();
 
     public VerticalGaugeBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
     {

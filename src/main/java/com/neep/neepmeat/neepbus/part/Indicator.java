@@ -1,5 +1,5 @@
 package com.neep.neepmeat.neepbus.part;
 
-public interface Indicator extends RangedPart
+public interface Indicator extends Ranged
 {
 }

@@ -3,11 +3,9 @@ package com.neep.neepmeat.block;
 import com.neep.meatlib.item.ItemSettings;
 import com.neep.meatlib.registry.RegistrationContext;
 import com.neep.neepmeat.neepbus.NeepBus;
-import com.neep.neepmeat.neepbus.NeepBusBlocks;
 import com.neep.neepmeat.transport.api.pipe.AbstractPipeBlock;
 import com.neep.neepmeat.transport.api.pipe.DataCable;
 import com.neep.neepmeat.transport.fluid_network.PipeConnectionType;
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.Fluids;
@@ -60,14 +58,14 @@ public class DataCableBlock extends AbstractPipeBlock implements DataCable
 
         if (newState.isOf(this))
         {
-            NeepBus.floodUpdate(world, pos, state);
+            NeepBus.floodUpdate(world, pos);
         }
     }
 
     @Override
     public void onConnectionUpdate(World world, BlockState state, BlockState newState, BlockPos pos, PlayerEntity entity)
     {
-        NeepBus.floodUpdate(world, pos, state);
+        NeepBus.floodUpdate(world, pos);
     }
 
     @Override

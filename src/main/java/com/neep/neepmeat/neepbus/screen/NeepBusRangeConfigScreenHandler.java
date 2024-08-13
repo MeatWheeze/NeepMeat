@@ -2,7 +2,7 @@ package com.neep.neepmeat.neepbus.screen;
 
 import com.neep.neepmeat.init.ScreenHandlerInit;
 import com.neep.neepmeat.neepbus.NeepBusConfig;
-import com.neep.neepmeat.neepbus.part.RangedPart;
+import com.neep.neepmeat.neepbus.part.Ranged;
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -16,7 +16,7 @@ public class NeepBusRangeConfigScreenHandler extends NeepBusConfigScreenHandler
 {
     public final RangeConfigHandler rangeConfig;
 
-    public static ExtendedScreenHandlerFactory getFactory(NeepBusConfig config, RangedPart ranged)
+    public static ExtendedScreenHandlerFactory getFactory(NeepBusConfig config, Ranged ranged)
     {
         return new ExtendedScreenHandlerFactory()
         {
@@ -40,13 +40,13 @@ public class NeepBusRangeConfigScreenHandler extends NeepBusConfigScreenHandler
         };
     }
 
-    public NeepBusRangeConfigScreenHandler(ScreenHandlerType<?> type, PlayerInventory playerInventory, int syncId, NeepBusConfig config, RangedPart ranged)
+    public NeepBusRangeConfigScreenHandler(ScreenHandlerType<?> type, PlayerInventory playerInventory, int syncId, NeepBusConfig config, Ranged ranged)
     {
         super(type, playerInventory, syncId, config);
         rangeConfig = new RangeConfigHandler(playerInventory.player, ranged);
     }
 
-    public NeepBusRangeConfigScreenHandler(PlayerInventory playerInventory, int syncId, NeepBusConfig config, RangedPart ranged)
+    public NeepBusRangeConfigScreenHandler(PlayerInventory playerInventory, int syncId, NeepBusConfig config, Ranged ranged)
     {
         this(ScreenHandlerInit.NEEPBUS_RANGE_CONFIG, playerInventory, syncId, config, ranged);
     }
@@ -54,7 +54,7 @@ public class NeepBusRangeConfigScreenHandler extends NeepBusConfigScreenHandler
     public NeepBusRangeConfigScreenHandler(int syncId, PlayerInventory player, PacketByteBuf buf)
     {
         super(syncId, player, buf);
-        rangeConfig = new RangeConfigHandler(playerInventory.player, RangedPart.EMPTY);
+        rangeConfig = new RangeConfigHandler(playerInventory.player, Ranged.EMPTY);
     }
 
     @Override

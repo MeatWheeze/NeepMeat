@@ -103,6 +103,11 @@ public class AddressConfigHandler implements WidgetHandler
         }
     }
 
+    public NeepBusConfig config()
+    {
+        return config;
+    }
+
     // A simple container for a name and address that can be easily serialised
     public record SyncEntry(String name, String address)
     {
