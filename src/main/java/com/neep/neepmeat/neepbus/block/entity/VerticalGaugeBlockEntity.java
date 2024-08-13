@@ -3,7 +3,7 @@ package com.neep.neepmeat.neepbus.block.entity;
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
 import com.neep.neepmeat.neepbus.NeepBusConfig;
 import com.neep.neepmeat.neepbus.NeepBusConfigImpl;
-import com.neep.neepmeat.neepbus.SimpleInputPort;
+import com.neep.neepmeat.neepbus.AbstractInputPort;
 import com.neep.neepmeat.neepbus.part.Indicator;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntityType;
@@ -18,7 +18,7 @@ public class VerticalGaugeBlockEntity extends SyncableBlockEntity implements Ind
     private int minValue = 0;
     private int maxValue = 500;
 
-    private final SimpleInputPort inputPort = new SimpleInputPort()
+    private final AbstractInputPort inputPort = new AbstractInputPort()
     {
         @Override
         public void receive(int data)
@@ -34,7 +34,6 @@ public class VerticalGaugeBlockEntity extends SyncableBlockEntity implements Ind
     private final NeepBusConfig config = NeepBusConfigImpl.ofInputs(
             List.of(new NeepBusConfig.SimpleEntry("Input")),
             List.of(inputPort),
-            inputPort::invalidateAddress,
             this::markDirty
     );
 

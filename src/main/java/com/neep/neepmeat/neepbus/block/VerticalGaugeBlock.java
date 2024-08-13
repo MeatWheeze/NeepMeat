@@ -6,9 +6,9 @@ import com.neep.meatlib.registry.RegistrationContext;
 import com.neep.neepmeat.neepbus.NeepBusBlocks;
 import com.neep.neepmeat.neepbus.NeepBusPort;
 import com.neep.neepmeat.neepbus.NeepBusProvider;
-import com.neep.neepmeat.neepbus.SimpleScreenHandlerFactory;
 import com.neep.neepmeat.neepbus.block.entity.VerticalGaugeBlockEntity;
-import com.neep.neepmeat.neepbus.screen.NeepBusScreenHandler;
+import com.neep.neepmeat.neepbus.screen.NeepBusConfigScreenHandler;
+import com.neep.neepmeat.neepbus.screen.NeepBusRangeConfigScreenHandler;
 import com.neep.neepmeat.transport.api.pipe.DataCable;
 import com.neep.neepmeat.util.MiscUtil;
 import net.minecraft.block.Block;
@@ -92,7 +92,7 @@ public class VerticalGaugeBlock extends BaseHorFacingBlock implements BlockEntit
         {
             if (player.isSneaking())
             {
-                player.openHandledScreen(NeepBusScreenHandler.getFactory(be.getConfig()));
+                player.openHandledScreen(NeepBusRangeConfigScreenHandler.getFactory(be.getConfig(), be));
             }
         }
         return super.onUse(state, world, pos, player, hand, hit);

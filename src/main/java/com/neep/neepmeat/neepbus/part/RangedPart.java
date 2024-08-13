@@ -10,4 +10,45 @@ public interface RangedPart
 
     int getMaxValue();
     void setMaxValue(int maxValue);
+
+    class Empty implements RangedPart
+    {
+        @Override
+        public int getValue()
+        {
+            return 0;
+        }
+
+        @Override
+        public void setValue(int value)
+        {
+
+        }
+
+        @Override
+        public int getMinValue()
+        {
+            return 0;
+        }
+
+        @Override
+        public void setMinValue(int minValue)
+        {
+
+        }
+
+        @Override
+        public int getMaxValue()
+        {
+            return 0;
+        }
+
+        @Override
+        public void setMaxValue(int maxValue)
+        {
+
+        }
+    }
+
+    RangedPart EMPTY = new Empty();
 }

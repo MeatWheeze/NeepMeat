@@ -3,8 +3,9 @@ package com.neep.neepmeat.init;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.machine.fabricator.FabricatorScreenHandler;
 import com.neep.neepmeat.machine.small_compressor.SmallCompressorScreenHandler;
+import com.neep.neepmeat.neepbus.screen.NeepBusRangeConfigScreenHandler;
 import com.neep.neepmeat.neepbus.screen.SliderScreenHandler;
-import com.neep.neepmeat.neepbus.screen.NeepBusScreenHandler;
+import com.neep.neepmeat.neepbus.screen.NeepBusConfigScreenHandler;
 import com.neep.neepmeat.screen_handler.DisplayPlateScreenHandler;
 import com.neep.neepmeat.machine.separator.SeparatorScreenHandler;
 import com.neep.neepmeat.plc.screen.PLCScreenHandler;
@@ -42,7 +43,8 @@ public class ScreenHandlerInit
 
     public static ScreenHandlerType<FilterScreenHandler> FILTER;
 
-    public static ExtendedScreenHandlerType<NeepBusScreenHandler> NEEPBUS_CONFIG;
+    public static ExtendedScreenHandlerType<NeepBusConfigScreenHandler> NEEPBUS_CONFIG;
+    public static ExtendedScreenHandlerType<NeepBusRangeConfigScreenHandler> NEEPBUS_RANGE_CONFIG;
     public static ScreenHandlerType<SliderScreenHandler> SLIDER;
 
     public static ScreenHandlerType<PLCScreenHandler> PLC;
@@ -67,7 +69,8 @@ public class ScreenHandlerInit
         SMALL_COMPRESSOR = register(NeepMeat.NAMESPACE, "small_compressor", SmallCompressorScreenHandler::new);
         FILTER = register(NeepMeat.NAMESPACE, "filter", FilterScreenHandler::new);
 
-        NEEPBUS_CONFIG = registerExtended(NeepMeat.NAMESPACE, "neepbus_config", NeepBusScreenHandler::new);
+        NEEPBUS_CONFIG = registerExtended(NeepMeat.NAMESPACE, "neepbus_config", NeepBusConfigScreenHandler::new);
+        NEEPBUS_RANGE_CONFIG = registerExtended(NeepMeat.NAMESPACE, "neepbus_range_config", NeepBusRangeConfigScreenHandler::new);
         SLIDER = register(NeepMeat.NAMESPACE, "neepbus_slider", SliderScreenHandler::new);
 
         LIVING_MACHINE = registerExtended(NeepMeat.NAMESPACE, "living_machine", LivingMachineScreenHandler::new);

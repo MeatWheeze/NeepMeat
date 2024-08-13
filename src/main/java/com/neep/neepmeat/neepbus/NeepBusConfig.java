@@ -1,6 +1,7 @@
 package com.neep.neepmeat.neepbus;
 
 import com.neep.meatlib.util.NbtSerialisable;
+import net.minecraft.nbt.NbtCompound;
 
 import java.util.List;
 import java.util.Map;
@@ -48,4 +49,37 @@ public interface NeepBusConfig extends NbtSerialisable
             this.address = address;
         }
     }
+
+    NeepBusConfig EMPTY = new NeepBusConfig()
+    {
+        @Override
+        public Map<String, NeepBusPort> getInputPorts()
+        {
+            return Map.of();
+        }
+
+        @Override
+        public List<? extends Entry> getInputs()
+        {
+            return List.of();
+        }
+
+        @Override
+        public List<? extends Entry> getOutputs()
+        {
+            return List.of();
+        }
+
+        @Override
+        public NbtCompound writeNbt(NbtCompound nbt)
+        {
+            return nbt;
+        }
+
+        @Override
+        public void readNbt(NbtCompound nbt)
+        {
+
+        }
+    };
 }

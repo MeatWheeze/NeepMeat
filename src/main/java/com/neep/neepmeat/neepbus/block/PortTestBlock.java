@@ -5,7 +5,7 @@ import com.neep.meatlib.block.BaseBlock;
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
 import com.neep.meatlib.registry.RegistrationContext;
 import com.neep.neepmeat.neepbus.*;
-import com.neep.neepmeat.neepbus.screen.NeepBusScreenHandler;
+import com.neep.neepmeat.neepbus.screen.NeepBusConfigScreenHandler;
 import com.neep.neepmeat.transport.api.pipe.DataCable;
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
 import net.minecraft.block.BlockEntityProvider;
@@ -60,7 +60,7 @@ public class PortTestBlock extends BaseBlock implements NeepBusProvider, DataCab
                     @Override
                     public void writeScreenOpeningData(ServerPlayerEntity player, PacketByteBuf buf)
                     {
-                        NeepBusScreenHandler.writeOpeningData(be.config, buf);
+                        NeepBusConfigScreenHandler.writeOpeningData(be.config, buf);
                     }
 
                     @Override
@@ -72,7 +72,7 @@ public class PortTestBlock extends BaseBlock implements NeepBusProvider, DataCab
                     @Override
                     public ScreenHandler createMenu(int syncId, PlayerInventory playerInventory, PlayerEntity player)
                     {
-                        return new NeepBusScreenHandler(playerInventory, syncId, be.config);
+                        return new NeepBusConfigScreenHandler(playerInventory, syncId, be.config);
                     }
                 });
                 return ActionResult.SUCCESS;
@@ -107,7 +107,7 @@ public class PortTestBlock extends BaseBlock implements NeepBusProvider, DataCab
     {
         private int counter;
 
-        private final SimpleInputPort inputPort = new SimpleInputPort()
+        private final AbstractInputPort inputPort = new AbstractInputPort()
         {
             @Override
             public void receive(int data)
@@ -128,7 +128,6 @@ public class PortTestBlock extends BaseBlock implements NeepBusProvider, DataCab
                 List.of(outputPort.entry()),
                 List.of(inputPort),
                 inputPort::invalidateAddress,
-                () -> {},
                 this::markDirty
         );
 

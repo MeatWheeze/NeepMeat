@@ -53,8 +53,10 @@ import com.neep.neepmeat.machine.small_compressor.SmallCompressorScreen;
 import com.neep.neepmeat.machine.small_trommel.SmallTrommelRenderer;
 import com.neep.neepmeat.machine.synthesiser.SynthesiserRenderer;
 import com.neep.neepmeat.machine.trough.TroughRenderer;
+import com.neep.neepmeat.neepbus.client.screen.NeepBusRangeConfigScreen;
 import com.neep.neepmeat.neepbus.client.screen.SliderScreen;
 import com.neep.neepmeat.neepbus.client.screen.NeepBusConfigScreen;
+import com.neep.neepmeat.neepbus.screen.NeepBusConfigScreenHandler;
 import com.neep.neepmeat.network.*;
 import com.neep.neepmeat.plc.PLCBlocks;
 import com.neep.neepmeat.transport.FluidTransport;
@@ -296,7 +298,9 @@ public class NeepMeatClient implements ClientModInitializer
         HandledScreens.register(ScreenHandlerInit.SMALL_COMPRESSOR, SmallCompressorScreen::new);
         HandledScreens.register(ScreenHandlerInit.FILTER, FilterScreen::new);
 
-        HandledScreens.register(ScreenHandlerInit.NEEPBUS_CONFIG, NeepBusConfigScreen::new);
+        // IDE says this is unnecessary, but the compiler disagrees.
+        HandledScreens.<NeepBusConfigScreenHandler, NeepBusConfigScreen<NeepBusConfigScreenHandler>>register(ScreenHandlerInit.NEEPBUS_CONFIG, NeepBusConfigScreen::new);
+        HandledScreens.register(ScreenHandlerInit.NEEPBUS_RANGE_CONFIG, NeepBusRangeConfigScreen::new);
         HandledScreens.register(ScreenHandlerInit.SLIDER, SliderScreen::new);
 
         HandledScreens.register(ScreenHandlerInit.LIVING_MACHINE, LivingMachineScreen::new);

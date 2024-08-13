@@ -8,7 +8,7 @@ import com.neep.neepmeat.neepbus.NeepBusProvider;
 import com.neep.neepmeat.neepbus.SimpleScreenHandlerFactory;
 import com.neep.neepmeat.neepbus.block.entity.LinearLeverBlockEntity;
 import com.neep.neepmeat.neepbus.screen.SliderScreenHandler;
-import com.neep.neepmeat.neepbus.screen.NeepBusScreenHandler;
+import com.neep.neepmeat.neepbus.screen.NeepBusConfigScreenHandler;
 import com.neep.neepmeat.transport.api.pipe.DataCable;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
@@ -90,7 +90,7 @@ public class LinearLeverBlock extends WallMountedBlock implements BlockEntityPro
             }
             else
             {
-                player.openHandledScreen(NeepBusScreenHandler.getFactory(be.getConfig()));
+                player.openHandledScreen(NeepBusConfigScreenHandler.getFactory(be.getConfig()));
             }
             return ActionResult.SUCCESS;
         }

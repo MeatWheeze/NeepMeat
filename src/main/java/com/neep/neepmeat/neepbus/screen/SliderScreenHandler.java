@@ -18,8 +18,8 @@ import java.util.List;
 public class SliderScreenHandler extends BasicScreenHandler
 {
     public final ChannelManager<MouseScroll> incrementC2S;
-    public final ChannelManager<UpdateParams> updateParamsS2C;
-    public final ChannelManager<UpdateParams> receiveParamsC2S;
+    public final SliderConfigHandler sliderConfig;
+
     private final Slider slider;
 
     private boolean updateToClient = true;
@@ -32,18 +32,11 @@ public class SliderScreenHandler extends BasicScreenHandler
                 ChannelFormat.builder(MouseScroll.class).param(ParamCodec.DOUBLE).param(ParamCodec.BOOLEAN).build(),
                 playerInventory.player);
 
-        updateParamsS2C = ChannelManager.create(new Identifier(NeepMeat.NAMESPACE, "update_params"),
-            ChannelFormat.builder(UpdateParams.class).param(ParamCodec.list(ParamCodec.INT)).build(),
-                playerInventory.player);
-
-        receiveParamsC2S = ChannelManager.create(new Identifier(NeepMeat.NAMESPACE, "receive_params"),
-                ChannelFormat.builder(UpdateParams.class).param(ParamCodec.list(ParamCodec.INT)).build(),
-                playerInventory.player);
+        sliderConfig = new SliderConfigHandler(playerInventory.player, slider);
 
         this.slider = slider;
 
         incrementC2S.receiver(this::increment);
-        receiveParamsC2S.receiver(this::receiveParams);
     }
 
     public SliderScreenHandler(int syncId, PlayerInventory playerInventory)
@@ -54,16 +47,6 @@ public class SliderScreenHandler extends BasicScreenHandler
     public SliderScreenHandler(int syncId, PlayerInventory playerInventory, Slider slider)
     {
         this(ScreenHandlerInit.SLIDER, playerInventory, syncId, slider);
-    }
-
-    private void receiveParams(List<Integer> ints)
-    {
-//        slider.setValue(ints.get(0));
-        slider.setMinValue(ints.get(1));
-        slider.setMaxValue(ints.get(2));
-        slider.setInterval(ints.get(3));
-
-        updateToClient = true;
     }
 
     private void increment(double amount, boolean large)
@@ -80,19 +63,18 @@ public class SliderScreenHandler extends BasicScreenHandler
         if (!isClient() && updateToClient)
         {
             // Send the updated (and possibly sanitised) values back to the client.
-            updateParamsS2C.emitter().update(List.of(slider.getValue(), slider.getMinValue(), slider.getMaxValue(), slider.getInterval()));
+            sliderConfig.updateParamsS2C.emitter().update(List.of(slider.getValue(), slider.getMinValue(), slider.getMaxValue(), slider.getInterval()));
             updateToClient = false;
         }
     }
-
 
     @Override
     public void onClosed(PlayerEntity player)
     {
         super.onClosed(player);
         incrementC2S.close();
-        updateParamsS2C.close();
-        receiveParamsC2S.close();
+
+        sliderConfig.close();
     }
 
     @FunctionalInterface

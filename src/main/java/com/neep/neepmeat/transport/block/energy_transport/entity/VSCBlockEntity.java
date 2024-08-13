@@ -5,8 +5,7 @@ import com.neep.neepmeat.api.processing.PowerUtils;
 import com.neep.neepmeat.api.storage.LazyBlockApiCache;
 import com.neep.neepmeat.neepbus.NeepBusConfig;
 import com.neep.neepmeat.neepbus.NeepBusConfigImpl;
-import com.neep.neepmeat.neepbus.NeepBusPort;
-import com.neep.neepmeat.neepbus.SimpleInputPort;
+import com.neep.neepmeat.neepbus.AbstractInputPort;
 import com.neep.neepmeat.transport.api.pipe.AbstractBloodAcceptor;
 import com.neep.neepmeat.transport.api.pipe.BloodAcceptor;
 import com.neep.neepmeat.transport.block.energy_transport.VSCBlock;
@@ -28,11 +27,10 @@ import net.minecraft.util.math.Direction;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
-import java.util.Map;
 
 public class VSCBlockEntity extends SyncableBlockEntity implements ExtendedScreenHandlerFactory
 {
-    private final SimpleInputPort inputPort = new SimpleInputPort()
+    private final AbstractInputPort inputPort = new AbstractInputPort()
     {
         @Override
         public void receive(int data)
@@ -45,7 +43,6 @@ public class VSCBlockEntity extends SyncableBlockEntity implements ExtendedScree
     private final NeepBusConfig config = NeepBusConfigImpl.ofInputs(
             List.of(new NeepBusConfig.SimpleEntry("Power")),
             List.of(inputPort),
-            inputPort::invalidateAddress,
             this::markDirty
     );
 

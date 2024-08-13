@@ -20,8 +20,8 @@ public class SliderScreen extends HandledScreen<SliderScreenHandler>
     {
         super(handler, inventory, title);
 
-        rangeConfig = new RangeConfigWidget(6, 0, 100, 100, list -> handler.receiveParamsC2S.emitter().update(list));
-        handler.updateParamsS2C.receiver(rangeConfig::updateParams);
+        rangeConfig = new RangeConfigWidget(6, 0, 100, 100, handler.sliderConfig);
+        handler.sliderConfig.updateParamsS2C.receiver(rangeConfig::updateParams);
     }
 
     @Override

@@ -2,38 +2,23 @@ package com.neep.neepmeat.neepbus.client.screen;
 
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.client.screen.NMTextField;
+import com.neep.meatlib.client.screen.ParentWidget;
 import com.neep.neepmeat.client.screen.util.Background;
-import com.neep.neepmeat.client.screen.util.ClickableWidget;
+import com.neep.neepmeat.neepbus.screen.RangeConfigHandler;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
 import it.unimi.dsi.fastutil.ints.IntList;
-import it.unimi.dsi.fastutil.objects.ObjectArrayList;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
-import net.minecraft.client.gui.AbstractParentElement;
-import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.gui.Drawable;
-import net.minecraft.client.gui.Selectable;
 import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder;
 import net.minecraft.text.Text;
 
 import java.util.List;
-import java.util.function.Consumer;
 
-public class RangeConfigWidget extends AbstractParentElement implements ClickableWidget, Selectable
+public class RangeConfigWidget extends ParentWidget
 {
     // For delaying C2S updates
-    private int counter;
+    private int counter = -1;
 
-    protected int x, y;
-    protected int w;
-    protected int h;
-    private final Consumer<List<Integer>> updateC2S;
-
-    private final MinecraftClient client = MinecraftClient.getInstance();
-    private final TextRenderer textRenderer = client.textRenderer;
-
-    private final List<ClickableWidget> positionables = new ObjectArrayList<>();
-    private final List<Drawable> drawables = new ObjectArrayList<>();
+    private final RangeConfigHandler handler;
 
     private final TextField valueField;
     private final TextField minField;
@@ -42,13 +27,11 @@ public class RangeConfigWidget extends AbstractParentElement implements Clickabl
 
     private final List<TextField> textFields;
 
-    public RangeConfigWidget(int x, int y, int w, int h, Consumer<List<Integer>> updateC2S)
+    public RangeConfigWidget(int x, int y, int w, int h, RangeConfigHandler handler)
     {
-        this.x = x;
-        this.y = y;
-        this.w = w;
-        this.h = h;
-        this.updateC2S = updateC2S;
+        super(x, y, w, h);
+
+        this.handler = handler;
 
         valueField = new TextField(textRenderer, x, y, w, 8, Text.of("Value: "));
         minField = new TextField(textRenderer, x, y, w, 8, Text.of("Min: "));
@@ -73,24 +56,12 @@ public class RangeConfigWidget extends AbstractParentElement implements Clickabl
     }
 
     @Override
-    public List<ClickableWidget> children()
-    {
-        return positionables;
-    }
-
-    protected <T extends ClickableWidget> T addChild(T widget)
-    {
-        positionables.add(widget);
-        return widget;
-    }
-
     public void init()
     {
-        drawables.clear();
-        children().clear();
+        super.init();
 
         Background background = new Background(x, y, w, h, 6);
-        drawables.add(background);
+        addChild(background);
 
         int yOff = y;
 
@@ -116,6 +87,7 @@ public class RangeConfigWidget extends AbstractParentElement implements Clickabl
         background.setH(h);
     }
 
+    @Override
     public void tick()
     {
         if (counter != -1)
@@ -143,39 +115,14 @@ public class RangeConfigWidget extends AbstractParentElement implements Clickabl
                 intList.add(parsed);
             }
 
-            updateC2S.accept(intList);
+            handler.receiveParamsC2S.emitter().update(intList);
+//            updateC2S.accept(intList);
         }
         catch (NumberFormatException e)
         {
             // Don't need to do anything.
             return;
         }
-    }
-
-    @Override
-    public int x() { return x; }
-
-    @Override
-    public int y() { return y; }
-
-    @Override
-    public int w() { return w; }
-    @Override
-    public int h() { return h; }
-
-    @Override
-    public void setPos(int x, int y)
-    {
-        this.x = x;
-        this.y = y;
-        init();
-    }
-
-    @Override
-    public void render(DrawContext context, int mouseX, int mouseY, float delta)
-    {
-        drawables.forEach(drawable -> drawable.render(context, mouseX, mouseY, delta));
-        children().forEach(clickableWidget -> clickableWidget.render(context, mouseX, mouseY, delta));
     }
 
     @Override
@@ -188,6 +135,11 @@ public class RangeConfigWidget extends AbstractParentElement implements Clickabl
     public SelectionType getType()
     {
         return SelectionType.NONE;
+    }
+
+    public void setW(int w)
+    {
+        this.w = w;
     }
 
     private class TextField extends NMTextField

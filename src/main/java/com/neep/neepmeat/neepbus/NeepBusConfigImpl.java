@@ -16,31 +16,31 @@ public class NeepBusConfigImpl implements NeepBusConfig
 
     private final List<InputEntry> inputs;
     private final List<OutputEntry> outputs;
-    private final List<NeepBusPort> inputPorts;
+    private final List<AbstractInputPort> inputPorts;
 
-    private final Runnable onInputsChanged;
+//    private final Runnable onInputsChanged;
     private final Runnable onOutputChanged;
     private final Runnable markDirty;
 
-    public NeepBusConfigImpl(List<Entry> inputs, List<Entry> outputs, List<NeepBusPort> inputPorts,
-                             Runnable onInputsChanged, Runnable onOutputsChanged, Runnable markDirty)
+    public NeepBusConfigImpl(List<Entry> inputs, List<Entry> outputs, List<AbstractInputPort> inputPorts,
+                             Runnable onOutputsChanged, Runnable markDirty)
     {
         this.inputs = inputs.stream().map(InputEntry::new).toList();
         this.outputs = outputs.stream().map(OutputEntry::new).toList();
         this.inputPorts = inputPorts;
-        this.onInputsChanged = onInputsChanged;
+//        this.onInputsChanged = onInputsChanged;
         this.onOutputChanged = onOutputsChanged;
         this.markDirty = markDirty;
     }
 
-    public static NeepBusConfigImpl ofInputs(List<Entry> inputs, List<NeepBusPort> inputPorts, Runnable onInputsChanged, Runnable markDirty)
+    public static NeepBusConfigImpl ofInputs(List<Entry> inputs, List<AbstractInputPort> inputPorts, Runnable markDirty)
     {
-        return new NeepBusConfigImpl(inputs, List.of(), inputPorts, onInputsChanged, () -> {}, markDirty);
+        return new NeepBusConfigImpl(inputs, List.of(), inputPorts, () -> {}, markDirty);
     }
 
     public static NeepBusConfigImpl ofOutputs(List<Entry> outputs, Runnable onOutputChanged, Runnable markDirty)
     {
-        return new NeepBusConfigImpl(List.of(), outputs, List.of(), () -> {}, onOutputChanged, markDirty);
+        return new NeepBusConfigImpl(List.of(), outputs, List.of(), onOutputChanged, markDirty);
     }
 
     @Override
@@ -66,6 +66,11 @@ public class NeepBusConfigImpl implements NeepBusConfig
         }
 
         return portMap;
+    }
+
+    private void onInputsChanged()
+    {
+        inputPorts.forEach(AbstractInputPort::invalidateAddress);
     }
 
     @Override
@@ -141,7 +146,7 @@ public class NeepBusConfigImpl implements NeepBusConfig
         {
             entry.setAddress(address);
             portMap = null;
-            onInputsChanged.run();
+            onInputsChanged();
             markDirty.run();
         }
     }
