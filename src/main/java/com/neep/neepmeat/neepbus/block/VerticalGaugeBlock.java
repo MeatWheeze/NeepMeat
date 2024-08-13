@@ -114,4 +114,10 @@ public class VerticalGaugeBlock extends BaseHorFacingBlock implements BlockEntit
     {
 
     }
+
+    @Override
+    public boolean isConnected(World world, BlockPos pos, BlockState state, Direction direction)
+    {
+        return direction == state.get(FACING).getOpposite();
+    }
 }

@@ -12,12 +12,14 @@ import com.neep.neepmeat.neepbus.screen.NeepBusScreenHandler;
 import com.neep.neepmeat.transport.api.pipe.DataCable;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.block.enums.WallMountLocation;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.state.StateManager;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
@@ -160,5 +162,20 @@ public class LinearLeverBlock extends WallMountedBlock implements BlockEntityPro
         {
             be.updateNetwork();
         }
+    }
+
+    @Override
+    public boolean connectInDirection(BlockView world, BlockPos pos, BlockState state, Direction direction)
+    {
+        return DataCable.super.connectInDirection(world, pos, state, direction);
+    }
+
+    @Override
+    public boolean isConnected(World world, BlockPos pos, BlockState state, Direction direction)
+    {
+        WallMountLocation face = state.get(FACE);
+        return (direction == Direction.UP && face == WallMountLocation.CEILING)
+                || (direction == Direction.DOWN && face == WallMountLocation.FLOOR)
+                || (face == WallMountLocation.WALL && direction.getOpposite() == state.get(FACING));
     }
 }

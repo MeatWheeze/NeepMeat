@@ -127,13 +127,26 @@ public class NeepBusConfigScreen extends HandledScreen<NeepBusScreenHandler>
         public void renderButton(DrawContext context, int mouseX, int mouseY, float delta)
         {
             super.renderButton(context, mouseX, mouseY, delta);
+            GUIUtil.drawText(context, textRenderer, Text.of(entry.get().name() + ": "), x() + 2, y(), PLCCols.TEXT.col, false);
+        }
+
+        @Override
+        protected String getPrefix()
+        {
+            return "→";
         }
 
         @Override
         protected int getTextY()
         {
 //            return super.getTextY();
-            return y() + 1;
+            return y() + textRenderer.fontHeight;
+        }
+
+        @Override
+        protected int getTextStart()
+        {
+            return w() - textRenderer.getWidth(getText()) - 4;
         }
 
         @Override
