@@ -65,7 +65,7 @@ public class BlockEntityFinder<T extends BlockEntity>
     {
         result.removeIf(BlockEntity::isRemoved);
 
-        if (world.getTime() + updateInterval < lastUpdate)
+        if (world.getTime() < lastUpdate + updateInterval)
         {
             return;
         }

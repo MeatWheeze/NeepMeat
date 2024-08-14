@@ -1,5 +1,7 @@
 package com.neep.neepmeat.machine.mixer;
 
+import com.google.common.base.Suppliers;
+import com.neep.meatlib.recipe.MeatlibRecipes;
 import com.neep.meatlib.storage.MeatlibStorageUtil;
 import com.neep.neepmeat.api.storage.WritableStackStorage;
 import com.neep.neepmeat.block.entity.MotorisedMachineBlockEntity;
@@ -8,6 +10,10 @@ import com.neep.neepmeat.init.NMParticles;
 import com.neep.neepmeat.init.NMrecipeTypes;
 import com.neep.neepmeat.machine.motor.MotorEntity;
 import com.neep.neepmeat.particle.SwirlingParticleEffect;
+import com.neep.neepmeat.transport.item_network.RetrievalTarget;
+import com.neep.neepmeat.util.MiscUtil;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import it.unimi.dsi.fastutil.objects.ObjectImmutableList;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
@@ -19,7 +25,6 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.recipe.Recipe;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.ItemScatterer;
@@ -28,25 +33,39 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.function.Supplier;
 
 @SuppressWarnings("UnstableApiUsage")
 public class MixerBlockEntity extends MotorisedMachineBlockEntity
 {
-    protected MixerStorage storage = new MixerStorage(this);
-    protected MixingRecipe currentRecipe;
-    protected Identifier currentRecipeId;
+    protected final MixerStorage storage = new MixerStorage(this);
+
+    @Nullable protected MixingRecipe currentRecipe;
     protected int processLength;
     protected float progress;
-    protected int cooldownTicks;
+    protected int cooldownTicks = 2;
 
     protected long processStart;
 
     public float bladeAngle;
     public float bladeSpeed;
+
+    private final Supplier<List<RetrievalTarget<FluidVariant>>> storageCaches = Suppliers.memoize(() ->
+    {
+        ObjectArrayList<RetrievalTarget<FluidVariant>> list = new ObjectArrayList<>();
+        for (Direction direction : Direction.values())
+        {
+            if (direction.getAxis().isVertical())
+                continue;
+
+            list.add(RetrievalTarget.of(FluidStorage.SIDED, (ServerWorld) getWorld(), getPos(), direction.getOpposite()));
+        }
+        return new ObjectImmutableList<>(list);
+    });
+
+    // Set to null at the end of every tick.
+    @Nullable private List<Storage<FluidVariant>> adjacentStorageCache;
 
     public MixerBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
     {
@@ -89,7 +108,7 @@ public class MixerBlockEntity extends MotorisedMachineBlockEntity
     public void setCurrentRecipe(@Nullable MixingRecipe recipe)
     {
         this.currentRecipe = recipe;
-        this.currentRecipeId = recipe != null ? recipe.id : null;
+//        this.currentRecipeId = recipe != null ? recipe.id : null;
         this.cooldownTicks = 2;
     }
 
@@ -100,30 +119,25 @@ public class MixerBlockEntity extends MotorisedMachineBlockEntity
 
     public List<Storage<FluidVariant>> getAdjacentStorages()
     {
-        if (getWorld().isClient())
-            return List.of();
-
-        List<Storage<FluidVariant>> out = new LinkedList<>();
-        for (Direction direction : Direction.values())
+        // Build the cache from the other cache
+        if (adjacentStorageCache == null)
         {
-            if (direction == Direction.DOWN || direction == Direction.UP)
-                continue;
-
-            BlockPos offset = getPos().offset(direction);
-            BlockState state = getWorld().getBlockState(offset);
-            BlockEntity be = getWorld().getBlockEntity(offset);
-
-            Storage<FluidVariant> storage;
-            if ((storage = FluidStorage.SIDED.find(getWorld(), pos, state, be, direction.getOpposite())) != null)
+            adjacentStorageCache = new ObjectArrayList<>();
+            for (var cache : storageCaches.get())
             {
-                // Cauldron storages hate the mixer, so we ignore them. Easy peasy.
-                if (storage instanceof CauldronStorage)
-                    continue;
+                Storage<FluidVariant> storage = cache.find();
+                if (storage != null)
+                {
+                    // Cauldron storages hate the mixer, so we ignore them. Easy peasy.
+                    if (storage instanceof CauldronStorage)
+                        continue;
 
-                out.add(storage);
+                    adjacentStorageCache.add(storage);
+                }
             }
         }
-        return out;
+
+        return adjacentStorageCache;
     }
 
     public Storage<FluidVariant> getOutputStorage()
@@ -140,7 +154,7 @@ public class MixerBlockEntity extends MotorisedMachineBlockEntity
     {
         if (currentRecipe == null)
         {
-            MixingRecipe recipe = world.getRecipeManager().getFirstMatch(NMrecipeTypes.MIXING, storage, world).orElse(null);
+            MixingRecipe recipe = MeatlibRecipes.getInstance().getFirstMatch(NMrecipeTypes.MIXING, storage).orElse(null);
 
             if (recipe != null && MeatlibStorageUtil.simulateInsert(getOutputStorage(), FluidVariant.of(recipe.fluidOutput.resource()),
                                                                  recipe.fluidOutput.maxAmount(), null) == recipe.fluidOutput.maxAmount())
@@ -169,7 +183,7 @@ public class MixerBlockEntity extends MotorisedMachineBlockEntity
         {
             try (Transaction transaction = Transaction.openOuter())
             {
-                if (getCurrentRecipe().ejectOutput(storage, transaction))
+                if (getCurrentRecipe().ejectOutputs(storage, transaction))
                     transaction.commit();
                 else
                     transaction.abort();
@@ -197,8 +211,8 @@ public class MixerBlockEntity extends MotorisedMachineBlockEntity
     public void readNbt(NbtCompound nbt)
     {
         super.readNbt(nbt);
-        this.currentRecipeId = new Identifier(nbt.getString("current_recipe"));
-        readCurrentRecipe();
+        this.currentRecipe = MiscUtil.ifPresentOrNull(nbt, "current_recipe",
+                s -> (MixingRecipe) MeatlibRecipes.getInstance().get(Identifier.tryParse(s)).orElse(null));
 
         this.progress = nbt.getFloat("progress");
         this.processLength = nbt.getInt("process_time");
@@ -206,19 +220,18 @@ public class MixerBlockEntity extends MotorisedMachineBlockEntity
         storage.readNbt(nbt);
     }
 
-    public void readCurrentRecipe()
-    {
-        if (world != null)
-        {
-            Optional<? extends Recipe<?>> optional = Objects.requireNonNull(getWorld()).getRecipeManager().get(currentRecipeId);
-            optional.ifPresentOrElse(recipe -> this.currentRecipe = (MixingRecipe) recipe,
-                    () -> this.currentRecipe = null);
-        }
-    }
+//    public void readCurrentRecipe()
+//    {
+//        if (world != null)
+//        {
+//            Optional<? extends Recipe<?>> optional = Objects.requireNonNull(getWorld()).getRecipeManager().get(currentRecipeId);
+//            optional.ifPresentOrElse(recipe -> this.currentRecipe = (MixingRecipe) recipe,
+//                    () -> this.currentRecipe = null);
+//        }
+//    }
 
     public void tick()
     {
-        readCurrentRecipe();
         if (currentRecipe != null && progressIncrement > minIncrement)
         {
             progress = Math.min(processLength, progress + progressIncrement);
@@ -245,6 +258,8 @@ public class MixerBlockEntity extends MotorisedMachineBlockEntity
 //            spawnMixingParticles(storage.displayInput2, 2, 0.2, 0.5);
         }
 //        sync();
+
+        adjacentStorageCache = null;
     }
 
     public void dropItems()

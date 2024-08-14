@@ -167,7 +167,7 @@ public class ItemPumpBlockEntity extends EjectorBlockEntity
 //        BlockPos newPos = target.getPos().offset(target.getFace());
 //        BlockState state = world.getBlockState(newPos);
         Direction facing = getCachedState().get(ItemPumpBlock.FACING);
-        return ((IServerWorld) world).getItemNetwork().route(target.getPos(), target.getFace(), pos, facing, amount.resource(), (int) amount.amount(), transaction);
+        return ((IServerWorld) world).getItemNetwork().route(target.getPos(), target.accessFace(), pos, facing, amount.resource(), (int) amount.amount(), transaction);
 //        if (state.getBlock() instanceof IItemPipe pipe)
 //        {
 //            return pipe.insert(world, newPos, state, target.getFace().getOpposite(), new ItemInPipe(amount, world.getTime()), transaction);

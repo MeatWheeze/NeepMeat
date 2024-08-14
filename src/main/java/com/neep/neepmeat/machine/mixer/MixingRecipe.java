@@ -1,7 +1,8 @@
 package com.neep.neepmeat.machine.mixer;
 
 import com.google.gson.JsonObject;
-import com.neep.meatlib.recipe.ImplementedRecipe;
+import com.neep.meatlib.recipe.MeatRecipeSerialiser;
+import com.neep.meatlib.recipe.MeatlibRecipe;
 import com.neep.meatlib.recipe.ingredient.RecipeInput;
 import com.neep.meatlib.recipe.ingredient.RecipeInputs;
 import com.neep.meatlib.recipe.ingredient.RecipeOutputImpl;
@@ -18,19 +19,17 @@ import net.minecraft.fluid.Fluids;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
 import net.minecraft.network.PacketByteBuf;
-import net.minecraft.recipe.RecipeSerializer;
 import net.minecraft.recipe.RecipeType;
 import net.minecraft.registry.Registries;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.JsonHelper;
-import net.minecraft.world.World;
 
 import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
 
 @SuppressWarnings("UnstableApiUsage")
-public class MixingRecipe extends ImplementedRecipe<MixerStorage>
+public class MixingRecipe implements MeatlibRecipe<MixerStorage>
 {
     protected Identifier id;
     protected RecipeInput<Item> itemInput;
@@ -70,7 +69,7 @@ public class MixingRecipe extends ImplementedRecipe<MixerStorage>
     }
 
     @Override
-    public boolean matches(MixerStorage inventory, World world)
+    public boolean matches(MixerStorage inventory)
     {
         Transaction transaction = Transaction.openOuter();
         List<RecipeInput<Fluid>> queue = new LinkedList<>(List.of(fluidInput1, fluidInput2));
@@ -98,6 +97,7 @@ public class MixingRecipe extends ImplementedRecipe<MixerStorage>
         return queue.size() == 0 && itemInput.test((StorageView<? extends TransferVariant<Item>>) inventory.getItemInput());
     }
 
+    @Override
     public boolean takeInputs(MixerStorage inventory, TransactionContext transactionContext)
     {
         try (Transaction inner = transactionContext.openNested())
@@ -132,7 +132,8 @@ public class MixingRecipe extends ImplementedRecipe<MixerStorage>
         return false;
     }
 
-    public boolean ejectOutput(MixerStorage inventory, TransactionContext transaction)
+    @Override
+    public boolean ejectOutputs(MixerStorage inventory, TransactionContext transaction)
     {
         try (Transaction inner = transaction.openNested())
         {
@@ -154,7 +155,7 @@ public class MixingRecipe extends ImplementedRecipe<MixerStorage>
     }
 
     @Override
-    public RecipeSerializer<?> getSerializer()
+    public MeatRecipeSerialiser<?> getSerializer()
     {
         return NMrecipeTypes.MIXING_SERIALIZER;
     }
@@ -165,7 +166,7 @@ public class MixingRecipe extends ImplementedRecipe<MixerStorage>
         return NMrecipeTypes.MIXING;
     }
 
-    public static class MixerSerializer implements RecipeSerializer<MixingRecipe>
+    public static class MixerSerializer implements MeatRecipeSerialiser<MixingRecipe>
     {
         RecipeFactory<MixingRecipe> factory;
         int processTIme;

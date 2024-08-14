@@ -21,8 +21,8 @@ public class NMrecipeTypes
 
     }
 
-    public static final RecipeSerializer<MixingRecipe> MIXING_SERIALIZER = RecipeRegistry.registerMeatlibSerializer(NeepMeat.NAMESPACE, "mixing", new MixingRecipe.MixerSerializer(MixingRecipe::new, 60));
-    public static final RecipeType<MixingRecipe> MIXING = RecipeRegistry.registerType(NeepMeat.NAMESPACE, "mixing");
+    public static final MeatRecipeSerialiser<MixingRecipe> MIXING_SERIALIZER = RecipeRegistry.registerMeatlibSerializer(NeepMeat.NAMESPACE, "mixing", new MixingRecipe.MixerSerializer(MixingRecipe::new, 60));
+    public static final MeatRecipeType<MixingRecipe> MIXING = RecipeRegistry.registerMeatlibType(NeepMeat.NAMESPACE, "mixing");
 
     public static final MeatRecipeSerialiser<CrushingRecipe> GRINDING_SERIALIZER = RecipeRegistry.registerMeatlibSerializer(NeepMeat.NAMESPACE, "grinding", new CrushingRecipe.Serializer<>(CrushingRecipe::new, CrushingRecipe.DestroyRecipe::new, 60));
     public static final MeatRecipeType<CrushingRecipe> GRINDING = RecipeRegistry.registerMeatlibType(NeepMeat.NAMESPACE, "grinding");

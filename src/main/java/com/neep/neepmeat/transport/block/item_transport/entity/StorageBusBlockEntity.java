@@ -7,14 +7,11 @@ import com.neep.neepmeat.transport.fluid_network.node.NodePos;
 import com.neep.neepmeat.transport.interfaces.IServerWorld;
 import com.neep.neepmeat.transport.item_network.PipeCacheImpl;
 import com.neep.neepmeat.transport.item_network.RetrievalTarget;
-import it.unimi.dsi.fastutil.Pair;
 import net.fabricmc.fabric.api.lookup.v1.block.BlockApiCache;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
-import net.fabricmc.fabric.api.transfer.v1.storage.StorageUtil;
 import net.fabricmc.fabric.api.transfer.v1.storage.StorageView;
-import net.fabricmc.fabric.api.transfer.v1.storage.base.ResourceAmount;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntityType;
@@ -139,7 +136,7 @@ public class StorageBusBlockEntity extends ItemPipeBlockEntity implements Storag
             if (extracted > 0)
             {
 //                foundTargets.add(Pair.of(target, new ResourceAmount<>(extractable, extracted)));
-                long l = itemNetwork.route(target.getPos(), target.getFace(), route, extractable, extracted, transaction);
+                long l = itemNetwork.route(target.getPos(), target.accessFace(), route, extractable, extracted, transaction);
                 routed.addAndGet(l);
             }
 
