@@ -53,9 +53,9 @@ public class ReactionCoreParameters
     {
         sensor.organisation.send(organisation);
         sensor.incidentZoneRadius.send(incidentZoneRadius);
-        sensor.exudateFlow.send(exudateMassFlow);
-        sensor.storedExudate.send(storedExudate);
-        sensor.cudEfficiency.send(cudEfficiency);
+        sensor.exudateFlow.send(exudateMassFlow * 10);
+        sensor.storedExudate.send(storedExudate * 10);
+        sensor.cudEfficiency.send(cudEfficiency * 100);
     }
 
     public double getIncidentZoneRadius()

@@ -43,6 +43,7 @@ public class CoreSensorBlock extends BaseBlock implements BlockEntityProvider, R
         if (world.getBlockEntity(pos) instanceof CoreSensorBlockEntity be)
         {
             player.openHandledScreen(NeepBusConfigScreenHandler.getFactory(be.getConfig()));
+            return ActionResult.SUCCESS;
         }
 
         return super.onUse(state, world, pos, player, hand, hit);

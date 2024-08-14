@@ -70,5 +70,6 @@ public class Processes
         getInstance().register(new CharnelPumpProcess());
         getInstance().register(new LargeCompressorProcess());
         getInstance().register(new BioreactorProcess());
+        getInstance().register(new DisruptorProcess());
     }
 }
