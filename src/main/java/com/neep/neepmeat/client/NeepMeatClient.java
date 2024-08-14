@@ -32,7 +32,6 @@ import com.neep.neepmeat.client.world.NMDimensionEffects;
 import com.neep.neepmeat.entity.follower.FollowerRenderer;
 import com.neep.neepmeat.init.*;
 import com.neep.neepmeat.item.DosimeterItem;
-import com.neep.neepmeat.item.NetworkingToolItem;
 import com.neep.neepmeat.machine.assembler.AssemblerRenderer;
 import com.neep.neepmeat.machine.bottler.BottlerRenderer;
 import com.neep.neepmeat.machine.casting_basin.CastingBasinRenderer;
@@ -53,11 +52,11 @@ import com.neep.neepmeat.machine.small_compressor.SmallCompressorScreen;
 import com.neep.neepmeat.machine.small_trommel.SmallTrommelRenderer;
 import com.neep.neepmeat.machine.synthesiser.SynthesiserRenderer;
 import com.neep.neepmeat.machine.trough.TroughRenderer;
-import com.neep.neepmeat.neepbus.client.NeepBusClient;
-import com.neep.neepmeat.neepbus.client.screen.NeepBusRangeConfigScreen;
-import com.neep.neepmeat.neepbus.client.screen.SliderScreen;
-import com.neep.neepmeat.neepbus.client.screen.NeepBusConfigScreen;
-import com.neep.neepmeat.neepbus.screen.NeepBusConfigScreenHandler;
+import com.neep.neepbus.client.NeepBusClient;
+import com.neep.neepbus.client.screen.NeepBusRangeConfigScreen;
+import com.neep.neepbus.client.screen.SliderScreen;
+import com.neep.neepbus.client.screen.NeepBusConfigScreen;
+import com.neep.neepbus.screen.NeepBusConfigScreenHandler;
 import com.neep.neepmeat.network.*;
 import com.neep.neepmeat.plc.PLCBlocks;
 import com.neep.neepmeat.transport.FluidTransport;
@@ -118,7 +117,6 @@ public class NeepMeatClient implements ClientModInitializer
         FarmingScutterHudRenderer.init();
         BigBlockPlacementHelper.init();
         RockDrillItemClient.init();
-        NeepBusClient.init();
 
         TransportClient.init();
 
@@ -142,7 +140,6 @@ public class NeepMeatClient implements ClientModInitializer
         PLCHudRenderer.init();
         PLCClient.init();
 
-        NetworkingToolItem.Client.init();
         DosimeterItem.Client.init();
 
         PhageRayClientComponent.init();
@@ -300,16 +297,11 @@ public class NeepMeatClient implements ClientModInitializer
         HandledScreens.register(ScreenHandlerInit.SMALL_COMPRESSOR, SmallCompressorScreen::new);
         HandledScreens.register(ScreenHandlerInit.FILTER, FilterScreen::new);
 
-        // IDE says this is unnecessary, but the compiler disagrees.
-        HandledScreens.<NeepBusConfigScreenHandler, NeepBusConfigScreen<NeepBusConfigScreenHandler>>register(ScreenHandlerInit.NEEPBUS_CONFIG, NeepBusConfigScreen::new);
-        HandledScreens.register(ScreenHandlerInit.NEEPBUS_RANGE_CONFIG, NeepBusRangeConfigScreen::new);
-        HandledScreens.register(ScreenHandlerInit.SLIDER, SliderScreen::new);
 
         HandledScreens.register(ScreenHandlerInit.LIVING_MACHINE, LivingMachineScreen::new);
         HandledScreens.register(ScreenHandlerInit.ITEM_OUTPUT, ItemOutputPortScreen::new);
 
         HandledScreens.register(ScreenHandlerInit.PLC, PLCProgramScreen::new);
-
     }
 
     public static void registerLayers()

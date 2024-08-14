@@ -115,7 +115,6 @@ public class NMItems
 
     public static Item TRANSFORMING_TOOL_BASE = new BaseCraftingItem(C, 1, new MeatlibItemSettings().group(NMItemGroups.GENERAL));
 
-    public static Item NETWORKING_TOOL = new NetworkingToolItem(C, TooltipSupplier.hidden(3), new MeatlibItemSettings().group(NMItemGroups.GENERAL));
     public static Item DOSIMETER = new DosimeterItem(C, TooltipSupplier.hidden(1), new MeatlibItemSettings().group(NMItemGroups.GENERAL));
 
     public static Item FARMING_SCUTTER = new FarmingScutterItem(() -> NMEntities.FARMING_SCUTTER, TooltipSupplier.hidden(1), new MeatlibItemSettings().group(NMItemGroups.GENERAL));

@@ -28,6 +28,7 @@ import net.minecraft.sound.BlockSoundGroup;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Direction;
 
+import static com.neep.meatlib.screen.ScreenHandlerRegistry.registerExtended;
 import static net.minecraft.registry.tag.BlockTags.AXE_MINEABLE;
 
 @RegisterMe(NeepMeat.NAMESPACE)
@@ -71,6 +72,6 @@ public class ItemTransport
 
         ITEM_PIPE_LOOKUP.registerFallback((world, pos, state, blockEntity, context) -> state.getBlock() instanceof ItemPipe pipe ? pipe : null);
 
-        TransportScreenHandlers.ITEM_REQUESTER_HANDLER = ScreenHandlerInit.registerExtended(NeepMeat.NAMESPACE, "item_requester", ItemRequesterScreenHandler::new);
+        TransportScreenHandlers.ITEM_REQUESTER_HANDLER = registerExtended(NeepMeat.NAMESPACE, "item_requester", ItemRequesterScreenHandler::new);
     }
 }

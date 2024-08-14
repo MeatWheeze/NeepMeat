@@ -21,7 +21,8 @@
     "main": [
       "com.neep.neepmeat.NeepMeat",
       "com.neep.meatlib.MeatLib",
-      "com.neep.meatweapons.MeatWeapons"
+      "com.neep.meatweapons.MeatWeapons",
+      "com.neep.neepbus.NeepBus"
     ],
     "fabric-datagen": [
       "com.neep.meatlib.datagen.MeatLibDataGen"
@@ -29,7 +30,8 @@
     "client": [
       "com.neep.neepmeat.client.NeepMeatClient",
       "com.neep.meatweapons.client.MWClient",
-      "com.neep.meatlib.client.MeatLibClient"
+      "com.neep.meatlib.client.MeatLibClient",
+      "com.neep.neepbus.client.NeepBusClient"
     ],
     "cardinal-components-chunk": [
       "com.neep.neepmeat.transport.TransportComponents"
@@ -39,7 +41,8 @@
     ],
     "cardinal-components-item": [
       "com.neep.neepmeat.init.NMComponents",
-      "com.neep.meatweapons.init.MWComponents"
+      "com.neep.meatweapons.init.MWComponents",
+      "com.neep.neepbus.NeepBusComponents"
     ],
     "cardinal-components-world": [
       "com.neep.meatweapons.init.MWComponents"
@@ -88,7 +91,8 @@
       "neepmeat:enlightenment_manager",
       "neepmeat:workpiece",
       "neepmeat:compressed_air",
-      "meatweapons:meatgun"
+      "meatweapons:meatgun",
+      "neepbus:networking_tool"
     ]
   },
   "accessWidener" : "neepmeat.accesswidener"

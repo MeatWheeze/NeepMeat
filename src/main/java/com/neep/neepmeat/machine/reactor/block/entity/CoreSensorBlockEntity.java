@@ -2,10 +2,10 @@ package com.neep.neepmeat.machine.reactor.block.entity;
 
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
 import com.neep.neepmeat.machine.reactor.ReceiverOrganismComponent;
-import com.neep.neepmeat.neepbus.CachingSender;
-import com.neep.neepmeat.neepbus.NeepBusConfig;
-import com.neep.neepmeat.neepbus.SimpleEntry;
-import com.neep.neepmeat.neepbus.SimpleOutputPort;
+import com.neep.neepbus.util.CachingSender;
+import com.neep.neepbus.util.NeepBusConfig;
+import com.neep.neepbus.util.SimpleEntry;
+import com.neep.neepbus.util.SimpleOutputPort;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.util.math.BlockPos;
