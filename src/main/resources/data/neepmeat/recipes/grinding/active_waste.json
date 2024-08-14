@@ -1,0 +1,13 @@
+{
+  "type": "neepmeat:grinding",
+  "input": {
+    "resource": "neepmeat:active_waste",
+    "amount": 1
+  },
+  "output": {
+    "resource": "minecraft:air",
+    "amount": 0
+  },
+  "experience": 0,
+  "processtime": 10
+}

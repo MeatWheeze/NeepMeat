@@ -4,17 +4,19 @@ import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.init.NMEntities;
 import com.neep.neepmeat.machine.live_machine.block.LargestHopperBlock;
 import com.neep.neepmeat.util.IterateRandomly;
-import net.minecraft.block.*;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
+import net.minecraft.block.LandingBlock;
 import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.FallingBlockEntity;
-import net.minecraft.entity.MovementType;
+import net.minecraft.entity.*;
 import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.item.AutomaticItemPlacementContext;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
@@ -28,13 +30,10 @@ import net.minecraft.registry.tag.BlockTags;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.state.property.Properties;
 import net.minecraft.text.Text;
-import net.minecraft.util.hit.BlockHitResult;
-import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.GameRules;
-import net.minecraft.world.RaycastContext;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
@@ -73,9 +72,9 @@ public class ActiveWasteFallingBlockEntity extends FallingBlockEntity
     {
         ActiveWasteFallingBlockEntity fallingBlockEntity = new ActiveWasteFallingBlockEntity(
                 serverWorld,
-                (double)pos.getX() + 0.5,
-                (double)pos.getY(),
-                (double)pos.getZ() + 0.5,
+                (double) pos.getX() + 0.5,
+                (double) pos.getY(),
+                (double) pos.getZ() + 0.5,
                 state.contains(Properties.WATERLOGGED) ? state.with(Properties.WATERLOGGED, Boolean.valueOf(false)) : state
         );
         serverWorld.setBlockState(pos, state.getFluidState().getBlockState(), Block.NOTIFY_ALL);
@@ -160,7 +159,7 @@ public class ActiveWasteFallingBlockEntity extends FallingBlockEntity
                     {
                         discard();
                         this.onDestroyedOnLanding(block, blockPos);
-                        this.dropItem(block);
+                        this.dropItemExact(block, 0);
                         return;
                     }
 
@@ -244,6 +243,23 @@ public class ActiveWasteFallingBlockEntity extends FallingBlockEntity
         }
     }
 
+    @Nullable
+    public ItemEntity dropItemExact(ItemConvertible item, float yOffset)
+    {
+        if (this.getWorld().isClient)
+        {
+            return null;
+        }
+        else
+        {
+            ItemStack stack = item.asItem().getDefaultStack();
+            ItemEntity itemEntity = new ItemEntity(this.getWorld(), this.getX(), this.getY() + (double) yOffset, this.getZ(), stack, 0, 0, 0);
+            itemEntity.setToDefaultPickupDelay();
+            this.getWorld().spawnEntity(itemEntity);
+            return itemEntity;
+        }
+    }
+
     private boolean jump(World world, BlockPos pos)
     {
         Direction[] directions = new Direction[]{Direction.NORTH, Direction.SOUTH, Direction.WEST, Direction.EAST};
@@ -283,8 +299,9 @@ public class ActiveWasteFallingBlockEntity extends FallingBlockEntity
     @Override
     public void onDestroyedOnLanding(Block block, BlockPos pos)
     {
-        if (block instanceof LandingBlock) {
-            ((LandingBlock)block).onDestroyedOnLanding(this.getWorld(), pos, this);
+        if (block instanceof LandingBlock)
+        {
+            ((LandingBlock) block).onDestroyedOnLanding(this.getWorld(), pos, this);
         }
     }
 
