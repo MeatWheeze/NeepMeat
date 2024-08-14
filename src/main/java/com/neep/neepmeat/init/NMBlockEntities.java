@@ -55,7 +55,7 @@ import com.neep.neepmeat.machine.power_flower.PowerFlowerControllerBlockEntity;
 import com.neep.neepmeat.machine.power_flower.PowerFlowerFluidPortBlock;
 import com.neep.neepmeat.machine.pylon.PylonBlockEntity;
 import com.neep.neepmeat.machine.reactor.IntrusionReactor;
-import com.neep.neepmeat.machine.reactor.ReactionCoreBlockEntity;
+import com.neep.neepmeat.machine.reactor.block.entity.ReactionCoreBlockEntity;
 import com.neep.neepmeat.machine.separator.SeparatorBlockEntity;
 import com.neep.neepmeat.machine.small_compressor.SmallCompressorBlockEntity;
 import com.neep.neepmeat.machine.small_trommel.SmallTrommelBlock;

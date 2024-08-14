@@ -2,15 +2,13 @@ package com.neep.neepmeat.neepbus.block.entity;
 
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
 import com.neep.neepmeat.neepbus.NeepBusConfig;
-import com.neep.neepmeat.neepbus.NeepBusConfigImpl;
 import com.neep.neepmeat.neepbus.AbstractInputPort;
+import com.neep.neepmeat.neepbus.SimpleEntry;
 import com.neep.neepmeat.neepbus.part.Indicator;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.math.BlockPos;
-
-import java.util.List;
 
 public class VerticalGaugeBlockEntity extends SyncableBlockEntity implements Indicator
 {
@@ -32,7 +30,7 @@ public class VerticalGaugeBlockEntity extends SyncableBlockEntity implements Ind
     };
 
     private final NeepBusConfig config = NeepBusConfig.builder(this::markDirty)
-            .input(new NeepBusConfig.SimpleEntry("Input"), inputPort)
+            .input(new SimpleEntry("Input"), inputPort)
             .applyChanges(this)
             .build();
 

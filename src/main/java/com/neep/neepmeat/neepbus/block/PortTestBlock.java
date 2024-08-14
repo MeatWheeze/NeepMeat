@@ -1,6 +1,5 @@
 package com.neep.neepmeat.neepbus.block;
 
-import com.google.common.base.Suppliers;
 import com.neep.meatlib.block.BaseBlock;
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
 import com.neep.meatlib.registry.RegistrationContext;
@@ -26,9 +25,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.List;
 import java.util.Map;
-import java.util.function.Supplier;
 
 public class PortTestBlock extends BaseBlock implements NeepBusProvider, DataCable, BlockEntityProvider
 {
@@ -92,7 +89,7 @@ public class PortTestBlock extends BaseBlock implements NeepBusProvider, DataCab
     {
         if (world.getBlockEntity(pos) instanceof PortTestBlockEntity be)
         {
-            be.sender.get().clear();
+            be.sender.invalidate();
         }
     }
 
@@ -119,9 +116,9 @@ public class PortTestBlock extends BaseBlock implements NeepBusProvider, DataCab
             }
         };
 
-        private final Supplier<CachingSender> sender = Suppliers.memoize(() -> new CachingSender(getWorld(), getPos()));
+        private final CachingSender sender = new CachingSender(this::getWorld, getPos());
 
-        private final SimpleOutputPort outputPort = new SimpleOutputPort(new NeepBusConfig.SimpleEntry("brine"), (s, value) -> sender.get().send(s, value));
+        private final SimpleOutputPort outputPort = new SimpleOutputPort(new SimpleEntry("brine"), sender::send);
 
 //        private final NeepBusConfig config = new NeepBusConfigImpl(
 //                List.of(new NeepBusConfig.SimpleEntry("ooer")),
@@ -132,7 +129,7 @@ public class PortTestBlock extends BaseBlock implements NeepBusProvider, DataCab
 //                applyChanges);
 
         private final NeepBusConfig config = NeepBusConfig.builder(this::markDirty)
-                .input(new NeepBusConfig.SimpleEntry("ooer"), inputPort)
+                .input(new SimpleEntry("ooer"), inputPort)
                 .output(outputPort.entry())
                 .applyChanges(this)
                 .build();

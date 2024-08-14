@@ -1,6 +1,8 @@
-package com.neep.neepmeat.machine.reactor;
+package com.neep.neepmeat.machine.reactor.block.entity;
 
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
+import com.neep.neepmeat.init.NMBlocks;
+import com.neep.neepmeat.machine.reactor.*;
 import com.neep.neepmeat.util.IterateRandomly;
 import it.unimi.dsi.fastutil.longs.LongOpenHashSet;
 import it.unimi.dsi.fastutil.longs.LongSet;
@@ -13,6 +15,7 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
@@ -31,6 +34,8 @@ public class ReactionCoreBlockEntity extends SyncableBlockEntity
 
     private final Object2FloatMap<ReceiverOrganismStructure.Property> properties = new Object2FloatArrayMap<>();
 
+    private final Set<ReceiverOrganismComponent> components = new HashSet<>();
+    @Nullable private CoreSensorBlockEntity sensor;
 
     public ReactionCoreBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
     {
@@ -67,12 +72,21 @@ public class ReactionCoreBlockEntity extends SyncableBlockEntity
             sync();
         }
 
+        components.removeIf(ReceiverOrganismComponent::isComponentRemoved);
+
         parameters.tickIncidentZone();
+
+        if (world.getTime() % 5 == 0 && sensor != null)
+        {
+            parameters.emitSensorData(sensor);
+        }
     }
 
     private void updateStructure(BlockPos origin)
     {
-        List<ReceiverOrganismStructure> structures = findStructures(world, origin);
+        List<ReceiverOrganismStructure> structures = new ObjectArrayList<>();
+
+        findStructures(world, origin, structures, components);
 
         EnumMap<ReceiverOrganismStructure.Property, Integer> present = new EnumMap<>(ReceiverOrganismStructure.Property.class);
         for (var structure : structures)
@@ -99,12 +113,18 @@ public class ReactionCoreBlockEntity extends SyncableBlockEntity
                 });
             });
         }
+
+        for (var component : components)
+        {
+            if (component instanceof CoreSensorBlockEntity sensor1)
+            {
+                this.sensor = sensor1;
+            }
+        }
     }
 
-    private List<ReceiverOrganismStructure> findStructures(World world, BlockPos origin)
+    private void findStructures(World world, BlockPos origin, List<ReceiverOrganismStructure> structures, Set<ReceiverOrganismComponent> components)
     {
-        List< ReceiverOrganismStructure> structures = new ObjectArrayList<>();
-
         LongSet visited = new LongOpenHashSet();
         Queue<BlockPos> queue = new ArrayDeque<>();
 
@@ -131,11 +151,15 @@ public class ReactionCoreBlockEntity extends SyncableBlockEntity
                         structures.add(structure);
                         queue.add(mutable.toImmutable());
                     }
+                    else if (nextState.getBlock() instanceof ReceiverOrganismComponentProvider provider)
+                    {
+                        var component = provider.get(world, mutable, nextState);
+                        if (component != null)
+                            components.add(component);
+                    }
                 }
             }
         }
-
-        return structures;
     }
 
     private int placeExudate(int toPlace)
@@ -160,7 +184,7 @@ public class ReactionCoreBlockEntity extends SyncableBlockEntity
 
             BlockState prevState = world.getBlockState(randomPos);
             // TODO: tag
-            if (!isValidBlock(prevState) && (prevState.isReplaceable() || random.nextBoolean()))
+            if (canReplace(prevState) && (prevState.isReplaceable() || random.nextBoolean()))
             {
                 world.setBlockState(randomPos, IntrusionReactor.ACTIVE_WASTE.getDefaultState());
                 ++placed;
@@ -303,6 +327,14 @@ public class ReactionCoreBlockEntity extends SyncableBlockEntity
         return blockState.isOf(IntrusionReactor.ACTIVE_WASTE)
                 || blockState.isOf(IntrusionReactor.REACTION_CORE)
                 || blockState.getBlock() instanceof ReceiverOrganismStructure
+                ;
+    }
+
+    private boolean canReplace(BlockState blockState)
+    {
+        return !isValidBlock(blockState)
+                && !blockState.isOf(IntrusionReactor.CORE_SENSOR)
+                && !blockState.isOf(NMBlocks.DATA_CABLE)
                 ;
     }
 }

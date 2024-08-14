@@ -32,36 +32,6 @@ public interface NeepBusConfig extends NbtSerialisable
         void setAddress(String address);
     }
 
-    class SimpleEntry implements Entry
-    {
-        private final String name;
-        private String address;
-
-        public SimpleEntry(String name)
-        {
-            this.name = name;
-            this.address = name.toLowerCase();
-        }
-
-        @Override
-        public String getName()
-        {
-            return name;
-        }
-
-        @Override
-        public String getAddress()
-        {
-            return address;
-        }
-
-        @Override
-        public void setAddress(String address)
-        {
-            this.address = address;
-        }
-    }
-
     NeepBusConfig EMPTY = new NeepBusConfig()
     {
         @Override

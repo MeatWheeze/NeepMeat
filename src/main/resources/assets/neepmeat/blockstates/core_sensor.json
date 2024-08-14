@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "": [
+      {
+        "model": "neepmeat:block/reactor/core_sensor",
+        "weight": 4
+      }
+    ]
+  }
+}

@@ -1,11 +1,14 @@
 package com.neep.neepmeat.neepbus;
 
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -181,9 +184,9 @@ public class NeepBusConfigImpl implements NeepBusConfig
     public static class Builder
     {
         protected final Runnable markDirty;
-        protected List<Entry> inputs = List.of();
-        protected List<Entry> outputs = List.of();
-        protected List<AbstractInputPort> inputPorts = List.of();
+        protected List<Entry> inputs = new ObjectArrayList<>();
+        protected List<Entry> outputs = new ObjectArrayList<>();
+        protected List<AbstractInputPort> inputPorts = new ObjectArrayList<>();
         protected Runnable onOutputsChanged = () -> {};
         protected Runnable applyChanges = () -> {};
 
@@ -206,8 +209,8 @@ public class NeepBusConfigImpl implements NeepBusConfig
 
         public Builder input(Entry input, AbstractInputPort inputPort)
         {
-            this.inputs = List.of(input);
-            this.inputPorts = List.of(inputPort);
+            this.inputs.add(input);
+            this.inputPorts.add(inputPort);
             return this;
         }
 
@@ -217,9 +220,15 @@ public class NeepBusConfigImpl implements NeepBusConfig
             return this;
         }
 
+        public Builder outputs(SimpleOutputPort... ports)
+        {
+            Arrays.stream(ports).map(SimpleOutputPort::entry).forEach(outputs::add);
+            return this;
+        }
+
         public Builder output(Entry output)
         {
-            this.outputs = List.of(output);
+            this.outputs.add(output);
             return this;
         }
 

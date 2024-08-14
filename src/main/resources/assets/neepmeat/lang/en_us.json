@@ -530,6 +530,7 @@
   "block.neepmeat.disruptor_segment": "Disruptor Segment",
   "component.neepmeat.disruptor_segment": "Disruptor Segment",
   "block.neepmeat.reaction_core": "Reaction Core",
+  "block.neepmeat.core_sensor": "Receiver Organism Sensor",
   "block.neepmeat.nervous_tissue": "Nervous Tissue",
   "block.neepmeat.active_waste": "Active Waste",
 

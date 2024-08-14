@@ -12,17 +12,18 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Supplier;
 
 public class CachingSender
 {
-    private final World world;
+    private final Supplier<World> world;
     private final BlockPos pos;
 
     // Values can be null, empty, or full. Empty indicates that the search has already been run but the
     // target address is not present in the network.
     private final Map<String, Set<NeepBusPort>> portCache = new HashMap<>();
 
-    public CachingSender(World world, BlockPos pos)
+    public CachingSender(Supplier<World> world, BlockPos pos)
     {
         this.world = world;
         this.pos = pos;
@@ -38,7 +39,7 @@ public class CachingSender
             finder.loop(32);
 
             cached = new HashSet<>(finder.getResult().values());
-            cached.forEach(port -> port.addInvalidateListener(this::clear));
+            cached.forEach(port -> port.addInvalidateListener(this::invalidate));
             portCache.put(address, cached);
         }
 
@@ -48,7 +49,7 @@ public class CachingSender
         }
     }
 
-    public void clear()
+    public void invalidate()
     {
         portCache.clear();
     }
@@ -65,6 +66,7 @@ public class CachingSender
         @Override
         protected State processPos(BlockPos pos)
         {
+            World world = CachingSender.this.world.get();
             BlockState currentState = world.getBlockState(pos);
             BlockPos.Mutable mutable = pos.mutableCopy();
 

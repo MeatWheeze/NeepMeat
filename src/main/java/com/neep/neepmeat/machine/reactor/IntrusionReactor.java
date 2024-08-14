@@ -10,6 +10,10 @@ import com.neep.neepmeat.api.live_machine.PropertyValue;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.init.NMBlocks;
 import com.neep.neepmeat.machine.live_machine.LivingMachineComponents;
+import com.neep.neepmeat.machine.reactor.block.ActiveWasteBlock;
+import com.neep.neepmeat.machine.reactor.block.CoreSensorBlock;
+import com.neep.neepmeat.machine.reactor.block.ReceiverOrganismBlock;
+import com.neep.neepmeat.machine.reactor.block.entity.CoreSensorBlockEntity;
 import com.neep.neepmeat.machine.reactor.disruptor.DisruptorNeedleBlock;
 import com.neep.neepmeat.machine.reactor.disruptor.DisruptorSegmentBlock;
 import com.neep.neepmeat.machine.reactor.disruptor.DisruptorSegmentBlockEntity;
@@ -34,17 +38,21 @@ public class IntrusionReactor
 
     public static final Block DISRUPTOR_NEEDLE = new DisruptorNeedleBlock(C, MeatlibBlockSettings.copyOf(NMBlocks.MACHINE_SETTINGS));
     public static final Block REACTION_CORE = new ReactionCoreBlock(C, MeatlibBlockSettings.copyOf(FLESH_SETTINGS));
+    public static final Block CORE_SENSOR = new CoreSensorBlock(C, MeatlibBlockSettings.copyOf(FLESH_SETTINGS));
     public static final Block ACTIVE_WASTE = new ActiveWasteBlock(C, MeatlibBlockSettings.copyOf(FLESH_SETTINGS));
 
     public static final Block DISRUPTOR_SEGMENT = new DisruptorSegmentBlock(C, MeatlibBlockSettings.copyOf(NMBlocks.MACHINE_SETTINGS),
             ItemSettings.block().tooltip(LivingMachineComponents.tooltip(LivingMachineComponents.DISRUPTOR_SEGMENT)));
 
     public static BlockEntityType<DisruptorSegmentBlockEntity> DISRUPTOR_SEGMENT_BE;
+    public static BlockEntityType<CoreSensorBlockEntity> CORE_SENSOR_BE;
 
     public static void init()
     {
         DISRUPTOR_SEGMENT_BE = NMBlockEntities.register(
             "disruptor_segment", (p, s) -> new DisruptorSegmentBlockEntity(DISRUPTOR_SEGMENT_BE, p, s), DISRUPTOR_SEGMENT);
+        CORE_SENSOR_BE = NMBlockEntities.register(
+                "core_sensor", (p, s) -> new CoreSensorBlockEntity(CORE_SENSOR_BE, p, s), CORE_SENSOR);
 
         LivingMachineComponent.LOOKUP.registerSelf(DISRUPTOR_SEGMENT_BE);
     }

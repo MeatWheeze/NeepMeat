@@ -33,7 +33,7 @@ public class AddressConfigWidget extends ParentWidget
 
         int headerHeight = 13;
         int entryHeight = 30;
-        int columnWidth = 100; // Includes padding
+        int columnWidth = 120; // Includes padding
 
         int numEntries = Math.max(handler.inputs.size(), handler.outputs.size());
 

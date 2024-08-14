@@ -1,4 +1,4 @@
-package com.neep.neepmeat.machine.reactor;
+package com.neep.neepmeat.machine.reactor.block;
 
 import com.neep.meatlib.block.MeatlibBlock;
 import com.neep.meatlib.item.BaseBlockItem;

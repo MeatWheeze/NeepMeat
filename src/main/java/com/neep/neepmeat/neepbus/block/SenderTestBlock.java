@@ -57,13 +57,13 @@ public class SenderTestBlock extends BaseBlock implements BlockEntityProvider, D
     {
         if (world.getBlockEntity(pos) instanceof BlockEntity be)
         {
-            be.cache.get().clear();
+            be.cache.invalidate();
         }
     }
 
     public static class BlockEntity extends SyncableBlockEntity
     {
-        private final LazySupplier<CachingSender> cache = LazySupplier.of(() -> new CachingSender(getWorld(), getPos()));
+        private final CachingSender cache = new CachingSender(this::getWorld, getPos());
 
         private int count = 0;
 
@@ -74,7 +74,7 @@ public class SenderTestBlock extends BaseBlock implements BlockEntityProvider, D
 
         public void sendTest()
         {
-            cache.get().send("ooer", count);
+            cache.send("ooer", count);
             count++;
         }
     }

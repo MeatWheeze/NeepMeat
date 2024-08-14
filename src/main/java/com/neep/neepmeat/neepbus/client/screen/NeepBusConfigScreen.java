@@ -1,7 +1,5 @@
 package com.neep.neepmeat.neepbus.client.screen;
 
-import com.neep.neepmeat.api.plc.PLCCols;
-import com.neep.neepmeat.client.screen.util.GUIUtil;
 import com.neep.neepmeat.neepbus.screen.NeepBusConfigScreenHandler;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;

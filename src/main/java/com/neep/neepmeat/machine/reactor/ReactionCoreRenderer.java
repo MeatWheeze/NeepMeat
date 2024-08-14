@@ -1,6 +1,6 @@
 package com.neep.neepmeat.machine.reactor;
 
-import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
+import com.neep.neepmeat.machine.reactor.block.entity.ReactionCoreBlockEntity;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.VertexConsumerProvider;

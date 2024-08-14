@@ -1,4 +1,4 @@
-package com.neep.neepmeat.machine.reactor;
+package com.neep.neepmeat.machine.reactor.block;
 
 import com.neep.meatlib.block.BaseBlock;
 import com.neep.meatlib.item.BaseBlockItem;
@@ -6,6 +6,7 @@ import com.neep.meatlib.item.ItemSettings;
 import com.neep.meatlib.registry.RegistrationContext;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.api.live_machine.PropertyValue;
+import com.neep.neepmeat.machine.reactor.ReceiverOrganismStructure;
 import net.minecraft.block.Block;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.item.TooltipContext;

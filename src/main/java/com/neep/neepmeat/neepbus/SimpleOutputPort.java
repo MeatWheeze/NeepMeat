@@ -18,6 +18,12 @@ public class SimpleOutputPort
         sender.accept(entry.getAddress(), data);
     }
 
+    // A stopgap until we decide whether to handle doubles instead of ints.
+    public void send(double data)
+    {
+        send((int) Math.round(data));
+    }
+
     public NeepBusConfig.Entry entry()
     {
         return entry;
