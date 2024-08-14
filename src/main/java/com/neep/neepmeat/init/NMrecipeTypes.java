@@ -44,11 +44,11 @@ public class NMrecipeTypes
     public static final RecipeSerializer<OreFatRenderingRecipe> ORE_FAT_RENDERING_SERIALIZER = RecipeRegistry.registerMeatlibSerializer(NeepMeat.NAMESPACE, "ore_fat_rendering", new OreFatRenderingRecipe.Serializer(OreFatRenderingRecipe::new));
     public static final RecipeType<OreFatRenderingRecipe> ORE_FAT_RENDERING = RecipeRegistry.registerType(NeepMeat.NAMESPACE, "ore_fat_rendering");
 
-    public static final RecipeSerializer<FatPressingRecipe> FAT_PRESSING_SERIALIZER = RecipeRegistry.registerMeatlibSerializer(NeepMeat.NAMESPACE, "fat_pressing", new FatPressingRecipe.Serializer(FatPressingRecipe::new));
-    public static final RecipeType<FatPressingRecipe> FAT_PRESSING = RecipeRegistry.registerType(NeepMeat.NAMESPACE, "fat_pressing");
+    public static final MeatRecipeSerialiser<FatPressingRecipe> FAT_PRESSING_SERIALIZER = RecipeRegistry.registerMeatlibSerializer(NeepMeat.NAMESPACE, "fat_pressing", new FatPressingRecipe.Serializer(FatPressingRecipe::new));
+    public static final MeatRecipeType<FatPressingRecipe> FAT_PRESSING = RecipeRegistry.registerMeatlibType(NeepMeat.NAMESPACE, "fat_pressing");
 
-    public static final RecipeSerializer<PressingRecipe> PRESSING_SERIALIZER = RecipeRegistry.registerMeatlibSerializer(NeepMeat.NAMESPACE, "pressing", new PressingRecipe.Serializer(PressingRecipe::new));
-    public static final RecipeType<PressingRecipe> PRESSING = RecipeRegistry.registerType(NeepMeat.NAMESPACE, "pressing");
+    public static final MeatRecipeSerialiser<PressingRecipe> PRESSING_SERIALIZER = RecipeRegistry.registerMeatlibSerializer(NeepMeat.NAMESPACE, "pressing", new PressingRecipe.Serializer(PressingRecipe::new));
+    public static final MeatRecipeType<PressingRecipe> PRESSING = RecipeRegistry.registerMeatlibType(NeepMeat.NAMESPACE, "pressing");
 
     public static final RecipeSerializer<MobSqueezingRecipe> MOB_SQUEEZING_SERIALIZER = RecipeRegistry.registerMeatlibSerializer(NeepMeat.NAMESPACE, "mob_squeezing", new MobSqueezingRecipe.Serializer(MobSqueezingRecipe::new));
     public static final RecipeType<MobSqueezingRecipe> MOB_SQUEEZING = RecipeRegistry.registerType(NeepMeat.NAMESPACE, "mob_squeezing");

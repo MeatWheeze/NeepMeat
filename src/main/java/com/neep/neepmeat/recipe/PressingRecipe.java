@@ -1,6 +1,7 @@
 package com.neep.neepmeat.recipe;
 
 import com.google.gson.JsonObject;
+import com.neep.meatlib.recipe.MeatRecipeSerialiser;
 import com.neep.meatlib.recipe.ingredient.RecipeInput;
 import com.neep.meatlib.recipe.ingredient.RecipeInputs;
 import com.neep.meatlib.recipe.ingredient.RecipeOutputImpl;
@@ -14,12 +15,10 @@ import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.item.Item;
 import net.minecraft.network.PacketByteBuf;
-import net.minecraft.recipe.RecipeSerializer;
 import net.minecraft.recipe.RecipeType;
 import net.minecraft.registry.Registries;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.JsonHelper;
-import net.minecraft.world.World;
 
 @SuppressWarnings("UnstableApiUsage")
 public class PressingRecipe extends AbstractPressingRecipe<CastingBasinStorage>
@@ -36,7 +35,7 @@ public class PressingRecipe extends AbstractPressingRecipe<CastingBasinStorage>
     }
 
     @Override
-    public boolean matches(CastingBasinStorage inventory, World world)
+    public boolean matches(CastingBasinStorage inventory)
     {
         WritableSingleFluidStorage storage = inventory.fluid(null);
         return fluidInput.test(storage) && storage.getAmount() == fluidInput.amount();
@@ -54,7 +53,7 @@ public class PressingRecipe extends AbstractPressingRecipe<CastingBasinStorage>
     }
 
     @Override
-    public RecipeSerializer<?> getSerializer()
+    public MeatRecipeSerialiser<?> getSerializer()
     {
         return NMrecipeTypes.PRESSING_SERIALIZER;
     }
@@ -65,7 +64,7 @@ public class PressingRecipe extends AbstractPressingRecipe<CastingBasinStorage>
         return NMrecipeTypes.PRESSING;
     }
 
-    public FluidVariant takeInputs(CastingBasinStorage storage, TransactionContext transaction)
+    public boolean takeInputs(CastingBasinStorage storage, TransactionContext transaction)
     {
         try (Transaction inner = transaction.openNested())
         {
@@ -76,7 +75,7 @@ public class PressingRecipe extends AbstractPressingRecipe<CastingBasinStorage>
             // Ensure that storage contents still match the recipe
             if (fluid == null)
             {
-                return null;
+                return false;
             }
 
             storage.unlock();
@@ -86,7 +85,7 @@ public class PressingRecipe extends AbstractPressingRecipe<CastingBasinStorage>
             if (ex2 != fluidInput.amount())
             {
                 inner.abort();
-                return null;
+                return false;
             }
 
             boolean transferred = itemOutput.insertInto(storage.item(null), ItemVariant::of, transaction);
@@ -94,11 +93,11 @@ public class PressingRecipe extends AbstractPressingRecipe<CastingBasinStorage>
             if (transferred)
             {
                 inner.commit();
-                return fluidVariant;
+                return true;
             }
             inner.abort();
         }
-        return null;
+        return false;
     }
 
     public RecipeOutputImpl<Item> getItemOutput()
@@ -106,7 +105,7 @@ public class PressingRecipe extends AbstractPressingRecipe<CastingBasinStorage>
         return itemOutput;
     }
 
-    public static class Serializer implements RecipeSerializer<PressingRecipe>
+    public static class Serializer implements MeatRecipeSerialiser<PressingRecipe>
     {
         RecipeFactory<PressingRecipe> factory;
 

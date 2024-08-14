@@ -1,6 +1,7 @@
 package com.neep.neepmeat.machine.hydraulic_press;
 
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
+import com.neep.meatlib.recipe.MeatlibRecipes;
 import com.neep.meatlib.recipe.RecipeBehaviour;
 import com.neep.meatlib.util.NbtSerialisable;
 import com.neep.neepmeat.api.storage.WritableSingleFluidStorage;
@@ -10,6 +11,7 @@ import com.neep.neepmeat.machine.casting_basin.CastingBasinBlockEntity;
 import com.neep.neepmeat.machine.casting_basin.CastingBasinStorage;
 import com.neep.neepmeat.recipe.AbstractPressingRecipe;
 import com.neep.neepmeat.recipe.MobSqueezingRecipe;
+import com.neep.neepmeat.util.MiscUtil;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
@@ -35,8 +37,7 @@ public class HydraulicPressBlockEntity extends SyncableBlockEntity
     protected short recipeState;
     protected int extensionTicks;
 
-    protected AbstractPressingRecipe<CastingBasinStorage> currentRecipe;
-    protected Identifier recipeId;
+    @Nullable protected AbstractPressingRecipe<CastingBasinStorage> currentRecipe;
     protected SqueezingRecipeBehaviour behaviour = new SqueezingRecipeBehaviour();
 
     public float renderExtension;
@@ -73,7 +74,6 @@ public class HydraulicPressBlockEntity extends SyncableBlockEntity
 
     protected boolean hasRecipe()
     {
-        loadRecipe();
         behaviour.load(world);
         return currentRecipe != null || behaviour.getCurrentRecipe() != null;
     }
@@ -92,8 +92,8 @@ public class HydraulicPressBlockEntity extends SyncableBlockEntity
     {
         try (Transaction transaction = Transaction.openOuter())
         {
-            FluidVariant variant = currentRecipe.takeInputs(storage, transaction);
-            if (variant != null)
+            boolean success = currentRecipe.takeInputs(storage, transaction);
+            if (success)
             {
                 transaction.commit();
             }
@@ -118,7 +118,6 @@ public class HydraulicPressBlockEntity extends SyncableBlockEntity
         if (storage != null) storage.unlock();
 
         this.recipeState = 0;
-        this.recipeId = null;
         this.currentRecipe = null;
     }
 
@@ -134,14 +133,12 @@ public class HydraulicPressBlockEntity extends SyncableBlockEntity
     {
         if (world.getBlockEntity(pos.down()) instanceof CastingBasinBlockEntity basin)
         {
-            loadRecipe();
-
             if (currentRecipe == null)
             {
-                AbstractPressingRecipe<CastingBasinStorage> recipe = world.getRecipeManager().getFirstMatch(NMrecipeTypes.FAT_PRESSING, basin.getStorage(), world).orElse(null);
+                AbstractPressingRecipe<CastingBasinStorage> recipe = MeatlibRecipes.getInstance().getFirstMatch(NMrecipeTypes.FAT_PRESSING, basin.getStorage()).orElse(null);
 
                 if (recipe == null)
-                    recipe = world.getRecipeManager().getFirstMatch(NMrecipeTypes.PRESSING, basin.getStorage(), world).orElse(null);
+                    recipe = MeatlibRecipes.getInstance().getFirstMatch(NMrecipeTypes.PRESSING, basin.getStorage()).orElse(null);
 
                 startPressRecipe(basin.getStorage(), recipe);
 
@@ -195,15 +192,6 @@ public class HydraulicPressBlockEntity extends SyncableBlockEntity
         return fluidStorage;
     }
 
-    public void loadRecipe()
-    {
-        if (currentRecipe == null)
-        {
-            if (recipeId != null)
-                currentRecipe = (AbstractPressingRecipe<CastingBasinStorage>) world.getRecipeManager().get(recipeId).orElse(null);
-        }
-    }
-
     @Override
     public void writeNbt(NbtCompound nbt)
     {
@@ -212,9 +200,7 @@ public class HydraulicPressBlockEntity extends SyncableBlockEntity
         nbt.putShort("recipeState", recipeState);
         nbt.putBoolean("recipeControlled", recipeControlled);
         if (currentRecipe != null)
-        {
             nbt.putString("currentRecipe", currentRecipe.getId().toString());
-        }
 
         behaviour.writeNbt(nbt);
     }
@@ -226,12 +212,9 @@ public class HydraulicPressBlockEntity extends SyncableBlockEntity
         fluidStorage.readNbt(nbt);
         this.recipeState = nbt.getShort("recipeState");
         this.recipeControlled = nbt.getBoolean("recipeControlled");
-        String recipeString = nbt.getString("currentRecipe");
-        if (recipeString != null)
-        {
-            this.recipeId = new Identifier(recipeString);
-        }
-        else this.recipeId = null;
+
+        this.currentRecipe = MiscUtil.ifPresentOrNull(nbt, "currentRecipe",
+            s -> (AbstractPressingRecipe<CastingBasinStorage>) MeatlibRecipes.getInstance().get(Identifier.tryParse(s)).orElse(null));
 
         behaviour.readNbt(nbt);
     }
@@ -260,7 +243,7 @@ public class HydraulicPressBlockEntity extends SyncableBlockEntity
         public void finishRecipe()
         {
             load(world);
-            getCurrentRecipe().finishRecipe(new MobSqueezeContext(world, pos), world);
+            getCurrentRecipe().finishRecipe(new MobSqueezeContext(world, pos), getWorld());
         }
     }
 

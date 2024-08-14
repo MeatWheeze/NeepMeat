@@ -1,6 +1,7 @@
 package com.neep.neepmeat.recipe;
 
 import com.google.gson.JsonObject;
+import com.neep.meatlib.recipe.MeatRecipeSerialiser;
 import com.neep.meatlib.recipe.ingredient.RecipeInput;
 import com.neep.meatlib.recipe.ingredient.RecipeInputs;
 import com.neep.neepmeat.api.processing.OreFatRegistry;
@@ -16,7 +17,6 @@ import net.minecraft.recipe.RecipeSerializer;
 import net.minecraft.recipe.RecipeType;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.JsonHelper;
-import net.minecraft.world.World;
 
 @SuppressWarnings("UnstableApiUsage")
 public class FatPressingRecipe extends AbstractPressingRecipe<CastingBasinStorage>
@@ -31,7 +31,7 @@ public class FatPressingRecipe extends AbstractPressingRecipe<CastingBasinStorag
     }
 
     @Override
-    public boolean matches(CastingBasinStorage inventory, World world)
+    public boolean matches(CastingBasinStorage inventory)
     {
         WritableSingleFluidStorage storage = inventory.fluid(null);
         return OreFatRegistry.getFromVariant(storage.getResource()) != null
@@ -50,7 +50,7 @@ public class FatPressingRecipe extends AbstractPressingRecipe<CastingBasinStorag
     }
 
     @Override
-    public RecipeSerializer<?> getSerializer()
+    public MeatRecipeSerialiser<?> getSerializer()
     {
         return NMrecipeTypes.FAT_PRESSING_SERIALIZER;
     }
@@ -61,7 +61,7 @@ public class FatPressingRecipe extends AbstractPressingRecipe<CastingBasinStorag
         return NMrecipeTypes.FAT_PRESSING;
     }
 
-    public FluidVariant takeInputs(CastingBasinStorage storage, TransactionContext transaction)
+    public boolean takeInputs(CastingBasinStorage storage, TransactionContext transaction)
     {
         try (Transaction inner = transaction.openNested())
         {
@@ -82,7 +82,7 @@ public class FatPressingRecipe extends AbstractPressingRecipe<CastingBasinStorag
             if (ex2 != fluidInput.amount())
             {
                 inner.abort();
-                return null;
+                return false;
             }
 
             // Might need to formalise this
@@ -92,14 +92,14 @@ public class FatPressingRecipe extends AbstractPressingRecipe<CastingBasinStorag
             if (transferred == insertAmount)
             {
                 inner.commit();
-                return fluidVariant;
+                return true;
             }
             inner.abort();
         }
-        return null;
+        return false;
     }
 
-    public static class Serializer implements RecipeSerializer<FatPressingRecipe>
+    public static class Serializer implements MeatRecipeSerialiser<FatPressingRecipe>
     {
         RecipeFactory<FatPressingRecipe> factory;
 
