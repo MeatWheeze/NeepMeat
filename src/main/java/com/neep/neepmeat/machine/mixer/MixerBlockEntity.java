@@ -59,7 +59,7 @@ public class MixerBlockEntity extends MotorisedMachineBlockEntity
             if (direction.getAxis().isVertical())
                 continue;
 
-            list.add(RetrievalTarget.of(FluidStorage.SIDED, (ServerWorld) getWorld(), getPos(), direction.getOpposite()));
+            list.add(RetrievalTarget.of(FluidStorage.SIDED, (ServerWorld) getWorld(), getPos().offset(direction), direction.getOpposite()));
         }
         return new ObjectImmutableList<>(list);
     });

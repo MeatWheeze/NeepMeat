@@ -66,7 +66,7 @@ public class MixerBlock extends TallBlock implements BlockEntityProvider
     @Override
     public void onStateReplaced(BlockState state, World world, BlockPos pos, BlockState newState, boolean moved)
     {
-        if (!newState.isOf(newState.getBlock()))
+        if (!newState.isOf(state.getBlock()))
         {
             if (world.getBlockEntity(pos) instanceof MixerBlockEntity be)
             {
