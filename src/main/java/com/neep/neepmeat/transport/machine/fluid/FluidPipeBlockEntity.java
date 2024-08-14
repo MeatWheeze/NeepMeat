@@ -92,7 +92,7 @@ public class FluidPipeBlockEntity<T extends PipeVertex & NbtSerialisable> extend
             vertex.updateNodes((ServerWorld) world, pos, newState);
 
             // Using a loop to be safe, but this should only happen once.
-            for (Direction direction : pipe.getConnections(getCachedState(), direction -> true))
+            for (Direction direction : pipe.getConnections(getCachedState()))
             {
                 var adjacent = findNextVertex(pos, direction);
                 if (adjacent != null)
@@ -125,7 +125,7 @@ public class FluidPipeBlockEntity<T extends PipeVertex & NbtSerialisable> extend
     private void linkVertices(FluidPipe pipe)
     {
         List<Pair<PipeVertex, Direction>> toConnect = Lists.newArrayList();
-        for (Direction direction : pipe.getConnections(getCachedState(), direction -> true))
+        for (Direction direction : pipe.getConnections(getCachedState()))
         {
             var nextVertex = findNextVertex(pos, direction);
             if (nextVertex != null)
@@ -151,7 +151,7 @@ public class FluidPipeBlockEntity<T extends PipeVertex & NbtSerialisable> extend
     // For use if this pipe is a vertex. Performs a BFS at each connection to find the closest vertices.
     private void findAdjacent(FluidPipe pipe)
     {
-        for (Direction direction : pipe.getConnections(getCachedState(), direction -> true))
+        for (Direction direction : pipe.getConnections(getCachedState()))
         {
             var adjacent = findNextVertex(pos, direction);
             if (adjacent != null)
@@ -195,7 +195,7 @@ public class FluidPipeBlockEntity<T extends PipeVertex & NbtSerialisable> extend
             }
 
             BlockPos.Mutable offsetPos = current.first().mutableCopy();
-            for (Direction direction : pipe.getConnections(currentState, d -> true))
+            for (Direction direction : pipe.getConnections(currentState))
             {
                 offsetPos.set(current.first(), direction);
 

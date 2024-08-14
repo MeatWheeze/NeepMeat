@@ -20,7 +20,6 @@ import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 
 import java.util.*;
-import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 public interface FluidPipe
@@ -109,22 +108,26 @@ public interface FluidPipe
         }
         return false;
     }
-    // TODO: Replace with EnumSet
 
-    default Iterable<Direction> getConnections(BlockState state, Predicate<Direction> forbidden)
+    // TODO: Replace with EnumSet
+//    default Iterable<Direction> getConnections(BlockState state, Predicate<Direction> forbidden)
+    default Iterable<Direction> getConnections(BlockState state)
     {
         if (state.getBlock() instanceof AbstractPipeBlock)
         {
+//            return () -> AbstractPipeBlock.DIR_TO_CONNECTION
+//                    .entrySet()
+//                    .stream()
+//                    .filter(e -> state.get(e.getValue()).isConnected())
+//                    .map(Map.Entry::getKey).iterator();
             return () -> Arrays.stream(Direction.values())
                     .filter(dir -> state.get(AbstractPipeBlock.DIR_TO_CONNECTION.get(dir)).isConnected())
-                    .filter(forbidden)
                     .iterator();
         }
         else if (state.getBlock() instanceof AbstractAxialFluidPipe)
         {
             Direction facing = state.get(AbstractAxialFluidPipe.FACING);
             return () -> Stream.of(facing, facing.getOpposite())
-                    .filter(forbidden)
                     .iterator();
         }
         else
@@ -170,7 +173,7 @@ public interface FluidPipe
 
             BlockPos.Mutable mutable = current.mutableCopy();
 
-            for (Direction direction : currentPipe.getConnections(currentState, p -> true))
+            for (Direction direction : currentPipe.getConnections(currentState))
             {
                 mutable.set(current, direction);
 
@@ -229,7 +232,7 @@ public interface FluidPipe
 
     default int countConnections(BlockState blockState)
     {
-        return Iterables.size(getConnections(blockState, d -> true));
+        return Iterables.size(getConnections(blockState));
     }
 
     default PipeCol getCol(World world, BlockPos pos, BlockState blockState)

@@ -82,7 +82,7 @@ public class BlockPipeVertex extends SimplePipeVertex implements NbtSerialisable
         FluidPipe pipe = FluidPipe.findFluidPipe(world, pos, state);
         if (pipe != null)
         {
-            for (Direction direction : pipe.getConnections(state, d -> true))
+            for (Direction direction : pipe.getConnections(state))
             {
                 FluidNode node = FluidNodeManagerImpl.getInstance(world).get(new NodePos(pos, direction));
                 if (node != null)

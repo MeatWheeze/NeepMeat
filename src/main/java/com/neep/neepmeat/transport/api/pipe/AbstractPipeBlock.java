@@ -24,6 +24,7 @@ import net.minecraft.state.property.EnumProperty;
 import net.minecraft.state.property.Properties;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
+import net.minecraft.util.Util;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
@@ -34,6 +35,7 @@ import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
 
+import java.util.EnumMap;
 import java.util.Map;
 
 public abstract class AbstractPipeBlock extends BaseBlock implements Waterloggable
@@ -49,14 +51,18 @@ public abstract class AbstractPipeBlock extends BaseBlock implements Waterloggab
 
     private final Map<BlockState, VoxelShape> shapes = Maps.newHashMap();
 
-    public static final Map<Direction, EnumProperty<PipeConnectionType>> DIR_TO_CONNECTION = (new ImmutableMap.Builder<Direction, EnumProperty<PipeConnectionType>>()
-            .put(Direction.NORTH, NORTH_CONNECTION)
-            .put(Direction.EAST, EAST_CONNECTION)
-            .put(Direction.SOUTH, SOUTH_CONNECTION)
-            .put(Direction.WEST, WEST_CONNECTION)
-            .put(Direction.DOWN, DOWN_CONNECTION)
-            .put(Direction.UP, UP_CONNECTION)
-    ).build();
+//    public static final Map<Direction, EnumProperty<PipeConnectionType>> DIR_TO_CONNECTION = new ImmutableMap.Builder<Direction, EnumProperty<PipeConnectionType>>()
+    public static final Map<Direction, EnumProperty<PipeConnectionType>> DIR_TO_CONNECTION = Util.make(() ->
+    {
+        EnumMap<Direction, EnumProperty<PipeConnectionType>> map = new EnumMap<>(Direction.class);
+        map.put(Direction.NORTH, NORTH_CONNECTION);
+        map.put(Direction.EAST, EAST_CONNECTION);
+        map.put(Direction.SOUTH, SOUTH_CONNECTION);
+        map.put(Direction.WEST, WEST_CONNECTION);
+        map.put(Direction.DOWN, DOWN_CONNECTION);
+        map.put(Direction.UP, UP_CONNECTION);
+        return map;
+    });
 
     public static final Map<Direction, VoxelShape> DIR_SHAPES = (new ImmutableMap.Builder<Direction, VoxelShape>()
             .put(Direction.NORTH, Block.createCuboidShape(4, 4, 0, 12, 12, 5))
