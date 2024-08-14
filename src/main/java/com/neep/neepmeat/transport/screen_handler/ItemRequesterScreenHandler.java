@@ -145,8 +145,8 @@ public class ItemRequesterScreenHandler extends BasicScreenHandler
         ResourceAmount<ItemVariant> ra = SyncRequesterScreenS2CPacket.decodeRequest(buf);
         try (Transaction transaction = Transaction.openOuter())
         {
-            routingNetwork.request(ra, pos, Direction.UP, RoutingNetwork.RequestType.ANY_AMOUNT, transaction);
-            transaction.commit();
+            if (routingNetwork.request(ra, pos, Direction.UP, RoutingNetwork.RequestType.ANY_AMOUNT, transaction))
+                transaction.commit();
         }
         syncState();
     }
