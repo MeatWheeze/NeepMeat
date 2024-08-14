@@ -53,6 +53,7 @@ import com.neep.neepmeat.machine.small_compressor.SmallCompressorScreen;
 import com.neep.neepmeat.machine.small_trommel.SmallTrommelRenderer;
 import com.neep.neepmeat.machine.synthesiser.SynthesiserRenderer;
 import com.neep.neepmeat.machine.trough.TroughRenderer;
+import com.neep.neepmeat.neepbus.client.NeepBusClient;
 import com.neep.neepmeat.neepbus.client.screen.NeepBusRangeConfigScreen;
 import com.neep.neepmeat.neepbus.client.screen.SliderScreen;
 import com.neep.neepmeat.neepbus.client.screen.NeepBusConfigScreen;
@@ -117,6 +118,7 @@ public class NeepMeatClient implements ClientModInitializer
         FarmingScutterHudRenderer.init();
         BigBlockPlacementHelper.init();
         RockDrillItemClient.init();
+        NeepBusClient.init();
 
         TransportClient.init();
 

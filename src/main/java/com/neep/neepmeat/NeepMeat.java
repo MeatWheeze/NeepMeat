@@ -32,6 +32,7 @@ import com.neep.neepmeat.machine.live_machine.LivingMachineComponents;
 import com.neep.neepmeat.machine.live_machine.LivingMachines;
 import com.neep.neepmeat.machine.reactor.IntrusionReactor;
 import com.neep.neepmeat.machine.synthesiser.MobSynthesisRegistry;
+import com.neep.neepmeat.neepbus.NeepBus;
 import com.neep.neepmeat.neepbus.NeepBusBlocks;
 import com.neep.neepmeat.network.MachineDiagnosticsRequest;
 import com.neep.neepmeat.network.NMTrackedData;

@@ -13,6 +13,7 @@ import com.neep.neepmeat.neepbus.block.SenderTestBlock;
 import com.neep.neepmeat.neepbus.block.VerticalGaugeBlock;
 import com.neep.neepmeat.neepbus.block.entity.LinearLeverBlockEntity;
 import com.neep.neepmeat.neepbus.block.entity.VerticalGaugeBlockEntity;
+import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.minecraft.block.Block;
 import net.minecraft.block.entity.BlockEntityType;
 

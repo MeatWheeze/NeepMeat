@@ -30,7 +30,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
 
-public class VerticalGaugeBlock extends BaseHorFacingBlock implements BlockEntityProvider, DataCable, NeepBusProvider
+public class VerticalGaugeBlock extends BaseHorFacingBlock implements BlockEntityProvider, DataCable, NeepBusProvider, GaugeProvider
 {
     public static final VoxelShape NORTH_SHAPE = Block.createCuboidShape(4, 1, 14, 12, 15, 16);
     public static final VoxelShape EAST_SHAPE = MiscUtil.rotateShapeY(NORTH_SHAPE, 90);

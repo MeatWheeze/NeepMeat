@@ -4,13 +4,16 @@ import com.neep.meatlib.blockentity.SyncableBlockEntity;
 import com.neep.neepmeat.neepbus.NeepBusConfig;
 import com.neep.neepmeat.neepbus.AbstractInputPort;
 import com.neep.neepmeat.neepbus.SimpleEntry;
+import com.neep.neepmeat.neepbus.block.GaugeProvider;
 import com.neep.neepmeat.neepbus.part.Indicator;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
+import org.jetbrains.annotations.Nullable;
 
-public class VerticalGaugeBlockEntity extends SyncableBlockEntity implements Indicator
+public class VerticalGaugeBlockEntity extends SyncableBlockEntity implements Indicator, GaugeBlockEntity
 {
     private int value;
     private int minValue = 0;
@@ -78,6 +81,13 @@ public class VerticalGaugeBlockEntity extends SyncableBlockEntity implements Ind
         return config;
     }
 
+    @Override
+    public @Nullable Text getName()
+    {
+        return null;
+    }
+
+    @Override
     public int getValue() { return value; }
 
     @Override

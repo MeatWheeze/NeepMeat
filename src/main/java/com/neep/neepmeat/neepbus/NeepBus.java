@@ -13,6 +13,11 @@ import java.util.Queue;
 
 public class NeepBus
 {
+    public static String formatValue(int value)
+    {
+        return String.valueOf(value);
+    }
+
     public static void updateImmediateNeighbours(World world, BlockPos pos, BlockState state)
     {
         BlockPos.Mutable mutable = pos.mutableCopy();
