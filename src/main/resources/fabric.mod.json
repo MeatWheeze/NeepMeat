@@ -92,7 +92,7 @@
       "neepmeat:workpiece",
       "neepmeat:compressed_air",
       "meatweapons:meatgun",
-      "neepbus:networking_tool"
+      "neepmeat:networking_tool"
     ]
   },
   "accessWidener" : "neepmeat.accesswidener"

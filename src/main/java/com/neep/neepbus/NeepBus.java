@@ -22,12 +22,13 @@ import net.minecraft.block.Block;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.item.Item;
 
-@RegisterMe(NeepBus.NAMESPACE)
+@RegisterMe(NeepBus.REGISTRY_NAMESPACE)
 public class NeepBus implements ModInitializer
 {
-    public static final String NAMESPACE = "neepbus";
+    // Use the same namespace so that the content will appear when @neepmeat is used in REI/EMI
+    public static final String REGISTRY_NAMESPACE = "neepmeat";
 
-    public static final RegistrationContext C = new RegistrationContext(NAMESPACE);
+    public static final RegistrationContext C = new RegistrationContext(REGISTRY_NAMESPACE);
 
     public static final MeatlibBlockSettings GAUGE_SETTINGS = MeatlibBlockSettings.copyOf(NMBlocks.MACHINE_SETTINGS).hardness(0.3f);
 

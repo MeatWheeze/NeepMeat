@@ -12,12 +12,12 @@ public class NeepBusComponents implements ItemComponentInitializer
 {
     public static final ComponentKey<NetworkingToolComponent> NETWORKING_TOOL =
             ComponentRegistry.getOrCreate(
-                    new Identifier(NeepBus.NAMESPACE, "networking_tool"),
+                    new Identifier(NeepBus.REGISTRY_NAMESPACE, "networking_tool"),
                     NetworkingToolComponent.class);
 
     @Override
     public void registerItemComponentFactories(@NotNull ItemComponentFactoryRegistry registry)
     {
-//        registry.register(NeepBus.NETWORKING_TOOL,
+        registry.register(NeepBus.NETWORKING_TOOL, NETWORKING_TOOL, NetworkingToolComponent::new);
     }
 }
