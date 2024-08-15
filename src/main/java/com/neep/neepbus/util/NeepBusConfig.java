@@ -15,8 +15,8 @@ public interface NeepBusConfig extends NbtSerialisable
 
     Map<String, NeepBusPort> getInputPorts();
 
-    List<? extends Entry> getInputs();
-    List<? extends Entry> getOutputs();
+    List<? extends ConfigEntry> getInputs();
+    List<? extends ConfigEntry> getOutputs();
 
     /**
      * To be called after input port changes have been made.
@@ -24,13 +24,6 @@ public interface NeepBusConfig extends NbtSerialisable
      * Override to emit a flood update through the cable network.
      */
     void applyChanges();
-
-    interface Entry
-    {
-        String getName();
-        String getAddress();
-        void setAddress(String address);
-    }
 
     NeepBusConfig EMPTY = new NeepBusConfig()
     {
@@ -41,13 +34,13 @@ public interface NeepBusConfig extends NbtSerialisable
         }
 
         @Override
-        public List<? extends Entry> getInputs()
+        public List<? extends ConfigEntry> getInputs()
         {
             return List.of();
         }
 
         @Override
-        public List<? extends Entry> getOutputs()
+        public List<? extends ConfigEntry> getOutputs()
         {
             return List.of();
         }

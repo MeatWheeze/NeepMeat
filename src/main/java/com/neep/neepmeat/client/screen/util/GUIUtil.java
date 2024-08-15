@@ -209,4 +209,9 @@ public interface GUIUtil
         bufferBuilder.vertex(matrix, (float) x0, (float) y0, (float) z).texture(u0, v0).next();
         BufferRenderer.drawWithGlobalProgram(bufferBuilder.end());
     }
+
+    static void fill(/*$ drawContext >>*/ DrawContext context, int x, int y, int x2, int y2, int col)
+    {
+        context.fill(x, y, x2, y2, col);
+    }
 }

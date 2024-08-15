@@ -21,7 +21,8 @@
     "KeyboardMixin",
     "MinecraftClientMixin",
     "MouseMixin",
-    "client.InGameHudMixin"
+    "client.InGameHudMixin",
+    "client.MinecraftClientAccessor"
   ],
   "injectors": {
     "defaultRequire": 1

@@ -4,10 +4,10 @@ import java.util.function.ObjIntConsumer;
 
 public class SimpleOutputPort
 {
-    private final NeepBusConfig.Entry entry;
+    private final ConfigEntry entry;
     private final ObjIntConsumer<String> sender;
 
-    public SimpleOutputPort(NeepBusConfig.Entry entry, ObjIntConsumer<String> sender)
+    public SimpleOutputPort(ConfigEntry entry, ObjIntConsumer<String> sender)
     {
         this.entry = entry;
         this.sender = sender;
@@ -24,7 +24,7 @@ public class SimpleOutputPort
         send((int) Math.round(data));
     }
 
-    public NeepBusConfig.Entry entry()
+    public ConfigEntry entry()
     {
         return entry;
     }

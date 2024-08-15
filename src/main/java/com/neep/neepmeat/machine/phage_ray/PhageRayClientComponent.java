@@ -65,9 +65,9 @@ public class PhageRayClientComponent implements ClientComponent
             }
         });
 
-        UseAttackCallback.DO_USE.register(client ->
+        UseAttackCallback.DO_USE.register((client, player) ->
         {
-            if (client.player.getVehicle() instanceof PhageRayEntity phageRay)
+            if (player.getVehicle() instanceof PhageRayEntity phageRay)
             {
                 return false;
             }

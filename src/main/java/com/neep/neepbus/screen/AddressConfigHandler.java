@@ -5,6 +5,7 @@ import com.neep.meatlib.api.network.ParamCodec;
 import com.neep.meatlib.api.network.RecordParamCodec;
 import com.neep.meatlib.network.ChannelManager;
 import com.neep.meatlib.screen.WidgetHandler;
+import com.neep.neepbus.util.ConfigEntry;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepbus.util.NeepBusConfig;
 import net.minecraft.entity.player.PlayerEntity;
@@ -111,7 +112,7 @@ public class AddressConfigHandler implements WidgetHandler
     // A simple container for a name and address that can be easily serialised
     public record SyncEntry(String name, String address)
     {
-        public static SyncEntry of(NeepBusConfig.Entry entry)
+        public static SyncEntry of(ConfigEntry entry)
         {
             return new SyncEntry(entry.getName(), entry.getAddress());
         }

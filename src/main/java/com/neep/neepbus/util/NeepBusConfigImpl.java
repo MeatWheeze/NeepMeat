@@ -25,7 +25,7 @@ public class NeepBusConfigImpl implements NeepBusConfig
     private final Runnable markDirty;
     private final Runnable applyChanges;
 
-    public NeepBusConfigImpl(List<Entry> inputs, List<Entry> outputs, List<AbstractInputPort> inputPorts,
+    public NeepBusConfigImpl(List<ConfigEntry> inputs, List<ConfigEntry> outputs, List<AbstractInputPort> inputPorts,
                              Runnable onOutputsChanged, Runnable markDirty, Runnable applyChanges)
     {
         this.inputs = inputs.stream().map(InputEntry::new).toList();
@@ -37,13 +37,13 @@ public class NeepBusConfigImpl implements NeepBusConfig
     }
 
     @Override
-    public List<? extends Entry> getInputs()
+    public List<? extends ConfigEntry> getInputs()
     {
         return inputs;
     }
 
     @Override
-    public List<? extends Entry> getOutputs()
+    public List<? extends ConfigEntry> getOutputs()
     {
         return outputs;
     }
@@ -119,11 +119,11 @@ public class NeepBusConfigImpl implements NeepBusConfig
         }
     }
 
-    private class InputEntry implements Entry
+    private class InputEntry implements ConfigEntry
     {
-        private final Entry entry;
+        private final ConfigEntry entry;
 
-        private InputEntry(Entry entry)
+        private InputEntry(ConfigEntry entry)
         {
             this.entry = entry;
         }
@@ -150,11 +150,11 @@ public class NeepBusConfigImpl implements NeepBusConfig
         }
     }
 
-    private class OutputEntry implements Entry
+    private class OutputEntry implements ConfigEntry
     {
-        private final Entry entry;
+        private final ConfigEntry entry;
 
-        private OutputEntry(Entry entry)
+        private OutputEntry(ConfigEntry entry)
         {
             this.entry = entry;
         }
@@ -183,8 +183,8 @@ public class NeepBusConfigImpl implements NeepBusConfig
     public static class Builder
     {
         protected final Runnable markDirty;
-        protected List<Entry> inputs = new ObjectArrayList<>();
-        protected List<Entry> outputs = new ObjectArrayList<>();
+        protected List<ConfigEntry> inputs = new ObjectArrayList<>();
+        protected List<ConfigEntry> outputs = new ObjectArrayList<>();
         protected List<AbstractInputPort> inputPorts = new ObjectArrayList<>();
         protected Runnable onOutputsChanged = () -> {};
         protected Runnable applyChanges = () -> {};
@@ -199,21 +199,21 @@ public class NeepBusConfigImpl implements NeepBusConfig
             return new NeepBusConfigImpl(inputs, outputs, inputPorts, onOutputsChanged, markDirty, applyChanges);
         }
 
-        public Builder inputs(List<Entry> inputs, List<AbstractInputPort> inputPorts)
+        public Builder inputs(List<ConfigEntry> inputs, List<AbstractInputPort> inputPorts)
         {
             this.inputs = inputs;
             this.inputPorts = inputPorts;
             return this;
         }
 
-        public Builder input(Entry input, AbstractInputPort inputPort)
+        public Builder input(ConfigEntry input, AbstractInputPort inputPort)
         {
             this.inputs.add(input);
             this.inputPorts.add(inputPort);
             return this;
         }
 
-        public Builder outputs(List<Entry> outputs)
+        public Builder outputs(List<ConfigEntry> outputs)
         {
             this.outputs = outputs;
             return this;
@@ -225,7 +225,7 @@ public class NeepBusConfigImpl implements NeepBusConfig
             return this;
         }
 
-        public Builder output(Entry output)
+        public Builder output(ConfigEntry output)
         {
             this.outputs.add(output);
             return this;

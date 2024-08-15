@@ -44,8 +44,8 @@ public class MWKeys
         KeyboardEvents.POST_INPUT.register(MWKeys::onKey);
 
         // Suppress use item and attack events when we are listening for key release events
-        UseAttackCallback.DO_USE.register(client -> !primaryHeld);
-        UseAttackCallback.DO_ATTACK.register(client -> !secondaryHeld);
+        UseAttackCallback.DO_USE.register((client, player) -> !primaryHeld);
+        UseAttackCallback.DO_ATTACK.register((client, player) -> !secondaryHeld);
 
 //        ClientTickEvents.END_CLIENT_TICK.register(client ->
 //        {

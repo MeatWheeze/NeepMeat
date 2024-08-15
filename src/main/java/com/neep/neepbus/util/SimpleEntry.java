@@ -1,6 +1,6 @@
 package com.neep.neepbus.util;
 
-public class SimpleEntry implements NeepBusConfig.Entry
+public class SimpleEntry implements ConfigEntry
 {
     private final String name;
     private String address;
