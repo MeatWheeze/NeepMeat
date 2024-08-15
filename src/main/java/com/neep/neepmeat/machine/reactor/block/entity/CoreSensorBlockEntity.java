@@ -2,18 +2,16 @@ package com.neep.neepmeat.machine.reactor.block.entity;
 
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
 import com.neep.neepbus.block.entity.ConfigProvider;
+import com.neep.neepbus.util.*;
 import com.neep.neepmeat.machine.reactor.ReceiverOrganismComponent;
-import com.neep.neepbus.util.CachingSender;
-import com.neep.neepbus.util.NeepBusConfig;
-import com.neep.neepbus.util.SimpleEntry;
-import com.neep.neepbus.util.SimpleOutputPort;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.util.math.BlockPos;
 
 public class CoreSensorBlockEntity extends SyncableBlockEntity implements ReceiverOrganismComponent, ConfigProvider
 {
-    private final CachingSender sender = new CachingSender(this::getWorld, getPos());
+//    private final CachingSender sender = new CachingSender(this::getWorld, getPos());
+    private final MultiCachingSender sender = new MultiCachingSender(this::getWorld, getPos(), s -> this.config.hasOutput(s));
 
     public final SimpleOutputPort organisation = new SimpleOutputPort(new SimpleEntry("Organisation"), sender::send);
     public final SimpleOutputPort incidentZoneRadius = new SimpleOutputPort(new SimpleEntry("Incident zone radius"), sender::send);
@@ -21,7 +19,7 @@ public class CoreSensorBlockEntity extends SyncableBlockEntity implements Receiv
     public final SimpleOutputPort storedExudate = new SimpleOutputPort(new SimpleEntry("Stored exudate"), sender::send);
     public final SimpleOutputPort cudEfficiency = new SimpleOutputPort(new SimpleEntry("Cud efficiency"), sender::send);
 
-    private final NeepBusConfig config = NeepBusConfig.builder(this::markDirty)
+    private final NeepBusConfigImpl config = NeepBusConfig.builder(this::markDirty)
             .outputs(organisation, incidentZoneRadius, exudateFlow, storedExudate, cudEfficiency)
             .build();
 

@@ -119,6 +119,11 @@ public class NeepBusConfigImpl implements NeepBusConfig
         }
     }
 
+    public boolean hasOutput(String address)
+    {
+        return outputs.stream().anyMatch(e -> e.getAddress().equals(address));
+    }
+
     private class InputEntry implements ConfigEntry
     {
         private final ConfigEntry entry;
