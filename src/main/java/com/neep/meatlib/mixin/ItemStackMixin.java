@@ -1,7 +1,7 @@
 package com.neep.meatlib.mixin;
 
 import com.neep.meatlib.attachment.itemstack.MeatItemStack;
-import com.neep.meatlib.client.api.event.AppendTooltipEvent;
+import com.neep.meatlib.client.event.AppendTooltipEvent;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;

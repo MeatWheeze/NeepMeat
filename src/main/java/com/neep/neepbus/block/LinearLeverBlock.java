@@ -3,6 +3,7 @@ package com.neep.neepbus.block;
 import com.neep.meatlib.item.ItemSettings;
 import com.neep.meatlib.registry.RegistrationContext;
 import com.neep.neepbus.NeepBus;
+import com.neep.neepbus.util.NeepBusConfig;
 import com.neep.neepbus.util.NeepBusPort;
 import com.neep.neepbus.screen.SimpleScreenHandlerFactory;
 import com.neep.neepbus.block.entity.LinearLeverBlockEntity;
@@ -142,16 +143,6 @@ public class LinearLeverBlock extends WallMountedBlock implements BlockEntityPro
     protected void appendProperties(StateManager.Builder<Block, BlockState> builder)
     {
         builder.add(FACE, FACING);
-    }
-
-    @Override
-    public Map<String, NeepBusPort> getPorts(World world, BlockPos pos, BlockState state)
-    {
-        if (world.getBlockEntity(pos) instanceof LinearLeverBlockEntity be)
-        {
-            return be.getPorts();
-        }
-        return NO_PORTS;
     }
 
     @Override

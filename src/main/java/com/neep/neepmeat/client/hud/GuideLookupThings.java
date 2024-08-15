@@ -1,12 +1,11 @@
 package com.neep.neepmeat.client.hud;
 
-import com.neep.meatlib.client.api.event.AppendTooltipEvent;
+import com.neep.meatlib.client.event.AppendTooltipEvent;
 import com.neep.meatlib.item.MeatlibItemExtension;
 import com.neep.neepmeat.client.screen.tablet.GuideMainScreen;
 import com.neep.neepmeat.datagen.tag.NMTags;
 import com.neep.neepmeat.guide.GuideNode;
 import com.neep.neepmeat.guide.GuideReloadListener;
-import com.neep.neepmeat.init.NMItems;
 import com.neep.neepmeat.item.ProjectorItem;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;

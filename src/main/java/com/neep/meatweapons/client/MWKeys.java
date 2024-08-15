@@ -1,7 +1,7 @@
 package com.neep.meatweapons.client;
 
 import com.neep.meatlib.api.event.KeyboardEvents;
-import com.neep.meatlib.client.api.event.UseAttackCallback;
+import com.neep.meatlib.client.event.UseAttackCallback;
 import com.neep.meatweapons.MeatWeapons;
 import com.neep.meatweapons.item.GunItem;
 import com.neep.meatweapons.network.MWAttackC2SPacket;

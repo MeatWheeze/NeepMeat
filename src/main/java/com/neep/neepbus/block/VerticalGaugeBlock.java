@@ -97,17 +97,6 @@ public class VerticalGaugeBlock extends BaseHorFacingBlock implements BlockEntit
     }
 
     @Override
-    public Map<String, NeepBusPort> getPorts(World world, BlockPos pos, BlockState state)
-    {
-        if (world.getBlockEntity(pos) instanceof VerticalGaugeBlockEntity be)
-        {
-            return be.getConfig().getInputPorts();
-        }
-
-        return NO_PORTS;
-    }
-
-    @Override
     public void networkChanged(World world, BlockPos pos, BlockPos whereChanged)
     {
 

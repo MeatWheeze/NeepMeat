@@ -1,4 +1,4 @@
-package com.neep.meatlib.client.api.event;
+package com.neep.meatlib.client.event;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.fabricmc.fabric.api.event.Event;

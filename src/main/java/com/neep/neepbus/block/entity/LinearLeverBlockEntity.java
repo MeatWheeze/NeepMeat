@@ -12,7 +12,7 @@ import net.minecraft.util.math.MathHelper;
 
 import java.util.Map;
 
-public class LinearLeverBlockEntity extends SyncableBlockEntity implements Slider
+public class LinearLeverBlockEntity extends SyncableBlockEntity implements Slider, ConfigProvider
 {
     private final CachingSender sender = new CachingSender(this::getWorld, getPos());
     private final SimpleOutputPort outputPort = new SimpleOutputPort(
@@ -85,16 +85,12 @@ public class LinearLeverBlockEntity extends SyncableBlockEntity implements Slide
         sync();
     }
 
-    public Map<String, NeepBusPort> getPorts()
-    {
-        return NeepBusProvider.NO_PORTS;
-    }
-
     public void updateNetwork()
     {
         sender.invalidate();
     }
 
+    @Override
     public NeepBusConfig getConfig()
     {
         return config;

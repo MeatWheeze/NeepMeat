@@ -1,4 +1,4 @@
-package com.neep.meatlib.client.api.event;
+package com.neep.meatlib.client.event;
 
 import net.fabricmc.fabric.api.event.Event;
 import net.fabricmc.fabric.api.event.EventFactory;

@@ -1,7 +1,7 @@
 package com.neep.neepmeat.machine.phage_ray;
 
 import com.neep.meatlib.api.event.KeyboardEvents;
-import com.neep.meatlib.client.api.event.UseAttackCallback;
+import com.neep.meatlib.client.event.UseAttackCallback;
 import com.neep.meatlib.util.ClientComponent;
 import com.neep.neepmeat.init.NMSounds;
 import net.fabricmc.api.EnvType;

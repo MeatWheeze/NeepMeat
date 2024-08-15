@@ -1,6 +1,7 @@
 package com.neep.neepmeat.machine.reactor.block.entity;
 
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
+import com.neep.neepbus.block.entity.ConfigProvider;
 import com.neep.neepmeat.machine.reactor.ReceiverOrganismComponent;
 import com.neep.neepbus.util.CachingSender;
 import com.neep.neepbus.util.NeepBusConfig;
@@ -10,7 +11,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.util.math.BlockPos;
 
-public class CoreSensorBlockEntity extends SyncableBlockEntity implements ReceiverOrganismComponent
+public class CoreSensorBlockEntity extends SyncableBlockEntity implements ReceiverOrganismComponent, ConfigProvider
 {
     private final CachingSender sender = new CachingSender(this::getWorld, getPos());
 
@@ -35,6 +36,7 @@ public class CoreSensorBlockEntity extends SyncableBlockEntity implements Receiv
         return isRemoved();
     }
 
+    @Override
     public NeepBusConfig getConfig()
     {
         return config;

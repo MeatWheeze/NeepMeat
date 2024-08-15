@@ -12,7 +12,7 @@ import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
 import org.jetbrains.annotations.Nullable;
 
-public class VerticalGaugeBlockEntity extends SyncableBlockEntity implements Indicator, GaugeBlockEntity
+public class VerticalGaugeBlockEntity extends SyncableBlockEntity implements Indicator, GaugeBlockEntity, ConfigProvider
 {
     private int value;
     private int minValue = 0;

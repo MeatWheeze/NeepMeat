@@ -20,7 +20,8 @@
     "ItemRendererMixin",
     "KeyboardMixin",
     "MinecraftClientMixin",
-    "MouseMixin"
+    "MouseMixin",
+    "client.InGameHudMixin"
   ],
   "injectors": {
     "defaultRequire": 1

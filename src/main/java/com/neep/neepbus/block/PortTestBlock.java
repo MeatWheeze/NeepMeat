@@ -4,6 +4,7 @@ import com.neep.meatlib.block.BaseBlock;
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
 import com.neep.meatlib.registry.RegistrationContext;
 import com.neep.neepbus.*;
+import com.neep.neepbus.block.entity.ConfigProvider;
 import com.neep.neepbus.screen.NeepBusConfigScreenHandler;
 import com.neep.neepbus.util.*;
 import com.neep.neepmeat.transport.api.pipe.DataCable;
@@ -33,17 +34,6 @@ public class PortTestBlock extends BaseBlock implements NeepBusProvider, DataCab
     public PortTestBlock(RegistrationContext ctx, Settings settings)
     {
         super(ctx, settings);
-    }
-
-    @Override
-    public Map<String, NeepBusPort> getPorts(World world, BlockPos pos, BlockState state)
-    {
-        if (world.getBlockEntity(pos) instanceof PortTestBlockEntity be)
-        {
-            return be.config.getInputPorts();
-        }
-
-        return NO_PORTS;
     }
 
     @Override
@@ -101,7 +91,7 @@ public class PortTestBlock extends BaseBlock implements NeepBusProvider, DataCab
         return NeepBus.PORT_TEST_BE.instantiate(pos, state);
     }
 
-    public static class PortTestBlockEntity extends SyncableBlockEntity
+    public static class PortTestBlockEntity extends SyncableBlockEntity implements ConfigProvider
     {
         private int counter;
 
@@ -159,6 +149,12 @@ public class PortTestBlock extends BaseBlock implements NeepBusProvider, DataCab
         {
             super.readNbt(nbt);
             this.config.readNbt(nbt.getCompound("config"));
+        }
+
+        @Override
+        public NeepBusConfig getConfig()
+        {
+            return config;
         }
     }
 }

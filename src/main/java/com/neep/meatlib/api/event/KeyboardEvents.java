@@ -28,5 +28,6 @@ public interface KeyboardEvents
                 }
             });
 
+
     void onKey(long window, int key, int scancode, int action, int modifiers);
 }
