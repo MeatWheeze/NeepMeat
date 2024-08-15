@@ -52,7 +52,7 @@ public class MeatgunClient
             });
         });
 
-        MeatgunNetwork.SEND_ANIMATION.receiver(MeatgunClient::receiveAnimation);
+        MeatgunNetwork.SEND_ANIMATION.receiver(EnvType.CLIENT, MeatgunClient::receiveAnimation);
 
         HudRenderCallback.EVENT.register((drawContext, tickDelta) ->
         {

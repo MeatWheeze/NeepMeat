@@ -4,51 +4,40 @@ import com.neep.meatlib.client.event.CrosshairRenderEvent;
 import com.neep.meatlib.client.event.ScrollEvents;
 import com.neep.meatlib.client.event.UseAttackCallback;
 import com.neep.neepbus.NeepBus;
-import com.neep.neepbus.NeepBusComponents;
 import com.neep.neepbus.block.NeepBusProvider;
-import com.neep.neepbus.component.NetworkingToolComponent;
+import com.neep.neepbus.network.NeepBusNetwork;
 import com.neep.neepbus.util.ConfigEntry;
 import com.neep.neepbus.util.NeepBusConfig;
 import com.neep.neepmeat.api.plc.PLCCols;
 import com.neep.neepmeat.client.screen.util.GUIUtil;
+import com.neep.neepmeat.init.NMItems;
 import com.neep.neepmeat.init.NMSounds;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
-import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderContext;
-import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.ShapeContext;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.render.Camera;
-import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.sound.PositionedSoundInstance;
 import net.minecraft.client.sound.SoundInstance;
 import net.minecraft.client.util.Window;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.nbt.NbtHelper;
 import net.minecraft.sound.SoundCategory;
+import net.minecraft.text.Text;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
-import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.shape.VoxelShape;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-import static com.neep.neepmeat.client.plc.PLCHudRenderer.drawCuboidShapeOutline;
-
 @Environment(EnvType.CLIENT)
 public class NetworkingToolClient
 {
-    @Nullable private static NeepBusConfig CONFIG;
+    @Nullable private static StoredConfig CONFIG;
 
     private static Mode mode = Mode.SENDER;
     @Nullable private static StoredAddress address;
@@ -57,8 +46,6 @@ public class NetworkingToolClient
 
     public static void init()
     {
-        WorldRenderEvents.BEFORE_BLOCK_OUTLINE.register(NetworkingToolClient::renderOutline);
-
         ClientTickEvents.END_CLIENT_TICK.register(client ->
         {
             if (client.world != null && client.player != null )
@@ -66,8 +53,7 @@ public class NetworkingToolClient
                 ItemStack mainStack = client.player.getMainHandStack();
                 if (mainStack.isOf(NeepBus.NETWORKING_TOOL))
                 {
-                    NetworkingToolComponent component = NeepBusComponents.NETWORKING_TOOL.getNullable(mainStack);
-                    tick(component, client);
+                    tick(client);
                 }
                 else
                     CONFIG = null;
@@ -82,8 +68,7 @@ public class NetworkingToolClient
                 ItemStack mainStack = client.player.getMainHandStack();
                 if (mainStack.isOf(NeepBus.NETWORKING_TOOL))
                 {
-                    NetworkingToolComponent component = NeepBusComponents.NETWORKING_TOOL.getNullable(mainStack);
-                    renderHud(component, drawContext, client, tickDelta);
+                    renderHud(drawContext, client, tickDelta);
                 }
             }
         });
@@ -97,7 +82,7 @@ public class NetworkingToolClient
             {
                 if (CONFIG != null)
                 {
-                    int newSelected = clampSelection(selected + (int) Math.round(amount));
+                    int newSelected = clampSelection(selected + (int) Math.round(amount), CONFIG.config());
                     if (newSelected != selected)
                     {
                         selected = newSelected;
@@ -113,12 +98,12 @@ public class NetworkingToolClient
 
         UseAttackCallback.DO_USE.register((client, player) ->
         {
-            if (override())
+            if (override() && player.getMainHandStack().isOf(NeepBus.NETWORKING_TOOL))
             {
                 if (CONFIG == null && address != null)
                     clear();
-                else
-                    configClick(client, CONFIG);
+                else if (CONFIG != null)
+                    configClick(client, CONFIG.blockName(), CONFIG.config());
 
                 UseAttackCallback.swingHand(client, Hand.MAIN_HAND);
 
@@ -127,7 +112,7 @@ public class NetworkingToolClient
             return true;
         });
 
-        CrosshairRenderEvent.EVENT.register(context -> override());
+        CrosshairRenderEvent.EVENT.register((context, player) -> override() && player.getMainHandStack().isOf(NeepBus.NETWORKING_TOOL));
     }
 
     private static void clear()
@@ -136,39 +121,54 @@ public class NetworkingToolClient
         address = null;
     }
 
-    private static void configClick(MinecraftClient client, NeepBusConfig config)
+    private static void configClick(MinecraftClient client, Text blockName, NeepBusConfig config)
     {
-        selected = clampSelection(selected);
+        selected = clampSelection(selected, config);
 
-        if (mode == Mode.SENDER)
+        if (address == null)
         {
-            var entries = config.getOutputs();
-            if (!entries.isEmpty())
+            if (mode == Mode.SENDER)
             {
-                ConfigEntry entry = config.getOutputs().get(selected);
-                address = new StoredAddress(entry);
-                mode = Mode.RECEIVER;
+                var entries = config.getOutputs();
+                if (!entries.isEmpty())
+                {
+                    ConfigEntry entry = config.getOutputs().get(selected);
+                    address = new StoredAddress(blockName, entry);
+                    mode = Mode.RECEIVER;
+
+                    client.getSoundManager().play(new PositionedSoundInstance(NMSounds.UI_BEEP, SoundCategory.PLAYERS,
+                            1, 1, SoundInstance.createRandom(),
+                            client.player.getX(), client.player.getY(), client.player.getZ()));
+                }
             }
+            // Add handling for RECEIVER
         }
-        else if (mode == Mode.RECEIVER)
+        else
         {
-            mode = Mode.SENDER;
-            address = null;
-
-            var entries = config.getInputs();
-            if (!entries.isEmpty())
+            if (mode == Mode.RECEIVER)
             {
-                ConfigEntry entry = config.getOutputs().get(selected);
+                var entries = config.getInputs();
+                if (!entries.isEmpty())
+                {
+                    if (client.crosshairTarget instanceof BlockHitResult blockHitResult)
+                    {
+                        NeepBusNetwork.NT_CONNECT.emitter(client.player)
+                                .send(blockHitResult.getBlockPos(), false, selected, address.address());
 
-                // Send packet
+                        client.getSoundManager().play(new PositionedSoundInstance(NMSounds.UI_BEEP, SoundCategory.PLAYERS,
+                                1, 1, SoundInstance.createRandom(),
+                                client.player.getX(), client.player.getY(), client.player.getZ()));
+                    }
 
-
-                mode = Mode.SENDER;
+                    mode = Mode.SENDER;
+                    address = null;
+                }
             }
+            // Add handling for SENDER
         }
     }
 
-    private static void renderHud(NetworkingToolComponent component, DrawContext context, MinecraftClient client, float tickDelta)
+    private static void renderHud(DrawContext context, MinecraftClient client, float tickDelta)
     {
         Window window = client.getWindow();
         int wWidth = window.getScaledWidth();
@@ -184,14 +184,17 @@ public class NetworkingToolClient
             int xStart = wWidth / 2 - entryWidth - 10;
             int yStart = (wHeight - entryStride) / 2;
             renderEntry(context, textRenderer, address, true, xStart, yStart, entryWidth, entryHeight);
+
+            renderHeader(context, textRenderer, address.blockName(), xStart, yStart - entryStride + 5, entryWidth, entryHeight);
         }
+
 
         if (address != null && CONFIG != null)
         {
             // Render right panel
             if (mode == Mode.RECEIVER)
             {
-                List<? extends ConfigEntry> inputs = CONFIG.getInputs();
+                List<? extends ConfigEntry> inputs = CONFIG.config().getInputs();
 
                 int idx = MathHelper.clamp(selected, 0, inputs.size() - 1);
 
@@ -199,12 +202,16 @@ public class NetworkingToolClient
                 int yStart = (wHeight - entryStride) / 2
                         + idx * entryStride;
 
-                for (int i = 0; i < inputs.size(); ++i)
+                int i = 0;
+                for (i = 0; i < inputs.size(); ++i)
                 {
                     int y = yStart - i * entryStride;
                     ConfigEntry entry = inputs.get(i);
                     renderEntry(context, textRenderer, entry, i == idx, xStart, y, entryWidth, entryHeight);
                 }
+
+                int labelY = yStart - i * entryStride + 5;
+                renderHeader(context, textRenderer, CONFIG.blockName(), xStart, labelY, entryWidth, entryHeight);
             }
         }
 
@@ -213,7 +220,7 @@ public class NetworkingToolClient
             // Render left panel
             if (mode == Mode.SENDER)
             {
-                List<? extends ConfigEntry> outputs = CONFIG.getOutputs();
+                List<? extends ConfigEntry> outputs = CONFIG.config().getOutputs();
 
                 int idx = MathHelper.clamp(selected, 0, outputs.size() - 1);
 
@@ -221,12 +228,16 @@ public class NetworkingToolClient
                 int yStart = (wHeight - entryStride) / 2
                         + idx * entryStride;
 
-                for (int i = 0; i < outputs.size(); ++i)
+                int i = 0;
+                for (i = 0; i < outputs.size(); ++i)
                 {
                     int y = yStart - i * entryStride;
                     ConfigEntry entry = outputs.get(i);
                     renderEntry(context, textRenderer, entry, i == idx, xStart, y, entryWidth, entryHeight);
                 }
+
+                int labelY = yStart - i * entryStride + 5;
+                renderHeader(context, textRenderer, CONFIG.blockName(), xStart, labelY, entryWidth, entryHeight);
             }
         }
 
@@ -254,26 +265,35 @@ public class NetworkingToolClient
         GUIUtil.drawText(context, textRenderer, address, x + w - addressWidth - 2, y + textRenderer.fontHeight + 2, PLCCols.TEXT.col, true);
     }
 
-    private static void tick(NetworkingToolComponent component, MinecraftClient client)
+    private static void renderHeader(DrawContext context, TextRenderer textRenderer, Text name, int x, int y, int w, int h)
+    {
+        GUIUtil.drawCenteredText(context, textRenderer, name,
+                x + w / 2f, y,
+                PLCCols.TEXT.col, true);
+
+        GUIUtil.drawHorizontalLine1(context, x, x + w, y + 10, PLCCols.BORDER.col);
+    }
+
+    private static void tick(MinecraftClient client)
     {
         updateConfig(client);
 
-        updateSelection(component);
+        updateSelection();
     }
 
-    private static void updateSelection(NetworkingToolComponent component)
+    private static void updateSelection()
     {
-        selected = clampSelection(selected);
+        selected = clampSelection(selected, CONFIG != null ? CONFIG.config : null);
     }
 
-    private static int clampSelection(int selected)
+    private static int clampSelection(int selected, NeepBusConfig config)
     {
-        if (CONFIG != null)
+        if (config != null)
         {
             return switch (mode)
             {
-                case SENDER -> MathHelper.clamp(selected, 0, CONFIG.getOutputs().size() - 1);
-                case RECEIVER -> MathHelper.clamp(selected, 0, CONFIG.getInputs().size() - 1);
+                case SENDER -> MathHelper.clamp(selected, 0, config.getOutputs().size() - 1);
+                case RECEIVER -> MathHelper.clamp(selected, 0, config.getInputs().size() - 1);
             };
         }
         return 0;
@@ -290,7 +310,7 @@ public class NetworkingToolClient
                 @Nullable NeepBusConfig config = provider.getConfig(client.world, pos, state);
                 if (config != null)
                 {
-                    CONFIG = config;
+                    CONFIG = new StoredConfig(state.getBlock().getName(), config);
                     return;
                 }
             }
@@ -298,36 +318,36 @@ public class NetworkingToolClient
         CONFIG = null;
     }
 
-    private static boolean renderOutline(WorldRenderContext context, @Nullable HitResult hitResult)
-    {
-        MinecraftClient client = MinecraftClient.getInstance();
-        Camera camera = client.gameRenderer.getCamera();
-
-        ItemStack stack = client.player.getMainHandStack();
-        if (stack.isOf(NeepBus.NETWORKING_TOOL))
-        {
-            NbtCompound nbt = stack.getSubNbt("networking");
-            if (nbt != null && nbt.contains("first"))
-            {
-                BlockPos first = NbtHelper.toBlockPos(nbt.getCompound("first"));
-
-                Vec3d camPos = camera.getPos();
-                BlockState targetState = client.world.getBlockState(first);
-                VoxelShape shape = targetState.getOutlineShape(client.world, first, ShapeContext.of(client.player));
-
-                drawCuboidShapeOutline(
-                        context.matrixStack(),
-                        context.consumers().getBuffer(RenderLayer.getLines()),
-                        shape,
-                        first.getX() - camPos.x,
-                        first.getY() - camPos.y,
-                        first.getZ() - camPos.z,
-                        1, 0.36f, 0.13f, 0.8f
-                );
-            }
-        }
-        return true;
-    }
+//    private static boolean renderOutline(WorldRenderContext context, @Nullable HitResult hitResult)
+//    {
+//        MinecraftClient client = MinecraftClient.getInstance();
+//        Camera camera = client.gameRenderer.getCamera();
+//
+//        ItemStack stack = client.player.getMainHandStack();
+//        if (stack.isOf(NeepBus.NETWORKING_TOOL))
+//        {
+//            NbtCompound nbt = stack.getSubNbt("networking");
+//            if (nbt != null && nbt.contains("first"))
+//            {
+//                BlockPos first = NbtHelper.toBlockPos(nbt.getCompound("first"));
+//
+//                Vec3d camPos = camera.getPos();
+//                BlockState targetState = client.world.getBlockState(first);
+//                VoxelShape shape = targetState.getOutlineShape(client.world, first, ShapeContext.of(client.player));
+//
+//                drawCuboidShapeOutline(
+//                        context.matrixStack(),
+//                        context.consumers().getBuffer(RenderLayer.getLines()),
+//                        shape,
+//                        first.getX() - camPos.x,
+//                        first.getY() - camPos.y,
+//                        first.getZ() - camPos.z,
+//                        1, 0.36f, 0.13f, 0.8f
+//                );
+//            }
+//        }
+//        return true;
+//    }
 
     public static boolean override()
     {
@@ -340,11 +360,16 @@ public class NetworkingToolClient
         RECEIVER
     }
 
-    public record StoredAddress(String name, String address) implements ConfigEntry
+    private record StoredConfig(Text blockName, NeepBusConfig config)
     {
-        public StoredAddress(ConfigEntry entry)
+
+    }
+
+    private record StoredAddress(Text blockName, String name, String address) implements ConfigEntry
+    {
+        public StoredAddress(Text blockName, ConfigEntry entry)
         {
-            this(entry.getName(), entry.getAddress());
+            this(blockName, entry.getName(), entry.getAddress());
         }
 
         @Override

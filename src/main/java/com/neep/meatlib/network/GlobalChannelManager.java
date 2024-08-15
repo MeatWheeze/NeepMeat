@@ -4,6 +4,7 @@ import com.neep.meatlib.MeatLib;
 import com.neep.meatlib.api.network.ChannelFormat;
 import com.neep.meatlib.client.ClientChannelSender;
 import com.neep.meatlib.client.GlobalClientChannelReceiver;
+import net.fabricmc.api.EnvType;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.entity.player.PlayerEntity;
@@ -55,9 +56,9 @@ public class GlobalChannelManager<T>
         return format.emitter(createSender(to));
     }
 
-    public void receiver(T listener)
+    public void receiver(EnvType envType, T listener)
     {
-        if (!MeatLib.isClient())
+        if (envType == EnvType.SERVER)
         {
             GlobalServerChannelReceiver.register(name, format, listener);
         }
@@ -67,20 +68,20 @@ public class GlobalChannelManager<T>
         }
     }
 
-    public void receiverHandler(ServerHandler<T> handler)
+    public void receiverHandler(EnvType envType, ReceiveHandler<T> handler)
     {
-        if (!MeatLib.isClient())
+        if (envType == EnvType.SERVER)
         {
             GlobalServerChannelReceiver.register(name, format, handler);
         }
         else
         {
-            throw new IllegalStateException("Cannot register server receiver on client");
+            GlobalClientChannelReceiver.register(name, format, handler);
         }
     }
 
-    public interface ServerHandler<T>
+    public interface ReceiveHandler<T>
     {
-        T receive(MinecraftServer server, ServerPlayerEntity player, ServerPlayNetworkHandler handler, PacketByteBuf buf, PacketSender responseSender);
+        T receive(PlayerEntity player, PacketByteBuf buf, PacketSender responseSender);
     }
 }

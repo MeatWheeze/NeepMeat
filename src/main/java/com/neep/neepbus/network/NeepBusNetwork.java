@@ -21,13 +21,6 @@ public class NeepBusNetwork
                     .param(ParamCodec.STRING)
                     .build());
 
-    public static void init()
-    {
-        NT_CONNECT.receiverHandler((server, player, handler, buf, responseSender) -> (pos, isOutput, entryIndex, address) ->
-        {
-
-        });
-    }
 
     @FunctionalInterface
     public interface NetworkingToolConnect

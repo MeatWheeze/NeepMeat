@@ -6,21 +6,28 @@ import com.neep.meatlib.item.MeatlibItemSettings;
 import com.neep.meatlib.item.TooltipSupplier;
 import com.neep.meatlib.registry.RegistrationContext;
 import com.neep.meatlib.registry.annotation.RegisterMe;
+import com.neep.neepbus.block.*;
+import com.neep.neepbus.block.entity.ConfigProvider;
+import com.neep.neepbus.block.entity.LinearLeverBlockEntity;
+import com.neep.neepbus.block.entity.VerticalGaugeBlockEntity;
+import com.neep.neepbus.item.NetworkingToolItem;
+import com.neep.neepbus.network.NeepBusNetwork;
+import com.neep.neepbus.util.ConfigEntry;
+import com.neep.neepbus.util.NeepBusConfig;
 import com.neep.neepmeat.NMItemGroups;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.init.NMBlocks;
 import com.neep.neepmeat.init.NMItems;
-import com.neep.neepbus.block.LinearLeverBlock;
-import com.neep.neepbus.block.PortTestBlock;
-import com.neep.neepbus.block.SenderTestBlock;
-import com.neep.neepbus.block.VerticalGaugeBlock;
-import com.neep.neepbus.block.entity.LinearLeverBlockEntity;
-import com.neep.neepbus.block.entity.VerticalGaugeBlockEntity;
-import com.neep.neepbus.item.NetworkingToolItem;
+import net.fabricmc.api.EnvType;
 import net.fabricmc.api.ModInitializer;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.item.Item;
+import net.minecraft.world.World;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.List;
 
 @RegisterMe(NeepBus.REGISTRY_NAMESPACE)
 public class NeepBus implements ModInitializer
@@ -53,5 +60,28 @@ public class NeepBus implements ModInitializer
         PORT_TEST_BE = NMBlockEntities.register("port_test", (p, s) -> new PortTestBlock.PortTestBlockEntity(PORT_TEST_BE, p, s), PORT_TEST);
 
         NeepBusScreenHandlers.init();
+
+        NeepBusNetwork.NT_CONNECT.receiverHandler(EnvType.SERVER, (player, buf, responseSender) ->
+        {
+           return (pos, isOutput, entryIndex, address) ->
+           {
+               World world = player.getWorld();
+               BlockState state = world.getBlockState(pos);
+               if (state.getBlock() instanceof NeepBusProvider provider)
+               {
+                   @Nullable NeepBusConfig config = provider.getConfig(world, pos, state);
+                   if (config != null)
+                   {
+                       List<? extends ConfigEntry> entries = isOutput ? config.getOutputs() : config.getInputs();
+
+                       if (entryIndex < entries.size())
+                       {
+                           entries.get(entryIndex).setAddress(address);
+                           config.applyChanges();
+                       }
+                   }
+               }
+           };
+       });
     }
 }

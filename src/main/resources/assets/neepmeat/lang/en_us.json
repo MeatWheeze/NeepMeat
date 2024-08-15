@@ -555,11 +555,7 @@
   "item.neepmeat.networking_tool": "Networking Tool",
   "item.neepmeat.dosimeter": "Enlightenment Dosimeter",
   "item.neepmeat.dosimeter.lore_0": "Determines the instantaneous dose of Enlightenment at the current position. Cannot determine the acute and chronic effects.",
-  "item.neepmeat.networking_tool.from": "Selected: %s %s %s",
-  "item.neepmeat.networking_tool.connected": "Connected %s %s %s to %s %s %s",
-  "item.neepmeat.networking_tool.lore_0": "Connects data ports together.",
-  "item.neepmeat.networking_tool.lore_1": "Right-click the sender block and then the",
-  "item.neepmeat.networking_tool.lore_2": "receiver block to set a connection.",
+  "item.neepmeat.networking_tool.lore_0": "Connects NEEPBus ports together.\nRight-click the sender block and scroll to choose the output port.\nRight-click the receiver block and scroll to choose the port.",
 
   "item.neepmeat.large_flywheel": "Flywheel",
   "item.neepmeat.stator": "Copper Stator",

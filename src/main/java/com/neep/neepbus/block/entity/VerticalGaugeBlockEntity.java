@@ -31,7 +31,7 @@ public class VerticalGaugeBlockEntity extends SyncableBlockEntity implements Ind
         }
     };
 
-    private final NeepBusConfig config = NeepBusConfig.builder(this::markDirty)
+    private final NeepBusConfig config = NeepBusConfig.builder(this::sync)
             .input(new SimpleEntry("Input"), inputPort)
             .applyChanges(this)
             .build();
@@ -46,8 +46,6 @@ public class VerticalGaugeBlockEntity extends SyncableBlockEntity implements Ind
     {
         super.writeNbt(nbt);
         toClientTag(nbt);
-
-        nbt.put("config", config.writeNbt(new NbtCompound()));
     }
 
     @Override
@@ -55,8 +53,6 @@ public class VerticalGaugeBlockEntity extends SyncableBlockEntity implements Ind
     {
         super.readNbt(nbt);
         fromClientTag(nbt);
-
-        this.config.readNbt(nbt.getCompound("config"));
     }
 
     @Override
@@ -65,6 +61,7 @@ public class VerticalGaugeBlockEntity extends SyncableBlockEntity implements Ind
         this.value = nbt.getInt("value");
         this.minValue = nbt.getInt("min_value");
         this.maxValue = nbt.getInt("max_value");
+        this.config.readNbt(nbt.getCompound("config"));
     }
 
     @Override
@@ -73,6 +70,7 @@ public class VerticalGaugeBlockEntity extends SyncableBlockEntity implements Ind
         nbt.putInt("value", value);
         nbt.putInt("min_value", minValue);
         nbt.putInt("max_value", maxValue);
+        nbt.put("config", config.writeNbt(new NbtCompound()));
     }
 
     public NeepBusConfig getConfig()

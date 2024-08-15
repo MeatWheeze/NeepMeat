@@ -12,9 +12,9 @@ public class GlobalServerChannelReceiver
                 format.receive(listener, buf, server));
     }
 
-    public static <T> void register(Identifier channelName, ChannelFormat<T> format, GlobalChannelManager.ServerHandler<T> serverHandler)
+    public static <T> void register(Identifier channelName, ChannelFormat<T> format, GlobalChannelManager.ReceiveHandler<T> receiveHandler)
     {
         ServerPlayNetworking.registerGlobalReceiver(channelName, (server, player, handler, buf, responseSender) ->
-                format.receive(serverHandler.receive(server, player, handler, buf, responseSender), buf, server));
+                format.receive(receiveHandler.receive(player, buf, responseSender), buf, server));
     }
 }
