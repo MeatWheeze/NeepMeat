@@ -1,7 +1,7 @@
 package com.neep.meatlib.client;
 
 import com.neep.meatlib.api.network.ChannelFormat;
-import com.neep.meatlib.network.Receiver;
+import com.neep.meatlib.network.GlobalChannelManager;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;

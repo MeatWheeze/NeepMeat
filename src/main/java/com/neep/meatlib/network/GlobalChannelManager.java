@@ -4,8 +4,12 @@ import com.neep.meatlib.MeatLib;
 import com.neep.meatlib.api.network.ChannelFormat;
 import com.neep.meatlib.client.ClientChannelSender;
 import com.neep.meatlib.client.GlobalClientChannelReceiver;
+import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.network.PacketByteBuf;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.network.ServerPlayNetworkHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
 
@@ -61,5 +65,22 @@ public class GlobalChannelManager<T>
         {
             GlobalClientChannelReceiver.register(name, format, listener);
         }
+    }
+
+    public void receiverHandler(ServerHandler<T> handler)
+    {
+        if (!MeatLib.isClient())
+        {
+            GlobalServerChannelReceiver.register(name, format, handler);
+        }
+        else
+        {
+            throw new IllegalStateException("Cannot register server receiver on client");
+        }
+    }
+
+    public interface ServerHandler<T>
+    {
+        T receive(MinecraftServer server, ServerPlayerEntity player, ServerPlayNetworkHandler handler, PacketByteBuf buf, PacketSender responseSender);
     }
 }
