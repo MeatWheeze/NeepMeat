@@ -1,7 +1,6 @@
 package com.neep.neepbus.block.entity;
 
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
-import com.neep.neepbus.block.NeepBusProvider;
 import com.neep.neepbus.part.Slider;
 import com.neep.neepbus.util.*;
 import net.minecraft.block.BlockState;
@@ -10,17 +9,17 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 
-import java.util.Map;
-
 public class LinearLeverBlockEntity extends SyncableBlockEntity implements Slider, ConfigProvider
 {
     private final CachingSender sender = new CachingSender(this::getWorld, getPos());
-    private final SimpleOutputPort outputPort = new SimpleOutputPort(
+
+    private final DirectReadPort outputPort = new DirectReadPort(
             new SimpleEntry("Output"),
+            this::getValue,
             sender::send);
 
     private final NeepBusConfig config = NeepBusConfig.builder(this::markDirty)
-            .output(outputPort.entry())
+            .output(outputPort.entry(), outputPort)
             .build();
 
     private int value = 0;
@@ -103,7 +102,7 @@ public class LinearLeverBlockEntity extends SyncableBlockEntity implements Slide
                 (large ? interval : interval / 10f),
                 1));
         value = MathHelper.clamp(value + increment, minValue, maxValue);
-        outputPort.send(value);
+        outputPort.send();
         sync();
     }
 

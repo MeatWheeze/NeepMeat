@@ -2,7 +2,8 @@ package com.neep.neepbus.block;
 
 import com.neep.neepbus.block.entity.ConfigProvider;
 import com.neep.neepbus.util.NeepBusConfig;
-import com.neep.neepbus.util.NeepBusPort;
+import com.neep.neepbus.util.PortMap;
+import com.neep.neepbus.util.WritePort;
 import net.minecraft.block.BlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -16,18 +17,18 @@ import java.util.Map;
  */
 public interface NeepBusProvider
 {
-    Map<String, NeepBusPort> NO_PORTS = Map.of();
+    PortMap NO_PORTS = PortMap.EMPTY;
 
 //    BlockApiLookup<NeepBusMember, Direction> LOOO = BlockApiLookup.get(
 //            new Identifier(NeepMeat.NAMESPACE, "neepbus_member"), NeepBusMember.class, Direction.class);
 
-    default Map<String, NeepBusPort> getPorts(World world, BlockPos pos, BlockState state)
+    default PortMap getPorts(World world, BlockPos pos, BlockState state)
     {
         NeepBusConfig config = getConfig(world, pos, state);
         if (config != null)
-            return config.getInputPorts();
+            return config.getPorts();
 
-        return NO_PORTS;
+        return PortMap.EMPTY;
     }
 
     @Nullable

@@ -2,7 +2,7 @@ package com.neep.neepbus.block.entity;
 
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
 import com.neep.neepbus.util.NeepBusConfig;
-import com.neep.neepbus.util.AbstractInputPort;
+import com.neep.neepbus.util.AbstractWritePort;
 import com.neep.neepbus.util.SimpleEntry;
 import com.neep.neepbus.part.Indicator;
 import net.minecraft.block.BlockState;
@@ -18,10 +18,10 @@ public class VerticalGaugeBlockEntity extends SyncableBlockEntity implements Ind
     private int minValue = 0;
     private int maxValue = 500;
 
-    private final AbstractInputPort inputPort = new AbstractInputPort()
+    private final AbstractWritePort inputPort = new AbstractWritePort()
     {
         @Override
-        public void receive(int data)
+        public void write(int data)
         {
             if (value != data)
             {

@@ -3,9 +3,10 @@ package com.neep.neepmeat.transport.block.energy_transport;
 import com.neep.meatlib.block.BaseFacingBlock;
 import com.neep.meatlib.item.ItemSettings;
 import com.neep.meatlib.registry.RegistrationContext;
+import com.neep.neepbus.util.PortMap;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.init.NMSounds;
-import com.neep.neepbus.util.NeepBusPort;
+import com.neep.neepbus.util.WritePort;
 import com.neep.neepbus.block.NeepBusProvider;
 import com.neep.neepmeat.transport.api.pipe.DataCable;
 import com.neep.neepmeat.transport.block.energy_transport.entity.VSCBlockEntity;
@@ -94,11 +95,11 @@ public class VSCBlock extends BaseFacingBlock implements BlockEntityProvider, Da
     }
 
     @Override
-    public Map<String, NeepBusPort> getPorts(World world, BlockPos pos, BlockState state)
+    public PortMap getPorts(World world, BlockPos pos, BlockState state)
     {
         if (world.getBlockEntity(pos) instanceof VSCBlockEntity be)
         {
-            return be.getConfig().getInputPorts();
+            return be.getConfig().getPorts();
         }
         return NO_PORTS;
     }

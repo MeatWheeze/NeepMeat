@@ -109,7 +109,8 @@ public class Instructions
     public static final InstructionProvider EMIT_REDSTONE = register("emit_redstone", new SimplerInstructionProvider(EmitRedstoneInstruction::new, (view, parsedSource, parser, scope) -> EmitRedstoneInstruction.parser(view, parsedSource, parser), Text.of("REMIT")));
     public static final InstructionProvider READ_REDSTONE = register("read_redstone", new SimplerInstructionProvider(ReadRedstoneInstruction::new, (view, parsedSource, parser, scope) -> ReadRedstoneInstruction.parser(view, parsedSource, parser), Text.of("RREAD")));
 
-    public static final InstructionProvider NEEPBUS_SEND = register("neepbus_send", new SimplerInstructionProvider(NeepBusSendInstruction::new, NeepBusSendInstruction::parser, Text.of("NBSEND")));
+    public static final InstructionProvider NEEPBUS_WRITE = register("neepbus_write", new SimplerInstructionProvider(NeepBusSendInstruction::new, NeepBusSendInstruction::parser, Text.of("NBWRITE")));
+    public static final InstructionProvider NEEPBUS_READ = register("neepbus_read", new SimplerInstructionProvider(NeepBusReadInstruction::new, NeepBusReadInstruction::parser, Text.of("NBREAD")));
 
     private static <T extends InstructionProvider> T register(String path, T provider)
     {

@@ -7,30 +7,31 @@ import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class NeepBusConfigImpl implements NeepBusConfig
 {
-    @Nullable private Map<String, NeepBusPort> portMap = null;
+    @Nullable private PortMap portMap = null;
 
     private final List<InputEntry> inputs;
     private final List<OutputEntry> outputs;
-    private final List<AbstractInputPort> inputPorts;
+
+    private final List<WritePort> writePorts;
+    private final List<ReadPort> readPorts;
 
     private final Runnable onOutputChanged;
     private final Runnable markDirty;
     private final Runnable applyChanges;
 
-    public NeepBusConfigImpl(List<ConfigEntry> inputs, List<ConfigEntry> outputs, List<AbstractInputPort> inputPorts,
-                             Runnable onOutputsChanged, Runnable markDirty, Runnable applyChanges)
+    public NeepBusConfigImpl(List<ConfigEntry> inputs, List<ConfigEntry> outputs, List<WritePort> writePorts,
+                             List<ReadPort> readPorts, Runnable onOutputsChanged, Runnable markDirty, Runnable applyChanges)
     {
         this.inputs = inputs.stream().map(InputEntry::new).toList();
         this.outputs = outputs.stream().map(OutputEntry::new).toList();
-        this.inputPorts = inputPorts;
+        this.writePorts = writePorts;
+        this.readPorts = readPorts;
         this.onOutputChanged = onOutputsChanged;
         this.markDirty = markDirty;
         this.applyChanges = applyChanges;
@@ -55,13 +56,16 @@ public class NeepBusConfigImpl implements NeepBusConfig
     }
 
     @Override
-    public Map<String, NeepBusPort> getInputPorts()
+    public PortMap getPorts()
     {
         if (portMap == null)
         {
-            portMap = IntStream.range(0, inputPorts.size())
-                    .boxed()
-                    .collect(Collectors.<Integer, String, NeepBusPort>toMap(i -> inputs.get(i).getAddress(), inputPorts::get));
+            portMap = new PortMap(
+                    IntStream.range(0, writePorts.size()).boxed()
+                    .collect(Collectors.<Integer, String, WritePort>toMap(i -> inputs.get(i).getAddress(), writePorts::get)),
+                    IntStream.range(0, readPorts.size()).boxed()
+                        .collect(Collectors.<Integer, String, ReadPort>toMap(i -> outputs.get(i).getAddress(), readPorts::get))
+            );
         }
 
         return portMap;
@@ -69,7 +73,7 @@ public class NeepBusConfigImpl implements NeepBusConfig
 
     private void onInputsChanged()
     {
-        inputPorts.forEach(AbstractInputPort::invalidateAddress);
+//        inputPorts.forEach(AbstractInputPort::invalidateAddress);
     }
 
     @Override
@@ -190,7 +194,8 @@ public class NeepBusConfigImpl implements NeepBusConfig
         protected final Runnable markDirty;
         protected List<ConfigEntry> inputs = new ObjectArrayList<>();
         protected List<ConfigEntry> outputs = new ObjectArrayList<>();
-        protected List<AbstractInputPort> inputPorts = new ObjectArrayList<>();
+        protected List<WritePort> writePorts = new ObjectArrayList<>();
+        protected List<ReadPort> readPorts = new ObjectArrayList<>();
         protected Runnable onOutputsChanged = () -> {};
         protected Runnable applyChanges = () -> {};
 
@@ -201,37 +206,43 @@ public class NeepBusConfigImpl implements NeepBusConfig
 
         public NeepBusConfigImpl build()
         {
-            return new NeepBusConfigImpl(inputs, outputs, inputPorts, onOutputsChanged, markDirty, applyChanges);
+            return new NeepBusConfigImpl(inputs, outputs, writePorts, readPorts, onOutputsChanged, markDirty, applyChanges);
         }
 
-        public Builder inputs(List<ConfigEntry> inputs, List<AbstractInputPort> inputPorts)
+        public Builder inputs(List<ConfigEntry> inputs, List<WritePort> inputPorts)
         {
             this.inputs = inputs;
-            this.inputPorts = inputPorts;
+            this.writePorts = inputPorts;
             return this;
         }
 
-        public Builder input(ConfigEntry input, AbstractInputPort inputPort)
+        public Builder input(ConfigEntry input, WritePort inputPort)
         {
             this.inputs.add(input);
-            this.inputPorts.add(inputPort);
+            this.writePorts.add(inputPort);
             return this;
         }
 
-        public Builder outputs(List<ConfigEntry> outputs)
+        public Builder outputs(List<ConfigEntry> outputs, List<ReadPort> readPorts)
         {
             this.outputs = outputs;
+            this.readPorts = readPorts;
             return this;
         }
 
-        public Builder outputs(SimpleOutputPort... ports)
+        public Builder outputs(SimpleReadPort... ports)
         {
-            Arrays.stream(ports).map(SimpleOutputPort::entry).forEach(outputs::add);
+            for (var p : ports)
+            {
+                readPorts.add(p);
+                outputs.add(p.entry());
+            }
             return this;
         }
 
-        public Builder output(ConfigEntry output)
+        public Builder output(ConfigEntry output, ReadPort readPort)
         {
+            this.readPorts.add(readPort);
             this.outputs.add(output);
             return this;
         }

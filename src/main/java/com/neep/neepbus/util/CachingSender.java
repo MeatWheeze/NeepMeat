@@ -22,7 +22,8 @@ public class CachingSender
 
     // Values can be null, empty, or full. Empty indicates that the search has already been run but the
     // target address is not present in the network.
-    private final Map<String, Set<NeepBusPort>> portCache = new HashMap<>();
+    private final Map<String, Set<WritePort>> writePortCache = new HashMap<>();
+    private final Map<String, Set<ReadPort>> readPortCache = new HashMap<>();
 
     public CachingSender(Supplier<World> world, BlockPos pos)
     {
@@ -32,36 +33,60 @@ public class CachingSender
 
     public void send(String address, int data)
     {
-        @Nullable Set<NeepBusPort> cached = portCache.get(address);
+        @Nullable Set<WritePort> cached = writePortCache.get(address);
         if (cached == null)
         {
-            Finder finder = new Finder(address);
+            Finder<WritePort> finder = new Finder<>(address, false);
             finder.queueBlock(pos);
             finder.loop(32);
 
             cached = new HashSet<>(finder.getResult().values());
-            cached.forEach(port -> port.addInvalidateListener(this::invalidate));
-            portCache.put(address, cached);
+//            cached.forEach(port -> port.addInvalidateListener(this::invalidate));
+            writePortCache.put(address, cached);
         }
 
         for (var port : cached)
         {
-            port.receive(data);
+            port.write(data);
         }
+    }
+
+    public int read(String address)
+    {
+        @Nullable Set<ReadPort> cached = readPortCache.get(address);
+        if (cached == null)
+        {
+            Finder<ReadPort> finder = new Finder<>(address, true);
+            finder.queueBlock(pos);
+            finder.loop(32);
+
+            cached = new HashSet<>(finder.getResult().values());
+//            cached.forEach(port -> port.addInvalidateListener(this::invalidate));
+            readPortCache.put(address, cached);
+        }
+
+        if (!cached.isEmpty())
+        {
+            return cached.iterator().next().read();
+        }
+
+        return 0;
     }
 
     public void invalidate()
     {
-        portCache.clear();
+        writePortCache.clear();
     }
 
-    private class Finder extends BFSGroupFinder<NeepBusPort>
+    private class Finder<T extends NeepBusPort> extends BFSGroupFinder<T>
     {
         private final String address;
+        private final boolean read;
 
-        public Finder(String address)
+        public Finder(String address, boolean read)
         {
             this.address = address;
+            this.read = read;
         }
 
         @Override
@@ -93,10 +118,11 @@ public class CachingSender
 
                         if (offsetState.getBlock() instanceof NeepBusProvider provider)
                         {
-                            NeepBusPort port = provider.getPorts(world, mutable, offsetState).get(address);
+                            NeepBusPort port = read ? provider.getPorts(world, mutable, offsetState).readPorts().get(address)
+                                    : provider.getPorts(world, mutable, offsetState).writePorts().get(address);
                             if (port != null)
                             {
-                                addResult(mutable, port);
+                                addResult(mutable, (T) port);
                             }
                         }
                     }

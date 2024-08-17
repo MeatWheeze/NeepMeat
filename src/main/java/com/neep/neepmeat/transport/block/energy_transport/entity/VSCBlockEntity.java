@@ -4,7 +4,7 @@ import com.neep.meatlib.blockentity.SyncableBlockEntity;
 import com.neep.neepmeat.api.processing.PowerUtils;
 import com.neep.neepmeat.api.storage.LazyBlockApiCache;
 import com.neep.neepbus.util.NeepBusConfig;
-import com.neep.neepbus.util.AbstractInputPort;
+import com.neep.neepbus.util.AbstractWritePort;
 import com.neep.neepbus.util.SimpleEntry;
 import com.neep.neepmeat.transport.api.pipe.AbstractBloodAcceptor;
 import com.neep.neepmeat.transport.api.pipe.BloodAcceptor;
@@ -28,10 +28,10 @@ import org.jetbrains.annotations.Nullable;
 
 public class VSCBlockEntity extends SyncableBlockEntity implements ExtendedScreenHandlerFactory
 {
-    private final AbstractInputPort inputPort = new AbstractInputPort()
+    private final AbstractWritePort inputPort = new AbstractWritePort()
     {
         @Override
-        public void receive(int data)
+        public void write(int data)
         {
 //            System.out.println(data);
             setDesiredPower(data);

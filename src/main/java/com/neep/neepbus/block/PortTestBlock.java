@@ -27,8 +27,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Map;
-
 public class PortTestBlock extends BaseBlock implements NeepBusProvider, DataCable, BlockEntityProvider
 {
     public PortTestBlock(RegistrationContext ctx, Settings settings)
@@ -95,21 +93,17 @@ public class PortTestBlock extends BaseBlock implements NeepBusProvider, DataCab
     {
         private int counter;
 
-        private final AbstractInputPort inputPort = new AbstractInputPort()
+        private final WritePort inputPort = data ->
         {
-            @Override
-            public void receive(int data)
+            for (PlayerEntity player : getWorld().getPlayers())
             {
-                for (PlayerEntity player : getWorld().getPlayers())
-                {
-                    player.sendMessage(Text.of(String.valueOf(data)), false);
-                }
+                player.sendMessage(Text.of(String.valueOf(data)), false);
             }
         };
 
         private final CachingSender sender = new CachingSender(this::getWorld, getPos());
 
-        private final SimpleOutputPort outputPort = new SimpleOutputPort(new SimpleEntry("brine"), sender::send);
+        private final DirectReadPort outputPort = new DirectReadPort(new SimpleEntry("brine"), () -> counter, sender::send);
 
 //        private final NeepBusConfig config = new NeepBusConfigImpl(
 //                List.of(new NeepBusConfig.SimpleEntry("ooer")),
@@ -121,14 +115,13 @@ public class PortTestBlock extends BaseBlock implements NeepBusProvider, DataCab
 
         private final NeepBusConfig config = NeepBusConfig.builder(this::markDirty)
                 .input(new SimpleEntry("ooer"), inputPort)
-                .output(outputPort.entry())
+                .output(outputPort.entry(), outputPort)
                 .applyChanges(this)
                 .build();
 
         public void send()
         {
-//            sender.get().send(config.
-            outputPort.send(counter);
+            outputPort.send();
             counter++;
         }
 

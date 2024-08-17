@@ -25,7 +25,7 @@ public class MultiCachingSender
     private final BlockPos pos;
     private final Predicate<String> addressPredicate;
 
-    @Nullable private Map<String, Set<NeepBusPort>> portCache;
+    @Nullable private Map<String, Set<WritePort>> portCache;
 
     public MultiCachingSender(Supplier<World> world, BlockPos pos, Predicate<String> addressPredicate)
     {
@@ -38,39 +38,43 @@ public class MultiCachingSender
     {
         if (portCache == null)
         {
-            Finder finder = new Finder();
+            Finder<WritePort> finder = new Finder<>(false);
             finder.queueBlock(pos);
             finder.loop(32);
 
             portCache = finder.result;
-            portCache.forEach((s, neepBusPorts) -> neepBusPorts.forEach(p -> p.addInvalidateListener(this::invalidate)));
+//            portCache.forEach((s, neepBusPorts) -> neepBusPorts.forEach(p -> p.addInvalidateListener(this::invalidate)));
         }
 
         // If an address is not in the map, a corresponding receiver was not found.
-        @Nullable Set<NeepBusPort> ports = portCache.get(address);
+        @Nullable Set<WritePort> ports = portCache.get(address);
         if (ports != null)
         {
             for (var port : portCache.get(address))
             {
-                port.receive(data);
+                port.write(data);
             }
         }
     }
+    
+    // TODO: read
 
     public void invalidate()
     {
         portCache = null;
     }
 
-    private class Finder extends BFSGroupFinder<NeepBusPort>
+    private class Finder<T extends NeepBusPort> extends BFSGroupFinder<T>
     {
-        private final Map<String, Set<NeepBusPort>> result = new HashMap<>();
+        private final boolean read;
+        private final Map<String, Set<T>> result = new HashMap<>();
 
-        public Finder()
+        public Finder(boolean read)
         {
+            this.read = read;
         }
 
-        protected void addResult(String address, NeepBusPort port)
+        protected void addResult(String address, T port)
         {
             result.computeIfAbsent(address, s -> new HashSet<>()).add(port);
         }
@@ -104,11 +108,22 @@ public class MultiCachingSender
 
                         if (offsetState.getBlock() instanceof NeepBusProvider provider)
                         {
-//                            NeepBusPort port = provider.getPorts(world, mutable, offsetState).get(address);
-                            for (var entry : provider.getPorts(world, mutable, offsetState).entrySet())
+                            // JAAAAAAAAAAAAANK
+                            if (read)
                             {
-                                if (addressPredicate.test(entry.getKey()))
-                                    addResult(entry.getKey(), entry.getValue());
+                                for (var entry : provider.getPorts(world, mutable, offsetState).readPorts().entrySet())
+                                {
+                                    if (addressPredicate.test(entry.getKey()))
+                                        addResult(entry.getKey(), (T) entry.getValue());
+                                }
+                            }
+                            else
+                            {
+                                for (var entry : provider.getPorts(world, mutable, offsetState).writePorts().entrySet())
+                                {
+                                    if (addressPredicate.test(entry.getKey()))
+                                        addResult(entry.getKey(), (T) entry.getValue());
+                                }
                             }
                         }
                     }

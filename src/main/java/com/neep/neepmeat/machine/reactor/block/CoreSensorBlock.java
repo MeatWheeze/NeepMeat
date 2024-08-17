@@ -2,11 +2,12 @@ package com.neep.neepmeat.machine.reactor.block;
 
 import com.neep.meatlib.block.BaseBlock;
 import com.neep.meatlib.registry.RegistrationContext;
+import com.neep.neepbus.util.PortMap;
 import com.neep.neepmeat.machine.reactor.ReceiverOrganismComponent;
 import com.neep.neepmeat.machine.reactor.ReceiverOrganismComponentProvider;
 import com.neep.neepmeat.machine.reactor.block.entity.CoreSensorBlockEntity;
 import com.neep.neepmeat.machine.reactor.IntrusionReactor;
-import com.neep.neepbus.util.NeepBusPort;
+import com.neep.neepbus.util.WritePort;
 import com.neep.neepbus.block.NeepBusProvider;
 import com.neep.neepbus.screen.NeepBusConfigScreenHandler;
 import com.neep.neepmeat.transport.api.pipe.DataCable;
@@ -50,11 +51,11 @@ public class CoreSensorBlock extends BaseBlock implements BlockEntityProvider, R
     }
 
     @Override
-    public Map<String, NeepBusPort> getPorts(World world, BlockPos pos, BlockState state)
+    public PortMap getPorts(World world, BlockPos pos, BlockState state)
     {
         if (world.getBlockEntity(pos) instanceof CoreSensorBlockEntity be)
         {
-            return be.getConfig().getInputPorts();
+            return be.getConfig().getPorts();
         }
         return NO_PORTS;
     }

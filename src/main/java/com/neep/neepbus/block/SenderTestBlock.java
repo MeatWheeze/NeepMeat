@@ -5,7 +5,8 @@ import com.neep.meatlib.blockentity.SyncableBlockEntity;
 import com.neep.meatlib.registry.RegistrationContext;
 import com.neep.neepbus.util.CachingSender;
 import com.neep.neepbus.NeepBus;
-import com.neep.neepbus.util.NeepBusPort;
+import com.neep.neepbus.util.PortMap;
+import com.neep.neepbus.util.WritePort;
 import com.neep.neepmeat.transport.api.pipe.DataCable;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
@@ -45,7 +46,7 @@ public class SenderTestBlock extends BaseBlock implements BlockEntityProvider, D
     }
 
     @Override
-    public Map<String, NeepBusPort> getPorts(World world, BlockPos pos, BlockState state)
+    public PortMap getPorts(World world, BlockPos pos, BlockState state)
     {
         return NO_PORTS;
     }

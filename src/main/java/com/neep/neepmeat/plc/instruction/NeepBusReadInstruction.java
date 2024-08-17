@@ -16,16 +16,16 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Supplier;
 
-public class NeepBusSendInstruction implements Instruction
+public class NeepBusReadInstruction implements Instruction
 {
     private final String address;
 
-    public NeepBusSendInstruction(Supplier<World> worldSupplier, NbtCompound nbt)
+    public NeepBusReadInstruction(Supplier<World> world, NbtCompound nbt)
     {
         this(nbt.getString("address"));
     }
 
-    public NeepBusSendInstruction(String address)
+    public NeepBusReadInstruction(String address)
     {
         this.address = address;
     }
@@ -44,7 +44,8 @@ public class NeepBusSendInstruction implements Instruction
         {
             if (p instanceof PLCBlockEntity be)
             {
-                be.getSender().send(address, p.variableStack().popInt());
+                int read = be.getSender().read(address);
+                be.variableStack().push(read);
             }
         }), PLC::advanceCounter);
     }
@@ -52,7 +53,7 @@ public class NeepBusSendInstruction implements Instruction
     @Override
     public @NotNull InstructionProvider getProvider()
     {
-        return Instructions.NEEPBUS_WRITE;
+        return Instructions.NEEPBUS_READ;
     }
 
     public static ParsedInstruction parser(TokenView view, ParsedSource parsedSource, Parser parser, @Nullable String s) throws NeepASM.ParseException
@@ -63,7 +64,6 @@ public class NeepBusSendInstruction implements Instruction
 
         parser.assureLineEnd(view);
 
-        return (world, parsedSource1, program) ->
-                program.addBack(new NeepBusSendInstruction(address));
+        return (world, parsedSource1, program) -> program.addBack(new NeepBusReadInstruction(address));
     }
 }

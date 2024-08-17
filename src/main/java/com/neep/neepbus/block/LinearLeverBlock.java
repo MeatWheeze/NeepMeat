@@ -3,8 +3,6 @@ package com.neep.neepbus.block;
 import com.neep.meatlib.item.ItemSettings;
 import com.neep.meatlib.registry.RegistrationContext;
 import com.neep.neepbus.NeepBus;
-import com.neep.neepbus.util.NeepBusConfig;
-import com.neep.neepbus.util.NeepBusPort;
 import com.neep.neepbus.screen.SimpleScreenHandlerFactory;
 import com.neep.neepbus.block.entity.LinearLeverBlockEntity;
 import com.neep.neepbus.screen.SliderScreenHandler;
@@ -25,8 +23,6 @@ import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldView;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.Map;
 
 public class LinearLeverBlock extends WallMountedBlock implements BlockEntityProvider, NeepBusProvider, DataCable
 {

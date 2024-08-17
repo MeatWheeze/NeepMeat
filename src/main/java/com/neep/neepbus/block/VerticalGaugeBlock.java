@@ -4,7 +4,6 @@ import com.neep.meatlib.block.BaseHorFacingBlock;
 import com.neep.meatlib.item.ItemSettings;
 import com.neep.meatlib.registry.RegistrationContext;
 import com.neep.neepbus.NeepBus;
-import com.neep.neepbus.util.NeepBusPort;
 import com.neep.neepbus.block.entity.VerticalGaugeBlockEntity;
 import com.neep.neepbus.screen.NeepBusRangeConfigScreenHandler;
 import com.neep.neepmeat.transport.api.pipe.DataCable;
@@ -25,8 +24,6 @@ import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.Map;
 
 public class VerticalGaugeBlock extends BaseHorFacingBlock implements BlockEntityProvider, DataCable, NeepBusProvider, GaugeProvider
 {

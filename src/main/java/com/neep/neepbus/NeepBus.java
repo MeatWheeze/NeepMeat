@@ -61,27 +61,24 @@ public class NeepBus implements ModInitializer
 
         NeepBusScreenHandlers.init();
 
-        NeepBusNetwork.NT_CONNECT.receiverHandler(EnvType.SERVER, (player, buf, responseSender) ->
+        NeepBusNetwork.NT_CONNECT.receiverHandler(EnvType.SERVER, (player, buf, responseSender) -> (pos, isOutput, entryIndex, address) ->
         {
-           return (pos, isOutput, entryIndex, address) ->
-           {
-               World world = player.getWorld();
-               BlockState state = world.getBlockState(pos);
-               if (state.getBlock() instanceof NeepBusProvider provider)
-               {
-                   @Nullable NeepBusConfig config = provider.getConfig(world, pos, state);
-                   if (config != null)
-                   {
-                       List<? extends ConfigEntry> entries = isOutput ? config.getOutputs() : config.getInputs();
+            World world = player.getWorld();
+            BlockState state = world.getBlockState(pos);
+            if (state.getBlock() instanceof NeepBusProvider provider)
+            {
+                @Nullable NeepBusConfig config = provider.getConfig(world, pos, state);
+                if (config != null)
+                {
+                    List<? extends ConfigEntry> entries = isOutput ? config.getOutputs() : config.getInputs();
 
-                       if (entryIndex < entries.size())
-                       {
-                           entries.get(entryIndex).setAddress(address);
-                           config.applyChanges();
-                       }
-                   }
-               }
-           };
-       });
+                    if (entryIndex < entries.size())
+                    {
+                        entries.get(entryIndex).setAddress(address);
+                        config.applyChanges();
+                    }
+                }
+            }
+        });
     }
 }

@@ -76,7 +76,8 @@ public class InstructionAttributes
         register(Instructions.EMIT_REDSTONE, Category.REDSTONE);
         register(Instructions.READ_REDSTONE, Category.REDSTONE);
 
-        register(Instructions.NEEPBUS_SEND, Category.NEEPBUS);
+        register(Instructions.NEEPBUS_WRITE, Category.NEEPBUS);
+        register(Instructions.NEEPBUS_READ, Category.NEEPBUS);
 
         register(Instructions.REQUEST, Category.ROUTING);
         register(Instructions.ROUTE, Category.ROUTING);

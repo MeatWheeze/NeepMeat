@@ -3,6 +3,7 @@ package com.neep.neepbus.util;
 import com.neep.meatlib.util.NbtSerialisable;
 import net.minecraft.nbt.NbtCompound;
 
+import javax.sound.sampled.Port;
 import java.util.List;
 import java.util.Map;
 
@@ -13,7 +14,7 @@ public interface NeepBusConfig extends NbtSerialisable
         return new NeepBusConfigImpl.Builder(markDirty);
     }
 
-    Map<String, NeepBusPort> getInputPorts();
+    PortMap getPorts();
 
     List<? extends ConfigEntry> getInputs();
     List<? extends ConfigEntry> getOutputs();
@@ -28,9 +29,9 @@ public interface NeepBusConfig extends NbtSerialisable
     NeepBusConfig EMPTY = new NeepBusConfig()
     {
         @Override
-        public Map<String, NeepBusPort> getInputPorts()
+        public PortMap getPorts()
         {
-            return Map.of();
+            return PortMap.EMPTY;
         }
 
         @Override
