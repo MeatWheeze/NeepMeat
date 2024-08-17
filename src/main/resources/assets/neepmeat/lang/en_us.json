@@ -740,6 +740,7 @@
   "instruction.neepmeat.call.desc": "Pushes the current instruction address to the call stack and jumps the given label. Use a function instead of this.",
   "instruction.neepmeat.push.desc": "Pushes the given immediate variable to the stack.",
   "instruction.neepmeat.pop.desc": "Removes the latest entry from the stack.",
+  "instruction.neepmeat.swap.desc": "Swaps the order of the top two stack entries.",
   "instruction.neepmeat.dup.desc": "Duplicates the latest entry on the stack.",
   "instruction.neepmeat.delay.desc": "Waits for the specified number of ticks.",
   "instruction.neepmeat.eq.desc": "Pops and checks the last two stack entries for equality. .",

@@ -41,6 +41,7 @@ public class Instructions
     public static final SimplerInstructionProvider CALL = register("call", new SimplerInstructionProvider(CallInstruction::new, new CallInstructionParser(), Text.of("CALL")));
     public static final SimplerInstructionProvider PUSH = register("push", new SimplerInstructionProvider(PushInstruction::new, new PushInstruction.Parser(), Text.of("PUSH")));
     public static final SimplerInstructionProvider POP = register("pop", new SimplerInstructionProvider(PopInstruction::new, parseNoArguments(PopInstruction::new), Text.of("POP")));
+    public static final SimplerInstructionProvider SWAP = register("swap", new SimplerInstructionProvider(SwapInstruction::new, parseNoArguments(SwapInstruction::new), Text.of("SWP")));
     public static final SimplerInstructionProvider DUP = register("dup", new SimplerInstructionProvider(DupInstruction::new, parseNoArguments(DupInstruction::new), Text.of("DUP")));
 
     public static final SimplerInstructionProvider DELAY = register("delay", new SimplerInstructionProvider(DelayInstruction::new, new DelayInstruction.Parse(), Text.of("DELAY")));
@@ -57,7 +58,7 @@ public class Instructions
     public static final SimplerInstructionProvider ADD = registeryBinary("add", () -> Instructions.SUB, Integer::sum);
     public static final SimplerInstructionProvider SUB = registeryBinary("sub", () -> Instructions.SUB, (f, l) -> f - l);
     public static final SimplerInstructionProvider MUL = registeryBinary("mul", () -> Instructions.MUL, (f, l) -> f * l);
-    public static final SimplerInstructionProvider DIV = registeryBinary("div", () -> Instructions.DIV, (f, l) -> f / l);
+    public static final SimplerInstructionProvider DIV = registeryBinary("div", () -> Instructions.DIV, (f, l) -> l != 0 ? f / l : (Integer.signum(l) * Integer.signum(f) * Integer.MAX_VALUE));
 
     public static final SimplerInstructionProvider NOT = registeryUnary("not", () -> Instructions.NOT, (l) -> ~l);
     public static final SimplerInstructionProvider AND = registeryBinary("and", () -> Instructions.AND, (f, l) -> f & l);

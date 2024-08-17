@@ -37,6 +37,7 @@ public class InstructionAttributes
         register(Instructions.PUSH, Category.VARIABLE);
         register(Instructions.POP, Category.VARIABLE);
         register(Instructions.DUP, Category.VARIABLE);
+        register(Instructions.SWAP, Category.VARIABLE);
         register(Instructions.DELAY, Category.CONTROL);
         register(Instructions.EQ, Category.COMPARISON);
         register(Instructions.LT, Category.COMPARISON);
