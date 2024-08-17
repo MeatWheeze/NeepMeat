@@ -130,15 +130,15 @@ public abstract class SimplePipeVertex extends SnapshotParticipant<ResourceAmoun
         return System.identityHashCode(this);
     }
 
-    public void putAdjacent(Direction direction, PipeVertex vertex)
-    {
-        adjacentVertices[direction.ordinal()] = vertex;
-    }
-
-    public PipeVertex getAdjacent(Direction direction)
-    {
-        return getAdjacent(direction.ordinal());
-    }
+//    public void putAdjacent(Direction direction, PipeVertex vertex)
+//    {
+//        adjacentVertices[direction.ordinal()] = vertex;
+//    }
+//
+//    public PipeVertex getAdjacent(Direction direction)
+//    {
+//        return getAdjacent(direction.ordinal());
+//    }
 
     public PipeVertex getAdjacent(int dir)
     {

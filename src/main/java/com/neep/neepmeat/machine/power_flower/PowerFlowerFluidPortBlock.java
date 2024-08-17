@@ -23,6 +23,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Objects;
+
 public class PowerFlowerFluidPortBlock extends BaseBlock implements BlockEntityProvider, PowerFlower
 {
     public PowerFlowerFluidPortBlock(RegistrationContext ctx, ItemSettings block, Settings settings)
@@ -116,8 +118,11 @@ public class PowerFlowerFluidPortBlock extends BaseBlock implements BlockEntityP
 
         public void setController(BlockPos controller)
         {
-            this.controllerPos = controller;
-            world.updateNeighbors(getPos(), getCachedState().getBlock());
+            if (!Objects.equals(this.controllerPos, controller))
+            {
+                this.controllerPos = controller;
+                world.updateNeighbors(getPos(), getCachedState().getBlock());
+            }
         }
     }
 }

@@ -14,7 +14,8 @@
     "PlayerEntityMixin",
     "PlayerMangerMixin",
     "RecipeManagerAccessor",
-    "ServerEntityManagerMixin"
+    "ServerEntityManagerMixin",
+    "WorldChunkMixin"
   ],
   "client": [
     "ItemRendererMixin",

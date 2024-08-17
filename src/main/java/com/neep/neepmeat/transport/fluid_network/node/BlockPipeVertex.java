@@ -32,12 +32,24 @@ public class BlockPipeVertex extends SimplePipeVertex implements NbtSerialisable
     protected Long[] queuedPositions = null;
     protected boolean[] queuedNodes = null;
 
+    // Cache to avoid performing stupid loops every tick. Set to null to invalidate.
+    // Invalidate if:
+    // - Nodes change
+    // - Edges change
+    // - BlockState changes
+    protected Boolean canSimplify = null;
+
     public BlockPipeVertex(FluidPipeBlockEntity<?> fluidPipeBlockEntity)
     {
         super(fluidPipeBlockEntity.getPos().asLong());
         this.parent = fluidPipeBlockEntity;
         setHeight(fluidPipeBlockEntity.getPos().getY());
         components.size(6);
+    }
+
+    public void invalidateCanSimplify()
+    {
+        canSimplify = null;
     }
 
     public boolean canSimplify(FluidPipe pipe, BlockState state)
@@ -48,8 +60,12 @@ public class BlockPipeVertex extends SimplePipeVertex implements NbtSerialisable
     @Override
     public boolean canSimplify()
     {
-        return canSimplify((FluidPipe) parent.getCachedState().getBlock(), parent.getCachedState());
-//        return super.canSimplify() && numNodes() == 0 && ((FluidPipe) parent.getCachedState().getBlock()).countConnections(parent.getCachedState()) <= 2;
+        if (canSimplify == null)
+        {
+            canSimplify = canSimplify((FluidPipe) parent.getCachedState().getBlock(), parent.getCachedState());
+        }
+
+        return canSimplify;
     }
 
     @Override
@@ -63,6 +79,7 @@ public class BlockPipeVertex extends SimplePipeVertex implements NbtSerialisable
     {
         super.setAdjVertex(dir, vertex);
         parent.markDirty();
+        invalidateCanSimplify();
     }
 
     public int numNodes()
@@ -91,6 +108,8 @@ public class BlockPipeVertex extends SimplePipeVertex implements NbtSerialisable
                 }
             }
         }
+
+        invalidateCanSimplify();
     }
 
     protected float getHeight(int dir)
@@ -431,6 +450,8 @@ public class BlockPipeVertex extends SimplePipeVertex implements NbtSerialisable
                 }
             }
             queuedNodes = null;
+
+            invalidateCanSimplify();
         }
     }
 }

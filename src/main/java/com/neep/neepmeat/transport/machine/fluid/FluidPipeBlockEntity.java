@@ -224,8 +224,14 @@ public class FluidPipeBlockEntity<T extends PipeVertex & NbtSerialisable> extend
     @Override
     public void setCachedState(BlockState state)
     {
-//        markReplaced();
         super.setCachedState(state);
+
+        // Uuuuuuugh
+        if (vertex instanceof BlockPipeVertex blockPipeVertex)
+        {
+            // But it's for optimisation!
+            blockPipeVertex.invalidateCanSimplify();
+        }
     }
 
     @Override
