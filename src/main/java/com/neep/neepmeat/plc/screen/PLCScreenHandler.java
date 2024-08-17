@@ -199,7 +199,10 @@ public class PLCScreenHandler extends ScreenHandler
             case COMPILE_RUN ->
             {
                 if (plc.getProgramEditor().compile())
+                {
+                    plc.hardStop();
                     plc.runProgram(plc.getProgramEditor().getProgram());
+                }
             }
         }
     }

@@ -76,6 +76,7 @@ public class CachingSender
     public void invalidate()
     {
         writePortCache.clear();
+        readPortCache.clear();
     }
 
     private class Finder<T extends NeepBusPort> extends BFSGroupFinder<T>

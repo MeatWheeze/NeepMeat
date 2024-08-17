@@ -71,11 +71,6 @@ public class NeepBusConfigImpl implements NeepBusConfig
         return portMap;
     }
 
-    private void onInputsChanged()
-    {
-//        inputPorts.forEach(AbstractInputPort::invalidateAddress);
-    }
-
     @Override
     public NbtCompound writeNbt(NbtCompound nbt)
     {
@@ -154,7 +149,6 @@ public class NeepBusConfigImpl implements NeepBusConfig
         {
             entry.setAddress(address);
             portMap = null;
-            onInputsChanged();
             markDirty.run();
         }
     }
@@ -185,6 +179,7 @@ public class NeepBusConfigImpl implements NeepBusConfig
         {
             entry.setAddress(address);
             onOutputChanged.run();
+            portMap = null;
             markDirty.run();
         }
     }
