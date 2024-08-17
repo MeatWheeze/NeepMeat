@@ -71,9 +71,12 @@ public class InstructionAttributes
         register(Instructions.MOVE, Category.MANUFACTURE);
         register(Instructions.IMPLANT, Category.MANUFACTURE);
         register(Instructions.INJECT, Category.MANUFACTURE);
+
         register(Instructions.WAIT_REDSTONE, Category.REDSTONE);
         register(Instructions.EMIT_REDSTONE, Category.REDSTONE);
         register(Instructions.READ_REDSTONE, Category.REDSTONE);
+
+        register(Instructions.NEEPBUS_SEND, Category.NEEPBUS);
 
         register(Instructions.REQUEST, Category.ROUTING);
         register(Instructions.ROUTE, Category.ROUTING);
@@ -123,6 +126,7 @@ public class InstructionAttributes
         CONTROL(Text.translatable("category.neepmeat.instruction.control")),
         VARIABLE(Text.translatable("category.neepmeat.instruction.variable")),
         REDSTONE(Text.translatable("category.neepmeat.instruction.redstone")),
+        NEEPBUS(Text.translatable("category.neepmeat.instruction.neepbus")),
         ROUTING(Text.translatable("category.neepmeat.instruction.routing")),
         MISC(Text.translatable("category.neepmeat.instruction.misc"));
 

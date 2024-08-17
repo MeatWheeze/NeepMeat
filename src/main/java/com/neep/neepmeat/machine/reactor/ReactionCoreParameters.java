@@ -1,6 +1,5 @@
 package com.neep.neepmeat.machine.reactor;
 
-import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.machine.reactor.block.entity.CoreSensorBlockEntity;
 import net.minecraft.util.math.MathHelper;
 
@@ -33,8 +32,8 @@ public class ReactionCoreParameters
         else
             cudEfficiency = ke * MathHelper.clamp(organisationFlow, 0, maxOrganisation) / maxOrganisation;
 
-        NeepMeat.LOGGER.info("Organisation {}, Cud efficiency {}, Exudate mass flow {}, Stored exudate {}, Incident zone radius {}",
-                organisation, cudEfficiency, exudateMassFlow, storedExudate, incidentZoneRadius);
+//        NeepMeat.LOGGER.info("Organisation {}, Cud efficiency {}, Exudate mass flow {}, Stored exudate {}, Incident zone radius {}",
+//                organisation, cudEfficiency, exudateMassFlow, storedExudate, incidentZoneRadius);
 
         if (organisation == 0)
         {

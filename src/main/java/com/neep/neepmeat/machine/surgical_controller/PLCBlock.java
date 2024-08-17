@@ -3,6 +3,7 @@ package com.neep.neepmeat.machine.surgical_controller;
 import com.neep.meatlib.block.BaseHorFacingBlock;
 import com.neep.meatlib.item.ItemSettings;
 import com.neep.meatlib.registry.RegistrationContext;
+import com.neep.neepbus.block.NeepBusProvider;
 import com.neep.neepmeat.plc.PLCBlocks;
 import com.neep.neepmeat.plc.block.entity.PLCBlockEntity;
 import com.neep.neepmeat.transport.api.pipe.DataCable;
@@ -21,7 +22,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
-public class PLCBlock extends BaseHorFacingBlock implements BlockEntityProvider, DataCable
+public class PLCBlock extends BaseHorFacingBlock implements BlockEntityProvider, DataCable, NeepBusProvider
 {
     public PLCBlock(RegistrationContext ctx, ItemSettings itemSettings, Settings settings)
     {
@@ -71,5 +72,14 @@ public class PLCBlock extends BaseHorFacingBlock implements BlockEntityProvider,
     public BlockEntity createBlockEntity(BlockPos pos, BlockState state)
     {
         return PLCBlocks.PLC_ENTITY.instantiate(pos, state);
+    }
+
+    @Override
+    public void networkChanged(World world, BlockPos pos, BlockPos whereChanged)
+    {
+        if (world.getBlockEntity(pos) instanceof PLCBlockEntity be)
+        {
+            be.getSender().invalidate();
+        }
     }
 }

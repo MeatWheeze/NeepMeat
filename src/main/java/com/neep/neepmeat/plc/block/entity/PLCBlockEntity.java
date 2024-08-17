@@ -2,6 +2,7 @@ package com.neep.neepmeat.plc.block.entity;
 
 import com.google.common.collect.Queues;
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
+import com.neep.neepbus.util.CachingSender;
 import com.neep.neepmeat.api.plc.PLC;
 import com.neep.neepmeat.api.plc.program.PLCProgram;
 import com.neep.neepmeat.api.plc.robot.RobotAction;
@@ -75,12 +76,15 @@ public class PLCBlockEntity extends SyncableBlockEntity implements PLC, Extended
 
     private RecordMode mode = RecordMode.IMMEDIATE;
 
+    private final CachingSender neepBusSender = new CachingSender(this::getWorld, getPos());
+
     public PLCBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
     {
         super(type, pos, state);
 
         this.programSupplier = () -> null;
     }
+
 
     @Override
     public void addRobotAction(RobotAction action, Consumer<PLC> callback)
@@ -564,5 +568,10 @@ public class PLCBlockEntity extends SyncableBlockEntity implements PLC, Extended
             return program.getDebugLine(counter);
         }
         return -1;
+    }
+
+    public CachingSender getSender()
+    {
+        return neepBusSender;
     }
 }
