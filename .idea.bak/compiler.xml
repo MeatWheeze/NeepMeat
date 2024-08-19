@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="CompilerConfiguration">
-    <bytecodeTargetLevel target="19" />
+    <bytecodeTargetLevel target="19">
+      <module name="NeepMeat-1.20.1.19.2.main" target="17" />
+      <module name="NeepMeat-1.20.1.19.2.test" target="17" />
+      <module name="NeepMeat-1.20.1.20.1.main" target="17" />
+      <module name="NeepMeat-1.20.1.20.1.test" target="17" />
+      <module name="NeepMeat-1.20.client" target="17" />
+    </bytecodeTargetLevel>
   </component>
 </project>
