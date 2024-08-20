@@ -18,7 +18,7 @@ public class LinearLeverBlockEntity extends SyncableBlockEntity implements Slide
             this::getValue,
             sender::send);
 
-    private final NeepBusConfig config = NeepBusConfig.builder(this::markDirty)
+    private final NeepBusConfig config = NeepBusConfig.builder(this::sync)
             .output(outputPort.entry(), outputPort)
             .build();
 
