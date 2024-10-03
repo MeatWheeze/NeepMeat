@@ -1,0 +1,49 @@
+{
+  "itemGroup.meatweapons.weapons": "NEEPMeat Оружие",
+  "itemGroup.neepmeat.weapons": "NEEPMeat Оружие",
+
+  "item.meatweapons.ballistic_cartridge": "Баллистический патрон",
+
+  "item.meatweapons.fusion": "Термоядерная пушка",
+  "item.meatweapons.hand_cannon": "Ручная пушка",
+  "item.meatweapons.machine_pistol": "Пистолет-пулемет",
+  "item.meatweapons.light_machine_gun": "Ручной пулемет",
+  "item.meatweapons.ma75": "MA-75",
+  "item.meatweapons.ma75.lore_0": "Марафон (1994) это хорошая игра.",
+  "item.meatweapons.heavy_cannon": "Карманная гаубица",
+  "item.meatweapons.engine": "Двигатель",
+
+  "item.meatweapons.meatgun": "Мясная пушка - WIP",
+  "item.meatweapons.meatgun.lore_0": "ТОЛЬКО ДЛЯ ДЕМО-ЦЕЛЕЙ!\nБУДУЩИЕ ОБНОВЛЕНИЯ МОГУТ УДАЛИТЬ ЭТОТ ЭЛЕМЕНТ ИЛИ СДЕЛАТЬ ЕГО ПОВРЕЖДЕННЫМ!\nИСПОЛЬЗУЙТЕ НА СВОЙ СТРАХ И РИСК!",
+
+  "item.meatweapons.assault_drill": "Штурмовая дрель",
+  "item.meatweapons.assault_drill.lore": "Уничтожьте своих врагов! Удивите своих друзей! Масса веселья на вечеринках!",
+  "item.meatweapons.assault_drill.damage_per_tick": "Урон за тик: %s",
+
+  "item.meatweapons.airtruck": "Аэротрак",
+  "item.meatweapons.airtruck.lore_0": "Летательный аппарат, перевозящий пилота и пассажира..",
+  "item.meatweapons.airtruck.lore_1": "SHIFT+ЛКМ чтобы разобрать.",
+
+  "block.meatweapons.tinker_table": "Ремонтный стол",
+
+  "key.meatweapons.category.general": "MeatWeapons",
+  "key.meatweapons.down": "Посадить транспорт",
+  "key.meatweapons.fire_secondary": "Вторичный огонь",
+
+  "enchantment.meatweapons.spikes": "Шипы",
+
+  "meatgun_module.meatweapons.pistol": "Пистолет",
+  "meatgun_module.meatweapons.chugger": "Чаггер",
+  "meatgun_module.meatweapons.bosher": "Бёшер",
+  "meatgun_module.meatweapons.long_boi": "Длинный мальчик",
+  "meatgun_module.meatweapons.grenade_launcher": "Гранатомет",
+  "meatgun_module.meatweapons.triple_carousel": "Тройная карусель",
+  "meatgun_module.meatweapons.double_carousel": "Двойная карусель",
+  "meatgun_module.meatweapons.underbarrel": "Подствольник",
+  "meatgun_module.meatweapons.battery": "Батарея",
+  "meatgun_module.meatweapons.base": "База",
+  "meatgun_module.meatweapons.bloodthrower": "Кровомет",
+
+  "text.meatweapons.tinker_table.item_here": "Поместите мясную пушку сюда",
+  "tooltip.meatweapons.meatgun_module_1": "Модуль мясной пушки - установите в ремонтном столе"
+}
